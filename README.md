@@ -7,7 +7,7 @@
 Install `node_modules`:
 
 ```bash
-npm install
+npm install --registry=https://registry.npm.taobao.org
 ```
 
 or
