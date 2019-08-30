@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import L7 from '@antv/l7';
 import className from 'classnames';
+import circle from '@/assets/circle.png';
 import RingDiagram from './components/RingDiagram';
 import styles from './DataPanel.less';
 
@@ -88,6 +89,7 @@ export default class DataPanel extends PureComponent {
         <div className={className(styles.mainPic)} />
         <div className={className(styles.map)} id="map" />
         <div className={className(styles.rd1)}>
+          <img alt="" src={circle} />
           <RingDiagram />
         </div>
       </div>

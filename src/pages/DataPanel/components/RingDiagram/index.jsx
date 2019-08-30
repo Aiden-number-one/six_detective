@@ -2,7 +2,7 @@
  * @Description: 环状图
  * @Author: mus
  * @Date: 2019-08-30 14:22:07
- * @LastEditTime: 2019-08-30 15:11:45
+ * @LastEditTime: 2019-08-30 17:19:22
  * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
@@ -17,19 +17,11 @@ export default class RingDiagram extends PureComponent {
     const data = [
       {
         type: '评估中',
-        percent: 0.23,
+        percent: 0.55,
       },
       {
         type: '设计中',
-        percent: 0.28,
-      },
-      {
-        type: '正在开发',
-        percent: 0.3,
-      },
-      {
-        type: '已上线',
-        percent: 0.19,
+        percent: 0.45,
       },
     ];
     const sum = 500;
@@ -54,13 +46,17 @@ export default class RingDiagram extends PureComponent {
     chart.legend(false);
     chart.coord('theta', {
       radius: 0.75,
-      innerRadius: 0.6,
+      innerRadius: 0.9,
     });
     chart
       .intervalStack()
       .position('percent')
-      .color('type', ['#0a7aca', '#0a9afe', '#4cb9ff', '#8ed1ff'])
+      .color('type', ['#ff245c', '#1b2732'])
       .opacity(1);
+    chart.guide().html({
+      position: ['50%', '50%'],
+      html: '<p class="value" style="color: #85abc6;font-weight: bold;font-size: 20px;">500</p>',
+    });
     chart.render();
   }
 
