@@ -3,6 +3,7 @@ import L7 from '@antv/l7';
 import className from 'classnames';
 import circle from '@/assets/circle.png';
 import RingDiagram from './components/RingDiagram';
+import SlideText from './components/SlideText/SlideText';
 import styles from './DataPanel.less';
 
 export default class DataPanel extends PureComponent {
@@ -91,6 +92,9 @@ export default class DataPanel extends PureComponent {
         <div className={className(styles.rd1)}>
           <img alt="" src={circle} />
           <RingDiagram />
+        </div>
+        <div className={className(styles.slideText)}>
+          <SlideText />
         </div>
       </div>
     );
