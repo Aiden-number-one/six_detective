@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-08-30 13:32:53
+ * @LastEditTime: 2019-09-18 15:26:05
  * @LastEditors: mus
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -105,6 +105,12 @@ export default {
           name: 'datapanel',
           icon: 'environment',
           component: './DataPanel/DataPanel',
+        },
+        {
+          path: '/sheet',
+          name: 'sheet',
+          icon: 'table',
+          component: './Sheet/Sheet',
         },
         {
           component: './Page404',

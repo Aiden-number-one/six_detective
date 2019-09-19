@@ -1,0 +1,17 @@
+@css-prefix: x-spreadsheet;
+
+.@{css-prefix} {
+  box-sizing: content-box !important;
+}
+.x-spreadsheet * {
+  -webkit-box-sizing: content-box !important;
+  -moz-box-sizing: content-box !important;
+  box-sizing: content-box !important;
+}
+.@{css-prefix}-editor {
+  .@{css-prefix}-editor-area {
+    textarea {
+      box-sizing: content-box !important;
+    }
+  }
+}

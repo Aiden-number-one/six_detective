@@ -1,0 +1,1151 @@
+<!--
+ * @Author: linjian
+ * @Date: 2019-06-17 09:01:07
+ * @LastEditors: linjian
+ * @Description: file content
+ * @email: linjian@szkingdom.com
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>x-spreadsheet</title>
+  <style>
+    .formulabar {
+      border-bottom: 1px solid #D4D4D4;
+      height: 26px;
+      position: relative;
+      background: #fafafa;
+      color: #737373;
+    }
+    .formulabar input[type=text]:not(.form-control) {
+        width: calc(100% - 350px) !important;
+        height: 15px;
+        font-size: 12px;
+        margin-bottom: 0;
+        padding: 2px 10px;
+        vertical-align: middle;
+        border: none;
+        background: 0 0;
+        outline: 0;
+        box-shadow: none;
+        color: #737373;
+        background: #fff;
+        margin-left: 200px;
+        margin-top: 2px;
+        border-radius: 2px;
+        border: 1px solid rgba(150, 150, 150, 1);
+    }
+    .formulabar .formulabar-fx {
+        position: absolute;
+        width: 33px;
+        height: 21px;
+        line-height: 21px;
+        left: 165px;
+        top: 3px;
+        cursor: pointer;
+    }
+    .formulabar .formulabar-text {
+        position: absolute;
+        width: 110px;
+        height: 20px;
+        left: 35px;
+        top: 2px;
+        line-height: 21px;
+        border: 1px solid rgba(150, 150, 150, 1);
+        line-height: 19px;
+        background: #fff;
+        padding: 0px 5px;
+        border-radius: 2px;
+        text-align: center;
+    }
+  </style>
+<link href="xspreadsheet.css" rel="stylesheet"></head>
+<body onload="load()">
+  <div class="formulabar" data-step="4" data-intro="显示函数或单元格值" data-position="auto" >
+    <input type="text" size="200" style="width: 400px;" id="fxFn" value="">
+    <div class="formulabar-fx">
+        <i class="icon iconfont icon-fx icon-fr" title="函数"></i>
+        <i class="icon iconfont icon-xiala icon-fr" title=""></i>
+    </div>
+    <div class="formulabar-text" id="J_choose_location"></div>
+  </div>
+  <div id="x-spreadsheet-demo"></div>
+  <div>
+    <canvas id="waterMark" width="150" height="40" style="border:1px solid #d3d3d3;display:none">
+    Your browser does not support the HTML5 canvas tag.</canvas>
+  </div>
+  <div class="x-spreadsheet">
+    <div class="x-spreadsheet-placeholder to__tip_items">
+    </div>
+  </div>
+  <div style="display: none">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAACK0lEQVQ4T63UPYgTQRQH8P/bzXpqo0HRQgiCFoeNYE4tREmfr5lALEQRtdAT5K7RRg5BPCuvEcHCSuQQCfJeEjFXCWIh2okfcILY2IgIcoiJLrtPJtyC5nIJ0dtu2Hm/eTPvzRDW+KPEy+fz6SAIjgPYMsoaRPRFVedF5JuL64KlUmm77/tNVV0AEI8IjgEwqVRqX61Wa3dBY8wJANtEZG4ULJlrrb0M4D0z1xJwkoh+MPPdarW6IQzDGwAOAAgBzInIw0ELGWPOEJHHzHdWgMYYl6UvItPLuERRdK7ZbH5cDR0IWmufM/Oh5CyNMa5Qm0XkVi9YqVT2x3E8TkQGwELfDK21tTiOb9br9WfL53udiF4wc92Nc7nc+nQ6PamqRwB8IKJFVd1DRO/6gqVSacL3/ccAHqnqd9cJInLBYeVyueh53nlVvSIiL5OMB27ZTSoUCjuCINgN4A0zf13O9CqAtIhM9bbWULD3rIwxDvslItf6FWZVUFWfAtjped5Su91+22q1flYqlbyqHmXmk6NW+RSAMYcS0TpVPUhEDwCc7nQ6E61Wa2lUcJyZpwGoC6xWq34YhvNE9JqZZ/+5sf8MtNbWoyi61Gg0FtcKfMXMe4fd7xVFKZfLx4hok4jcToKz2WyQyWSeMPPhYaC19qKqfhKR+927XCwWN6ZSKdfMs6rqHgSo6lbP86ZUdWYIuIuIzkZRVGw0Gp//+4EF4Br/3l8P7LAtjfL/N2JOPCTFuUnLAAAAAElFTkSuQmCC" alt="">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAACZUlEQVQ4T8WUT2gTQRTGvzfTBvQoVREE8SYeFLws2ZmXxhZtK6igiAgqeBH8S8GD2INeimhRsGfFs4gotCg9hszY7TZEwaOCeBAURFGRZttsd2SlG9I0NBQKzm2YNz++9773HmGdD60zD/8fyMz7nHN3AWwgoo0ArJRypFQq/UmzXVWh7/t5IUSPtXYyDVZKHRFCPHDOnbDWVgFIrfUoAG2t5VWBSikWQowDGDDGfFuC3QHQb4z50lx7rfVjAE+ttVNtFTJzv3NunIj2pzCt9SAR3Z6fnz8wOzv7vdVIZlZpAsaYsRVApdSQEOJ+FEV9lUrlq+/7fVLK0YWFhcEwDH+36wpmPg0gMsY8WwZk5qMA7kVRxClMa62JaGxubm6oWq3+SmG+7+8QQpTr9boKw/Cz53lbc7ncRBzHxSAIag0gM+92zk3W6/XeNFBr7QEYr9VqA60wAMPW2hfMvNk59ypJkovT09OVZaZorYMkSa6mD1rrvQAeLS4uDgRB8KNZWSsMwGVrbZiV4p9Cz/O2d3d3P7TWDqV3Zp4ioivlcvnDWmANhUqpQ0TUb629tgR87Zw7Y639mNUsU+b7/hYhxMtWZcsUMvMeADeMMaeWgMcB3HLOPSeiswBGjDFPisViTxzHUwAuNafZ7HxmimDmt1LK3lKp9DMNyOfzu6SUB+M4npiZmfmUwZIkuZAZ0K6FGi4rpY4JIQ4bY861adxtaQd0gq0YPa319XS0nHM3oyh619XVtSmXyxWdc8NEdN4Y86bTulsxKYVCoZAkyUkAO4konYz3UsqxbJusGdjpQ6f3dV+wfwHIazMkPz5y0QAAAABJRU5ErkJggg==" alt="">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAIAAAC0tAIdAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpENkJCODQ0MUExMjkxMUU5QUUwREExNDZCOUY0RkE1NCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpENkJCODQ0MkExMjkxMUU5QUUwREExNDZCOUY0RkE1NCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkQ2QkI4NDNGQTEyOTExRTlBRTBEQTE0NkI5RjRGQTU0IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkQ2QkI4NDQwQTEyOTExRTlBRTBEQTE0NkI5RjRGQTU0Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+N72W1QAAAH1JREFUeNqskm0GACEQhtvV3bpSJNGPdKS6WCSxMaw+ZtdELxM1z4zXTFcIgZHFWwghKGiM8WY7Ok075wbfP7LWppRItDEm5zzPBCSlbKf3Hq5a61JK/4L4hhql1IoO9JtoBbXWFZ179+kVRZwAhKL4vL/Q7V1y+C5E+hFgAOiJMcbuCH22AAAAAElFTkSuQmCC" alt="">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAIAAAC0tAIdAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpDODkzMkVDQUExMjkxMUU5QkJGNkVDRjVFMzY2MzZEMyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpDODkzMkVDQkExMjkxMUU5QkJGNkVDRjVFMzY2MzZEMyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkM4OTMyRUM4QTEyOTExRTlCQkY2RUNGNUUzNjYzNkQzIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkM4OTMyRUM5QTEyOTExRTlCQkY2RUNGNUUzNjYzNkQzIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Zf5svAAAACtJREFUeNpi3LFjBwPRgAWI3d3diVG6c+dOJgZSwKjqkaqaBZJciFQNEGAAfh0HdcX9m3AAAAAASUVORK5CYII=" alt="">
+    
+  </div>
+  <!-- <div class="x-spreadsheet-addRow" style="line-height: 28px;z-index:1000;position: absolute;bottom: 28px;left: 16px;">+</div> -->
+  <footer id="J_footer">
+
+  </footer>
+  <script>
+    console.time('1');
+    let sheetArray = [];
+    let data = {
+      // freeze: 'C3',
+      styles: [
+        {
+          bgcolor: '#f4f5f8',
+          textwrap: true,
+          color: '#900b09',
+          border: {
+            top: ['thin', '#0366d6'],
+            bottom: ['thin', '#0366d6'],
+            right: ['thin', '#0366d6'],
+            left: ['thin', '#0366d6'],
+          },
+        },
+      ],
+      merges: [
+        "A1:J1",
+        "A15:C16"
+      ],
+      rows: {
+        0: {
+          cells: {
+            0: { 
+              text: '' ,merge: [0, 9] ,
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+                border: {
+                  // top: ['thin', '#000000'],
+                  bottom: ['thin', '#ff0000'],
+                  right: ['thin', '#0366d6'],
+                  // left: ['thin', '#ff0000'],
+                }
+              },
+              cellProps: {
+                // cellType: 'text'
+                cellType: "date",
+                format: "yyyy-MM-dd"
+              }
+            },
+          },
+        },
+        1: {
+          cells: {
+            0: { 
+              text: '111111111',
+              annotation:'测试',
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+                border: {
+                  // top: ['thin', '#000000'],
+                  bottom: ['thin', '#ff0000'],
+                  right: ['thin', '#0366d6'],
+                  // left: ['thin', '#ff0000'],
+                }
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "numeric",
+                forbidSelect: "0",
+                format: "$0,0.00",
+                isBlank: "0",
+                scale: "2",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                sy: "2",
+                type: "currency",
+              }
+            },
+            1: {  
+              text: '111111112',
+              comment:'测试',
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+                border: {
+                  // top: ['thin', '#000000'],
+                  bottom: ['thin', '#ff0000'],
+                  right: ['thin', '#0366d6'],
+                  // left: ['thin', '#ff0000'],
+                }
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "numeric",
+                forbidSelect: "0",
+                format: "￥0,0.00",
+                isBlank: "0",
+                scale: "2",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                sy: "2",
+                type: "currency",
+              },
+              readOnly:true
+            },
+            2: { 
+              text: 0,
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+                border: {
+                  // top: ['thin', '#000000'],
+                  bottom: ['thin', '#ff0000'],
+                  right: ['thin', '#0366d6'],
+                  // left: ['thin', '#ff0000'],
+                }
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "numeric",
+                forbidSelect: "0",
+                format: "0.00",
+                isBlank: "0",
+                scale: "2",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                sy: "2",
+              }
+            },
+            3: { 
+              text: '1',
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+                border: {
+                  // top: ['thin', '#000000'],
+                  bottom: ['thin', '#ff0000'],
+                  right: ['thin', '#0366d6'],
+                  // left: ['thin', '#ff0000'],
+                }
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "numeric",
+                forbidSelect: "0",
+                format: "0.00%",
+                isBlank: "0",
+                scale: "2",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                sy: "2",
+                type: "permillage"
+              }
+            },
+            4: { 
+              text: '1',
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+                border: {
+                  // top: ['thin', '#000000'],
+                  bottom: ['thin', '#ff0000'],
+                  right: ['thin', '#0366d6'],
+                  // left: ['thin', '#ff0000'],
+                }
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "numeric",
+                forbidSelect: "0",
+                format: "0.00%",
+                isBlank: "0",
+                scale: "2",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                sy: "2",
+                type: "percentage"
+              }
+            },
+            5: { 
+              text: '20181010',
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+                border: {
+                  // top: ['thin', '#000000'],
+                  bottom: ['thin', '#ff0000'],
+                  right: ['thin', '#0366d6'],
+                  // left: ['thin', '#ff0000'],
+                }
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "date",
+                forbidSelect: "0",
+                format: "yyyy-MM-dd",
+                isBlank: "0",
+                scale: "2",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                sy: "2",
+                type: "date"
+              }
+            },
+            6: { 
+              text: '20181010121314',
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+                border: {
+                  // top: ['thin', '#000000'],
+                  bottom: ['thin', '#ff0000'],
+                  right: ['thin', '#0366d6'],
+                  // left: ['thin', '#ff0000'],
+                }
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "datetime",
+                forbidSelect: "0",
+                format: "yyyy-MM-dd hh:mm:ss",
+                isBlank: "0",
+                scale: "2",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                sy: "2",
+                type: "datetime"
+              }
+            },
+            7: { 
+              text: '121314',
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+                border: {
+                  top: ['thin', '#ff0000'],
+                  bottom: ['thin', '#ff0000'],
+                  right: ['thin', '#0366d6'],
+                  left: ['thin', '#ff0000'],
+                }
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "time",
+                forbidSelect: "0",
+                format: "hh:mm:ss",
+                isBlank: "0",
+                scale: "2",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                sy: "2",
+                type: "time"
+              }
+            },
+            8: { 
+              text: '01',
+              // dropdownText: "1是",
+              source:[
+                {text: "0否", id: "01"},
+                {text: "1是", id: "02"},
+              ],
+              typeOptions:{
+                allowCustomValue: false,
+                allowMultiSelect: false,
+                allowParentSelection: false,
+                allowTree: true,
+              },
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "dropdown",
+                forbidSelect: "0",
+                isBlank: "0",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                style: {'background-color': "#fff", 'text-align': "right"},
+                sy: "2",
+                type: "dropdown"
+              }
+            },
+            9: { 
+              readOnly: true,
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+              },
+              typeOptions:{
+                images: [
+                  {
+                    height: 22,
+                    name: "001.png",
+                    path: "https://note.youdao.com/yws/res/1156/WEBRESOURCEd34cc973296805f95c6aab3f59305823",
+                    width: 40,
+                  },
+                  {
+                    height: 40,
+                    name: "002.png",
+                    path: "https://note.youdao.com/yws/res/1161/WEBRESOURCEe82c9ff2d55f73a04ebe1210691d5a90",
+                    width: 22,
+                  },
+                ]
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "image",
+                forbidSelect: "0",
+                isBlank: "0",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                style: {'background-color': "#fff", 'text-align': "right"},
+                sy: "2",
+                type: "image"
+              }
+            },
+            10: { 
+              text: '',
+              style:{
+                bgcolor: '#fff',
+                textwrap: false,
+                color: '#333',
+              },
+              typeOptions:{
+                files:[
+                  {
+                    name: "001.png",
+                    path: "/fileserver/images/20190525/201905250940535421.png",
+                  },
+                ]
+              },
+              cellProps:{
+                cellCustomField: "B2",
+                cellDesc: "",
+                cellType: "file",
+                forbidSelect: "0",
+                isBlank: "0",
+                streamTableInfo: {streamTableName: "R_9338", streamTableDesc: ""},
+                style: {'background-color': "#fff", 'text-align': "right"},
+                sy: "2",
+                type: "file"
+              }
+            },
+          }
+        },
+        2: {
+          cells:{
+            0:{
+              "text":"",
+              "customerText":"",//用来存储自定义输入下拉值
+              "cellProps":{
+                "cellCustomField":"E2",
+                "forbidSelect":"0",
+                "isBlank":"0",
+                "dropdownSourceType":"1",
+                "style":{"background-color":"#fff","text-align":"left"},
+                "cellDesc":"枚举联动1",
+                "isPublic":false,
+                "sy":"0",
+                "enumId":"0122",
+                "cellType":"dropdown",
+                "streamTableInfo":{"streamTableName":"R_29927","streamTableDesc":""}
+              },
+              "typeOptions":{
+                  "link":[{"point":"A3","col":0,"row":2},{"point":"B3","col":1,"row":2}],
+                  "allowTree":false,
+                  "allowCustomValue":true,
+                  "allowParentSelection":false,
+                  "allowMultiSelect":true,
+                  "level":0,
+                  "validation":{}
+                },
+              "style":{"font":{"bold":false,"italic":false,"name":"微软雅黑","size":"12px"},"border":{},"valign":"middle","bgcolor":"#fff","align":"left"},
+              "readOnly":false,
+              "source":[
+                {"children":[{"operateMode":"","id":"0011","name":"北京","open":true,"text":"北京","parentEnumItemId":"01","enumName":"国家","updateTime":"20190612170127","enumItemId":"0011","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"北京"},{"operateMode":"","id":"0012","name":"深圳","open":true,"text":"深圳","parentEnumItemId":"01","enumName":"国家","updateTime":"20190612170127","enumItemId":"0012","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"深圳"}],"operateMode":"","id":"01","open":true,"name":"中国","rowsCount":0,"childEnumItemJson":[{"operateMode":"","id":"0011","name":"北京","open":true,"text":"北京","parentEnumItemId":"01","enumName":"国家","updateTime":"20190612170127","enumItemId":"0011","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"北京"},{"operateMode":"","id":"0012","name":"深圳","open":true,"text":"深圳","parentEnumItemId":"01","enumName":"国家","updateTime":"20190612170127","enumItemId":"0012","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"深圳"}],"parentEnumItemId":"-1","enumName":"国家","updateTime":"20190612170127","enumId":"0122","text":"中国","enumItemId":"01","taskId":"0037","enumItemName":"中国"},{"children":[{"operateMode":"","id":"0021","name":"华盛顿","open":true,"text":"华盛顿","parentEnumItemId":"02","enumName":"国家","updateTime":"20190612170127","enumItemId":"0021","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"华盛顿"},{"operateMode":"","id":"0022","name":"洛杉矶","open":true,"text":"洛杉矶","parentEnumItemId":"02","enumName":"国家","updateTime":"20190612170127","enumItemId":"0022","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"洛杉矶"}],"operateMode":"","id":"02","open":true,"name":"美国","rowsCount":0,"childEnumItemJson":[{"operateMode":"","id":"0021","name":"华盛顿","open":true,"text":"华盛顿","parentEnumItemId":"02","enumName":"国家","updateTime":"20190612170127","enumItemId":"0021","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"华盛顿"},{"operateMode":"","id":"0022","name":"洛杉矶","open":true,"text":"洛杉矶","parentEnumItemId":"02","enumName":"国家","updateTime":"20190612170127","enumItemId":"0022","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"洛杉矶"}],"parentEnumItemId":"-1","enumName":"国家","updateTime":"20190612170127","enumId":"0122","text":"美国","enumItemId":"02","taskId":"0037","enumItemName":"美国"}
+                ]
+              },
+              1:{
+              "text":"",
+              "cellProps":{
+                "cellCustomField":"E2",
+                "forbidSelect":"0",
+                "isBlank":"0",
+                "dropdownSourceType":"1",
+                "style":{"background-color":"#fff","text-align":"left"},
+                "cellDesc":"枚举联动1",
+                "isPublic":false,
+                "sy":"0",
+                "enumId":"0122",
+                "typeOptions":{
+                  "link":[{"point":"A3","col":0,"row":2},{"point":"B3","col":1,"row":2}],
+                  "allowTree":false,
+                  "allowCustomValue":false,
+                  "allowParentSelection":true,
+                  "allowMultiSelect":false,
+                  "level":1,
+                  "validation":{}
+                },
+                "cellType":"dropdown",
+                "streamTableInfo":{"streamTableName":"R_29927","streamTableDesc":""}
+              },
+              "typeOptions":{
+                "link":[{"point":"A3","col":0,"row":2},{"point":"B3","col":1,"row":2}],
+                "allowTree":false,
+                "allowCustomValue":false,
+                "allowParentSelection":true,
+                "allowMultiSelect":false,
+                "level":1,
+                "validation":{}
+              },
+              "style":{"font":{"bold":false,"italic":false,"name":"微软雅黑","size":"12px"},"border":{},"valign":"middle","bgcolor":"#fff","align":"left"},
+              "readOnly":false,
+              "source":[
+                  {"children":[{"operateMode":"","id":"0011","name":"北京","open":true,"text":"北京","parentEnumItemId":"01","enumName":"国家","updateTime":"20190612170127","enumItemId":"0011","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"北京"},{"operateMode":"","id":"0012","name":"深圳","open":true,"text":"深圳","parentEnumItemId":"01","enumName":"国家","updateTime":"20190612170127","enumItemId":"0012","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"深圳"}],"operateMode":"","id":"01","open":true,"name":"中国","rowsCount":0,"childEnumItemJson":[{"operateMode":"","id":"0011","name":"北京","open":true,"text":"北京","parentEnumItemId":"01","enumName":"国家","updateTime":"20190612170127","enumItemId":"0011","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"北京"},{"operateMode":"","id":"0012","name":"深圳","open":true,"text":"深圳","parentEnumItemId":"01","enumName":"国家","updateTime":"20190612170127","enumItemId":"0012","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"深圳"}],"parentEnumItemId":"-1","enumName":"国家","updateTime":"20190612170127","enumId":"0122","text":"中国","enumItemId":"01","taskId":"0037","enumItemName":"中国"},{"children":[{"operateMode":"","id":"0021","name":"华盛顿","open":true,"text":"华盛顿","parentEnumItemId":"02","enumName":"国家","updateTime":"20190612170127","enumItemId":"0021","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"华盛顿"},{"operateMode":"","id":"0022","name":"洛杉矶","open":true,"text":"洛杉矶","parentEnumItemId":"02","enumName":"国家","updateTime":"20190612170127","enumItemId":"0022","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"洛杉矶"}],"operateMode":"","id":"02","open":true,"name":"美国","rowsCount":0,"childEnumItemJson":[{"operateMode":"","id":"0021","name":"华盛顿","open":true,"text":"华盛顿","parentEnumItemId":"02","enumName":"国家","updateTime":"20190612170127","enumItemId":"0021","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"华盛顿"},{"operateMode":"","id":"0022","name":"洛杉矶","open":true,"text":"洛杉矶","parentEnumItemId":"02","enumName":"国家","updateTime":"20190612170127","enumItemId":"0022","rowsCount":0,"enumId":"0122","taskId":"0037","enumItemName":"洛杉矶"}],"parentEnumItemId":"-1","enumName":"国家","updateTime":"20190612170127","enumId":"0122","text":"美国","enumItemId":"02","taskId":"0037","enumItemName":"美国"}
+                ]
+              },
+              2:{
+                "text":"",
+                "cellProps":{
+                  "cellCustomField":"E2",
+                  "forbidSelect":"0",
+                  "isBlank":"0",
+                  "style":{"background-color":"#fff","text-align":"left"},
+                  "sy":"0",
+                  "cellType":"text",
+                  "defaultValue": "默认值",
+                },
+                "style":{"font":{"bold":false,"italic":false,"name":"微软雅黑","size":"12px"},"border":{},"valign":"middle","bgcolor":"#fff","align":"left"},
+                "readOnly":false,
+              },
+              3:{
+                "text":"",
+                "cellProps":{
+                  "cellCustomField":"E2",
+                  "forbidSelect":"0",
+                  "isBlank":"0",
+                  "style":{"background-color":"#fff","text-align":"left"},
+                  "sy":"0",
+                  "cellType":"text",
+                  'required' : true,
+                  'placeholder': {
+                    title:'有效性',
+                    content: '内容要求非空',
+                  },
+                },
+                "style":{"font":{"bold":false,"italic":false,"name":"微软雅黑","size":"12px"},"border":{},"valign":"middle","bgcolor":"#fff","align":"left"},
+                "readOnly":false,
+              },
+              4:{
+                "text":"",
+                "cellProps":{
+                  "cellCustomField":"E2",
+                  "forbidSelect":"0",
+                  "isBlank":"0",
+                  "style":{"background-color":"#fff","text-align":"left"},
+                  "sy":"0",
+                  "cellType":"text",
+                  'required' : true,
+                  'placeholder': {
+                    title:'有效性',
+                    content: '内容要求非空',
+                  },
+                  'operator':'be',
+                  'value' : [5,10]
+                },
+                "style":{"font":{"bold":false,"italic":false,"name":"微软雅黑","size":"12px"},"border":{},"valign":"middle","bgcolor":"#fff","align":"left"},
+                "readOnly":false,
+              }
+          }
+        },
+        3:{
+          cells:{
+            0:{
+              text:'=IF(LEFT(I2,2)="01","01-渠道",IF(LEFT(I2,2)="02","02-生产经营",IF(LEFT(I2,2)="03","03-管理","")))',
+              cellProps: {
+                cellType: 'text',
+                calculateFormula:'IF(LEFT(I2,2)="01","01-渠道",IF(LEFT(I2,2)="02","02-生产经营",IF(LEFT(I2,2)="03","03-管理","")))'
+              }
+              // text:"=SUM(B:B)",
+              // formularValue:2,
+            },
+            1:{
+              text:1,
+              cellProps:{
+                cellCustomField: "B2",
+                cellType: "numeric",
+                sy: "2",
+              }
+            },
+            2:{
+              text:3,
+              cellProps:{
+                cellCustomField: "B2",
+                cellType: "numeric",
+                sy: "2",
+              }
+            },
+            3:{
+              text:true,
+              cellProps:{
+                cellCustomField: "B2",
+                cellType: "checkbox",
+              }
+            },
+            4:{
+              text:'',
+              cellProps: {
+                cellType: 'dropdown',
+              },
+              typeOptions: {
+                sourceRange: 'L2:M2'
+              }
+              // text:"=SUM(B:B)",
+              // formularValue:2,
+            },
+          }
+        },
+        8: {
+          cells: {
+            8: { text: 'border test', style: {
+              border: {
+                top: ['thin', '#ff0000'],
+                bottom: ['thin', '#ff0000'],
+                right: ['thin', '#0366d6'],
+                left: ['thin', '#ff0000'],
+              },
+            } ,readOnly:true},
+          }
+        },
+        14: {
+          "cells": {
+            "0": {
+              "text": "这是备注信息",
+              "cellProps": {
+                "style": {
+                  "merge": "center",
+                  "vertical-align": "middle",
+                  "text-align": "left",
+                  "background-color": "#f5f5f5"
+                },
+                "sy": "0",
+                "cellType": "text",
+                "isForm": "1",
+                "isFormTwo": true,
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle",
+                "align": "left",
+                "bgcolor": "#f5f5f5"
+              },
+              "readOnly": true,
+              "merge": [1, 2]
+            },
+            "1": {
+              "text": "",
+              "cellProps": {
+                "style": {},
+                "cellType": "text",
+                "sy": "0",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle"
+              },
+              "readOnly": false
+            },
+            "2": {
+              "text": "",
+              "cellProps": {
+                "style": {},
+                "cellType": "text",
+                "sy": "0",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle"
+              },
+              "readOnly": false
+            },
+            "3": {
+              "text": "",
+              "cellProps": {
+                "style": {},
+                "cellType": "text",
+                "sy": "0",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle"
+              },
+              "readOnly": false
+            },
+            "4": {
+              "text": "",
+              "cellProps": {
+                "style": {},
+                "cellType": "text",
+                "sy": "0",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle"
+              },
+              "readOnly": false
+            },
+            "5": {
+              "text": "",
+              "cellProps": {
+                "style": {},
+                "cellType": "text",
+                "sy": "0",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle"
+              },
+              "readOnly": false
+            },
+            "6": {
+              "text": "",
+              "cellProps": {
+                "style": {},
+                "cellType": "text",
+                "sy": "0",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle"
+              },
+              "readOnly": false
+            },
+            "7": {
+              "text": "",
+              "cellProps": {
+                "style": {},
+                "cellType": "text",
+                "sy": "0",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle"
+              },
+              "readOnly": false
+            },
+            "8": {
+              "text": "",
+              "cellProps": {
+                "style": {},
+                "cellType": "text",
+                "sy": "0",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle"
+              },
+              "readOnly": false
+            },
+            "9": {
+              "text": "",
+              "cellProps": {
+                "style": {},
+                "cellType": "text",
+                "sy": "0",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle"
+              },
+              "readOnly": false
+            },
+            "10": {
+              "text": "",
+              "cellProps": {
+                "cellCustomField": "K4",
+                "cellDesc": "这是备注信息_千分比",
+                "style": {
+                  "background-color": "#fff",
+                  "text-align": "left"
+                },
+                "sy": "0",
+                "isBlank": "0",
+                "forbidSelect": "0",
+                "cellType": "text",
+                "typeOptions": {
+                  "validation": {}
+                }
+              },
+              "style": {
+                "font": {
+                  "bold": false,
+                  "italic": false,
+                  "name": "微软雅黑",
+                  "size": "12px"
+                },
+                "border": {},
+                "valign": "middle",
+                "bgcolor": "#fff",
+                "align": "left"
+              },
+              "readOnly": false
+            }
+          },
+          "height": 35
+        },
+      },
+    };
+
+    var xsOptions = {
+        showGrid: true, // 是否显示默认网格
+        showToolbar: true, // 是否显示工具栏
+        showContextmenu: true, // 是否显示右键菜单
+        showAddCol: false, // 是否显示添加列按钮
+        showAddRow: false, // 是否显示添加行按钮
+        isNeedCut: true, // 是否启用剪切功能
+        isNeedAutoFilter:false, // 是否启用自动过滤
+        isOnlyCopeText: true, // 设置在复制、剪切、自动填充  只处理文本
+        waterMarkContent: ['融汇通金','分公司1填报', '鸟人'],
+        isShowWatermark: true,
+        name:'sheet1',
+        fxObj:document.querySelector('#fxFn'),
+        row: {
+            len: 10,
+            height: 30,
+            minHeight:2,// 设置高度可调最小高度
+        },
+        col: {
+            len: 20,
+            width: 50,
+            indexWidth: 20,
+            minWidth: 2,//设置列最小宽度
+            colAttr:[],
+        },
+        streamCharts:[
+          {finalFirstRows: 0, finalLastRows: 0},
+          {finalFirstRows: 3, finalLastRows: 10},
+        ],
+        isCalCulatorFormula:true, // 是否运算公式
+        isCalculatorDropdownRange: true,// 是否运算下拉项
+        imageImg:document.getElementsByTagName('img')[0],
+        imageFile:document.getElementsByTagName('img')[1],
+        imageCheckedBox:document.getElementsByTagName('img')[2],
+        imageUncheckedBox:document.getElementsByTagName('img')[3],
+        contextMenuItems: [
+          {
+            key:'freezePanes',
+            isShow: true,
+          },
+          { key: 'divider', isShow: true },
+          {
+            key:'edit_modal',
+            title: "编辑",
+            isShow: true,
+            callback: function (params) {
+              console.table(params);
+            }
+          },
+          { key: 'divider', isShow: true },
+          {
+            key:'insert_modal',
+            title: "插入",
+            isShow: true,
+            callback: function (params) {
+              console.table(params);
+            }
+          },
+          {
+            key:'delete_settings',
+            title:'删除',
+            isShow:true,
+            callback: (params) => {
+              console.table(params);
+            }
+          },
+        ],
+        hooks:{
+          beforeChangeFile: function(cellProps, row, col, index){
+            console.log('row:' + row + ' col:' + col + ' index:' + index);
+          },
+          afterTriggerHistoryAction (historyType, params) {
+            console.table(historyType, params);
+          },
+          /**
+           * @description: 右键菜单显示前回调 可用于显示和隐藏菜单
+           * @param {type} 
+           * @return: 
+           * @Author: linjian
+           * @Date: 2019-08-05 10:50:29
+           */
+          beforeContextMenuShow: function(contextMenu){
+            console.log('show contextMenu before');
+          },
+          /**
+           * @description: 选择单元格后回调
+           * @param {type} 
+           * @return: 
+           * @Author: linjian
+           * @Date: 2019-06-24 13:32:05
+           */
+          afterSelection: function(sri, sci, eri, eci) {
+            // console.log('sri:' + sri + ' sci:' + sci + ' eri:' + eri + ' eci:' + eci);
+            document.querySelector('#J_choose_location').innerHTML= ((sri + 1) + ',' +(sci + 1))
+          },
+          /**拖动鼠标多选之后 回调
+           * @description: 
+           * @param {type} 
+           * @return: 
+           * @Author: linjian
+           * @Date: 2019-06-24 14:23:55
+           */
+          afterMultiSelection: function(sri, sci, eri, eci) {
+            // console.log('sri:' + sri + ' sci:' + sci + ' eri:' + eri + ' eci:' + eci);
+            document.querySelector('#J_choose_location').innerHTML = ((sri + 1) + ',' +(sci + 1)+ ':' + (eri + 1) + ',' +(eci + 1))
+          },
+          /**
+           * @description: 
+           * @param {string} tipType：toast/alert/confirm
+           * @param {string} msg 消息内容
+           * @return: 
+           * @Author: linjian
+           * @Date: 2019-06-14 09:39:30
+           */
+          tipMessage:function(tipType, msg){
+            switch (tipType) {
+              case 'toast':
+                console.log('tipType', tipType, 'msg', msg);
+                break;
+              case 'alert':
+                console.log('tipType', tipType, 'msg', msg);
+                break;
+              case 'confirm':
+                console.log('tipType', tipType, 'msg', msg);
+                break;
+              default:
+                break;
+            }
+          },
+          /**
+           * @description: 增加行回调，如果有这个回调 就不会执行默认操作
+           * @param {type} 
+           * @return: 
+           * @Author: linjian
+           * @Date: 2019-06-26 09:16:33
+           */  
+          insertRow: function() {
+            xs.sheet.insertDeleteRowColumn('insert-row', xs.data.rows.len, 1,xs.data.rows.len - 1);
+          },
+          /**
+           * @description: 增加l列回调，如果有这个回调 就不会执行默认操作
+           * @param {type} 
+           * @return: 
+           * @Author: linjian
+           * @Date: 2019-06-26 09:16:33
+           */  
+          insertCol: function() {
+            xs.sheet.insertDeleteRowColumn('insert-column', xs.data.cols.len, 1);
+          },
+          requestCondition: function(ri, ci, conditionItems, afterGetConditionItemsCallback) {
+            // console.log(ri, ci, conditionItems, afterGetConditionItemsCallback);
+            let content = ['linjian1','linjian2','linjian3','linjian4','linjian5','linjian6','linjian7'];
+            if (conditionItems) {
+              content = ['黄垒1','黄垒2'];
+            }
+            afterGetConditionItemsCallback(content);
+          },
+          requestData:function({ startRow, endRow, conditions }, callback){
+            console.log('加载更多')
+            // for (let index = startRow - 5; index <= endRow; index++) {
+            //   var cells ={};
+            //   data.rows[index] = {};
+            //   let random = parseInt(Math.random()*10);
+            //   for (let col = 0; col < 10; col++) {
+
+            //     cells[col] ={ 
+            //       text: 'render_'+(index+1)+'_'+(col+1)+'__',
+            //       style:{
+            //         bgcolor: random ===col?'red':'#f5f5f5',
+            //         textwrap: false,
+            //         color: '#333',
+            //       },
+            //     };
+            //   }
+              // data.rows[index].height = parseInt(Math.random()*20 + 20);
+              // data.rows[index]['cells']=cells;
+            // }
+            // callback(data)
+          },
+        },
+        hideCol:[0,1,2,3,4,5,6,7,8,9]
+      }
+    for (let col = 0; col < 10; col++) {
+      xsOptions.col.colAttr[col] ={width:50}
+    }
+    // for (let row = 6; row < 20; row++) {
+    //   var cells ={};
+    //   data.rows[row] = {};
+    //   // var tempArray = [];
+    //   for (let col = 0; col < 10; col++) {
+    //     cells[col] ={ 
+    //       // text: 'render_'+(row+1)+'_'+(col+1)+'__',
+    //       text: col + 1,
+    //       cellProps:{
+    //         cellCustomField: "B2",
+    //         cellType: "numeric",
+    //         sy: "2",
+    //       },
+    //       style:{
+    //         bgcolor: '#f5f5f5',
+    //         textwrap: false,
+    //         color: '#333',
+    //         // border: {
+    //         //   top: ['thin', '#ccc'],
+    //         //   bottom: ['thin', '#ccc'],
+    //         //   right: ['thin', '#ccc'],
+    //         //   left: ['thin', '#ccc'],
+    //         // },
+    //       },
+    //     };
+    //     // tempArray.push('render'+Math.random())
+    //   }
+    //   // data.rows[row].height = parseInt(Math.random()*20+20);
+    //   // sheetArray.push(tempArray)
+    //   data.rows[row]['cells']=cells;
+    // }
+    // window.data = data;
+    // window.sheetArray = sheetArray;
+    function load(){
+      // x.spreadsheet.locale('zh-cn');
+      // var container = []
+      // for (let index = 0; index < 100; index++) {
+      //   var obj = document.createElement('div');
+      //   obj.textContent=index+1;
+      //   if(index!=0){
+      //     obj.style.display='none'
+      //   }
+      //   container.push(obj);
+      //   document.querySelector('#J_footer').appendChild(obj)
+      //   document.querySelector('#x-spreadsheet-demo').appendChild(obj)
+      // }
+      // container.map((value,index)=>{
+      //   var xs = x.spreadsheet(value, {})
+      //   .loadData(data).change((cdata) => {
+      //     console.log(cdata);
+      //     console.log(xs.validate());
+      //   });
+      // })
+      xsObj.spreadsheet.locale('zhCn');
+      window.selectInstance = xsObj.spreadsheet('#x-spreadsheet-demo', xsOptions)
+        .loadData(data).change((cdata) => {
+          // console.log(cdata);
+          // console.log(xs.validate());
+      });
+      
+      // console.timeEnd('1');
+    }
+  </script>
+  <script src="/layDateFile/laydate/laydate.js"></script>
+  <!--script type="text/javascript" src="https://unpkg.com/x-data-spreadsheet@1.0.20/dist/locale/zh-cn.js"></script-->
+<script type="text/javascript" src="xspreadsheet.js"></script></body>
+</html>

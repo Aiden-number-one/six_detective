@@ -1,3 +1,11 @@
+/*
+ * @Description: eslint 配置
+ * @Author: mus
+ * @Date: 2019-08-30 16:09:36
+ * @LastEditTime: 2019-09-19 10:27:54
+ * @LastEditors: mus
+ * @Email: mus@szkingdom.com
+ */
 const { strictEslint } = require('@umijs/fabric');
 
 module.exports = {
