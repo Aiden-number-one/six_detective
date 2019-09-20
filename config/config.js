@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-09-18 15:26:05
+ * @LastEditTime: 2019-09-19 20:06:27
  * @LastEditors: mus
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -89,6 +89,11 @@ export default {
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: [
     {
+      path: '/login',
+      component: '../layouts/UserLayout',
+      routes: [{ path: '/login', name: 'login', component: './User/Login' }],
+    },
+    {
       path: '/',
       component: '../layouts/BasicLayout',
       Routes: ['src/pages/Authorized'],
@@ -166,7 +171,9 @@ export default {
   proxy: {
     '/areas': {
       target: 'https://geo.datav.aliyun.com/areas',
-      pathRewrite: { '^/areas': '' },
+      pathRewrite: {
+        '^/areas': '',
+      },
       secure: false,
     },
   },

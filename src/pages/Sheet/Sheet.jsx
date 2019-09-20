@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { Button } from 'antd';
 import SpreadSheet from '@/components/SpreadSheet';
 
-export default class DataPanel extends PureComponent {
+export default class Sheet extends PureComponent {
   state = {};
 
   spreadSheetRef = React.createRef();
