@@ -2,8 +2,8 @@
  * @Description: user modal
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-09-20 10:13:57
- * @LastEditors: mus
+ * @LastEditTime: 2019-09-20 10:18:32
+ * @LastEditors: lan
  */
 const user = {
   namespace: 'user',
