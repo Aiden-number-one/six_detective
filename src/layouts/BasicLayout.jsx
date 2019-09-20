@@ -34,6 +34,10 @@ const BasicLayout = props => {
     if (dispatch) {
       dispatch({
         type: 'menu/getMenuData',
+        payload: {
+          customerno: 'system',
+          endType: '1',
+        },
       });
     }
   }, []);

@@ -27,15 +27,18 @@ class AvatarDropdown extends React.Component {
 
   render() {
     const { currentUser = {}, menu } = this.props;
+    currentUser.name = localStorage.getItem('currentUser')
+      ? localStorage.getItem('currentUser')
+      : '';
 
-    if (!menu) {
-      return (
-        <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={styles.name}>{currentUser.name}</span>
-        </span>
-      );
-    }
+    // if (!menu) {
+    //   return (
+    //     <span className={`${styles.action} ${styles.account}`}>
+    //       <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+    //       <span className={styles.name}>{currentUser.name}</span>
+    //     </span>
+    //   );
+    // }
 
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>

@@ -4,28 +4,31 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-09-20 10:33:11
- * @LastEditors: mus
+ * @LastEditTime: 2019-09-20 17:06:13
+ * @LastEditors: lan
  */
 
 import { Base64 } from 'js-base64';
 import md5 from 'md5';
+import { components } from '@/utils/common';
 
 const geneMenuData = data => {
-  if (!data || !data.length) return [];
+  if (!data || !data.length || !data[0] || !data[0].menuList) return [];
   const id = 'menuid';
   const pid = 'parentmenuid';
   // 删除 所有 routes,以防止多次调用
-  const newData = data.map(item => ({
+  const newData = data[0].menuList.map(item => ({
     ...item,
-    menuid: item.menuid,
-    menuname: item.menuname,
+    menuid: item.menuId,
+    menuname: item.menuName,
     path: item.page || '',
-    // icon: item.icon,
-    icon: null,
-    name: item.menuname,
+    icon: item.icon,
+    // icon: null,
+    name: item.menuName,
     hideInMenu: item.menutype === '1',
     target: item.linecss,
+    component: components[item.page],
+    // iframeUrl: getIframe(item.page),
   }));
 
   // 将数据存储为 以 id 为 KEY 的 map 索引数据列
@@ -118,7 +121,7 @@ const utils = {
       testParam.v = v;
       testParam.p = JSON.stringify(p);
       testParam.ts = new Date().getTime();
-      testParam.lang = lang;
+      testParam.bcLangType = lang;
       // testParam.href = document.location.href;
       return testParam;
     }
