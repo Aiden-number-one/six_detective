@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 
 export default class SpreadsheetComponent extends Component {
+  static create() {}
+
   state = {};
 
   spreadSheet = null;
