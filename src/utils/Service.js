@@ -7,14 +7,10 @@
  */
 import request from './request';
 import utils from './utils';
+import Api from '@/services/api';
 
 const { getParams } = utils;
 const apisfx = '/api/';
-const Api = {
-  getDatas: 'kingdom.retl.getDatas',
-  delDatas: 'kingdom.retl.delDatas',
-  getDataSourceList: 'kingdom.retl.getDataSourceList',
-};
 
 const Service = {
   logout() {
