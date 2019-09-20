@@ -4,12 +4,49 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-08-30 13:44:51
+ * @LastEditTime: 2019-09-20 10:33:11
  * @LastEditors: mus
  */
 
 import { Base64 } from 'js-base64';
 import md5 from 'md5';
+
+const geneMenuData = data => {
+  if (!data || !data.length) return [];
+  const id = 'menuid';
+  const pid = 'parentmenuid';
+  // 删除 所有 routes,以防止多次调用
+  const newData = data.map(item => ({
+    ...item,
+    menuid: item.menuid,
+    menuname: item.menuname,
+    path: item.page || '',
+    // icon: item.icon,
+    icon: null,
+    name: item.menuname,
+    hideInMenu: item.menutype === '1',
+    target: item.linecss,
+  }));
+
+  // 将数据存储为 以 id 为 KEY 的 map 索引数据列
+  const map = {};
+  newData.forEach(item => {
+    map[item[id]] = item;
+  });
+  const val = [];
+  newData.forEach(item => {
+    // 以当前遍历项，的pid,去map对象中找到索引的id
+    const parent = map[item[pid]];
+    // 好绕啊，如果找到索引，那么说明此项不在顶级当中,那么需要把此项添加到，他对应的父级中
+    if (parent) {
+      (parent.children || (parent.children = [])).push(item);
+    } else {
+      // 如果没有在map中找到对应的索引ID,那么直接把 当前的item添加到 val结果集中，作为顶级
+      val.push(item);
+    }
+  });
+  return val;
+};
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -97,4 +134,4 @@ const utils = {
 
 export default utils;
 
-export { isAntDesignProOrDev, isAntDesignPro, isUrl };
+export { isAntDesignProOrDev, isAntDesignPro, isUrl, geneMenuData };

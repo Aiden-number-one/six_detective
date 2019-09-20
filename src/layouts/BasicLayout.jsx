@@ -25,7 +25,7 @@ const menuDataRender = menuList =>
 const footerRender = () => null;
 
 const BasicLayout = props => {
-  const { dispatch, children, settings, collapsed } = props;
+  const { dispatch, children, settings, collapsed, menuData } = props;
   /**
    * constructor
    */
@@ -33,10 +33,7 @@ const BasicLayout = props => {
   useEffect(() => {
     if (dispatch) {
       dispatch({
-        type: 'user/fetchCurrent',
-      });
-      dispatch({
-        type: 'settings/getSetting',
+        type: 'menu/getMenuData',
       });
     }
   }, []);
@@ -81,6 +78,7 @@ const BasicLayout = props => {
         );
       }}
       footerRender={footerRender}
+      // menuDataRender={() => menuDataRender(menuData)}
       menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
@@ -92,7 +90,8 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings }) => ({
+export default connect(({ global, settings, menu }) => ({
   collapsed: global.collapsed,
   settings,
+  menuData: menu.menuData,
 }))(BasicLayout);
