@@ -30,7 +30,7 @@ const AuthComponent = ({
   location = {
     pathname: '',
   },
-  user,
+  user = {},
 }) => {
   const { currentUser } = user;
   const { routes = [] } = route;
