@@ -2,7 +2,7 @@
  * @Description: kddes
  * @Author: mus
  * @Date: 2019-09-19 20:07:10
- * @LastEditTime: 2019-09-20 09:28:31
+ * @LastEditTime: 2019-09-20 10:44:13
  * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
@@ -638,4 +638,4 @@ const kddes = {
   },
 };
 
-global.kddes = kddes;
+window.kddes = kddes;
