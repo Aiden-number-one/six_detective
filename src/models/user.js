@@ -2,8 +2,8 @@
  * @Description: user modal
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-09-19 17:03:15
- * @LastEditors: mus
+ * @LastEditTime: 2019-09-20 10:17:59
+ * @LastEditors: lan
  */
 import { queryCurrent, query as queryUsers } from '@/services/user';
 
