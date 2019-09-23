@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 // import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Table, Button, Layout, Card, Icon } from 'antd';
+import { Table, Layout, Card, Icon } from 'antd';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import styles from './DataSource.less';
@@ -107,7 +107,7 @@ export default class DataSource extends PureComponent {
             </Card>
           </Sider>
           <Content className={styles.tableData}>
-            <Button onClick={this.getData}>刷新</Button>
+            {/* <Button onClick={this.getData}>刷新</Button> */}
             <Table dataSource={tableData} columns={columns} loading={loading} bordered />
           </Content>
         </Layout>

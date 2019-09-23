@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-08 15:22:20
- * @LastEditTime: 2019-08-29 15:12:05
+ * @LastEditTime: 2019-09-23 13:24:30
  * @LastEditors: lan
  */
 import { message } from 'antd';
@@ -20,7 +20,7 @@ export default {
 
   effects: {
     *queryDatas({ payload }, { call, put }) {
-      const response = yield call(getDatas, payload);
+      const response = yield call(getDatas, { param: payload });
       if (response.kdjson.flag === '1') {
         if (response.kdjson.items) {
           yield put({

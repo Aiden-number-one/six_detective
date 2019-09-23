@@ -4,6 +4,7 @@
   "private": true,
   "description": "An out-of-box UI solution for enterprise applications",
   "scripts": {
+    "bc-install": "npm install --registry=https://registry.npm.taobao.org ",
     "analyze": "cross-env ANALYZE=1 umi build",
     "build": "umi build",
     "build:mock": "cross-env MOCK=1 umi build",
