@@ -2,7 +2,8 @@ import React, { PureComponent, Fragment } from 'react';
 import { Button } from 'antd';
 import SpreadSheet from '@/components/SpreadSheet';
 
-export default class Sheet extends PureComponent {
+@SpreadSheet.createSpreadSheet
+class Sheet extends PureComponent {
   state = {};
 
   spreadSheetRef = React.createRef();
@@ -10,7 +11,8 @@ export default class Sheet extends PureComponent {
   componentDidMount() {}
 
   setCellStyle = (property, value) => {
-    this.spreadSheetRef.current.setCellStyle(property, value);
+    const { setCellStyle } = this.props;
+    setCellStyle(property, value);
   };
 
   render() {
@@ -34,8 +36,10 @@ export default class Sheet extends PureComponent {
         <Button>下划线</Button>
         <Button>删除线</Button>
         <Button>颜色</Button>
-        <SpreadSheet ref={this.spreadSheetRef} />
+        <SpreadSheet />
       </Fragment>
     );
   }
 }
+
+export default Sheet;

@@ -1,3 +1,11 @@
+/*
+ * @Description: 登录
+ * @Author: mus
+ * @Date: 2019-09-19 20:00:55
+ * @LastEditTime: 2019-09-23 11:06:51
+ * @LastEditors: mus
+ * @Email: mus@szkingdom.com
+ */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Tabs } from 'antd';
@@ -99,7 +107,7 @@ class Login extends Component {
     });
     return (
       <LoginContext.Provider value={this.getContext()}>
-        <div className={classNames(className, styles.login)}>
+        <div className={classNames(className, styles.login, 'loginGlobal')}>
           <Form onSubmit={this.handleSubmit}>
             {tabs.length ? (
               <React.Fragment>
