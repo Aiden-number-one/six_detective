@@ -2,8 +2,8 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-09-20 09:29:05
- * @LastEditors: mus
+ * @LastEditTime: 2019-09-20 16:06:57
+ * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -36,13 +36,13 @@ class LoginPage extends Component {
       submitting: true,
     });
     const param = {
-      loginName,
-      loginPwd: window.kddes.getDes(loginPwd),
+      loginname: loginName,
+      password: window.kddes.getDes(loginPwd),
       storeId: '100',
       ipAddress: '127.0.0.1',
-      loginType: '1',
+      loginType: '0',
       loginFromWay: '0',
-      businessCode: '1001',
+      // businessCode: '1001',
     };
     if (!err) {
       const { dispatch } = this.props;
