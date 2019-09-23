@@ -1,6 +1,7 @@
 import { getMenuData, getPageTitle } from '@ant-design/pro-layout';
 import DocumentTitle from 'react-document-title';
 import Link from 'umi/link';
+import classNames from 'classnames';
 import React from 'react';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -43,11 +44,9 @@ const UserLayout = props => {
                 <span className={styles.title}>香港交易所</span>
               </Link>
             </div>
-            {/* <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div> */}
           </div>
           {children}
         </div>
-        {/* <DefaultFooter /> */}
       </div>
     </DocumentTitle>
   );

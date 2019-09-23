@@ -26,7 +26,8 @@ const fontSize = [
   { fontSize: '48' },
 ];
 
-export default class Sheet extends PureComponent {
+@SpreadSheet.createSpreadSheet
+class Sheet extends PureComponent {
   state = {
     fontColor: '#000',
     bgColor: '#fff',
@@ -37,7 +38,9 @@ export default class Sheet extends PureComponent {
   componentDidMount() {}
 
   setCellStyle = (property, value) => {
-    this.spreadSheetRef.current.setCellStyle(property, value);
+    const { setCellStyle, getCellStyle } = this.props;
+    const result = getCellStyle(property);
+    setCellStyle(property, value);
   };
 
   render() {
@@ -141,8 +144,10 @@ export default class Sheet extends PureComponent {
           <Button style={{ backgroundColor: bgColor }}>填充颜色</Button>
         </Dropdown>
 
-        <SpreadSheet ref={this.spreadSheetRef} />
+        <SpreadSheet />
       </Fragment>
     );
   }
 }
+
+export default Sheet;
