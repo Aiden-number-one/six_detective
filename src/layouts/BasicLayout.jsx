@@ -82,8 +82,8 @@ const BasicLayout = props => {
         );
       }}
       footerRender={footerRender}
-      // menuDataRender={() => menuDataRender(menuData)}
-      menuDataRender={menuDataRender}
+      menuDataRender={() => menuDataRender(menuData)}
+      // menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}
