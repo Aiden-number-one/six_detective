@@ -11,7 +11,8 @@ class Sheet extends PureComponent {
   componentDidMount() {}
 
   setCellStyle = (property, value) => {
-    const { setCellStyle } = this.props;
+    const { setCellStyle, getCellStyle } = this.props;
+    const result = getCellStyle(property);
     setCellStyle(property, value);
   };
 

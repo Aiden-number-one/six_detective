@@ -2,11 +2,15 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-23 14:22:47
+ * @LastEditTime: 2019-09-23 17:09:31
  * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
+
+const styleKeyMap = {
+  'font-bold': 'bold',
+};
 
 export default WrapperComponent =>
   class extends Component {
@@ -205,13 +209,23 @@ export default WrapperComponent =>
     };
 
     // 得到cell属性
-    // getCellStyle = () => {
-
-    // }
+    getCellStyle = property => {
+      const {
+        sheet: { data },
+      } = this.spreadSheet;
+      return (() => {
+        const styles = data.getSelectedCellStyle();
+        if (property === 'font-bold') {
+          return styles.font[styleKeyMap[property]];
+        }
+        return false;
+      })();
+    };
 
     render() {
       const props = {
         setCellStyle: this.setCellStyle,
+        getCellStyle: this.getCellStyle,
       };
       return <WrapperComponent {...props} />;
     }
