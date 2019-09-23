@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-08-30 13:32:53
+ * @LastEditTime: 2019-09-20 11:21:23
  * @LastEditors: mus
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -89,6 +89,11 @@ export default {
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: [
     {
+      path: '/login',
+      component: '../layouts/UserLayout',
+      routes: [{ path: '/login', name: 'login', component: './User/Login' }],
+    },
+    {
       path: '/',
       component: '../layouts/BasicLayout',
       Routes: ['src/pages/Authorized'],
@@ -105,6 +110,12 @@ export default {
           name: 'datapanel',
           icon: 'environment',
           component: './DataPanel/DataPanel',
+        },
+        {
+          path: '/sheet',
+          name: 'sheet',
+          icon: 'table',
+          component: './Sheet/Sheet',
         },
         {
           component: './Page404',
@@ -158,10 +169,11 @@ export default {
   },
   chainWebpack: webpackPlugin,
   proxy: {
-    '/areas': {
-      target: 'https://geo.datav.aliyun.com/areas',
-      pathRewrite: { '^/areas': '' },
-      secure: false,
+    '/api': {
+      target: 'http://10.70.1.7:9090/superlop/rest/admin/v2.0/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+      timeout: 10000,
     },
   },
 };

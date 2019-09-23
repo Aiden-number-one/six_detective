@@ -1,15 +1,18 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable no-underscore-dangle */
 /*
  * @Description: request
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-08-29 14:45:52
- * @LastEditors: lan
+ * @LastEditTime: 2019-09-19 19:59:36
+ * @LastEditors: mus
  */
 import fetch from 'dva/fetch';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 import router from 'umi/router';
 import queryString from 'query-string';
-// import queryString from 'qs';
+import uuidv1 from 'uuid/v1';
+import { md5 } from 'md5js';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -34,10 +37,10 @@ const checkStatus = response => {
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
-  notification.error({
-    message: `请求错误 ${response.status}: ${response.url}`,
-    description: errortext,
-  });
+  // notification.error({
+  //   message: `请求错误 ${response.status}: ${response.url}`,
+  //   description: errortext,
+  // });
   const error = new Error(errortext);
   error.name = response.status;
   error.response = response;
@@ -72,7 +75,40 @@ export default function request(url, option) {
   const defaultOptions = {
     credentials: 'include',
   };
-  const newOptions = { ...defaultOptions, ...options };
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  let x_trace_user_id = localStorage.getItem('x-trace-user-id');
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  if (!x_trace_user_id) {
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    x_trace_user_id = uuidv1();
+    localStorage.setItem('x-trace-user-id', x_trace_user_id);
+  }
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  let { x_trace_page_id } = window;
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  if (!x_trace_page_id) {
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    x_trace_page_id = uuidv1();
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    window.x_trace_page_id = x_trace_page_id;
+  }
+  const headers = {
+    'X-Kweb-Menu-Id': document.location.href,
+    'X-Kweb-Trace-Req-Id': uuidv1(),
+    'X-Kweb-Trace-Page-Id': x_trace_page_id,
+    'X-Kweb-Trace-User-Id': x_trace_user_id,
+    'X-Kweb-Location-Href': document.location.href,
+    'X-Kweb-Timestamp': `${new Date().getTime()}`,
+    'X-Kweb-Sign': md5(document.location.href),
+    'X-Kweb-Api-Name': url.trim(),
+    'X-Kweb-Api-Version': '4.0',
+  };
+
+  const newOptions = {
+    ...defaultOptions,
+    ...options,
+    headers,
+  };
   if (
     newOptions.method === 'POST' ||
     newOptions.method === 'PUT' ||
@@ -93,6 +129,24 @@ export default function request(url, option) {
         ...newOptions.headers,
       };
     }
+  } else if (newOptions.method === 'GET') {
+    newOptions.headers = {
+      Accept: 'application/json',
+      ...newOptions.headers,
+    };
+    const paramsMap = newOptions.body;
+    if (paramsMap) {
+      // 拼接参数
+      const paramsArray = Object.keys(paramsMap).map(key => `${key}=${paramsMap[key]}`);
+      if (url.search(/\?/) === -1) {
+        // eslint-disable-next-line no-param-reassign
+        url += `?${paramsArray.join('&')}`;
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        url += `&${paramsArray.join('&')}`;
+      }
+    }
+    delete newOptions.body;
   }
 
   return fetch(url, newOptions)
@@ -104,18 +158,21 @@ export default function request(url, option) {
         .then(res => {
           try {
             const val = JSON.parse(res);
-            if (
-              val.flag &&
-              val.flag === 'F' &&
-              val.code &&
-              ['invalid_token', 'access_denied', 'invalid_grant'].indexOf(val.code) !== -1
-            ) {
-              // eslint-disable-next-line no-underscore-dangle
+            if (val.kdjson.flag === '001') {
               window.g_app._store.dispatch({ type: 'global/setLogout' });
-              router.push('/');
+              router.push('/login');
+            }
+            if (val.kdjson.flag === '0000') {
+              notification.error({
+                message: '请求错误',
+                description: val.kdjson.msg,
+              });
+            }
+            if (val.kdjson.flag === '0') {
+              message.error(val.kdjson.msg);
             }
           } catch (error) {
-            //
+            // console.log(error);
           }
         });
       return response;
@@ -130,7 +187,7 @@ export default function request(url, option) {
       try {
         responseJson = response.json();
       } catch (error) {
-        //
+        console.log(error);
       }
 
       return responseJson;
@@ -139,7 +196,6 @@ export default function request(url, option) {
       const status = e.name;
       if (status === 401) {
         // @HACK
-        // eslint-disable-next-line no-underscore-dangle
         window.g_app._store.dispatch({
           type: 'global/logout',
         });

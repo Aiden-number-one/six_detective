@@ -2,8 +2,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-07 13:33:44
- * @LastEditTime: 2019-08-30 14:10:34
- * @LastEditors: lan
+ * @LastEditTime: 2019-09-19 17:53:28
+ * @LastEditors: mus
  */
 const getDatas = (req, res) => {
   setTimeout(() => {
@@ -169,7 +169,7 @@ const getDataSourceList = (req, res) => {
 };
 
 export default {
-  '/api/getDatas': getDatas,
-  '/api/delDatas': delDatas,
-  '/api/getDataSourceList': getDataSourceList,
+  'POST /api/kingdom.retl.getDatas.json': getDatas,
+  'POST /api/kingdom.retl.delDatas.json': delDatas,
+  'POST /api/kingdom.retl.getDataSourceList.json': getDataSourceList,
 };

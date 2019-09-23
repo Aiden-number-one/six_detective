@@ -93,6 +93,14 @@ export default class DataPanel extends PureComponent {
           <img alt="" src={circle} />
           <RingDiagram />
         </div>
+        <div className={className(styles.rd2)}>
+          <img alt="" src={circle} />
+          <RingDiagram />
+        </div>
+        <div className={className(styles.rd3)}>
+          <img alt="" src={circle} />
+          <RingDiagram />
+        </div>
         <div className={className(styles.slideText)}>
           <SlideText />
         </div>

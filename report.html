@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ESLint Results (lite)</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style type="text/css">
+    body {
+      margin: 0;
+    }
+  
+    .eslint-report {
+      font-family: "Helvetica Neue", sans-serif;
+      font-size: 14px;
+      padding: 20px 40px;
+    }
+  
+    .eslint-report h1 {
+      border-bottom: 1px solid #ddd;
+      line-height: 1;
+      padding-bottom: 12px;
+    }
+  
+    .eslint-report h2 {
+      padding-bottom: 9px;
+      line-height: 1;
+      margin-top: 24px;
+      margin-bottom: 9px;
+    }
+  
+    .eslint-report h3 {
+      line-height: 1;
+      margin-top: 0;
+    }
+  
+    .eslint-report a {
+      text-decoration: none;
+    }
+  
+    .eslint-report table {
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+  
+    .toggle-all-link {
+      font-size: 14px;
+    }
+  
+    .report-table {
+      font-size: 14px;
+      min-width: 800px;
+      border: 1px solid #e6e6e6;
+      margin: 10px;
+    }
+  
+    .report-table thead {
+      background-color: #eee;
+    }
+  
+    .report-table th {
+      text-align: left;
+      vertical-align: middle;
+    }
+  
+    .report-table th,
+    .report-table td {
+      padding: 4px 9px;
+      border: 1px solid #ccc;
+    }
+  
+    .report-table td {
+      line-height: 1.5;
+      vertical-align: top;
+    }
+  
+    .report-table .error-col {
+      width: 41px;
+    }
+  
+    .report-table .warning-col {
+      width: 63px;
+    }
+  
+    .report-table .toggle-link {
+      display: block;
+    }
+  
+    .report-table .danger td {
+      background-color: rgba(242, 222, 222, 0.8);
+    }
+  
+    .report-table .danger:hover td {
+      background-color: rgba(242, 222, 222, 1);
+    }
+  
+    .report-table .warning td {
+      background-color: rgba(252, 248, 227, 0.8);
+    }
+  
+    .report-table .warning:hover td {
+      background-color: rgba(252, 248, 227, 1);
+    }
+  
+    .report-table .success td {
+      background-color: rgba(223, 240, 216, 0.8);
+    }
+  
+    .report-table .success:hover td {
+      background-color: rgba(223, 240, 216, 1);
+    }
+  
+    .table-wrapper {
+      display: flex;
+      justify-content: flex-start;
+      width: 600px;
+      align-items: flex-end;
+    }
+  
+    .table-wrapper.occurrences {
+      align-items: flex-start;
+    }
+  
+    .table-wrapper.occurrences .table-column {
+      height: 180px;
+      overflow-y: auto;
+    }
+  
+    .table-column {
+      flex: 1;
+      margin: 10px;
+    }
+  
+    .summary-table {
+      width: 100%;
+    }
+  
+    .summary-table a {
+      display: block;
+    }
+  
+    .summary-table td {
+      padding: 4px 0;
+    }
+  
+    .summary-table td:last-child {
+      text-align: right;
+    }
+  
+    .summary-table tfoot td {
+      border-top: 2px solid #666;
+      font-weight: bold;
+    }
+  
+    .details-row.hidden {
+      display: none;
+    }
+  
+    .details-table {
+      font-size: 12px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  
+    .details-table td {
+      border: 0;
+      padding: 1px 6px;
+    }
+  
+    .details-table td:first-child {
+      padding-left: 0;
+    }
+  
+    .details-table .location-col {
+      width: 25px;
+    }
+  
+    .details-table .rule-col {
+      white-space: nowrap;
+      width: 100px;
+    }
+  
+    .details-table .rule-col a {
+      display: block;
+    }
+  
+    .details-table .rule-col a:hover {
+      text-decoration: underline;
+    }
+  
+    .details-table .severity-col {
+      width: 45px;
+    }
+  
+    .details-table .msg-danger .severity-col {
+      color: #900;
+    }
+  
+    .details-table .msg-warning .severity-col {
+      color: #f90;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="eslint-report">
+    <h1>ESLint Results (lite)</h1>
+
+      <h2>Summary</h2>
+      
+      <div class="table-wrapper">
+        <div class="table-column">
+          <table class="summary-table">
+              <tbody>
+                <tr>
+                  <td>Errors</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Warnings</td>
+                  <td>18</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td>Total alerts</td>
+                  <td>18</td>
+                </tr>
+              </tfoot>
+          </table>
+        </div>
+        <div class="table-column">
+          <table class="summary-table">
+              <tbody>
+                <tr>
+                  <td>Files with errors</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Files with only warnings</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>Clean files</td>
+                  <td>81</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td>Total files linted</td>
+                  <td>84</td>
+                </tr>
+              </tfoot>
+          </table>
+        </div>
+      </div>
+
+        <h2>Most-Common Errors and Warnings</h2>
+        
+        <div class="table-wrapper occurrences">
+          <div class="table-column">
+            <h3>Errors</h3>
+        
+              <p>No errors were found!</p>
+          </div>
+          <div class="table-column">
+            <h3>Warnings</h3>
+        
+              <table class="summary-table">
+                <tbody>
+                    <tr class="occurrence row-0">
+                        <td><a href="http://eslint.org/docs/rules/no-console">no-console</a></td>
+                      <td>10</td>
+                    </tr>
+                    <tr class="occurrence row-1">
+                        <td><a href="http://eslint.org/docs/rules/@typescript-eslint/no-unused-vars">@typescript-eslint/no-unused-vars</a></td>
+                      <td>7</td>
+                    </tr>
+                    <tr class="occurrence row-2">
+                        <td><a href="http://eslint.org/docs/rules/eslint-comments/no-unlimited-disable">eslint-comments/no-unlimited-disable</a></td>
+                      <td>1</td>
+                    </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+
+      <h2>File Breakdown
+      </h2>
+      
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>File</th>
+            <th class="error-col">Errors</th>
+            <th class="warning-col">Warnings</th>
+          </tr>
+        </thead>
+        <tbody><tr class="warning"><td>E:\SLOP\superlop-web-project\src\components\SpreadSheet\index.jsx</td>
+              <td>0</td>
+              <td>16</td></tr><tr class="warning"><td>E:\SLOP\superlop-web-project\src\utils\request.js</td>
+              <td>0</td>
+              <td>1</td></tr><tr class="warning"><td>E:\SLOP\superlop-web-project\src\components\Login\index.js</td>
+              <td>0</td>
+              <td>1</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Authorized\Authorized.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Authorized\AuthorizedRoute.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Authorized\CheckPermissions.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Authorized\PromiseRender.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Authorized\Secured.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Authorized\index.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Authorized\renderAuthorize.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\CopyBlock\index.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\GlobalHeader\AvatarDropdown.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\GlobalHeader\NoticeIconView.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\GlobalHeader\RightContent.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\HeaderDropdown\index.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\HeaderSearch\index.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Login\LoginItem.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Login\LoginSubmit.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Login\LoginTab.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Login\loginContext.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\Login\map.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\NoticeIcon\NoticeList.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\NoticeIcon\index.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\PageLoading\index.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\SelectLang\index.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\components\SettingDrawer\themeColorClient.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\e2e\__mocks__\antd-pro-merge-less.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\e2e\baseLayout.e2e.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\e2e\topMenu.e2e.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\global.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\layouts\BasicLayout.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\layouts\BlankLayout.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\layouts\UserLayout.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\en-US.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\en-US\component.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\en-US\globalHeader.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\en-US\menu.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\en-US\pwa.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\en-US\settingDrawer.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\en-US\settings.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\pt-BR.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\pt-BR\component.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\pt-BR\globalHeader.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\pt-BR\menu.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\pt-BR\pwa.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\pt-BR\settingDrawer.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\pt-BR\settings.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-CN.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-CN\component.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-CN\globalHeader.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-CN\menu.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-CN\pwa.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-CN\settingDrawer.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-CN\settings.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-TW.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-TW\component.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-TW\globalHeader.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-TW\menu.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-TW\pwa.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-TW\settingDrawer.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\locales\zh-TW\settings.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\models\SettingModel.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\models\api.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\models\global.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\models\login.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\models\menu.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\models\user.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\pages\Authorized.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\pages\DataPanel\DataPanel.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\pages\DataPanel\components\RingDiagram\index.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\pages\DataPanel\components\SlideText\SlideText.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\pages\DataSource\DataSource.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\pages\Page404.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\pages\Sheet\Sheet.jsx</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\pages\User\Login.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\service-worker.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\services\api.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\services\common.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\utils\Authorized.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\utils\Service.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\utils\authority.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\utils\authority.test.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\utils\utils.js</td>
+              <td>0</td>
+              <td>0</td></tr><tr class="success"><td>E:\SLOP\superlop-web-project\src\utils\utils.test.js</td>
+              <td>0</td>
+              <td>0</td></tr></tbody>
+      </table>
+
+  </div>
+</body>
+</html>
