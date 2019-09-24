@@ -2,7 +2,7 @@
  * @Description: request
  * @Author: lan
  * @Date: 2019-08-29 13:21:48
- * @LastEditTime: 2019-09-24 11:23:48
+ * @LastEditTime: 2019-09-24 13:48:30
  * @LastEditors: mus
  */
 import { Base64 } from 'js-base64';
@@ -25,24 +25,24 @@ Object.keys(Api).forEach(key => {
     const P = opts.param || {}; // 参数
     const S = new Date().getTime();
     P.bcLangType = bcLangType;
+    const base64Param = Base64.encode(JSON.stringify(P));
     return request(
       `${`${apisfx + V}/${N}`}.json`,
       {
         ...opts,
         method: opts.method || 'POST',
         body: {
-          bcp: Base64.encode(JSON.stringify(P)),
+          bcp: base64Param,
           s: S,
         },
       },
       {
         N,
         V,
-        P: JSON.stringify(P),
+        P: base64Param,
         S,
       },
     );
-    // return request(`${apisfx}${a}.json`, opt);
   };
 });
 

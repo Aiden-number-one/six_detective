@@ -4,7 +4,7 @@
  * @Description: request
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-09-24 11:20:54
+ * @LastEditTime: 2019-09-24 13:42:24
  * @LastEditors: mus
  */
 import fetch from 'dva/fetch';
@@ -110,7 +110,7 @@ export default function request(url, option, NVPS) {
       randowNVPS.forEach(value => {
         signText += value + NVPS[value];
       });
-      return signMode + md5(signText);
+      return signMode + md5(signText, 32).toUpperCase();
     })(),
     'X-Bc-T': `BCT${uuidv1().replace(/-/g, '')}`,
   };
