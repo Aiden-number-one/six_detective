@@ -375,6 +375,24 @@ class Sheet extends PureComponent {
           只读
         </Button>
 
+        <Button
+          className={styles.marginRight5}
+          onClick={() => {
+            setCellStyle('clearformat');
+          }}
+        >
+          清除格式
+        </Button>
+
+        <Button
+          className={styles.marginRight5}
+          onClick={() => {
+            setCellStyle('paintformat', true);
+          }}
+        >
+          格式刷
+        </Button>
+
         <SpreadSheet />
       </Fragment>
     );
