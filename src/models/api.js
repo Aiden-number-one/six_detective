@@ -2,12 +2,11 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-08 15:22:20
- * @LastEditTime: 2019-09-23 13:24:30
- * @LastEditors: lan
+ * @LastEditTime: 2019-09-24 15:03:06
+ * @LastEditors: mus
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
-// import { queryDatas, delDatas, getDataSourceList } from '@/services/user';
 
 const { getDatas, delDatas, getDataSourceList } = Service;
 export default {

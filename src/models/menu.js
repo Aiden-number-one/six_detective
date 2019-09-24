@@ -2,7 +2,7 @@
  * @Description: menu modal
  * @Author: mus
  * @Date: 2019-09-19 17:03:33
- * @LastEditTime: 2019-09-24 09:57:42
+ * @LastEditTime: 2019-09-24 14:45:08
  * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
@@ -19,7 +19,7 @@ export default {
   effects: {
     *getMenuData({ payload }, { call, put }) {
       const response = yield call(getMenu, { param: payload, version: 'v2.0' });
-      const items = response.kdjson.items || [];
+      const items = response.bcjson.items || [];
       const menuData = geneMenuData(items);
       yield put({
         type: 'save',
