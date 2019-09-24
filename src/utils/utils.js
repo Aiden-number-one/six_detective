@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-09-24 13:23:57
+ * @LastEditTime: 2019-09-24 14:01:25
  * @LastEditors: mus
  */
 
@@ -54,24 +54,15 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(
 
 const isUrl = path => reg.test(path);
 
-const isAntDesignPro = () => {
-  if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
-    return true;
-  }
-
-  return window.location.hostname === 'preview.pro.ant.design';
-}; // 给官方演示站点用，用于关闭真实开发环境不需要使用的特性
-
-const isAntDesignProOrDev = () => {
+const isProOrDev = () => {
   const { NODE_ENV } = process.env;
 
   if (NODE_ENV === 'development') {
     return true;
   }
 
-  return isAntDesignPro();
+  return false;
 };
-const testMode = true;
 // 得到随机的NVPS
 const getRandowNVPS = () => {
   const array = ['N', 'V', 'P', 'S'];
@@ -83,4 +74,4 @@ const getRandowNVPS = () => {
   return newArray;
 };
 
-export { isAntDesignProOrDev, isAntDesignPro, isUrl, geneMenuData, getRandowNVPS };
+export { isProOrDev, isUrl, geneMenuData, getRandowNVPS };
