@@ -2,14 +2,15 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-23 17:09:31
- * @LastEditors: mus
+ * @LastEditTime: 2019-09-24 11:20:53
+ * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
 
 const styleKeyMap = {
   'font-bold': 'bold',
+  'font-italic': 'italic',
 };
 
 export default WrapperComponent =>
@@ -215,8 +216,15 @@ export default WrapperComponent =>
       } = this.spreadSheet;
       return (() => {
         const styles = data.getSelectedCellStyle();
-        if (property === 'font-bold') {
+        const cells = data.getSelectedCell();
+        if (property === 'font-bold' || property === 'font-italic') {
           return styles.font[styleKeyMap[property]];
+        }
+        if (property === 'underline' || property === 'strike' || property === 'textwrap') {
+          return styles[property];
+        }
+        if (property === 'merge') {
+          return cells && !!cells[property];
         }
         return false;
       })();
