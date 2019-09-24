@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-07 13:33:44
- * @LastEditTime: 2019-09-19 17:53:28
+ * @LastEditTime: 2019-09-24 15:04:02
  * @LastEditors: mus
  */
 const getDatas = (req, res) => {
@@ -169,7 +169,7 @@ const getDataSourceList = (req, res) => {
 };
 
 export default {
-  'POST /api/kingdom.retl.getDatas.json': getDatas,
-  'POST /api/kingdom.retl.delDatas.json': delDatas,
-  'POST /api/kingdom.retl.getDataSourceList.json': getDataSourceList,
+  'POST /api/v2.0/kingdom.retl.getDatas.json': getDatas,
+  'POST /api/v2.0/kingdom.retl.delDatas.json': delDatas,
+  'POST /api/v2.0/kingdom.retl.getDataSourceList.json': getDataSourceList,
 };
