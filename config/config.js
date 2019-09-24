@@ -2,8 +2,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-09-24 11:06:11
- * @LastEditors: mus
+ * @LastEditTime: 2019-09-24 14:03:25
+ * @LastEditors: lan
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 

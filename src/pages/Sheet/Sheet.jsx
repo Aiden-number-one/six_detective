@@ -2,6 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { Button, Select, Dropdown } from 'antd';
 import { SketchPicker } from 'react-color';
 import SpreadSheet from '@/components/SpreadSheet';
+import styles from './Sheet.less';
 
 const { Option } = Select;
 const fontFamily = [
@@ -48,7 +49,11 @@ class Sheet extends PureComponent {
   setCellStyle = (property, value) => {
     const { setCellStyle, getCellStyle } = this.props;
     const result = getCellStyle(property);
-    setCellStyle(property, value);
+    if (result === value) {
+      setCellStyle(property, false);
+    } else {
+      setCellStyle(property, value);
+    }
   };
 
   render() {
@@ -57,6 +62,7 @@ class Sheet extends PureComponent {
     return (
       <Fragment>
         <Button
+          className={styles.marginRight5}
           onClick={() => {
             setCellStyle('font-bold', true);
           }}
@@ -65,6 +71,7 @@ class Sheet extends PureComponent {
         </Button>
 
         <Button
+          className={styles.marginRight5}
           onClick={() => {
             setCellStyle('font-italic', true);
           }}
@@ -73,6 +80,7 @@ class Sheet extends PureComponent {
         </Button>
 
         <Select
+          className={styles.marginRight5}
           placeholder="请选择"
           onChange={value => {
             setCellStyle('font-name', value);
@@ -87,6 +95,7 @@ class Sheet extends PureComponent {
         </Select>
 
         <Select
+          className={styles.marginRight5}
           placeholder="请选择"
           onChange={value => {
             setCellStyle('font-size', value);
@@ -101,6 +110,7 @@ class Sheet extends PureComponent {
         </Select>
 
         <Button
+          className={styles.marginRight5}
           onClick={() => {
             setCellStyle('underline', true);
           }}
@@ -109,6 +119,7 @@ class Sheet extends PureComponent {
         </Button>
 
         <Button
+          className={styles.marginRight5}
           onClick={() => {
             setCellStyle('strike', true);
           }}
@@ -117,6 +128,7 @@ class Sheet extends PureComponent {
         </Button>
 
         <Dropdown
+          className={styles.marginRight5}
           trigger={['click']}
           overlay={
             <SketchPicker
@@ -135,6 +147,7 @@ class Sheet extends PureComponent {
         </Dropdown>
 
         <Dropdown
+          className={styles.marginRight5}
           trigger={['click']}
           overlay={
             <SketchPicker
@@ -151,6 +164,52 @@ class Sheet extends PureComponent {
         >
           <Button style={{ backgroundColor: bgColor }}>填充颜色</Button>
         </Dropdown>
+
+        <Select
+          className={styles.marginRight5}
+          placeholder="水平对齐方式"
+          onChange={value => {
+            setCellStyle('align', value);
+          }}
+          value="left"
+          style={{ width: 140 }}
+        >
+          <Option value="left">左对齐</Option>
+          <Option value="center">居中对齐</Option>
+          <Option value="right">右对齐</Option>
+        </Select>
+
+        <Select
+          className={styles.marginRight5}
+          placeholder="垂直对齐方式"
+          onChange={value => {
+            setCellStyle('valign', value);
+          }}
+          value="middle"
+          style={{ width: 140 }}
+        >
+          <Option value="top">顶部对齐</Option>
+          <Option value="middle">居中对齐</Option>
+          <Option value="bottom">底部对齐</Option>
+        </Select>
+
+        <Button
+          className={styles.marginRight5}
+          onClick={() => {
+            setCellStyle('textwrap', true);
+          }}
+        >
+          自动换行
+        </Button>
+
+        <Button
+          className={styles.marginRight5}
+          onClick={() => {
+            setCellStyle('merge', true);
+          }}
+        >
+          合并单元格
+        </Button>
 
         <SpreadSheet />
       </Fragment>
