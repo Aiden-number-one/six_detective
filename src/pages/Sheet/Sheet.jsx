@@ -4,11 +4,20 @@ import SpreadSheet from '@/components/SpreadSheet';
 
 @SpreadSheet.createSpreadSheet
 class Sheet extends PureComponent {
-  state = {};
+  state = {
+    cellStyle: {},
+  };
 
   spreadSheetRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { setCellCallback } = this.props;
+    setCellCallback(cellStyle => {
+      this.setState({
+        cellStyle,
+      });
+    });
+  }
 
   setCellStyle = (property, value) => {
     const { setCellStyle, getCellStyle } = this.props;
@@ -18,6 +27,7 @@ class Sheet extends PureComponent {
 
   render() {
     const { setCellStyle } = this;
+    const { cellStyle } = this.state;
     return (
       <Fragment>
         <Button

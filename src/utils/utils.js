@@ -4,8 +4,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-09-20 17:06:13
- * @LastEditors: lan
+ * @LastEditTime: 2019-09-24 11:03:39
+ * @LastEditors: mus
  */
 
 import { Base64 } from 'js-base64';
@@ -74,6 +74,16 @@ const isAntDesignProOrDev = () => {
   return isAntDesignPro();
 };
 const testMode = true;
+// 得到随机的NVPS
+const getRandowNVPS = () => {
+  const array = ['N', 'V', 'P', 'S'];
+  const newArray = [];
+  while (array.length > 0) {
+    const random = Math.floor(Math.random() * array.length);
+    newArray.push(array.splice(random, 1)[0]);
+  }
+  return newArray;
+};
 const utils = {
   get16(a, v, p) {
     const pp = {};
@@ -137,4 +147,4 @@ const utils = {
 
 export default utils;
 
-export { isAntDesignProOrDev, isAntDesignPro, isUrl, geneMenuData };
+export { isAntDesignProOrDev, isAntDesignPro, isUrl, geneMenuData, getRandowNVPS };
