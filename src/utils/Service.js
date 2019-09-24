@@ -2,15 +2,15 @@
  * @Description: request
  * @Author: lan
  * @Date: 2019-08-29 13:21:48
- * @LastEditTime: 2019-09-20 16:12:37
- * @LastEditors: lan
+ * @LastEditTime: 2019-09-24 13:48:30
+ * @LastEditors: mus
  */
+import { Base64 } from 'js-base64';
 import request from './request';
-import utils from './utils';
 import Api from '@/services/api';
 
-const { getParams } = utils;
 const apisfx = '/api/';
+const bcLangType = 'ZHCN';
 
 const Service = {
   logout() {
@@ -20,17 +20,29 @@ const Service = {
 
 Object.keys(Api).forEach(key => {
   Service[key] = (opts = {}) => {
-    const a = Api[key];
-    const v = opts.version || 'v2.0';
-    const p = opts.param || {};
-    const lang = opts.lang || 'ZHCN';
-    const params = getParams(a, v, p, lang);
-    return request(`${apisfx + a}.json`, {
-      ...opts,
-      method: opts.method || 'POST',
-      body: params,
-    });
-    // return request(`${apisfx}${a}.json`, opt);
+    const N = Api[key]; // 接口名
+    const V = opts.version || 'v2.0'; // 版本号
+    const P = opts.param || {}; // 参数
+    const S = new Date().getTime();
+    P.bcLangType = bcLangType;
+    const base64Param = Base64.encode(JSON.stringify(P));
+    return request(
+      `${`${apisfx + V}/${N}`}.json`,
+      {
+        ...opts,
+        method: opts.method || 'POST',
+        body: {
+          bcp: base64Param,
+          s: S,
+        },
+      },
+      {
+        N,
+        V,
+        P: base64Param,
+        S,
+      },
+    );
   };
 });
 

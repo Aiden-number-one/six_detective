@@ -4,7 +4,7 @@
  * @Description: request
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-09-19 19:59:36
+ * @LastEditTime: 2019-09-24 13:42:24
  * @LastEditors: mus
  */
 import fetch from 'dva/fetch';
@@ -13,6 +13,7 @@ import router from 'umi/router';
 import queryString from 'query-string';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
+import { getRandowNVPS } from './utils';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -64,7 +65,7 @@ const checkStatus = response => {
  * @param  {object} [option] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, option) {
+export default function request(url, option, NVPS) {
   const options = {
     ...option,
   };
@@ -102,8 +103,17 @@ export default function request(url, option) {
     'X-Kweb-Sign': md5(document.location.href),
     'X-Kweb-Api-Name': url.trim(),
     'X-Kweb-Api-Version': '4.0',
+    'X-Bc-S': (() => {
+      const randowNVPS = getRandowNVPS();
+      const signMode = randowNVPS.join('');
+      let signText = '';
+      randowNVPS.forEach(value => {
+        signText += value + NVPS[value];
+      });
+      return signMode + md5(signText, 32).toUpperCase();
+    })(),
+    'X-Bc-T': `BCT${uuidv1().replace(/-/g, '')}`,
   };
-
   const newOptions = {
     ...defaultOptions,
     ...options,

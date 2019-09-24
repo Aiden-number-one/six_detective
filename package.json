@@ -62,7 +62,6 @@
     "js-base64": "^2.5.1",
     "lodash": "^4.17.11",
     "lodash-decorators": "^6.0.1",
-    "md5": "^2.2.1",
     "md5js": "^1.0.7",
     "memoize-one": "^5.0.4",
     "moment": "^2.24.0",

@@ -30,13 +30,21 @@ const fontSize = [
 @SpreadSheet.createSpreadSheet
 class Sheet extends PureComponent {
   state = {
+    cellStyle: {},
     fontColor: '#000',
     bgColor: '#fff',
   };
 
   spreadSheetRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { setCellCallback } = this.props;
+    setCellCallback(cellStyle => {
+      this.setState({
+        cellStyle,
+      });
+    });
+  }
 
   setCellStyle = (property, value) => {
     const { setCellStyle, getCellStyle } = this.props;
@@ -50,7 +58,7 @@ class Sheet extends PureComponent {
 
   render() {
     const { setCellStyle } = this;
-    const { fontColor, bgColor } = this.state;
+    const { fontColor, bgColor, cellStyle } = this.state;
     return (
       <Fragment>
         <Button

@@ -2,11 +2,12 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-24 11:20:53
+ * @LastEditTime: 2019-09-24 14:03:01
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 const styleKeyMap = {
   'font-bold': 'bold',
@@ -15,9 +16,16 @@ const styleKeyMap = {
 
 export default WrapperComponent =>
   class extends Component {
-    state = {};
-
-    spreadSheet = null;
+    constructor(props) {
+      super(props);
+      this.state = {};
+      // sheet的实例
+      this.spreadSheet = null;
+      // 点击单元格回调函数
+      this.clickCellReflectFunc = () => {};
+      // 点击cell
+      this.clickCell = _.debounce(this.clickCell, 500);
+    }
 
     componentDidMount() {
       const { data = {} } = this.props;
@@ -112,9 +120,8 @@ export default WrapperComponent =>
            * @Author: linjian
            * @Date: 2019-06-24 13:32:05
            */
-          afterSelection(sri, sci, eri, eci) {
-            // console.log('sri:' + sri + ' sci:' + sci + ' eri:' + eri + ' eci:' + eci);
-            document.querySelector('#J_choose_location').innerHTML = `${sri + 1},${sci + 1}`;
+          afterSelection: (sri, sci, eri, eci) => {
+            this.clickCell(sri, sci, eri, eci);
           },
           /** 拖动鼠标多选之后 回调
            * @description:
@@ -123,10 +130,8 @@ export default WrapperComponent =>
            * @Author: linjian
            * @Date: 2019-06-24 14:23:55
            */
-          afterMultiSelection(sri, sci, eri, eci) {
-            // console.log('sri:' + sri + ' sci:' + sci + ' eri:' + eri + ' eci:' + eci);
-            document.querySelector('#J_choose_location').innerHTML = `${sri + 1},${sci + 1}:${eri +
-              1},${eci + 1}`;
+          afterMultiSelection: (sri, sci, eri, eci) => {
+            this.clickCell(sri, sci, eri, eci);
           },
           /**
            * @description:
@@ -200,6 +205,17 @@ export default WrapperComponent =>
         .change(() => {});
     }
 
+    // 点击单元格
+    clickCell = (sri, sci) => {
+      if (!this.spreadSheet) {
+        return;
+      }
+      const {
+        sheet: { data },
+      } = this.spreadSheet;
+      this.clickCellReflectFunc(data.getCellStyle(sri, sci) || {});
+    };
+
     // 设置cell属性
     setCellStyle = (property, value) => {
       const {
@@ -230,10 +246,17 @@ export default WrapperComponent =>
       })();
     };
 
+    // 设置点击单元格的回调函数
+    setCellCallback = callback => {
+      this.clickCellReflectFunc = callback;
+    };
+
     render() {
       const props = {
         setCellStyle: this.setCellStyle,
         getCellStyle: this.getCellStyle,
+        setCellCallback: this.setCellCallback,
+        ...this.props,
       };
       return <WrapperComponent {...props} />;
     }
