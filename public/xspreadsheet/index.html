@@ -1,7 +1,7 @@
 <!--
  * @Author: linjian
  * @Date: 2019-06-17 09:01:07
- * @LastEditors: linjian
+ * @LastEditors: mus
  * @Description: file content
  * @email: linjian@szkingdom.com
  -->
@@ -63,6 +63,8 @@
   </style>
 <link href="xspreadsheet.css" rel="stylesheet"></head>
 <body onload="load()">
+  <div onclick="changeText(this)">wowowowowoow</div>
+  <div onclick="changeCellType(this)">changeCellType</div>
   <div class="formulabar" data-step="4" data-intro="显示函数或单元格值" data-position="auto" >
     <input type="text" size="200" style="width: 400px;" id="fxFn" value="">
     <div class="formulabar-fx">
@@ -1077,7 +1079,7 @@
             // callback(data)
           },
         },
-        hideCol:[0,1,2,3,4,5,6,7,8,9]
+        // hideCol:[0,1,2,3,4,5,6,7,8,9]
       }
     for (let col = 0; col < 10; col++) {
       xsOptions.col.colAttr[col] ={width:50}
@@ -1143,6 +1145,34 @@
       });
       
       // console.timeEnd('1');
+    }
+    function changeText() {
+      const {
+        sheet,
+        sheet: { cellAttrChange },
+      } = window.selectInstance;
+      cellAttrChange.call(sheet, 'paintformat', true);
+    }
+    function changeCellType() {
+      const {
+        sheet,
+        sheet: { cellTypeChange },
+      } = window.selectInstance;
+      debugger;
+      cellTypeChange.call(sheet, 'cellType', {
+        cellType: 'date',
+        format: 'yyyy-MM-dd',
+        type: 'date',
+      });
+      // cellTypeChange.call(sheet, 'cellType', {
+      //   format: '￥0,0.00',
+      //   scale: '2',
+      //   type: 'currency',
+      // });
+      //   cellType: 'numeric',
+      // format: '￥0,0.00',
+      // scale: '2',
+      // type: 'currency',
     }
   </script>
   <script src="/layDateFile/laydate/laydate.js"></script>

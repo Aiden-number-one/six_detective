@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-25 18:04:16
+ * @LastEditTime: 2019-09-25 18:15:08
  * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
@@ -240,9 +240,10 @@ export default WrapperComponent =>
     // 设置cellType
     setCellType = (property, value) => {
       const {
+        sheet,
         sheet: { cellTypeChange },
       } = this.spreadSheet;
-      cellTypeChange(property, value);
+      cellTypeChange.call(sheet, property, value);
     };
 
     // 得到cell属性

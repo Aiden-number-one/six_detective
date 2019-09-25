@@ -300,37 +300,37 @@
         }
         var F = /(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g,
           U = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g,
-          W = {},
-          V = {};
+          V = {},
+          W = {};
         function B(e, t, n, r) {
           var i = r;
           'string' == typeof r &&
             (i = function() {
               return this[r]();
             }),
-            e && (V[e] = i),
+            e && (W[e] = i),
             t &&
-              (V[t[0]] = function() {
+              (W[t[0]] = function() {
                 return H(i.apply(this, arguments), t[1], t[2]);
               }),
             n &&
-              (V[n] = function() {
+              (W[n] = function() {
                 return this.localeData().ordinal(i.apply(this, arguments), e);
               });
         }
         function G(e, t) {
           return e.isValid()
             ? ((t = z(t, e.localeData())),
-              (W[t] =
-                W[t] ||
+              (V[t] =
+                V[t] ||
                 (function(e) {
                   var t,
                     n,
                     r,
                     i = e.match(F);
                   for (t = 0, n = i.length; t < n; t++)
-                    V[i[t]]
-                      ? (i[t] = V[i[t]])
+                    W[i[t]]
+                      ? (i[t] = W[i[t]])
                       : (i[t] = (r = i[t]).match(/\[[\s\S]/)
                           ? r.replace(/^\[|\]$/g, '')
                           : r.replace(/\\/g, ''));
@@ -341,7 +341,7 @@
                     return a;
                   };
                 })(t)),
-              W[t](e))
+              V[t](e))
             : e.localeData().invalidDate();
         }
         function z(e, t) {
@@ -577,7 +577,7 @@
         }
         var Fe = ue,
           Ue = ue;
-        function We() {
+        function Ve() {
           function e(e, t) {
             return t.length - e.length;
           }
@@ -600,7 +600,7 @@
             (this._monthsStrictRegex = new RegExp('^(' + i.join('|') + ')', 'i')),
             (this._monthsShortStrictRegex = new RegExp('^(' + r.join('|') + ')', 'i'));
         }
-        function Ve(e, t, n, r, i, a, o) {
+        function We(e, t, n, r, i, a, o) {
           var s;
           return (
             e < 100 && e >= 0
@@ -1099,7 +1099,7 @@
               0 === e._a[we] &&
               0 === e._a[Te] &&
               ((e._nextDay = !0), (e._a[Me] = 0)),
-              (e._d = (e._useUTC ? Be : Ve).apply(null, s)),
+              (e._d = (e._useUTC ? Be : We).apply(null, s)),
               (a = e._useUTC ? e._d.getUTCDay() : e._d.getDay()),
               null != e._tzm && e._d.setUTCMinutes(e._d.getUTCMinutes() - e._tzm),
               e._nextDay && (e._a[Me] = 24),
@@ -1250,7 +1250,7 @@
                     ((o = s.substr(0, s.indexOf(n))).length > 0 && m(e).unusedInput.push(o),
                     (s = s.slice(s.indexOf(n) + n.length)),
                     (l += n.length)),
-                  V[a]
+                  W[a]
                     ? (n ? (m(e).empty = !1) : m(e).unusedTokens.push(a), _e(a, n, e))
                     : e._strict && !n && m(e).unusedTokens.push(a);
               (m(e).charsLeftOver = u - l),
@@ -1456,25 +1456,25 @@
         function Ut(e) {
           return e < 0 ? -1 * Math.round(-1 * e) : Math.round(e);
         }
-        function Wt(e, t) {
+        function Vt(e, t) {
           B(e, 0, 0, function() {
             var e = this.utcOffset(),
               n = '+';
             return e < 0 && ((e = -e), (n = '-')), n + H(~~(e / 60), 2) + t + H(~~e % 60, 2);
           });
         }
-        Wt('Z', ':'),
-          Wt('ZZ', ''),
+        Vt('Z', ':'),
+          Vt('ZZ', ''),
           ce('Z', se),
           ce('ZZ', se),
           me(['Z', 'ZZ'], function(e, t, n) {
             (n._useUTC = !0), (n._tzm = Bt(se, e));
           });
-        var Vt = /([\+\-]|\d\d)/gi;
+        var Wt = /([\+\-]|\d\d)/gi;
         function Bt(e, t) {
           var n = (t || '').match(e);
           if (null === n) return null;
-          var r = ((n[n.length - 1] || []) + '').match(Vt) || ['-', 0, 0],
+          var r = ((n[n.length - 1] || []) + '').match(Wt) || ['-', 0, 0],
             i = 60 * r[1] + T(r[2]);
           return 0 === i ? 0 : '+' === r[0] ? i : -i;
         }
@@ -2401,14 +2401,14 @@
           }),
           (En.monthsRegex = function(e) {
             return this._monthsParseExact
-              ? (f(this, '_monthsRegex') || We.call(this),
+              ? (f(this, '_monthsRegex') || Ve.call(this),
                 e ? this._monthsStrictRegex : this._monthsRegex)
               : (f(this, '_monthsRegex') || (this._monthsRegex = Ue),
                 this._monthsStrictRegex && e ? this._monthsStrictRegex : this._monthsRegex);
           }),
           (En.monthsShortRegex = function(e) {
             return this._monthsParseExact
-              ? (f(this, '_monthsRegex') || We.call(this),
+              ? (f(this, '_monthsRegex') || Ve.call(this),
                 e ? this._monthsShortStrictRegex : this._monthsShortRegex)
               : (f(this, '_monthsShortRegex') || (this._monthsShortRegex = Fe),
                 this._monthsShortStrictRegex && e
@@ -2573,8 +2573,8 @@
           Hn = Rn('h'),
           Fn = Rn('d'),
           Un = Rn('w'),
-          Wn = Rn('M'),
-          Vn = Rn('Q'),
+          Vn = Rn('M'),
+          Wn = Rn('Q'),
           Bn = Rn('y');
         function Gn(e) {
           return function() {
@@ -2693,8 +2693,8 @@
           (ar.asHours = Hn),
           (ar.asDays = Fn),
           (ar.asWeeks = Un),
-          (ar.asMonths = Wn),
-          (ar.asQuarters = Vn),
+          (ar.asMonths = Vn),
+          (ar.asQuarters = Wn),
           (ar.asYears = Bn),
           (ar.valueOf = function() {
             return this.isValid()
@@ -3546,8 +3546,8 @@
         H = n(11),
         F = n(23),
         U = H.f,
-        W = F.f,
-        V = i.RangeError,
+        V = F.f,
+        W = i.RangeError,
         B = i.TypeError,
         G = i.Uint8Array,
         z = Array.prototype,
@@ -3593,7 +3593,7 @@
           }),
         Le = function(e, t) {
           var n = m(e);
-          if (n < 0 || n % t) throw V('Wrong offset!');
+          if (n < 0 || n % t) throw W('Wrong offset!');
           return n;
         },
         Se = function(e) {
@@ -3729,7 +3729,7 @@
             r = w(e),
             i = p(r.length),
             a = 0;
-          if (i + t > n) throw V('Wrong length!');
+          if (i + t > n) throw W('Wrong length!');
           for (; a < i; ) this[t + a] = r[a++];
         },
         Pe = {
@@ -3747,7 +3747,7 @@
           return b(e) && e[ge] && 'symbol' != typeof t && t in e && String(+t) == String(t);
         },
         He = function(e, t) {
-          return je(e, (t = v(t, !0))) ? f(2, e[t]) : W(e, t);
+          return je(e, (t = v(t, !0))) ? f(2, e[t]) : V(e, t);
         },
         Fe = function(e, t, n) {
           return !(je(e, (t = v(t, !0))) && b(n) && g(n, 'value')) ||
@@ -3823,9 +3823,9 @@
                   (a = n), (h = Le(r, t));
                   var y = n.byteLength;
                   if (void 0 === i) {
-                    if (y % t) throw V('Wrong length!');
-                    if ((o = y - h) < 0) throw V('Wrong length!');
-                  } else if ((o = p(i) * t) + h > y) throw V('Wrong length!');
+                    if (y % t) throw W('Wrong length!');
+                    if ((o = y - h) < 0) throw W('Wrong length!');
+                  } else if ((o = p(i) * t) + h > y) throw W('Wrong length!');
                   s = o / t;
                 } else (s = _(n)), (a = new q((o = s * t)));
                 for (d(e, '_d', { b: a, o: h, l: o, e: s, v: new X(a) }); f < s; ) D(e, f++);
@@ -7710,14 +7710,14 @@
     function U(e) {
       return I(e, 23, 4);
     }
-    function W(e, t, n) {
+    function V(e, t, n) {
       p(e[v], t, {
         get: function() {
           return this[n];
         },
       });
     }
-    function V(e, t, n, r) {
+    function W(e, t, n, r) {
       var i = h(+n);
       if (i + t > e[O]) throw T(g);
       var a = e[Y]._b,
@@ -7788,36 +7788,36 @@
           (this[Y] = e), (this[N] = i), (this[O] = n);
         }),
         i &&
-          (W(M, 'byteLength', '_l'),
-          W(b, 'buffer', '_b'),
-          W(b, 'byteLength', '_l'),
-          W(b, 'byteOffset', '_o')),
+          (V(M, 'byteLength', '_l'),
+          V(b, 'buffer', '_b'),
+          V(b, 'byteLength', '_l'),
+          V(b, 'byteOffset', '_o')),
         u(b[v], {
           getInt8: function(e) {
-            return (V(this, 1, e)[0] << 24) >> 24;
+            return (W(this, 1, e)[0] << 24) >> 24;
           },
           getUint8: function(e) {
-            return V(this, 1, e)[0];
+            return W(this, 1, e)[0];
           },
           getInt16: function(e) {
-            var t = V(this, 2, e, arguments[1]);
+            var t = W(this, 2, e, arguments[1]);
             return (((t[1] << 8) | t[0]) << 16) >> 16;
           },
           getUint16: function(e) {
-            var t = V(this, 2, e, arguments[1]);
+            var t = W(this, 2, e, arguments[1]);
             return (t[1] << 8) | t[0];
           },
           getInt32: function(e) {
-            return C(V(this, 4, e, arguments[1]));
+            return C(W(this, 4, e, arguments[1]));
           },
           getUint32: function(e) {
-            return C(V(this, 4, e, arguments[1])) >>> 0;
+            return C(W(this, 4, e, arguments[1])) >>> 0;
           },
           getFloat32: function(e) {
-            return R(V(this, 4, e, arguments[1]), 23, 4);
+            return R(W(this, 4, e, arguments[1]), 23, 4);
           },
           getFloat64: function(e) {
-            return R(V(this, 8, e, arguments[1]), 52, 8);
+            return R(W(this, 8, e, arguments[1]), 52, 8);
           },
           setInt8: function(e, t) {
             B(this, 1, e, P, t);
@@ -24047,8 +24047,8 @@
       H = c('symbol-registry'),
       F = c('symbols'),
       U = c('op-symbols'),
-      W = Object.prototype,
-      V = 'function' == typeof N && !!D.f,
+      V = Object.prototype,
+      W = 'function' == typeof N && !!D.f,
       B = r.QObject,
       G = !B || !B.prototype || !B.prototype.findChild,
       z =
@@ -24066,8 +24066,8 @@
           );
         })
           ? function(e, t, n) {
-              var r = x(W, t);
-              r && delete W[t], Y(e, t, n), r && e !== W && Y(W, t, r);
+              var r = x(V, t);
+              r && delete V[t], Y(e, t, n), r && e !== V && Y(V, t, r);
             }
           : Y,
       q = function(e) {
@@ -24075,7 +24075,7 @@
         return (t._k = e), t;
       },
       X =
-        V && 'symbol' == typeof N.iterator
+        W && 'symbol' == typeof N.iterator
           ? function(e) {
               return 'symbol' == typeof e;
             }
@@ -24084,7 +24084,7 @@
             },
       J = function(e, t, n) {
         return (
-          e === W && J(U, t, n),
+          e === V && J(U, t, n),
           v(e),
           (t = w(t, !0)),
           v(n),
@@ -24104,12 +24104,12 @@
       K = function(e) {
         var t = j.call(this, (e = w(e, !0)));
         return (
-          !(this === W && i(F, e) && !i(U, e)) &&
+          !(this === V && i(F, e) && !i(U, e)) &&
           (!(t || !i(this, e) || !i(F, e) || (i(this, C) && this[C][e])) || t)
         );
       },
       Q = function(e, t) {
-        if (((e = b(e)), (t = w(t, !0)), e !== W || !i(F, t) || i(U, t))) {
+        if (((e = b(e)), (t = w(t, !0)), e !== V || !i(F, t) || i(U, t))) {
           var n = x(e, t);
           return !n || !i(F, t) || (i(e, C) && e[C][t]) || (n.enumerable = !0), n;
         }
@@ -24120,21 +24120,21 @@
         return r;
       },
       ee = function(e) {
-        for (var t, n = e === W, r = O(n ? U : b(e)), a = [], o = 0; r.length > o; )
-          !i(F, (t = r[o++])) || (n && !i(W, t)) || a.push(F[t]);
+        for (var t, n = e === V, r = O(n ? U : b(e)), a = [], o = 0; r.length > o; )
+          !i(F, (t = r[o++])) || (n && !i(V, t)) || a.push(F[t]);
         return a;
       };
-    V ||
+    W ||
       (s(
         (N = function() {
           if (this instanceof N) throw TypeError('Symbol is not a constructor!');
           var e = d(arguments.length > 0 ? arguments[0] : void 0),
             t = function(n) {
-              this === W && t.call(U, n),
+              this === V && t.call(U, n),
                 i(this, C) && i(this[C], e) && (this[C][e] = !1),
                 z(this, e, T(1, n));
             };
-          return a && G && z(W, e, { configurable: !0, set: t }), q(e);
+          return a && G && z(V, e, { configurable: !0, set: t }), q(e);
         }).prototype,
         'toString',
         function() {
@@ -24146,11 +24146,11 @@
       (n(38).f = S.f = Z),
       (n(50).f = K),
       (D.f = ee),
-      a && !n(34) && s(W, 'propertyIsEnumerable', K, !0),
+      a && !n(34) && s(V, 'propertyIsEnumerable', K, !0),
       (m.f = function(e) {
         return q(h(e));
       })),
-      o(o.G + o.W + o.F * !V, { Symbol: N });
+      o(o.G + o.W + o.F * !W, { Symbol: N });
     for (
       var te = 'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'.split(
           ',',
@@ -24161,7 +24161,7 @@
     )
       h(te[ne++]);
     for (var re = A(h.store), ie = 0; re.length > ie; ) p(re[ie++]);
-    o(o.S + o.F * !V, 'Symbol', {
+    o(o.S + o.F * !W, 'Symbol', {
       for: function(e) {
         return i(H, (e += '')) ? H[e] : (H[e] = N(e));
       },
@@ -24176,7 +24176,7 @@
         G = !1;
       },
     }),
-      o(o.S + o.F * !V, 'Object', {
+      o(o.S + o.F * !W, 'Object', {
         create: function(e, t) {
           return void 0 === t ? L(e) : $(L(e), t);
         },
@@ -24198,7 +24198,7 @@
         o(
           o.S +
             o.F *
-              (!V ||
+              (!W ||
                 l(function() {
                   var e = N();
                   return '[null]' != R([e]) || '{}' != R({ a: e }) || '{}' != R(Object(e));
@@ -28791,21 +28791,26 @@
       return t && A(e.prototype, t), n && A(e, n), e;
     }
     var Y = (function() {
-        function e(t, n, r, i, a, o) {
+        function e(t, n, r, i, a, o, s) {
           k(this, e),
             (this.ri = t),
             (this.ci = n),
             (this.operator = r),
             (this.value = i),
             (this.isSelectAll = a),
-            (this.order = o);
+            (this.order = o),
+            (this.searchKey = s);
         }
         return (
           x(e, [
             {
               key: 'set',
-              value: function(e, t, n, r) {
-                (this.operator = e), (this.value = t), (this.isSelectAll = n), (this.order = r);
+              value: function(e, t, n, r, i) {
+                (this.operator = e),
+                  (this.value = t),
+                  (this.isSelectAll = n),
+                  (this.order = r),
+                  (this.searchKey = i);
               },
             },
             {
@@ -28833,6 +28838,7 @@
                   value: this.value,
                   isSelectAll: this.isSelectAll,
                   order: this.order,
+                  searchKey: this.searchKey,
                 };
               },
             },
@@ -28929,9 +28935,9 @@
             },
             {
               key: 'addFilter',
-              value: function(e, t, n, r, i, a) {
-                var o = this.getFilter(e, t);
-                null == o ? this.filters.push(new Y(e, t, n, r, i, a)) : o.set(n, r, i, a);
+              value: function(e, t, n, r, i, a, o) {
+                var s = this.getFilter(e, t);
+                null == s ? this.filters.push(new Y(e, t, n, r, i, a, o)) : s.set(n, r, i, a, o);
               },
             },
             {
@@ -29564,8 +29570,8 @@
       );
     }
     var U = /^([$])?([A-Za-z]+)([$])?([0-9]+)$/,
-      W = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-      V = W.length;
+      V = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      W = V.length;
     function B(e) {
       var t = !1;
       '=' !== e[0] && ((t = !0), (e = '='.concat(e)));
@@ -29612,7 +29618,7 @@
     }
     function q(e) {
       for (var t = ''; e >= 0; )
-        (t = String.fromCharCode((e % V) + 97) + t), (e = Math.floor(e / V) - 1);
+        (t = String.fromCharCode((e % W) + 97) + t), (e = Math.floor(e / W) - 1);
       return t.toUpperCase();
     }
     function X(e, t) {
@@ -29627,7 +29633,7 @@
       var t = 0;
       if ('string' == typeof e)
         for (var n = 0, r = (e = e.toUpperCase()).length - 1; n < e.length; n += 1, r -= 1)
-          t += Math.pow(V, r) * (W.indexOf(e[n]) + 1);
+          t += Math.pow(W, r) * (V.indexOf(e[n]) + 1);
       return --t;
     }
     function K(e) {
@@ -30190,7 +30196,10 @@
                           } else if (
                             ('addRow' === i
                               ? ((o.text = ''), o.dropdownText && (o.dropdownText = ''))
-                              : 'requestData' === i && (o.text = a[n]),
+                              : 'requestData' === i &&
+                                ((o.text = a[n]),
+                                Object.prototype.hasOwnProperty.call(o, 'dropdownText') &&
+                                  (o.dropdownText = '')),
                             o.typeOptions)
                           ) {
                             var g = Object.assign({}, o.typeOptions);
@@ -30245,7 +30254,10 @@
                   ? (i[u] = s)
                   : o >= e && o <= t
                   ? n.eachCells(o, function(e, t) {
-                      t && t.imageId && document.getElementById(t.imageId).remove();
+                      if (t && t.imageId) {
+                        var n = document.getElementById(t.imageId);
+                        n && n.remove();
+                      }
                     })
                   : o > t && ((i[u - r] = s), n.updateFormulaAndLink(t, -r, s, a));
               }),
@@ -31701,8 +31713,8 @@
         })(e, t);
     }
     var Ue = 1,
-      We = [Ue, 2, 3],
-      Ve = H.arrayFilter,
+      Ve = [Ue, 2, 3],
+      We = H.arrayFilter,
       Be = (function(e) {
         function t(e, n) {
           var r;
@@ -31781,7 +31793,7 @@
             {
               key: 'setState',
               value: function(e) {
-                if (-1 === We.indexOf(e)) throw Error('Unrecognized state: '.concat(e));
+                if (-1 === Ve.indexOf(e)) throw Error('Unrecognized state: '.concat(e));
                 this.state = e;
               },
             },
@@ -31837,7 +31849,7 @@
                   t = this.externalReferences[n];
                 } else t = this.references;
                 return (
-                  Ve(t, function(t) {
+                  We(t, function(t) {
                     t.isEqual(e, !0);
                   }).length > 0
                 );
@@ -32996,9 +33008,9 @@
       Ht = n(69),
       Ft = n.n(Ht),
       Ut = n(266),
-      Wt = n.n(Ut),
-      Vt = n(68),
-      Bt = n.n(Vt),
+      Vt = n.n(Ut),
+      Wt = n(68),
+      Bt = n.n(Wt),
       Gt = n(267),
       zt = n.n(Gt),
       qt = n(54),
@@ -34826,7 +34838,7 @@
           Ct.a,
           jt.a,
           Ft.a,
-          Wt.a,
+          Vt.a,
           Bt.a,
           zt.a,
           Xt.a,
@@ -35646,7 +35658,7 @@
             (kn.inputHooks.afterSetDataAtCell && kn.inputHooks.afterSetDataAtCell(e), e[2] === e[3])
           )
             return !0;
-          if (this.isCalCulatorFormula) {
+          if (this.isCalCulatorFormula || this.isCalculatorDropdownRange) {
             var n = window.xsObj.getInstanceByName(this.name),
               r = { row: e[0], column: e[1] };
             this.dependences.all.forEach(function(e, i) {
@@ -35710,40 +35722,14 @@
         isInEditStatus: function(e) {
           kn.inputHooks.isInEditStatus && kn.inputHooks.isInEditStatus(e);
         },
+        customerValidate: function(e, t, n, r) {
+          return kn.inputHooks.customerValidate ? kn.inputHooks.customerValidate(e, t, n, r) : [!0];
+        },
       },
       An = function() {
         return kn;
       };
-    function xn(e) {
-      return (
-        (function(e) {
-          if (Array.isArray(e)) {
-            for (var t = 0, n = new Array(e.length); t < e.length; t++) n[t] = e[t];
-            return n;
-          }
-        })(e) ||
-        (function(e) {
-          if (
-            Symbol.iterator in Object(e) ||
-            '[object Arguments]' === Object.prototype.toString.call(e)
-          )
-            return Array.from(e);
-        })(e) ||
-        (function() {
-          throw new TypeError('Invalid attempt to spread non-iterable instance');
-        })()
-      );
-    }
-    function Yn(e, t) {
-      for (var n = 0; n < t.length; n++) {
-        var r = t[n];
-        (r.enumerable = r.enumerable || !1),
-          (r.configurable = !0),
-          'value' in r && (r.writable = !0),
-          Object.defineProperty(e, r.key, r);
-      }
-    }
-    function On(e, t) {
+    function xn(e, t) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
@@ -35782,7 +35768,256 @@
         })()
       );
     }
-    var Nn = {
+    function Yn(e, t) {
+      for (var n = 0; n < t.length; n++) {
+        var r = t[n];
+        (r.enumerable = r.enumerable || !1),
+          (r.configurable = !0),
+          'value' in r && (r.writable = !0),
+          Object.defineProperty(e, r.key, r);
+      }
+    }
+    var On = { phone: /^[1-9]\d{10}$/, email: /w+([-+.]w+)*@w+([-.]w+)*.w+([-.]w+)*/ };
+    function Nn(e, t) {
+      var n = '';
+      if (!e) {
+        for (var r = arguments.length, i = new Array(r > 2 ? r - 2 : 0), a = 2; a < r; a++)
+          i[a - 2] = arguments[a];
+        n = ue.apply(void 0, ['validation.'.concat(t)].concat(i));
+      }
+      return [e, n];
+    }
+    var In = (function() {
+      function e() {
+        !(function(e, t) {
+          if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
+        })(this, e);
+      }
+      var t, n, r;
+      return (
+        (t = e),
+        (n = [
+          {
+            key: 'initData',
+            value: function() {
+              var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
+                t = arguments.length > 1 ? arguments[1] : void 0,
+                n = arguments.length > 2 ? arguments[2] : void 0,
+                r = arguments.length > 3 ? arguments[3] : void 0,
+                i = e.cellType,
+                a = e.required,
+                o = e.value,
+                s = e.operator;
+              return (
+                (this.required = a),
+                (this.value = o),
+                (this.type = i),
+                (this.operator = s),
+                (this.message = ''),
+                (this.customerValidate = t),
+                (this.rindex = n),
+                (this.cindex = r),
+                (this.cellProps = e),
+                this
+              );
+            },
+          },
+          {
+            key: 'parseValue',
+            value: function(e) {
+              var t = this.type;
+              return 'text' === t ? H.getRealTextLen(e, 2).realLen : 'number' === t ? Number(e) : e;
+            },
+          },
+          {
+            key: 'equals',
+            value: function(e) {
+              var t =
+                this.type === e.type &&
+                this.required === e.required &&
+                this.operator === e.operator;
+              return (
+                t &&
+                  (t = Array.isArray(this.value)
+                    ? H.arrayEquals(this.value, e.value)
+                    : this.value === e.value),
+                t
+              );
+            },
+          },
+          {
+            key: 'values',
+            value: function() {
+              return this.value.split(',');
+            },
+          },
+          {
+            key: 'validate',
+            value: function(e) {
+              var t = this.required,
+                n = this.operator,
+                r = this.value,
+                i = this.type;
+              if ('function' == typeof this.customerValidate && this.cellProps) {
+                var a = xn(this.customerValidate(this.cellProps, e, this.rindex, this.cindex), 2),
+                  o = a[0],
+                  s = a[1];
+                if (!o) return [o, s];
+              }
+              if (!i) return [!0];
+              if (t && /^\s*$/.test(e)) return Nn(!1, 'required');
+              if (/^\s*$/.test(e)) return [!0];
+              if (On[i] && !On[i].test(e)) return Nn(!1, 'notMatch');
+              if ('list' === i) return Nn(this.values().includes(e), 'notIn');
+              var u = 'subjectString';
+              if ('numeric' === this.type && ((u = 'subjectNumber'), isNaN(e)))
+                return Nn(!1, 'isNaN', ue('validation.'.concat(u)));
+              if (n) {
+                var l = this.parseValue(e);
+                if ('be' === n) {
+                  var c = xn(r, 2),
+                    f = c[0],
+                    d = c[1];
+                  return Nn(l >= f && l <= d, 'between', ue('validation.'.concat(u)), f, d);
+                }
+                if ('nbe' === n) {
+                  var h = xn(r, 2),
+                    m = h[0],
+                    p = h[1];
+                  return Nn(l < m || l > p, 'notBetween', ue('validation.'.concat(u)), m, p);
+                }
+                if ('eq' === n) return Nn(l === r, 'equal', ue('validation.'.concat(u)), r);
+                if ('neq' === n) return Nn(l !== r, 'notEqual', ue('validation.'.concat(u)), r);
+                if ('lt' === n) return Nn(l < r, 'lessThan', ue('validation.'.concat(u)), r);
+                if ('lte' === n) return Nn(l <= r, 'lessThanEqual', ue('validation.'.concat(u)), r);
+                if ('gt' === n) return Nn(l > r, 'greaterThan', ue('validation.'.concat(u)), r);
+                if ('gte' === n)
+                  return Nn(l >= r, 'greaterThanEqual', ue('validation.'.concat(u)), r);
+              }
+              return [!0];
+            },
+          },
+        ]) && Yn(t.prototype, n),
+        r && Yn(t, r),
+        e
+      );
+    })();
+    function Rn(e, t) {
+      var n = Object.keys(e);
+      if (Object.getOwnPropertySymbols) {
+        var r = Object.getOwnPropertySymbols(e);
+        t &&
+          (r = r.filter(function(t) {
+            return Object.getOwnPropertyDescriptor(e, t).enumerable;
+          })),
+          n.push.apply(n, r);
+      }
+      return n;
+    }
+    function Cn(e, t, n) {
+      return (
+        t in e
+          ? Object.defineProperty(e, t, {
+              value: n,
+              enumerable: !0,
+              configurable: !0,
+              writable: !0,
+            })
+          : (e[t] = n),
+        e
+      );
+    }
+    function Pn(e, t) {
+      if (null == e) return {};
+      var n,
+        r,
+        i = (function(e, t) {
+          if (null == e) return {};
+          var n,
+            r,
+            i = {},
+            a = Object.keys(e);
+          for (r = 0; r < a.length; r++) (n = a[r]), t.indexOf(n) >= 0 || (i[n] = e[n]);
+          return i;
+        })(e, t);
+      if (Object.getOwnPropertySymbols) {
+        var a = Object.getOwnPropertySymbols(e);
+        for (r = 0; r < a.length; r++)
+          (n = a[r]),
+            t.indexOf(n) >= 0 ||
+              (Object.prototype.propertyIsEnumerable.call(e, n) && (i[n] = e[n]));
+      }
+      return i;
+    }
+    function jn(e) {
+      return (
+        (function(e) {
+          if (Array.isArray(e)) {
+            for (var t = 0, n = new Array(e.length); t < e.length; t++) n[t] = e[t];
+            return n;
+          }
+        })(e) ||
+        (function(e) {
+          if (
+            Symbol.iterator in Object(e) ||
+            '[object Arguments]' === Object.prototype.toString.call(e)
+          )
+            return Array.from(e);
+        })(e) ||
+        (function() {
+          throw new TypeError('Invalid attempt to spread non-iterable instance');
+        })()
+      );
+    }
+    function Hn(e, t) {
+      for (var n = 0; n < t.length; n++) {
+        var r = t[n];
+        (r.enumerable = r.enumerable || !1),
+          (r.configurable = !0),
+          'value' in r && (r.writable = !0),
+          Object.defineProperty(e, r.key, r);
+      }
+    }
+    function Fn(e, t) {
+      return (
+        (function(e) {
+          if (Array.isArray(e)) return e;
+        })(e) ||
+        (function(e, t) {
+          if (
+            !(
+              Symbol.iterator in Object(e) ||
+              '[object Arguments]' === Object.prototype.toString.call(e)
+            )
+          )
+            return;
+          var n = [],
+            r = !0,
+            i = !1,
+            a = void 0;
+          try {
+            for (
+              var o, s = e[Symbol.iterator]();
+              !(r = (o = s.next()).done) && (n.push(o.value), !t || n.length !== t);
+              r = !0
+            );
+          } catch (e) {
+            (i = !0), (a = e);
+          } finally {
+            try {
+              r || null == s.return || s.return();
+            } finally {
+              if (i) throw a;
+            }
+          }
+          return n;
+        })(e, t) ||
+        (function() {
+          throw new TypeError('Invalid attempt to destructure non-iterable instance');
+        })()
+      );
+    }
+    var Un = {
         view: {
           height: function() {
             return document.documentElement.clientHeight;
@@ -35807,19 +36042,19 @@
           font: { name: 'Arial', size: 10, bold: !1, italic: !1 },
         },
       },
-      In = H.arrayEach,
-      Rn = H.arrayMap,
-      Cn = H.isFormulaExpression,
-      Pn = H.rangeEach2,
-      jn = 3;
-    function Hn(e, t) {
+      Vn = H.arrayEach,
+      Wn = H.arrayMap,
+      Bn = H.isFormulaExpression,
+      Gn = H.rangeEach2,
+      zn = 3;
+    function qn(e, t) {
       var n = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : function() {},
         r = this.merges,
         i = t.clone(),
-        a = On(e.size(), 2),
+        a = Fn(e.size(), 2),
         o = a[0],
         s = a[1],
-        u = On(t.size(), 2),
+        u = Fn(t.size(), 2),
         l = u[0],
         c = u[1];
       return (
@@ -35828,7 +36063,7 @@
         !r.intersects(i) || (n(ue('error.pasteForMergedCell')), !1)
       );
     }
-    function Fn(e, t, n) {
+    function Xn(e, t, n) {
       var r = this,
         i = arguments.length > 3 && void 0 !== arguments[3] && arguments[3],
         a = this.rows,
@@ -35837,7 +36072,7 @@
         a.copyPaste(e, t, n, i, function(e, t, n, i) {
           if (n) {
             if (n.merge) {
-              var a = On(n.merge, 2),
+              var a = Fn(n.merge, 2),
                 s = a[0],
                 u = a[1];
               if (s <= 0 && u <= 0) return;
@@ -35850,7 +36085,7 @@
           }
         });
     }
-    function Un(e, t) {
+    function Jn(e, t) {
       var n = this,
         r = this.clipboard,
         i = this.rows,
@@ -35886,14 +36121,14 @@
         a.move(e, t.sri - e.sri, t.sci - e.sci),
         r.clear();
     }
-    function Wn(e, t, n) {
+    function $n(e, t, n) {
       var r = this.rows.getCellOrNew(e, t),
         i = {};
       void 0 !== r.style && (i = r.style),
         Object.assign(i, { border: n }),
         (r.style = this.addStyle(i));
     }
-    function Vn(e) {
+    function Kn(e) {
       var t = this,
         n = e.mode,
         r = e.style,
@@ -35927,7 +36162,7 @@
               for (var e = [], a = u; a <= c; a += 1)
                 for (var s = l; s <= f; s += 1) {
                   for (var h = [], m = 0; m < e.length; m += 1) {
-                    var p = On(e[m], 4),
+                    var p = Fn(e[m], 4),
                       _ = p[0],
                       y = p[1],
                       v = p[2],
@@ -35948,7 +36183,7 @@
                     b = 0,
                     w = 0;
                   if (M && M.merge) {
-                    var T = On(M.merge, 2);
+                    var T = Fn(M.merge, 2);
                     (b = T[0]), (w = T[1]), e.push([a, s, b, w]);
                   }
                   var L = b > 0 && a + b === c,
@@ -35968,24 +36203,24 @@
                       (L || c === a) && (E.bottom = [r, i]),
                       l === s && (E.left = [r, i]),
                       (S || f === s) && (E.right = [r, i])),
-                    Object.keys(E).length > 0 && Wn.call(t, a, s, E),
+                    Object.keys(E).length > 0 && $n.call(t, a, s, E),
                     (s += w);
                 }
             })();
           else if ('top' === n || 'bottom' === n)
             for (var h = l; h <= f; h += 1)
-              'top' === n && (Wn.call(this, u, h, { top: [r, i] }), (h += o.getCellMerge(u, h)[1])),
+              'top' === n && ($n.call(this, u, h, { top: [r, i] }), (h += o.getCellMerge(u, h)[1])),
                 'bottom' === n &&
-                  (Wn.call(this, c, h, { bottom: [r, i] }), (h += o.getCellMerge(c, h)[1]));
+                  ($n.call(this, c, h, { bottom: [r, i] }), (h += o.getCellMerge(c, h)[1]));
           else if ('left' === n || 'right' === n)
             for (var m = u; m <= c; m += 1)
               'left' === n &&
-                (Wn.call(this, m, l, { left: [r, i] }), (m += o.getCellMerge(m, l)[0])),
+                ($n.call(this, m, l, { left: [r, i] }), (m += o.getCellMerge(m, l)[0])),
                 'right' === n &&
-                  (Wn.call(this, m, f, { right: [r, i] }), (m += o.getCellMerge(m, f)[0]));
-        } else Wn.call(this, u, l, { top: [r, i], bottom: [r, i], left: [r, i], right: [r, i] });
+                  ($n.call(this, m, f, { right: [r, i] }), (m += o.getCellMerge(m, f)[0]));
+        } else $n.call(this, u, l, { top: [r, i], bottom: [r, i], left: [r, i], right: [r, i] });
     }
-    function Bn(e, t) {
+    function Qn(e, t) {
       var n = this.rows,
         r = this.startPostion,
         i = this.freezeTotalHeight(),
@@ -35993,7 +36228,7 @@
         o = 0,
         s = this.exceptRowSet;
       e > i && (r && void 0 !== r.sri ? ((o = r.sri), (a = i + a)) : i + n.height < e && (a -= t));
-      var u = On(
+      var u = Fn(
           H.rangeReduceIf(
             o,
             n.len,
@@ -36012,12 +36247,12 @@
         f = u[2];
       return c <= 0 ? { ri: -1, top: 0, height: f } : { ri: l - 1, top: c, height: f };
     }
-    function Gn(e, t) {
+    function Zn(e, t) {
       var n = this.cols,
         r = this.freezeTotalWidth(),
         i = n.indexWidth;
       r + n.indexWidth < e && (i -= t);
-      var a = On(
+      var a = Fn(
           H.rangeReduceIf(0, n.len, i, n.indexWidth, e, function(e) {
             return n.getWidth(e);
           }),
@@ -36028,13 +36263,13 @@
         u = a[2];
       return s <= 0 ? { ci: -1, left: 0, width: n.indexWidth } : { ci: o - 1, left: s, width: u };
     }
-    var zn = (function() {
+    var er = (function() {
       function e(t) {
         var n = this;
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, e),
-          (this.settings = H.merge(Nn, t || {})),
+          (this.settings = H.merge(Un, t || {})),
           (this.name = t.name || 'sheet'),
           (this.freeze = [0, 0]),
           (this.styles = []),
@@ -36060,7 +36295,7 @@
           (this.imageFile = t.imageFile),
           (this.imageCheckedBox = t.imageCheckedBox),
           (this.imageUncheckedBox = t.imageUncheckedBox),
-          (this.dependenceState = jn),
+          (this.dependenceState = zn),
           (this.dependences = new ht(this)),
           (this.history = new S(a)),
           (this.initing = !0),
@@ -36080,7 +36315,8 @@
             }, 0)),
           (this.exceptRowSet = new Set()),
           (this.sortedRowMap = new Map()),
-          (this.unsortedRowMap = new Map());
+          (this.unsortedRowMap = new Map()),
+          (this.customerValidator = new In());
       }
       var t, n, r;
       return (
@@ -36185,7 +36421,7 @@
             key: 'recalculate',
             value: function(e) {
               switch (this.dependenceState) {
-                case jn:
+                case zn:
                   this.recalculateFull(e);
                   break;
                 case 2:
@@ -36198,7 +36434,7 @@
             value: function() {
               var e = this,
                 t = this.dependence.getOutOfDateCells();
-              In(t, function(t) {
+              Vn(t, function(t) {
                 var n = e.dataProvider.getSourceDataAtCell(t.row, t.column);
                 H.isFormulaExpression(n) && e.calculateFormularsValue(t, n.substr(1));
               }),
@@ -36276,7 +36512,7 @@
                 if (0 !== n) {
                   var u = JSON.parse(JSON.stringify(e.parseArr)),
                     l = Mn.call(this, u, n),
-                    c = On(l, 1);
+                    c = Fn(l, 1);
                   s = c[0];
                 } else {
                   var f = this.getCellTextOrDefault(r, i),
@@ -36341,7 +36577,7 @@
                 if (a && a.hasError()) throw Error(i);
               }
               var o = e.dependences.getDependence('formulas');
-              if (Cn(i)) {
+              if (Bn(i)) {
                 var s = o.getDependent({ row: n, column: r });
                 if (!s)
                   return (
@@ -36387,9 +36623,9 @@
               }
               -1 === r && -1 === o && ((r = 0), (o = u.rows.len - 1));
               var l = u.getRawDataByRange(r, i, o, s);
-              return Rn(l, function(e, t) {
+              return Wn(l, function(e, t) {
                 return (function(e, t) {
-                  return Rn(e, function(e, n) {
+                  return Wn(e, function(e, n) {
                     var o = new Dn(r + t, i + n, a);
                     return u.getCellValue(u, o);
                   });
@@ -36432,8 +36668,8 @@
               })(e, t);
               return n
                 ? 1 === n.length
-                  ? this.onCallCellValue.apply(this, xn(n))
-                  : this.onCallRangeValue.apply(this, xn(n))
+                  ? this.onCallCellValue.apply(this, jn(n))
+                  : this.onCallRangeValue.apply(this, jn(n))
                 : new Error();
             },
           },
@@ -36451,9 +36687,9 @@
               var i = this,
                 a = [];
               return (
-                Pn(e, n, function(e) {
+                Gn(e, n, function(e) {
                   var n = [];
-                  Pn(t, r, function(t) {
+                  Gn(t, r, function(t) {
                     n.push(i.getCellTextOrDefault(e, t));
                   }),
                     a.push(n);
@@ -36689,12 +36925,12 @@
                   case 'paste-action-copy':
                     Object.setPrototypeOf(y, g),
                       Object.setPrototypeOf(v, g),
-                      Fn.call(t, v, y, 'text');
+                      Xn.call(t, v, y, 'text');
                     break;
                   case 'paste-action-cut':
                     Object.setPrototypeOf(y, g),
                       Object.setPrototypeOf(v, g),
-                      Un.call(t, v, y, 'text');
+                      Jn.call(t, v, y, 'text');
                     break;
                   default:
                     t.setData(n);
@@ -36723,16 +36959,16 @@
                 r = this.clipboard,
                 i = this.selector;
               if (r.isClear()) return !1;
-              if (!Hn.call(this, r.range, i.range, n)) return !1;
+              if (!qn.call(this, r.range, i.range, n)) return !1;
               var a = r.range.size(),
-                o = On(a, 1),
+                o = Fn(a, 1),
                 s = o[0];
               if (s > this.historyNumCount)
                 return (
                   this.hook.tipMessage('alert', '粘贴数据量过大，此操作不记录到历史记录'),
                   r.isCopy()
-                    ? Fn.call(this, r.range, i.range, t)
-                    : r.isCut() && Un.call(this, r.range, i.range),
+                    ? Xn.call(this, r.range, i.range, t)
+                    : r.isCut() && Jn.call(this, r.range, i.range),
                   !1
                 );
               var u = {};
@@ -36742,8 +36978,8 @@
                   : r.isCut() && this.pasteBak('cut', r.range, i.range, u),
                 this.changeData(u, function() {
                   r.isCopy()
-                    ? Fn.call(e, r.range, i.range, t)
-                    : r.isCut() && Un.call(e, r.range, i.range);
+                    ? Xn.call(e, r.range, i.range, t)
+                    : r.isCut() && Jn.call(e, r.range, i.range);
                 }),
                 !0
               );
@@ -36771,7 +37007,7 @@
                         n.calculateZackValue({ row: e, column: i }, 'dropdownRange'),
                       a && a.merge)
                     ) {
-                      var o = On(a.merge, 2),
+                      var o = Fn(a.merge, 2),
                         s = o[0],
                         u = o[1];
                       if (s <= 0 && u <= 0) return;
@@ -36807,7 +37043,7 @@
                         n.calculateZackValue({ row: e, column: i }, 'dropdownRange'),
                       a && a.merge)
                     ) {
-                      var o = On(a.merge, 2),
+                      var o = Fn(a.merge, 2),
                         s = o[0],
                         u = o[1];
                       if (s <= 0 && u <= 0) return;
@@ -36830,10 +37066,10 @@
               var a = r.distData,
                 o = r.srcData,
                 s = this.rows._,
-                u = On(t.size(), 2),
+                u = Fn(t.size(), 2),
                 l = u[0],
                 c = u[1],
-                f = On(n.size(), 2),
+                f = Fn(n.size(), 2),
                 d = l - f[0],
                 h = c - f[1];
               d > 0 && (n.eri += d), h > 0 && (n.eci += h);
@@ -36867,12 +37103,12 @@
               var n = this,
                 r = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : function() {},
                 i = this.selector.range;
-              if (!Hn.call(this, i, e, r)) return !1;
+              if (!qn.call(this, i, e, r)) return !1;
               var a = {};
               return (
                 this.pasteBak('copy', i, e, a),
                 this.changeData(a, function() {
-                  Fn.call(n, i, e, t, !0);
+                  Xn.call(n, i, e, t, !0);
                 }),
                 !0
               );
@@ -36935,13 +37171,13 @@
                 var r = n.selector,
                   i = n.rows;
                 if ('merge' === e) t ? n.merge() : n.unmerge();
-                else if ('border' === e) Vn.call(n, t);
+                else if ('border' === e) Kn.call(n, t);
                 else if ('formula' === e) {
                   var a = r.ri,
                     o = r.ci,
                     s = r.range;
                   if (r.multiple()) {
-                    var u = On(r.size(), 2),
+                    var u = Fn(r.size(), 2),
                       l = u[0],
                       c = u[1],
                       d = s.sri,
@@ -36977,17 +37213,52 @@
                       (u[e.split('-')[1]] = t),
                         (s.font = Object.assign(s.font || {}, u)),
                         (o.style = n.addStyle(s));
-                    } else
-                      ('strike' !== e &&
-                        'textwrap' !== e &&
-                        'underline' !== e &&
-                        'align' !== e &&
-                        'valign' !== e &&
-                        'color' !== e &&
-                        'bgcolor' !== e) ||
-                        ((s[e] = t), (o.style = n.addStyle(s)));
+                    } else if (
+                      'strike' === e ||
+                      'textwrap' === e ||
+                      'underline' === e ||
+                      'align' === e ||
+                      'valign' === e ||
+                      'color' === e ||
+                      'bgcolor' === e
+                    )
+                      (s[e] = t), (o.style = n.addStyle(s));
+                    else if ('cellType' === e) {
+                      var l = o.cellProps || {},
+                        c =
+                          (l.cellType,
+                          l.format,
+                          l.type,
+                          l.scale,
+                          Pn(l, ['cellType', 'format', 'type', 'scale']));
+                      o.cellProps = (function(e) {
+                        for (var t = 1; t < arguments.length; t++) {
+                          var n = null != arguments[t] ? arguments[t] : {};
+                          t % 2
+                            ? Rn(n, !0).forEach(function(t) {
+                                Cn(e, t, n[t]);
+                              })
+                            : Object.getOwnPropertyDescriptors
+                            ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(n))
+                            : Rn(n).forEach(function(t) {
+                                Object.defineProperty(e, t, Object.getOwnPropertyDescriptor(n, t));
+                              });
+                        }
+                        return e;
+                      })({}, t, {}, c);
+                    }
                   });
               });
+            },
+          },
+          {
+            key: 'setCellStyle',
+            value: function(e, t, n) {
+              var r = this.rows.getCellOrNew(e, t),
+                i = {};
+              void 0 !== r.style && (i = r.style),
+                Object.assign(i, { border: n }),
+                (r.style = this.addStyle(i));
             },
           },
           {
@@ -37120,11 +37391,11 @@
                 i = this.merges,
                 a = this.rows,
                 o = this.cols,
-                s = Bn.call(this, t, r.y),
+                s = Qn.call(this, t, r.y),
                 u = s.ri,
                 l = s.top,
                 c = s.height,
-                f = Gn.call(this, e, r.x),
+                f = Zn.call(this, e, r.x),
                 d = f.ci,
                 h = f.left,
                 m = f.width;
@@ -37160,7 +37431,7 @@
                 i = e.eci,
                 a = this.getCell(t, n);
               if (a && a.merge) {
-                var o = On(a.merge, 2),
+                var o = Fn(a.merge, 2),
                   s = o[0],
                   u = o[1];
                 if (t + s === r && n + u === i) return !0;
@@ -37178,7 +37449,7 @@
                 i = e.eci,
                 a = this.getCell(t, n);
               if (a && a.merge) {
-                var o = On(a.merge, 2),
+                var o = Fn(a.merge, 2),
                   s = o[0],
                   u = o[1];
                 if (t + s === r && n + u === i) return !0;
@@ -37193,7 +37464,7 @@
                 t = this.selector,
                 n = this.rows;
               if (!this.isSignleSelected()) {
-                var r = On(t.size(), 2),
+                var r = Fn(t.size(), 2),
                   i = r[0],
                   a = r[1];
                 if (i > 1 || a > 1) {
@@ -37250,8 +37521,8 @@
           },
           {
             key: 'setAutoFilter',
-            value: function(e, t, n, r, i, a) {
-              this.autoFilter.addFilter(e, t, r, i, a, n),
+            value: function(e, t, n, r, i, a, o) {
+              this.autoFilter.addFilter(e, t, r, i, a, n, o),
                 'function' == typeof this.requestData && this.requestData('resetAutoFilter', e);
             },
           },
@@ -37409,7 +37680,7 @@
                 h = f.sci,
                 m = f.eri,
                 p = f.eci,
-                _ = On(i.size(), 2),
+                _ = Fn(i.size(), 2),
                 y = _[0],
                 v = _[1],
                 g = 'delete-'.concat(e),
@@ -37474,8 +37745,8 @@
               var n = this.scroll,
                 r = this.freeze,
                 i = this.cols,
-                a = On(r, 2)[1],
-                o = On(
+                a = Fn(r, 2)[1],
+                o = Fn(
                   H.rangeReduceIf(a, i.len, 0, 0, e, function(e) {
                     return i.getWidth(e);
                   }),
@@ -37495,7 +37766,7 @@
                 r = this.freeze,
                 i = this.rows,
                 a = this.cachePosition,
-                o = On(r, 1)[0],
+                o = Fn(r, 1)[0],
                 s = 0,
                 u = o,
                 l = i.len;
@@ -37514,7 +37785,7 @@
                   }
                   return !1;
                 });
-              var c = On(
+              var c = Fn(
                   H.rangeReduceIf(u, l, s, 0, e, function(e) {
                     return i.getHeight(e);
                   }),
@@ -37547,7 +37818,7 @@
                 h = r.getHeight(e),
                 m = h;
               if (null !== f && f.merge) {
-                var p = On(f.merge, 2),
+                var p = Fn(f.merge, 2),
                   _ = p[0],
                   y = p[1];
                 if (_ > 0)
@@ -37693,26 +37964,41 @@
                 s = this.getCellTextOrDefault(e, t),
                 u = this.getCellPropsOrNew(e, t),
                 l = this.getCell(e, t);
-              if ('numeric' === u.cellType && !H.isFormulaExpression(n)) {
-                if (isNaN(n)) return void this.hook.tipMessage('toast', '请输入数值！');
-                n = parseFloat(n);
-              }
               if ('finished' === r) {
-                var c = [e, t, l.initText, n];
-                ['dropdown', 'date', 'datetime', 'time'].includes(u.cellType)
-                  ? (c[2] = l.text)
-                  : void 0 === l.initText && (c[2] = n),
+                var c = u.cellType,
+                  f = u.scale;
+                if ('numeric' === c) {
+                  if (!H.isFormulaExpression(n)) {
+                    if (isNaN(n)) return void this.hook.tipMessage('toast', '请输入数值！');
+                    n = parseFloat(n);
+                  }
+                  if (f)
+                    switch (u.type) {
+                      case 'percentage':
+                        n = parseFloat(n.toFixed(f + 2));
+                        break;
+                      case 'permillage':
+                        n = parseFloat(n.toFixed(f + 3));
+                        break;
+                      default:
+                        n = parseFloat(n.toFixed(f));
+                    }
+                }
+                var d = [e, t, l.initText, n];
+                ['dropdown', 'date', 'datetime', 'time', 'checkbox'].includes(u.cellType)
+                  ? (d[2] = l.text)
+                  : void 0 === l.initText && (d[2] = n),
                   delete l.initText,
                   (l.isEdit = !0),
-                  c[2] !== c[3] &&
+                  d[2] !== d[3] &&
                     a.add(null, {
                       actionType: 'modify-data',
                       ri: e,
                       ci: t,
-                      data: { text: c[2], currentData: c[3] },
+                      data: { text: d[2], currentData: d[3] },
                     }),
                   i.setCellText(e, t, n),
-                  this.hook.afterSetDataAtCell.call(this, c, r);
+                  this.hook.afterSetDataAtCell.call(this, d, r);
               } else
                 void 0 === l.initText && (l.initText = s),
                   i.setCellText(e, t, n),
@@ -37776,7 +38062,7 @@
           {
             key: 'freezeIsActive',
             value: function() {
-              var e = On(this.freeze, 2),
+              var e = Fn(this.freeze, 2),
                 t = e[0],
                 n = e[1];
               return t > 0 || n > 0;
@@ -37840,7 +38126,7 @@
           {
             key: 'freezeViewRange',
             value: function() {
-              var e = On(this.freeze, 2),
+              var e = Fn(this.freeze, 2),
                 t = e[0],
                 n = e[1];
               return new m(0, 0, t - 1, n - 1, this.freezeTotalWidth(), this.freezeTotalHeight());
@@ -37874,7 +38160,7 @@
                 i = this.exceptRowSet,
                 a = e.ri,
                 o = e.ci;
-              a <= 0 && (a = On(r, 1)[0]), o <= 0 && (o = On(r, 2)[1]);
+              a <= 0 && (a = Fn(r, 1)[0]), o <= 0 && (o = Fn(r, 2)[1]);
               for (
                 var s = 0, u = 0, l = [t.len, n.len], c = l[0], f = l[1], d = a;
                 d < t.len &&
@@ -37919,7 +38205,7 @@
             key: 'rowEach',
             value: function(e, t, n) {
               for (
-                var r = 0, i = this.rows, a = this.exceptRowSet, o = xn(a), s = 0, u = 0;
+                var r = 0, i = this.rows, a = this.exceptRowSet, o = jn(a), s = 0, u = 0;
                 u < o.length;
                 u += 1
               )
@@ -37968,7 +38254,7 @@
                   if ('merges' === n || 'rows' === n || 'cols' === n || 'validations' === n)
                     t[n].setData(e[n]);
                   else if ('freeze' === n) {
-                    var r = On(c(e[n]), 2),
+                    var r = Fn(c(e[n]), 2),
                       i = r[0],
                       a = r[1];
                     t.freeze = [a, i];
@@ -38001,40 +38287,40 @@
               };
             },
           },
-        ]) && Yn(t.prototype, n),
-        r && Yn(t, r),
+        ]) && Hn(t.prototype, n),
+        r && Hn(t, r),
         e
       );
     })();
-    function qn(e, t, n) {
+    function tr(e, t, n) {
       e.addEventListener(t, n);
     }
-    function Xn(e, t, n) {
+    function nr(e, t, n) {
       e.removeEventListener(t, n);
     }
-    function Jn(e) {
+    function rr(e) {
       e.xclickoutside &&
-        (Xn(window.document.body, 'click', e.xclickoutside), delete e.xclickoutside);
+        (nr(window.document.body, 'click', e.xclickoutside), delete e.xclickoutside);
     }
-    function $n(e, t) {
+    function ir(e, t) {
       (e.xclickoutside = function(n) {
-        2 === n.detail || e.contains(n.target) || (t ? t(e) : (e.hide(), Jn(e)));
+        2 === n.detail || e.contains(n.target) || (t ? t(e) : (e.hide(), rr(e)));
       }),
-        qn(window.document.body, 'click', e.xclickoutside);
+        tr(window.document.body, 'click', e.xclickoutside);
     }
-    function Kn(e, t, n) {
-      qn(e, 'mousemove', t),
+    function ar(e, t, n) {
+      tr(e, 'mousemove', t),
         (e.xEvtUp = function(r) {
-          Xn(e, 'mousemove', t), Xn(e, 'mouseup', e.xEvtUp), n(r);
+          nr(e, 'mousemove', t), nr(e, 'mouseup', e.xEvtUp), n(r);
         }),
-        qn(e, 'mouseup', e.xEvtUp);
+        tr(e, 'mouseup', e.xEvtUp);
     }
-    function Qn(e, t, n, r) {
+    function or(e, t, n, r) {
       Math.abs(e) > Math.abs(t)
         ? r(e > 0 ? 'right' : 'left', e, n)
         : r(t > 0 ? 'down' : 'up', t, n);
     }
-    function Zn(e, t) {
+    function sr(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -38043,7 +38329,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var er = (function() {
+    var ur = (function() {
       function e() {
         var t = this,
           n = arguments.length > 0 && void 0 !== arguments[0] && arguments[0],
@@ -38110,7 +38396,7 @@
                 s = this.minDistance,
                 u = o ? a.width : a.height;
               i.show(),
-                Kn(
+                ar(
                   window,
                   function(e) {
                     (t.moving = !0),
@@ -38131,12 +38417,12 @@
                 );
             },
           },
-        ]) && Zn(t.prototype, n),
-        r && Zn(t, r),
+        ]) && sr(t.prototype, n),
+        r && sr(t, r),
         e
       );
     })();
-    function tr(e, t) {
+    function lr(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -38145,7 +38431,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var nr = (function() {
+    var cr = (function() {
       function e(t) {
         var n = this;
         !(function(e, t) {
@@ -38208,12 +38494,12 @@
               return this;
             },
           },
-        ]) && tr(t.prototype, n),
-        r && tr(t, r),
+        ]) && lr(t.prototype, n),
+        r && lr(t, r),
         e
       );
     })();
-    function rr(e, t) {
+    function fr(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -38222,7 +38508,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var ir = (function() {
+    var dr = (function() {
         function e(t, n, r) {
           !(function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
@@ -38324,12 +38610,12 @@
                   }
               },
             },
-          ]) && rr(t.prototype, n),
-          r && rr(t, r),
+          ]) && fr(t.prototype, n),
+          r && fr(t, r),
           e
         );
       })(),
-      ar = {
+      hr = {
         getPosition: function(e, t, n) {
           var r = n.elemOffsetWidth,
             i = void 0 === r ? 0 : r,
@@ -38365,7 +38651,7 @@
           );
         },
       };
-    function or(e, t) {
+    function mr(e, t) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
@@ -38404,10 +38690,10 @@
         })()
       );
     }
-    function sr(e, t) {
+    function pr(e, t) {
       if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
     }
-    function ur(e, t) {
+    function _r(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -38416,13 +38702,13 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function lr(e, t, n) {
-      return t && ur(e.prototype, t), n && ur(e, n), e;
+    function yr(e, t, n) {
+      return t && _r(e.prototype, t), n && _r(e, n), e;
     }
-    var cr = 10,
-      fr = (function() {
+    var vr = 10,
+      gr = (function() {
         function e() {
-          sr(this, e),
+          pr(this, e),
             (this.cornerEl = o('div', ''.concat(g, '-selector-corner'))),
             (this.dropdownBtn = o('div', ''.concat(g, '-dropdown-btn'))),
             (this.placeholderDom = o('div', ''.concat(g, '-placeholder to__tip_items'))
@@ -38441,13 +38727,13 @@
             (this.clipboardEl = o('div', ''.concat(g, '-selector-clipboard')).hide()),
             (this.autofillEl = o('div', ''.concat(g, '-selector-autofill')).hide()),
             (this.el = o('div', ''.concat(g, '-selector'))
-              .css('z-index', ''.concat(cr))
+              .css('z-index', ''.concat(vr))
               .children(this.areaEl, this.clipboardEl, this.autofillEl)
               .hide()),
-            (cr += 1);
+            (vr += 1);
         }
         return (
-          lr(e, [
+          yr(e, [
             {
               key: 'setOffset',
               value: function(e) {
@@ -38514,7 +38800,7 @@
           e
         );
       })();
-    function dr(e) {
+    function Mr(e) {
       var t = this.data,
         n = e.left,
         r = e.top,
@@ -38527,7 +38813,7 @@
         c = n - u;
       return u > s && (c -= o.x), { left: c, top: r - l, width: i, height: a };
     }
-    function hr(e) {
+    function br(e) {
       var t = this.data,
         n = e.left,
         r = e.width,
@@ -38539,7 +38825,7 @@
         l = n - u;
       return u > a && (l -= s.x), { left: l, top: o, width: r, height: i };
     }
-    function mr(e) {
+    function wr(e) {
       var t = this.data,
         n = e.top,
         r = e.width,
@@ -38551,37 +38837,37 @@
         l = n - u;
       return u > o && (l -= s.y), { left: a, top: l, width: r, height: i };
     }
-    function pr(e) {
-      this.br.setAreaOffset(dr.call(this, e));
-    }
-    function _r(e) {
-      this.tl.setAreaOffset(e);
-    }
-    function yr(e) {
-      this.t.setAreaOffset(hr.call(this, e));
-    }
-    function vr(e) {
-      this.l.setAreaOffset(mr.call(this, e));
-    }
-    function gr(e) {
-      this.l.setClipboardOffset(mr.call(this, e));
-    }
-    function Mr(e) {
-      this.br.setClipboardOffset(dr.call(this, e));
-    }
-    function br(e) {
-      this.tl.setClipboardOffset(e);
-    }
-    function wr(e) {
-      this.t.setClipboardOffset(hr.call(this, e));
-    }
     function Tr(e) {
-      pr.call(this, e), _r.call(this, e), yr.call(this, e), vr.call(this, e);
+      this.br.setAreaOffset(Mr.call(this, e));
     }
     function Lr(e) {
-      Mr.call(this, e), br.call(this, e), wr.call(this, e), gr.call(this, e);
+      this.tl.setAreaOffset(e);
     }
-    function Sr(e, t, n) {
+    function Sr(e) {
+      this.t.setAreaOffset(br.call(this, e));
+    }
+    function Er(e) {
+      this.l.setAreaOffset(wr.call(this, e));
+    }
+    function Dr(e) {
+      this.l.setClipboardOffset(wr.call(this, e));
+    }
+    function kr(e) {
+      this.br.setClipboardOffset(Mr.call(this, e));
+    }
+    function Ar(e) {
+      this.tl.setClipboardOffset(e);
+    }
+    function xr(e) {
+      this.t.setClipboardOffset(br.call(this, e));
+    }
+    function Yr(e) {
+      Tr.call(this, e), Lr.call(this, e), Sr.call(this, e), Er.call(this, e);
+    }
+    function Or(e) {
+      kr.call(this, e), Ar.call(this, e), xr.call(this, e), Dr.call(this, e);
+    }
+    function Nr(e, t, n) {
       var r = this,
         i = parseInt(n.getAttribute('sri'), 10),
         a = parseInt(n.getAttribute('sci'), 10),
@@ -38639,23 +38925,23 @@
         !0
       );
     }
-    function Er(e) {
+    function Ir(e) {
       e.className.indexOf('to__roate') > -1 ? (e.className = '') : (e.className = 'to__roate');
       var t = e.parentNode.parentNode.nextElementSibling;
       t.className.indexOf('to__show') > -1
         ? (t.className = 'to__subItem')
         : (t.className = 'to__subItem to__show');
     }
-    var Dr = (function() {
+    var Rr = (function() {
       function e(t, n) {
         var r = this;
-        sr(this, e),
+        pr(this, e),
           (this.data = t),
           (this.sheet = n),
-          (this.br = new fr()),
-          (this.t = new fr()),
-          (this.l = new fr()),
-          (this.tl = new fr()),
+          (this.br = new gr()),
+          (this.t = new gr()),
+          (this.l = new gr()),
+          (this.tl = new gr()),
           this.br.el.show(),
           (this.offset = null),
           (this.areaOffset = null),
@@ -38676,10 +38962,10 @@
               var i = n.domTarget;
               switch (n.clickType) {
                 case 'domClick':
-                  Sr.call(r, i, t, e.currentTarget);
+                  Nr.call(r, i, t, e.currentTarget);
                   break;
                 case 'dropClick':
-                  Er.call(null, i);
+                  Ir.call(null, i);
               }
             })
             .on('mousemove', function(e) {
@@ -38722,7 +39008,7 @@
                   a)
                 ) {
                   case 'x-spreadsheet-image-right-switch':
-                    if (d + 1 >= f.length) i = or(f, 1)[0];
+                    if (d + 1 >= f.length) i = mr(f, 1)[0];
                     else i = f[d + 1];
                     break;
                   case 'x-spreadsheet-image-left-switch':
@@ -38764,7 +39050,7 @@
             .hide()),
           (this.lastri = -1),
           (this.lastci = -1),
-          (cr += 1),
+          (vr += 1),
           (this.sheet = n);
         var i = this.br.el.el
             .querySelector('.'.concat(g, '-selector-area'))
@@ -38778,13 +39064,13 @@
           u = this.tl.el.el
             .querySelector('.'.concat(g, '-selector-area'))
             .querySelector('.'.concat(g, '-dropdown-btn'));
-        qn(i, 'click', this.dropdownFn.bind(this, i)),
-          qn(a, 'click', this.dropdownFn.bind(this, a)),
-          qn(s, 'click', this.dropdownFn.bind(this, s)),
-          qn(u, 'click', this.dropdownFn.bind(this, u));
+        tr(i, 'click', this.dropdownFn.bind(this, i)),
+          tr(a, 'click', this.dropdownFn.bind(this, a)),
+          tr(s, 'click', this.dropdownFn.bind(this, s)),
+          tr(u, 'click', this.dropdownFn.bind(this, u));
       }
       return (
-        lr(e, [
+        yr(e, [
           {
             key: 'hide',
             value: function() {
@@ -38814,7 +39100,7 @@
             value: function() {
               var e = this.data.getSelectedRect(),
                 t = this.data.getClipboardRect();
-              Tr.call(this, e), Lr.call(this, t), this.resetOffset();
+              Yr.call(this, e), Or.call(this, t), this.resetOffset();
             },
           },
           {
@@ -38822,10 +39108,10 @@
             value: function() {
               var e = this.data.getSelectedRect(),
                 t = this.data.getClipboardRect();
-              pr.call(this, e),
-                yr.call(this, e),
-                Mr.call(this, t),
-                wr.call(this, t),
+              Tr.call(this, e),
+                Sr.call(this, e),
+                kr.call(this, t),
+                xr.call(this, t),
                 this.resetOffset();
             },
           },
@@ -38834,10 +39120,10 @@
             value: function() {
               var e = this.data.getSelectedRect(),
                 t = this.data.getClipboardRect();
-              pr.call(this, e),
-                vr.call(this, e),
-                Mr.call(this, t),
-                gr.call(this, t),
+              Tr.call(this, e),
+                Er.call(this, e),
+                kr.call(this, t),
+                Dr.call(this, t),
                 this.resetOffset();
             },
           },
@@ -38848,7 +39134,7 @@
               var n = this.data.selector.range,
                 r = n.sri,
                 i = n.sci,
-                a = this.data.settings.col.colAttr[i],
+                a = this.data.cols.getWidth(i),
                 s = this.data.getCellProps(r, i),
                 u = this;
               if ('dropdown' === s.cellType) {
@@ -38859,10 +39145,10 @@
                   d = c.source || [];
                 l.setAttribute('sri', r),
                   l.setAttribute('sci', i),
-                  new ir(l, f, this.data).getData(d, l),
+                  new dr(l, f, this.data).getData(d, l),
                   o(l).show();
                 var h = this.data.cols._[i].width || this.data.cols.width,
-                  m = ar.getPosition(e, l, { elemOffsetWidth: -h - 1, elemOffsetHeight: 2 }),
+                  m = hr.getPosition(e, l, { elemOffsetWidth: -h - 1, elemOffsetHeight: 2 }),
                   p = m.top,
                   _ = m.left;
                 (l.style.top = p), (l.style.left = _), (l.style.display = 'block');
@@ -38917,13 +39203,13 @@
             key: 'showOrHidePlaceHolderBtn',
             value: function(e) {
               this.sheet.el.el.querySelector('.x-spreadsheet-placeholder').style.display = 'none';
-              var t = this.data.getCellProps(e.sri, e.sci);
-              if (e.eci === e.sci && e.eri === e.sri && t && t.placeholder) {
-                var n = this.data.getCell(e.sri, e.sci),
-                  r = n.isError,
+              var t = this.data.getCellProps(e.sri, e.sci),
+                n = this.data.getCell(e.sri, e.sci);
+              if (e.eci === e.sci && e.eri === e.sri && t && (t.placeholder || n.isError)) {
+                var r = n.isError,
                   i = n.errorMsg,
                   a = this.data.rows._[e.sri].height || this.data.rows.height;
-                this.hidePlaceHolderBtn(this.el, 'block', t.placeholder, r, i, a);
+                this.hidePlaceHolderBtn(this.el, 'block', t.placeholder || {}, r, i, a);
               } else this.hidePlaceHolderBtn(this.el, 'none', {});
               return !0;
             },
@@ -38996,7 +39282,7 @@
                 (this.lastri = e), (this.lastci = t);
               }
               (this.range = r.calSelectedRangeByEnd(e, t)),
-                Tr.call(this, this.data.getSelectedRect()),
+                Yr.call(this, this.data.getSelectedRect()),
                 this.showOrHideDropdownBtn.call(this, this.range);
               var o = this.range,
                 s = o.sri,
@@ -39051,9 +39337,9 @@
                     p = this.l,
                     _ = this.t,
                     y = this.tl;
-                  h.showAutofill(dr.call(this, d)),
-                    p.showAutofill(mr.call(this, d)),
-                    _.showAutofill(hr.call(this, d)),
+                  h.showAutofill(Mr.call(this, d)),
+                    p.showAutofill(wr.call(this, d)),
+                    _.showAutofill(br.call(this, d)),
                     y.showAutofill(d);
                 }
               }
@@ -39073,7 +39359,7 @@
             value: function() {
               var e = this,
                 t = this.data.getClipboardRect();
-              Lr.call(this, t),
+              Or.call(this, t),
                 ['br', 'l', 't', 'tl'].forEach(function(t) {
                   e[t].showClipboard();
                 });
@@ -39092,7 +39378,7 @@
         e
       );
     })();
-    function kr(e) {
+    function Cr(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -39112,7 +39398,7 @@
         })()
       );
     }
-    function Ar(e, t) {
+    function Pr(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -39121,7 +39407,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function xr(e) {
+    function jr(e) {
       e.preventDefault(), e.stopPropagation();
       var t = this.filterItems;
       t.length <= 0 ||
@@ -39130,7 +39416,7 @@
         this.itemIndex < 0 && (this.itemIndex = t.length - 1),
         t[this.itemIndex].toggle());
     }
-    function Yr(e) {
+    function Hr(e) {
       e.stopPropagation();
       var t = this.filterItems;
       t.length <= 0 ||
@@ -39139,7 +39425,7 @@
         this.itemIndex > t.length - 1 && (this.itemIndex = 0),
         t[this.itemIndex].toggle());
     }
-    function Or(e) {
+    function Fr(e) {
       e.preventDefault();
       var t = this.filterItems;
       t.length <= 0 ||
@@ -39148,30 +39434,30 @@
         t[this.itemIndex].el.click(),
         this.hide());
     }
-    function Nr(e) {
+    function Ur(e) {
       var t = e.keyCode;
       switch ((e.ctrlKey && e.stopPropagation(), t)) {
         case 37:
           e.stopPropagation();
           break;
         case 38:
-          xr.call(this, e);
+          jr.call(this, e);
           break;
         case 39:
           e.stopPropagation();
           break;
         case 40:
-          Yr.call(this, e);
+          Hr.call(this, e);
           break;
         case 13:
         case 9:
-          Or.call(this, e);
+          Fr.call(this, e);
           break;
         default:
           e.stopPropagation();
       }
     }
-    var Ir = (function() {
+    var Vr = (function() {
       function e(t, n) {
         var r = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : '200px';
         !(function(e, t) {
@@ -39199,7 +39485,7 @@
             key: 'hide',
             value: function() {
               var e = this.el;
-              (this.filterItems = []), (this.itemIndex = -1), e.hide(), Jn(this.el.parent());
+              (this.filterItems = []), (this.itemIndex = -1), e.hide(), rr(this.el.parent());
             },
           },
           {
@@ -39233,8 +39519,8 @@
                 !(r.length <= 0))
               ) {
                 var i = this.el;
-                (t = i.html('')).children.apply(t, kr(r)).show(),
-                  $n(i.parent(), function() {
+                (t = i.html('')).children.apply(t, Cr(r)).show(),
+                  ir(i.parent(), function() {
                     n.hide();
                   });
               }
@@ -39245,17 +39531,17 @@
             value: function(e) {
               var t = this;
               e.on('keydown', function(e) {
-                return Nr.call(t, e);
+                return Ur.call(t, e);
               });
             },
           },
-        ]) && Ar(t.prototype, n),
-        r && Ar(t, r),
+        ]) && Pr(t.prototype, n),
+        r && Pr(t, r),
         e
       );
     })();
-    function Rr(e) {
-      return (Rr =
+    function Wr(e) {
+      return (Wr =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -39269,7 +39555,7 @@
                 : typeof e;
             })(e);
     }
-    function Cr(e, t) {
+    function Br(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -39278,8 +39564,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Pr(e, t) {
-      return !t || ('object' !== Rr(t) && 'function' != typeof t)
+    function Gr(e, t) {
+      return !t || ('object' !== Wr(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -39287,28 +39573,28 @@
           })(e)
         : t;
     }
-    function jr(e) {
-      return (jr = Object.setPrototypeOf
+    function zr(e) {
+      return (zr = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Hr(e, t) {
-      return (Hr =
+    function qr(e, t) {
+      return (qr =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Fr = (function(e) {
+    var Xr = (function(e) {
       function t(e) {
         var n;
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          ((n = Pr(this, jr(t).call(this, 'div', ''.concat(g, '-icon')))).iconNameEl = o(
+          ((n = Gr(this, zr(t).call(this, 'div', ''.concat(g, '-icon')))).iconNameEl = o(
             'div',
             ''.concat(g, '-icon-img ').concat(e),
           )),
@@ -39324,7 +39610,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Hr(e, t);
+            t && qr(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -39334,12 +39620,12 @@
               this.iconNameEl.className(''.concat(g, '-icon-img ').concat(e));
             },
           },
-        ]) && Cr(n.prototype, r),
-        i && Cr(n, i),
+        ]) && Br(n.prototype, r),
+        i && Br(n, i),
         t
       );
     })(a);
-    function Ur(e, t) {
+    function Jr(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -39348,7 +39634,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Wr() {
+    function $r() {
       if (!/^\s*$/.test(this.inputText)) {
         var e = this.textlineEl,
           t = this.textEl,
@@ -39367,7 +39653,7 @@
         }
       }
     }
-    function Vr(e) {
+    function Kr(e) {
       var t = e.target.value,
         n = this.suggest,
         r = this.textlineEl,
@@ -39377,20 +39663,20 @@
         var a = t.lastIndexOf('=');
         -1 !== a ? n.search(t.substring(a + 1)) : n.hide();
       }
-      r.html(t), Wr.call(this), this.change('input', t);
+      r.html(t), $r.call(this), this.change('input', t);
     }
-    function Br(e) {
+    function Qr(e) {
       var t = this.textEl.el;
       setTimeout(function() {
         t.focus(), t.setSelectionRange(e, e);
       }, 0);
     }
-    function Gr(e, t) {
+    function Zr(e, t) {
       var n = this.textEl,
         r = this.textlineEl;
-      n.el.blur(), n.val(e), r.html(e), Br.call(this, t);
+      n.el.blur(), n.val(e), r.html(e), Qr.call(this, t);
     }
-    function zr(e) {
+    function ei(e) {
       var t = this.inputText,
         n = this.validator,
         r = 0;
@@ -39404,12 +39690,12 @@
           (r = this.inputText.length),
           (this.inputText += ')'.concat(o));
       }
-      Gr.call(this, this.inputText, r);
+      Zr.call(this, this.inputText, r);
     }
-    function qr() {
+    function ti() {
       this.suggest.setItems(this.formulas);
     }
-    var Xr = (function() {
+    var ni = (function() {
       function e(t, n, r) {
         var i = this;
         !(function(e, t) {
@@ -39418,13 +39704,13 @@
           (this.viewFn = n),
           (this.rowHeight = r),
           (this.formulas = t),
-          (this.suggest = new Ir(t, function(e) {
-            zr.call(i, e);
+          (this.suggest = new Vr(t, function(e) {
+            ei.call(i, e);
           })),
           (this.areaEl = o('div', ''.concat(g, '-editor-area'))
             .children(
               (this.textEl = o('textarea', '').on('input', function(e) {
-                return Vr.call(i, e);
+                return Kr.call(i, e);
               })),
               (this.textlineEl = o('div', 'textline')),
               this.suggest.el,
@@ -39461,7 +39747,7 @@
                 this.el.hide(),
                 this.textEl.val(''),
                 this.textlineEl.html(''),
-                qr.call(this);
+                ti.call(this);
             },
           },
           {
@@ -39511,15 +39797,15 @@
           {
             key: 'setText',
             value: function(e) {
-              (this.inputText = e), Gr.call(this, e, ''.concat(e).length), Wr.call(this);
+              (this.inputText = e), Zr.call(this, e, ''.concat(e).length), $r.call(this);
             },
           },
-        ]) && Ur(t.prototype, n),
-        r && Ur(t, r),
+        ]) && Jr(t.prototype, n),
+        r && Jr(t, r),
         e
       );
     })();
-    function Jr(e) {
+    function ri(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -39539,7 +39825,7 @@
         })()
       );
     }
-    function $r(e, t) {
+    function ii(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -39548,7 +39834,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var Kr = [
+    var ai = [
       { key: 'freezePanes', title: le('contextmenu.freezePanes'), isShow: !1 },
       { key: 'copy', title: le('contextmenu.copy'), label: 'Ctrl+C', isShow: !1 },
       { key: 'cut', title: le('contextmenu.cut'), label: 'Ctrl+X', isShow: !1 },
@@ -39575,7 +39861,7 @@
       { key: 'divider', isShow: !1 },
       { key: 'validation', title: le('contextmenu.validation'), isShow: !1 },
     ];
-    function Qr(e, t) {
+    function oi(e, t) {
       var n = this;
       if (!e.isShow && !t) return !1;
       if ('divider' === e.key) return o('div', ''.concat(g, '-item divider'));
@@ -39592,15 +39878,17 @@
           .children(r, o('div', 'label').child(e.label || ''))
       );
     }
-    function Zr(e) {
+    function si(e) {
       var t = this;
-      return Kr.map(function(n) {
-        return Qr.call(t, n, e);
-      }).filter(function(e) {
-        return e;
-      });
+      return ai
+        .map(function(n) {
+          return oi.call(t, n, e);
+        })
+        .filter(function(e) {
+          return e;
+        });
     }
-    var ei = (function() {
+    var ui = (function() {
         function e(t) {
           var n,
             r = arguments.length > 1 && void 0 !== arguments[1] && arguments[1],
@@ -39615,9 +39903,9 @@
               return !!e.isShow && ((a = !1), !0);
             }),
             this.assignItems(i),
-            (Kr = Kr.concat(i)),
+            (ai = ai.concat(i)),
             (this.el = (n = o('div', ''.concat(g, '-contextmenu'))).children
-              .apply(n, Jr(Zr.call(this, a)))
+              .apply(n, ri(si.call(this, a)))
               .hide()),
             (this.viewFn = t),
             (this.itemClick = function() {}),
@@ -39630,8 +39918,8 @@
             {
               key: 'assignItems',
               value: function(e) {
-                for (var t = 0; t < Kr.length; t++)
-                  for (var n = Kr[t], r = 0; r < e.length; r++) {
+                for (var t = 0; t < ai.length; t++)
+                  for (var n = ai[t], r = 0; r < e.length; r++) {
                     var i = e[r];
                     i.key === n.key && (Object.assign(n, i), e.splice(r, 1));
                   }
@@ -39641,7 +39929,7 @@
               key: 'hide',
               value: function() {
                 var e = this.el;
-                e.hide(), Jn(e);
+                e.hide(), rr(e);
               },
             },
             {
@@ -39665,16 +39953,16 @@
                   c.height - t <= s && (f -= s),
                     c.width - e <= u && (d -= u),
                     a.offset({ left: d, top: f }),
-                    $n(a);
+                    ir(a);
                 }
               },
             },
-          ]) && $r(t.prototype, n),
-          r && $r(t, r),
+          ]) && ii(t.prototype, n),
+          r && ii(t, r),
           e
         );
       })(),
-      ti = [
+      li = [
         { key: 'Arial', title: 'Arial' },
         { key: 'Helvetica', title: 'Helvetica' },
         { key: 'Source Sans Pro', title: 'Source Sans Pro' },
@@ -39683,7 +39971,7 @@
         { key: 'Verdana', title: 'Verdana' },
         { key: 'Lato', title: 'Lato' },
       ],
-      ni = [
+      ci = [
         { pt: 7.5, px: 10 },
         { pt: 8, px: 11 },
         { pt: 9, px: 12 },
@@ -39701,18 +39989,18 @@
         { pt: 36, px: 48 },
         { pt: 42, px: 56 },
       ];
-    function ri(e) {
+    function fi(e) {
       if (-1 !== (e += '').indexOf('px')) return parseInt(e.replace('px', ''));
       e = parseInt(e.replace('pt', ''));
-      for (var t = 0; t < ni.length; t += 1) {
-        var n = ni[t];
+      for (var t = 0; t < ci.length; t += 1) {
+        var n = ci[t];
         if (n.pt === e) return n.px;
       }
       return parseInt((4 * e) / 3);
     }
-    var ii = n(100),
-      ai = n.n(ii);
-    function oi(e) {
+    var di = n(100),
+      hi = n.n(di);
+    function mi(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -39720,41 +40008,41 @@
             return n;
           }
         })(e) ||
-        ui(e) ||
+        _i(e) ||
         (function() {
           throw new TypeError('Invalid attempt to spread non-iterable instance');
         })()
       );
     }
-    function si(e) {
+    function pi(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
         })(e) ||
-        ui(e) ||
+        _i(e) ||
         (function() {
           throw new TypeError('Invalid attempt to destructure non-iterable instance');
         })()
       );
     }
-    function ui(e) {
+    function _i(e) {
       if (
         Symbol.iterator in Object(e) ||
         '[object Arguments]' === Object.prototype.toString.call(e)
       )
         return Array.from(e);
     }
-    var li = function(e) {
+    var yi = function(e) {
         return e;
       },
-      ci = function(e, t) {
+      vi = function(e, t) {
         if (!e) return e;
-        var n = ai()(e).format(t);
+        var n = hi()(e).format(t);
         return 'Invalid Date' === n && (n = '无效日期格式'), n;
       },
-      fi = function(e, t) {
+      gi = function(e, t) {
         if (e && /^(-?\d*.?\d*)$/.test(e)) {
-          var n = si(
+          var n = pi(
               Number(e)
                 .toFixed(t)
                 .toString()
@@ -39762,19 +40050,19 @@
             ),
             r = n[0],
             i = n.slice(1);
-          return [r.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')].concat(oi(i));
+          return [r.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')].concat(mi(i));
         }
         return e;
       },
-      di = [
-        { key: 'normal', title: le('format.normal'), type: 'string', render: li },
-        { key: 'text', title: le('format.text'), type: 'string', render: li },
+      Mi = [
+        { key: 'normal', title: le('format.normal'), type: 'string', render: yi },
+        { key: 'text', title: le('format.text'), type: 'string', render: yi },
         {
           key: 'number',
           title: le('format.number'),
           type: 'number',
           label: '1,000.12',
-          render: fi,
+          render: gi,
         },
         {
           key: 'normalNumber',
@@ -39795,7 +40083,7 @@
           type: 'number',
           label: '10.12%',
           render: function(e, t) {
-            return fi(e, t) ? ''.concat(fi(100 * e, t), '%') : e;
+            return gi(e, t) ? ''.concat(gi(100 * e, t), '%') : e;
           },
         },
         {
@@ -39804,7 +40092,7 @@
           type: 'number',
           label: '10.12‰',
           render: function(e, t) {
-            return fi(e, t) ? ''.concat(fi(1e3 * e, t), '‰') : e;
+            return gi(e, t) ? ''.concat(gi(1e3 * e, t), '‰') : e;
           },
         },
         {
@@ -39813,7 +40101,7 @@
           type: 'number',
           label: '￥10.00',
           render: function(e, t) {
-            return fi(e, t) ? '￥'.concat(fi(e, t)) : e;
+            return gi(e, t) ? '￥'.concat(gi(e, t)) : e;
           },
         },
         {
@@ -39822,7 +40110,7 @@
           type: 'number',
           label: '$10.00',
           render: function(e, t) {
-            return fi(e, t) ? '$'.concat(fi(e, t)) : e;
+            return gi(e, t) ? '$'.concat(gi(e, t)) : e;
           },
         },
         {
@@ -39831,10 +40119,10 @@
           type: 'number',
           label: '€10.00',
           render: function(e) {
-            return '€'.concat(fi(e));
+            return '€'.concat(gi(e));
           },
         },
-        { key: 'date', title: le('format.date'), type: 'date', label: '26/09/2008', render: ci },
+        { key: 'date', title: le('format.date'), type: 'date', label: '26/09/2008', render: vi },
         {
           key: 'time',
           title: le('format.time'),
@@ -39844,7 +40132,7 @@
             if (!e) return e;
             var n = '20181010 '.concat(e),
               r = 'YYYY-MM-DD '.concat(t),
-              i = ai()(n).format(r);
+              i = hi()(n).format(r);
             return 'Invalid Date' === i ? '无效日期格式' : i.split(' ')[1];
           },
         },
@@ -39853,24 +40141,24 @@
           title: le('format.datetime'),
           type: 'date',
           label: '26/09/2008 15:59:00',
-          render: ci,
+          render: vi,
         },
         {
           key: 'duration',
           title: le('format.duration'),
           type: 'date',
           label: '24:01:00',
-          render: ci,
+          render: vi,
         },
       ],
-      hi = {};
-    di.forEach(function(e) {
-      hi[e.key] = e;
+      bi = {};
+    Mi.forEach(function(e) {
+      bi[e.key] = e;
     });
-    var mi = n(268),
-      pi = n.n(mi);
-    function _i(e) {
-      return (_i =
+    var wi = n(268),
+      Ti = n.n(wi);
+    function Li(e) {
+      return (Li =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -39884,7 +40172,7 @@
                 : typeof e;
             })(e);
     }
-    function yi(e, t) {
+    function Si(e, t) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
@@ -39923,8 +40211,8 @@
         })()
       );
     }
-    var vi = null;
-    var gi = {
+    var Ei = null;
+    var Di = {
       getFullNum: function(e) {
         if (isNaN(e)) return e;
         if (!/e/i.test('' + e)) return e;
@@ -39935,14 +40223,14 @@
         return function() {
           var n = this,
             r = arguments;
-          vi && clearTimeout(vi),
-            (vi = setTimeout(function() {
+          Ei && clearTimeout(Ei),
+            (Ei = setTimeout(function() {
               e.apply(n, r);
             }, t));
         };
       },
       workerCalUtil: function(e, t) {
-        var n = pi.a.createWebWorker('./js/workerCalc.js', {}, function(n, r) {
+        var n = Ti.a.createWebWorker('./js/workerCalc.js', {}, function(n, r) {
             var i = r.data;
             (e.data.cachePosition = i.result || []),
               (e.data.totalHeightValue = i.totalHeight),
@@ -39954,7 +40242,7 @@
           i = r.rows,
           a = r.cols,
           o = r.settings.streamCharts,
-          s = yi(e.data.freeze, 1)[0];
+          s = Si(e.data.freeze, 1)[0];
         n &&
           n.postMessage({
             actionApi: 'calcYValue',
@@ -39976,13 +40264,13 @@
         if (!e) return !1;
         var t = e.content,
           n = e.key;
-        return 'object' === _i(e) && (t = JSON.stringify(t)), sessionStorage.setItem(n, t), !0;
+        return 'object' === Li(e) && (t = JSON.stringify(t)), sessionStorage.setItem(n, t), !0;
       },
       getSesstionStorage: function(e) {
         return e ? sessionStorage.getItem(e) : null;
       },
     };
-    function Mi(e) {
+    function ki(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -40002,7 +40290,7 @@
         })()
       );
     }
-    function bi(e, t) {
+    function Ai(e, t) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
@@ -40041,10 +40329,10 @@
         })()
       );
     }
-    function wi(e, t) {
+    function xi(e, t) {
       if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
     }
-    function Ti(e, t) {
+    function Yi(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -40053,27 +40341,27 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Li(e, t, n) {
-      return t && Ti(e.prototype, t), n && Ti(e, n), e;
+    function Oi(e, t, n) {
+      return t && Yi(e.prototype, t), n && Yi(e, n), e;
     }
-    function Si() {
+    function Ni() {
       return window.devicePixelRatio || 1;
     }
-    function Ei() {
-      return Si() - 0.5;
+    function Ii() {
+      return Ni() - 0.5;
     }
-    function Di(e) {
-      return parseInt(e * Si(), 10);
+    function Ri(e) {
+      return parseInt(e * Ni(), 10);
     }
-    function ki(e) {
-      var t = Di(e);
+    function Ci(e) {
+      var t = Ri(e);
       return t > 0 ? t - 0.5 : 0.5;
     }
-    var Ai = (function() {
+    var Pi = (function() {
       function e(t, n, r, i) {
         var a = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : 0,
           o = arguments.length > 5 ? arguments[5] : void 0;
-        wi(this, e),
+        xi(this, e),
           (this.x = t),
           (this.y = n),
           (this.width = r),
@@ -40087,7 +40375,7 @@
           (this.borderLeft = null);
       }
       return (
-        Li(e, [
+        Oi(e, [
           {
             key: 'setBorders',
             value: function(e) {
@@ -40187,7 +40475,7 @@
         e
       );
     })();
-    function xi(e, t, n, r, i, a, o) {
+    function ji(e, t, n, r, i, a, o) {
       var s = { x: 0, y: 0 };
       'underline' === e
         ? (s.y = 'bottom' === i ? 0 : 'top' === i ? -(a + 2) : -a / 2)
@@ -40195,23 +40483,23 @@
         'center' === r ? (s.x = o / 2) : 'right' === r && (s.x = o),
         this.line([t - s.x, n - s.y], [t - s.x + o, n - s.y]);
     }
-    var Yi = (function() {
+    var Hi = (function() {
       function e(t, n, r) {
-        wi(this, e),
+        xi(this, e),
           (this.el = t),
           (this.ctx = t.getContext('2d')),
           this.resize(n, r),
-          this.ctx.scale(Si(), Si());
+          this.ctx.scale(Ni(), Ni());
       }
       return (
-        Li(e, [
+        Oi(e, [
           {
             key: 'resize',
             value: function(e, t) {
               (this.el.style.width = ''.concat(e, 'px')),
                 (this.el.style.height = ''.concat(t, 'px')),
-                (this.el.width = Di(e)),
-                (this.el.height = Di(t));
+                (this.el.width = Ri(e)),
+                (this.el.height = Ri(t));
             },
           },
           {
@@ -40250,7 +40538,7 @@
           {
             key: 'translate',
             value: function(e, t) {
-              return this.ctx.translate(Di(e), Di(t)), this;
+              return this.ctx.translate(Ri(e), Ri(t)), this;
             },
           },
           {
@@ -40262,13 +40550,13 @@
           {
             key: 'fillRect',
             value: function(e, t, n, r) {
-              return this.ctx.fillRect(Di(e) - 0.5, Di(t) - 0.5, Di(n), Di(r)), this;
+              return this.ctx.fillRect(Ri(e) - 0.5, Ri(t) - 0.5, Ri(n), Ri(r)), this;
             },
           },
           {
             key: 'fillText',
             value: function(e, t, n) {
-              return this.ctx.fillText(e, Di(t), Di(n)), this;
+              return this.ctx.fillText(e, Ri(t), Ri(n)), this;
             },
           },
           {
@@ -40292,7 +40580,7 @@
                   font: ''
                     .concat(s.italic ? 'italic' : '', ' ')
                     .concat(s.bold ? 'bold' : '', ' ')
-                    .concat(Di(s.size), 'px ')
+                    .concat(Ri(s.size), 'px ')
                     .concat(s.name),
                   fillStyle: u,
                   strokeStyle: u,
@@ -40309,8 +40597,8 @@
                   var v = e[y];
                   (_.len >= t.innerWidth() || '\n' === v) &&
                     (this.fillText(e.substring(_.start, y), f, p),
-                    l && xi.call(this, 'strike', f, p, a, o, s.size, _.len),
-                    c && xi.call(this, 'underline', f, p, a, o, s.size, _.len),
+                    l && ji.call(this, 'strike', f, p, a, o, s.size, _.len),
+                    c && ji.call(this, 'underline', f, p, a, o, s.size, _.len),
                     (p += s.size + 2),
                     (_.len = 0),
                     (_.start = y)),
@@ -40318,12 +40606,12 @@
                 }
                 _.len > 0 &&
                   (this.fillText(e.substring(_.start), f, p),
-                  l && xi.call(this, 'strike', f, p, a, o, s.size, _.len),
-                  c && xi.call(this, 'underline', f, p, a, o, s.size, _.len));
+                  l && ji.call(this, 'strike', f, p, a, o, s.size, _.len),
+                  c && ji.call(this, 'underline', f, p, a, o, s.size, _.len));
               } else
                 this.fillText(e, f, p),
-                  l && xi.call(this, 'strike', f, p, a, o, s.size, d),
-                  c && xi.call(this, 'underline', f, p, a, o, s.size, d);
+                  l && ji.call(this, 'strike', f, p, a, o, s.size, d),
+                  c && ji.call(this, 'underline', f, p, a, o, s.size, d);
               return i.restore(), this;
             },
           },
@@ -40332,17 +40620,17 @@
             value: function(e, t) {
               var n = this.ctx;
               return (
-                (n.lineWidth = Ei()),
+                (n.lineWidth = Ii()),
                 (n.strokeStyle = t),
                 'medium' === e
-                  ? (n.lineWidth = Di(2) - 0.5)
+                  ? (n.lineWidth = Ri(2) - 0.5)
                   : 'thick' === e
-                  ? (n.lineWidth = Di(3))
+                  ? (n.lineWidth = Ri(3))
                   : 'dashed' === e
-                  ? n.setLineDash([Di(3), Di(2)])
+                  ? n.setLineDash([Ri(3), Ri(2)])
                   : 'dotted' === e
-                  ? n.setLineDash([Di(1), Di(1)])
-                  : 'double' === e && n.setLineDash([Di(2), 0]),
+                  ? n.setLineDash([Ri(1), Ri(1)])
+                  : 'double' === e && n.setLineDash([Ri(2), 0]),
                 this
               );
             },
@@ -40353,16 +40641,16 @@
               var e = this.ctx;
               if (arguments.length > 1) {
                 var t = arguments.length <= 0 ? void 0 : arguments[0],
-                  n = bi(t, 2),
+                  n = Ai(t, 2),
                   r = n[0],
                   i = n[1];
-                e.moveTo(ki(r), ki(i));
+                e.moveTo(Ci(r), Ci(i));
                 for (var a = 1; a < arguments.length; a += 1) {
                   var o = a < 0 || arguments.length <= a ? void 0 : arguments[a],
-                    s = bi(o, 2),
+                    s = Ai(o, 2),
                     u = s[0],
                     l = s[1];
-                  e.lineTo(ki(u), ki(l));
+                  e.lineTo(Ci(u), Ci(l));
                 }
                 e.stroke();
               }
@@ -40378,10 +40666,10 @@
                 r = e.borderRight,
                 i = e.borderBottom,
                 a = e.borderLeft;
-              n && (this.border.apply(this, Mi(n)), this.line.apply(this, Mi(e.topxys()))),
-                r && (this.border.apply(this, Mi(r)), this.line.apply(this, Mi(e.rightxys()))),
-                i && (this.border.apply(this, Mi(i)), this.line.apply(this, Mi(e.bottomxys()))),
-                a && (this.border.apply(this, Mi(a)), this.line.apply(this, Mi(e.leftxys()))),
+              n && (this.border.apply(this, ki(n)), this.line.apply(this, ki(e.topxys()))),
+                r && (this.border.apply(this, ki(r)), this.line.apply(this, ki(e.rightxys()))),
+                i && (this.border.apply(this, ki(i)), this.line.apply(this, ki(e.bottomxys()))),
+                a && (this.border.apply(this, ki(a)), this.line.apply(this, ki(e.leftxys()))),
                 t.restore();
             },
           },
@@ -40394,9 +40682,9 @@
                 i = n + e.width - 1;
               t.save(),
                 t.beginPath(),
-                t.moveTo(Di(i - 12), Di(r - 1)),
-                t.lineTo(Di(i), Di(r - 1)),
-                t.lineTo(Di(i), Di(r + 12)),
+                t.moveTo(Ri(i - 12), Ri(r - 1)),
+                t.lineTo(Ri(i), Ri(r - 1)),
+                t.lineTo(Ri(i), Ri(r + 12)),
                 t.closePath(),
                 (t.fillStyle = 'rgba(255, 0, 0, .65)'),
                 t.fill(),
@@ -40413,9 +40701,9 @@
                 o = i + e.height - 15;
               n.save(),
                 n.beginPath(),
-                n.moveTo(Di(a), Di(o)),
-                n.lineTo(Di(a + 8), Di(o)),
-                n.lineTo(Di(a + 4), Di(o + 6)),
+                n.moveTo(Ri(a), Ri(o)),
+                n.lineTo(Ri(a + 8), Ri(o)),
+                n.lineTo(Ri(a + 4), Ri(o + 6)),
                 n.closePath(),
                 (n.fillStyle = t ? '#ffbf00' : 'rgba(0, 0, 0, .45)'),
                 n.fill(),
@@ -40431,9 +40719,9 @@
                 i = n + e.width - 1;
               t.save(),
                 t.beginPath(),
-                t.moveTo(Di(i - 8), Di(r - 1)),
-                t.lineTo(Di(i), Di(r - 1)),
-                t.lineTo(Di(i), Di(r + 8)),
+                t.moveTo(Ri(i - 8), Ri(r - 1)),
+                t.lineTo(Ri(i), Ri(r - 1)),
+                t.lineTo(Ri(i), Ri(r + 8)),
                 t.closePath(),
                 (t.fillStyle = 'rgba(255, 0, 0, .65)'),
                 t.fill(),
@@ -40452,7 +40740,7 @@
               n.save(),
                 n.beginPath(),
                 (n.fillStyle = s || '#fff'),
-                n.rect(ki(r + 1), ki(i + 1), Di(a - 2), Di(o - 2)),
+                n.rect(Ci(r + 1), Ci(i + 1), Ri(a - 2), Ri(o - 2)),
                 n.clip(),
                 n.fill(),
                 t(),
@@ -40467,9 +40755,9 @@
               if (
                 (u.save(),
                 u.beginPath(),
-                u.moveTo(Di(e), Di(t)),
-                u.lineTo(ki(n + 1), ki(r + 1)),
-                u.lineTo(ki(i + 1), ki(a + 1)),
+                u.moveTo(Ri(e), Ri(t)),
+                u.lineTo(Ci(n + 1), Ci(r + 1)),
+                u.lineTo(Ci(i + 1), Ci(a + 1)),
                 o)
               ) {
                 var l = ''.concat(s, 'Style');
@@ -40494,7 +40782,7 @@
                   font: ''
                     .concat(c.italic ? 'italic' : '', ' ')
                     .concat(c.bold ? 'bold' : '', ' ')
-                    .concat(Di(c.size), 'px ')
+                    .concat(Ri(c.size), 'px ')
                     .concat(c.name),
                 });
                 var f = i.measureText('('.concat(n, ')')).width;
@@ -40502,13 +40790,13 @@
               } else l = (s - e.width) / 2;
               var d = (u - e.height) / 2;
               if (
-                (i.drawImage(e, Di(a + l), Di(o + d), Di(e.width), Di(e.height)),
+                (i.drawImage(e, Ri(a + l), Ri(o + d), Ri(e.width), Ri(e.height)),
                 i.restore(),
                 -1 !== n)
               ) {
                 var h = a + l + e.width,
                   m = s - (l + e.width),
-                  p = new Ai(h, o, m, u);
+                  p = new Pi(h, o, m, u);
                 this.text('('.concat(n, ')'), p, r, !1);
               }
             },
@@ -40529,7 +40817,7 @@
                     SecondLinePositionY: 50,
                   },
                   o = document.getElementById('waterMark'),
-                  s = bi(t, 3),
+                  s = Ai(t, 3),
                   u = s[0],
                   l = s[1],
                   c = s[2],
@@ -40562,7 +40850,16 @@
         e
       );
     })();
-    function Oi(e, t) {
+    function Fi(e, t) {
+      for (var n = 0; n < t.length; n++) {
+        var r = t[n];
+        (r.enumerable = r.enumerable || !1),
+          (r.configurable = !0),
+          'value' in r && (r.writable = !0),
+          Object.defineProperty(e, r.key, r);
+      }
+    }
+    function Ui(e, t) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
@@ -40601,193 +40898,20 @@
         })()
       );
     }
-    function Ni(e, t) {
-      for (var n = 0; n < t.length; n++) {
-        var r = t[n];
-        (r.enumerable = r.enumerable || !1),
-          (r.configurable = !0),
-          'value' in r && (r.writable = !0),
-          Object.defineProperty(e, r.key, r);
-      }
-    }
-    var Ii = { phone: /^[1-9]\d{10}$/, email: /w+([-+.]w+)*@w+([-.]w+)*.w+([-.]w+)*/ };
-    function Ri(e, t) {
-      var n = '';
-      if (!e) {
-        for (var r = arguments.length, i = new Array(r > 2 ? r - 2 : 0), a = 2; a < r; a++)
-          i[a - 2] = arguments[a];
-        n = ue.apply(void 0, ['validation.'.concat(t)].concat(i));
-      }
-      return [e, n];
-    }
-    var Ci = (function() {
-      function e() {
-        !(function(e, t) {
-          if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
-        })(this, e);
-      }
-      var t, n, r;
-      return (
-        (t = e),
-        (n = [
-          {
-            key: 'initData',
-            value: function() {
-              var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
-                t = e.cellType,
-                n = e.required,
-                r = e.value,
-                i = e.operator;
-              return (
-                (this.required = n),
-                (this.value = r),
-                (this.type = t),
-                (this.operator = i),
-                (this.message = ''),
-                this
-              );
-            },
-          },
-          {
-            key: 'parseValue',
-            value: function(e) {
-              var t = this.type;
-              return 'text' === t ? H.getRealTextLen(e, 2).realLen : 'number' === t ? Number(e) : e;
-            },
-          },
-          {
-            key: 'equals',
-            value: function(e) {
-              var t =
-                this.type === e.type &&
-                this.required === e.required &&
-                this.operator === e.operator;
-              return (
-                t &&
-                  (t = Array.isArray(this.value)
-                    ? H.arrayEquals(this.value, e.value)
-                    : this.value === e.value),
-                t
-              );
-            },
-          },
-          {
-            key: 'values',
-            value: function() {
-              return this.value.split(',');
-            },
-          },
-          {
-            key: 'validate',
-            value: function(e) {
-              var t = this.required,
-                n = this.operator,
-                r = this.value,
-                i = this.type;
-              if (!i) return [!0];
-              if (t && /^\s*$/.test(e)) return Ri(!1, 'required');
-              if (/^\s*$/.test(e)) return [!0];
-              if (Ii[i] && !Ii[i].test(e)) return Ri(!1, 'notMatch');
-              if ('list' === i) return Ri(this.values().includes(e), 'notIn');
-              var a = 'subjectString';
-              if ('numeric' === this.type)
-                return (
-                  (a = 'subjectNumber'),
-                  Ri('' !== e && !isNaN(e), 'isNaN', ue('validation.'.concat(a)))
-                );
-              if (n) {
-                var o = this.parseValue(e);
-                if ('be' === n) {
-                  var s = Oi(r, 2),
-                    u = s[0],
-                    l = s[1];
-                  return Ri(o >= u && o <= l, 'between', ue('validation.'.concat(a)), u, l);
-                }
-                if ('nbe' === n) {
-                  var c = Oi(r, 2),
-                    f = c[0],
-                    d = c[1];
-                  return Ri(o < f || o > d, 'notBetween', ue('validation.'.concat(a)), f, d);
-                }
-                if ('eq' === n) return Ri(o === r, 'equal', ue('validation.'.concat(a)), r);
-                if ('neq' === n) return Ri(o !== r, 'notEqual', ue('validation.'.concat(a)), r);
-                if ('lt' === n) return Ri(o < r, 'lessThan', ue('validation.'.concat(a)), r);
-                if ('lte' === n) return Ri(o <= r, 'lessThanEqual', ue('validation.'.concat(a)), r);
-                if ('gt' === n) return Ri(o > r, 'greaterThan', ue('validation.'.concat(a)), r);
-                if ('gte' === n)
-                  return Ri(o >= r, 'greaterThanEqual', ue('validation.'.concat(a)), r);
-              }
-              return [!0];
-            },
-          },
-        ]) && Ni(t.prototype, n),
-        r && Ni(t, r),
-        e
-      );
-    })();
-    function Pi(e, t) {
-      for (var n = 0; n < t.length; n++) {
-        var r = t[n];
-        (r.enumerable = r.enumerable || !1),
-          (r.configurable = !0),
-          'value' in r && (r.writable = !0),
-          Object.defineProperty(e, r.key, r);
-      }
-    }
-    function ji(e, t) {
-      return (
-        (function(e) {
-          if (Array.isArray(e)) return e;
-        })(e) ||
-        (function(e, t) {
-          if (
-            !(
-              Symbol.iterator in Object(e) ||
-              '[object Arguments]' === Object.prototype.toString.call(e)
-            )
-          )
-            return;
-          var n = [],
-            r = !0,
-            i = !1,
-            a = void 0;
-          try {
-            for (
-              var o, s = e[Symbol.iterator]();
-              !(r = (o = s.next()).done) && (n.push(o.value), !t || n.length !== t);
-              r = !0
-            );
-          } catch (e) {
-            (i = !0), (a = e);
-          } finally {
-            try {
-              r || null == s.return || s.return();
-            } finally {
-              if (i) throw a;
-            }
-          }
-          return n;
-        })(e, t) ||
-        (function() {
-          throw new TypeError('Invalid attempt to destructure non-iterable instance');
-        })()
-      );
-    }
-    var Hi = 5,
-      Fi = { fillStyle: '#f4f5f8' },
-      Ui = { fillStyle: '#fff', lineWidth: Ei(), strokeStyle: '#e6e6e6' },
-      Wi = ['image', 'file', 'checkbox'],
-      Vi = new Ci();
-    function Bi(e, t, n) {
+    var Vi = 5,
+      Wi = { fillStyle: '#f4f5f8' },
+      Bi = { fillStyle: '#fff', lineWidth: Ii(), strokeStyle: '#e6e6e6' },
+      Gi = ['image', 'file', 'checkbox'];
+    function zi(e, t, n) {
       var r = this.data.cellRect(e, t, n),
         i = r.left,
         a = r.top,
         o = r.width,
         s = r.height,
         u = r.mergeRealHeight;
-      return new Ai(i, a, o, s, Hi, u);
+      return new Pi(i, a, o, s, Vi, u);
     }
-    function Gi(e, t, n) {
+    function qi(e, t, n) {
       var r = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {},
         i = (r.fw, r.fh, r.tx),
         a = r.ty,
@@ -40802,18 +40926,18 @@
         s.isAjustRowHeight && (f.textwrap = !0);
         var d = c.cellProps,
           h = c.formularValue,
-          m = Bi.call(this, e, t, n);
+          m = zi.call(this, e, t, n);
         (m.bgcolor = f.bgcolor),
           void 0 !== f.border && (m.setBorders(f.border), o.strokeBorders(m)),
           o.rect(m, function() {
-            if (d && Wi.includes(d.cellType)) {
+            if (d && Gi.includes(d.cellType)) {
               var n = c.typeOptions;
-              if (Wi.includes(d.cellType)) {
+              if (Gi.includes(d.cellType)) {
                 var r = (n || {}).files,
                   u = (n || {}).images,
                   l = -1,
                   p = Object.assign({}, f.font);
-                p.size = ri(p.size);
+                p.size = fi(p.size);
                 var _ = {
                   align: f.align,
                   valign: f.valign,
@@ -40867,7 +40991,7 @@
                       (A.name = w),
                       (A.style.width = ''.concat(T, 'px')),
                       (A.style.height = ''.concat(L, 'px'));
-                    var x = gi.uuID();
+                    var x = Di.uuID();
                     (A.id = x),
                       (A.style.left = S),
                       (A.style.top = E),
@@ -40897,16 +41021,17 @@
                 }
               }
             } else {
-              var W = c.text;
-              0 === W && (W = '0');
-              var V = '';
-              (V = H.isFormulaExpression(W) ? (0 === h ? h : h || '') : W || ''),
-                d && d.defaultValue && '' === V && (V = d.defaultValue);
-              var B = ji(Vi.initData(d).validate(V), 2),
-                G = B[0],
-                z = B[1];
-              G
-                ? ((V = (function(e, t, n, r, i, a) {
+              var V = c.text;
+              0 === V && (V = '0');
+              var W = '';
+              (W = H.isFormulaExpression(V) ? (0 === h ? h : h || '') : V || ''),
+                d && d.defaultValue && '' === W && (W = d.defaultValue);
+              var B = s.hook,
+                G = Ui(s.customerValidator.initData(d, B.customerValidate, e, t).validate(W), 2),
+                z = G[0],
+                q = G[1];
+              z
+                ? ((W = (function(e, t, n, r, i, a) {
                     var o,
                       s = 'normal';
                     if (t) {
@@ -40918,7 +41043,8 @@
                         else
                           switch (t.cellType) {
                             case 'numeric':
-                              s = -1 !== t.format.indexOf(',') ? 'number' : 'normalNumber';
+                              (s = -1 !== t.format.indexOf(',') ? 'number' : 'normalNumber'),
+                                (o = parseInt(t.scale, 10));
                               break;
                             case 'date':
                               (s = 'date'), (o = (t.format || 'YYYY-MM-DD').toUpperCase());
@@ -40969,19 +41095,19 @@
                         }
                       }
                     }
-                    return (n = hi[s].render(n, o));
-                  })(c, d, V, s, e, t)),
+                    return (n = bi[s].render(n, o));
+                  })(c, d, W, s, e, t)),
                   c.isError && delete c.isError)
-                : c.isEdit && ((c.isError = !0), o.error(m), (c.errorMsg = z));
-              var q = Object.assign({}, f.font);
-              (q.size = ri(q.size)),
+                : ((c.isError = !0), o.error(m), (c.errorMsg = q));
+              var X = Object.assign({}, f.font);
+              (X.size = fi(X.size)),
                 o.text(
-                  V,
+                  W,
                   m,
                   {
                     align: f.align || 'left',
                     valign: f.valign,
-                    font: q,
+                    font: X,
                     color: f.color,
                     strike: f.strike,
                     underline: f.underline,
@@ -40990,32 +41116,32 @@
                 );
             }
             if (c.annotation || c.comment) {
-              var X = m.x + m.width,
-                J = m.y,
-                $ = X - 10,
-                K = J,
-                Q = X,
+              var J = m.x + m.width,
+                $ = m.y,
+                K = J - 10,
+                Q = $,
                 Z = J,
-                ee = X,
-                te = J + 10,
-                ne = '#ff0000';
+                ee = $,
+                te = J,
+                ne = $ + 10,
+                re = '#ff0000';
               if (c.comment) {
-                var re = [m.x, m.y + 10, m.x, m.y, m.x + 10, m.y];
-                ($ = re[0]),
-                  (K = re[1]),
-                  (Q = re[2]),
-                  (Z = re[3]),
-                  (ee = re[4]),
-                  (te = re[5]),
-                  (ne = '#1ecece');
+                var ie = [m.x, m.y + 10, m.x, m.y, m.x + 10, m.y];
+                (K = ie[0]),
+                  (Q = ie[1]),
+                  (Z = ie[2]),
+                  (ee = ie[3]),
+                  (te = ie[4]),
+                  (ne = ie[5]),
+                  (re = '#1ecece');
               }
-              o.triangle($, K, Q, Z, ee, te, ne);
+              o.triangle(K, Q, Z, ee, te, ne, re);
             }
             return s.validations.getError(e, t) && o.error(m), !0;
           });
       }
     }
-    function zi(e, t) {
+    function Xi(e, t) {
       var n = this,
         r = this.data,
         i = this.draw;
@@ -41030,11 +41156,11 @@
                 l = s.lastCi,
                 c = s.firstCi;
               if (!u || o === l) {
-                var f = Bi.call(n, e, o, t),
+                var f = zi.call(n, e, o, t),
                   d = !1,
                   h = null;
                 (h = u ? a.getFilter(c, o) : a.getFilter(e, o)) &&
-                  ((h.value && h.value.length > 0) || null !== h.order) &&
+                  ((h.value && h.value.length > 0) || h.order) &&
                   (d = !0),
                   i.dropdown(f, d);
               }
@@ -41042,7 +41168,7 @@
         });
       }
     }
-    function qi(e, t, n, r, i, a) {
+    function Ji(e, t, n, r, i, a) {
       var o = this,
         s = this.draw,
         u = this.data,
@@ -41062,7 +41188,7 @@
           function(e, s) {
             var u = o.data.isCellInMerge(e, s),
               l = o.data.cols.isHideCol(s);
-            u || l || Gi.call(o, e, s, a, { fw: t, fh: n, tx: r, ty: i });
+            u || l || qi.call(o, e, s, a, { fw: t, fh: n, tx: r, ty: i });
           },
           function(e) {
             return (function(e) {
@@ -41089,17 +41215,17 @@
               var m = u.rows.sumHeight(l, h + 1);
               s.translate(0, -m);
             }
-          } else Gi.call(o, l, f, a, { fw: t, fh: n, tx: r, ty: i });
+          } else qi.call(o, l, f, a, { fw: t, fh: n, tx: r, ty: i });
         }),
         s.restore(),
-        zi.call(this, e, a),
+        Xi.call(this, e, a),
         s.restore();
     }
-    function Xi(e, t, n, r) {
+    function $i(e, t, n, r) {
       var i = this.draw;
       i.save(), i.attr({ fillStyle: 'rgba(75, 137, 255, 0.08)' }).fillRect(e, t, n, r), i.restore();
     }
-    function Ji(e, t, n, r, i, a) {
+    function Ki(e, t, n, r, i, a) {
       var o = this,
         s = this.draw,
         l = this.data,
@@ -41108,7 +41234,7 @@
         d = a + r,
         h = i + n;
       s.save(),
-        s.attr(Fi),
+        s.attr(Wi),
         ('all' !== e && 'left' !== e) || s.fillRect(0, d, n, c),
         ('all' !== e && 'top' !== e) || s.fillRect(h, 0, f, r);
       var m = l.selector.range,
@@ -41119,16 +41245,16 @@
       s.attr({
         textAlign: 'center',
         textBaseline: 'middle',
-        font: '500 '.concat(Di(12), 'px Source Sans Pro'),
+        font: '500 '.concat(Ri(12), 'px Source Sans Pro'),
         fillStyle: '#585757',
-        lineWidth: Ei(),
+        lineWidth: Ii(),
         strokeStyle: '#e6e6e6',
       }),
         ('all' !== e && 'left' !== e) ||
           (l.rowEach(t.sri, t.eri, function(e, t, r) {
             var i = d + t,
               a = e;
-            s.line([0, i], [n, i]), p <= a && a < y + 1 && Xi.call(o, 0, i, n, r);
+            s.line([0, i], [n, i]), p <= a && a < y + 1 && $i.call(o, 0, i, n, r);
             var u = (function(e, t) {
               var n = '',
                 r = e.settings.streamCharts;
@@ -41154,14 +41280,14 @@
             var i = h + t,
               a = e;
             s.line([i, 0], [i, r]),
-              _ <= a && a < v + 1 && Xi.call(o, i, 0, n, r),
+              _ <= a && a < v + 1 && $i.call(o, i, 0, n, r),
               s.fillText(u(a), i + n / 2, r / 2);
           }),
           s.line([f + h, 0], [f + h, r]),
           s.line([0, r], [f + h, r])),
         s.restore();
     }
-    function $i(e, t) {
+    function Qi(e, t) {
       var n = this.draw;
       n.save(),
         n.attr({ fillStyle: '#f4f5f8' }).fillRect(0, 0, e, t),
@@ -41176,7 +41302,7 @@
         ),
         n.restore();
     }
-    function Ki(e, t, n, r, i) {
+    function Zi(e, t, n, r, i) {
       var a = e.sri,
         o = e.sci,
         s = e.eri,
@@ -41187,7 +41313,7 @@
         d = this.data,
         h = d.settings;
       f.save(),
-        f.attr(Ui).translate(t + r, n + i),
+        f.attr(Bi).translate(t + r, n + i),
         f.clearRect(0, 0, l, c),
         h.showGrid
           ? (d.rowEach(a, s, function(e, t, n) {
@@ -41199,7 +41325,7 @@
             f.restore())
           : f.restore();
     }
-    function Qi(e, t, n, r) {
+    function ea(e, t, n, r) {
       var i = this.draw,
         a = this.data,
         o = a.viewWidth() - e,
@@ -41212,13 +41338,13 @@
         i.line([n, 0], [n, s]),
         i.restore();
     }
-    var Zi = (function() {
+    var ta = (function() {
       function e(t, n) {
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, e),
           (this.el = t),
-          (this.draw = new Yi(t, n.viewWidth(), n.viewHeight())),
+          (this.draw = new Hi(t, n.viewWidth(), n.viewHeight())),
           (this.data = n);
       }
       var t, n, r;
@@ -41237,14 +41363,14 @@
                 a = e.freezeTotalWidth(),
                 o = e.freezeTotalHeight(),
                 s = e.scroll.x;
-              Ki.call(this, i, n, r, a, o);
+              Zi.call(this, i, n, r, a, o);
               var u = { sri: i.sri, top: 0 };
               0 !== o && (u.top = o),
                 (e.startPostion = u),
-                qi.call(this, i, n, r, -s, u.top, u),
-                Ji.call(this, 'all', i, n, r, a, o),
-                $i.call(this, n, r);
-              var l = ji(e.freeze, 2),
+                Ji.call(this, i, n, r, -s, u.top, u),
+                Ki.call(this, 'all', i, n, r, a, o),
+                Qi.call(this, n, r);
+              var l = Ui(e.freeze, 2),
                 c = l[0],
                 f = l[1];
               if (c > 0 || f > 0) {
@@ -41253,24 +41379,24 @@
                   (d.sri = 0),
                     (d.eri = c - 1),
                     (d.h = o),
-                    Ki.call(this, d, n, r, a, 0),
-                    Ji.call(this, 'top', d, n, r, a, 0),
-                    qi.call(this, d, n, r, -s, 0);
+                    Zi.call(this, d, n, r, a, 0),
+                    Ki.call(this, 'top', d, n, r, a, 0),
+                    Ji.call(this, d, n, r, -s, 0);
                 }
                 if (f > 0) {
                   var h = i.clone();
                   (h.sci = 0),
                     (h.eci = f - 1),
                     (h.w = a),
-                    Ki.call(this, h, n, r, 0, o),
-                    Ji.call(this, 'left', h, n, r, 0, o),
-                    qi.call(this, h, n, r, 0, u.top, u);
+                    Zi.call(this, h, n, r, 0, o),
+                    Ki.call(this, 'left', h, n, r, 0, o),
+                    Ji.call(this, h, n, r, 0, u.top, u);
                 }
                 var m = e.freezeViewRange();
-                Ki.call(this, m, n, r, 0, 0),
-                  Ji.call(this, 'all', m, n, r, 0, 0),
-                  qi.call(this, m, n, r, 0, 0),
-                  Qi.call(this, n, r, a, o);
+                Zi.call(this, m, n, r, 0, 0),
+                  Ki.call(this, 'all', m, n, r, 0, 0),
+                  Ji.call(this, m, n, r, 0, 0),
+                  ea.call(this, n, r, a, o);
               }
               if (e.isShowWatermark) {
                 var p = e.cols.indexWidth,
@@ -41286,7 +41412,7 @@
                 t = e.rows,
                 n = e.cols.indexWidth,
                 r = t.height,
-                i = ji(e.freeze, 2),
+                i = Ui(e.freeze, 2),
                 a = i[0],
                 o = i[1];
               this.draw.resize(e.viewWidth(), e.viewHeight()), this.clear();
@@ -41294,14 +41420,14 @@
                 u = e.freezeTotalWidth(),
                 l = e.freezeTotalHeight(),
                 c = e.scroll.x;
-              Ki.call(this, s, n, r, u, l);
+              Zi.call(this, s, n, r, u, l);
               var f = { sri: s.sri, top: 0 };
               if (
                 (0 !== l && (f.top = l),
                 (e.startPostion = f),
-                qi.call(this, s, n, r, -c, f.top, f),
-                Ji.call(this, 'all', s, n, r, u, l),
-                $i.call(this, n, r),
+                Ji.call(this, s, n, r, -c, f.top, f),
+                Ki.call(this, 'all', s, n, r, u, l),
+                Qi.call(this, n, r),
                 a > 0 || o > 0)
               ) {
                 if (a > 0) {
@@ -41309,24 +41435,24 @@
                   (d.sri = 0),
                     (d.eri = a - 1),
                     (d.h = l),
-                    Ki.call(this, d, n, r, u, 0),
-                    Ji.call(this, 'top', d, n, r, u, 0),
-                    qi.call(this, d, n, r, -c, 0);
+                    Zi.call(this, d, n, r, u, 0),
+                    Ki.call(this, 'top', d, n, r, u, 0),
+                    Ji.call(this, d, n, r, -c, 0);
                 }
                 if (o > 0) {
                   var h = s.clone();
                   (h.sci = 0),
                     (h.eci = o - 1),
                     (h.w = u),
-                    Ki.call(this, h, n, r, 0, l),
-                    Ji.call(this, 'left', h, n, r, 0, l),
-                    qi.call(this, h, n, r, 0, f.top, f);
+                    Zi.call(this, h, n, r, 0, l),
+                    Ki.call(this, 'left', h, n, r, 0, l),
+                    Ji.call(this, h, n, r, 0, f.top, f);
                 }
                 var m = e.freezeViewRange();
-                Ki.call(this, m, n, r, 0, 0),
-                  Ji.call(this, 'all', m, n, r, 0, 0),
-                  qi.call(this, m, n, r, 0, 0),
-                  Qi.call(this, n, r, u, l);
+                Zi.call(this, m, n, r, 0, 0),
+                  Ki.call(this, 'all', m, n, r, 0, 0),
+                  Ji.call(this, m, n, r, 0, 0),
+                  ea.call(this, n, r, u, l);
               }
               if (e.isShowWatermark) {
                 var p = e.cols.indexWidth,
@@ -41341,12 +41467,12 @@
               this.draw.clear(), (this.data.imageItems.el.style.display = 'none');
             },
           },
-        ]) && Pi(t.prototype, n),
-        r && Pi(t, r),
+        ]) && Fi(t.prototype, n),
+        r && Fi(t, r),
         e
       );
     })();
-    function ea(e, t) {
+    function na(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -41355,7 +41481,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var ta = (function() {
+    var ra = (function() {
       function e(t, n, r) {
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
@@ -41398,10 +41524,10 @@
                       u
                         .css('left', ''.concat(r + a / 2 - l.width / 2, 'px'))
                         .css('top', ''.concat(i + s + 2, 'px')),
-                        qn(t, 'mouseleave', function() {
+                        tr(t, 'mouseleave', function() {
                           document.body.contains(u.el) && document.body.removeChild(u.el);
                         }),
-                        qn(t, 'click', function() {
+                        tr(t, 'click', function() {
                           document.body.contains(u.el) && document.body.removeChild(u.el);
                         });
                     }
@@ -41411,13 +41537,13 @@
             },
           },
           { key: 'setState', value: function() {} },
-        ]) && ea(t.prototype, n),
-        r && ea(t, r),
+        ]) && na(t.prototype, n),
+        r && na(t, r),
         e
       );
     })();
-    function na(e) {
-      return (na =
+    function ia(e) {
+      return (ia =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -41431,7 +41557,7 @@
                 : typeof e;
             })(e);
     }
-    function ra(e, t) {
+    function aa(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -41440,8 +41566,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function ia(e, t) {
-      return !t || ('object' !== na(t) && 'function' != typeof t)
+    function oa(e, t) {
+      return !t || ('object' !== ia(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -41449,13 +41575,13 @@
           })(e)
         : t;
     }
-    function aa(e, t, n) {
-      return (aa =
+    function sa(e, t, n) {
+      return (sa =
         'undefined' != typeof Reflect && Reflect.get
           ? Reflect.get
           : function(e, t, n) {
               var r = (function(e, t) {
-                for (; !Object.prototype.hasOwnProperty.call(e, t) && null !== (e = oa(e)); );
+                for (; !Object.prototype.hasOwnProperty.call(e, t) && null !== (e = ua(e)); );
                 return e;
               })(e, t);
               if (r) {
@@ -41464,27 +41590,27 @@
               }
             })(e, t, n || e);
     }
-    function oa(e) {
-      return (oa = Object.setPrototypeOf
+    function ua(e) {
+      return (ua = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function sa(e, t) {
-      return (sa =
+    function la(e, t) {
+      return (la =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var ua = (function(e) {
+    var ca = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          ia(this, oa(t).apply(this, arguments))
+          oa(this, ua(t).apply(this, arguments))
         );
       }
       var n, r, i;
@@ -41495,7 +41621,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && sa(e, t);
+            t && la(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -41516,7 +41642,7 @@
                 (this.dd.change = function(t) {
                   return e.change(n, e.getValue(t));
                 }),
-                aa(oa(t.prototype), 'element', this)
+                sa(ua(t.prototype), 'element', this)
                   .call(this)
                   .child(this.dd)
               );
@@ -41528,13 +41654,13 @@
               e && ((this.value = e), this.dd.setTitle(e));
             },
           },
-        ]) && ra(n.prototype, r),
-        i && ra(n, i),
+        ]) && aa(n.prototype, r),
+        i && aa(n, i),
         t
       );
-    })(ta);
-    function la(e) {
-      return (la =
+    })(ra);
+    function fa(e) {
+      return (fa =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -41548,7 +41674,7 @@
                 : typeof e;
             })(e);
     }
-    function ca(e, t) {
+    function da(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -41557,8 +41683,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function fa(e, t) {
-      return !t || ('object' !== la(t) && 'function' != typeof t)
+    function ha(e, t) {
+      return !t || ('object' !== fa(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -41566,27 +41692,27 @@
           })(e)
         : t;
     }
-    function da(e) {
-      return (da = Object.setPrototypeOf
+    function ma(e) {
+      return (ma = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function ha(e, t) {
-      return (ha =
+    function pa(e, t) {
+      return (pa =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var ma = (function(e) {
+    var _a = (function(e) {
       function t(e, n, r, i) {
         var a, s;
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, t),
-          ((s = fa(this, da(t).call(this, 'div', ''.concat(g, '-dropdown ').concat(i)))).title = e),
+          ((s = ha(this, ma(t).call(this, 'div', ''.concat(g, '-dropdown ').concat(i)))).title = e),
           (s.change = function() {}),
           'string' == typeof e
             ? (s.title = o('div', ''.concat(g, '-dropdown-title')).child(e))
@@ -41623,7 +41749,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && ha(e, t);
+            t && pa(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -41639,7 +41765,7 @@
               var e = this;
               this.contentEl.show(),
                 this.parent().active(),
-                $n(this.parent(), function() {
+                ir(this.parent(), function() {
                   e.hide();
                 });
             },
@@ -41647,16 +41773,16 @@
           {
             key: 'hide',
             value: function() {
-              this.parent().active(!1), this.contentEl.hide(), Jn(this.parent());
+              this.parent().active(!1), this.contentEl.hide(), rr(this.parent());
             },
           },
-        ]) && ca(n.prototype, r),
-        i && ca(n, i),
+        ]) && da(n.prototype, r),
+        i && da(n, i),
         t
       );
     })(a);
-    function pa(e) {
-      return (pa =
+    function ya(e) {
+      return (ya =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -41670,7 +41796,7 @@
                 : typeof e;
             })(e);
     }
-    function _a(e) {
+    function va(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -41690,7 +41816,7 @@
         })()
       );
     }
-    function ya(e, t) {
+    function ga(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -41699,8 +41825,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function va(e, t) {
-      return !t || ('object' !== pa(t) && 'function' != typeof t)
+    function Ma(e, t) {
+      return !t || ('object' !== ya(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -41708,29 +41834,29 @@
           })(e)
         : t;
     }
-    function ga(e) {
-      return (ga = Object.setPrototypeOf
+    function ba(e) {
+      return (ba = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Ma(e, t) {
-      return (Ma =
+    function wa(e, t) {
+      return (wa =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var ba = (function(e) {
+    var Ta = (function(e) {
       function t(e, n) {
         var r, i;
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, t);
-        var a = new Fr('align-'.concat(n)),
+        var a = new Xr('align-'.concat(n)),
           s = e.map(function(e) {
-            return ((t = 'align-'.concat(e)), o('div', ''.concat(g, '-item')).child(new Fr(t))).on(
+            return ((t = 'align-'.concat(e)), o('div', ''.concat(g, '-item')).child(new Xr(t))).on(
               'click',
               function() {
                 i.setTitle(e), i.change(e);
@@ -41738,9 +41864,9 @@
             );
             var t;
           });
-        return (i = va(
+        return (i = Ma(
           this,
-          (r = ga(t)).call.apply(r, [this, a, 'auto', !0, 'bottom-left'].concat(_a(s))),
+          (r = ba(t)).call.apply(r, [this, a, 'auto', !0, 'bottom-left'].concat(va(s))),
         ));
       }
       var n, r, i;
@@ -41751,7 +41877,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Ma(e, t);
+            t && wa(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -41761,13 +41887,13 @@
               this.title.setName('align-'.concat(e)), this.hide();
             },
           },
-        ]) && ya(n.prototype, r),
-        i && ya(n, i),
+        ]) && ga(n.prototype, r),
+        i && ga(n, i),
         t
       );
-    })(ma);
-    function wa(e) {
-      return (wa =
+    })(_a);
+    function La(e) {
+      return (La =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -41781,7 +41907,7 @@
                 : typeof e;
             })(e);
     }
-    function Ta(e, t) {
+    function Sa(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -41789,89 +41915,9 @@
           'value' in r && (r.writable = !0),
           Object.defineProperty(e, r.key, r);
       }
-    }
-    function La(e, t) {
-      return !t || ('object' !== wa(t) && 'function' != typeof t)
-        ? (function(e) {
-            if (void 0 === e)
-              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-            return e;
-          })(e)
-        : t;
-    }
-    function Sa(e) {
-      return (Sa = Object.setPrototypeOf
-        ? Object.getPrototypeOf
-        : function(e) {
-            return e.__proto__ || Object.getPrototypeOf(e);
-          })(e);
     }
     function Ea(e, t) {
-      return (Ea =
-        Object.setPrototypeOf ||
-        function(e, t) {
-          return (e.__proto__ = t), e;
-        })(e, t);
-    }
-    var Da = (function(e) {
-      function t(e) {
-        return (
-          (function(e, t) {
-            if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
-          })(this, t),
-          La(this, Sa(t).call(this, 'align', '', e))
-        );
-      }
-      var n, r, i;
-      return (
-        (function(e, t) {
-          if ('function' != typeof t && null !== t)
-            throw new TypeError('Super expression must either be null or a function');
-          (e.prototype = Object.create(t && t.prototype, {
-            constructor: { value: e, writable: !0, configurable: !0 },
-          })),
-            t && Ea(e, t);
-        })(t, e),
-        (n = t),
-        (r = [
-          {
-            key: 'dropdown',
-            value: function() {
-              var e = this.value;
-              return new ba(['left', 'center', 'right'], e);
-            },
-          },
-        ]) && Ta(n.prototype, r),
-        i && Ta(n, i),
-        t
-      );
-    })(ua);
-    function ka(e) {
-      return (ka =
-        'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
-          ? function(e) {
-              return typeof e;
-            }
-          : function(e) {
-              return e &&
-                'function' == typeof Symbol &&
-                e.constructor === Symbol &&
-                e !== Symbol.prototype
-                ? 'symbol'
-                : typeof e;
-            })(e);
-    }
-    function Aa(e, t) {
-      for (var n = 0; n < t.length; n++) {
-        var r = t[n];
-        (r.enumerable = r.enumerable || !1),
-          (r.configurable = !0),
-          'value' in r && (r.writable = !0),
-          Object.defineProperty(e, r.key, r);
-      }
-    }
-    function xa(e, t) {
-      return !t || ('object' !== ka(t) && 'function' != typeof t)
+      return !t || ('object' !== La(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -41879,27 +41925,27 @@
           })(e)
         : t;
     }
-    function Ya(e) {
-      return (Ya = Object.setPrototypeOf
+    function Da(e) {
+      return (Da = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Oa(e, t) {
-      return (Oa =
+    function ka(e, t) {
+      return (ka =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Na = (function(e) {
+    var Aa = (function(e) {
       function t(e) {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          xa(this, Ya(t).call(this, 'valign', '', e))
+          Ea(this, Da(t).call(this, 'align', '', e))
         );
       }
       var n, r, i;
@@ -41910,7 +41956,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Oa(e, t);
+            t && ka(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -41918,16 +41964,16 @@
             key: 'dropdown',
             value: function() {
               var e = this.value;
-              return new ba(['top', 'middle', 'bottom'], e);
+              return new Ta(['left', 'center', 'right'], e);
             },
           },
-        ]) && Aa(n.prototype, r),
-        i && Aa(n, i),
+        ]) && Sa(n.prototype, r),
+        i && Sa(n, i),
         t
       );
-    })(ua);
-    function Ia(e) {
-      return (Ia =
+    })(ca);
+    function xa(e) {
+      return (xa =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -41941,7 +41987,7 @@
                 : typeof e;
             })(e);
     }
-    function Ra(e, t) {
+    function Ya(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -41950,8 +41996,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Ca(e, t) {
-      return !t || ('object' !== Ia(t) && 'function' != typeof t)
+    function Oa(e, t) {
+      return !t || ('object' !== xa(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -41959,13 +42005,93 @@
           })(e)
         : t;
     }
-    function Pa(e, t, n) {
-      return (Pa =
+    function Na(e) {
+      return (Na = Object.setPrototypeOf
+        ? Object.getPrototypeOf
+        : function(e) {
+            return e.__proto__ || Object.getPrototypeOf(e);
+          })(e);
+    }
+    function Ia(e, t) {
+      return (Ia =
+        Object.setPrototypeOf ||
+        function(e, t) {
+          return (e.__proto__ = t), e;
+        })(e, t);
+    }
+    var Ra = (function(e) {
+      function t(e) {
+        return (
+          (function(e, t) {
+            if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
+          })(this, t),
+          Oa(this, Na(t).call(this, 'valign', '', e))
+        );
+      }
+      var n, r, i;
+      return (
+        (function(e, t) {
+          if ('function' != typeof t && null !== t)
+            throw new TypeError('Super expression must either be null or a function');
+          (e.prototype = Object.create(t && t.prototype, {
+            constructor: { value: e, writable: !0, configurable: !0 },
+          })),
+            t && Ia(e, t);
+        })(t, e),
+        (n = t),
+        (r = [
+          {
+            key: 'dropdown',
+            value: function() {
+              var e = this.value;
+              return new Ta(['top', 'middle', 'bottom'], e);
+            },
+          },
+        ]) && Ya(n.prototype, r),
+        i && Ya(n, i),
+        t
+      );
+    })(ca);
+    function Ca(e) {
+      return (Ca =
+        'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
+          ? function(e) {
+              return typeof e;
+            }
+          : function(e) {
+              return e &&
+                'function' == typeof Symbol &&
+                e.constructor === Symbol &&
+                e !== Symbol.prototype
+                ? 'symbol'
+                : typeof e;
+            })(e);
+    }
+    function Pa(e, t) {
+      for (var n = 0; n < t.length; n++) {
+        var r = t[n];
+        (r.enumerable = r.enumerable || !1),
+          (r.configurable = !0),
+          'value' in r && (r.writable = !0),
+          Object.defineProperty(e, r.key, r);
+      }
+    }
+    function ja(e, t) {
+      return !t || ('object' !== Ca(t) && 'function' != typeof t)
+        ? (function(e) {
+            if (void 0 === e)
+              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+            return e;
+          })(e)
+        : t;
+    }
+    function Ha(e, t, n) {
+      return (Ha =
         'undefined' != typeof Reflect && Reflect.get
           ? Reflect.get
           : function(e, t, n) {
               var r = (function(e, t) {
-                for (; !Object.prototype.hasOwnProperty.call(e, t) && null !== (e = ja(e)); );
+                for (; !Object.prototype.hasOwnProperty.call(e, t) && null !== (e = Fa(e)); );
                 return e;
               })(e, t);
               if (r) {
@@ -41974,27 +42100,27 @@
               }
             })(e, t, n || e);
     }
-    function ja(e) {
-      return (ja = Object.setPrototypeOf
+    function Fa(e) {
+      return (Fa = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Ha(e, t) {
-      return (Ha =
+    function Ua(e, t) {
+      return (Ua =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Fa = (function(e) {
+    var Va = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Ca(this, ja(t).apply(this, arguments))
+          ja(this, Fa(t).apply(this, arguments))
         );
       }
       var n, r, i;
@@ -42005,7 +42131,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Ha(e, t);
+            t && Ua(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -42014,9 +42140,9 @@
             value: function() {
               var e = this,
                 n = this.tag;
-              return Pa(ja(t.prototype), 'element', this)
+              return Ha(Fa(t.prototype), 'element', this)
                 .call(this)
-                .child(new Fr(n))
+                .child(new Xr(n))
                 .on('click', function() {
                   return e.click();
                 });
@@ -42046,13 +42172,13 @@
               return this.el.hasClass('active');
             },
           },
-        ]) && Ra(n.prototype, r),
-        i && Ra(n, i),
+        ]) && Pa(n.prototype, r),
+        i && Pa(n, i),
         t
       );
-    })(ta);
-    function Ua(e) {
-      return (Ua =
+    })(ra);
+    function Wa(e) {
+      return (Wa =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -42066,7 +42192,7 @@
                 : typeof e;
             })(e);
     }
-    function Wa(e, t) {
+    function Ba(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -42075,8 +42201,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Va(e, t) {
-      return !t || ('object' !== Ua(t) && 'function' != typeof t)
+    function Ga(e, t) {
+      return !t || ('object' !== Wa(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -42084,27 +42210,27 @@
           })(e)
         : t;
     }
-    function Ba(e) {
-      return (Ba = Object.setPrototypeOf
+    function za(e) {
+      return (za = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Ga(e, t) {
-      return (Ga =
+    function qa(e, t) {
+      return (qa =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var za = (function(e) {
+    var Xa = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Va(this, Ba(t).call(this, 'autofilter'))
+          Ga(this, za(t).call(this, 'autofilter'))
         );
       }
       var n, r, i;
@@ -42115,16 +42241,16 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Ga(e, t);
+            t && qa(e, t);
         })(t, e),
         (n = t),
-        (r = [{ key: 'setState', value: function() {} }]) && Wa(n.prototype, r),
-        i && Wa(n, i),
+        (r = [{ key: 'setState', value: function() {} }]) && Ba(n.prototype, r),
+        i && Ba(n, i),
         t
       );
-    })(Fa);
-    function qa(e) {
-      return (qa =
+    })(Va);
+    function Ja(e) {
+      return (Ja =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -42137,37 +42263,37 @@
                 ? 'symbol'
                 : typeof e;
             })(e);
-    }
-    function Xa(e, t) {
-      return !t || ('object' !== qa(t) && 'function' != typeof t)
-        ? (function(e) {
-            if (void 0 === e)
-              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-            return e;
-          })(e)
-        : t;
-    }
-    function Ja(e) {
-      return (Ja = Object.setPrototypeOf
-        ? Object.getPrototypeOf
-        : function(e) {
-            return e.__proto__ || Object.getPrototypeOf(e);
-          })(e);
     }
     function $a(e, t) {
-      return ($a =
+      return !t || ('object' !== Ja(t) && 'function' != typeof t)
+        ? (function(e) {
+            if (void 0 === e)
+              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+            return e;
+          })(e)
+        : t;
+    }
+    function Ka(e) {
+      return (Ka = Object.setPrototypeOf
+        ? Object.getPrototypeOf
+        : function(e) {
+            return e.__proto__ || Object.getPrototypeOf(e);
+          })(e);
+    }
+    function Qa(e, t) {
+      return (Qa =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Ka = (function(e) {
+    var Za = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Xa(this, Ja(t).call(this, 'font-bold', 'Ctrl+B'))
+          $a(this, Ka(t).call(this, 'font-bold', 'Ctrl+B'))
         );
       }
       return (
@@ -42177,13 +42303,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && $a(e, t);
+            t && Qa(e, t);
         })(t, e),
         t
       );
-    })(Fa);
-    function Qa(e) {
-      return (Qa =
+    })(Va);
+    function eo(e) {
+      return (eo =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -42196,37 +42322,37 @@
                 ? 'symbol'
                 : typeof e;
             })(e);
-    }
-    function Za(e, t) {
-      return !t || ('object' !== Qa(t) && 'function' != typeof t)
-        ? (function(e) {
-            if (void 0 === e)
-              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-            return e;
-          })(e)
-        : t;
-    }
-    function eo(e) {
-      return (eo = Object.setPrototypeOf
-        ? Object.getPrototypeOf
-        : function(e) {
-            return e.__proto__ || Object.getPrototypeOf(e);
-          })(e);
     }
     function to(e, t) {
-      return (to =
+      return !t || ('object' !== eo(t) && 'function' != typeof t)
+        ? (function(e) {
+            if (void 0 === e)
+              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+            return e;
+          })(e)
+        : t;
+    }
+    function no(e) {
+      return (no = Object.setPrototypeOf
+        ? Object.getPrototypeOf
+        : function(e) {
+            return e.__proto__ || Object.getPrototypeOf(e);
+          })(e);
+    }
+    function ro(e, t) {
+      return (ro =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var no = (function(e) {
+    var io = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Za(this, eo(t).call(this, 'font-italic', 'Ctrl+I'))
+          to(this, no(t).call(this, 'font-italic', 'Ctrl+I'))
         );
       }
       return (
@@ -42236,13 +42362,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && to(e, t);
+            t && ro(e, t);
         })(t, e),
         t
       );
-    })(Fa);
-    function ro(e) {
-      return (ro =
+    })(Va);
+    function ao(e) {
+      return (ao =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -42255,37 +42381,37 @@
                 ? 'symbol'
                 : typeof e;
             })(e);
-    }
-    function io(e, t) {
-      return !t || ('object' !== ro(t) && 'function' != typeof t)
-        ? (function(e) {
-            if (void 0 === e)
-              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-            return e;
-          })(e)
-        : t;
-    }
-    function ao(e) {
-      return (ao = Object.setPrototypeOf
-        ? Object.getPrototypeOf
-        : function(e) {
-            return e.__proto__ || Object.getPrototypeOf(e);
-          })(e);
     }
     function oo(e, t) {
-      return (oo =
+      return !t || ('object' !== ao(t) && 'function' != typeof t)
+        ? (function(e) {
+            if (void 0 === e)
+              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+            return e;
+          })(e)
+        : t;
+    }
+    function so(e) {
+      return (so = Object.setPrototypeOf
+        ? Object.getPrototypeOf
+        : function(e) {
+            return e.__proto__ || Object.getPrototypeOf(e);
+          })(e);
+    }
+    function uo(e, t) {
+      return (uo =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var so = (function(e) {
+    var lo = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          io(this, ao(t).call(this, 'strike', 'Ctrl+U'))
+          oo(this, so(t).call(this, 'strike', 'Ctrl+U'))
         );
       }
       return (
@@ -42295,13 +42421,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && oo(e, t);
+            t && uo(e, t);
         })(t, e),
         t
       );
-    })(Fa);
-    function uo(e) {
-      return (uo =
+    })(Va);
+    function co(e) {
+      return (co =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -42315,8 +42441,8 @@
                 : typeof e;
             })(e);
     }
-    function lo(e, t) {
-      return !t || ('object' !== uo(t) && 'function' != typeof t)
+    function fo(e, t) {
+      return !t || ('object' !== co(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -42324,27 +42450,27 @@
           })(e)
         : t;
     }
-    function co(e) {
-      return (co = Object.setPrototypeOf
+    function ho(e) {
+      return (ho = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function fo(e, t) {
-      return (fo =
+    function mo(e, t) {
+      return (mo =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var ho = (function(e) {
+    var po = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          lo(this, co(t).call(this, 'underline', 'Ctrl+U'))
+          fo(this, ho(t).call(this, 'underline', 'Ctrl+U'))
         );
       }
       return (
@@ -42354,12 +42480,12 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && fo(e, t);
+            t && mo(e, t);
         })(t, e),
         t
       );
-    })(Fa);
-    function mo(e) {
+    })(Va);
+    function _o(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -42379,7 +42505,7 @@
         })()
       );
     }
-    var po = [
+    var yo = [
         '#ffffff',
         '#000100',
         '#e7e5e6',
@@ -42391,7 +42517,7 @@
         '#4371c6',
         '#71ae47',
       ],
-      _o = [
+      vo = [
         [
           '#f2f2f2',
           '#7f7f7f',
@@ -42453,7 +42579,7 @@
           '#365624',
         ],
       ],
-      yo = [
+      go = [
         '#c00000',
         '#fe0000',
         '#fdc101',
@@ -42465,7 +42591,7 @@
         '#012060',
         '#7030a0',
       ];
-    function vo(e) {
+    function Mo(e) {
       var t = this;
       return o('td', '').child(
         o('div', ''.concat(g, '-color-palette-cell'))
@@ -42475,7 +42601,7 @@
           .css('background-color', e),
       );
     }
-    var go = function e() {
+    var bo = function e() {
       var t,
         n,
         r,
@@ -42491,21 +42617,21 @@
           [
             (n = o('tr', ''.concat(g, '-theme-color-placeholders'))).children.apply(
               n,
-              mo(
-                po.map(function(e) {
-                  return vo.call(i, e);
+              _o(
+                yo.map(function(e) {
+                  return Mo.call(i, e);
                 }),
               ),
             ),
           ].concat(
-            mo(
-              _o.map(function(e) {
+            _o(
+              vo.map(function(e) {
                 var t;
                 return (t = o('tr', ''.concat(g, '-theme-colors'))).children.apply(
                   t,
-                  mo(
+                  _o(
                     e.map(function(e) {
-                      return vo.call(i, e);
+                      return Mo.call(i, e);
                     }),
                   ),
                 );
@@ -42514,9 +42640,9 @@
             [
               (r = o('tr', ''.concat(g, '-standard-colors'))).children.apply(
                 r,
-                mo(
-                  yo.map(function(e) {
-                    return vo.call(i, e);
+                _o(
+                  go.map(function(e) {
+                    return Mo.call(i, e);
                   }),
                 ),
               ),
@@ -42526,8 +42652,8 @@
       );
       this.el.child(a);
     };
-    function Mo(e) {
-      return (Mo =
+    function wo(e) {
+      return (wo =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -42541,7 +42667,7 @@
                 : typeof e;
             })(e);
     }
-    function bo(e, t) {
+    function To(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -42550,8 +42676,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function wo(e, t) {
-      return !t || ('object' !== Mo(t) && 'function' != typeof t)
+    function Lo(e, t) {
+      return !t || ('object' !== wo(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -42559,33 +42685,33 @@
           })(e)
         : t;
     }
-    function To(e) {
-      return (To = Object.setPrototypeOf
+    function So(e) {
+      return (So = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Lo(e, t) {
-      return (Lo =
+    function Eo(e, t) {
+      return (Eo =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var So = (function(e) {
+    var Do = (function(e) {
       function t(e, n) {
         var r;
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, t);
-        var i = new Fr(e).css('height', '16px').css('border-bottom', '3px solid '.concat(n)),
-          a = new go();
+        var i = new Xr(e).css('height', '16px').css('border-bottom', '3px solid '.concat(n)),
+          a = new bo();
         return (
           (a.change = function(e) {
             r.setTitle(e), r.change(e);
           }),
-          (r = wo(this, To(t).call(this, i, 'auto', !1, 'bottom-left', a.el)))
+          (r = Lo(this, So(t).call(this, i, 'auto', !1, 'bottom-left', a.el)))
         );
       }
       var n, r, i;
@@ -42596,7 +42722,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Lo(e, t);
+            t && Eo(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -42606,13 +42732,13 @@
               this.title.css('border-color', e), this.hide();
             },
           },
-        ]) && bo(n.prototype, r),
-        i && bo(n, i),
+        ]) && To(n.prototype, r),
+        i && To(n, i),
         t
       );
-    })(ma);
-    function Eo(e) {
-      return (Eo =
+    })(_a);
+    function ko(e) {
+      return (ko =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -42626,7 +42752,7 @@
                 : typeof e;
             })(e);
     }
-    function Do(e) {
+    function Ao(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -42646,8 +42772,8 @@
         })()
       );
     }
-    function ko(e, t) {
-      return !t || ('object' !== Eo(t) && 'function' != typeof t)
+    function xo(e, t) {
+      return !t || ('object' !== ko(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -42655,21 +42781,21 @@
           })(e)
         : t;
     }
-    function Ao(e) {
-      return (Ao = Object.setPrototypeOf
+    function Yo(e) {
+      return (Yo = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function xo(e, t) {
-      return (xo =
+    function Oo(e, t) {
+      return (Oo =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Yo = [
+    var No = [
         [
           'thin',
           '<svg xmlns="http://www.w3.org/2000/svg" width="50" height="1" style="user-select: none;"><line x1="0" y1="0.5" x2="50" y2="0.5" stroke-width="1" stroke="black" style="user-select: none;"></line></svg>',
@@ -42691,24 +42817,24 @@
           '<svg xmlns="http://www.w3.org/2000/svg" width="50" height="1" style="user-select: none;"><line x1="0" y1="0.5" x2="50" y2="0.5" stroke-width="1" stroke="black" stroke-dasharray="1" style="user-select: none;"></line></svg>',
         ],
       ],
-      Oo = (function(e) {
+      Io = (function(e) {
         function t(e) {
           var n, r;
           !(function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t);
-          var i = new Fr('line-type'),
+          var i = new Xr('line-type'),
             a = 0,
-            s = Yo.map(function(t, n) {
+            s = No.map(function(t, n) {
               return o('div', ''.concat(g, '-item state ').concat(e === t[0] ? 'checked' : ''))
                 .on('click', function() {
                   s[a].toggle('checked'), s[n].toggle('checked'), (a = n), r.hide(), r.change(t);
                 })
                 .child(o('div', ''.concat(g, '-line-type')).html(t[1]));
             });
-          return (r = ko(
+          return (r = xo(
             this,
-            (n = Ao(t)).call.apply(n, [this, i, 'auto', !1, 'bottom-left'].concat(Do(s))),
+            (n = Yo(t)).call.apply(n, [this, i, 'auto', !1, 'bottom-left'].concat(Ao(s))),
           ));
         }
         return (
@@ -42718,12 +42844,12 @@
             (e.prototype = Object.create(t && t.prototype, {
               constructor: { value: e, writable: !0, configurable: !0 },
             })),
-              t && xo(e, t);
+              t && Oo(e, t);
           })(t, e),
           t
         );
-      })(ma);
-    function No(e) {
+      })(_a);
+    function Ro(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -42743,7 +42869,7 @@
         })()
       );
     }
-    function Io(e, t) {
+    function Co(e, t) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
@@ -42782,15 +42908,15 @@
         })()
       );
     }
-    function Ro() {
+    function Po() {
       var e;
       return o('table', '').child((e = o('tbody', '')).children.apply(e, arguments));
     }
-    function Co(e) {
+    function jo(e) {
       var t = this;
       return o('td', '').child(
         o('div', ''.concat(g, '-border-palette-cell'))
-          .child(new Fr('border-'.concat(e)))
+          .child(new Xr('border-'.concat(e)))
           .on('click', function() {
             t.mode = e;
             var n = t.mode,
@@ -42800,7 +42926,7 @@
           }),
       );
     }
-    var Po = function e() {
+    var Ho = function e() {
       var t,
         n,
         r = this;
@@ -42811,33 +42937,33 @@
         (this.style = 'thin'),
         (this.mode = 'all'),
         (this.change = function() {}),
-        (this.ddColor = new So('line-color', this.color)),
+        (this.ddColor = new Do('line-color', this.color)),
         (this.ddColor.change = function(e) {
           r.color = e;
         }),
-        (this.ddType = new Oo(this.style)),
+        (this.ddType = new Io(this.style)),
         (this.ddType.change = function(e) {
-          var t = Io(e, 1)[0];
+          var t = Co(e, 1)[0];
           r.style = t;
         }),
         (this.el = o('div', ''.concat(g, '-border-palette')));
-      var i = Ro(
+      var i = Po(
         o('tr', '').children(
           o('td', ''.concat(g, '-border-palette-left')).child(
-            Ro(
+            Po(
               (t = o('tr', '')).children.apply(
                 t,
-                No(
+                Ro(
                   ['all', 'inside', 'horizontal', 'vertical', 'outside'].map(function(e) {
-                    return Co.call(r, e);
+                    return jo.call(r, e);
                   }),
                 ),
               ),
               (n = o('tr', '')).children.apply(
                 n,
-                No(
+                Ro(
                   ['left', 'top', 'right', 'bottom', 'none'].map(function(e) {
-                    return Co.call(r, e);
+                    return jo.call(r, e);
                   }),
                 ),
               ),
@@ -42851,8 +42977,8 @@
       );
       this.el.child(i);
     };
-    function jo(e) {
-      return (jo =
+    function Fo(e) {
+      return (Fo =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -42866,8 +42992,8 @@
                 : typeof e;
             })(e);
     }
-    function Ho(e, t) {
-      return !t || ('object' !== jo(t) && 'function' != typeof t)
+    function Uo(e, t) {
+      return !t || ('object' !== Fo(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -42875,33 +43001,33 @@
           })(e)
         : t;
     }
-    function Fo(e) {
-      return (Fo = Object.setPrototypeOf
+    function Vo(e) {
+      return (Vo = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Uo(e, t) {
-      return (Uo =
+    function Wo(e, t) {
+      return (Wo =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Wo = (function(e) {
+    var Bo = (function(e) {
       function t() {
         var e;
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, t);
-        var n = new Fr('border-all'),
-          r = new Po();
+        var n = new Xr('border-all'),
+          r = new Ho();
         return (
           (r.change = function(t) {
             e.change(t), e.hide();
           }),
-          (e = Ho(this, Fo(t).call(this, n, 'auto', !1, 'bottom-left', r.el)))
+          (e = Uo(this, Vo(t).call(this, n, 'auto', !1, 'bottom-left', r.el)))
         );
       }
       return (
@@ -42911,13 +43037,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Uo(e, t);
+            t && Wo(e, t);
         })(t, e),
         t
       );
-    })(ma);
-    function Vo(e) {
-      return (Vo =
+    })(_a);
+    function Go(e) {
+      return (Go =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -42931,7 +43057,7 @@
                 : typeof e;
             })(e);
     }
-    function Bo(e, t) {
+    function zo(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -42940,8 +43066,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Go(e, t) {
-      return !t || ('object' !== Vo(t) && 'function' != typeof t)
+    function qo(e, t) {
+      return !t || ('object' !== Go(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -42949,27 +43075,27 @@
           })(e)
         : t;
     }
-    function zo(e) {
-      return (zo = Object.setPrototypeOf
+    function Xo(e) {
+      return (Xo = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function qo(e, t) {
-      return (qo =
+    function Jo(e, t) {
+      return (Jo =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Xo = (function(e) {
+    var $o = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Go(this, zo(t).call(this, 'border'))
+          qo(this, Xo(t).call(this, 'border'))
         );
       }
       var n, r, i;
@@ -42980,23 +43106,23 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && qo(e, t);
+            t && Jo(e, t);
         })(t, e),
         (n = t),
         (r = [
           {
             key: 'dropdown',
             value: function() {
-              return new Wo();
+              return new Bo();
             },
           },
-        ]) && Bo(n.prototype, r),
-        i && Bo(n, i),
+        ]) && zo(n.prototype, r),
+        i && zo(n, i),
         t
       );
-    })(ua);
-    function Jo(e) {
-      return (Jo =
+    })(ca);
+    function Ko(e) {
+      return (Ko =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43010,7 +43136,7 @@
                 : typeof e;
             })(e);
     }
-    function $o(e, t) {
+    function Qo(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -43019,8 +43145,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Ko(e, t) {
-      return !t || ('object' !== Jo(t) && 'function' != typeof t)
+    function Zo(e, t) {
+      return !t || ('object' !== Ko(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -43028,13 +43154,13 @@
           })(e)
         : t;
     }
-    function Qo(e, t, n) {
-      return (Qo =
+    function es(e, t, n) {
+      return (es =
         'undefined' != typeof Reflect && Reflect.get
           ? Reflect.get
           : function(e, t, n) {
               var r = (function(e, t) {
-                for (; !Object.prototype.hasOwnProperty.call(e, t) && null !== (e = Zo(e)); );
+                for (; !Object.prototype.hasOwnProperty.call(e, t) && null !== (e = ts(e)); );
                 return e;
               })(e, t);
               if (r) {
@@ -43043,27 +43169,27 @@
               }
             })(e, t, n || e);
     }
-    function Zo(e) {
-      return (Zo = Object.setPrototypeOf
+    function ts(e) {
+      return (ts = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function es(e, t) {
-      return (es =
+    function ns(e, t) {
+      return (ns =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var ts = (function(e) {
+    var rs = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Ko(this, Zo(t).apply(this, arguments))
+          Zo(this, ts(t).apply(this, arguments))
         );
       }
       var n, r, i;
@@ -43074,7 +43200,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && es(e, t);
+            t && ns(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -43082,9 +43208,9 @@
             key: 'element',
             value: function() {
               var e = this;
-              return Qo(Zo(t.prototype), 'element', this)
+              return es(ts(t.prototype), 'element', this)
                 .call(this)
-                .child(new Fr(this.tag))
+                .child(new Xr(this.tag))
                 .on('click', function() {
                   return e.change(e.tag);
                 });
@@ -43096,13 +43222,13 @@
               this.el.disabled(e);
             },
           },
-        ]) && $o(n.prototype, r),
-        i && $o(n, i),
+        ]) && Qo(n.prototype, r),
+        i && Qo(n, i),
         t
       );
-    })(ta);
-    function ns(e) {
-      return (ns =
+    })(ra);
+    function is(e) {
+      return (is =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43115,37 +43241,37 @@
                 ? 'symbol'
                 : typeof e;
             })(e);
-    }
-    function rs(e, t) {
-      return !t || ('object' !== ns(t) && 'function' != typeof t)
-        ? (function(e) {
-            if (void 0 === e)
-              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-            return e;
-          })(e)
-        : t;
-    }
-    function is(e) {
-      return (is = Object.setPrototypeOf
-        ? Object.getPrototypeOf
-        : function(e) {
-            return e.__proto__ || Object.getPrototypeOf(e);
-          })(e);
     }
     function as(e, t) {
-      return (as =
+      return !t || ('object' !== is(t) && 'function' != typeof t)
+        ? (function(e) {
+            if (void 0 === e)
+              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+            return e;
+          })(e)
+        : t;
+    }
+    function os(e) {
+      return (os = Object.setPrototypeOf
+        ? Object.getPrototypeOf
+        : function(e) {
+            return e.__proto__ || Object.getPrototypeOf(e);
+          })(e);
+    }
+    function ss(e, t) {
+      return (ss =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var os = (function(e) {
+    var us = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          rs(this, is(t).call(this, 'clearformat'))
+          as(this, os(t).call(this, 'clearformat'))
         );
       }
       return (
@@ -43155,13 +43281,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && as(e, t);
+            t && ss(e, t);
         })(t, e),
         t
       );
-    })(ts);
-    function ss(e) {
-      return (ss =
+    })(rs);
+    function ls(e) {
+      return (ls =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43175,7 +43301,7 @@
                 : typeof e;
             })(e);
     }
-    function us(e, t) {
+    function cs(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -43183,37 +43309,37 @@
           'value' in r && (r.writable = !0),
           Object.defineProperty(e, r.key, r);
       }
-    }
-    function ls(e, t) {
-      return !t || ('object' !== ss(t) && 'function' != typeof t)
-        ? (function(e) {
-            if (void 0 === e)
-              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-            return e;
-          })(e)
-        : t;
-    }
-    function cs(e) {
-      return (cs = Object.setPrototypeOf
-        ? Object.getPrototypeOf
-        : function(e) {
-            return e.__proto__ || Object.getPrototypeOf(e);
-          })(e);
     }
     function fs(e, t) {
-      return (fs =
+      return !t || ('object' !== ls(t) && 'function' != typeof t)
+        ? (function(e) {
+            if (void 0 === e)
+              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+            return e;
+          })(e)
+        : t;
+    }
+    function ds(e) {
+      return (ds = Object.setPrototypeOf
+        ? Object.getPrototypeOf
+        : function(e) {
+            return e.__proto__ || Object.getPrototypeOf(e);
+          })(e);
+    }
+    function hs(e, t) {
+      return (hs =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var ds = (function(e) {
+    var ms = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          ls(this, cs(t).call(this, 'paintformat'))
+          fs(this, ds(t).call(this, 'paintformat'))
         );
       }
       var n, r, i;
@@ -43224,16 +43350,16 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && fs(e, t);
+            t && hs(e, t);
         })(t, e),
         (n = t),
-        (r = [{ key: 'setState', value: function() {} }]) && us(n.prototype, r),
-        i && us(n, i),
+        (r = [{ key: 'setState', value: function() {} }]) && cs(n.prototype, r),
+        i && cs(n, i),
         t
       );
-    })(Fa);
-    function hs(e) {
-      return (hs =
+    })(Va);
+    function ps(e) {
+      return (ps =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43247,7 +43373,7 @@
                 : typeof e;
             })(e);
     }
-    function ms(e, t) {
+    function _s(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -43255,37 +43381,37 @@
           'value' in r && (r.writable = !0),
           Object.defineProperty(e, r.key, r);
       }
-    }
-    function ps(e, t) {
-      return !t || ('object' !== hs(t) && 'function' != typeof t)
-        ? (function(e) {
-            if (void 0 === e)
-              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-            return e;
-          })(e)
-        : t;
-    }
-    function _s(e) {
-      return (_s = Object.setPrototypeOf
-        ? Object.getPrototypeOf
-        : function(e) {
-            return e.__proto__ || Object.getPrototypeOf(e);
-          })(e);
     }
     function ys(e, t) {
-      return (ys =
+      return !t || ('object' !== ps(t) && 'function' != typeof t)
+        ? (function(e) {
+            if (void 0 === e)
+              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+            return e;
+          })(e)
+        : t;
+    }
+    function vs(e) {
+      return (vs = Object.setPrototypeOf
+        ? Object.getPrototypeOf
+        : function(e) {
+            return e.__proto__ || Object.getPrototypeOf(e);
+          })(e);
+    }
+    function gs(e, t) {
+      return (gs =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var vs = (function(e) {
+    var Ms = (function(e) {
       function t(e) {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          ps(this, _s(t).call(this, 'color', void 0, e))
+          ys(this, vs(t).call(this, 'color', void 0, e))
         );
       }
       var n, r, i;
@@ -43296,7 +43422,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && ys(e, t);
+            t && gs(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -43305,16 +43431,16 @@
             value: function() {
               var e = this.tag,
                 t = this.value;
-              return new So(e, t);
+              return new Do(e, t);
             },
           },
-        ]) && ms(n.prototype, r),
-        i && ms(n, i),
+        ]) && _s(n.prototype, r),
+        i && _s(n, i),
         t
       );
-    })(ua);
-    function gs(e) {
-      return (gs =
+    })(ca);
+    function bs(e) {
+      return (bs =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43328,7 +43454,7 @@
                 : typeof e;
             })(e);
     }
-    function Ms(e, t) {
+    function ws(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -43337,8 +43463,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function bs(e, t) {
-      return !t || ('object' !== gs(t) && 'function' != typeof t)
+    function Ts(e, t) {
+      return !t || ('object' !== bs(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -43346,27 +43472,27 @@
           })(e)
         : t;
     }
-    function ws(e) {
-      return (ws = Object.setPrototypeOf
+    function Ls(e) {
+      return (Ls = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Ts(e, t) {
-      return (Ts =
+    function Ss(e, t) {
+      return (Ss =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Ls = (function(e) {
+    var Es = (function(e) {
       function t(e) {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          bs(this, ws(t).call(this, 'bgcolor', void 0, e))
+          Ts(this, Ls(t).call(this, 'bgcolor', void 0, e))
         );
       }
       var n, r, i;
@@ -43377,7 +43503,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Ts(e, t);
+            t && Ss(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -43386,16 +43512,16 @@
             value: function() {
               var e = this.tag,
                 t = this.value;
-              return new So(e, t);
+              return new Do(e, t);
             },
           },
-        ]) && Ms(n.prototype, r),
-        i && Ms(n, i),
+        ]) && ws(n.prototype, r),
+        i && ws(n, i),
         t
       );
-    })(ua);
-    function Ss(e) {
-      return (Ss =
+    })(ca);
+    function Ds(e) {
+      return (Ds =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43409,7 +43535,7 @@
                 : typeof e;
             })(e);
     }
-    function Es(e) {
+    function ks(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -43429,8 +43555,8 @@
         })()
       );
     }
-    function Ds(e, t) {
-      return !t || ('object' !== Ss(t) && 'function' != typeof t)
+    function As(e, t) {
+      return !t || ('object' !== Ds(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -43438,36 +43564,36 @@
           })(e)
         : t;
     }
-    function ks(e) {
-      return (ks = Object.setPrototypeOf
+    function xs(e) {
+      return (xs = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function As(e, t) {
-      return (As =
+    function Ys(e, t) {
+      return (Ys =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var xs = (function(e) {
+    var Os = (function(e) {
       function t() {
         var e, n;
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, t);
-        var r = ni.map(function(e) {
+        var r = ci.map(function(e) {
           return o('div', ''.concat(g, '-item'))
             .on('click', function() {
               n.setTitle(''.concat(e.pt)), n.change(e);
             })
             .child(''.concat(e.pt));
         });
-        return (n = Ds(
+        return (n = As(
           this,
-          (e = ks(t)).call.apply(e, [this, '10', '60px', !0, 'bottom-left'].concat(Es(r))),
+          (e = xs(t)).call.apply(e, [this, '10', '60px', !0, 'bottom-left'].concat(ks(r))),
         ));
       }
       return (
@@ -43477,13 +43603,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && As(e, t);
+            t && Ys(e, t);
         })(t, e),
         t
       );
-    })(ma);
-    function Ys(e) {
-      return (Ys =
+    })(_a);
+    function Ns(e) {
+      return (Ns =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43497,7 +43623,7 @@
                 : typeof e;
             })(e);
     }
-    function Os(e, t) {
+    function Is(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -43506,8 +43632,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Ns(e, t) {
-      return !t || ('object' !== Ys(t) && 'function' != typeof t)
+    function Rs(e, t) {
+      return !t || ('object' !== Ns(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -43515,27 +43641,27 @@
           })(e)
         : t;
     }
-    function Is(e) {
-      return (Is = Object.setPrototypeOf
+    function Cs(e) {
+      return (Cs = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Rs(e, t) {
-      return (Rs =
+    function Ps(e, t) {
+      return (Ps =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Cs = (function(e) {
+    var js = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Ns(this, Is(t).call(this, 'font-size'))
+          Rs(this, Cs(t).call(this, 'font-size'))
         );
       }
       var n, r, i;
@@ -43546,7 +43672,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Rs(e, t);
+            t && Ps(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -43559,16 +43685,16 @@
           {
             key: 'dropdown',
             value: function() {
-              return new xs();
+              return new Os();
             },
           },
-        ]) && Os(n.prototype, r),
-        i && Os(n, i),
+        ]) && Is(n.prototype, r),
+        i && Is(n, i),
         t
       );
-    })(ua);
-    function Ps(e) {
-      return (Ps =
+    })(ca);
+    function Hs(e) {
+      return (Hs =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43582,7 +43708,7 @@
                 : typeof e;
             })(e);
     }
-    function js(e) {
+    function Fs(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -43602,8 +43728,8 @@
         })()
       );
     }
-    function Hs(e, t) {
-      return !t || ('object' !== Ps(t) && 'function' != typeof t)
+    function Us(e, t) {
+      return !t || ('object' !== Hs(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -43611,36 +43737,36 @@
           })(e)
         : t;
     }
-    function Fs(e) {
-      return (Fs = Object.setPrototypeOf
+    function Vs(e) {
+      return (Vs = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Us(e, t) {
-      return (Us =
+    function Ws(e, t) {
+      return (Ws =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Ws = (function(e) {
+    var Bs = (function(e) {
       function t() {
         var e, n;
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, t);
-        var r = ti.map(function(e) {
+        var r = li.map(function(e) {
           return o('div', ''.concat(g, '-item'))
             .on('click', function() {
               n.setTitle(e.title), n.change(e);
             })
             .child(e.title);
         });
-        return (n = Hs(
+        return (n = Us(
           this,
-          (e = Fs(t)).call.apply(e, [this, ti[0].title, '160px', !0, 'bottom-left'].concat(js(r))),
+          (e = Vs(t)).call.apply(e, [this, li[0].title, '160px', !0, 'bottom-left'].concat(Fs(r))),
         ));
       }
       return (
@@ -43650,13 +43776,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Us(e, t);
+            t && Ws(e, t);
         })(t, e),
         t
       );
-    })(ma);
-    function Vs(e) {
-      return (Vs =
+    })(_a);
+    function Gs(e) {
+      return (Gs =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43670,7 +43796,7 @@
                 : typeof e;
             })(e);
     }
-    function Bs(e, t) {
+    function zs(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -43679,8 +43805,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Gs(e, t) {
-      return !t || ('object' !== Vs(t) && 'function' != typeof t)
+    function qs(e, t) {
+      return !t || ('object' !== Gs(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -43688,27 +43814,27 @@
           })(e)
         : t;
     }
-    function zs(e) {
-      return (zs = Object.setPrototypeOf
+    function Xs(e) {
+      return (Xs = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function qs(e, t) {
-      return (qs =
+    function Js(e, t) {
+      return (Js =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Xs = (function(e) {
+    var $s = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Gs(this, zs(t).call(this, 'font-name'))
+          qs(this, Xs(t).call(this, 'font-name'))
         );
       }
       var n, r, i;
@@ -43719,7 +43845,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && qs(e, t);
+            t && Js(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -43732,16 +43858,16 @@
           {
             key: 'dropdown',
             value: function() {
-              return new Ws();
+              return new Bs();
             },
           },
-        ]) && Bs(n.prototype, r),
-        i && Bs(n, i),
+        ]) && zs(n.prototype, r),
+        i && zs(n, i),
         t
       );
-    })(ua);
-    function Js(e) {
-      return (Js =
+    })(ca);
+    function Ks(e) {
+      return (Ks =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43755,7 +43881,7 @@
                 : typeof e;
             })(e);
     }
-    function $s(e) {
+    function Qs(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -43775,7 +43901,7 @@
         })()
       );
     }
-    function Ks(e, t) {
+    function Zs(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -43784,8 +43910,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Qs(e, t) {
-      return !t || ('object' !== Js(t) && 'function' != typeof t)
+    function eu(e, t) {
+      return !t || ('object' !== Ks(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -43793,27 +43919,27 @@
           })(e)
         : t;
     }
-    function Zs(e) {
-      return (Zs = Object.setPrototypeOf
+    function tu(e) {
+      return (tu = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function eu(e, t) {
-      return (eu =
+    function nu(e, t) {
+      return (nu =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var tu = (function(e) {
+    var ru = (function(e) {
       function t() {
         var e, n;
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, t);
-        var r = di.slice(0);
+        var r = Mi.slice(0);
         return (
           r.splice(2, 0, { key: 'divider' }),
           r.splice(8, 0, { key: 'divider' }),
@@ -43829,9 +43955,9 @@
               t
             );
           })),
-          (n = Qs(
+          (n = eu(
             this,
-            (e = Zs(t)).call.apply(e, [this, 'Normal', '220px', !0, 'bottom-left'].concat($s(r))),
+            (e = tu(t)).call.apply(e, [this, 'Normal', '220px', !0, 'bottom-left'].concat(Qs(r))),
           ))
         );
       }
@@ -43843,25 +43969,25 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && eu(e, t);
+            t && nu(e, t);
         })(t, e),
         (n = t),
         (r = [
           {
             key: 'setTitle',
             value: function(e) {
-              for (var t = 0; t < di.length; t += 1)
-                di[t].key === e && this.title.html(di[t].title);
+              for (var t = 0; t < Mi.length; t += 1)
+                Mi[t].key === e && this.title.html(Mi[t].title);
               this.hide();
             },
           },
-        ]) && Ks(n.prototype, r),
-        i && Ks(n, i),
+        ]) && Zs(n.prototype, r),
+        i && Zs(n, i),
         t
       );
-    })(ma);
-    function nu(e) {
-      return (nu =
+    })(_a);
+    function iu(e) {
+      return (iu =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -43875,7 +44001,7 @@
                 : typeof e;
             })(e);
     }
-    function ru(e, t) {
+    function au(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -43884,8 +44010,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function iu(e, t) {
-      return !t || ('object' !== nu(t) && 'function' != typeof t)
+    function ou(e, t) {
+      return !t || ('object' !== iu(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -43893,27 +44019,27 @@
           })(e)
         : t;
     }
-    function au(e) {
-      return (au = Object.setPrototypeOf
+    function su(e) {
+      return (su = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function ou(e, t) {
-      return (ou =
+    function uu(e, t) {
+      return (uu =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var su = (function(e) {
+    var lu = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          iu(this, au(t).call(this, 'format'))
+          ou(this, su(t).call(this, 'format'))
         );
       }
       var n, r, i;
@@ -43924,7 +44050,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && ou(e, t);
+            t && uu(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -43937,15 +44063,15 @@
           {
             key: 'dropdown',
             value: function() {
-              return new tu();
+              return new ru();
             },
           },
-        ]) && ru(n.prototype, r),
-        i && ru(n, i),
+        ]) && au(n.prototype, r),
+        i && au(n, i),
         t
       );
-    })(ua);
-    function uu(e, t) {
+    })(ca);
+    function cu(e, t) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
@@ -43984,7 +44110,7 @@
         })()
       );
     }
-    function lu(e) {
+    function fu(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -44004,7 +44130,7 @@
         })()
       );
     }
-    var cu = [
+    var du = [
         {
           key: 'SUM',
           title: le('formula.sum'),
@@ -44031,7 +44157,7 @@
           render: function(e) {
             return Math.max.apply(
               Math,
-              lu(
+              fu(
                 e.map(function(e) {
                   return Number(e);
                 }),
@@ -44045,7 +44171,7 @@
           render: function(e) {
             return Math.min.apply(
               Math,
-              lu(
+              fu(
                 e.map(function(e) {
                   return Number(e);
                 }),
@@ -44057,7 +44183,7 @@
           key: 'IF',
           title: le('formula._if'),
           render: function(e) {
-            var t = uu(e, 3),
+            var t = cu(e, 3),
               n = t[0],
               r = t[1],
               i = t[2];
@@ -44072,9 +44198,9 @@
           },
         },
       ],
-      fu = {};
-    function du(e) {
-      return (du =
+      hu = {};
+    function mu(e) {
+      return (mu =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -44088,7 +44214,7 @@
                 : typeof e;
             })(e);
     }
-    function hu(e) {
+    function pu(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -44108,8 +44234,8 @@
         })()
       );
     }
-    function mu(e, t) {
-      return !t || ('object' !== du(t) && 'function' != typeof t)
+    function _u(e, t) {
+      return !t || ('object' !== mu(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -44117,41 +44243,41 @@
           })(e)
         : t;
     }
-    function pu(e) {
-      return (pu = Object.setPrototypeOf
+    function yu(e) {
+      return (yu = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function _u(e, t) {
-      return (_u =
+    function vu(e, t) {
+      return (vu =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    cu.forEach(function(e) {
-      fu[e.key] = e;
+    du.forEach(function(e) {
+      hu[e.key] = e;
     });
-    var yu = (function(e) {
+    var gu = (function(e) {
       function t() {
         var e, n;
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
         })(this, t);
-        var r = cu.map(function(e) {
+        var r = du.map(function(e) {
           return o('div', ''.concat(g, '-item'))
             .on('click', function() {
               n.hide(), n.change(e);
             })
             .child(e.key);
         });
-        return (n = mu(
+        return (n = _u(
           this,
-          (e = pu(t)).call.apply(
+          (e = yu(t)).call.apply(
             e,
-            [this, new Fr('formula'), '180px', !0, 'bottom-left'].concat(hu(r)),
+            [this, new Xr('formula'), '180px', !0, 'bottom-left'].concat(pu(r)),
           ),
         ));
       }
@@ -44162,13 +44288,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && _u(e, t);
+            t && vu(e, t);
         })(t, e),
         t
       );
-    })(ma);
-    function vu(e) {
-      return (vu =
+    })(_a);
+    function Mu(e) {
+      return (Mu =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -44182,7 +44308,7 @@
                 : typeof e;
             })(e);
     }
-    function gu(e, t) {
+    function bu(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -44191,8 +44317,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Mu(e, t) {
-      return !t || ('object' !== vu(t) && 'function' != typeof t)
+    function wu(e, t) {
+      return !t || ('object' !== Mu(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -44200,27 +44326,27 @@
           })(e)
         : t;
     }
-    function bu(e) {
-      return (bu = Object.setPrototypeOf
+    function Tu(e) {
+      return (Tu = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function wu(e, t) {
-      return (wu =
+    function Lu(e, t) {
+      return (Lu =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Tu = (function(e) {
+    var Su = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Mu(this, bu(t).call(this, 'formula'))
+          wu(this, Tu(t).call(this, 'formula'))
         );
       }
       var n, r, i;
@@ -44231,7 +44357,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && wu(e, t);
+            t && Lu(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -44244,16 +44370,16 @@
           {
             key: 'dropdown',
             value: function() {
-              return new yu();
+              return new gu();
             },
           },
-        ]) && gu(n.prototype, r),
-        i && gu(n, i),
+        ]) && bu(n.prototype, r),
+        i && bu(n, i),
         t
       );
-    })(ua);
-    function Lu(e) {
-      return (Lu =
+    })(ca);
+    function Eu(e) {
+      return (Eu =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -44267,8 +44393,8 @@
                 : typeof e;
             })(e);
     }
-    function Su(e, t) {
-      return !t || ('object' !== Lu(t) && 'function' != typeof t)
+    function Du(e, t) {
+      return !t || ('object' !== Eu(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -44276,27 +44402,27 @@
           })(e)
         : t;
     }
-    function Eu(e) {
-      return (Eu = Object.setPrototypeOf
+    function ku(e) {
+      return (ku = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Du(e, t) {
-      return (Du =
+    function Au(e, t) {
+      return (Au =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var ku = (function(e) {
+    var xu = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Su(this, Eu(t).call(this, 'freeze'))
+          Du(this, ku(t).call(this, 'freeze'))
         );
       }
       return (
@@ -44306,13 +44432,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Du(e, t);
+            t && Au(e, t);
         })(t, e),
         t
       );
-    })(Fa);
-    function Au(e) {
-      return (Au =
+    })(Va);
+    function Yu(e) {
+      return (Yu =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -44326,7 +44452,7 @@
                 : typeof e;
             })(e);
     }
-    function xu(e, t) {
+    function Ou(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -44335,8 +44461,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Yu(e, t) {
-      return !t || ('object' !== Au(t) && 'function' != typeof t)
+    function Nu(e, t) {
+      return !t || ('object' !== Yu(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -44344,27 +44470,27 @@
           })(e)
         : t;
     }
-    function Ou(e) {
-      return (Ou = Object.setPrototypeOf
+    function Iu(e) {
+      return (Iu = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Nu(e, t) {
-      return (Nu =
+    function Ru(e, t) {
+      return (Ru =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Iu = (function(e) {
+    var Cu = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Yu(this, Ou(t).call(this, 'merge'))
+          Nu(this, Iu(t).call(this, 'merge'))
         );
       }
       var n, r, i;
@@ -44375,7 +44501,7 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Nu(e, t);
+            t && Ru(e, t);
         })(t, e),
         (n = t),
         (r = [
@@ -44385,13 +44511,13 @@
               this.el.active(e).disabled(t);
             },
           },
-        ]) && xu(n.prototype, r),
-        i && xu(n, i),
+        ]) && Ou(n.prototype, r),
+        i && Ou(n, i),
         t
       );
-    })(Fa);
-    function Ru(e) {
-      return (Ru =
+    })(Va);
+    function Pu(e) {
+      return (Pu =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -44404,96 +44530,37 @@
                 ? 'symbol'
                 : typeof e;
             })(e);
-    }
-    function Cu(e, t) {
-      return !t || ('object' !== Ru(t) && 'function' != typeof t)
-        ? (function(e) {
-            if (void 0 === e)
-              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-            return e;
-          })(e)
-        : t;
-    }
-    function Pu(e) {
-      return (Pu = Object.setPrototypeOf
-        ? Object.getPrototypeOf
-        : function(e) {
-            return e.__proto__ || Object.getPrototypeOf(e);
-          })(e);
     }
     function ju(e, t) {
-      return (ju =
-        Object.setPrototypeOf ||
-        function(e, t) {
-          return (e.__proto__ = t), e;
-        })(e, t);
+      return !t || ('object' !== Pu(t) && 'function' != typeof t)
+        ? (function(e) {
+            if (void 0 === e)
+              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+            return e;
+          })(e)
+        : t;
     }
-    var Hu = (function(e) {
-      function t() {
-        return (
-          (function(e, t) {
-            if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
-          })(this, t),
-          Cu(this, Pu(t).call(this, 'redo', 'Ctrl+Y'))
-        );
-      }
-      return (
-        (function(e, t) {
-          if ('function' != typeof t && null !== t)
-            throw new TypeError('Super expression must either be null or a function');
-          (e.prototype = Object.create(t && t.prototype, {
-            constructor: { value: e, writable: !0, configurable: !0 },
-          })),
-            t && ju(e, t);
-        })(t, e),
-        t
-      );
-    })(ts);
-    function Fu(e) {
+    function Hu(e) {
+      return (Hu = Object.setPrototypeOf
+        ? Object.getPrototypeOf
+        : function(e) {
+            return e.__proto__ || Object.getPrototypeOf(e);
+          })(e);
+    }
+    function Fu(e, t) {
       return (Fu =
-        'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
-          ? function(e) {
-              return typeof e;
-            }
-          : function(e) {
-              return e &&
-                'function' == typeof Symbol &&
-                e.constructor === Symbol &&
-                e !== Symbol.prototype
-                ? 'symbol'
-                : typeof e;
-            })(e);
-    }
-    function Uu(e, t) {
-      return !t || ('object' !== Fu(t) && 'function' != typeof t)
-        ? (function(e) {
-            if (void 0 === e)
-              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-            return e;
-          })(e)
-        : t;
-    }
-    function Wu(e) {
-      return (Wu = Object.setPrototypeOf
-        ? Object.getPrototypeOf
-        : function(e) {
-            return e.__proto__ || Object.getPrototypeOf(e);
-          })(e);
-    }
-    function Vu(e, t) {
-      return (Vu =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Bu = (function(e) {
+    var Uu = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          Uu(this, Wu(t).call(this, 'undo', 'Ctrl+Z'))
+          ju(this, Hu(t).call(this, 'redo', 'Ctrl+Y'))
         );
       }
       return (
@@ -44503,13 +44570,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Vu(e, t);
+            t && Fu(e, t);
         })(t, e),
         t
       );
-    })(ts);
-    function Gu(e) {
-      return (Gu =
+    })(rs);
+    function Vu(e) {
+      return (Vu =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -44523,8 +44590,8 @@
                 : typeof e;
             })(e);
     }
-    function zu(e, t) {
-      return !t || ('object' !== Gu(t) && 'function' != typeof t)
+    function Wu(e, t) {
+      return !t || ('object' !== Vu(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -44532,27 +44599,86 @@
           })(e)
         : t;
     }
-    function qu(e) {
-      return (qu = Object.setPrototypeOf
+    function Bu(e) {
+      return (Bu = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
+    }
+    function Gu(e, t) {
+      return (Gu =
+        Object.setPrototypeOf ||
+        function(e, t) {
+          return (e.__proto__ = t), e;
+        })(e, t);
+    }
+    var zu = (function(e) {
+      function t() {
+        return (
+          (function(e, t) {
+            if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
+          })(this, t),
+          Wu(this, Bu(t).call(this, 'undo', 'Ctrl+Z'))
+        );
+      }
+      return (
+        (function(e, t) {
+          if ('function' != typeof t && null !== t)
+            throw new TypeError('Super expression must either be null or a function');
+          (e.prototype = Object.create(t && t.prototype, {
+            constructor: { value: e, writable: !0, configurable: !0 },
+          })),
+            t && Gu(e, t);
+        })(t, e),
+        t
+      );
+    })(rs);
+    function qu(e) {
+      return (qu =
+        'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
+          ? function(e) {
+              return typeof e;
+            }
+          : function(e) {
+              return e &&
+                'function' == typeof Symbol &&
+                e.constructor === Symbol &&
+                e !== Symbol.prototype
+                ? 'symbol'
+                : typeof e;
+            })(e);
     }
     function Xu(e, t) {
-      return (Xu =
+      return !t || ('object' !== qu(t) && 'function' != typeof t)
+        ? (function(e) {
+            if (void 0 === e)
+              throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+            return e;
+          })(e)
+        : t;
+    }
+    function Ju(e) {
+      return (Ju = Object.setPrototypeOf
+        ? Object.getPrototypeOf
+        : function(e) {
+            return e.__proto__ || Object.getPrototypeOf(e);
+          })(e);
+    }
+    function $u(e, t) {
+      return ($u =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Ju = (function(e) {
+    var Ku = (function(e) {
       function t() {
         return (
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          zu(this, qu(t).call(this, 'textwrap'))
+          Xu(this, Ju(t).call(this, 'textwrap'))
         );
       }
       return (
@@ -44562,12 +44688,12 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Xu(e, t);
+            t && $u(e, t);
         })(t, e),
         t
       );
-    })(Fa);
-    function $u(e, t) {
+    })(Va);
+    function Qu(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -44576,8 +44702,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Ku(e) {
-      return (Ku =
+    function Zu(e) {
+      return (Zu =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -44591,11 +44717,11 @@
                 : typeof e;
             })(e);
     }
-    function Qu(e, t) {
+    function el(e, t) {
       if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
     }
-    function Zu(e, t) {
-      return !t || ('object' !== Ku(t) && 'function' != typeof t)
+    function tl(e, t) {
+      return !t || ('object' !== Zu(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -44603,56 +44729,56 @@
           })(e)
         : t;
     }
-    function el(e) {
-      return (el = Object.setPrototypeOf
+    function nl(e) {
+      return (nl = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function tl(e, t) {
+    function rl(e, t) {
       if ('function' != typeof t && null !== t)
         throw new TypeError('Super expression must either be null or a function');
       (e.prototype = Object.create(t && t.prototype, {
         constructor: { value: e, writable: !0, configurable: !0 },
       })),
-        t && nl(e, t);
+        t && il(e, t);
     }
-    function nl(e, t) {
-      return (nl =
+    function il(e, t) {
+      return (il =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var rl = (function(e) {
+    var al = (function(e) {
         function t() {
           var e;
-          Qu(this, t);
-          var n = new Fr('ellipsis'),
+          el(this, t);
+          var n = new Xr('ellipsis'),
             r = o('div', ''.concat(g, '-toolbar-more'));
           return (
-            ((e = Zu(this, el(t).call(this, n, 'auto', !1, 'bottom-right', r))).moreBtns = r),
+            ((e = tl(this, nl(t).call(this, n, 'auto', !1, 'bottom-right', r))).moreBtns = r),
             e.contentEl.css('max-width', '420px'),
             e
           );
         }
-        return tl(t, e), t;
-      })(ma),
-      il = (function(e) {
+        return rl(t, e), t;
+      })(_a),
+      ol = (function(e) {
         function t() {
           var e;
-          return Qu(this, t), (e = Zu(this, el(t).call(this, 'more'))).el.hide(), e;
+          return el(this, t), (e = tl(this, nl(t).call(this, 'more'))).el.hide(), e;
         }
         var n, r, i;
         return (
-          tl(t, e),
+          rl(t, e),
           (n = t),
           (r = [
             {
               key: 'dropdown',
               value: function() {
-                return new rl();
+                return new al();
               },
             },
             {
@@ -44667,12 +44793,12 @@
                 this.el.hide();
               },
             },
-          ]) && $u(n.prototype, r),
-          i && $u(n, i),
+          ]) && Qu(n.prototype, r),
+          i && Qu(n, i),
           t
         );
-      })(ua);
-    function al(e, t) {
+      })(ca);
+    function sl(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -44681,7 +44807,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function ol(e, t) {
+    function ul(e, t) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
@@ -44720,10 +44846,10 @@
         })()
       );
     }
-    function sl() {
+    function ll() {
       return o('div', ''.concat(g, '-toolbar-divider'));
     }
-    function ul() {
+    function cl() {
       var e = this;
       (this.btns2 = []),
         this.items.forEach(function(t) {
@@ -44745,7 +44871,7 @@
           }
         });
     }
-    function ll() {
+    function fl() {
       var e,
         t,
         n = this.el,
@@ -44762,7 +44888,7 @@
         d = [],
         h = [];
       a.forEach(function(e, t) {
-        var n = ol(e, 2),
+        var n = ul(e, 2),
           r = n[0],
           i = n[1];
         (c += i), t === a.length - 1 || c < l.width ? d.push(r) : ((f += i), h.push(r));
@@ -44772,7 +44898,7 @@
         u.css('width', ''.concat(f, 'px')),
         h.length > 0 ? i.show() : i.hide();
     }
-    var cl = (function() {
+    var dl = (function() {
       function e(t, n) {
         var r = this,
           i = arguments.length > 2 && void 0 !== arguments[2] && arguments[2];
@@ -44786,41 +44912,41 @@
         var a = t.defaultStyle();
         (this.items = [
           [
-            (this.undoEl = new Bu()),
-            (this.redoEl = new Hu()),
-            (this.paintformatEl = new ds()),
-            (this.clearformatEl = new os()),
+            (this.undoEl = new zu()),
+            (this.redoEl = new Uu()),
+            (this.paintformatEl = new ms()),
+            (this.clearformatEl = new us()),
           ],
-          sl(),
-          [(this.formatEl = new su())],
-          sl(),
-          [(this.fontEl = new Xs()), (this.fontSizeEl = new Cs())],
-          sl(),
+          ll(),
+          [(this.formatEl = new lu())],
+          ll(),
+          [(this.fontEl = new $s()), (this.fontSizeEl = new js())],
+          ll(),
           [
-            (this.boldEl = new Ka()),
-            (this.italicEl = new no()),
-            (this.underlineEl = new ho()),
-            (this.strikeEl = new so()),
-            (this.textColorEl = new vs(a.color)),
+            (this.boldEl = new Za()),
+            (this.italicEl = new io()),
+            (this.underlineEl = new po()),
+            (this.strikeEl = new lo()),
+            (this.textColorEl = new Ms(a.color)),
           ],
-          sl(),
+          ll(),
           [
-            (this.fillColorEl = new Ls(a.bgcolor)),
-            (this.borderEl = new Xo()),
-            (this.mergeEl = new Iu()),
+            (this.fillColorEl = new Es(a.bgcolor)),
+            (this.borderEl = new $o()),
+            (this.mergeEl = new Cu()),
           ],
-          sl(),
+          ll(),
           [
-            (this.alignEl = new Da(a.align)),
-            (this.valignEl = new Na(a.valign)),
-            (this.textwrapEl = new Ju()),
+            (this.alignEl = new Aa(a.align)),
+            (this.valignEl = new Ra(a.valign)),
+            (this.textwrapEl = new Ku()),
           ],
-          sl(),
+          ll(),
           [
-            (this.freezeEl = new ku()),
-            (this.autofilterEl = new za()),
-            (this.formulaEl = new Tu()),
-            (this.moreEl = new il()),
+            (this.freezeEl = new xu()),
+            (this.autofilterEl = new Xa()),
+            (this.formulaEl = new Su()),
+            (this.moreEl = new ol()),
           ],
         ]),
           (this.el = o('div', ''.concat(g, '-toolbar'))),
@@ -44840,10 +44966,10 @@
             ? this.el.hide()
             : (this.reset(),
               setTimeout(function() {
-                ul.call(r), ll.call(r);
+                cl.call(r), fl.call(r);
               }, 0),
-              qn(window, 'resize', function() {
-                ll.call(r);
+              tr(window, 'resize', function() {
+                fl.call(r);
               }));
       }
       var t, n, r;
@@ -44896,12 +45022,12 @@
               }
             },
           },
-        ]) && al(t.prototype, n),
-        r && al(t, r),
+        ]) && sl(t.prototype, n),
+        r && sl(t, r),
         e
       );
     })();
-    function fl(e) {
+    function hl(e) {
       return (
         (function(e) {
           if (Array.isArray(e)) {
@@ -44921,7 +45047,7 @@
         })()
       );
     }
-    function dl(e, t) {
+    function ml(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -44930,7 +45056,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var hl = (function() {
+    var pl = (function() {
       function e(t, n) {
         var r,
           i = this,
@@ -44943,12 +45069,12 @@
             .css('width', a)
             .children(
               o('div', ''.concat(g, '-modal-header')).children(
-                new Fr('close').on('click.stop', function() {
+                new Xr('close').on('click.stop', function() {
                   return i.hide();
                 }),
                 this.title,
               ),
-              (r = o('div', ''.concat(g, '-modal-content'))).children.apply(r, fl(n)),
+              (r = o('div', ''.concat(g, '-modal-content'))).children.apply(r, hl(n)),
             )
             .hide());
       }
@@ -44972,7 +45098,7 @@
                 (window.xkeydownEsc = function(t) {
                   27 === t.keyCode && e.hide();
                 }),
-                qn(window, 'keydown', window.xkeydownEsc);
+                tr(window, 'keydown', window.xkeydownEsc);
             },
           },
           {
@@ -44980,16 +45106,16 @@
             value: function() {
               this.el.hide(),
                 document.body.removeChild(this.dimmer.el),
-                Xn(window, 'keydown', window.xkeydownEsc),
+                nr(window, 'keydown', window.xkeydownEsc),
                 delete window.xkeydownEsc;
             },
           },
-        ]) && dl(t.prototype, n),
-        r && dl(t, r),
+        ]) && ml(t.prototype, n),
+        r && ml(t, r),
         e
       );
     })();
-    function ml(e, t) {
+    function _l(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -44998,7 +45124,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var pl = (function() {
+    var yl = (function() {
       function e(t, n) {
         var r = this;
         !(function(e, t) {
@@ -45030,12 +45156,12 @@
               return this.input.val(e);
             },
           },
-        ]) && ml(t.prototype, n),
-        r && ml(t, r),
+        ]) && _l(t.prototype, n),
+        r && _l(t, r),
         e
       );
     })();
-    function _l(e, t) {
+    function vl(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -45044,7 +45170,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var yl = (function() {
+    var gl = (function() {
       function e(t, n, r) {
         var i = this,
           a =
@@ -45061,7 +45187,7 @@
           (this.getTitle = a),
           (this.vchange = function() {}),
           (this.el = o('div', ''.concat(g, '-form-select'))),
-          (this.suggest = new Ir(
+          (this.suggest = new Vr(
             n.map(function(e) {
               return { key: e, title: i.getTitle(e) };
             }),
@@ -45104,12 +45230,12 @@
                 : this.key;
             },
           },
-        ]) && _l(t.prototype, n),
-        r && _l(t, r),
+        ]) && vl(t.prototype, n),
+        r && vl(t, r),
         e
       );
     })();
-    function vl(e, t) {
+    function Ml(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -45118,8 +45244,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var gl = { number: /(^\d+$)|(^\d+(\.\d{0,4})?$)/, date: /^\d{4}-\d{1,2}-\d{1,2}$/ },
-      Ml = (function() {
+    var bl = { number: /(^\d+$)|(^\d+(\.\d{0,4})?$)/, date: /^\d{4}-\d{1,2}-\d{1,2}$/ },
+      wl = (function() {
         function e(t, n, r, i) {
           var a = this;
           !(function(e, t) {
@@ -45184,18 +45310,18 @@
                   i = e.val();
                 return t.required && /^\s*$/.test(i)
                   ? (n.html(ue('validation.required')), r.addClass('error'), !1)
-                  : (!t.type && !t.pattern) || (t.pattern || gl[t.type]).test(i)
+                  : (!t.type && !t.pattern) || (t.pattern || bl[t.type]).test(i)
                   ? (r.removeClass('error'), !0)
                   : (n.html(ue('validation.notMatch')), r.addClass('error'), !1);
               },
             },
-          ]) && vl(t.prototype, n),
-          r && vl(t, r),
+          ]) && Ml(t.prototype, n),
+          r && Ml(t, r),
           e
         );
       })();
-    function bl(e) {
-      return (bl =
+    function Tl(e) {
+      return (Tl =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -45209,8 +45335,8 @@
                 : typeof e;
             })(e);
     }
-    function wl(e, t) {
-      return !t || ('object' !== bl(t) && 'function' != typeof t)
+    function Ll(e, t) {
+      return !t || ('object' !== Tl(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -45218,21 +45344,21 @@
           })(e)
         : t;
     }
-    function Tl(e) {
-      return (Tl = Object.setPrototypeOf
+    function Sl(e) {
+      return (Sl = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function Ll(e, t) {
-      return (Ll =
+    function El(e, t) {
+      return (El =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Sl = (function(e) {
+    var Dl = (function(e) {
       function t(e) {
         var n,
           r = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : '';
@@ -45240,7 +45366,7 @@
           (function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t),
-          (n = wl(this, Tl(t).call(this, 'div', ''.concat(g, '-button ').concat(r)))).child(
+          (n = Ll(this, Sl(t).call(this, 'div', ''.concat(g, '-button ').concat(r)))).child(
             ue('button.'.concat(e)),
           ),
           n
@@ -45253,13 +45379,13 @@
           (e.prototype = Object.create(t && t.prototype, {
             constructor: { value: e, writable: !0, configurable: !0 },
           })),
-            t && Ll(e, t);
+            t && El(e, t);
         })(t, e),
         t
       );
     })(a);
-    function El(e) {
-      return (El =
+    function kl(e) {
+      return (kl =
         'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           ? function(e) {
               return typeof e;
@@ -45273,7 +45399,7 @@
                 : typeof e;
             })(e);
     }
-    function Dl(e, t) {
+    function Al(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -45282,8 +45408,8 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function kl(e, t) {
-      return !t || ('object' !== El(t) && 'function' != typeof t)
+    function xl(e, t) {
+      return !t || ('object' !== kl(t) && 'function' != typeof t)
         ? (function(e) {
             if (void 0 === e)
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -45291,41 +45417,41 @@
           })(e)
         : t;
     }
-    function Al(e) {
-      return (Al = Object.setPrototypeOf
+    function Yl(e) {
+      return (Yl = Object.setPrototypeOf
         ? Object.getPrototypeOf
         : function(e) {
             return e.__proto__ || Object.getPrototypeOf(e);
           })(e);
     }
-    function xl(e, t) {
-      return (xl =
+    function Ol(e, t) {
+      return (Ol =
         Object.setPrototypeOf ||
         function(e, t) {
           return (e.__proto__ = t), e;
         })(e, t);
     }
-    var Yl = 100,
-      Ol = (function(e) {
+    var Nl = 100,
+      Il = (function(e) {
         function t() {
           var e;
           !(function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, t);
-          var n = new Ml(
-              new yl('cell', ['cell'], '100%', function(e) {
+          var n = new wl(
+              new gl('cell', ['cell'], '100%', function(e) {
                 return ue('dataValidation.modeType.'.concat(e));
               }),
               { required: !0 },
               ''.concat(ue('dataValidation.range'), ':'),
-              Yl,
+              Nl,
             ),
-            r = new Ml(new pl('120px', 'E3 or E3:F12'), {
+            r = new wl(new yl('120px', 'E3 or E3:F12'), {
               required: !0,
               pattern: /^([A-Z]{1,2}[1-9]\d*)(:[A-Z]{1,2}[1-9]\d*)?$/,
             }),
-            i = new Ml(
-              new yl(
+            i = new wl(
+              new gl(
                 'list',
                 ['list', 'number', 'date', 'phone', 'email'],
                 '100%',
@@ -45338,10 +45464,10 @@
               ),
               { required: !0 },
               ''.concat(ue('dataValidation.criteria'), ':'),
-              Yl,
+              Nl,
             ),
-            a = new Ml(
-              new yl(
+            a = new wl(
+              new gl(
                 'be',
                 ['be', 'nbe', 'eq', 'neq', 'lt', 'lte', 'gt', 'gte'],
                 '160px',
@@ -45354,24 +45480,24 @@
               ),
               { required: !0 },
             ).hide(),
-            s = new Ml(new pl('70px', '10'), { required: !0 }).hide(),
-            u = new Ml(new pl('70px', '100'), { required: !0, type: 'number' }).hide(),
-            l = new Ml(new pl('120px', 'a,b,c'), { required: !0 }),
-            c = new Ml(new pl('70px', '10'), { required: !0, type: 'number' }).hide();
+            s = new wl(new yl('70px', '10'), { required: !0 }).hide(),
+            u = new wl(new yl('70px', '100'), { required: !0, type: 'number' }).hide(),
+            l = new wl(new yl('120px', 'a,b,c'), { required: !0 }),
+            c = new wl(new yl('70px', '10'), { required: !0, type: 'number' }).hide();
           return (
-            ((e = kl(
+            ((e = xl(
               this,
-              Al(t).call(this, ue('contextmenu.validation'), [
+              Yl(t).call(this, ue('contextmenu.validation'), [
                 o('div', ''.concat(g, '-form-fields')).children(n.el, r.el),
                 o('div', ''.concat(g, '-form-fields')).children(i.el, a.el, s.el, u.el, c.el, l.el),
                 o('div', ''.concat(g, '-buttons')).children(
-                  new Sl('cancel').on('click', function() {
+                  new Dl('cancel').on('click', function() {
                     return e.btnClick('cancel');
                   }),
-                  new Sl('remove').on('click', function() {
+                  new Dl('remove').on('click', function() {
                     return e.btnClick('remove');
                   }),
-                  new Sl('save', 'primary').on('click', function() {
+                  new Dl('save', 'primary').on('click', function() {
                     return e.btnClick('save');
                   }),
                 ),
@@ -45396,7 +45522,7 @@
             (e.prototype = Object.create(t && t.prototype, {
               constructor: { value: e, writable: !0, configurable: !0 },
             })),
-              t && xl(e, t);
+              t && Ol(e, t);
           })(t, e),
           (n = t),
           (r = [
@@ -45509,12 +45635,12 @@
                 this.show();
               },
             },
-          ]) && Dl(n.prototype, r),
-          i && Dl(n, i),
+          ]) && Al(n.prototype, r),
+          i && Al(n, i),
           t
         );
-      })(hl);
-    function Nl(e, t) {
+      })(pl);
+    function Rl(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -45523,54 +45649,54 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Il(e) {
+    function Cl(e) {
       return o('div', ''.concat(g, '-item ').concat(e));
     }
-    function Rl(e) {
+    function Pl(e) {
       var t = this,
         n = o('span', 'state-'.concat(e, '-image')),
         r = o('span', 'state-'.concat(e, '-text'), ue('sort.'.concat(e)));
-      return Il('state state-'.concat(e))
+      return Cl('state state-'.concat(e))
         .children(n, r)
         .on('click.stop', function() {
           return t.itemClick(e);
         });
     }
-    function Cl(e) {
-      var t = this,
-        n = this.filterbEl,
-        r = this.filterValues;
-      n.html(''),
-        e.forEach(function(e, i) {
-          var a = !!r.includes(e),
-            s = o('input', 'xs-spread-sheet-checkbox')
-              .attr('type', 'checkbox')
-              .attr('checked', 'checked');
-          a || s.el.removeAttribute('checked'),
-            n.child(
+    function jl(e, t) {
+      var n = this,
+        r = this.filterbEl,
+        i = this.filterValues,
+        a = t.isSelectAll;
+      a || (a = this.isSelectAll),
+        r.html(''),
+        e.forEach(function(e, t) {
+          var s = o('input', 'xs-spread-sheet-checkbox').attr('type', 'checkbox');
+          a ? i.includes(e) || (s.el.checked = !0) : i.includes(e) && (s.el.checked = !0),
+            !!i.includes(e) || s.el.removeAttribute('checked'),
+            r.child(
               o('div', ''.concat(g, '-sub-item state'))
-                .on('click', function(n) {
-                  n.stopPropagation(),
-                    setTimeout(function() {
-                      t.filterClick(i, e);
-                    }, 0);
+                .on('click', function(r) {
+                  if ((r.stopPropagation(), r.target.classList.contains('xs-spread-sheet-label'))) {
+                    var i = r.target.querySelector('.xs-spread-sheet-checkbox');
+                    i.checked ? (i.checked = !1) : (i.checked = !0);
+                  }
+                  setTimeout(function() {
+                    n.filterClick(t, e);
+                  }, 0);
                 })
                 .child(
-                  o('label', 'xs-spread-sheet-label').children(
-                    '' === e ? ue('filter.empty') : s,
-                    e,
-                  ),
+                  o('span', 'xs-spread-sheet-label').children('' === e ? ue('filter.empty') : s, e),
                 ),
             );
         });
     }
-    function Pl() {
+    function Hl() {
       var e = this.filterhEl,
         t = this.filterValues,
         n = this.values;
       e.html(''.concat(t.length, ' / ').concat(n.length)), e.checked(t.length === n.length);
     }
-    var jl = (function() {
+    var Fl = (function() {
       function e() {
         var t = this;
         !(function(e, t) {
@@ -45578,8 +45704,8 @@
         })(this, e),
           (this.filterbEl = o('div', ''.concat(g, '-body'))),
           (this.filterhEl = o('div', ''.concat(g, '-header state'))),
-          (this.sortAscEl = Rl.call(this, 'asc')),
-          (this.sortDescEl = Rl.call(this, 'desc')),
+          (this.sortAscEl = Pl.call(this, 'asc')),
+          (this.sortDescEl = Pl.call(this, 'desc')),
           (this.sortSelectAll = o('span', 'sort-select-all', '全选').on('click.stop', function() {
             return t.filterClick(0, 'all');
           })),
@@ -45594,16 +45720,16 @@
           (this.el = o('div', ''.concat(g, '-sort-filter'))
             .children(
               o('div', 'sort-container').children(this.sortAscEl, this.sortDescEl),
-              Il('divider'),
+              Cl('divider'),
               o('div', 'search-text', '过滤值'),
               this.searchTextEl,
               o('div', 'sort-action-btn1').children(this.sortSelectAll, this.sortClearAll),
               o('div', ''.concat(g, '-filter')).children(this.filterbEl),
               o('div', ''.concat(g, '-buttons')).children(
-                new Sl('cancel').on('click', function() {
+                new Dl('cancel').on('click', function() {
                   return t.btnClick('cancel');
                 }),
-                new Sl('ok', 'primary').on('click', function() {
+                new Dl('ok', 'primary').on('click', function() {
                   return t.btnClick('ok');
                 }),
               ),
@@ -45615,7 +45741,8 @@
           (this.values = null),
           (this.filterValues = []),
           (this.isSelectAll = !1),
-          (this.isClear = !1);
+          (this.isClear = !1),
+          (this.searchKey = '');
       }
       var t, n, r;
       return (
@@ -45629,8 +45756,9 @@
                   n = this.ci,
                   r = this.sort,
                   i = this.filterValues,
-                  a = this.isSelectAll;
-                this.ok && this.ok(t, n, r, 'in', i, a);
+                  a = this.isSelectAll,
+                  o = this.searchKey;
+                this.ok && this.ok(t, n, r, 'in', i, a, o);
               }
               this.hide();
             },
@@ -45691,7 +45819,7 @@
                           1,
                         ));
               }
-              Pl.call(this);
+              Hl.call(this);
             },
           },
           {
@@ -45705,25 +45833,36 @@
                 : ((this.sortDesc = null), i.checked(!1), a.checked(!1)),
                 (this.values = Object.keys(t)),
                 (this.filterValues = n ? Array.from(n.value) : Object.keys(t)),
-                Cl.call(this, t, n),
-                Pl.call(this);
+                jl.call(this, t, n || {}),
+                Hl.call(this);
             },
           },
           {
             key: 'setItems',
-            value: function(e, t, n, r) {
+            value: function(e, t, n, r, i, a) {
               (this.ci = t), (this.ri = e);
-              var i = this.sortAscEl,
-                a = this.sortDescEl,
-                o = null;
-              r && (o = r.order),
-                null !== o
-                  ? ((this.sort = o), i.checked('asc' === o), a.checked('desc' === o))
-                  : ((this.sortDesc = null), i.checked(!1), a.checked(!1)),
-                (this.values = n),
+              var o = this.sortAscEl,
+                s = this.sortDescEl,
+                u = this.searchTextEl;
+              if ('init' === a) {
+                var l = '';
+                r && r.searchKey && (l = r.searchKey),
+                  (u.el.value = l),
+                  (this.sortDesc = null),
+                  (this.values = null),
+                  (this.filterValues = []),
+                  (this.isSelectAll = !0),
+                  (this.isClear = !1);
+                var c = null;
+                r && (c = r.order),
+                  null !== c
+                    ? ((this.sort = c), o.checked('asc' === c), s.checked('desc' === c))
+                    : ((this.sortDesc = null), o.checked(!1), s.checked(!1));
+              }
+              (this.values = n),
                 (this.filterValues = r ? Array.from(r.value) : []),
-                Cl.call(this, n, r),
-                Pl.call(this);
+                jl.call(this, n, r || {}),
+                Hl.call(this);
             },
           },
           {
@@ -45744,12 +45883,12 @@
               this.el.hide();
             },
           },
-        ]) && Nl(t.prototype, n),
-        r && Nl(t, r),
+        ]) && Rl(t.prototype, n),
+        r && Rl(t, r),
         e
       );
     })();
-    function Hl(e, t) {
+    function Ul(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -45758,7 +45897,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    var Fl = (function() {
+    var Vl = (function() {
       function e(t, n, r, i, a) {
         !(function(e, t) {
           if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
@@ -45800,12 +45939,12 @@
               return this.fxObj ? this.fxObj.value : '';
             },
           },
-        ]) && Hl(t.prototype, n),
-        r && Hl(t, r),
+        ]) && Ul(t.prototype, n),
+        r && Ul(t, r),
         e
       );
     })();
-    function Ul(e, t) {
+    function Wl(e, t) {
       var n = Object.keys(e);
       if (Object.getOwnPropertySymbols) {
         var r = Object.getOwnPropertySymbols(e);
@@ -45817,7 +45956,7 @@
       }
       return n;
     }
-    function Wl(e, t, n) {
+    function Bl(e, t, n) {
       return (
         t in e
           ? Object.defineProperty(e, t, {
@@ -45830,7 +45969,7 @@
         e
       );
     }
-    function Vl(e, t) {
+    function Gl(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -45839,7 +45978,7 @@
           Object.defineProperty(e, r.key, r);
       }
     }
-    function Bl(e, t) {
+    function zl(e, t) {
       return (
         (function(e) {
           if (Array.isArray(e)) return e;
@@ -45878,7 +46017,7 @@
         })()
       );
     }
-    function Gl() {
+    function ql() {
       var e = this.data,
         t = this.verticalScrollbar,
         n = this.horizontalScrollbar,
@@ -45901,7 +46040,7 @@
         s < d && t.move({ top: a - 1 - d });
       }
     }
-    function zl(e, t, n) {
+    function Xl(e, t, n) {
       var r = !(arguments.length > 3 && void 0 !== arguments[3]) || arguments[3],
         i = arguments.length > 4 && void 0 !== arguments[4] && arguments[4];
       if (-1 !== t || -1 !== n) {
@@ -45911,19 +46050,19 @@
         e ? o.setEnd(t, n, i) : o.set(t, n, r), s.reset(), a.render();
       }
     }
-    function ql(e, t) {
+    function Jl(e, t) {
       var n = this.selector,
         r = this.data,
         i = r.rows,
         a = r.cols,
-        o = Bl(n.indexes, 2),
+        o = zl(n.indexes, 2),
         s = o[0],
         u = o[1],
         l = n.range,
         c = l.eri,
         f = l.eci;
       if (e) {
-        var d = Bl(n.moveIndexes, 2);
+        var d = zl(n.moveIndexes, 2);
         (s = d[0]), (u = d[1]);
       }
       'left' === t
@@ -45942,10 +46081,10 @@
         ? (s = 0)
         : 'col-last' === t && (s = i.len - 1),
         e && (n.moveIndexes = [s, u]),
-        zl.call(this, e, s, u),
-        Gl.call(this);
+        Xl.call(this, e, s, u),
+        ql.call(this);
     }
-    function Xl(e) {
+    function $l(e) {
       for (var t = [], n = -1, r = 0; r < e.length; r++) {
         var i = e[r],
           a = i.querySelector('.to__item');
@@ -45957,14 +46096,14 @@
       }
       return { selectedIndex: n, hideIndex: t };
     }
-    function Jl(e) {
+    function Kl(e) {
       var t = document
           .querySelector('.x-spreadsheet-dropdown-items')
           .getElementsByClassName('item-container'),
         n = -1;
       switch (e) {
         case 'up':
-          var r = Xl(t),
+          var r = $l(t),
             i = r.hideIndex,
             a = (n = r.selectedIndex) - 1;
           0 === n && (a = t.length - 1);
@@ -45972,7 +46111,7 @@
           t[a].querySelector('.to__item').style.background = '#f5f5f5';
           break;
         case 'down':
-          var s = Xl(t),
+          var s = $l(t),
             u = s.hideIndex,
             l = s.selectedIndex,
             c = l + 1;
@@ -45990,7 +46129,7 @@
           }
       }
     }
-    function $l(e) {
+    function Ql(e) {
       if (0 === e.buttons && e.target.className !== ''.concat(g, '-resizer-hover')) {
         var t = e.offsetX,
           n = e.offsetY,
@@ -46034,7 +46173,7 @@
         }
       }
     }
-    function Kl(e) {
+    function Zl(e) {
       var t = this.verticalScrollbar,
         n = this.data,
         r = t.scroll().top,
@@ -46048,7 +46187,7 @@
         s >= 0 && t.move({ top: 0 === s ? 0 : r - a.getHeight(s) });
       }
     }
-    function Ql(e, t) {
+    function ec(e, t) {
       var n = this.verticalScrollbar,
         r = this.horizontalScrollbar,
         i = n.scroll().top,
@@ -46057,7 +46196,7 @@
         ? r.move({ left: a - t })
         : ('up' !== e && 'down' !== e) || n.move({ top: i - t });
     }
-    function Zl(e) {
+    function tc(e) {
       var t,
         n = this.data,
         r = this.verticalScrollbar,
@@ -46066,17 +46205,17 @@
       var a = n.exceptRowTotalHeight(0, -1);
       r.set(i, t - a);
     }
-    function ec() {
+    function nc() {
       var e = this.data,
         t = this.horizontalScrollbar,
         n = this.getTableOffset().width;
       e && t.set(n, e.cols.totalWidth());
     }
-    function tc() {
+    function rc() {
       var e = this.selector,
         t = this.data,
         n = this.editor,
-        r = Bl(t.freeze, 2),
+        r = zl(t.freeze, 2),
         i = r[0],
         a = r[1];
       if (i > 0 || a > 0) {
@@ -46086,7 +46225,7 @@
       }
       e.resetAreaOffset();
     }
-    function nc() {
+    function ic() {
       var e = this,
         t = this.tableEl,
         n = this.overlayerEl,
@@ -46101,9 +46240,9 @@
         n.offset(l),
         r.offset(u),
         s.css('width', ''.concat(l.width, 'px')),
-        Zl.call(this),
-        ec.call(this),
         tc.call(this),
+        nc.call(this),
+        rc.call(this),
         i.render(),
         a.reset();
       var c = this.data.selector.range,
@@ -46116,9 +46255,9 @@
       }),
         o.reset();
       var h = this.data.fx;
-      h && h.setData(this.data.getCellTextOrDefault(f, d)), gi.workerCalUtil(this);
+      h && h.setData(this.data.getCellTextOrDefault(f, d)), Di.workerCalUtil(this);
     }
-    function rc() {
+    function ac() {
       var e = this.tableEl,
         t = this.overlayerEl,
         n = this.overlayerCEl,
@@ -46133,44 +46272,44 @@
         t.offset(u),
         n.offset(s),
         o.css('width', ''.concat(u.width, 'px')),
-        Zl.call(this),
-        ec.call(this),
         tc.call(this),
+        nc.call(this),
+        rc.call(this),
         r.customerRender(),
         i.reset(),
         a.reset(),
         this
       );
     }
-    function ic() {
+    function oc() {
       var e = this.data,
         t = this.selector;
       e.clearClipboard(), t.hideClipboard();
     }
-    function ac() {
+    function sc() {
       var e = this.data,
         t = this.selector;
       e.copy(), t.showClipboard();
     }
-    function oc() {
+    function uc() {
       var e = this.data,
         t = this.selector;
       e.isNeedCut && (e.cut(), t.showClipboard());
     }
-    function sc(e) {
+    function lc(e) {
       var t = this.data;
       t.paste(e, function(e) {
         return t.hook.tipMessage('alert', e);
-      }) && nc.call(this);
+      }) && ic.call(this);
     }
-    function uc() {
-      this.data.autofilter(), nc.call(this);
+    function cc() {
+      this.data.autofilter(), ic.call(this);
     }
-    function lc() {
+    function fc() {
       var e = this.toolbar;
-      e.paintformatActive() && (sc.call(this, 'format'), ic.call(this), e.paintformatToggle());
+      e.paintformatActive() && (lc.call(this, 'format'), oc.call(this), e.paintformatToggle());
     }
-    function cc(e) {
+    function dc(e) {
       var t = this,
         n = this.selector,
         r = this.data,
@@ -46188,51 +46327,55 @@
         p = l.ci,
         _ = r.autoFilter;
       if (_.includes(m, p) && c + d - 20 < o && f + h - 20 < s && c + d >= o && f + h >= s) {
-        (0, r.hook.requestCondition)(m, p, '', function(e) {
-          a.setItems(m, p, e, _.getFilter(m, p), _.getSort(m, p));
-        });
-        var y = document.querySelector('.x-spreadsheet-sheet').getBoundingClientRect(),
-          v = c + y.left,
-          M = f + y.top;
+        var y = r.hook.requestCondition,
+          v = _.getFilter(m, p),
+          M = '';
+        v && v.searchKey && (M = v.searchKey),
+          y(m, p, M, function(e) {
+            a.setItems(m, p, e, v, _.getSort(m, p), 'init');
+          });
+        var b = this.el.el.getBoundingClientRect(),
+          w = c + b.left,
+          T = f + b.top;
         return (
           a.show(),
           void a.setOffset(
-            ar.getPosition(null, a.el.el, {
+            hr.getPosition(null, a.el.el, {
               elemOffsetWidth: 0,
               elemOffsetHeight: h + 2,
-              cellRect: { left: v, top: M },
+              cellRect: { left: w, top: T },
             }),
           )
         );
       }
       a.hide();
-      var b = r.hook,
-        w = b.afterSelection,
-        T = b.beforeChangeFile;
+      var L = r.hook,
+        S = L.afterSelection,
+        E = L.beforeChangeFile;
       if (-1 === m && -1 === p && e.target.classList.contains(''.concat(g, '-overlayer'))) {
-        var L = this.data.rows.len - 1,
-          S = this.data.cols.len - 1;
-        this.data.selector.setRange({ sri: 0, sci: 0, eri: L, eci: S }),
+        var D = this.data.rows.len - 1,
+          k = this.data.cols.len - 1;
+        this.data.selector.setRange({ sri: 0, sci: 0, eri: D, eci: k }),
           this.refresh(),
-          w.call(r, 0, 0, L, S);
+          S.call(r, 0, 0, D, k);
       }
       if (!e.shiftKey) {
         if (u) n.showAutofill(m, p);
         else {
-          var E = this.data.getCellProps(m, p);
-          if (E)
+          var A = this.data.getCellProps(m, p);
+          if (A)
             if (
-              (('image' !== E.cellType && 'file' !== E.cellType) ||
-                T(this.data.getCell(m, p), m, p, 0),
-              'checkbox' === E.cellType)
+              (('image' !== A.cellType && 'file' !== A.cellType) ||
+                E(this.data.getCell(m, p), m, p, 0),
+              'checkbox' === A.cellType)
             )
               this.data.getCell(m, p).text
                 ? this.data.setCellText(m, p, !1, 'finished')
                 : this.data.setCellText(m, p, !0, 'finished'),
                 this.refresh();
-          zl.call(this, !1, m, p);
+          Xl.call(this, !1, m, p);
         }
-        Kn(
+        ar(
           window,
           function(e) {
             var i = r.getCellRectByXY(e.offsetX, e.offsetY);
@@ -46240,7 +46383,7 @@
               (p = i.ci),
               u
                 ? n.showAutofill(m, p)
-                : 1 !== e.buttons || e.shiftKey || zl.call(t, !0, m, p, !0, !0);
+                : 1 !== e.buttons || e.shiftKey || Xl.call(t, !0, m, p, !0, !0);
           },
           function() {
             u &&
@@ -46249,25 +46392,25 @@
               }) &&
               i.render(),
               n.hideAutofill(),
-              lc.call(t);
+              fc.call(t);
           },
         );
       }
-      u || 1 !== e.buttons || (e.shiftKey && zl.call(this, !0, m, p));
+      u || 1 !== e.buttons || (e.shiftKey && Xl.call(this, !0, m, p));
     }
-    function fc() {
+    function hc() {
       var e = this.editor,
         t = this.data.getSelectedRect(),
         n = this.getTableOffset(),
         r = 'top';
       t.top > n.height / 2 && (r = 'bottom'), e.setOffset(t, r);
     }
-    function dc() {
+    function mc() {
       var e = this.editor,
         t = this.data;
-      fc.call(this), e.setCell(t.getSelectedCell(), t.getSelectedValidator()), ic.call(this);
+      hc.call(this), e.setCell(t.getSelectedCell(), t.getSelectedValidator()), oc.call(this);
     }
-    function hc(e, t, n, r) {
+    function pc(e, t, n, r) {
       var i = this,
         a = this.data,
         s = this.table,
@@ -46281,10 +46424,10 @@
         : e + r === n && ((f += 30), (d = !0)),
         this.data.settings.showAddRow && (d ? o(l.el).show() : o(l.el).hide()),
         a.scrolly(f, function(e) {
-          s.render(), u.resetBRLAreaOffset(e), fc.call(i, e);
+          s.render(), u.resetBRLAreaOffset(e), hc.call(i, e);
         });
     }
-    function mc(e) {
+    function _c(e) {
       for (
         var t = this,
           n = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : 'loadNext',
@@ -46318,11 +46461,11 @@
       this.data.hook.requestData(
         { startRow: c, endRow: u, conditions: l, actionType: n },
         function() {
-          rc.call(t);
+          ac.call(t);
         },
       );
     }
-    function pc(e, t, n, r) {
+    function yc(e, t, n, r) {
       var i = this,
         a = this.data,
         s = this.table,
@@ -46331,35 +46474,35 @@
         c = this.data.settings.showAddCol;
       e + r === n && c ? o(l.el).css({ right: '12px', display: 'block' }) : o(l.el).hide(),
         a.scrollx(e, function() {
-          u.resetBRTAreaOffset(), fc.call(i), s.render();
+          u.resetBRTAreaOffset(), hc.call(i), s.render();
         });
     }
-    function _c(e, t) {
+    function vc(e, t) {
       var n = this,
         r = e.ri,
         i = this.table,
         a = this.selector;
       this.data.rows.setHeight(r, t),
         i.render(),
-        gi.workerCalUtil(this, function(e) {
-          Zl.call(n, e);
+        Di.workerCalUtil(this, function(e) {
+          tc.call(n, e);
         }),
         a.resetAreaOffset(),
-        fc.call(this);
+        hc.call(this);
     }
-    function yc(e, t) {
+    function gc(e, t) {
       var n = e.ci,
         r = this.table,
         i = this.selector;
-      this.data.cols.setWidth(n, t), r.render(), i.resetAreaOffset(), ec.call(this), fc.call(this);
+      this.data.cols.setWidth(n, t), r.render(), i.resetAreaOffset(), nc.call(this), hc.call(this);
     }
-    function vc(e) {
+    function Mc(e) {
       var t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : 'finished',
         n = this.data,
         r = this.table;
       n.setSelectedCellText(e, t), 'finished' === t && r.render();
     }
-    function gc(e) {
+    function bc(e) {
       var t = this,
         n = this.data;
       'insert-row' === e
@@ -46375,21 +46518,21 @@
         : 'delete-cell-format' === e
         ? n.deleteCell('format')
         : 'delete-cell-text' === e && n.deleteCell('text'),
-        ic.call(this),
+        oc.call(this),
         setTimeout(function() {
-          nc.call(t);
+          ic.call(t);
         }, 0);
     }
-    function Mc(e, t) {
+    function wc(e, t) {
       var n = this.data;
       if ('undo' === e) this.undo();
       else if ('redo' === e) this.redo();
       else if ('print' === e);
-      else if ('paintformat' === e) !0 === t ? ac.call(this) : ic.call(this);
-      else if ('clearformat' === e) gc.call(this, 'delete-cell-format');
+      else if ('paintformat' === e) !0 === t ? sc.call(this) : oc.call(this);
+      else if ('clearformat' === e) bc.call(this, 'delete-cell-format');
       else if ('link' === e);
       else if ('chart' === e);
-      else if ('autofilter' === e) uc.call(this);
+      else if ('autofilter' === e) cc.call(this);
       else if ('freeze' === e)
         if (t) {
           var r = n.selector,
@@ -46399,13 +46542,13 @@
         } else this.freeze(0, 0);
       else
         n.setSelectedCellAttr(e, t),
-          'formula' !== e || n.selector.multiple() || dc.call(this),
-          nc.call(this);
+          'formula' !== e || n.selector.multiple() || mc.call(this),
+          ic.call(this);
     }
-    function bc(e, t, n, r, i, a) {
-      this.data.setAutoFilter(e, t, n, r, i, a), this.data.requestData();
+    function Tc(e, t, n, r, i, a, o) {
+      this.data.setAutoFilter(e, t, n, r, i, a, o), this.data.requestData();
     }
-    function wc() {
+    function Lc() {
       var e,
         t,
         n,
@@ -46426,10 +46569,10 @@
         y = this.sortFilter;
       s
         .on('mousemove', function(e) {
-          $l.call(o, e);
+          Ql.call(o, e);
         })
         .on('mousedown', function(e) {
-          var t = Bl(o.selector.indexes, 2),
+          var t = zl(o.selector.indexes, 2),
             n = t[0],
             r = t[1];
           if (2 === e.buttons)
@@ -46458,88 +46601,90 @@
                 )
                   f.typeOptions.allowCustomValue || (c = !0);
             }
-            if (!c) dc.call(o), (0, o.data.hook.isInEditStatus)(!0);
-          } else d.clear(), cc.call(o, e);
+            if (!c) mc.call(o), (0, o.data.hook.isInEditStatus)(!0);
+          } else d.clear(), dc.call(o, e);
         })
         .on('mousewheel.stop', function(e) {
-          Kl.call(o, e);
+          Zl.call(o, e);
         }),
         (e = s.el),
         (n = (t = {
           move: function(e, t) {
-            Ql.call(o, e, t);
+            ec.call(o, e, t);
           },
         }).move),
         (r = t.end),
         (i = 0),
         (a = 0),
-        qn(e, 'touchstart', function(e) {
+        tr(e, 'touchstart', function(e) {
           var t = e.touches[0],
             n = t.pageX,
             r = t.pageY;
           (i = n), (a = r);
         }),
-        qn(e, 'touchmove', function(e) {
+        tr(e, 'touchmove', function(e) {
           if (n) {
             var t = e.changedTouches[0],
               r = t.pageX,
               o = t.pageY,
               s = r - i,
               u = o - a;
-            (Math.abs(s) > 10 || Math.abs(u) > 10) && (Qn(s, u, e, n), (i = r), (a = o)),
+            (Math.abs(s) > 10 || Math.abs(u) > 10) && (or(s, u, e, n), (i = r), (a = o)),
               e.preventDefault();
           }
         }),
-        qn(e, 'touchend', function(e) {
+        tr(e, 'touchend', function(e) {
           if (r) {
             var t = e.changedTouches[0],
               n = t.pageX,
               o = t.pageY;
-            Qn(n - i, o - a, e, r);
+            or(n - i, o - a, e, r);
           }
         }),
         (p.change = function(e, t) {
-          return Mc.call(o, e, t);
+          return wc.call(o, e, t);
         }),
-        (y.ok = function(e, t, n, r, i, a) {
-          return bc.call(o, e, t, n, r, i, a);
+        (y.ok = function(e, t, n, r, i, a, s) {
+          return Tc.call(o, e, t, n, r, i, a, s);
         }),
         (y.conditionChange = function() {
-          gi.debounce(function() {
+          Di.debounce(function() {
             var e = document.querySelector('.search-text-input').value,
               t = y.ri,
-              n = y.ci;
-            (0, o.data.hook.requestCondition)(t, n, e, function(e) {
-              return y.setItems(
-                t,
-                n,
-                e,
-                o.data.autoFilter.getFilter(t, n),
-                o.data.autoFilter.getSort(t, n),
-              );
-            });
+              n = y.ci,
+              r = o.data.hook.requestCondition;
+            (y.searchKey = e),
+              r(t, n, e, function(e) {
+                return y.setItems(
+                  t,
+                  n,
+                  e,
+                  o.data.autoFilter.getFilter(t, n),
+                  o.data.autoFilter.getSort(t, n),
+                );
+              });
           }, 300).call(o);
         }),
         (m.requestData = function(e, t) {
-          mc.call(o, null, 'conditionChange', t);
+          _c.call(o, null, 'conditionChange', t);
         }),
         (u.finishedFn = function(e, t) {
-          _c.call(o, e, t);
+          vc.call(o, e, t);
         }),
         (l.finishedFn = function(e, t) {
-          yc.call(o, e, t);
+          gc.call(o, e, t);
         }),
         (c.moveFn = function(e, t, n, r) {
-          hc.call(o, e, t, n, r);
-        }),
-        (f.moveFn = function(e, t, n, r) {
           pc.call(o, e, t, n, r);
         }),
+        (f.moveFn = function(e, t, n, r) {
+          yc.call(o, e, t, n, r);
+        }),
         (c.moveVerticalFn = function(e) {
-          gi.debounce(mc, 300).call(o, e);
+          Di.debounce(_c, 300).call(o, e);
         }),
         (d.change = function(e, t) {
-          vc.call(o, t, e);
+          Mc.call(o, t, e);
         }),
         (_.change = function(e) {
           if ('save' === e) {
@@ -46551,33 +46696,33 @@
         (h.itemClick = function(e, t, n) {
           if ('function' == typeof n) return n(o.data.selector, t), !0;
           if ('validation' === e) _.setValue(m.getSelectedValidation());
-          else if ('copy' === e) ac.call(o);
-          else if ('cut' === e) oc.call(o);
-          else if ('paste' === e) sc.call(o, 'all');
-          else if ('paste-value' === e) sc.call(o, 'text');
-          else if ('paste-format' === e) sc.call(o, 'format');
+          else if ('copy' === e) sc.call(o);
+          else if ('cut' === e) uc.call(o);
+          else if ('paste' === e) lc.call(o, 'all');
+          else if ('paste-value' === e) lc.call(o, 'text');
+          else if ('paste-format' === e) lc.call(o, 'format');
           else if ('freezePanes' === e) {
             var r = o.data.freeze,
               i = o.data.selector,
               a = i.ri,
               s = i.ci;
             0 === r[0] && 0 === r[1] ? o.freeze(a, s) : o.freeze(0, 0);
-          } else gc.call(o, e);
+          } else bc.call(o, e);
           return !0;
         }),
-        qn(window, 'resize', function() {
-          gi.debounce(function() {
+        tr(window, 'resize', function() {
+          Di.debounce(function() {
             var e = document.documentElement.clientHeight,
               t = document.documentElement.clientWidth;
-            gi.setSessionStorage({ key: 'screenHeight', content: e }),
-              gi.setSessionStorage({ key: 'screenWidth', content: t }),
+            Di.setSessionStorage({ key: 'screenHeight', content: e }),
+              Di.setSessionStorage({ key: 'screenWidth', content: t }),
               o.reload();
           }, 300).call(o);
         }),
-        qn(window, 'click', function(e) {
+        tr(window, 'click', function(e) {
           o.focusing = s.contains(e.target);
         }),
-        qn(window, 'keydown', function(e) {
+        tr(window, 'keydown', function(e) {
           if (o.focusing) {
             var t = e.keyCode || e.which,
               n = e.key,
@@ -46597,31 +46742,31 @@
                   o.redo(), e.preventDefault();
                   break;
                 case 67:
-                  ac.call(o), e.preventDefault();
+                  sc.call(o), e.preventDefault();
                   break;
                 case 88:
-                  oc.call(o), e.preventDefault();
+                  uc.call(o), e.preventDefault();
                   break;
                 case 85:
                   p.trigger('underline'), e.preventDefault();
                   break;
                 case 86:
-                  sc.call(o, u), e.preventDefault();
+                  lc.call(o, u), e.preventDefault();
                   break;
                 case 37:
-                  ql.call(o, i, 'row-first'), e.preventDefault();
+                  Jl.call(o, i, 'row-first'), e.preventDefault();
                   break;
                 case 38:
-                  ql.call(o, i, 'col-first'), e.preventDefault();
+                  Jl.call(o, i, 'col-first'), e.preventDefault();
                   break;
                 case 39:
-                  ql.call(o, i, 'row-last'), e.preventDefault();
+                  Jl.call(o, i, 'row-last'), e.preventDefault();
                   break;
                 case 40:
-                  ql.call(o, i, 'col-last'), e.preventDefault();
+                  Jl.call(o, i, 'col-last'), e.preventDefault();
                   break;
                 case 32:
-                  zl.call(o, !1, -1, m.selector.ci, !1), e.preventDefault();
+                  Xl.call(o, !1, -1, m.selector.ci, !1), e.preventDefault();
                   break;
                 case 66:
                   p.trigger('bold');
@@ -46633,38 +46778,38 @@
               var l = document.querySelector('.'.concat(g, '-dropdown-items'));
               switch (t) {
                 case 32:
-                  i && zl.call(o, !1, m.selector.ri, -1, !1);
+                  i && Xl.call(o, !1, m.selector.ri, -1, !1);
                   break;
                 case 27:
-                  h.hide(), ic.call(o);
+                  h.hide(), oc.call(o);
                   break;
                 case 37:
-                  ql.call(o, i, 'left'), e.preventDefault();
+                  Jl.call(o, i, 'left'), e.preventDefault();
                   break;
                 case 38:
-                  l && 'block' === l.style.display ? Jl('up') : ql.call(o, i, 'up'),
+                  l && 'block' === l.style.display ? Kl('up') : Jl.call(o, i, 'up'),
                     e.preventDefault();
                   break;
                 case 39:
-                  ql.call(o, i, 'right'), e.preventDefault();
+                  Jl.call(o, i, 'right'), e.preventDefault();
                   break;
                 case 40:
-                  l && 'block' === l.style.display ? Jl('down') : ql.call(o, i, 'down'),
+                  l && 'block' === l.style.display ? Kl('down') : Jl.call(o, i, 'down'),
                     e.preventDefault();
                   break;
                 case 9:
-                  d.clear(), ql.call(o, !1, i ? 'left' : 'right'), e.preventDefault();
+                  d.clear(), Jl.call(o, !1, i ? 'left' : 'right'), e.preventDefault();
                   break;
                 case 13:
                   l && 'block' === l.style.display
-                    ? Jl('enter')
-                    : (d.clear(), ql.call(o, !1, i ? 'up' : 'down')),
+                    ? Kl('enter')
+                    : (d.clear(), Jl.call(o, !1, i ? 'up' : 'down')),
                     e.preventDefault();
                   break;
                 case 8:
-                  gc.call(o, 'delete-cell-text'), e.preventDefault();
+                  bc.call(o, 'delete-cell-text'), e.preventDefault();
               }
-              if ('Delete' === n) gc.call(o, 'delete-cell-text'), e.preventDefault();
+              if ('Delete' === n) bc.call(o, 'delete-cell-text'), e.preventDefault();
               else if (
                 (t >= 65 && t <= 90) ||
                 (t >= 48 && t <= 57) ||
@@ -46672,28 +46817,26 @@
                 '=' === e.key
               ) {
                 var c = o.data.getCell(m.selector.ri, m.selector.ci);
-                (c && c.readOnly) || (vc.call(o, e.key, 'input'), dc.call(o));
-              } else 113 === t && dc.call(o);
+                (c && c.readOnly) || (Mc.call(o, e.key, 'input'), mc.call(o));
+              } else 113 === t && mc.call(o);
             }
           }
         });
     }
-    function Tc() {}
-    function Lc() {
+    function Sc() {}
+    function Ec() {
       var e = this.data.fx.getData();
-      vc.call(this, e, 'finished');
+      Mc.call(this, e, 'finished');
     }
-    function Sc() {
+    function Dc() {
       var e = this,
         t = this.data.fx.getData();
-      vc.call(this, t, 'input'),
-        gi
-          .debounce(function() {
-            return e.refresh();
-          }, 300)
-          .call(this);
+      Mc.call(this, t, 'input'),
+        Di.debounce(function() {
+          return e.refresh();
+        }, 300).call(this);
     }
-    var Ec = (function() {
+    var kc = (function() {
       function e(t, n, r) {
         var i = this;
         !(function(e, t) {
@@ -46706,23 +46849,23 @@
           c = a.contextMenuItems;
         if (
           ((this.el = o('div', ''.concat(g, '-sheet'))),
-          (this.toolbar = new cl(n, s.width, !u)),
+          (this.toolbar = new dl(n, s.width, !u)),
           t.children(this.toolbar.el, this.el),
           (this.data = n),
           (this.tableEl = o('canvas', ''.concat(g, '-table'))),
-          (this.rowResizer = new er(!1, n.rows.minHeight)),
-          (this.colResizer = new er(!0, n.cols.minWidth)),
-          (this.verticalScrollbar = new nr(!0)),
-          (this.horizontalScrollbar = new nr(!1)),
-          (this.editor = new Xr(
+          (this.rowResizer = new ur(!1, n.rows.minHeight)),
+          (this.colResizer = new ur(!0, n.cols.minWidth)),
+          (this.verticalScrollbar = new cr(!0)),
+          (this.horizontalScrollbar = new cr(!1)),
+          (this.editor = new ni(
             [],
             function() {
               return i.getTableOffset();
             },
             n.rows.height,
           )),
-          (this.modalValidation = new Ol()),
-          (this.contextMenu = new ei(
+          (this.modalValidation = new Il()),
+          (this.contextMenu = new ui(
             function() {
               return i.getTableOffset();
             },
@@ -46732,12 +46875,12 @@
                 for (var t = 1; t < arguments.length; t++) {
                   var n = null != arguments[t] ? arguments[t] : {};
                   t % 2
-                    ? Ul(n, !0).forEach(function(t) {
-                        Wl(e, t, n[t]);
+                    ? Wl(n, !0).forEach(function(t) {
+                        Bl(e, t, n[t]);
                       })
                     : Object.getOwnPropertyDescriptors
                     ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(n))
-                    : Ul(n).forEach(function(t) {
+                    : Wl(n).forEach(function(t) {
                         Object.defineProperty(e, t, Object.getOwnPropertyDescriptor(n, t));
                       });
                 }
@@ -46745,7 +46888,7 @@
               })({}, e);
             }),
           )),
-          (this.selector = new Dr(n, this)),
+          (this.selector = new Rr(n, this)),
           (this.overlayerCEl = o('div', ''.concat(g, '-overlayer-content')).children(
             this.editor.el,
             this.selector.el,
@@ -46756,12 +46899,12 @@
           (this.addCol = o('div', ''.concat(g, '-add ').concat(g, '-add-col'))
             .html('+')
             .hide()),
-          qn(this.addRow.el, 'click', function() {
+          tr(this.addRow.el, 'click', function() {
             'function' == typeof i.data.hook.inputHooks.insertRow
               ? i.data.hook.insertRow()
               : i.insertDeleteRowColumn('insert-row', n.rows.len, 1);
           }),
-          qn(this.addCol.el, 'click', function() {
+          tr(this.addCol.el, 'click', function() {
             'function' == typeof i.data.hook.inputHooks.insertCol
               ? i.data.hook.insertCol()
               : i.insertDeleteRowColumn('insert-column', n.cols.len, 1);
@@ -46771,13 +46914,13 @@
             this.addRow,
             this.addCol,
           )),
-          (this.sortFilter = new jl()),
+          (this.sortFilter = new Fl()),
           r)
         ) {
-          var f = Lc.bind(this),
-            d = Tc.bind(this),
-            h = Sc.bind(this);
-          this.data.fx = new Fl(this, r, d, f, h);
+          var f = Ec.bind(this),
+            d = Sc.bind(this),
+            h = Dc.bind(this);
+          this.data.fx = new Vl(this, r, d, f, h);
         }
         this.el.children(
           this.tableEl,
@@ -46790,15 +46933,15 @@
           this.modalValidation.el,
           this.sortFilter.el,
         ),
-          (this.table = new Zi(this.tableEl.el, n)),
-          wc.call(this),
-          nc.call(this),
-          zl.call(this, !1, 0, 0);
+          (this.table = new ta(this.tableEl.el, n)),
+          Lc.call(this),
+          ic.call(this),
+          Xl.call(this, !1, 0, 0);
         var m = this.el.el,
           p = m.offsetTop,
           _ = m.offsetLeft;
-        gi.setSessionStorage({ key: 'xsSheetOffsetLeft', content: _ }),
-          gi.setSessionStorage({ key: 'xsSheetOffsetTop', content: p });
+        Di.setSessionStorage({ key: 'xsSheetOffsetLeft', content: _ }),
+          Di.setSessionStorage({ key: 'xsSheetOffsetTop', content: p });
       }
       var t, n, r;
       return (
@@ -46807,7 +46950,13 @@
           {
             key: 'cellAttrChange',
             value: function(e, t) {
-              Mc.call(this, e, t);
+              wc.call(this, e, t);
+            },
+          },
+          {
+            key: 'cellTypeChange',
+            value: function(e, t) {
+              this.data.setSelectedCellAttr(e, t);
             },
           },
           {
@@ -46869,16 +47018,16 @@
             value: function(e, t) {
               var n = 0,
                 r = 0;
-              e > 0 && (n = e - 1),
-                t > 0 && (r = t - 1),
-                this.verticalScrollbar.move(this.data.cellCustomerPosition(n, r));
+              e > 0 && (n = e - 1), t > 0 && (r = t - 1);
+              var i = this.data.cellCustomerPosition(n, r);
+              this.verticalScrollbar.move(i), this.horizontalScrollbar.move(i);
             },
           },
           {
             key: 'calculateAddRowAndColPosition',
             value: function() {
-              var e = gi.getSesstionStorage('xsSheetOffsetLeft'),
-                t = gi.getSesstionStorage('xsSheetOffsetTop'),
+              var e = Di.getSesstionStorage('xsSheetOffsetLeft'),
+                t = Di.getSesstionStorage('xsSheetOffsetTop'),
                 n = this.data.settings.view.height(),
                 r = this.data.settings.view.width(),
                 i = this.data.cols,
@@ -46914,7 +47063,7 @@
                 this.data.isCalCulatorFormula && this.data.recalculate(this),
                 this.data.isCalculatorDropdownRange && this.data.recalculateDropdownRange(this),
                 setTimeout(function() {
-                  nc.call(t);
+                  ic.call(t);
                 }, 0),
                 this
               );
@@ -46923,7 +47072,7 @@
           {
             key: 'freeze',
             value: function(e, t) {
-              return this.data.setFreeze(e, t), nc.call(this), this;
+              return this.data.setFreeze(e, t), ic.call(this), this;
             },
           },
           {
@@ -46946,7 +47095,7 @@
                 }
               }),
                 setTimeout(function() {
-                  nc.call(e);
+                  ic.call(e);
                 }, 0);
             },
           },
@@ -46965,20 +47114,20 @@
                 }
               }),
                 setTimeout(function() {
-                  nc.call(e);
+                  ic.call(e);
                 }, 0);
             },
           },
           {
             key: 'reload',
             value: function() {
-              return nc.call(this), this;
+              return ic.call(this), this;
             },
           },
           {
             key: 'refresh',
             value: function() {
-              rc.call(this);
+              ac.call(this);
             },
           },
           {
@@ -47010,8 +47159,8 @@
           {
             key: 'selectCells',
             value: function(e) {
-              var t = Bl(e, 1),
-                n = Bl(t[0], 4),
+              var t = zl(e, 1),
+                n = zl(t[0], 4),
                 r = n[0],
                 i = void 0 === r ? 0 : r,
                 a = n[1],
@@ -47068,6 +47217,18 @@
             },
           },
           {
+            key: 'getColWidth',
+            value: function(e) {
+              return this.data.cols.getWidth(e);
+            },
+          },
+          {
+            key: 'getRowHeight',
+            value: function(e) {
+              return this.data.rows.getHeight(e);
+            },
+          },
+          {
             key: 'getTotalTableLen',
             value: function() {
               return { height: this.data.totalHeightValue, width: this.data.totalWidthValue };
@@ -47114,7 +47275,7 @@
                   var u = this.data.selector.range,
                     l = u.sri,
                     c = u.size(),
-                    f = Bl(c, 1),
+                    f = zl(c, 1),
                     d = f[0];
                   s = this.updateFormulaDependence(l, d, e);
                 }
@@ -47127,9 +47288,11 @@
                   m = o.rows;
                 h.shift('row', t, -n, function(e, t, n, r) {
                   var i = m.getCell(e, t);
-                  (i.merge[0] += n),
+                  i &&
+                    i.merge &&
+                    ((i.merge[0] += n),
                     (i.merge[1] += r),
-                    0 === i.merge[0] && 0 === i.merge[1] && delete i.merge;
+                    0 === i.merge[0] && 0 === i.merge[1] && delete i.merge);
                 });
               } else
                 'insert-column' === e
@@ -47141,7 +47304,7 @@
                   : 'delete-cell-format' === e
                   ? o.deleteCell('format')
                   : 'delete-cell-text' === e && o.deleteCell('text');
-              ic.call(this),
+              oc.call(this),
                 setTimeout(function() {
                   i.refresh();
                 }, 0);
@@ -47205,13 +47368,13 @@
               );
             },
           },
-        ]) && Vl(t.prototype, n),
-        r && Vl(t, r),
+        ]) && Gl(t.prototype, n),
+        r && Gl(t, r),
         e
       );
     })();
     n(459);
-    function Dc(e, t) {
+    function Ac(e, t) {
       for (var n = 0; n < t.length; n++) {
         var r = t[n];
         (r.enumerable = r.enumerable || !1),
@@ -47221,21 +47384,21 @@
       }
     }
     n.d(t, 'spreadsheet', function() {
-      return Ac;
+      return Yc;
     });
-    var kc = (function() {
+    var xc = (function() {
         function e(t) {
           var n = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
           !(function(e, t) {
             if (!(e instanceof t)) throw new TypeError('Cannot call a class as a function');
           })(this, e);
           var r = t;
-          'string' == typeof t && (r = document.querySelector(t)), (this.data = new zn(n));
+          'string' == typeof t && (r = document.querySelector(t)), (this.data = new er(n));
           var i = o('div', ''.concat(g)).on('contextmenu', function(e) {
             return e.preventDefault();
           });
           r.appendChild(i.el),
-            (this.sheet = new Ec(i, this.data, n.fxObj)),
+            (this.sheet = new kc(i, this.data, n.fxObj)),
             window.xsObj.instanceArray.push(this);
         }
         var t, n, r;
@@ -47274,12 +47437,12 @@
                 return (this.data.change = e), this;
               },
             },
-          ]) && Dc(t.prototype, n),
-          r && Dc(t, r),
+          ]) && Ac(t.prototype, n),
+          r && Ac(t, r),
           e
         );
       })(),
-      Ac = function(e) {
+      Yc = function(e) {
         var t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
         if (window.xsObj) {
           var n = window.xsObj.instanceArray;
@@ -47300,7 +47463,7 @@
             }
           }
         }
-        var a = new kc(e, t);
+        var a = new xc(e, t);
         return (
           setTimeout(function() {
             window.xsObj.afterExternalInstanceFinishInitialization[t.name] &&
@@ -47350,11 +47513,11 @@
           );
         },
       }),
-      (window.xsObj.spreadsheet = Ac),
+      (window.xsObj.spreadsheet = Yc),
       (window.xsObj.spreadsheet.locale = function(e, t) {
         return ce(e, t);
       }));
-    t.default = kc;
+    t.default = xc;
   },
 ]);
 //# sourceMappingURL=xspreadsheet.js.map

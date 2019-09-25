@@ -781,7 +781,10 @@
     that.remove(Class.thisElemDate);
 
     //如果是静态定位，则插入到指定的容器中，否则，插入到body
-    isStatic ? options.elem.append(elem) : (document.body.appendChild(elem), that.position()); //定位
+    isStatic
+      ? options.elem.append(elem)
+      : (document.body.appendChild(elem),
+        that.position()); //定位
 
     that.checkDate().calendar(); //初始校验
     that.changeEvent(); //日期切换
