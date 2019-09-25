@@ -133,6 +133,33 @@ class Sheet extends PureComponent {
         <Button
           className={styles.marginRight5}
           onClick={() => {
+            setCellStyle('undo');
+          }}
+        >
+          撤销
+        </Button>
+
+        <Button
+          className={styles.marginRight5}
+          onClick={() => {
+            setCellStyle('redo');
+          }}
+        >
+          恢复
+        </Button>
+
+        <Button
+          className={styles.marginRight5}
+          onClick={() => {
+            setCellStyle('font-bold', true);
+          }}
+        >
+          恢复
+        </Button>
+
+        <Button
+          className={styles.marginRight5}
+          onClick={() => {
             setCellStyle('font-bold', true);
           }}
         >
