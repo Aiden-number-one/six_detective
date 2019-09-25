@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-25 16:19:38
+ * @LastEditTime: 2019-09-25 18:04:16
  * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
@@ -262,8 +262,32 @@ export default WrapperComponent =>
         if (property === 'merge') {
           return cells && !!cells[property];
         }
+        if (property === 'freeze') {
+          return data.freeze[0] === data.selector.ri && data.freeze[1] === data.selector.ci;
+        }
+        if (property === 'readOnly') {
+          if (cells) {
+            if (cells.readOnly) {
+              cells.readOnly = !cells.readOnly;
+            } else {
+              cells.readOnly = true;
+            }
+          }
+        }
         return false;
       })();
+    };
+
+    insertDeleteRowColumn = (type, opera) => {
+      const {
+        sheet,
+        sheet: { insertDeleteRowColumn, data },
+      } = this.spreadSheet;
+      if (type === 'row') {
+        insertDeleteRowColumn.call(sheet, opera, data.selector.ri);
+      } else if (type === 'column') {
+        insertDeleteRowColumn.call(sheet, opera, data.selector.ci);
+      }
     };
 
     // 设置点击单元格的回调函数
@@ -277,6 +301,7 @@ export default WrapperComponent =>
         setCellStyle: this.setCellStyle,
         getCellStyle: this.getCellStyle,
         setCellCallback: this.setCellCallback,
+        insertDeleteRowColumn: this.insertDeleteRowColumn,
         ...this.props,
       };
       return <WrapperComponent {...props} />;

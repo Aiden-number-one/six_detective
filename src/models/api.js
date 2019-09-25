@@ -2,8 +2,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-08 15:22:20
- * @LastEditTime: 2019-09-24 15:03:06
- * @LastEditors: mus
+ * @LastEditTime: 2019-09-25 15:32:01
+ * @LastEditors: lan
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -20,8 +20,8 @@ export default {
   effects: {
     *queryDatas({ payload }, { call, put }) {
       const response = yield call(getDatas, { param: payload });
-      if (response.kdjson.flag === '1') {
-        if (response.kdjson.items) {
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
           yield put({
             type: 'setDatas',
             payload: response.kdjson.items,

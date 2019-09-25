@@ -4,16 +4,16 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-09-24 14:01:25
- * @LastEditors: mus
+ * @LastEditTime: 2019-09-25 15:38:02
+ * @LastEditors: lan
  */
 
 import { components } from '@/utils/common';
 
 const geneMenuData = data => {
   if (!data || !data.length || !data[0] || !data[0].menuList) return [];
-  const id = 'menuid';
-  const pid = 'parentmenuid';
+  const id = 'menuId';
+  const pid = 'parentMenuId';
   // 删除 所有 routes,以防止多次调用
   const newData = data[0].menuList.map(item => ({
     ...item,

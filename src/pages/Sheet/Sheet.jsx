@@ -201,6 +201,29 @@ const cellTypeMap = {
   },
 };
 
+const rowAndCol = [
+  {
+    type: 'row',
+    value: 'insert-row',
+    key: '插入行',
+  },
+  {
+    type: 'row',
+    value: 'delete-row',
+    key: '删除行',
+  },
+  {
+    type: 'column',
+    value: 'insert-column',
+    key: '插入列',
+  },
+  {
+    type: 'column',
+    value: 'delete-column',
+    key: '删除列',
+  },
+];
+
 @SpreadSheet.createSpreadSheet
 class Sheet extends PureComponent {
   state = {
@@ -233,9 +256,14 @@ class Sheet extends PureComponent {
     }
   };
 
+  editRowColumn = (type, opera) => {
+    const { insertDeleteRowColumn } = this.props;
+    insertDeleteRowColumn(type, opera);
+  };
+
   render() {
-    const { setCellStyle } = this;
     const { setCellType } = this.props;
+    const { setCellStyle, editRowColumn } = this;
     const { fontColor, bgColor, cellStyle, borderColor, borderStyle, visible } = this.state;
     return (
       <Fragment>
@@ -505,7 +533,7 @@ class Sheet extends PureComponent {
         <Button
           className={styles.marginRight5}
           onClick={() => {
-            setCellStyle('read-only', true);
+            setCellStyle('readOnly', true);
           }}
         >
           只读
@@ -528,6 +556,47 @@ class Sheet extends PureComponent {
         >
           格式刷
         </Button>
+        <Button
+          className={styles.marginRight5}
+          onClick={() => {
+            setCellStyle('freeze', true);
+          }}
+        >
+          冻结
+        </Button>
+
+        <Select
+          className={styles.marginRight5}
+          placeholder="函数"
+          onChange={value => {
+            setCellStyle('formula', value);
+          }}
+          // value="left"
+          style={{ width: 140 }}
+        >
+          <Option value="SUM">SUM</Option>
+          <Option value="AVERAGE">AVERAGE</Option>
+          <Option value="MAX">MAX</Option>
+          <Option value="MIN">MIN</Option>
+          <Option value="IF">IF</Option>
+          <Option value="CONCAT">CONCAT</Option>
+        </Select>
+
+        <Select
+          className={styles.marginRight5}
+          placeholder="行列操作"
+          onChange={(value, option) => {
+            editRowColumn(option.props.type, value);
+          }}
+          // value="left"
+          style={{ width: 140 }}
+        >
+          {rowAndCol.map(item => (
+            <Option key={item.value} value={item.value} type={item.type}>
+              {item.key}
+            </Option>
+          ))}
+        </Select>
 
         <Select
           className={styles.marginRight5}
@@ -543,7 +612,6 @@ class Sheet extends PureComponent {
             </Option>
           ))}
         </Select>
-
         <SpreadSheet />
       </Fragment>
     );

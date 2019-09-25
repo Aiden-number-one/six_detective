@@ -2,7 +2,7 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-09-20 16:06:57
+ * @LastEditTime: 2019-09-25 15:32:23
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -53,10 +53,10 @@ class LoginPage extends Component {
           this.setState({
             submitting: false,
           });
-          if (response.kdjson.flag === '0') {
+          if (response.bcjson.flag === '0') {
             return;
           }
-          const items = response.kdjson.items[0];
+          const items = response.bcjson.items[0];
           localStorage.setItem('currentUser', items.name);
           router.push('/');
         },
