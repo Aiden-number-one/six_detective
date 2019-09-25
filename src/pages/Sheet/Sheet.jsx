@@ -369,7 +369,7 @@ class Sheet extends PureComponent {
         <Button
           className={styles.marginRight5}
           onClick={() => {
-            setCellStyle('read-only', true);
+            setCellStyle('readOnly', true);
           }}
         >
           只读
@@ -392,6 +392,32 @@ class Sheet extends PureComponent {
         >
           格式刷
         </Button>
+
+        <Button
+          className={styles.marginRight5}
+          onClick={() => {
+            setCellStyle('freeze', true);
+          }}
+        >
+          冻结
+        </Button>
+
+        <Select
+          className={styles.marginRight5}
+          placeholder="函数"
+          onChange={value => {
+            setCellStyle('formula', value);
+          }}
+          // value="left"
+          style={{ width: 140 }}
+        >
+          <Option value="SUM">SUM</Option>
+          <Option value="AVERAGE">AVERAGE</Option>
+          <Option value="MAX">MAX</Option>
+          <Option value="MIN">MIN</Option>
+          <Option value="IF">IF</Option>
+          <Option value="CONCAT">CONCAT</Option>
+        </Select>
 
         <SpreadSheet />
       </Fragment>

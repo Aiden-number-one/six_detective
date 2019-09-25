@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-24 14:03:01
+ * @LastEditTime: 2019-09-25 13:56:54
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -241,6 +241,18 @@ export default WrapperComponent =>
         }
         if (property === 'merge') {
           return cells && !!cells[property];
+        }
+        if (property === 'freeze') {
+          return data.freeze[0] === data.selector.ri && data.freeze[1] === data.selector.ci;
+        }
+        if (property === 'readOnly') {
+          if (cells) {
+            if (cells.readOnly) {
+              cells.readOnly = !cells.readOnly;
+            } else {
+              cells.readOnly = true;
+            }
+          }
         }
         return false;
       })();
