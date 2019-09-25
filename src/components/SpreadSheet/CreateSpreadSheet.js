@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-25 13:56:54
+ * @LastEditTime: 2019-09-25 16:56:23
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -258,6 +258,18 @@ export default WrapperComponent =>
       })();
     };
 
+    insertDeleteRowColumn = (type, opera) => {
+      const {
+        sheet,
+        sheet: { insertDeleteRowColumn, data },
+      } = this.spreadSheet;
+      if (type === 'row') {
+        insertDeleteRowColumn.call(sheet, opera, data.selector.ri);
+      } else if (type === 'column') {
+        insertDeleteRowColumn.call(sheet, opera, data.selector.ci);
+      }
+    };
+
     // 设置点击单元格的回调函数
     setCellCallback = callback => {
       this.clickCellReflectFunc = callback;
@@ -268,6 +280,7 @@ export default WrapperComponent =>
         setCellStyle: this.setCellStyle,
         getCellStyle: this.getCellStyle,
         setCellCallback: this.setCellCallback,
+        insertDeleteRowColumn: this.insertDeleteRowColumn,
         ...this.props,
       };
       return <WrapperComponent {...props} />;

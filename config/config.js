@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-09-25 14:33:32
+ * @LastEditTime: 2019-09-25 15:15:25
  * @LastEditors: lan
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -170,7 +170,7 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api': {
-      target: 'http://127.0.0.1:8090/superlop/rest/admin/',
+      target: 'http://127.0.0.1:8090/superlop/restv2/admin/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
       timeout: 10000,
