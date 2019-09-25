@@ -2,8 +2,8 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-24 14:03:01
- * @LastEditors: lan
+ * @LastEditTime: 2019-09-25 16:19:38
+ * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -211,8 +211,16 @@ export default WrapperComponent =>
         return;
       }
       const {
-        sheet: { data },
+        data,
+        sheet: { toolbar },
       } = this.spreadSheet;
+      if (toolbar.paintformatActive()) {
+        // 对格式刷的处理
+        data.paste('format', () => {});
+        setTimeout(() => {
+          toolbar.paintformatActive = () => false;
+        }, 0);
+      }
       this.clickCellReflectFunc(data.getCellStyle(sri, sci) || {});
     };
 
@@ -220,9 +228,21 @@ export default WrapperComponent =>
     setCellStyle = (property, value) => {
       const {
         sheet,
-        sheet: { cellAttrChange },
+        sheet: { cellAttrChange, toolbar },
       } = this.spreadSheet;
+      if (property === 'paintformat') {
+        // 对格式刷进行处理
+        toolbar.paintformatActive = () => true;
+      }
       cellAttrChange.call(sheet, property, value);
+    };
+
+    // 设置cellType
+    setCellType = (property, value) => {
+      const {
+        sheet: { cellTypeChange },
+      } = this.spreadSheet;
+      cellTypeChange(property, value);
     };
 
     // 得到cell属性
@@ -253,6 +273,7 @@ export default WrapperComponent =>
 
     render() {
       const props = {
+        setCellType: this.setCellType,
         setCellStyle: this.setCellStyle,
         getCellStyle: this.getCellStyle,
         setCellCallback: this.setCellCallback,

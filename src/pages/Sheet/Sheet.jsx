@@ -93,6 +93,114 @@ const borderLine = [
   },
 ];
 
+const cellType = [
+  {
+    label: '日期(yyyy-MM-dd)',
+    key: 'dateyyyy-MM-dd',
+    value: 'dateyyyy-MM-dd',
+  },
+  {
+    label: '日期时间',
+    key: 'datetimeyyyy-MM-dd hh:mm:ss',
+    value: 'datetimeyyyy-MM-dd hh:mm:ss',
+  },
+  {
+    label: '时间',
+    key: 'timehh:mm:ss',
+    value: 'timehh:mm:ss',
+  },
+  {
+    label: '文本',
+    key: 'text',
+    value: 'text',
+  },
+  {
+    label: '货币($)',
+    key: 'currency$',
+    value: 'currency$',
+  },
+  {
+    label: '货币(￥)',
+    key: 'currency￥',
+    value: 'currency￥',
+  },
+  {
+    label: '千分比',
+    key: 'permillage',
+    value: 'permillage',
+  },
+  {
+    label: '百分比',
+    key: 'percentage',
+    value: 'percentage',
+  },
+  {
+    label: '勾选框',
+    key: 'checkbox',
+    value: 'checkbox',
+  },
+  // {
+  //   key: '下拉框',
+  //   value: undefined,
+  // },
+  // {
+  //   key: '图片',
+  //   value: undefined,
+  // },
+  // {
+  //   key: '文件',
+  //   value: undefined,
+  // },
+];
+
+const cellTypeMap = {
+  'dateyyyy-MM-dd': {
+    cellType: 'date',
+    format: 'yyyy-MM-dd',
+    type: 'date',
+  },
+  'datetimeyyyy-MM-dd hh:mm:ss': {
+    cellType: 'datetime',
+    format: 'yyyy-MM-dd hh:mm:ss',
+    type: 'datetime',
+  },
+  'timehh:mm:ss': {
+    cellType: 'time',
+    format: 'hh:mm:ss',
+    type: 'time',
+  },
+  text: {
+    cellType: 'text',
+  },
+  currency$: {
+    cellType: 'numeric',
+    format: '$0,0.00',
+    scale: '2',
+    type: 'currency',
+  },
+  'currency￥': {
+    cellType: 'numeric',
+    format: '￥0,0.00',
+    scale: '2',
+    type: 'currency',
+  },
+  permillage: {
+    cellType: 'numeric',
+    format: '0.00%',
+    scale: '2',
+    type: 'permillage',
+  },
+  percentage: {
+    cellType: 'numeric',
+    format: '0.00%',
+    scale: '2',
+    type: 'percentage',
+  },
+  checkbox: {
+    cellType: 'checkbox',
+  },
+};
+
 @SpreadSheet.createSpreadSheet
 class Sheet extends PureComponent {
   state = {
@@ -127,6 +235,7 @@ class Sheet extends PureComponent {
 
   render() {
     const { setCellStyle } = this;
+    const { setCellType } = this.props;
     const { fontColor, bgColor, cellStyle, borderColor, borderStyle, visible } = this.state;
     return (
       <Fragment>
@@ -419,6 +528,21 @@ class Sheet extends PureComponent {
         >
           格式刷
         </Button>
+
+        <Select
+          className={styles.marginRight5}
+          placeholder="数据类型"
+          onChange={value => {
+            setCellType('cellType', cellTypeMap[value]);
+          }}
+          style={{ width: 100 }}
+        >
+          {cellType.map(item => (
+            <Option key={item.key} value={item.value}>
+              {item.label}
+            </Option>
+          ))}
+        </Select>
 
         <SpreadSheet />
       </Fragment>
