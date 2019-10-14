@@ -2,8 +2,8 @@
  * @Description: request
  * @Author: lan
  * @Date: 2019-08-29 13:21:48
- * @LastEditTime: 2019-09-24 14:09:30
- * @LastEditors: mus
+ * @LastEditTime: 2019-10-10 16:24:04
+ * @LastEditors: lan
  */
 import { Base64 } from 'js-base64';
 import request from './request';
@@ -32,7 +32,8 @@ Object.keys(Api).forEach(key => {
     }
     const base64Param = Base64.encode(JSON.stringify(P)); // 对参数base64编码
     return request(
-      `${`${apisfx + V}/${N}`}.json`,
+      // `${`${apisfx + V}/${N}`}.json`, // 线上
+      `${apisfx + N}`, // Mock
       {
         ...opts,
         method: opts.method || 'POST',
