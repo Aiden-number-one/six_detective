@@ -145,23 +145,11 @@ class Node extends Component {
     const { op, children } = data;
     return (
       <div className={styles.rulesEngine}>
-        {indexProps && <JoinLine index={indexProps} length={length} />}
+        {indexProps && <JoinLine index={indexProps} length={length} needFill />}
         <Select ref={this.selectRef} defaultValue={op} className={styles.conditionSelect}>
           <Option value="and">并且</Option>
           <Option value="or">或者</Option>
         </Select>
-        {/* <div className={styles.lineCollection}>
-          {children.map((value, index) => (
-            <JoinLine index={index} length={children.length} childrenData={children} />
-          ))}
-          <Icon
-            className={styles.icon}
-            type="plus-circle"
-            onClick={() => {
-              modifyData(children);
-            }}
-          />
-        </div> */}
         <div className={styles.contentCollection}>
           {children.map((child, index) => {
             if (child.actionType === 'set') {
@@ -181,6 +169,13 @@ class Node extends Component {
               />
             );
           })}
+          <Icon
+            type="plus-circle"
+            style={{ fontSize: 16 }}
+            onClick={() => {
+              modifyData(children);
+            }}
+          />
         </div>
       </div>
     );
@@ -198,27 +193,12 @@ function Content({ left, op, right, index, length }) {
   );
 }
 
-// 计算线的高度
-// const calHeight = (childrenData, index) => {
-//   const heigth =
-//   const preChildrenData = childrenData.splice(0, index);
-// }
-
-function JoinLine(props) {
-  const { index, length } = props;
+function JoinLine({ index, needFill }) {
   const first = index === 0;
-  const last = index === length - 1;
-  const height = first ? '1px' : `${index * 30}px`;
   return (
     <Fragment>
-      <div
-        className={classNames(
-          first ? styles.noRadius : styles.radius,
-          styles.line,
-          // last ? styles.last :
-        )}
-        // style={{ height }}
-      />
+      <div className={classNames(first ? styles.noRadius : styles.radius)} />
+      {needFill && <div className={styles.fillLine}></div>}
     </Fragment>
   );
 }
