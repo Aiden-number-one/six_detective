@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-10-11 16:56:59
+ * @LastEditTime: 2019-10-17 13:39:17
  * @LastEditors: mus
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -176,7 +176,8 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api': {
-      target: 'http://127.0.0.1:8090/superlop/restv2/admin/',
+      target: 'http://127.0.0.1:8090/superlop/restv2/admin/', // 线上
+      // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
       timeout: 10000,
