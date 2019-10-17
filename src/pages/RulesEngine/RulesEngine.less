@@ -1,0 +1,64 @@
+.rulesEngine {
+  position: relative;
+  &::after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+  .conditionSelect {
+    z-index: 2;
+    float: left;
+    width: 70px;
+  }
+  .contentCollection {
+    position: relative;
+    float: left;
+    margin-left: 50px;
+    .content {
+      position: relative;
+      padding: 3px 0 6px 0;
+      // &::before {
+      //   display: inline-block;
+      //   width: 50px;
+      //   height: 30px;
+      //   border: 1px solid #333;
+      //   content: '';
+      // }
+    }
+  }
+  .item {
+    display: inline-block;
+    padding-right: 5px;
+  }
+  .line {
+    position: absolute;
+    top: -30px;
+    left: -55px;
+    box-sizing: content-box;
+    height: 120% !important;
+    padding-top: 10px;
+  }
+  .last {
+    position: relative;
+  }
+  .radius {
+    width: 50px;
+    height: 20px;
+    border: 1px solid #333;
+    border-top: 0;
+    border-right: 0;
+    border-bottom-left-radius: 20px;
+  }
+  // .noRadius {
+  //   width: 50px;
+  //   height: 1px;
+  //   background-color: #333;
+  // }
+  .icon {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    margin-left: 20px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+}

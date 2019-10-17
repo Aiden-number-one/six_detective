@@ -35725,6 +35725,9 @@
         customerValidate: function(e, t, n, r) {
           return kn.inputHooks.customerValidate ? kn.inputHooks.customerValidate(e, t, n, r) : [!0];
         },
+        afterRender: function() {
+          kn.inputHooks.afterRender && kn.inputHooks.afterRender();
+        },
       },
       An = function() {
         return kn;
@@ -37253,12 +37256,14 @@
           },
           {
             key: 'setCellStyle',
-            value: function(e, t, n) {
-              var r = this.rows.getCellOrNew(e, t),
-                i = {};
-              void 0 !== r.style && (i = r.style),
-                Object.assign(i, { border: n }),
-                (r.style = this.addStyle(i));
+            value: function(e, t) {
+              var n = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {},
+                r = this.rows,
+                i = r.getCellOrNew(e, t),
+                a = {};
+              void 0 !== i.style && (a = i.style),
+                Object.assign(a, n),
+                (i.style = this.addStyle(a));
             },
           },
           {
@@ -39134,7 +39139,7 @@
               var n = this.data.selector.range,
                 r = n.sri,
                 i = n.sci,
-                a = this.data.cols.getWidth(i),
+                a = { width: this.data.cols.getWidth(i) },
                 s = this.data.getCellProps(r, i),
                 u = this;
               if ('dropdown' === s.cellType) {
@@ -47063,7 +47068,7 @@
                 this.data.isCalCulatorFormula && this.data.recalculate(this),
                 this.data.isCalculatorDropdownRange && this.data.recalculateDropdownRange(this),
                 setTimeout(function() {
-                  ic.call(t);
+                  ic.call(t), t.data.hook.afterRender.call(t);
                 }, 0),
                 this
               );

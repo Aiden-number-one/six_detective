@@ -2,8 +2,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-09-25 15:15:25
- * @LastEditors: lan
+ * @LastEditTime: 2019-10-11 16:56:59
+ * @LastEditors: mus
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
@@ -116,6 +116,12 @@ export default {
           name: 'sheet',
           icon: 'table',
           component: './Sheet/Sheet',
+        },
+        {
+          path: '/rulesEngine',
+          name: 'rulesEngine',
+          icon: 'build',
+          component: './RulesEngine/RulesEngine',
         },
         {
           component: './Page404',
