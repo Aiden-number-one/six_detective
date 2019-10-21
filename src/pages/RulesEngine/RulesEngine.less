@@ -1,0 +1,68 @@
+.rulesEngine {
+  position: relative;
+  &::after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+  .conditionSelect {
+    z-index: 2;
+    float: left;
+    width: 70px;
+  }
+  .contentCollection {
+    position: relative;
+    float: left;
+    margin-left: 50px;
+    .content {
+      position: relative;
+      padding: 3px 0 6px 0;
+    }
+  }
+  .item {
+    display: inline-block;
+    padding-right: 5px;
+  }
+  .color {
+    color: red;
+  }
+  .last {
+    position: relative;
+  }
+  .radius {
+    position: absolute;
+    top: -30px;
+    left: -55px;
+    box-sizing: content-box;
+    width: 50px;
+    height: 34px;
+    padding-top: 10px;
+    border: 1px solid #333;
+    border-top: 0;
+    border-right: 0;
+    border-bottom-left-radius: 20px;
+  }
+  .fillLine {
+    position: absolute;
+    top: -30px;
+    left: -55px;
+    width: 50px;
+    height: 120% !important;
+    border-left: 1px solid #333;
+  }
+  .noRadius {
+    position: absolute;
+    top: 13px;
+    left: -50px;
+    width: 50px;
+    height: 1px;
+    background-color: #333;
+  }
+  .icon {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    margin-left: 20px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+}

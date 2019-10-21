@@ -2,13 +2,13 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-07 13:33:44
- * @LastEditTime: 2019-09-24 15:04:02
+ * @LastEditTime: 2019-09-26 10:21:13
  * @LastEditors: mus
  */
 const getDatas = (req, res) => {
   setTimeout(() => {
     res.json({
-      kdjson: {
+      bcjson: {
         code: '0',
         detail: '',
         flag: '1',
@@ -70,7 +70,7 @@ const getDatas = (req, res) => {
 
 const delDatas = (req, res) => {
   res.json({
-    kdjson: {
+    bcjson: {
       code: '0',
       detail: '',
       flag: '1',
@@ -86,7 +86,7 @@ const delDatas = (req, res) => {
 const getDataSourceList = (req, res) => {
   setTimeout(() => {
     res.json({
-      kdjson: {
+      bcjson: {
         code: '0',
         detail: '',
         flag: '1',

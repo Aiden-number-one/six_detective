@@ -253,6 +253,7 @@ class Sheet extends PureComponent {
       setCellStyle(property, false);
     } else {
       setCellStyle(property, value);
+      const arr = [[0, 1], [2, 3], [4, 5]];
     }
   };
 

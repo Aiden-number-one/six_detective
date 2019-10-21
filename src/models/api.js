@@ -2,8 +2,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-08 15:22:20
- * @LastEditTime: 2019-09-25 15:32:01
- * @LastEditors: lan
+ * @LastEditTime: 2019-09-26 10:20:46
+ * @LastEditors: mus
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -24,7 +24,7 @@ export default {
         if (response.bcjson.items) {
           yield put({
             type: 'setDatas',
-            payload: response.kdjson.items,
+            payload: response.bcjson.items,
           });
         }
       }
@@ -33,7 +33,7 @@ export default {
       const response = yield call(delDatas, payload);
       const data = yield select(state => state.api.data);
       data.shift();
-      if (response.kdjson.flag === '1') {
+      if (response.bcjson.flag === '1') {
         yield put({
           type: 'deleteDatas',
           payload: data,
@@ -43,11 +43,11 @@ export default {
     },
     *queryDataSourceList({ payload }, { call, put }) {
       const response = yield call(getDataSourceList, payload);
-      if (response.kdjson.flag === '1') {
-        if (response.kdjson.items) {
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
           yield put({
             type: 'setDataSourceList',
-            payload: response.kdjson.items,
+            payload: response.bcjson.items,
           });
         }
       }
