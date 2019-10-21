@@ -25,20 +25,26 @@ const menuDataRender = menuList =>
 const footerRender = () => null;
 
 const BasicLayout = props => {
-  const { dispatch, children, settings, collapsed, menuData } = props;
+  const {
+    dispatch,
+    children,
+    settings,
+    collapsed,
+    // menuData
+  } = props;
   /**
    * constructor
    */
 
   useEffect(() => {
     if (dispatch) {
-      dispatch({
-        type: 'menu/getMenuData',
-        payload: {
-          customerno: 'system',
-          endType: '1',
-        },
-      });
+      // dispatch({
+      //   type: 'menu/getMenuData',
+      //   payload: {
+      //     customerno: 'system',
+      //     endType: '1',
+      //   },
+      // });
     }
   }, []);
   /**
@@ -82,8 +88,8 @@ const BasicLayout = props => {
         );
       }}
       footerRender={footerRender}
-      menuDataRender={() => menuDataRender(menuData)}
-      // menuDataRender={menuDataRender}
+      // menuDataRender={() => menuDataRender(menuData)}
+      menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}

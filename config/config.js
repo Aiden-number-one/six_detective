@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-10-15 17:59:35
+ * @LastEditTime: 2019-10-17 14:30:25
  * @LastEditors: lan
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -118,6 +118,12 @@ export default {
           component: './Sheet/Sheet',
         },
         {
+          path: '/dragboard',
+          name: 'dragboard',
+          icon: 'table',
+          component: './Dragboard/Dragboard',
+        },
+        {
           component: './Page404',
         },
       ],
@@ -170,8 +176,8 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api': {
-      target: 'http://127.0.0.1:8090/superlop/restv2/admin/', // 线上
-      // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
+      // target: 'http://127.0.0.1:8090/superlop/restv2/admin/', // 线上
+      target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
       timeout: 10000,
