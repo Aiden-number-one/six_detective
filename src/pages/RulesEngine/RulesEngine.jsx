@@ -2,6 +2,8 @@ import React, { PureComponent, Fragment, Component } from 'react';
 import { Select, Icon, Modal, List, Radio, Input } from 'antd';
 import { connect } from 'dva';
 import classNames from 'classnames';
+import LevelBox from './components/Level/LevelBox';
+import ChartsBox from './components/Charts/ChartsBox';
 import styles from './RulesEngine.less';
 
 const { Option } = Select;
@@ -208,6 +210,8 @@ export default class DataSource extends PureComponent {
             <Input placeholder="请输入值" onChange={this.onChangeValue} />
           )}
         </Modal>
+        <LevelBox />
+        <ChartsBox />
       </Fragment>
     );
   }
