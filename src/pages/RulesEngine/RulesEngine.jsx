@@ -116,19 +116,15 @@ export default class DataSource extends PureComponent {
 
   // 选择列表项内容
   chooseItem = item => {
-    const { childData, ruleData, chooseType } = this.state;
-    switch (chooseType) {
-      case childData.keyField:
-        childData.keyFiledName = item;
-        break;
-      case childData.valueType:
-        childData.value = item;
-        break;
-      default:
-        childData.op = item;
-    }
-    this.setState({
-      ruleData: { ...ruleData },
+    const { childData, chooseType } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'rulesEngine/selectItem',
+      payload: {
+        chooseType,
+        item,
+        childData,
+      },
     });
     this.handleOk();
   };
