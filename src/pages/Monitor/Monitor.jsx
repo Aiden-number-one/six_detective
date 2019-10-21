@@ -14,7 +14,7 @@ export default class Monitor extends PureComponent {
   render() {
     return (
       <Fragment>
-        <div>监控预警</div>
+        <div className={styles.monitor}>{/* 组件 */}</div>
       </Fragment>
     );
   }
