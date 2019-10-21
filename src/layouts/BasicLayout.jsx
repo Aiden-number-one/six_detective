@@ -25,20 +25,26 @@ const menuDataRender = menuList =>
 const footerRender = () => null;
 
 const BasicLayout = props => {
-  const { dispatch, children, settings, collapsed, menuData } = props;
+  const {
+    dispatch,
+    children,
+    settings,
+    collapsed,
+    // menuData
+  } = props;
   /**
    * constructor
    */
 
   useEffect(() => {
     if (dispatch) {
-      dispatch({
-        type: 'menu/getMenuData',
-        payload: {
-          customerno: 'system',
-          endType: '1',
-        },
-      });
+      // dispatch({
+      //   type: 'menu/getMenuData',
+      //   payload: {
+      //     customerno: 'system',
+      //     endType: '1',
+      //   },
+      // });
     }
   }, []);
   /**
