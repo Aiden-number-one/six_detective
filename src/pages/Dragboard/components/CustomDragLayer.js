@@ -34,7 +34,7 @@ class CustomDragLayer extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.itemType !== this.props.itemType && this.props.isDragging) {
       const chart = new G2.Chart({
-        container: 'chart2',
+        container: 'virChart',
         width: 400,
         height: 200,
       });
@@ -46,12 +46,14 @@ class CustomDragLayer extends Component {
         { genre: 'Other', sold: 150 },
       ];
       chart.source(data);
-      chart.line().position('genre*sold');
+      // chart.line().position('genre*sold');
       chart.render();
       if (this.props.item.type === 'chart1') {
+        chart.clear();
         chart.line().position('genre*sold');
         chart.repaint();
       } else if (this.props.item.type === 'chart2') {
+        chart.clear();
         chart.interval().position('genre*sold');
         chart.repaint();
       }
@@ -65,13 +67,13 @@ class CustomDragLayer extends Component {
     // }
     // const source = this.props.item && imgType[this.props.item.type];
 
-    let display;
     // 此组件仅在拖动时生效
     const { isDragging } = this.props;
     if (!isDragging || !this.props.item) {
-      display = { display: 'none' };
-    } else {
-      display = { display: 'block' };
+      //   display = { display: 'none' };
+      // } else {
+      //   display = { display: 'block' };
+      return null;
     }
 
     // 若无source则隐藏此img
@@ -83,7 +85,7 @@ class CustomDragLayer extends Component {
       <div style={{ zIndex: 100, position: 'relative', width: '100%', height: 0 }}>
         <div style={getItemStyles(this.props)}>
           {/* <img src={source} alt="" /> */}
-          <div id="chart2" style={display}></div>
+          <div id="virChart"></div>
         </div>
       </div>
     );

@@ -5,7 +5,7 @@ import G2 from '@antv/g2';
 class DragTargetInContent extends Component {
   componentDidUpdate() {
     const chart = new G2.Chart({
-      container: 'chart1',
+      container: this.props.value,
       width: 400,
       height: 200,
     });
@@ -17,33 +17,26 @@ class DragTargetInContent extends Component {
       { genre: 'Other', sold: 150 },
     ];
     chart.source(data);
+    chart.render();
     if (this.props.value === 'chart1') {
+      chart.clear();
       chart.line().position('genre*sold');
       chart.render();
     } else if (this.props.value === 'chart2') {
+      chart.clear();
       chart.interval().position('genre*sold');
       chart.render();
     }
   }
 
   render() {
-    const {
-      currentPosition,
-      // value,
-      index,
-      connectDragSource,
-      isDragging,
-    } = this.props;
+    const { currentPosition, value, index, connectDragSource, isDragging } = this.props;
     if (isDragging) {
       return null;
     }
-    return connectDragSource(
-      // <img src={value} alt=""
-      //   style={{ position: 'absolute',
-      // left: currentPosition[index].x, top: currentPosition[index].y }}
-      // />,
+    const tar = value ? (
       <div
-        id="chart1"
+        id={value}
         style={{
           position: 'absolute',
           left: currentPosition[index].x,
@@ -51,7 +44,16 @@ class DragTargetInContent extends Component {
           width: 400,
           height: 200,
         }}
-      ></div>,
+      ></div>
+    ) : (
+      <div></div>
+    );
+    return connectDragSource(
+      tar,
+      // <img src={value} alt=""
+      //   style={{ position: 'absolute',
+      // left: currentPosition[index].x, top: currentPosition[index].y }}
+      // />,
     );
   }
 }

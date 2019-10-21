@@ -48,7 +48,7 @@ class IconDrag extends Component {
     } = this.props;
     return connectDragSource(
       <span>
-        <Icon className={styles.singleIcon} type="plus" />
+        <Icon type="plus" />
       </span>,
     );
   }
