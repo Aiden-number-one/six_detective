@@ -2,13 +2,15 @@
  * @Description: 菜单
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-10-11 16:55:19
- * @LastEditors: mus
+ * @LastEditTime: 2019-10-21 14:09:53
+ * @LastEditors: lan
  */
 export default {
   'menu.welcome': '数据源',
   'menu.datapanel': '数据面板',
   'menu.sheet': '电子表格',
+  'menu.monitor': '监控预警',
+  'menu.dragboard': '图表面板',
   'menu.rulesEngine': '规则引擎',
   'menu.more-blocks': '更多区块',
   'menu.home': '首页',

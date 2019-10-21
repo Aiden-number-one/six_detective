@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-10-21 09:37:56
+ * @LastEditTime: 2019-10-21 14:09:36
  * @LastEditors: lan
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -122,6 +122,12 @@ export default {
           name: 'dragboard',
           icon: 'table',
           component: './Dragboard/Dragboard',
+        },
+        {
+          path: '/monitor',
+          name: 'monitor',
+          icon: 'table',
+          component: './Monitor/Monitor',
         },
         {
           path: '/rulesEngine',
