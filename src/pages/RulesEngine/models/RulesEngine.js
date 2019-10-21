@@ -127,6 +127,32 @@ const rulesEngineModel = {
         },
       };
     },
+    selectItem(state, { payload }) {
+      switch (payload.chooseType) {
+        case payload.childData.keyField:
+          {
+            const obj = payload.childData;
+            obj.keyFiledName = payload.item;
+          }
+          break;
+        case payload.childData.valueType:
+          {
+            const obj = payload.childData;
+            obj.value = payload.item;
+          }
+          break;
+        default: {
+          const obj = payload.childData;
+          obj.op = payload.item;
+        }
+      }
+      return {
+        ...state,
+        ruleData: {
+          ...state.ruleData,
+        },
+      };
+    },
   },
 };
 export default rulesEngineModel;
