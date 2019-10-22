@@ -2,7 +2,7 @@
  * @Description: 图表
  * @Author: lan
  * @Date: 2019-10-21 17:02:36
- * @LastEditTime: 2019-10-22 15:49:46
+ * @LastEditTime: 2019-10-22 18:03:42
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -19,7 +19,7 @@ export default class ScrollTable extends PureComponent {
       height: 200,
       padding: [10, 10, 40, 15],
       // forceFit: true,
-      color: '#fff',
+      color: '#10416c',
     });
     const data = [
       { date: '08/19', num: 5 },
@@ -40,7 +40,7 @@ export default class ScrollTable extends PureComponent {
     });
     chart.axis('num', {
       line: {
-        stroke: '#fff',
+        stroke: '#10416c',
       },
       label: {
         textStyle: {
@@ -53,7 +53,7 @@ export default class ScrollTable extends PureComponent {
     });
     chart.axis('date', {
       line: {
-        stroke: '#fff',
+        stroke: '#10416c',
       },
       label: {
         textStyle: {

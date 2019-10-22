@@ -12,11 +12,11 @@ export default function TotalMsgWithTit(props) {
       <span>| {des.text}</span>
       <div className={countWithTitle}>
         <p>{des.title}</p>
-        <span style={{ color: 'rgb(255, 255, 255)' }}>{des.total}</span>
+        <span style={{ color: '#10416c' }}>{des.total}</span>
       </div>
       <div className={countWithTitle}>
         <p>{des.title1}</p>
-        <span style={{ color: 'rgb(212, 136, 6)' }}>{des.total1}</span>
+        <span style={{ color: 'rgb(255, 184, 28)' }}>{des.total1}</span>
       </div>
       <div className={countWithTitle}>
         <p>{des.title2}</p>
