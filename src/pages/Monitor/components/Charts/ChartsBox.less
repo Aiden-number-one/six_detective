@@ -1,15 +1,19 @@
 .ChartsBox {
+  position: relative;
   width: 320px;
   height: 200px;
-  // background-image: url(https://datav.oss-cn-hangzhou.aliyuncs.com/uploads/images/9bd18164f2344101e03d3e9e29af8d15.png);
   background-size: 100%;
+  border-style: solid;
+  border-width: 52px 43px;
   border-radius: 10px;
+  border-image: url(@/assets/level-border.png) 32 37 stretch;
   transform: scale(0.75);
   .content {
+    position: absolute;
+    top: -43px;
+    left: -43px;
     width: 320px;
     height: 200px;
-    border: 1px solid #fff;
-    border-radius: 10px;
     .listBox {
       height: 200px;
       margin-left: 30px;
