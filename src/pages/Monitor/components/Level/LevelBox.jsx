@@ -36,30 +36,59 @@ export default class LevelBox extends Component {
         id: 555,
       },
     ],
+    chartData1: [
+      {
+        progress: '100%',
+        rank: 1,
+        text: 'LOP reporting error',
+        id: 111,
+      },
+      {
+        progress: '80%',
+        rank: 2,
+        text: 'Material drop in LOP',
+        id: 222,
+      },
+      {
+        progress: '72%',
+        rank: 3,
+        text: 'Approach of Position Limit',
+        id: 333,
+      },
+    ],
   };
 
   render() {
-    let { chartData } = this.state;
+    const { chartData, chartData1 } = this.state;
     const { propstyles, len } = this.props;
-    if (len) {
-      chartData = chartData.splice(0, len);
-    }
     return (
       <div className={styles.LevelBox} style={propstyles || {}}>
         <div className={styles.content}>
           <Title test="Alert type" />
           <div className={styles.listBox}>
-            {chartData.map(item => (
-              <div className={styles.itemBox} key={item.id}>
-                <div className={styles.text}>
-                  <span>{`NO.${item.rank}`}</span>
-                  <p>{item.text}</p>
-                </div>
-                <div className={styles.lineBox}>
-                  <div className={styles.line} style={{ width: item.progress }}></div>
-                </div>
-              </div>
-            ))}
+            {len
+              ? chartData1.map(item => (
+                  <div className={styles.itemBox} key={item.id}>
+                    <div className={styles.text}>
+                      <span>{`NO.${item.rank}`}</span>
+                      <p>{item.text}</p>
+                    </div>
+                    <div className={styles.lineBox}>
+                      <div className={styles.line} style={{ width: item.progress }}></div>
+                    </div>
+                  </div>
+                ))
+              : chartData.map(item => (
+                  <div className={styles.itemBox} key={item.id}>
+                    <div className={styles.text}>
+                      <span>{`NO.${item.rank}`}</span>
+                      <p>{item.text}</p>
+                    </div>
+                    <div className={styles.lineBox}>
+                      <div className={styles.line} style={{ width: item.progress }}></div>
+                    </div>
+                  </div>
+                ))}
           </div>
         </div>
       </div>

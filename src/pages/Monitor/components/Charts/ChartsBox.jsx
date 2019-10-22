@@ -34,8 +34,9 @@ export default class ChartsBox extends Component {
 
   render() {
     const { chartData } = this.state;
+    const { propstyles } = this.props;
     return (
-      <div className={styles.ChartsBox}>
+      <div className={styles.ChartsBox} style={propstyles || {}}>
         <div className={styles.content}>
           <Title test="Alert level" />
           <div className={styles.listBox}>

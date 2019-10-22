@@ -2,7 +2,7 @@
  * @Description: 图表
  * @Author: lan
  * @Date: 2019-10-21 17:02:36
- * @LastEditTime: 2019-10-22 13:50:20
+ * @LastEditTime: 2019-10-22 15:49:46
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -15,9 +15,9 @@ export default class ScrollTable extends PureComponent {
     const { type } = this.props;
     const chart = new G2.Chart({
       container: type,
-      width: 400,
+      width: 360,
       height: 200,
-      padding: [10, 0, 20, 20],
+      padding: [10, 10, 40, 15],
       // forceFit: true,
       color: '#fff',
     });
@@ -93,7 +93,7 @@ export default class ScrollTable extends PureComponent {
               justifyContent: 'center',
               alignItems: 'center',
               marginTop: 20,
-              width: 430,
+              width: 390,
             }}
           >
             <div id={type}></div>

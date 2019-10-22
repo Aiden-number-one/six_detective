@@ -9,7 +9,7 @@ export default function TotalMsg(props) {
 
   return (
     <div className={classNames(container, className)}>
-      <span>{des.text}</span>
+      <span>| {des.text}</span>
       <div className={count}>
         <span>{des.total}</span>
       </div>
