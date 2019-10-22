@@ -1,9 +1,17 @@
 import React, { PureComponent, Fragment } from 'react';
+import classNames from 'classnames';
 import styles from './Monitor.less';
-import ScrollTable from './components/ScrollTable';
+import ScrollTable from './components/scrollTable';
 import AreaChart from './components/AreaChart';
 import LevelBox from './components/Level/LevelBox';
 import ChartsBox from './components/Charts/ChartsBox';
+import TotalMsg from './components/TotalMsg/TotalMsg';
+
+const mockData = [
+  { text: 'for lop', total: 18 },
+  { text: 'for mma', total: 8 },
+  { text: 'for lopso', total: 80 },
+];
 
 export default class Monitor extends PureComponent {
   componentDidMount() {
@@ -65,6 +73,17 @@ export default class Monitor extends PureComponent {
               >
                 Trade Date: 20190824
               </span>
+            </div>
+            <div className={classNames(styles.content)}>
+              <div className={styles.alert_msg}>
+                {mockData.map((v, i) => (
+                  <TotalMsg
+                    className={classNames(styles.item, i === 1 && styles.middle)}
+                    des={v}
+                    key={v.text}
+                  />
+                ))}
+              </div>
             </div>
             <div
               style={{
