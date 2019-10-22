@@ -39,9 +39,13 @@ export default class LevelBox extends Component {
   };
 
   render() {
-    const { chartData } = this.state;
+    let { chartData } = this.state;
+    const { propstyles, len } = this.props;
+    if (len) {
+      chartData = chartData.splice(0, len);
+    }
     return (
-      <div className={styles.LevelBox}>
+      <div className={styles.LevelBox} style={propstyles || {}}>
         <div className={styles.content}>
           <Title test="Alert type" />
           <div className={styles.listBox}>

@@ -2,12 +2,13 @@
  * @Description: 图表
  * @Author: lan
  * @Date: 2019-10-21 17:02:36
- * @LastEditTime: 2019-10-22 09:43:13
+ * @LastEditTime: 2019-10-22 13:50:20
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
 import G2 from '@antv/g2';
 import { Title } from './Title/TitleBar';
+import styles from '../Monitor.less';
 
 export default class ScrollTable extends PureComponent {
   componentDidMount() {
@@ -48,6 +49,7 @@ export default class ScrollTable extends PureComponent {
           fontSize: '14', // 文本大小
         },
       },
+      grid: null,
     });
     chart.axis('date', {
       line: {
@@ -60,6 +62,8 @@ export default class ScrollTable extends PureComponent {
           fontSize: '14', // 文本大小
         },
       },
+      grid: null,
+      subTickCount: 0,
     });
     chart.source(data);
     chart
@@ -80,21 +84,20 @@ export default class ScrollTable extends PureComponent {
   render() {
     const { type } = this.props;
     return (
-      <div
-        style={{
-          border: '1px solid #fff',
-          borderRadius: 10,
-        }}
-      >
-        <Title test="Alert trend of recent 10 days" />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <div id={type}></div>
+      <div className={styles.areaChart}>
+        <div className={styles.content}>
+          <Title test="Alert trend of recent 10 days" />
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 20,
+              width: 430,
+            }}
+          >
+            <div id={type}></div>
+          </div>
         </div>
       </div>
     );

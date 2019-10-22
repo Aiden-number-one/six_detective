@@ -7,15 +7,15 @@ import ChartsBox from './components/Charts/ChartsBox';
 
 export default class Monitor extends PureComponent {
   componentDidMount() {
-    const scale = document.getElementById('pageWidth').offsetWidth / 1960;
+    const scale = document.getElementById('pageWidth').offsetWidth / 1920;
     document.getElementById('scaleDiv').style.transform = `scale(${scale})`;
   }
 
   componentDidUpdate() {
     setTimeout(() => {
-      const scale = document.getElementById('pageWidth').offsetWidth / 1960;
+      const scale = document.getElementById('pageWidth').offsetWidth / 1920;
       document.getElementById('scaleDiv').style.transform = `scale(${scale})`;
-    }, 100);
+    }, 300);
   }
 
   render() {
@@ -28,13 +28,14 @@ export default class Monitor extends PureComponent {
           id="pageWidth"
           style={{
             width: '100%',
+            height: '100%',
           }}
         >
           <div
             id="scaleDiv"
             style={{
               transformOrigin: '0 0',
-              width: 1960,
+              width: 1920,
             }}
           >
             <div
@@ -96,7 +97,14 @@ export default class Monitor extends PureComponent {
                 >
                   <ChartsBox />
                 </div>
-                <div style={{ width: '100%', height: 300 }}>
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
                   <AreaChart type="chart1" />
                 </div>
               </div>
@@ -119,7 +127,7 @@ export default class Monitor extends PureComponent {
                       alignItems: 'center',
                     }}
                   >
-                    <LevelBox />
+                    <LevelBox propstyles={{ width: 520, height: 190, marginRight: 30 }} len={3} />
                   </div>
                   <div
                     style={{
@@ -161,7 +169,14 @@ export default class Monitor extends PureComponent {
                 >
                   <ChartsBox />
                 </div>
-                <div style={{ width: '100%', height: 300 }}>
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
                   <AreaChart type="chart2" />
                 </div>
               </div>
