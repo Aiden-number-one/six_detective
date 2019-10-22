@@ -2,18 +2,19 @@
  * @Description: 图表
  * @Author: lan
  * @Date: 2019-10-21 17:02:36
- * @LastEditTime: 2019-10-21 19:31:41
+ * @LastEditTime: 2019-10-22 09:43:13
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
 import G2 from '@antv/g2';
-import styles from '../Monitor.less';
+import { Title } from './Title/TitleBar';
 
 export default class ScrollTable extends PureComponent {
   componentDidMount() {
+    const { type } = this.props;
     const chart = new G2.Chart({
-      container: 'area',
-      width: 350,
+      container: type,
+      width: 400,
       height: 200,
       padding: [10, 0, 20, 20],
       // forceFit: true,
@@ -40,7 +41,13 @@ export default class ScrollTable extends PureComponent {
       line: {
         stroke: '#fff',
       },
-      label: {},
+      label: {
+        textStyle: {
+          textAlign: 'center', // 文本对齐方向，可取值为： start center end
+          fill: '#999', // 文本的颜色
+          fontSize: '14', // 文本大小
+        },
+      },
     });
     chart.axis('date', {
       line: {
@@ -49,8 +56,8 @@ export default class ScrollTable extends PureComponent {
       label: {
         textStyle: {
           textAlign: 'center', // 文本对齐方向，可取值为： start center end
-          fill: '#404040', // 文本的颜色
-          fontSize: '12', // 文本大小
+          fill: '#999', // 文本的颜色
+          fontSize: '14', // 文本大小
         },
       },
     });
@@ -71,15 +78,24 @@ export default class ScrollTable extends PureComponent {
   }
 
   render() {
+    const { type } = this.props;
     return (
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          border: '1px solid #fff',
+          borderRadius: 10,
         }}
       >
-        <div id="area"></div>
+        <Title test="Alert trend of recent 10 days" />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <div id={type}></div>
+        </div>
       </div>
     );
   }

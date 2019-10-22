@@ -2,11 +2,10 @@
  * @Description: 滚动表格
  * @Author: lan
  * @Date: 2019-10-21 14:10:56
- * @LastEditTime: 2019-10-21 16:41:42
+ * @LastEditTime: 2019-10-22 09:32:37
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
-import { Table, Layout, Card, Icon } from 'antd';
 import styles from '../Monitor.less';
 
 export default class ScrollTable extends PureComponent {
