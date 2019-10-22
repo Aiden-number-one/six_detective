@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 120px;
+  background: none;
+  border-style: solid;
+  border-width: 20px 20px;
+  border-image: url('https://datav.oss-cn-hangzhou.aliyuncs.com/uploads/images/a7c93134c5e1440c58b1a7a3b675009b.png')
+    20 20 stretch;
+  > span {
+    max-width: 50%;
+    color: #fff;
+    font-size: 18px;
+    line-height: 1.2;
+    word-break: break-all;
+  }
+  .count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 60px;
+    background-image: url(https://datav.oss-cn-hangzhou.aliyuncs.com/uploads/images/13c890ebf14a1a23c168fc01e445932a.png);
+    background-size: 100% 100%;
+    pointer-events: auto;
+    > span {
+      color: rgb(0, 192, 255);
+      font-weight: bold;
+      font-size: 32px;
+    }
+  }
+}
