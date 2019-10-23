@@ -136,6 +136,23 @@ export default {
           component: './RulesEngine/RulesEngine',
         },
         {
+          path: '/approval',
+          name: 'approval',
+          icon: 'build',
+          routes: [
+            {
+              path: '/approval/check',
+              name: 'approvalEheck',
+              component: './Approval/ApprovalEheck/ApprovalEheck',
+            },
+            {
+              path: '/approval/set',
+              name: 'approvalSet',
+              component: './Approval/ApprovalSet/ApprovalSet',
+            },
+          ],
+        },
+        {
           component: './Page404',
         },
       ],
