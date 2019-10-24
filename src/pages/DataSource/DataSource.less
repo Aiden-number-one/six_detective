@@ -202,3 +202,81 @@
     }
   }
 }
+:global {
+  .ant-popover-inner-content {
+    padding: 0;
+  }
+  .ant-select-dropdown.filterSelect {
+    font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    background-color: #5d7c9d;
+    border-radius: 0;
+    .ant-empty-image {
+      display: none;
+    }
+    .ant-empty-description {
+      color: #fff;
+    }
+    .ant-select-dropdown-menu-item {
+      color: #10416c;
+    }
+    .ant-select-dropdown-menu-item:hover:not(.ant-select-dropdown-menu-item-disabled),
+    .ant-select-dropdown-menu-item-selected,
+    .ant-select-dropdown-menu-item-active:not(.ant-select-dropdown-menu-item-disabled) {
+      color: #fff;
+      background-color: #10416c;
+    }
+    .ant-select-dropdown-menu::-webkit-scrollbar {
+      // 滚动条整体部分
+      width: 10px;
+      height: 10px;
+    }
+    .ant-select-dropdown-menu::-webkit-scrollbar-track {
+      // 滚动条的轨道（里面装有Thumb）
+      background: transparent;
+      border-radius: 2px;
+    }
+    .ant-select-dropdown-menu::-webkit-scrollbar-thumb {
+      // 滚动条里面的小方块，能向上向下移动（或往左往右移动，取决于是垂直滚动条还是水平滚动条）
+      background: #7d96b1;
+      border-radius: 10px;
+    }
+    .ant-select-dropdown-menu::-webkit-scrollbar-thumb:hover {
+      background: #5b646e;
+    }
+    .ant-select-dropdown-menu::-webkit-scrollbar-corner {
+      // 边角，即两个滚动条的交汇处
+      background: #179a16;
+    }
+  }
+}
+.filterContent {
+  font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  :global {
+    .ant-select-selection-selected-value {
+      color: #fff;
+    }
+    .ant-checkbox-inner {
+      border: 1px solid #10416c;
+    }
+    .ant-select-selection--single,
+    .ant-select-selection__rendered {
+      height: 40px;
+      line-height: 40px;
+    }
+    .ant-select-selection {
+      background-color: #5d7c9d;
+      border: 1px solid transparent;
+      border-radius: 0;
+    }
+    .ant-select-selection:hover {
+      border-color: #5d7c9d;
+      border-right-width: 1px !important;
+    }
+    .ant-select-arrow {
+      color: #fff;
+    }
+    .ant-input {
+      border-radius: 0;
+    }
+  }
+}
