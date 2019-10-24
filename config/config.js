@@ -141,14 +141,19 @@ export default {
           icon: 'build',
           routes: [
             {
-              path: '/approval/check',
-              name: 'approvalEheck',
-              component: './Approval/ApprovalEheck/ApprovalEheck',
+              path: '/approval/design',
+              name: 'approvalDesign',
+              component: './Approval/ApprovalDesign/ApprovalDesign',
             },
             {
               path: '/approval/set',
               name: 'approvalSet',
               component: './Approval/ApprovalSet/ApprovalSet',
+            },
+            {
+              path: '/approval/check',
+              name: 'approvalEheck',
+              component: './Approval/ApprovalEheck/ApprovalEheck',
             },
           ],
         },
