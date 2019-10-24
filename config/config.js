@@ -8,6 +8,7 @@
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
 import slash from 'slash2';
+import router from './router.config';
 import webpackPlugin from './plugin.config';
 const { pwa, primaryColor } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
@@ -87,63 +88,7 @@ export default {
   },
   devtool: isAntDesignProPreview ? 'source-map' : false,
   // umi routes: https://umijs.org/zh/guide/router.html
-  routes: [
-    {
-      path: '/login',
-      component: '../layouts/UserLayout',
-      routes: [{ path: '/login', name: 'login', component: './User/Login' }],
-    },
-    {
-      path: '/',
-      component: '../layouts/BasicLayout',
-      Routes: ['src/pages/Authorized'],
-      authority: ['admin', 'user'],
-      routes: [
-        {
-          path: '/',
-          name: 'welcome',
-          icon: 'database',
-          component: './DataSource/DataSource',
-        },
-        {
-          path: '/datapanel',
-          name: 'datapanel',
-          icon: 'environment',
-          component: './DataPanel/DataPanel',
-        },
-        {
-          path: '/sheet',
-          name: 'sheet',
-          icon: 'table',
-          component: './Sheet/Sheet',
-        },
-        {
-          path: '/dragboard',
-          name: 'dragboard',
-          icon: 'table',
-          component: './Dragboard/Dragboard',
-        },
-        {
-          path: '/monitor',
-          name: 'monitor',
-          icon: 'table',
-          component: './Monitor/Monitor',
-        },
-        {
-          path: '/rulesEngine',
-          name: 'rulesEngine',
-          icon: 'build',
-          component: './RulesEngine/RulesEngine',
-        },
-        {
-          component: './Page404',
-        },
-      ],
-    },
-    {
-      component: './Page404',
-    },
-  ],
+  routes: router,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': primaryColor,
