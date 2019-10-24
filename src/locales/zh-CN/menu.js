@@ -6,7 +6,13 @@
  * @LastEditors: lan
  */
 export default {
-  'menu.welcome': '数据源',
+  'menu.dataManagement': '数据管理',
+  'menu.dataManagement.dashboard': '仪表盘',
+  'menu.dataManagement.dataImport': '数据导入',
+  'menu.dataManagement.dataImport.lopDataImport': 'LOP数据导入',
+  'menu.dataManagement.dataImport.marketDataImport': 'Market数据导入',
+  'menu.index': '首页',
+  'menu.database': '数据源',
   'menu.datapanel': '数据面板',
   'menu.sheet': '电子表格',
   'menu.monitor': '监控预警',

@@ -92,6 +92,10 @@ const BasicLayout = props => {
       menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
+      // menuRender={(a, b) => {
+      //   debugger;
+      //   return null;
+      // }}
       {...props}
       {...settings}
     >
