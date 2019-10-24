@@ -2,7 +2,7 @@
  * @Description: 滚动表格
  * @Author: lan
  * @Date: 2019-10-21 14:10:56
- * @LastEditTime: 2019-10-22 09:32:37
+ * @LastEditTime: 2019-10-22 16:25:10
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -35,13 +35,13 @@ export default class ScrollTable extends PureComponent {
               Level
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              20190824 15:38:20
+              20190823 15:26:00
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [KSF] Reported LOP of BI/TO dropped 2000 contracts
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              Overdue
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -49,13 +49,13 @@ export default class ScrollTable extends PureComponent {
               Level1
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190823 15:38:54
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [LFK] 1/2 NRM and 1/7 TMR Working Capital
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              pending
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -63,13 +63,13 @@ export default class ScrollTable extends PureComponent {
               Level2
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190823 15:47:00
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [SHK] Working Capital ten million HKD
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              Overdue
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -77,13 +77,13 @@ export default class ScrollTable extends PureComponent {
               Level3
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:00:00
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [ASA] Position on HSI position limit
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              pending
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -91,13 +91,13 @@ export default class ScrollTable extends PureComponent {
               Level4
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:10:20
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [BNP] UNC accounts with delta of HSI/HHI 500 delta
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              pending
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -105,13 +105,13 @@ export default class ScrollTable extends PureComponent {
               Level5
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:18:32
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [BOC] Record with reported LOP EP OI by EP Total
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              Completed
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -119,13 +119,13 @@ export default class ScrollTable extends PureComponent {
               Level6
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:38:20
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [HNT] Position 80% of position limit
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              processing
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -133,13 +133,13 @@ export default class ScrollTable extends PureComponent {
               Level7
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:40:15
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [JPM] Individual investor 5% of position limit
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              Completed
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -147,13 +147,13 @@ export default class ScrollTable extends PureComponent {
               Level
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190823 15:26:00
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [KSF] Reported LOP of BI/TO dropped 2000 contracts
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              Overdue
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -161,13 +161,13 @@ export default class ScrollTable extends PureComponent {
               Level1
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190823 15:38:54
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [LFK] 1/2 NRM and 1/7 TMR Working Capital
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              pending
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -175,13 +175,13 @@ export default class ScrollTable extends PureComponent {
               Level2
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190823 15:47:00
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [SHK] Working Capital ten million HKD
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              Overdue
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -189,13 +189,13 @@ export default class ScrollTable extends PureComponent {
               Level3
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:00:00
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [ASA] Position on HSI position limit
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              pending
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -203,13 +203,13 @@ export default class ScrollTable extends PureComponent {
               Level4
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:10:20
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [BNP] UNC accounts with delta of HSI/HHI 500 delta
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              pending
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -217,13 +217,13 @@ export default class ScrollTable extends PureComponent {
               Level5
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:18:32
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [BOC] Record with reported LOP EP OI by EP Total
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              Completed
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -231,13 +231,13 @@ export default class ScrollTable extends PureComponent {
               Level6
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:38:20
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [HNT] Position 80% of position limit
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              processing
             </div>
           </div>
           <div className={styles.rowContent}>
@@ -245,13 +245,13 @@ export default class ScrollTable extends PureComponent {
               Level7
             </div>
             <div className={styles.columnTitle} style={{ width: '25%' }}>
-              Alert Time
+              20190824 15:40:15
             </div>
             <div className={styles.columnTitle} style={{ width: '55%' }}>
-              Alert Content
+              [JPM] Individual investor 5% of position limit
             </div>
             <div className={styles.columnTitle} style={{ width: '10%' }}>
-              Status
+              Completed
             </div>
           </div>
         </div>

@@ -8,7 +8,7 @@ export default class ChartsBox extends Component {
       {
         progress: '55%',
         text: 'LOP',
-        color: '#EA0000',
+        color: '#e14952',
         id: 111,
       },
       {
@@ -20,7 +20,7 @@ export default class ChartsBox extends Component {
       {
         progress: '80%',
         text: 'Approach',
-        color: '#FF9224',
+        color: '#FFB81C',
         id: 333,
       },
       {
@@ -34,8 +34,9 @@ export default class ChartsBox extends Component {
 
   render() {
     const { chartData } = this.state;
+    const { propstyles } = this.props;
     return (
-      <div className={styles.ChartsBox}>
+      <div className={styles.ChartsBox} style={propstyles || {}}>
         <div className={styles.content}>
           <Title test="Alert level" />
           <div className={styles.listBox}>

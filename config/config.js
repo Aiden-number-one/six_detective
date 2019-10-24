@@ -8,6 +8,7 @@
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
 import slash from 'slash2';
+import router from './router.config';
 import webpackPlugin from './plugin.config';
 const { pwa, primaryColor } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
@@ -152,6 +153,28 @@ export default {
           name: 'rulesEngine',
           icon: 'build',
           component: './RulesEngine/RulesEngine',
+        },
+        {
+          path: '/approval',
+          name: 'approval',
+          icon: 'build',
+          routes: [
+            {
+              path: '/approval/design',
+              name: 'approvalDesign',
+              component: './Approval/ApprovalDesign/ApprovalDesign',
+            },
+            {
+              path: '/approval/set',
+              name: 'approvalSet',
+              component: './Approval/ApprovalSet/ApprovalSet',
+            },
+            {
+              path: '/approval/check',
+              name: 'approvalEheck',
+              component: './Approval/ApprovalEheck/ApprovalEheck',
+            },
+          ],
         },
         {
           component: './Page404',

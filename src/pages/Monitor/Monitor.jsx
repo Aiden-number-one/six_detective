@@ -1,167 +1,115 @@
 import React, { PureComponent, Fragment } from 'react';
+import classNames from 'classnames';
 import styles from './Monitor.less';
-import ScrollTable from './components/ScrollTable';
+import ScrollTable from './components/scrollTable';
 import AreaChart from './components/AreaChart';
 import LevelBox from './components/Level/LevelBox';
 import ChartsBox from './components/Charts/ChartsBox';
+import TotalMsg from './components/TotalMsg/TotalMsg';
+import TotalMsgWithTit from './components/TotalMsg/TotalMsgWithTit';
+
+const mockData = [
+  { text: 'Number of alerts for lop', total: 18 },
+  { text: 'Number of alerts for mma', total: 8 },
+  { text: 'Number of alerts for lopso', total: 80 },
+];
+
+const mockData1 = {
+  text: 'Alert processing status',
+  total: 4,
+  total1: 2,
+  total2: 3,
+  total3: 4,
+  title: 'Pending',
+  title1: 'Processing',
+  title2: 'Overdue',
+  title3: 'Completed',
+};
 
 export default class Monitor extends PureComponent {
   componentDidMount() {
-    const scale = document.getElementById('pageWidth').offsetWidth / 1960;
+    const scale = document.getElementById('pageWidth').offsetWidth / 1920;
     document.getElementById('scaleDiv').style.transform = `scale(${scale})`;
+    const height = document.getElementById('scaleDiv').offsetHeight * scale;
+    document.getElementsByClassName('ant-layout')[0].style.height = `${height}px`;
   }
 
   componentDidUpdate() {
     setTimeout(() => {
-      const scale = document.getElementById('pageWidth').offsetWidth / 1960;
+      const scale = document.getElementById('pageWidth').offsetWidth / 1920;
       document.getElementById('scaleDiv').style.transform = `scale(${scale})`;
-    }, 100);
+      // const height = document.getElementById('scaleDiv').offsetHeight * scale;
+      // document.getElementsByClassName('ant-layout')[0].style.height = `${height}px`;
+    }, 300);
   }
 
   render() {
     return (
       <Fragment>
-        {/* 背景 */}
-        <div className={styles.monitor}></div>
         {/* 用于计算页面宽度 */}
-        <div
-          id="pageWidth"
-          style={{
-            width: '100%',
-          }}
-        >
-          <div
-            id="scaleDiv"
-            style={{
-              transformOrigin: '0 0',
-              width: 1960,
-            }}
-          >
-            <div
-              id="monitor"
-              style={{
-                position: 'relative',
-                width: '100%',
-                height: 100,
-                color: '#fff',
-                lineHeight: '100px',
-                textAlign: 'center',
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 40,
-                  marginRight: 10,
-                }}
-              >
-                Surveillance Overview
-              </span>
-              <span
-                style={{
-                  fontSize: 20,
-                  color: 'rgb(244, 183, 56)',
-                }}
-              >
-                Trade Date: 20190824
-              </span>
+        <div id="pageWidth" className={styles.pageWidth}>
+          {/* 缩放的页面 */}
+          <div id="scaleDiv" className={styles.scaleDiv}>
+            <div className={styles.title}>
+              <span className={styles.firstTitle}>Surveillance Overview</span>
+              <span className={styles.secondTitle}>Trade Date: 20190824</span>
             </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-              }}
-            >
-              <div
-                style={{
-                  width: 495,
-                }}
-              >
-                <div
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
+            <div className={classNames(styles.content)}>
+              <div className={styles.alert_msg}>
+                {mockData.map((v, i) => (
+                  <TotalMsg
+                    className={classNames(styles.item, i === 1 && styles.middle)}
+                    des={v}
+                    key={v.text}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className={styles.mainContent}>
+              <div className={styles.left}>
+                <div className={styles.flexDiv}>
                   <LevelBox />
                 </div>
-                <div
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
+                <div className={styles.flexDiv}>
                   <ChartsBox />
                 </div>
-                <div style={{ width: '100%', height: 300 }}>
+                <div className={styles.flexDiv}>
                   <AreaChart type="chart1" />
                 </div>
               </div>
-              <div
-                style={{
-                  width: 990,
-                }}
-              >
+              <div className={styles.middle}>
                 <div
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
                   }}
                 >
-                  <div
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <LevelBox />
+                  <div className={styles.flexDiv}>
+                    <LevelBox propstyles={{ width: 570, height: 200, marginRight: 30 }} len={3} />
                   </div>
-                  <div
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <ChartsBox />
+                  <div className={styles.flexDiv}>
+                    <ChartsBox propstyles={{ width: 440, height: 200 }} />
                   </div>
                 </div>
                 <div style={{ width: '100%', height: 418 }}>
                   <ScrollTable />
                 </div>
+                <div style={{ width: '100%', height: 130, marginTop: 40 }}>
+                  <TotalMsgWithTit
+                    des={mockData1}
+                    key={mockData1.text}
+                    propstyle={{ width: '100%', alignItems: 'flex-start' }}
+                  />
+                </div>
               </div>
-              <div
-                style={{
-                  width: 495,
-                }}
-              >
-                <div
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
+              <div className={styles.right}>
+                <div className={styles.flexDiv}>
                   <LevelBox />
                 </div>
-                <div
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
+                <div className={styles.flexDiv}>
                   <ChartsBox />
                 </div>
-                <div style={{ width: '100%', height: 300 }}>
+                <div className={styles.flexDiv}>
                   <AreaChart type="chart2" />
                 </div>
               </div>

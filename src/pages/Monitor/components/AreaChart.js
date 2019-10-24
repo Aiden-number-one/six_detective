@@ -2,23 +2,24 @@
  * @Description: 图表
  * @Author: lan
  * @Date: 2019-10-21 17:02:36
- * @LastEditTime: 2019-10-22 09:43:13
+ * @LastEditTime: 2019-10-22 18:03:42
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
 import G2 from '@antv/g2';
 import { Title } from './Title/TitleBar';
+import styles from '../Monitor.less';
 
 export default class ScrollTable extends PureComponent {
   componentDidMount() {
     const { type } = this.props;
     const chart = new G2.Chart({
       container: type,
-      width: 400,
+      width: 360,
       height: 200,
-      padding: [10, 0, 20, 20],
+      padding: [10, 10, 40, 15],
       // forceFit: true,
-      color: '#fff',
+      color: '#10416c',
     });
     const data = [
       { date: '08/19', num: 5 },
@@ -39,7 +40,7 @@ export default class ScrollTable extends PureComponent {
     });
     chart.axis('num', {
       line: {
-        stroke: '#fff',
+        stroke: '#10416c',
       },
       label: {
         textStyle: {
@@ -48,10 +49,11 @@ export default class ScrollTable extends PureComponent {
           fontSize: '14', // 文本大小
         },
       },
+      grid: null,
     });
     chart.axis('date', {
       line: {
-        stroke: '#fff',
+        stroke: '#10416c',
       },
       label: {
         textStyle: {
@@ -60,6 +62,8 @@ export default class ScrollTable extends PureComponent {
           fontSize: '14', // 文本大小
         },
       },
+      grid: null,
+      subTickCount: 0,
     });
     chart.source(data);
     chart
@@ -80,21 +84,20 @@ export default class ScrollTable extends PureComponent {
   render() {
     const { type } = this.props;
     return (
-      <div
-        style={{
-          border: '1px solid #fff',
-          borderRadius: 10,
-        }}
-      >
-        <Title test="Alert trend of recent 10 days" />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <div id={type}></div>
+      <div className={styles.areaChart}>
+        <div className={styles.content}>
+          <Title test="Alert trend of recent 10 days" />
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 20,
+              width: 390,
+            }}
+          >
+            <div id={type}></div>
+          </div>
         </div>
       </div>
     );
