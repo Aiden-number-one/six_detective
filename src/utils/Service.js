@@ -32,8 +32,8 @@ Object.keys(Api).forEach(key => {
     }
     const base64Param = Base64.encode(JSON.stringify(P)); // 对参数base64编码
     return request(
-      // `${`${apisfx + V}/${N}`}.json`, // 线上
-      `${apisfx + N}`, // Mock
+      `${`${apisfx + V}/${N}`}.json`, // 线上
+      // `${apisfx + N}`, // Mock
       {
         ...opts,
         method: opts.method || 'POST',

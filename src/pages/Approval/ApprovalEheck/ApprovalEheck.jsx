@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
 import { Select, Form, Icon, Input, Button, DatePicker, Divider, Table } from 'antd';
 import { connect } from 'dva';
@@ -23,7 +22,7 @@ class ApprovalEheck extends PureComponent {
   // 生成数据Data
   createData = () => {
     const data = [];
-    for (let i = 0; i < 46; i++) {
+    for (let i = 0; i < 46; i += 1) {
       data.push({
         key: i,
         name: `Edward King ${i}`,

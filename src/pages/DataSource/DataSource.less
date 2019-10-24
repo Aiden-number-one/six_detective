@@ -17,3 +17,188 @@
 .active {
   background-color: #e3e3e3;
 }
+.sortArea {
+  position: relative;
+  display: inline-block;
+}
+.icon {
+  color: rgba(17, 65, 108, 0.6);
+  font-size: 16px;
+  vertical-align: text-bottom;
+  &.up {
+    position: absolute;
+    top: -15px;
+    left: 3px;
+    font-size: 14px;
+  }
+  &.down {
+    position: absolute;
+    top: -9px;
+    left: 3px;
+    font-size: 14px;
+  }
+}
+.newList {
+  :global {
+    .ant-table-thead {
+      .ant-checkbox-wrapper {
+        display: none;
+      }
+    }
+    .ant-table-pagination.ant-pagination {
+      float: none;
+      text-align: center;
+    }
+    .tableHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+      padding: 22px;
+      border-top: 1px rgba(129, 154, 179, 0.5) solid;
+      .ant-checkbox-wrapper {
+        color: #10416c;
+        font-weight: bold;
+        font-size: 12px;
+      }
+      .ant-btn {
+        width: 31px;
+        height: 31px;
+        background-color: red;
+        border: 0;
+      }
+    }
+    .clearFix {
+      &::after {
+        display: block;
+        clear: both;
+        content: '';
+      }
+    }
+    .btnArea {
+      margin-top: 20px;
+    }
+    .filterArea {
+      float: right;
+      color: #10416c;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+      .text {
+        text-decoration: underline;
+      }
+    }
+    .ant-btn {
+      width: 85px;
+      padding: 0;
+      color: #10416c;
+      font-weight: bold;
+      font-size: 12px;
+      border-radius: 0;
+      &.ant-btn-primary {
+        color: #fff;
+      }
+    }
+    .btn1 {
+      float: right;
+      margin-right: 15px;
+      font-weight: normal;
+    }
+    .btn2 {
+      float: right;
+    }
+    .ant-advanced-search-form {
+      padding-top: 45px;
+      padding-bottom: 45px;
+    }
+    .ant-advanced-search-form .ant-form-item {
+      display: flex;
+    }
+    .ant-advanced-search-form .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+    .ant-form-item-label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 95px;
+      padding-right: 15px;
+      color: #10416c;
+      white-space: normal;
+      label {
+        color: #10416c;
+        font-weight: bold;
+        font-size: 13px;
+        font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        line-height: 1.2;
+      }
+    }
+    .ant-select-selection {
+      border-color: #10416c;
+      border-radius: 0;
+      .ant-select-selection__placeholder,
+      .ant-select-search__field__placeholder {
+        color: #cddae5;
+      }
+    }
+    .ant-select-arrow {
+      color: #10416c;
+    }
+    .ant-table-thead th {
+      background-color: #f1f6f8;
+    }
+    .ant-table-column-title,
+    .ant-table-tbody {
+      color: #10416c;
+      font-size: 13px;
+      font-family: FSElliotPro, FSElliot, Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+    .ant-table-column-title {
+      font-weight: bold;
+    }
+    .ant-table-tbody > tr > td,
+    .ant-table-thead > tr > th {
+      border: 0;
+    }
+    .ant-table-tbody {
+      tr:nth-child(odd) {
+        background-color: #fff;
+      }
+      tr:nth-child(even) {
+        background-color: #f1f6f8;
+      }
+    }
+    .ant-table-thead > tr:first-child > th:first-child {
+      border-radius: 0;
+    }
+    .ant-table-thead > tr:first-child > th:last-child {
+      border-radius: 0;
+    }
+    .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+      background: transparent;
+    }
+    .ant-pagination.mini {
+      .ant-pagination-prev {
+        margin-right: 23px;
+      }
+      .ant-pagination-next {
+        margin-left: 23px;
+      }
+      .ant-pagination-item {
+        border: 0;
+        a {
+          color: #9cb4c9;
+        }
+        &.ant-pagination-item-active a {
+          color: #567494;
+          text-decoration: underline;
+        }
+      }
+      .ant-pagination-item-link {
+        color: #fff;
+        background: #567494;
+        border-radius: 0;
+      }
+    }
+  }
+}
