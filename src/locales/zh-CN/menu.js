@@ -7,6 +7,9 @@
  */
 export default {
   'menu.welcome': '数据源',
+  'menu.usermanagement': '用户管理',
+  'menu.emailconfig': '邮箱配置',
+  'menu.systemparams': '系统参数',
   'menu.datapanel': '数据面板',
   'menu.sheet': '电子表格',
   'menu.monitor': '监控预警',

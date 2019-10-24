@@ -112,6 +112,24 @@ export default {
           component: './DataPanel/DataPanel',
         },
         {
+          path: '/usermanagement',
+          name: 'usermanagement',
+          icon: 'table',
+          component: './UserManagement/UserManagement',
+        },
+        {
+          path: '/emailconfig',
+          name: 'emailconfig',
+          icon: 'table',
+          component: './EmailConfig/EmailConfig',
+        },
+        {
+          path: '/systemparams',
+          name: 'systemparams',
+          icon: 'table',
+          component: './SystemParams/SystemParams',
+        },
+        {
           path: '/sheet',
           name: 'sheet',
           icon: 'table',
