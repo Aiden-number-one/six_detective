@@ -79,23 +79,20 @@ class PopoverContent extends Component {
     const { tableData, columnName, setVisible } = this.props;
     const columnItems = Array.from(new Set(tableData.map(value => value[columnName])));
     return (
-      <div
-        className={styles.filterContent}
-        style={{ background: '#d1dde6', width: 280, position: 'relative' }}
-      >
+      <div className={styles.filterContent}>
         <p>
           <Select
-            style={{ width: '100%', height: 40 }}
+            className={styles.filterSelect}
             placeholder="please select"
-            dropdownClassName="filterSelect"
+            dropdownClassName="selectDropdown"
           >
             {FilterArr.map(value => (
               <Option value={value}>{value}</Option>
             ))}
           </Select>
-          <Input style={{ width: '100%', background: '#e5eff9', height: 40, color: '#10416c' }} />
+          <Input className={styles.filterInput} />
         </p>
-        <div style={{ marginLeft: 30, paddingBottom: 80 }}>
+        <div className={styles.checkGroup}>
           <p>
             <Checkbox
               style={{ color: '#10416c' }}
@@ -119,59 +116,22 @@ class PopoverContent extends Component {
             ))}
           </Checkbox.Group>
         </div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            display: 'flex',
-            flexDirection: 'row',
-          }}
-        >
+        <div className={styles.buttonGroup}>
           <div
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: '50%',
-              backgroundColor: '#aecac4',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginRight: 20,
-            }}
+            className={styles.buttonGreen}
             onClick={() => {
               setVisible(columnName, false);
             }}
           >
-            <Icon
-              type="check"
-              style={{
-                fontSize: 20,
-                color: '#23803d',
-              }}
-            />
+            <Icon type="check" />
           </div>
           <div
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: '50%',
-              backgroundColor: '#d6c5cf',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            className={styles.buttonRed}
             onClick={() => {
               setVisible(columnName, false);
             }}
           >
-            <Icon
-              type="close"
-              style={{
-                fontSize: 20,
-                color: '#ea6473',
-              }}
-            />
+            <Icon type="close" />
           </div>
         </div>
       </div>

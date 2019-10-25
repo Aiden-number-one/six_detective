@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-10-21 14:09:36
+ * @LastEditTime: 2019-10-25 09:23:10
  * @LastEditors: lan
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -155,6 +155,12 @@ export default {
           component: './RulesEngine/RulesEngine',
         },
         {
+          path: '/templateSet',
+          name: 'templateSet',
+          icon: 'build',
+          component: './TemplateSet/TemplateSet',
+        },
+        {
           path: '/approval',
           name: 'approval',
           icon: 'build',
@@ -229,8 +235,8 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api': {
-      // target: 'http://127.0.0.1:8090/superlop/restv2/admin/', // 线上
-      target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
+      target: 'http://10.201.62.184:7567/superlop/restv2/admin/', // 线上
+      // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
       timeout: 10000,
