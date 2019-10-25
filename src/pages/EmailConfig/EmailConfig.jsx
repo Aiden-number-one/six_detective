@@ -1,8 +1,13 @@
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable no-console */
+/* eslint-disable react/no-unused-state */
+/* eslint-disable max-len */
 import React, { Component, Fragment } from 'react';
-import { Button, Input, Modal, Select, Table } from 'antd';
+import { Form, Button, Input, Modal, Select, Table } from 'antd';
 import styles from './email.less';
 
 const { Option } = Select;
+
 class EmailConfig extends Component {
   state = {
     visible: false,
@@ -46,6 +51,24 @@ class EmailConfig extends Component {
       },
       {
         key: '5',
+        name: '9233',
+        server: '192.168.5.22',
+        port: 88,
+        email: 'zhangsan@sina.com',
+        isOpen: '是',
+        create: '创建',
+      },
+      {
+        key: '6',
+        name: '9233',
+        server: '192.168.5.22',
+        port: 88,
+        email: 'zhangsan@sina.com',
+        isOpen: '是',
+        create: '创建',
+      },
+      {
+        key: '7',
         name: '9233',
         server: '192.168.5.22',
         port: 88,
@@ -104,6 +127,14 @@ class EmailConfig extends Component {
         ),
       },
     ],
+    emailObj: {
+      server: '',
+      port: null,
+      email: '',
+      password: '',
+      isopen: '',
+      remark: '',
+    },
   };
 
   addUser = () => {
@@ -122,12 +153,24 @@ class EmailConfig extends Component {
 
   updateEmail = () => {};
 
+  setServer = e => {
+    console.log('e=====', e);
+    console.log('e=', e.target.value);
+  };
+
+  handleSubmit = () => {};
+
   render() {
     return (
       <Fragment>
         <div>
           <div>
-            <Button type="primary" onClick={this.addUser}>
+            <Button
+              type="primary"
+              onClick={() => {
+                this.addUser();
+              }}
+            >
               添加
             </Button>
             <Modal
@@ -136,44 +179,64 @@ class EmailConfig extends Component {
               onOk={this.handleOk}
               onCancel={this.handleCancel}
             >
-              <ul className={styles['add-user']}>
-                <li>
-                  <span>服务器IP：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-                <li>
-                  <span>端口：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-                <li>
-                  <span>发件人邮箱地址：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-                <li>
-                  <span>发件人邮箱密码：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-                <li>
-                  <span>是否开启：</span>
-                  <Select
-                    defaultValue="lucy"
-                    style={{ width: 300 }}
-                    onChange={this.handleChange}
-                    placeholder="Please select"
-                  >
-                    <Option value="jack">开启</Option>
-                    <Option value="lucy">关闭</Option>
-                  </Select>
-                </li>
-                <li>
-                  <span>备注：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-              </ul>
+              <div>
+                <Form onSubmit={this.handleSubmit}>
+                  {/* <ul className={styles['add-user']}> */}
+                  <Form.Item label="服务器IP：">
+                    {/* <li> */}
+                    {/* <span>服务器IP：</span> */}
+                    <Input className={styles['input-value']}></Input>
+                    {/* </li> */}
+                  </Form.Item>
+                  <Form.Item label="端口：">
+                    {/* <li> */}
+                    {/* <span>端口：</span> */}
+                    <Input className={styles['input-value']}></Input>
+                    {/* </li> */}
+                  </Form.Item>
+                  <Form.Item label="发件人邮箱地址：">
+                    {/* <li> */}
+                    {/* <span>发件人邮箱地址：</span> */}
+                    <Input className={styles['input-value']}></Input>
+                    {/* </li> */}
+                  </Form.Item>
+                  <Form.Item label="发件人邮箱密码：">
+                    {/* <li> */}
+                    {/* <span>发件人邮箱密码：</span> */}
+                    <Input className={styles['input-value']}></Input>
+                    {/* </li> */}
+                  </Form.Item>
+                  <Form.Item label="是否开启：">
+                    {/* <li> */}
+                    {/* <span>是否开启：</span> */}
+                    <Select
+                      defaultValue="lucy"
+                      style={{ width: 300 }}
+                      onChange={this.handleChange}
+                      placeholder="Please select"
+                    >
+                      <Option value="jack">开启</Option>
+                      <Option value="lucy">关闭</Option>
+                    </Select>
+                    {/* </li> */}
+                  </Form.Item>
+                  <Form.Item label="备注：">
+                    {/* <li> */}
+                    {/* <span>备注：</span> */}
+                    <Input className={styles['input-value']}></Input>
+                    {/* </li> */}
+                  </Form.Item>
+                  {/* </ul> */}
+                </Form>
+              </div>
             </Modal>
           </div>
           <div>
-            <Table dataSource={this.state.dataSource} columns={this.state.columns}></Table>
+            <Table
+              dataSource={this.state.dataSource}
+              pagination={{ pageSize: 5 }}
+              columns={this.state.columns}
+            ></Table>
           </div>
         </div>
       </Fragment>
