@@ -8,7 +8,7 @@
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
 import slash from 'slash2';
-import router from './router.config';
+// import router from './router.config';
 import webpackPlugin from './plugin.config';
 const { pwa, primaryColor } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
@@ -155,6 +155,12 @@ export default {
           component: './RulesEngine/RulesEngine',
         },
         {
+          path: '/templateSet',
+          name: 'templateSet',
+          icon: 'build',
+          component: './TemplateSet/TemplateSet',
+        },
+        {
           path: '/approval',
           name: 'approval',
           icon: 'build',
@@ -229,8 +235,8 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api': {
-      // target: 'http://127.0.0.1:8090/superlop/restv2/admin/', // 线上
-      target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
+      target: 'http://10.201.62.184:7567/superlop/restv2/admin/', // 线上
+      // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
       timeout: 10000,
