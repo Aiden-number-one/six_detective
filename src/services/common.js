@@ -14,4 +14,6 @@ export default {
   getDatas: 'kingdom.retl.getDatas',
   delDatas: 'kingdom.retl.delDatas',
   getDataSourceList: 'kingdom.retl.getDataSourceList',
+  // 字典管理
+  queryTaskSpmDict: 'bayconnect.superlop.api_query_task_spm_dict_index.json',
 };

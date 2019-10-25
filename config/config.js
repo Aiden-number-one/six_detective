@@ -27,7 +27,7 @@ const plugins = [
         // default false
         enable: true,
         // default zh-CN
-        default: 'zh-CN',
+        default: 'en-US',
         // default true, when it is true, will use `navigator.language` overwrite default
         baseNavigator: true,
       },
@@ -88,85 +88,86 @@ export default {
   },
   devtool: isAntDesignProPreview ? 'source-map' : false,
   // umi routes: https://umijs.org/zh/guide/router.html
-  routes: [
-    {
-      path: '/login',
-      component: '../layouts/UserLayout',
-      routes: [{ path: '/login', name: 'login', component: './User/Login' }],
-    },
-    {
-      path: '/',
-      component: '../layouts/BasicLayout',
-      Routes: ['src/pages/Authorized'],
-      authority: ['admin', 'user'],
-      routes: [
-        {
-          path: '/',
-          name: 'welcome',
-          icon: 'database',
-          component: './DataSource/DataSource',
-        },
-        {
-          path: '/datapanel',
-          name: 'datapanel',
-          icon: 'environment',
-          component: './DataPanel/DataPanel',
-        },
-        {
-          path: '/sheet',
-          name: 'sheet',
-          icon: 'table',
-          component: './Sheet/Sheet',
-        },
-        {
-          path: '/dragboard',
-          name: 'dragboard',
-          icon: 'table',
-          component: './Dragboard/Dragboard',
-        },
-        {
-          path: '/monitor',
-          name: 'monitor',
-          icon: 'table',
-          component: './Monitor/Monitor',
-        },
-        {
-          path: '/rulesEngine',
-          name: 'rulesEngine',
-          icon: 'build',
-          component: './RulesEngine/RulesEngine',
-        },
-        {
-          path: '/approval',
-          name: 'approval',
-          icon: 'build',
-          routes: [
-            {
-              path: '/approval/design',
-              name: 'approvalDesign',
-              component: './Approval/ApprovalDesign/ApprovalDesign',
-            },
-            {
-              path: '/approval/set',
-              name: 'approvalSet',
-              component: './Approval/ApprovalSet/ApprovalSet',
-            },
-            {
-              path: '/approval/check',
-              name: 'approvalEheck',
-              component: './Approval/ApprovalEheck/ApprovalEheck',
-            },
-          ],
-        },
-        {
-          component: './Page404',
-        },
-      ],
-    },
-    {
-      component: './Page404',
-    },
-  ],
+  routes: router,
+  // [
+  //   {
+  //     path: '/login',
+  //     component: '../layouts/UserLayout',
+  //     routes: [{ path: '/login', name: 'login', component: './User/Login' }],
+  //   },
+  //   {
+  //     path: '/',
+  //     component: '../layouts/BasicLayout',
+  //     Routes: ['src/pages/Authorized'],
+  //     authority: ['admin', 'user'],
+  //     routes: [
+  //       {
+  //         path: '/',
+  //         name: 'welcome',
+  //         icon: 'database',
+  //         component: './DataSource/DataSource',
+  //       },
+  //       {
+  //         path: '/datapanel',
+  //         name: 'datapanel',
+  //         icon: 'environment',
+  //         component: './DataPanel/DataPanel',
+  //       },
+  //       {
+  //         path: '/sheet',
+  //         name: 'sheet',
+  //         icon: 'table',
+  //         component: './Sheet/Sheet',
+  //       },
+  //       {
+  //         path: '/dragboard',
+  //         name: 'dragboard',
+  //         icon: 'table',
+  //         component: './Dragboard/Dragboard',
+  //       },
+  //       {
+  //         path: '/monitor',
+  //         name: 'monitor',
+  //         icon: 'table',
+  //         component: './Monitor/Monitor',
+  //       },
+  //       {
+  //         path: '/rulesEngine',
+  //         name: 'rulesEngine',
+  //         icon: 'build',
+  //         component: './RulesEngine/RulesEngine',
+  //       },
+  //       {
+  //         path: '/approval',
+  //         name: 'approval',
+  //         icon: 'build',
+  //         routes: [
+  //           {
+  //             path: '/approval/design',
+  //             name: 'approvalDesign',
+  //             component: './Approval/ApprovalDesign/ApprovalDesign',
+  //           },
+  //           {
+  //             path: '/approval/set',
+  //             name: 'approvalSet',
+  //             component: './Approval/ApprovalSet/ApprovalSet',
+  //           },
+  //           {
+  //             path: '/approval/check',
+  //             name: 'approvalEheck',
+  //             component: './Approval/ApprovalEheck/ApprovalEheck',
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         component: './Page404',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     component: './Page404',
+  //   },
+  // ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': primaryColor,
