@@ -1,7 +1,3 @@
-/* eslint-disable react/jsx-no-undef */
-/* eslint-disable no-console */
-/* eslint-disable react/no-unused-state */
-/* eslint-disable max-len */
 import React, { Component, Fragment } from 'react';
 import { Form, Button, Input, Modal, Select, Table } from 'antd';
 import styles from './email.less';
@@ -127,14 +123,6 @@ class EmailConfig extends Component {
         ),
       },
     ],
-    emailObj: {
-      server: '',
-      port: null,
-      email: '',
-      password: '',
-      isopen: '',
-      remark: '',
-    },
   };
 
   addUser = () => {
@@ -153,10 +141,7 @@ class EmailConfig extends Component {
 
   updateEmail = () => {};
 
-  setServer = e => {
-    console.log('e=====', e);
-    console.log('e=', e.target.value);
-  };
+  setServer = () => {};
 
   handleSubmit = () => {};
 

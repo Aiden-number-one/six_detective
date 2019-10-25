@@ -117,18 +117,21 @@ export default {
           name: 'usermanagement',
           icon: 'table',
           component: './UserManagement/UserManagement',
+          hideInMenu: true,
         },
         {
           path: '/emailconfig',
           name: 'emailconfig',
           icon: 'table',
           component: './EmailConfig/EmailConfig',
+          hideInMenu: true,
         },
         {
           path: '/systemparams',
           name: 'systemparams',
           icon: 'table',
           component: './SystemParams/SystemParams',
+          hideInMenu: true,
         },
         {
           path: '/sheet',
