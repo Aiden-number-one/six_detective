@@ -1,19 +1,6 @@
 import React, { PureComponent, Fragment, Component } from 'react';
 // import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import {
-  Table,
-  Layout,
-  Card,
-  Icon,
-  Input,
-  Form,
-  Row,
-  Col,
-  Button,
-  Select,
-  Checkbox,
-  Popover,
-} from 'antd';
+import { Table, Icon, Input, Form, Row, Col, Button, Select, Checkbox, Popover } from 'antd';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
 import classNames from 'classnames';
@@ -161,7 +148,7 @@ class AdvancedSearchForm extends Component {
   getFields() {
     const count = this.state.expand ? 10 : 6;
     const { getFieldDecorator } = this.props.form;
-    const children = [];
+    // const children = [];
     const itemArray = [
       'Source',
       'DataBase',
@@ -248,7 +235,7 @@ export default class DataSource extends PureComponent {
   };
 
   render() {
-    const { tableData, dispatch, loading, dataSourceList } = this.props;
+    const { tableData, loading } = this.props;
     const { visible } = this.state;
     const columns = [
       {

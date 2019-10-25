@@ -1,73 +1,60 @@
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
-import { Form, Icon, Input, Button, Divider, Table } from 'antd';
+import { Form, Input, Icon, Button, Divider, Tabs, Modal } from 'antd';
 // import { connect } from 'dva';
 // import classNames from 'classnames';
 import styles from './ApprovalDesign.less';
 
+const { TabPane } = Tabs;
+const { TextArea } = Input;
 class ApprovalDesign extends PureComponent {
-  state = {};
+  state = {
+    dataSource: [],
+    visible: false,
+  };
 
   componentDidMount() {
-    this.props.form.validateFields();
+    this.createData();
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
+  // 生成数据model
+  createData = () => {
+    const data = [];
+    for (let i = 0; i < 46; i++) {
+      data.push({
+        key: i,
+        modelName: `SuperLop项目部署流程 ${i}`,
+        modelValue: `流程图 ${i}`,
+      });
+    }
+    this.setState({
+      dataSource: data,
+    });
+  };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleOk = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
     });
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const setColumns = [
-      {
-        title: '序号',
-        dataIndex: 'number',
-      },
-      {
-        title: '业务名称',
-        dataIndex: 'name',
-      },
-      {
-        title: '流程模型名称',
-        dataIndex: 'tel',
-      },
-      {
-        title: '说明',
-        dataIndex: 'phone',
-        editable: true,
-      },
-      {
-        title: '是否启用',
-        dataIndex: 'isUseing',
-      },
-      {
-        title: '是否默认',
-        dataIndex: 'IsDefault',
-      },
-    ];
-    const data = [];
-    for (let i = 0; i < 50; i++) {
-      data.push({
-        key: i,
-        number: i + 1,
-        name: `Edward King ${i}`,
-        age: 32,
-        tel: '0571-22098909',
-        phone: 18889898989,
-        IsDefault: '否',
-        isUseing: '是',
-        address: `London, Park Lane no. ${i}`,
-      });
-    }
-
+    const { dataSource } = this.state;
     return (
       <Fragment>
-        <div className={styles.approvalCheck}>
+        <div className={styles.approvalDesign}>
           <div className={styles.titleBox}>
             <div className={styles.title}>
               <Icon type="unordered-list" className={styles.icon} />
@@ -75,50 +62,57 @@ class ApprovalDesign extends PureComponent {
             </div>
             <Divider className={styles.divider} />
           </div>
-          <Form layout="inline" onSubmit={this.handleSubmit}>
-            <Form.Item label="说明:">
-              {getFieldDecorator('businesDescription', {
-                rules: [{ required: false, message: '请输入说明' }],
-              })(<Input />)}
-            </Form.Item>
-
-            <Form.Item>
-              <Button
-                type="primary"
-                icon="search"
-                htmlType="submit"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-              >
-                查询
+          <div className={styles.contentBox}>
+            <div className={styles.buttonBox}>
+              <Button type="primary" icon="deployment-unit">
+                部署模型
               </Button>
-            </Form.Item>
-            <br />
-            <Form.Item style={{ marginTop: '5px' }}>
-              <Button
-                type="primary"
-                icon="file-add"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-              >
-                增加
+              <Button type="primary" icon="edit">
+                编辑模型
               </Button>
-            </Form.Item>
-            <Form.Item style={{ marginTop: '5px' }}>
-              <Button
-                type="primary"
-                icon="delete"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-              >
-                删除
+              <Button type="primary" icon="delete">
+                删除模型
               </Button>
+              <Button type="primary" icon="import">
+                导入模型
+              </Button>
+              <Button type="primary" icon="export">
+                导出模型
+              </Button>
+            </div>
+            <div className={styles.tabsBox}>
+              <div className={styles.modelTitleBox}>
+                <span>模型列表</span>
+                <Button type="primary" icon="file-add" onClick={this.showModal}>
+                  新建模型
+                </Button>
+              </div>
+              <Tabs defaultActiveKey="1" tabPosition="left" style={{ height: 400 }}>
+                {dataSource.map(item => (
+                  <TabPane tab={item.modelName} key={item.key}>
+                    {item.modelValue}
+                  </TabPane>
+                ))}
+              </Tabs>
+            </div>
+          </div>
+          <Modal
+            title="新模型"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            <Form.Item label="名称:">
+              <Input placeholder="至少2个字符,最多16个字符" />
             </Form.Item>
-          </Form>
-          <Table columns={setColumns} dataSource={data} bordered className={styles.tableBox} />
+            <Form.Item label="描述:">
+              <TextArea rows={4} />
+            </Form.Item>
+          </Modal>
         </div>
       </Fragment>
     );
   }
 }
 
-const ApprovalDesignFrom = Form.create()(ApprovalDesign);
-
-export default ApprovalDesignFrom;
+export default ApprovalDesign;

@@ -10,25 +10,17 @@ const { Option } = Select;
   approvalCheck: state.approvalCheck,
 }))
 class ApprovalEheck extends PureComponent {
-  state = {};
+  state = {
+    dataSource: [],
+  };
 
   componentDidMount() {
     this.props.form.validateFields();
+    this.createData();
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
-  };
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { approvalCheck } = this.props;
-    const { checkColumns } = approvalCheck;
+  // 生成数据Data
+  createData = () => {
     const data = [];
     for (let i = 0; i < 46; i += 1) {
       data.push({
@@ -42,6 +34,26 @@ class ApprovalEheck extends PureComponent {
         address: `London, Park Lane no. ${i}`,
       });
     }
+    this.setState({
+      dataSource: data,
+    });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
+  };
+
+  render() {
+    const { dataSource } = this.state;
+    const { getFieldDecorator } = this.props.form;
+    const { approvalCheck } = this.props;
+    const { checkColumns } = approvalCheck;
+
     const rangeConfig = {
       rules: [{ type: 'array', required: false, message: '请选择时间' }],
     };
@@ -110,7 +122,12 @@ class ApprovalEheck extends PureComponent {
               </Button>
             </Form.Item>
           </Form>
-          <Table columns={checkColumns} dataSource={data} bordered className={styles.tableBox} />
+          <Table
+            columns={checkColumns}
+            dataSource={dataSource}
+            bordered
+            className={styles.tableBox}
+          />
         </div>
       </Fragment>
     );
