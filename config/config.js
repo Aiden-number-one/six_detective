@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-10-25 09:23:10
+ * @LastEditTime: 2019-10-25 13:56:36
  * @LastEditors: lan
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -181,6 +181,12 @@ export default {
               component: './Approval/ApprovalEheck/ApprovalEheck',
             },
           ],
+        },
+        {
+          path: '/formItem',
+          name: 'formItem',
+          icon: 'build',
+          component: './FormItem/FormItem',
         },
         {
           component: './Page404',

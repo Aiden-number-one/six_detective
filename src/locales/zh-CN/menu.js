@@ -2,7 +2,7 @@
  * @Description: 菜单
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-10-21 14:09:53
+ * @LastEditTime: 2019-10-25 13:57:24
  * @LastEditors: lan
  */
 export default {
@@ -26,6 +26,7 @@ export default {
   'menu.approval.approvalDesign': '流程设计',
   'menu.approval.approvalSet': '审批设置',
   'menu.approval.approvalEheck': '审批查询',
+  'menu.formItem': '表单控件',
   'menu.more-blocks': '更多区块',
   'menu.home': '首页',
   'menu.login': '登录',
