@@ -11,6 +11,12 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       {
+        path: '/',
+        name: 'indexdashboard',
+        component: './Monitor/Monitor',
+        hideInMenu: true,
+      },
+      {
         path: '/data-management',
         name: 'dataManagement',
         routes: [

@@ -1,4 +1,5 @@
 export default {
+  'menu.indexdashboard': 'DASHBOARD',
   'menu.dataManagement': 'DATA MANAGEMENT',
   'menu.dataManagement.dashboard': 'Dashboard',
   'menu.dataManagement.dataImport': 'Data Import',
