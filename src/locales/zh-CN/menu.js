@@ -21,6 +21,7 @@ export default {
   'menu.monitor': '监控预警',
   'menu.dragboard': '图表面板',
   'menu.rulesEngine': '规则引擎',
+  'menu.templateSet': '模板设置',
   'menu.approval': '审批管理',
   'menu.approval.approvalDesign': '流程设计',
   'menu.approval.approvalSet': '审批设置',

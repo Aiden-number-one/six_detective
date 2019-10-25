@@ -14,4 +14,5 @@ export default {
   getDatas: 'kingdom.retl.getDatas',
   delDatas: 'kingdom.retl.delDatas',
   getDataSourceList: 'kingdom.retl.getDataSourceList',
+  getApproval: 'bayconnect.superlop.get_approval_list_page',
 };
