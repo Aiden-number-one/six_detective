@@ -60,7 +60,9 @@ const BasicLayout = props => {
 
   return (
     <ProLayout
+      siderWidth={200}
       logo={collapsed ? logoSamll : logo}
+      menuHeaderRender={logoItem => <a>{logoItem}</a>}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl) {

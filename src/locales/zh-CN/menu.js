@@ -2,26 +2,31 @@
  * @Description: 菜单
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-10-21 14:09:53
+ * @LastEditTime: 2019-10-25 13:57:24
  * @LastEditors: lan
  */
 export default {
+  'menu.database': '数据源',
+  'menu.datapanel': '数据面板',
+  'menu.usermanagement': '用户管理',
+  'menu.emailconfig': '邮箱配置',
+  'menu.systemparams': '系统参数',
   'menu.dataManagement': '数据管理',
   'menu.dataManagement.dashboard': '仪表盘',
   'menu.dataManagement.dataImport': '数据导入',
   'menu.dataManagement.dataImport.lopDataImport': 'LOP数据导入',
   'menu.dataManagement.dataImport.marketDataImport': 'Market数据导入',
   'menu.index': '首页',
-  'menu.database': '数据源',
-  'menu.datapanel': '数据面板',
   'menu.sheet': '电子表格',
   'menu.monitor': '监控预警',
   'menu.dragboard': '图表面板',
   'menu.rulesEngine': '规则引擎',
+  'menu.templateSet': '模板设置',
   'menu.approval': '审批管理',
   'menu.approval.approvalDesign': '流程设计',
   'menu.approval.approvalSet': '审批设置',
   'menu.approval.approvalEheck': '审批查询',
+  'menu.formItem': '表单控件',
   'menu.more-blocks': '更多区块',
   'menu.home': '首页',
   'menu.login': '登录',

@@ -1,4 +1,4 @@
-.approvalCheck {
+.approvalDesign {
   margin: 0 16px;
   .titleBox {
     .title {
@@ -23,7 +23,29 @@
       margin-bottom: 14px;
     }
   }
-  .tableBox {
-    margin-top: 18px;
+  .contentBox {
+    position: relative;
+    .buttonBox {
+      margin-bottom: 10px;
+      margin-left: 220px;
+      :global {
+        .ant-btn-primary {
+          margin-right: 13px;
+          background-color: #1890ff;
+          border-color: #1890ff;
+        }
+      }
+    }
+    .tabsBox {
+      position: relative;
+      .modelTitleBox {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        span {
+          margin-right: 15px;
+        }
+      }
+    }
   }
 }

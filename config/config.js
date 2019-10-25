@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-10-21 14:09:36
+ * @LastEditTime: 2019-10-25 13:56:36
  * @LastEditors: lan
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -89,7 +89,7 @@ export default {
   devtool: isAntDesignProPreview ? 'source-map' : false,
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: router,
-  // [
+  // routes: [
   //   {
   //     path: '/login',
   //     component: '../layouts/UserLayout',
@@ -112,6 +112,24 @@ export default {
   //         name: 'datapanel',
   //         icon: 'environment',
   //         component: './DataPanel/DataPanel',
+  //       },
+  //       {
+  //         path: '/usermanagement',
+  //         name: 'usermanagement',
+  //         icon: 'table',
+  //         component: './UserManagement/UserManagement',
+  //       },
+  //       {
+  //         path: '/emailconfig',
+  //         name: 'emailconfig',
+  //         icon: 'table',
+  //         component: './EmailConfig/EmailConfig',
+  //       },
+  //       {
+  //         path: '/systemparams',
+  //         name: 'systemparams',
+  //         icon: 'table',
+  //         component: './SystemParams/SystemParams',
   //       },
   //       {
   //         path: '/sheet',
@@ -138,6 +156,12 @@ export default {
   //         component: './RulesEngine/RulesEngine',
   //       },
   //       {
+  //         path: '/templateSet',
+  //         name: 'templateSet',
+  //         icon: 'build',
+  //         component: './TemplateSet/TemplateSet',
+  //       },
+  //       {
   //         path: '/approval',
   //         name: 'approval',
   //         icon: 'build',
@@ -158,6 +182,12 @@ export default {
   //             component: './Approval/ApprovalEheck/ApprovalEheck',
   //           },
   //         ],
+  //       },
+  //       {
+  //         path: '/formItem',
+  //         name: 'formItem',
+  //         icon: 'build',
+  //         component: './FormItem/FormItem',
   //       },
   //       {
   //         component: './Page404',
@@ -212,8 +242,8 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api': {
-      // target: 'http://127.0.0.1:8090/superlop/restv2/admin/', // 线上
-      target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
+      target: 'http://10.201.62.184:7567/superlop/restv2/admin/', // 线上
+      // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
       timeout: 10000,

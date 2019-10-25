@@ -6,42 +6,99 @@ import styles from './ApprovalEheck.less';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-@connect(state => ({
-  approvalCheck: state.approvalCheck,
+@connect(({ approvalCheck, loading }) => ({
+  checkColumns: approvalCheck.checkColumns,
+  loading: loading.effects['approvalCheck/approvalCheckDatas'],
+  approvalData: approvalCheck.data,
 }))
 class ApprovalEheck extends PureComponent {
   state = {};
 
   componentDidMount() {
     this.props.form.validateFields();
+    this.checkData();
   }
+
+  // 获取查询列表数据
+  checkData = param => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalCheck/approvalCheckDatas',
+      payload: param,
+    });
+  };
+  // 生成模拟数据Data
+  // createData = () => {
+  //   const data = [];
+  //   for (let i = 0; i < 46; i += 1) {
+  //     data.push({
+  //       key: i,
+  //       name: `Edward King ${i}`,
+  //       age: 32,
+  //       tel: '0571-22098909',
+  //       phone: 18889898989,
+  //       checkStatus: '审批中',
+  //       date: '2019-10-23',
+  //       address: `London, Park Lane no. ${i}`,
+  //     });
+  //   }
+  //   this.setState({
+  //     dataSource: data,
+  //   });
+  // };
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        this.checkData();
       }
     });
   };
 
   render() {
+    // const { dataSource } = this.state;
     const { getFieldDecorator } = this.props.form;
-    const { approvalCheck } = this.props;
-    const { checkColumns } = approvalCheck;
-    const data = [];
-    for (let i = 0; i < 46; i += 1) {
-      data.push({
-        key: i,
-        name: `Edward King ${i}`,
-        age: 32,
-        tel: '0571-22098909',
-        phone: 18889898989,
-        checkStatus: '审批中',
-        date: '2019-10-23',
-        address: `London, Park Lane no. ${i}`,
-      });
-    }
+    const { approvalData = {} } = this.props;
+    const dataSource = approvalData.resultList;
+    const checkColumns = [
+      {
+        title: '审批号',
+        dataIndex: 'businessCode',
+        align: 'center',
+      },
+      {
+        title: '业务名称',
+        dataIndex: 'createrName',
+        align: 'center',
+      },
+      {
+        title: '业务说明',
+        dataIndex: 'procDef',
+        align: 'center',
+      },
+      {
+        title: '发起人',
+        dataIndex: 'taskName',
+        align: 'center',
+      },
+      {
+        title: '审批日期',
+        dataIndex: 'period',
+        align: 'center',
+      },
+      {
+        title: '审批时间',
+        dataIndex: 'LASTUPDATETIME',
+        align: 'center',
+      },
+      {
+        title: '审批状态',
+        dataIndex: 'procInstStatusName',
+        align: 'center',
+      },
+    ];
     const rangeConfig = {
       rules: [{ type: 'array', required: false, message: '请选择时间' }],
     };
@@ -110,7 +167,12 @@ class ApprovalEheck extends PureComponent {
               </Button>
             </Form.Item>
           </Form>
-          <Table columns={checkColumns} dataSource={data} bordered className={styles.tableBox} />
+          <Table
+            columns={checkColumns}
+            dataSource={dataSource}
+            bordered
+            className={styles.tableBox}
+          />
         </div>
       </Fragment>
     );

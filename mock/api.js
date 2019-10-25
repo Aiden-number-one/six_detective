@@ -2,8 +2,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-07 13:33:44
- * @LastEditTime: 2019-09-26 10:21:13
- * @LastEditors: mus
+ * @LastEditTime: 2019-10-24 14:25:19
+ * @LastEditors: lan
  */
 const getDatas = (req, res) => {
   setTimeout(() => {
@@ -25,7 +25,7 @@ const getDatas = (req, res) => {
           },
           {
             key: 2,
-            ParameterID: 'HKE0001',
+            ParameterID: 'HKE0002',
             ParameterName: 'Participant Name',
             GenerationTime: '15/10/2019 20:30:15',
             Source: 'SLOP',
@@ -35,7 +35,7 @@ const getDatas = (req, res) => {
           },
           {
             key: 3,
-            ParameterID: 'HKE0001',
+            ParameterID: 'HKE0003',
             ParameterName: 'Participant Name',
             GenerationTime: '15/10/2019 20:30:15',
             Source: 'SLOP',
@@ -45,7 +45,7 @@ const getDatas = (req, res) => {
           },
           {
             key: 4,
-            ParameterID: 'HKE0001',
+            ParameterID: 'HKE0004',
             ParameterName: 'Participant Name',
             GenerationTime: '15/10/2019 20:30:15',
             Source: 'SLOP',

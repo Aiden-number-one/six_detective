@@ -1,16 +1,35 @@
 import React, { PureComponent, Fragment, Component } from 'react';
 // import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Table, Layout, Card, Icon, Input, Form, Row, Col, Button, Select, Checkbox } from 'antd';
+import { Table, Icon, Input, Form, Row, Col, Button, Select, Checkbox, Popover } from 'antd';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
 import classNames from 'classnames';
 import styles from './DataSource.less';
 
-const { Content, Sider } = Layout;
+const { Option } = Select;
 
-const Title = ({ name }) => (
+const Title = ({ name, tableData, columnName, setVisible, visible }) => (
   <Fragment>
-    <IconFont type="iconfilter1" className={styles.icon} style={{ marginRight: 3 }} />
+    <Popover
+      trigger="click"
+      placement="top"
+      content={
+        <PopoverContent columnName={columnName} tableData={tableData} setVisible={setVisible} />
+      }
+      onClick={() => {
+        setVisible(columnName, !visible[columnName]);
+      }}
+      visible={visible[columnName] || false}
+    >
+      <IconFont
+        type="iconfilter1"
+        className={styles.icon}
+        style={{
+          marginRight: 3,
+          color: visible[columnName] ? '#ea6473' : 'rgba(17, 65, 108, 0.6)',
+        }}
+      />
+    </Popover>
     {name}
     <div className={styles.sortArea}>
       <IconFont type="iconarrow-up" className={classNames(styles.icon, styles.up)} />
@@ -18,6 +37,107 @@ const Title = ({ name }) => (
     </div>
   </Fragment>
 );
+
+const FilterArr = [
+  'Is not equal to',
+  'Is equal to',
+  'Start With',
+  'Contains',
+  'Does Not Contains',
+  'Is Null',
+  'Ends With',
+  'Is not Null',
+  'Is Empty',
+  'Is not Empty',
+  'Has No Value',
+];
+
+class PopoverContent extends Component {
+  state = {
+    checkAll: false,
+  };
+
+  onChange = checkedList => {
+    const { tableData, columnName } = this.props;
+    const columnItems = Array.from(new Set(tableData.map(value => value[columnName])));
+    this.setState({
+      checkedList,
+      checkAll: checkedList.length === columnItems.length,
+    });
+  };
+
+  onCheckAllChange = e => {
+    const { tableData, columnName } = this.props;
+    const columnItems = Array.from(new Set(tableData.map(value => value[columnName])));
+    this.setState({
+      checkedList: e.target.checked ? columnItems : [],
+      checkAll: e.target.checked,
+    });
+  };
+
+  render() {
+    const { tableData, columnName, setVisible } = this.props;
+    const columnItems = Array.from(new Set(tableData.map(value => value[columnName])));
+    return (
+      <div className={styles.filterContent}>
+        <p>
+          <Select
+            className={styles.filterSelect}
+            placeholder="please select"
+            dropdownClassName="selectDropdown"
+          >
+            {FilterArr.map(value => (
+              <Option value={value}>{value}</Option>
+            ))}
+          </Select>
+          <Input className={styles.filterInput} />
+        </p>
+        <div className={styles.checkGroup}>
+          <p>
+            <Checkbox
+              style={{ color: '#10416c' }}
+              onChange={this.onCheckAllChange}
+              checked={this.state.checkAll}
+            >
+              Check all
+            </Checkbox>
+          </p>
+          <Checkbox.Group
+            onChange={this.onChange}
+            // options={columnItems}
+            value={this.state.checkedList}
+          >
+            {columnItems.map(element => (
+              <Row>
+                <Checkbox style={{ color: '#10416c' }} value={element}>
+                  {element}
+                </Checkbox>
+              </Row>
+            ))}
+          </Checkbox.Group>
+        </div>
+        <div className={styles.buttonGroup}>
+          <div
+            className={styles.buttonGreen}
+            onClick={() => {
+              setVisible(columnName, false);
+            }}
+          >
+            <Icon type="check" />
+          </div>
+          <div
+            className={styles.buttonRed}
+            onClick={() => {
+              setVisible(columnName, false);
+            }}
+          >
+            <Icon type="close" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
 
 class AdvancedSearchForm extends Component {
   state = {
@@ -28,7 +148,7 @@ class AdvancedSearchForm extends Component {
   getFields() {
     const count = this.state.expand ? 10 : 6;
     const { getFieldDecorator } = this.props.form;
-    const children = [];
+    // const children = [];
     const itemArray = [
       'Source',
       'DataBase',
@@ -76,6 +196,10 @@ const WrappedAdvancedSearchForm = Form.create({ name: 'advanced_search' })(Advan
   dataSourceList: api.dataSourceList,
 }))
 export default class DataSource extends PureComponent {
+  state = {
+    visible: {},
+  };
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -100,17 +224,44 @@ export default class DataSource extends PureComponent {
     });
   };
 
+  setVisible = (columnName, value) => {
+    const { visible } = this.state;
+    this.setState({
+      visible: {
+        ...visible,
+        [columnName]: value,
+      },
+    });
+  };
+
   render() {
-    const { tableData, dispatch, loading, dataSourceList } = this.props;
+    const { tableData, loading } = this.props;
+    const { visible } = this.state;
     const columns = [
       {
-        title: () => <Title name="Parameter ID" />,
+        title: () => (
+          <Title
+            name="Parameter ID"
+            columnName="ParameterID"
+            visible={visible}
+            setVisible={this.setVisible}
+            tableData={tableData}
+          />
+        ),
         dataIndex: 'ParameterID',
         key: 'ParameterID',
         align: 'center',
       },
       {
-        title: 'Parameter Name',
+        title: () => (
+          <Title
+            name="Parameter Name"
+            columnName="ParameterName"
+            visible={visible}
+            setVisible={this.setVisible}
+            tableData={tableData}
+          />
+        ),
         dataIndex: 'ParameterName',
         key: 'ParameterName',
         align: 'center',
