@@ -143,9 +143,24 @@ export default [
             component: './Page404',
           },
           {
+            path: '/system-management/mail-content-template',
+            name: 'mailContentTemplate',
+            component: './TemplateSet/TemplateSet',
+          },
+          {
+            path: '/system-management/workflow-design',
+            name: 'workflowDesign',
+            component: './Approval/ApprovalDesign/ApprovalDesign',
+          },
+          {
+            path: '/system-management/workflow-config',
+            name: 'workflowConfig',
+            component: './Approval/ApprovalSet/ApprovalSet',
+          },
+          {
             path: '/system-management/workflow-history',
             name: 'workflowHistory',
-            component: './Page404',
+            component: './Approval/ApprovalEheck/ApprovalEheck',
           },
         ],
       },
