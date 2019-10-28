@@ -140,12 +140,42 @@ export default [
           {
             path: '/system-management/user-maintenance',
             name: 'userMaintenance',
-            component: './Page404',
+            component: './UserManagement/UserManagement',
+          },
+          {
+            path: '/system-management/mail-content-template',
+            name: 'mailContentTemplate',
+            component: './TemplateSet/TemplateSet',
+          },
+          {
+            path: '/system-management/workflow-design',
+            name: 'workflowDesign',
+            component: './Approval/ApprovalDesign/ApprovalDesign',
+          },
+          {
+            path: '/system-management/workflow-config',
+            name: 'workflowConfig',
+            component: './Approval/ApprovalSet/ApprovalSet',
           },
           {
             path: '/system-management/workflow-history',
             name: 'workflowHistory',
-            component: './Page404',
+            component: './Approval/ApprovalEheck/ApprovalEheck',
+          },
+          {
+            path: '/system-management/email-parameter',
+            name: 'emailParameter',
+            component: './EmailConfig/EmailConfig',
+          },
+          {
+            path: '/system-management/system-parameters',
+            name: 'systemParameters',
+            component: './SystemParams/SystemParams',
+          },
+          {
+            path: '/system-management/code-antenance',
+            name: 'codeMaintenance',
+            component: './CodeMaintenance/CodeMaintenance',
           },
         ],
       },
