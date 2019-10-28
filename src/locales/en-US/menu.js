@@ -1,4 +1,5 @@
 export default {
+  'menu.indexdashboard': 'DASHBOARD',
   'menu.dataManagement': 'DATA MANAGEMENT',
   'menu.dataManagement.dashboard': 'Dashboard',
   'menu.dataManagement.dataImport': 'Data Import',
@@ -23,9 +24,12 @@ export default {
   'menu.analysis.investorSegmentAnalysis': 'Investor Segment Analysis',
   'menu.systemManagement': 'SYSTEM MANAGEMENT',
   'menu.systemManagement.userMaintenance': 'User Maintenance',
+  'menu.systemManagement.mailContentTemplate': 'Mail Content Template',
   'menu.systemManagement.workflowHistory': 'Workflow History',
   'menu.systemManagement.emailParameter': 'Email Parameter',
   'menu.systemManagement.systemParameters': 'System Parameters',
+  'menu.systemManagement.workflowConfig': 'Workflow Config',
+  'menu.systemManagement.workflowDesign': 'Workflow Design',
   'menu.welcome': 'Welcome',
   'menu.more-blocks': 'More Blocks',
   'menu.home': 'Home',
