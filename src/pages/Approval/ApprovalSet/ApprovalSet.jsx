@@ -1,3 +1,4 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
 import { Form, Icon, Input, Button, Divider, Table, Switch, Popconfirm } from 'antd';

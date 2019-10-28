@@ -1,6 +1,14 @@
 @import '~antd/es/style/themes/default.less';
 @import './sheet.less';
 @pro-header-hover-bg: rgba(0, 0, 0, 0.025);
+@font-face {
+  font-family: 'AvenirHeavy';
+  src: url('./assets/AvenirHeavy.otf');
+}
+@font-face {
+  font-family: 'AvenirBook';
+  src: url('./assets/AvenirBook.ttc');
+}
 html,
 body,
 #root {
@@ -13,6 +21,7 @@ body,
 
 .ant-layout {
   min-height: 100vh;
+  background-color: #fff !important;
 }
 
 canvas {
@@ -20,9 +29,13 @@ canvas {
 }
 
 body {
+  overflow: hidden !important;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol' !important;
 }
 
 ul,
@@ -123,5 +136,101 @@ ol {
 .loginGlobal {
   .ant-form-item {
     margin: 0 2px 24px;
+  }
+}
+
+:global {
+  // 菜单整体的上下距离
+  .ant-menu-root {
+    padding-top: 0 !important;
+  }
+  // logo 位置
+  .ant-pro-sider-menu-logo {
+    padding-left: 15px !important;
+  }
+  // 整体颜色
+  .ant-menu-dark,
+  .ant-pro-sider-menu-logo,
+  .ant-layout-sider,
+  ul.ant-menu-dark .ant-menu-inline.ant-menu-sub {
+    background-color: #10416c !important;
+  }
+  ul.ant-menu.ant-menu-dark .ant-menu-item-selected,
+  ul.ant-menu.ant-menu-dark
+    .ant-menu-submenu-open
+    > ul
+    > li.ant-menu-submenu-open
+    > .ant-menu-submenu-title {
+    background-color: rgba(23, 44, 64, 0.5) !important;
+  }
+  // 左右距离
+  .ant-pro-sider-menu-sider > div > ul.ant-menu-dark.ant-menu-inline > li {
+    > .ant-menu-submenu-title {
+      width: calc(100% - 30px);
+      margin-left: 15px;
+      padding-right: 0;
+      padding-left: 0 !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      i {
+        top: 17px;
+        right: 0;
+      }
+    }
+    > ul > li.ant-menu-item {
+      padding-left: 35px !important;
+    }
+    > ul > li {
+      .ant-menu-submenu-title {
+        padding-left: 35px !important;
+      }
+      > ul > li {
+        padding-left: 55px !important;
+      }
+    }
+  }
+  // 背景色
+  ul.ant-menu-dark .ant-menu-inline.ant-menu-sub {
+    background: #001529;
+    box-shadow: none;
+  }
+  ul.ant-menu.ant-menu-dark .ant-menu-item-selected {
+    background-color: #172c40;
+  }
+  ul.ant-menu.ant-menu-dark .ant-menu-submenu-open {
+    > ul > li.ant-menu-submenu-open > .ant-menu-submenu-title {
+      background-color: #172c40;
+    }
+    > ul > li.ant-menu-submenu-open.ant-menu-submenu-selected > .ant-menu-submenu-title {
+      background: #001529;
+    }
+  }
+  // 字体颜色
+  .ant-menu-root span,
+  .ant-menu-root .ant-menu-submenu-title {
+    color: rgba(255, 255, 255, 1) !important;
+    font-size: 11px !important;
+    font-family: AvenirBook, sans-serif !important;
+  }
+  .ant-menu-root > li > .ant-menu-submenu-title {
+    color: #fff !important;
+    font-size: 11px !important;
+    font-family: AvenirHeavy, sans-serif !important;
+  }
+  // 上下距离
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    height: 35px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .ant-menu-vertical > .ant-menu-item,
+  .ant-menu-vertical-left > .ant-menu-item,
+  .ant-menu-vertical-right > .ant-menu-item,
+  .ant-menu-inline > .ant-menu-item,
+  .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title,
+  .ant-menu-vertical-left > .ant-menu-submenu > .ant-menu-submenu-title,
+  .ant-menu-vertical-right > .ant-menu-submenu > .ant-menu-submenu-title,
+  .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+    line-height: 34px !important;
   }
 }
