@@ -18,6 +18,9 @@ export default {
   },
 
   effects: {
+    // *queryTaskSpmDict({ payload }, { call }) {
+    //   const response = yield call(getDatas, { param: payload });
+    // },
     *queryDatas({ payload }, { call, put }) {
       const response = yield call(getDatas, { param: payload });
       if (response.bcjson.flag === '1') {
