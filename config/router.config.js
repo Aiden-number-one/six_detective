@@ -172,6 +172,11 @@ export default [
             name: 'systemParameters',
             component: './SystemParams/SystemParams',
           },
+          {
+            path: '/system-management/code-antenance',
+            name: 'codeMaintenance',
+            component: './CodeMaintenance/CodeMaintenance',
+          },
         ],
       },
     ],
