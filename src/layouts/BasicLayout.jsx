@@ -4,7 +4,7 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -12,6 +12,7 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
 import logoSamll from '../assets/logo-small.png';
+import '@/assets/css/index.less';
 
 /**
  * use Authorized check all menu item
@@ -35,6 +36,7 @@ const BasicLayout = props => {
   /**
    * constructor
    */
+  const [openKeys, setOpenKeys] = useState([]);
 
   useEffect(() => {
     if (dispatch) {
@@ -62,6 +64,7 @@ const BasicLayout = props => {
     <ProLayout
       siderWidth={200}
       logo={collapsed ? logoSamll : logo}
+      headerRender={headerViewProps => <span>111222</span>}
       menuHeaderRender={logoItem => <a>{logoItem}</a>}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
@@ -100,6 +103,12 @@ const BasicLayout = props => {
       // }}
       {...props}
       {...settings}
+      menuProps={{
+        openKeys,
+        onOpenChange: openKeysNew => {
+          setOpenKeys(openKeysNew);
+        },
+      }}
     >
       {children}
     </ProLayout>
