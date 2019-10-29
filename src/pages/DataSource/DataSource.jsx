@@ -301,7 +301,7 @@ export default class DataSource extends PureComponent {
       type: 'checkbox',
     };
     return (
-      <Fragment>
+      <PageHeaderWrapper>
         <div className={styles.newList}>
           <WrappedAdvancedSearchForm />
           <div className="tableHeader">
@@ -318,7 +318,7 @@ export default class DataSource extends PureComponent {
             }}
           />
         </div>
-      </Fragment>
+      </PageHeaderWrapper>
     );
   }
 }
