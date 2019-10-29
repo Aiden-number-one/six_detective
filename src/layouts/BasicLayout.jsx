@@ -12,6 +12,7 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
 import logoSamll from '../assets/logo-small.png';
+import styles from './BasicLayout.less';
 import '@/assets/css/index.less';
 
 /**
@@ -24,7 +25,15 @@ const menuDataRender = menuList =>
   });
 
 const footerRender = () => null;
-
+const headerRender = () => (
+  <div className={styles.headerRender}>
+    <div className={styles.left}>
+      <div>Welcome,John</div>
+      <div>Last Login: 03-Jun-2019 21:00 HKT</div>
+    </div>
+    <div className={styles.right}></div>
+  </div>
+);
 const BasicLayout = props => {
   const {
     dispatch,
@@ -64,7 +73,7 @@ const BasicLayout = props => {
     <ProLayout
       siderWidth={200}
       logo={collapsed ? logoSamll : logo}
-      headerRender={headerViewProps => <span>111222</span>}
+      headerRender={headerRender}
       menuHeaderRender={logoItem => <a>{logoItem}</a>}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
