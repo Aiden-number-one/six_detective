@@ -12,6 +12,7 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
 import logoSamll from '../assets/logo-small.png';
+import styles from './BasicLayout.less';
 import '@/assets/css/index.less';
 
 /**
@@ -23,8 +24,22 @@ const menuDataRender = menuList =>
     return Authorized.check(item.authority, localItem, null);
   });
 
-const footerRender = () => null;
-
+const footerRender = () => (
+  <div className={styles.footerRender}>
+    {/* eslint-disable-next-line global-require */}
+    <img src={require('@/assets/logo.png')} alt="香港交易所" />
+    <div>@ 2019 Hong Kong Exchanges and Clearing Limited. All rights reserved</div>
+  </div>
+);
+const headerRender = () => (
+  <div className={styles.headerRender}>
+    <div className={styles.left}>
+      <div>Welcome,John</div>
+      <div>Last Login: 03-Jun-2019 21:00 HKT</div>
+    </div>
+    <div className={styles.right}></div>
+  </div>
+);
 const BasicLayout = props => {
   const {
     dispatch,
@@ -64,7 +79,7 @@ const BasicLayout = props => {
     <ProLayout
       siderWidth={200}
       logo={collapsed ? logoSamll : logo}
-      headerRender={headerViewProps => <span>111222</span>}
+      headerRender={headerRender}
       menuHeaderRender={logoItem => <a>{logoItem}</a>}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {

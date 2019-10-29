@@ -32,7 +32,7 @@ export default [
               {
                 path: '/data-management/data-import/lop-data-import',
                 name: 'lopDataImport',
-                component: './Page404',
+                component: './DataSource/DataSource',
               },
               {
                 path: '/data-management/data-import/market-data-import',
@@ -178,6 +178,12 @@ export default [
             component: './CodeMaintenance/CodeMaintenance',
           },
         ],
+      },
+      {
+        path: './formItem',
+        name: 'formItem',
+        component: './FormItem/FormItem',
+        hideInMenu: true,
       },
     ],
   },

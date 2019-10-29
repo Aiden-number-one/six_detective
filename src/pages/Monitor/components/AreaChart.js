@@ -2,7 +2,7 @@
  * @Description: 图表
  * @Author: lan
  * @Date: 2019-10-21 17:02:36
- * @LastEditTime: 2019-10-22 18:03:42
+ * @LastEditTime: 2019-10-29 17:59:56
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -10,7 +10,7 @@ import G2 from '@antv/g2';
 import { Title } from './Title/TitleBar';
 import styles from '../Monitor.less';
 
-export default class ScrollTable extends PureComponent {
+export default class AreaChart extends PureComponent {
   componentDidMount() {
     const { type } = this.props;
     const chart = new G2.Chart({
