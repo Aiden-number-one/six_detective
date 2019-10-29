@@ -1,9 +1,15 @@
 import React, { Component, Fragment } from 'react';
 
 import { Button, Input, Modal, Select, Table } from 'antd';
+import { connect } from 'dva';
 import styles from './user.less';
 
 const { Option } = Select;
+
+@connect(({ userManagement, loading }) => ({
+  loading: loading.effects['userManagement/userManagemetDatas'],
+  userManagementData: userManagement,
+}))
 class UserManagement extends Component {
   state = {
     visible: false,
@@ -83,6 +89,7 @@ class UserManagement extends Component {
     ],
   };
 
+  // eslint-disable-next-line react/sort-comp
   addUser = () => {
     this.setState({ visible: true });
   };
@@ -98,6 +105,20 @@ class UserManagement extends Component {
   handleChange = () => {};
 
   updateUser = () => {};
+
+  // 获取查询列表数据
+  checkData = param => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'userManagement/userManagemetDatas',
+      payload: param,
+    });
+  };
+
+  // eslint-disable-next-line space-before-blocks
+  componentDidMount() {
+    this.checkData();
+  }
 
   render() {
     return (
