@@ -1,8 +1,26 @@
 .form-item {
+  margin-right: 20px;
   background-color: #fff;
 }
+@media (min-width: 991px) {
+  .form-item {
+    margin-right: 100px;
+  }
+}
 :global {
+  // .ant-form-item-label {
+  //   display: flex;
+  //   align-items: center;
+  //   white-space: normal;
+  // }
+  @media (max-width: 768px) {
+    .ant-col-xs-24.ant-form-item-label {
+      text-align: left;
+    }
+  }
   .ant-form-item-label > label {
+    // display: inline;
+    // flex: 1;
     color: #10416c;
   }
   // 多选框
@@ -218,5 +236,28 @@
   }
   .ant-calendar-input-wrap {
     display: none;
+  }
+  // 单选框
+  .ant-radio-inner {
+    border-color: #10416c;
+  }
+  .ant-radio-checked .ant-radio-inner {
+    background-color: #10416c;
+  }
+  .ant-radio-checked .ant-radio-inner::after {
+    position: absolute;
+    top: 50%;
+    left: 21%;
+    display: table;
+    width: 5px;
+    height: 9px;
+    background-color: transparent;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    transform: rotate(45deg) scale(1) translate(-50%, -50%);
+    opacity: 1;
+    transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+    content: ' ';
   }
 }
