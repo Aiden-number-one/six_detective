@@ -7,6 +7,12 @@
     margin-right: 100px;
   }
 }
+h2 {
+  width: 300px;
+  margin: 0 auto 20px;
+  white-space: normal;
+  text-align: center;
+}
 :global {
   // .ant-form-item-label {
   //   display: flex;
@@ -30,17 +36,17 @@
   .ant-checkbox-inner {
     border: 1px solid #10416c;
   }
-  .ant-checkbox .ant-checkbox-inner::after {
-    position: absolute;
-    display: table;
-    border: 2px solid #10416c;
-    border-top: 0;
-    border-left: 0;
-    transform: rotate(45deg) scale(1) translate(-50%, -50%);
-    opacity: 1;
-    transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
-    content: ' ';
-  }
+  // .ant-checkbox .ant-checkbox-inner::after {
+  //   position: absolute;
+  //   display: table;
+  //   border: 2px solid #10416c;
+  //   border-top: 0;
+  //   border-left: 0;
+  //   transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  //   opacity: 1;
+  //   transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+  //   content: ' ';
+  // }
   .ant-checkbox-checked .ant-checkbox-inner::after {
     border-color: #fff;
   }
@@ -70,7 +76,7 @@
   }
   // 次按钮 取消按钮
   .ant-btn {
-    height: 34px;
+    height: 36px;
     color: #a5a6a7;
     background-color: #e3e3e3;
     border-color: #e3e3e3;
@@ -90,7 +96,7 @@
   }
   // 文本框
   .ant-input {
-    height: 34px;
+    height: 36px;
     color: #10416c;
     border-color: #10416c;
     border-radius: 0;
@@ -134,8 +140,8 @@
   }
   .ant-select-selection--single,
   .ant-select-selection__rendered {
-    height: 34px;
-    line-height: 34px;
+    height: 36px;
+    line-height: 36px;
   }
   .ant-select-selection {
     border: 1px solid #10416c;

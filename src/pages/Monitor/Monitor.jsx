@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import classNames from 'classnames';
 import styles from './Monitor.less';
-import ScrollTable from './components/scrollTable';
+import ScrollTable from './components/ScrollTable';
 import AreaChart from './components/AreaChart';
 import LevelBox from './components/Level/LevelBox';
 import ChartsBox from './components/Charts/ChartsBox';
@@ -31,7 +31,7 @@ export default class Monitor extends PureComponent {
     const scale = document.getElementById('pageWidth').offsetWidth / 1920;
     document.getElementById('scaleDiv').style.transform = `scale(${scale})`;
     const height = document.getElementById('scaleDiv').offsetHeight * scale;
-    document.getElementsByClassName('ant-layout')[0].style.height = `${height}px`;
+    document.getElementById('pageWidth').style.height = `${height}px`;
   }
 
   componentDidUpdate() {

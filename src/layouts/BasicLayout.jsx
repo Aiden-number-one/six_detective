@@ -24,7 +24,13 @@ const menuDataRender = menuList =>
     return Authorized.check(item.authority, localItem, null);
   });
 
-const footerRender = () => null;
+const footerRender = () => (
+  <div className={styles.footerRender}>
+    {/* eslint-disable-next-line global-require */}
+    <img src={require('@/assets/logo.png')} alt="香港交易所" />
+    <div>@ 2019 Hong Kong Exchanges and Clearing Limited. All rights reserved</div>
+  </div>
+);
 const headerRender = () => (
   <div className={styles.headerRender}>
     <div className={styles.left}>

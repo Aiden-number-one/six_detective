@@ -2,10 +2,11 @@
  * @Description: 表单控件
  * @Author: lan
  * @Date: 2019-10-25 13:42:35
- * @LastEditTime: 2019-10-28 18:36:05
+ * @LastEditTime: 2019-10-29 13:41:03
  * @LastEditors: lan
  */
 import React, { Component, Fragment } from 'react';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import {
   Form,
   Button,
@@ -68,7 +69,14 @@ export default class FormItem extends Component {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Fragment>
+      <PageHeaderWrapper>
+        <div>
+          <Button>CANCEL</Button>
+          <span> </span>
+          <Button type="primary">SEARCH</Button>
+          <span> </span>
+        </div>
+        <h2>Transaction Originator Section Lop Input Form 2</h2>
         <Form className={styles['form-item']} {...formItemLayout}>
           <Row>
             <Col xs={24} md={12}>
@@ -78,7 +86,7 @@ export default class FormItem extends Component {
                   initialValue: undefined,
                 })(
                   <LocaleProvider locale="en-us">
-                    <DatePicker style={{ width: '100%' }} />
+                    <DatePicker style={{ width: '100%' }} disabled />
                   </LocaleProvider>,
                 )}
               </Form.Item>
@@ -88,7 +96,7 @@ export default class FormItem extends Component {
                 {getFieldDecorator('epCode', {
                   rules: [{ required: true, message: 'Error' }],
                   initialValue: undefined,
-                })(<Input placeholder="Type your answer here" />)}
+                })(<Input placeholder="Type your answer here" disabled />)}
               </Form.Item>
             </Col>
             <Col xs={24} md={12}>
@@ -96,7 +104,7 @@ export default class FormItem extends Component {
                 {getFieldDecorator('submitterCode', {
                   rules: [{ required: true, message: 'Error' }],
                   initialValue: undefined,
-                })(<Input placeholder="Type your answer here" />)}
+                })(<Input placeholder="Type your answer here" disabled />)}
               </Form.Item>
             </Col>
             <Col xs={24} md={12}>
@@ -104,7 +112,7 @@ export default class FormItem extends Component {
                 {getFieldDecorator('submitterName', {
                   rules: [{ required: true, message: 'Error' }],
                   initialValue: undefined,
-                })(<Input placeholder="Type your answer here" />)}
+                })(<Input placeholder="Type your answer here" disabled />)}
               </Form.Item>
             </Col>
             <Col xs={24} md={12}>
@@ -112,7 +120,7 @@ export default class FormItem extends Component {
                 {getFieldDecorator('toCode', {
                   rules: [{ required: true, message: 'Error' }],
                   initialValue: undefined,
-                })(<Input placeholder="Type your answer here" />)}
+                })(<Input placeholder="Type your answer here" disabled />)}
               </Form.Item>
             </Col>
             <Col xs={24} md={12}>
@@ -120,7 +128,7 @@ export default class FormItem extends Component {
                 {getFieldDecorator('toName', {
                   rules: [{ required: true, message: 'Error' }],
                   initialValue: undefined,
-                })(<Input placeholder="Type your answer here" />)}
+                })(<Input placeholder="Type your answer here" disabled />)}
               </Form.Item>
             </Col>
             <Col xs={24} md={12}>
@@ -128,7 +136,7 @@ export default class FormItem extends Component {
                 {getFieldDecorator('phoneNO', {
                   rules: [{ required: true, message: 'Error' }],
                   initialValue: undefined,
-                })(<Input placeholder="Type your answer here" />)}
+                })(<Input placeholder="Type your answer here" disabled />)}
               </Form.Item>
             </Col>
             <Col xs={24} md={12}>
@@ -136,7 +144,7 @@ export default class FormItem extends Component {
                 {getFieldDecorator('acName', {
                   rules: [{ required: true, message: 'Error' }],
                   initialValue: undefined,
-                })(<Input placeholder="Type your answer here" />)}
+                })(<Input placeholder="Type your answer here" disabled />)}
               </Form.Item>
             </Col>
           </Row>
@@ -146,7 +154,7 @@ export default class FormItem extends Component {
                 {getFieldDecorator('RBIName', {
                   rules: [{ required: true, message: 'Error' }],
                   initialValue: undefined,
-                })(<Input placeholder="Type your answer here" />)}
+                })(<Input placeholder="Type your answer here" disabled />)}
               </Form.Item>
             </Col>
           </Row>
@@ -156,7 +164,7 @@ export default class FormItem extends Component {
                 {getFieldDecorator('RTOName', {
                   rules: [{ required: true, message: 'Error' }],
                   initialValue: undefined,
-                })(<Input placeholder="Type your answer here" />)}
+                })(<Input placeholder="Type your answer here" disabled />)}
               </Form.Item>
             </Col>
           </Row>
@@ -197,6 +205,96 @@ export default class FormItem extends Component {
               </Form.Item>
             </Col>
           </Row>
+          <Row>
+            <h2>Option Series</h2>
+          </Row>
+          <Row>
+            <Col xs={24} md={12}>
+              <Form.Item label="A/C Name">
+                {getFieldDecorator('acName', {
+                  rules: [{ required: true, message: 'Error' }],
+                  initialValue: undefined,
+                })(<Input placeholder="Type your answer here" disabled />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={24} md={12}>
+              <Form.Item label="A/C Name">
+                {getFieldDecorator('acName', {
+                  rules: [{ required: true, message: 'Error' }],
+                  initialValue: undefined,
+                })(<Input placeholder="Type your answer here" disabled />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Item label="Type of Account" labelCol={{ md: 5 }}>
+                {getFieldDecorator('accountType', {
+                  rules: [{ required: true, message: 'Error' }],
+                  initialValue: 'house',
+                })(
+                  <Radio.Group>
+                    <Radio value="house">House</Radio>
+                    <Radio value="client">Cilent</Radio>
+                  </Radio.Group>,
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <h2>BI/Omni Section Lop Input Form 2</h2>
+          </Row>
+          <Row>
+            <Col xs={24} md={12}>
+              <Form.Item label="A/C Name">
+                {getFieldDecorator('acName', {
+                  rules: [{ required: true, message: 'Error' }],
+                  initialValue: undefined,
+                })(<Input placeholder="Type your answer here" disabled />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={24} md={12}>
+              <Form.Item label="A/C Name">
+                {getFieldDecorator('acName', {
+                  rules: [{ required: true, message: 'Error' }],
+                  initialValue: undefined,
+                })(<Input placeholder="Type your answer here" disabled />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Item label="Reported BI Name" labelCol={{ md: 5 }}>
+                {getFieldDecorator('RBIName', {
+                  rules: [{ required: true, message: 'Error' }],
+                  initialValue: undefined,
+                })(<Input placeholder="Type your answer here" disabled />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={24} md={12}>
+              <Form.Item label="Submitter Name">
+                {getFieldDecorator('submitterName', {
+                  rules: [{ required: true, message: 'Error' }],
+                  initialValue: undefined,
+                })(<Input placeholder="Type your answer here" disabled />)}
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={12}>
+              <Form.Item label="TO Code">
+                {getFieldDecorator('toCode', {
+                  rules: [{ required: true, message: 'Error' }],
+                  initialValue: undefined,
+                })(<Input placeholder="Type your answer here" disabled />)}
+              </Form.Item>
+            </Col>
+          </Row>
+
           {/* <Form.Item wrapperCol={{ offset: 8 }}>
             <Button>CANCEL</Button>
             <span> </span>
@@ -268,7 +366,7 @@ export default class FormItem extends Component {
           </Form.Item>
           <Form.Item></Form.Item> */}
         </Form>
-      </Fragment>
+      </PageHeaderWrapper>
     );
   }
 }
