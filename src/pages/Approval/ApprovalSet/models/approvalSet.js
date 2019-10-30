@@ -1,34 +1,31 @@
+import Service from '@/utils/Service';
+
+const { getConfig } = Service;
 const approvalSetModel = {
   namespace: 'approvalSet',
   state: {
-    checkColumns: [
-      {
-        title: '序号',
-        dataIndex: 'number',
-      },
-      {
-        title: '业务名称',
-        dataIndex: 'name',
-      },
-      {
-        title: '流程模型名称',
-        dataIndex: 'tel',
-      },
-      {
-        title: '说明',
-        dataIndex: 'phone',
-      },
-      {
-        title: '是否启用',
-        dataIndex: 'isUseing',
-      },
-      {
-        title: '是否默认',
-        dataIndex: 'IsDefault',
-      },
-    ],
+    data: [],
   },
-  effects: {},
-  reducers: {},
+  effects: {
+    *approvalConfigDatas({ payload }, { call, put }) {
+      const response = yield call(getConfig, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'setDatas',
+            payload: response.bcjson.items,
+          });
+        }
+      }
+    },
+  },
+  reducers: {
+    setDatas(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+  },
 };
 export default approvalSetModel;

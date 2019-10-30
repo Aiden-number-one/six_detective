@@ -248,5 +248,13 @@ export default {
       pathRewrite: { '^/api': '' },
       timeout: 10000,
     },
+    '/upload': {
+      target:
+        'http://10.201.62.184:7567/superlop/rest/admin/v2.0/bayconnect.superlop.file_upload.json', // 线上
+      // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
+      changeOrigin: true,
+      pathRewrite: { '^/upload': '' },
+      timeout: 10000,
+    },
   },
 };
