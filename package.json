@@ -20,7 +20,7 @@
     "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./",
     "lint:prettier": "check-prettier lint",
     "lint:style": "stylelint --fix \"src/**/*.less\" --syntax less",
-    "prettier": "prettier -c --write \"**/*\"",
+    "prettier": "prettier -c --write \"src/**/*\"",
     "start": "umi dev",
     "start:no-mock": "cross-env MOCK=none umi dev",
     "test": "umi test",
