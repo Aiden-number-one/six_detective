@@ -2,7 +2,7 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-09-25 15:32:23
+ * @LastEditTime: 2019-10-30 17:48:29
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -87,42 +87,55 @@ class LoginPage extends Component {
           }}
         >
           <div style={{ marginTop: 30 }}>
+            <div
+              style={{
+                margin: '0 2px',
+                textAlign: 'right',
+                color: '#10416c',
+                fontSize: 16,
+                fontWeight: 600,
+              }}
+            >
+              USER LOGIN
+            </div>
             <UserName
               name="loginName"
-              placeholder="请输入用户名"
+              placeholder="Log in"
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: '用户名不能为空' }),
+                  message: formatMessage({ id: 'Error' }),
                 },
               ]}
+              style={{ height: 40 }}
             />
             <Password
               name="loginPwd"
-              placeholder="请输入登录密码"
+              placeholder="Password"
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: '密码不能为空' }),
+                  message: formatMessage({ id: 'Error' }),
                 },
               ]}
               onPressEnter={e => {
                 e.preventDefault();
                 this.loginForm.validateFields(this.handleSubmit);
               }}
+              style={{ height: 40 }}
             />
           </div>
 
-          <div>
+          {/* <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="记住密码" />
             </Checkbox>
             <a style={{ float: 'right' }} href="">
               <FormattedMessage id="忘记密码" />
             </a>
-          </div>
-          <Submit loading={submitting}>
-            <FormattedMessage id="登录" />
+          </div> */}
+          <Submit loading={submitting} style={{ height: 40 }}>
+            <FormattedMessage id="LOG IN" />
           </Submit>
         </Login>
       </div>
