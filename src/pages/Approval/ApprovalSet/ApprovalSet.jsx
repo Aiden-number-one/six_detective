@@ -6,8 +6,9 @@ import { connect } from 'dva';
 // import classNames from 'classnames';
 import styles from './ApprovalSet.less';
 
-@connect(state => ({
-  approvalSet: state.approvalSet,
+@connect(({ approvalSet, loading }) => ({
+  loading: loading.effects['approvalSet/approvalConfigDatas'],
+  approvalData: approvalSet.data,
 }))
 class ApprovalSet extends PureComponent {
   state = {
@@ -17,8 +18,21 @@ class ApprovalSet extends PureComponent {
 
   componentDidMount() {
     this.props.form.validateFields();
+    this.configData({
+      pageNumber: 10,
+      pageSize: 1,
+    });
     this.createData();
   }
+
+  // 获取查询设置列表数据
+  configData = param => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalSet/approvalConfigDatas',
+      payload: param,
+    });
+  };
 
   // 生成dataSource数据
   createData = () => {
