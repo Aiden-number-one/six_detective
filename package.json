@@ -35,7 +35,7 @@
   },
   "lint-staged": {
     "**/*.less": "stylelint --syntax less",
-    "**/*.{js,jsx,tsx,ts,less,md,json}": [
+    "src/**/*.{js,jsx,tsx,ts,less,md,json}": [
       "prettier --write",
       "git add"
     ],
