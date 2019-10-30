@@ -186,6 +186,104 @@ class UpdateForm extends Component {
 }
 const NewUpdateForm = Form.create({})(UpdateForm);
 
+class PasswordForm extends Component {
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Fragment>
+        <div>
+          <Form>
+            <Form.Item label="原密码：">
+              {getFieldDecorator('oldPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your 原密码',
+                  },
+                ],
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="登陆密码：">
+              {getFieldDecorator('password', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your 登陆密码',
+                  },
+                ],
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="确认密码：">
+              {getFieldDecorator('confirmPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please confirm your password!',
+                  },
+                  {
+                    validator: this.compareToFirstPassword,
+                  },
+                ],
+              })(
+                <Input.Password
+                  className={styles['input-value']}
+                  onBlur={this.handleConfirmBlur}
+                />,
+              )}
+            </Form.Item>
+          </Form>
+        </div>
+      </Fragment>
+    );
+  }
+}
+
+const NewPasswordForm = Form.create({})(PasswordForm);
+
+class ResetPasswordForm extends Component {
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Fragment>
+        <div>
+          <Form>
+            <Form.Item label="登陆密码：">
+              {getFieldDecorator('password', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your 登陆密码',
+                  },
+                ],
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="确认密码：">
+              {getFieldDecorator('confirmPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please confirm your password!',
+                  },
+                  {
+                    validator: this.compareToFirstPassword,
+                  },
+                ],
+              })(
+                <Input.Password
+                  className={styles['input-value']}
+                  onBlur={this.handleConfirmBlur}
+                />,
+              )}
+            </Form.Item>
+          </Form>
+        </div>
+      </Fragment>
+    );
+  }
+}
+
+const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
+
 @connect(({ userManagement, loading }) => ({
   loading: loading.effects['userManagement/userManagemetDatas'],
   userManagementData: userManagement.data,
@@ -196,6 +294,8 @@ class UserManagement extends Component {
     updateVisible: false,
     lockVisible: false,
     closingVisible: false,
+    updatePasswordVisible: false,
+    resetPasswordVisible: false,
     // eslint-disable-next-line react/no-unused-state
     userInfo: {
       login: '',
@@ -239,9 +339,15 @@ class UserManagement extends Component {
             <a href="#" onClick={() => this.lockUser()}>
               锁定
             </a>
-            <a href="#">销户</a>
-            <a href="#">密码修改</a>
-            <a href="#">密码重置</a>
+            <a href="#" onClick={() => this.closingUser()}>
+              销户
+            </a>
+            <a href="#" onClick={() => this.updatePassword()}>
+              密码修改
+            </a>
+            <a href="#" onClick={() => this.resetPassword()}>
+              密码重置
+            </a>
           </span>
         ),
       },
@@ -251,6 +357,10 @@ class UserManagement extends Component {
   formRef = React.createRef();
 
   updateFormRef = React.createRef();
+
+  passwordFormRef = React.createRef();
+
+  resetPasswordFormRef = React.createRef();
 
   // eslint-disable-next-line react/sort-comp
   addUser = () => {
@@ -417,7 +527,7 @@ class UserManagement extends Component {
       payload: param,
       callback: () => {
         console.log('okk');
-        this.checkData({
+        this.queryUser({
           customerno: '3047',
         });
       },
@@ -429,12 +539,118 @@ class UserManagement extends Component {
 
   lockCancel = () => {
     this.setState({
+      lockVisible: false,
+    });
+  };
+
+  // 销户
+  closingUser = () => {
+    this.setState({
+      closingVisible: true,
+    });
+  };
+
+  closingConfirm = () => {
+    const { dispatch } = this.props;
+    const param = {
+      custCustomerno: 3047,
+      operationType: 3,
+    };
+    dispatch({
+      type: 'userManagement/operationUserModelDatas',
+      payload: param,
+      callback: () => {
+        this.queryUser({
+          customerno: '3047',
+        });
+        this.setState({
+          closingVisible: false,
+        });
+      },
+    });
+  };
+
+  closingCancel = () => {
+    this.setState({
       closingVisible: false,
     });
   };
 
+  // 修改密码
+  updatePassword = () => {
+    this.setState({
+      updatePasswordVisible: true,
+    });
+  };
+
+  updatePasswordConfirm = () => {
+    const { dispatch } = this.props;
+    this.passwordFormRef.current.validateFields((err, values) => {
+      console.log('err, values=', err, values);
+      const passwordStrength = this.passWordStrength(values.password);
+      const param = {
+        custCustomerno: 3047,
+        operationType: 5,
+        oldPassword: values.oldPassword,
+        password: values.password,
+        passwordStrength,
+      };
+      dispatch({
+        type: 'userManagement/operationUserModelDatas',
+        payload: param,
+        callback: () => {
+          this.setState({
+            updatePasswordVisible: false,
+          });
+        },
+      });
+    });
+  };
+
+  updatePasswordCancel = () => {
+    this.setState({
+      updatePasswordVisible: false,
+    });
+  };
+
+  // 重置密码
+  resetPassword = () => {
+    this.setState({
+      resetPasswordVisible: true,
+    });
+  };
+
+  resetPasswordConfirm = () => {
+    const { dispatch } = this.props;
+    this.resetPasswordFormRef.current.validateFields((err, values) => {
+      console.log('err, values=', err, values);
+      const passwordStrength = this.passWordStrength(values.password);
+      const param = {
+        custCustomerno: 3047,
+        operationType: 6,
+        password: values.password,
+        passwordStrength,
+      };
+      dispatch({
+        type: 'userManagement/operationUserModelDatas',
+        payload: param,
+        callback: () => {
+          this.setState({
+            resetPasswordVisible: false,
+          });
+        },
+      });
+    });
+  };
+
+  resetPasswordCancel = () => {
+    this.setState({
+      resetPasswordVisible: false,
+    });
+  };
+
   // 获取查询列表数据
-  checkData = param => {
+  queryUser = param => {
     const { dispatch } = this.props;
 
     dispatch({
@@ -447,7 +663,7 @@ class UserManagement extends Component {
     const obj = {
       customerno: '3047',
     };
-    this.checkData(obj);
+    this.queryUser(obj);
   }
 
   render() {
@@ -507,6 +723,24 @@ class UserManagement extends Component {
               onCancel={this.closingCancel}
             >
               <span>是否销户？</span>
+            </Modal>
+            {/* 密码修改 */}
+            <Modal
+              title="密码修改"
+              visible={this.state.updatePasswordVisible}
+              onOk={this.updatePasswordConfirm}
+              onCancel={this.updatePasswordCancel}
+            >
+              <NewPasswordForm ref={this.passwordFormRef}></NewPasswordForm>
+            </Modal>
+            {/* 密码重置 */}
+            <Modal
+              title="密码重置"
+              visible={this.state.resetPasswordVisible}
+              onOk={this.resetPasswordConfirm}
+              onCancel={this.resetPasswordCancel}
+            >
+              <NewResetPasswordForm ref={this.resetPasswordFormRef}></NewResetPasswordForm>
             </Modal>
           </div>
           <div>
