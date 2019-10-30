@@ -32,7 +32,7 @@ export default [
               {
                 path: '/data-management/data-import/lop-data-import',
                 name: 'lopDataImport',
-                component: './Page404',
+                component: './DataSource/DataSource',
               },
               {
                 path: '/data-management/data-import/market-data-import',
@@ -140,7 +140,7 @@ export default [
           {
             path: '/system-management/user-maintenance',
             name: 'userMaintenance',
-            component: './Page404',
+            component: './UserManagement/UserManagement',
           },
           {
             path: '/system-management/mail-content-template',
@@ -162,7 +162,28 @@ export default [
             name: 'workflowHistory',
             component: './Approval/ApprovalEheck/ApprovalEheck',
           },
+          {
+            path: '/system-management/email-parameter',
+            name: 'emailParameter',
+            component: './EmailConfig/EmailConfig',
+          },
+          {
+            path: '/system-management/system-parameters',
+            name: 'systemParameters',
+            component: './SystemParams/SystemParams',
+          },
+          {
+            path: '/system-management/code-antenance',
+            name: 'codeMaintenance',
+            component: './CodeMaintenance/CodeMaintenance',
+          },
         ],
+      },
+      {
+        path: './formItem',
+        name: 'formItem',
+        component: './FormItem/FormItem',
+        hideInMenu: true,
       },
     ],
   },

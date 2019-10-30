@@ -8,7 +8,7 @@
 import { message } from 'antd';
 import Service from '@/utils/Service';
 
-const { getDatas, delDatas, getDataSourceList, queryTaskSpmDict } = Service;
+const { getDatas, delDatas, getDataSourceList } = Service;
 export default {
   namespace: 'api',
 
@@ -18,9 +18,9 @@ export default {
   },
 
   effects: {
-    *queryTaskSpmDict({ payload }, { call }) {
-      const response = yield call(getDatas, { param: payload });
-    },
+    // *queryTaskSpmDict({ payload }, { call }) {
+    //   const response = yield call(getDatas, { param: payload });
+    // },
     *queryDatas({ payload }, { call, put }) {
       const response = yield call(getDatas, { param: payload });
       if (response.bcjson.flag === '1') {

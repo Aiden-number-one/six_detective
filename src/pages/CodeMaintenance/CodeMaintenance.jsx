@@ -1,108 +1,84 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Button, Input, Modal, Select, Table } from 'antd';
-import styles from './email.less';
+import styles from './code.less';
 
 const { Option } = Select;
 
-class EmailConfig extends Component {
+class CodeMaintenance extends Component {
   state = {
     visible: false,
     dataSource: [
       {
         key: '1',
-        name: '233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
+        index: '1',
+        dictionaryItem: '233',
+        itemName: '192.168.5.22',
+        itemSort: 88,
         operation: [1, 3],
       },
       {
         key: '2',
-        name: '23355',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
+        index: '1',
+        dictionaryItem: '233',
+        itemName: '192.168.5.22',
+        itemSort: 88,
       },
       {
         key: '3',
-        name: '6233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
+        index: '1',
+        dictionaryItem: '233',
+        itemName: '192.168.5.22',
+        itemSort: 88,
       },
       {
         key: '4',
-        name: '8233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
+        index: '1',
+        dictionaryItem: '233',
+        itemName: '192.168.5.22',
+        itemSort: 88,
       },
       {
         key: '5',
-        name: '9233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
+        index: '1',
+        dictionaryItem: '233',
+        itemName: '192.168.5.22',
+        itemSort: 88,
       },
       {
         key: '6',
-        name: '9233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
+        index: '1',
+        dictionaryItem: '233',
+        itemName: '192.168.5.22',
+        itemSort: 88,
       },
       {
         key: '7',
-        name: '9233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
+        index: '1',
+        dictionaryItem: '233',
+        itemName: '192.168.5.22',
+        itemSort: 88,
       },
     ],
     columns: [
       {
-        title: '配置ID',
-        dataIndex: 'name',
-        key: 'name',
+        title: '序号',
+        dataIndex: 'index',
+        key: 'index',
       },
       {
-        title: '服务器IP',
-        dataIndex: 'server',
-        key: 'server',
+        title: '字典子项',
+        dataIndex: 'dictionaryItem',
+        key: 'dictionaryItem',
       },
       {
-        title: '端口',
-        dataIndex: 'port',
-        key: 'port',
+        title: '子项名称',
+        dataIndex: 'itemName',
+        key: 'itemName',
       },
       {
-        title: '发件人邮箱',
-        dataIndex: 'email',
-        key: 'email',
-      },
-      {
-        title: '是否开启',
-        dataIndex: 'isOpen',
-        key: 'isOpen',
-      },
-      {
-        title: '创建',
-        dataIndex: 'create',
-        key: 'create',
+        title: '子项排序',
+        dataIndex: 'itemSort',
+        key: 'itemSort',
       },
       {
         title: '操作',
@@ -121,6 +97,44 @@ class EmailConfig extends Component {
             <a href="#">删除</a>
           </span>
         ),
+      },
+    ],
+    // eslint-disable-next-line key-spacing
+    codeDataSource: [
+      {
+        key: '1',
+        index: 1,
+        dictionaryEntry: '1013',
+        entryName: '报表类型',
+      },
+      {
+        key: '2',
+        index: 2,
+        dictionaryEntry: '1014',
+        entryName: '报表类型4',
+      },
+      {
+        key: '3',
+        index: 3,
+        dictionaryEntry: '1015',
+        entryName: '报表类型5',
+      },
+    ],
+    codeColumns: [
+      {
+        title: '序号',
+        dataIndex: 'index',
+        key: 'index',
+      },
+      {
+        title: '字典条目',
+        dataIndex: 'dictionaryEntry',
+        key: 'dictionaryEntry',
+      },
+      {
+        title: '条目名称',
+        dataIndex: 'entryName',
+        key: 'entryName',
       },
     ],
   };
@@ -148,6 +162,26 @@ class EmailConfig extends Component {
   render() {
     return (
       <Fragment>
+        <div>
+          <div>
+            <ul className={styles.clearfix}>
+              <li className={styles.fl}>
+                <span>条目名称：</span>
+                <Input className={styles['login-name']}></Input>
+              </li>
+              <li className={styles.fl}>
+                <Button type="primary" icon="search"></Button>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <Table
+              dataSource={this.state.codeDataSource}
+              pagination={{ pageSize: 5 }}
+              columns={this.state.codeColumns}
+            ></Table>
+          </div>
+        </div>
         <div>
           <div>
             <Button
@@ -229,4 +263,4 @@ class EmailConfig extends Component {
   }
 }
 
-export default EmailConfig;
+export default CodeMaintenance;

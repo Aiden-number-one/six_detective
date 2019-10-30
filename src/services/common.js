@@ -26,4 +26,6 @@ export default {
   exportModel: 'bayconnect.superlop.set_workflow_model_export',
   deployModel: 'bayconnect.superlop.set_workflow_model_deploy',
   downloadFile: 'bayconnect.superlop.file_download_quick',
+  getUserList: 'bayconnect.superlop.get_user_list_impl',
+  addUser: 'bayconnect.superlop.set_add_customer',
 };

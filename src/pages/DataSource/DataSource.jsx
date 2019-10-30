@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment, Component } from 'react';
-// import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Table, Icon, Input, Form, Row, Col, Button, Select, Checkbox, Popover } from 'antd';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
@@ -301,7 +301,7 @@ export default class DataSource extends PureComponent {
       type: 'checkbox',
     };
     return (
-      <Fragment>
+      <PageHeaderWrapper>
         <div className={styles.newList}>
           <WrappedAdvancedSearchForm />
           <div className="tableHeader">
@@ -318,7 +318,7 @@ export default class DataSource extends PureComponent {
             }}
           />
         </div>
-      </Fragment>
+      </PageHeaderWrapper>
     );
   }
 }
