@@ -31,6 +31,7 @@ export default {
   'menu.systemManagement.workflowConfig': 'Workflow Config',
   'menu.systemManagement.workflowDesign': 'Workflow Design',
   'menu.systemManagement.codeMaintenance': 'codeMaintenance',
+  'menu.systemManagement.auditLog': 'Audit Log',
   'menu.welcome': 'Welcome',
   'menu.more-blocks': 'More Blocks',
   'menu.home': 'Home',

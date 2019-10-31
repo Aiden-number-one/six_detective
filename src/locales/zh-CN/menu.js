@@ -20,6 +20,7 @@ export default {
   'menu.systemManagement.emailParameter': '邮箱配置',
   'menu.systemManagement.systemParameters': '系统参数',
   'menu.systemManagement.codeMaintenance': '系统字典管理',
+  'menu.systemManagement.auditLog': '操作日志',
   'menu.index': '首页',
   'menu.sheet': '电子表格',
   'menu.monitor': '监控预警',
