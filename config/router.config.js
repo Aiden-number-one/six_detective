@@ -177,6 +177,11 @@ export default [
             name: 'codeMaintenance',
             component: './CodeMaintenance/CodeMaintenance',
           },
+          {
+            path: '/system-management/audit-log',
+            name: 'auditLog',
+            component: './AuditLog/AuditLog'
+          }
         ],
       },
       {

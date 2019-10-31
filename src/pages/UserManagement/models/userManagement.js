@@ -1,12 +1,13 @@
 import Service from '@/utils/Service';
 
-const { getUserList, addUser, operationUser } = Service;
+const { getUserList, addUser, updateUser, operationUser } = Service;
 export const userManagementModel = {
   namespace: 'userManagement',
   state: {
     data: [],
     datas: {},
     operationDatas: {},
+    updateDatas: {},
   },
   effects: {
     *userManagemetDatas({ payload }, { call, put }) {
@@ -26,6 +27,17 @@ export const userManagementModel = {
         if (response.bcjson.items) {
           yield put({
             type: 'addDatas',
+            payload: response.bcjson.items,
+          });
+        }
+      }
+    },
+    *updateUserModelDatas({ payload }, { call, put }) {
+      const response = yield call(updateUser, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'updateDatas',
             payload: response.bcjson.items,
           });
         }
@@ -52,6 +64,12 @@ export const userManagementModel = {
       };
     },
     addDatas(state, action) {
+      return {
+        ...state,
+        datas: action.payload,
+      };
+    },
+    updateDatas(state, action) {
       return {
         ...state,
         datas: action.payload,

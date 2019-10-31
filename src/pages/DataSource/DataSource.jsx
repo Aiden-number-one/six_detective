@@ -2,8 +2,8 @@ import React, { PureComponent, Fragment, Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Table, Icon, Input, Form, Row, Col, Button, Select, Checkbox, Popover } from 'antd';
 import { connect } from 'dva';
-import IconFont from '@/components/IconFont';
 import classNames from 'classnames';
+import IconFont from '@/components/IconFont';
 import styles from './DataSource.less';
 
 const { Option } = Select;
@@ -158,7 +158,7 @@ class AdvancedSearchForm extends Component {
       'Last Update Marker',
     ];
     return itemArray.map((value, i) => (
-      <Col span={8} key={value} style={{ display: i < count ? 'block' : 'none' }}>
+      <Col xs={12} sm={12} lg={8} key={value} style={{ display: i < count ? 'block' : 'none' }}>
         <Form.Item label={value} colon={false}>
           {getFieldDecorator(value, {})(<Select placeholder="Please Select" />)}
         </Form.Item>
@@ -169,7 +169,7 @@ class AdvancedSearchForm extends Component {
   render() {
     return (
       <Form className="ant-advanced-search-form">
-        <Row gutter={48}>{this.getFields()}</Row>
+        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>{this.getFields()}</Row>
         <div className="clearFix">
           <span className="filterArea">
             <span className="text">More Filter</span>+
