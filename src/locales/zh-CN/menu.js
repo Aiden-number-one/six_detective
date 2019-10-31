@@ -6,6 +6,7 @@
  * @LastEditors: lan
  */
 export default {
+  'menu.welcome': '欢迎',
   'menu.database': '数据源',
   'menu.datapanel': '数据面板',
   'menu.usermanagement': '用户管理',
