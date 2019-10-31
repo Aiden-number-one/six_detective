@@ -1,149 +1,410 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Button, Input, Modal, Select, Table } from 'antd';
+import { connect } from 'dva';
 import styles from './email.less';
 
 const { Option } = Select;
+class AddForm extends Component {
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Fragment>
+        <div>
+          <Form>
+            <Form.Item label="服务器IP：">
+              {getFieldDecorator('mailHost', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your mailHost',
+                  },
+                ],
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="端口：">
+              {getFieldDecorator('mailPort', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your mailPort',
+                  },
+                ],
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="发件人邮箱地址：">
+              {getFieldDecorator('mailAddress', {
+                rules: [
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
+                  {
+                    required: true,
+                    message: 'Please input your mailAddress',
+                  },
+                ],
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="发件人邮箱密码：">
+              {getFieldDecorator('mailPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your mailPassword',
+                  },
+                ],
+              })(<Input.Password className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="是否开启：">
+              {getFieldDecorator('isopen', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your isopen',
+                  },
+                ],
+              })(
+                <Select
+                  defaultValue="0"
+                  style={{ width: 300 }}
+                  onChange={this.handleChange}
+                  placeholder="Please select"
+                >
+                  <Option value="0">开启</Option>
+                  <Option value="1">关闭</Option>
+                </Select>,
+              )}
+            </Form.Item>
+            <Form.Item label="备注：">
+              {getFieldDecorator('remark', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your remark',
+                  },
+                ],
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+          </Form>
+        </div>
+      </Fragment>
+    );
+  }
+}
 
-class EmailConfig extends Component {
+const NewAddForm = Form.create({})(AddForm);
+
+class ModifyForm extends Component {
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { emailObj } = this.props;
+    return (
+      <Fragment>
+        <div>
+          <Form>
+            <Form.Item label="服务器IP：">
+              {getFieldDecorator('mailHost', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your mailHost',
+                  },
+                ],
+                initialValue: emailObj.mailHost,
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="端口：">
+              {getFieldDecorator('mailPort', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your mailPort',
+                  },
+                ],
+                initialValue: emailObj.mailPort,
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="发件人邮箱地址：">
+              {getFieldDecorator('mailAddress', {
+                rules: [
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
+                  {
+                    required: true,
+                    message: 'Please input your mailAddress',
+                  },
+                ],
+                initialValue: emailObj.mailAddress,
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="发件人邮箱密码：">
+              {getFieldDecorator('mailPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your mailPassword',
+                  },
+                ],
+                initialValue: emailObj.mailPassword,
+              })(<Input.Password className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="是否开启：">
+              {getFieldDecorator('isopen', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your isopen',
+                  },
+                ],
+                initialValue: emailObj.isopen,
+              })(
+                <Select
+                  defaultValue="0"
+                  style={{ width: 300 }}
+                  onChange={this.handleChange}
+                  placeholder="Please select"
+                >
+                  <Option value="0">开启</Option>
+                  <Option value="1">关闭</Option>
+                </Select>,
+              )}
+            </Form.Item>
+            <Form.Item label="备注：">
+              {getFieldDecorator('remark', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your remark',
+                  },
+                ],
+                initialValue: emailObj.remark,
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+          </Form>
+        </div>
+      </Fragment>
+    );
+  }
+}
+
+const NewModifyForm = Form.create({})(ModifyForm);
+@connect(({ getEmail, loading }) => ({
+  loading: loading.effects['getEmail/getEmailList'],
+  getEmailListData: getEmail.data,
+}))
+class EmailParameter extends Component {
   state = {
-    visible: false,
-    dataSource: [
-      {
-        key: '1',
-        name: '233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
-        operation: [1, 3],
-      },
-      {
-        key: '2',
-        name: '23355',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
-      },
-      {
-        key: '3',
-        name: '6233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
-      },
-      {
-        key: '4',
-        name: '8233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
-      },
-      {
-        key: '5',
-        name: '9233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
-      },
-      {
-        key: '6',
-        name: '9233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
-      },
-      {
-        key: '7',
-        name: '9233',
-        server: '192.168.5.22',
-        port: 88,
-        email: 'zhangsan@sina.com',
-        isOpen: '是',
-        create: '创建',
-      },
-    ],
+    addVisible: false,
+    modifyVisible: false,
+    deleteVisible: false,
+    mailId: '',
     columns: [
       {
         title: '配置ID',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'mailId',
+        key: 'mailId',
       },
       {
         title: '服务器IP',
-        dataIndex: 'server',
-        key: 'server',
+        dataIndex: 'mailHost',
+        key: 'mailHost',
       },
       {
         title: '端口',
-        dataIndex: 'port',
-        key: 'port',
+        dataIndex: 'mailPort',
+        key: 'mailPort',
       },
       {
         title: '发件人邮箱',
-        dataIndex: 'email',
-        key: 'email',
+        dataIndex: 'mailAddress',
+        key: 'mailAddress',
       },
       {
         title: '是否开启',
-        dataIndex: 'isOpen',
-        key: 'isOpen',
+        dataIndex: 'isopen',
+        key: 'isopen',
       },
       {
-        title: '创建',
-        dataIndex: 'create',
-        key: 'create',
+        title: '备注',
+        dataIndex: 'remark',
+        key: 'remark',
       },
       {
         title: '操作',
         dataIndex: 'operation',
         key: 'operation',
-        render: (res, recode, index, active) => (
+        render: (res, recode) => (
           <span className={styles.operation}>
             <a
               href="#"
               onClick={() => {
-                this.updateEmail(res, recode, index, active);
+                this.updateEmail(res, recode);
               }}
             >
               修改
             </a>
-            <a href="#">删除</a>
+            <a
+              href="#"
+              onClick={() => {
+                this.deleteEmail(res, recode);
+              }}
+            >
+              删除
+            </a>
           </span>
         ),
       },
     ],
+    emailObj: {},
   };
 
+  addFormRef = React.createRef();
+
+  modifyForm = React.createRef();
+
+  componentDidMount() {
+    this.getEmailInit();
+  }
+
   addUser = () => {
-    this.setState({ visible: true });
+    this.setState({ addVisible: true });
   };
 
   handleOk = () => {
-    this.setState({ visible: false });
+    const { dispatch } = this.props;
+    this.addFormRef.current.validateFields((err, values) => {
+      const param = {
+        mailHost: values.mailHost,
+        mailPort: values.mailPort,
+        mailAddress: values.mailAddress,
+        mailPassword: values.mailPassword,
+        isopen: values.isopen,
+        remark: values.remark,
+        isAddConfig: true,
+      };
+      dispatch({
+        type: 'getEmail/addEmailDate',
+        payload: param,
+        callback: () => {
+          this.getEmailInit();
+          this.setState({ addVisible: false });
+        },
+      });
+    });
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({ addVisible: false });
   };
 
   handleChange = () => {};
 
-  updateEmail = () => {};
+  // 修改
+  updateEmail = (res, obj) => {
+    const Obj = {
+      mailHost: obj.mailHost,
+      mailPort: obj.mailPort,
+      mailAddress: obj.mailAddress,
+      mailPassword: obj.mailPassword,
+      isopen: obj.isopen,
+      remark: obj.remark,
+      isAddConfig: obj.isAddConfig,
+    };
+    this.setState(
+      {
+        modifyVisible: true,
+        emailObj: Obj,
+      },
+      () => {
+        console.log('emailObj=', this.state.emailObj);
+      },
+    );
+  };
+
+  modifyConfirm = () => {
+    const { dispatch } = this.props;
+    this.modifyForm.current.validateFields((err, values) => {
+      const param = {
+        mailHost: values.mailHost,
+        mailPort: values.mailPort,
+        mailAddress: values.mailAddress,
+        mailPassword: values.mailPassword,
+        isopen: values.isopen,
+        remark: values.remark,
+      };
+      dispatch({
+        type: 'getEmail/addEmailDate',
+        payload: param,
+        callback: () => {
+          this.getEmailInit();
+          this.setState({
+            modifyVisible: false,
+          });
+        },
+      });
+    });
+  };
+
+  modifyCancel = () => {
+    this.setState({
+      modifyVisible: false,
+    });
+  };
 
   setServer = () => {};
 
   handleSubmit = () => {};
+
+  // 删除
+  deleteEmail = (res, obj) => {
+    console.log('res=', res);
+    this.setState({
+      mailId: obj.mailId,
+      deleteVisible: true,
+    });
+  };
+
+  deleteConfirm = () => {
+    const { dispatch } = this.props;
+    const param = {
+      mailId: this.state.mailId,
+    };
+    dispatch({
+      type: 'getEmail/deleteEmailDate',
+      payload: param,
+      callback: () => {
+        this.getEmailInit();
+        this.setState({
+          deleteVisible: false,
+        });
+      },
+    });
+  };
+
+  deleteCancel = () => {
+    this.setState({
+      deleteVisible: false,
+    });
+  };
+
+  getEmailInit = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'getEmail/getEmailList',
+      payload: {},
+    });
+  };
+
+  // 数据处理函数
+  formatIsOpen = value => {
+    const obj = {
+      0: '关闭',
+      1: '开启',
+    };
+    return obj[value];
+  };
 
   render() {
     return (
@@ -160,65 +421,38 @@ class EmailConfig extends Component {
             </Button>
             <Modal
               title="新增绑定配置"
-              visible={this.state.visible}
+              visible={this.state.addVisible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
             >
               <div>
-                <Form onSubmit={this.handleSubmit}>
-                  {/* <ul className={styles['add-user']}> */}
-                  <Form.Item label="服务器IP：">
-                    {/* <li> */}
-                    {/* <span>服务器IP：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="端口：">
-                    {/* <li> */}
-                    {/* <span>端口：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="发件人邮箱地址：">
-                    {/* <li> */}
-                    {/* <span>发件人邮箱地址：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="发件人邮箱密码：">
-                    {/* <li> */}
-                    {/* <span>发件人邮箱密码：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="是否开启：">
-                    {/* <li> */}
-                    {/* <span>是否开启：</span> */}
-                    <Select
-                      defaultValue="lucy"
-                      style={{ width: 300 }}
-                      onChange={this.handleChange}
-                      placeholder="Please select"
-                    >
-                      <Option value="jack">开启</Option>
-                      <Option value="lucy">关闭</Option>
-                    </Select>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="备注：">
-                    {/* <li> */}
-                    {/* <span>备注：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  {/* </ul> */}
-                </Form>
+                <NewAddForm ref={this.addFormRef}></NewAddForm>
+              </div>
+            </Modal>
+            {/* 修改 */}
+            <Modal
+              title="修改邮件配置"
+              visible={this.state.modifyVisible}
+              onOk={this.modifyConfirm}
+              onCancel={this.modifyCancel}
+            >
+              <NewModifyForm ref={this.modifyForm} emailObj={this.state.emailObj}></NewModifyForm>
+            </Modal>
+            {/* 删除 */}
+            <Modal
+              title="修改邮件配置"
+              visible={this.state.deleteVisible}
+              onOk={this.deleteConfirm}
+              onCancel={this.deleteCancel}
+            >
+              <div>
+                <span>确定删除吗？</span>
               </div>
             </Modal>
           </div>
           <div>
             <Table
-              dataSource={this.state.dataSource}
+              dataSource={this.props.getEmailListData}
               pagination={{ pageSize: 5 }}
               columns={this.state.columns}
             ></Table>
@@ -229,4 +463,4 @@ class EmailConfig extends Component {
   }
 }
 
-export default EmailConfig;
+export default EmailParameter;

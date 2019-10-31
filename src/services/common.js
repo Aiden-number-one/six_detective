@@ -28,5 +28,9 @@ export default {
   downloadFile: 'bayconnect.superlop.file_download_quick',
   getUserList: 'bayconnect.superlop.get_user_list_impl',
   addUser: 'bayconnect.superlop.set_add_customer',
+  updateUser: 'bayconnect.superlop./v2.0/bayconnect.superlop.set_user_edit',
   operationUser: 'bayconnect.superlop.set_user_service_impl',
+  emailList: 'bayconnect.superlop.get_mail_config_list',
+  addEmail: 'bayconnect.superlop.set_mail_config_save',
+  deleteEmail: 'bayconnect.superlop.set_mail_config_delete',
 };
