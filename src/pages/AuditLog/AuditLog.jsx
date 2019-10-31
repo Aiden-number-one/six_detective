@@ -28,12 +28,7 @@ class OperatorForm extends Component {
                     message: 'Please input your beginDate',
                   },
                 ],
-              })(
-                <DatePicker
-                  onChange={() => this.changeBeginDate()}
-                  className={styles['input-value']}
-                />,
-              )}
+              })(<DatePicker onChange={this.changeBeginDate} className={styles['input-value']} />)}
             </Form.Item>
             <Form.Item label="结束时间：">
               {getFieldDecorator('endDate', {
@@ -68,7 +63,7 @@ class AuditLog extends Component {
       {
         index: 1,
         operatorTime: '2019-08-22',
-        operatorName: '张三',
+        operatorName: '李四1111',
         businessName: 'aaa',
         status: '成功',
         returnInfo: '认证成功',
