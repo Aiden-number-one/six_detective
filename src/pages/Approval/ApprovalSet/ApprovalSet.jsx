@@ -1,28 +1,32 @@
+/* eslint-disable react/no-unused-state */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
-import { Form, Icon, Input, Button, Divider, Table, Switch, Popconfirm } from 'antd';
+import { Form, Icon, Input, Button, Divider, Table, Popconfirm } from 'antd';
 import { connect } from 'dva';
+import ModelForm from './compontents/modelForm';
 // import classNames from 'classnames';
 import styles from './ApprovalSet.less';
 
 @connect(({ approvalSet, loading }) => ({
   loading: loading.effects['approvalSet/approvalConfigDatas'],
-  approvalData: approvalSet.data,
+  approvalConfigList: approvalSet.data,
 }))
 class ApprovalSet extends PureComponent {
   state = {
-    dataSource: [],
-    count: 0,
+    // dataSource: [],
+    // count: 0,
+    formValue: '',
+    visible: false,
   };
 
   componentDidMount() {
-    this.props.form.validateFields();
+    // this.props.form.validateFields();
     this.configData({
-      pageNumber: 10,
-      pageSize: 1,
+      pageNumber: '1',
+      pageSize: '10',
     });
-    this.createData();
+    // this.createData();
   }
 
   // 获取查询设置列表数据
@@ -34,68 +38,100 @@ class ApprovalSet extends PureComponent {
     });
   };
 
-  // 生成dataSource数据
-  createData = () => {
-    const data = [];
-    for (let i = 0; i < 3; i++) {
-      data.push({
-        key: i,
-        number: i + 1,
-        name: `任务发布审批流程 ${i}`,
-        age: 32,
-        modelName: `一步发布审核 ${i}`,
-        phone: 18889898989,
-        IsDefault: '否',
-        isUseing: '是',
-        address: `London, Park Lane no. ${i}`,
-      });
-    }
-    this.setState({
-      dataSource: data,
-      count: data.length,
-    });
-  };
+  // // 生成dataSource数据
+  // createData = () => {
+  //   const data = [];
+  //   for (let i = 0; i < 3; i++) {
+  //     data.push({
+  //       key: i,
+  //       number: i + 1,
+  //       name: `任务发布审批流程 ${i}`,
+  //       age: 32,
+  //       modelName: `一步发布审核 ${i}`,
+  //       phone: 18889898989,
+  //       IsDefault: '否',
+  //       isUseing: '是',
+  //       address: `London, Park Lane no. ${i}`,
+  //     });
+  //   }
+  //   this.setState({
+  //     dataSource: data,
+  //     count: data.length,
+  //   });
+  // };
 
-  // 表单提交
+  // 查询表单提交
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        this.configData({
+          pageNumber: '1',
+          pageSize: '10',
+          remark: values.remark,
+        });
       }
     });
   };
 
   // 增加行 dom
   handleAdd = () => {
-    const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      number: count + 1,
-      name: `任务发布审批流程 ${count}`,
-      age: 32,
-      modelName: `一步发布审核 ${count}`,
-      phone: 18889898989,
-      IsDefault: '否',
-      isUseing: '是',
-      address: `London, Park Lane no. ${count}`,
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalSet/addConfigDatas',
+      payload: '',
+      callback: param => this.configData(param),
     });
+    // const { count, dataSource } = this.state;
+    // const newData = {
+    //   key: count,
+    //   number: count + 1,
+    //   name: `任务发布审批流程 ${count}`,
+    //   age: 32,
+    //   modelName: `一步发布审核 ${count}`,
+    //   phone: 18889898989,
+    //   IsDefault: '否',
+    //   isUseing: '是',
+    //   address: `London, Park Lane no. ${count}`,
+    // };
+    // this.setState({
+    //   dataSource: [...dataSource, newData],
+    //   count: count + 1,
+    // });
   };
 
   // 删除行
-  handleDelete = key => {
-    const { dataSource } = this.state;
-    const dataSourceCopy = [...dataSource];
-    this.setState({ dataSource: dataSourceCopy.filter(item => item.key !== key) });
+  handleDelete = configId => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalSet/deleteConfigDatas',
+      payload: { configId },
+      callback: param => this.configData(param),
+    });
+    // const { dataSource } = this.state;
+    // const dataSourceCopy = [...dataSource];
+    // this.setState({ dataSource: dataSourceCopy.filter(item => item.key !== key) });
+  };
+
+  showModel = record => {
+    this.setState({
+      visible: true,
+      formValue: record,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
   };
 
   render() {
-    const { dataSource } = this.state;
+    const { visible, formValue } = this.state;
+    const { approvalConfigList } = this.props;
     const { getFieldDecorator } = this.props.form;
+
     const setColumns = [
       {
         title: '序号',
@@ -104,52 +140,51 @@ class ApprovalSet extends PureComponent {
       },
       {
         title: '业务名称',
-        dataIndex: 'name',
+        dataIndex: 'businessName',
         align: 'center',
       },
       {
         title: '流程模型名称',
-        dataIndex: 'modelName',
+        dataIndex: 'processName',
         align: 'center',
       },
       {
         title: '说明',
-        dataIndex: 'phone',
+        dataIndex: 'remark',
         align: 'center',
-        render: () => ({
-          children: <Input placeholder="输入字符不能超过25位" />,
-        }),
       },
       {
         title: '是否启用',
-        dataIndex: 'isUseing',
+        dataIndex: 'status',
         align: 'center',
-        render: () => ({
-          children: <Switch checkedChildren="启用" unCheckedChildren="停用" defaultChecked />,
-        }),
+        // render: () => ({
+        //   children: <Switch checkedChildren="启用" unCheckedChildren="停用" defaultChecked />,
+        // }),
       },
       {
         title: '是否默认',
-        dataIndex: 'IsDefault',
+        dataIndex: 'isDefault',
         align: 'center',
-        render: () => ({
-          children: <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked />,
-        }),
+        // render: () => ({
+        //   children: <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked />,
+        // }),
       },
       {
         title: '操作',
         dataIndex: 'operation',
         align: 'center',
-        render: (text, record) => {
-          if (this.state.dataSource.length >= 1) {
-            return (
-              <Popconfirm title="确定删除吗?" onConfirm={() => this.handleDelete(record.key)}>
-                <Icon type="delete" />
-              </Popconfirm>
-            );
-          }
-          return null;
-        },
+        render: (text, record) => (
+          <div>
+            <Icon
+              onClick={() => this.showModel(record)}
+              type="edit"
+              style={{ marginRight: '22px' }}
+            />
+            <Popconfirm title="确定删除吗?" onConfirm={() => this.handleDelete(record.configId)}>
+              <Icon type="delete" />
+            </Popconfirm>
+          </div>
+        ),
       },
     ];
 
@@ -163,9 +198,10 @@ class ApprovalSet extends PureComponent {
             </div>
             <Divider className={styles.divider} />
           </div>
+
           <Form layout="inline" onSubmit={this.handleSubmit}>
             <Form.Item label="说明:">
-              {getFieldDecorator('businesDescription', {
+              {getFieldDecorator('remark', {
                 rules: [{ required: false, message: '请输入说明' }],
               })(<Input />)}
             </Form.Item>
@@ -191,17 +227,18 @@ class ApprovalSet extends PureComponent {
                 增加
               </Button>
             </Form.Item>
-            {/* <Form.Item className={styles.delete}>
-              <Button type="primary" icon="delete">
-                删除
-              </Button>
-            </Form.Item> */}
           </Form>
           <Table
             columns={setColumns}
-            dataSource={dataSource}
+            dataSource={approvalConfigList}
             bordered
             className={styles.tableBox}
+          />
+          <ModelForm
+            showModel={this.showModel}
+            handleCancel={this.handleCancel}
+            visible={visible}
+            formValue={formValue}
           />
         </div>
       </Fragment>

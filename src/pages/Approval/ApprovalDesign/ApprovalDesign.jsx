@@ -86,6 +86,7 @@ class ApprovalDesign extends PureComponent {
     dispatch({
       type: 'approvalDesign/importModel',
       payload: param,
+      callback: (pageNumber, pageSize) => this.getModelList(pageNumber, pageSize),
     });
   };
 
@@ -99,7 +100,7 @@ class ApprovalDesign extends PureComponent {
   // 上传文件
   importFileStatus = info => {
     if (info.file.status === 'done') {
-      const url = info.file.response.bcjson.items.absoluteUrl;
+      const url = info.file.response.bcjson.items.relativeUrl;
       // console.log(info)
       this.importModel({ filename: url });
     } else if (info.file.status === 'error') {
@@ -108,12 +109,12 @@ class ApprovalDesign extends PureComponent {
   };
 
   // 下载文件
-  downloadFile = () => {
+  downloadFile = filePath => {
     const { dispatch } = this.props;
     dispatch({
       type: 'approvalDesign/downloadFile',
       payload: {
-        filePath: '',
+        filePath,
       },
     });
   };
@@ -127,6 +128,7 @@ class ApprovalDesign extends PureComponent {
         modelId: chooseModelId,
         type: 'xml',
       },
+      callback: filePath => this.downloadFile(filePath),
     });
   };
 
@@ -153,7 +155,7 @@ class ApprovalDesign extends PureComponent {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // console.log('Received values of form: ', values);
+        console.log('Received values of form: ', values);
         this.createModel(values);
         this.setState({
           visible: false,
