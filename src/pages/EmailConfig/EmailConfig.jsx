@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { Form, Button, Input, Modal, Select, Table } from 'antd';
 import { connect } from 'dva';
 import styles from './email.less';
+import KdTable from '@/components/KdTable';
+import generatePersons from '@/components/KdTable/genData';
 
 const { Option } = Select;
 class AddForm extends Component {
@@ -257,7 +259,67 @@ class EmailParameter extends Component {
         ),
       },
     ],
-    emailObj: {},
+    // header: [
+    //   {
+    //     field: 'personid',
+    //     caption: 'ID',
+    //     width: 100,
+    //     headerStyle: { textAlign: 'center' },
+    //     style: { textAlign: 'center' },
+    //   },
+    //   {
+    //     field: 'fname',
+    //     caption: 'First Name',
+    //     width: 200,
+    //     sort: true,
+    //     style: { textAlign: 'center' },
+    //   },
+    //   {
+    //     field: 'lname',
+    //     caption: 'Last Name',
+    //     width: 100,
+    //     headerStyle: { textAlign: 'center' },
+    //     style: { textAlign: 'center' },
+    //   },
+    //   {
+    //     field: 'email',
+    //     caption: 'Email',
+    //     width: 'auto',
+    //     headerStyle: { textAlign: 'center' },
+    //     style: { textAlign: 'center' },
+    //   },
+    //   // {
+    //   //   field: 'action',
+    //   //   caption: 'Action',
+    //   //   width: 60,
+    //   //   headerStyle: { textAlign: 'center' },
+    //   //   style: { textAlign: 'center' },
+    //   //   columnType: new cheetahGrid.columns.type.ButtonColumn({
+    //   //     caption: '修改',
+    //   //   }),
+    //   //   action: new cheetahGrid.columns.action.ButtonAction({
+    //   //     action() {
+    //   //       alert('click modify');
+    //   //     },
+    //   //   }),
+    //   // },
+    //   // {
+    //   //   field: 'action1',
+    //   //   caption: '',
+    //   //   width: 60,
+    //   //   headerStyle: { textAlign: 'center' },
+    //   //   style: { textAlign: 'center' },
+    //   //   columnType: new cheetahGrid.columns.type.ButtonColumn({
+    //   //     caption: '删除',
+    //   //   }),
+    //   //   action: new cheetahGrid.columns.action.ButtonAction({
+    //   //     action() {
+    //   //       alert('click delete');
+    //   //     },
+    //   //   }),
+    //   // },
+    // ],
+    records: generatePersons(10),
   };
 
   addFormRef = React.createRef();
@@ -458,6 +520,8 @@ class EmailParameter extends Component {
             ></Table>
           </div>
         </div>
+        {/* 这是KdTable渲染的表格 */}
+        <KdTable dataSource={this.state.records}></KdTable>
       </Fragment>
     );
   }

@@ -77,7 +77,7 @@ const BasicLayout = props => {
 
   return (
     <ProLayout
-      siderWidth={200}
+      siderWidth={250}
       logo={collapsed ? logoSamll : logo}
       headerRender={headerRender}
       menuHeaderRender={logoItem => <a>{logoItem}</a>}

@@ -33,16 +33,30 @@ KISBPM.URL = {
   putModel: function(modelId) {
     return ACTIVITI.CONFIG.contextRoot + '/model/' + modelId + '/save';
   },
-  getParams: function({ N, V, P, S }) {
+  getParams: function({ N, V, P, S }, isEncoder = true) {
     const NVPS = {
       N,
       V,
       P,
       S,
     };
-    P.bcLangType = "ZHCN";
-    
-    NVPS.P = BASE64.encoder(JSON.stringify(NVPS.P));
+    P.bcLangType = 'ZHCN';
+    // debugger;
+    if (isEncoder) {
+      NVPS.P = BASE64.encoder(JSON.stringify(NVPS.P));
+      return {
+        param: {
+          bcp: NVPS.P,
+          s: NVPS.S,
+        },
+        header: this.getHeader(NVPS),
+      };
+    }
+    // debugger;
+    if (window.btoa) {
+      NVPS.P = window.btoa(unescape(encodeURIComponent(JSON.stringify(NVPS.P))));
+    }
+
     return {
       param: {
         bcp: NVPS.P,
@@ -131,7 +145,6 @@ KISBPM.URL = {
       newArray.push(array.splice(random, 1)[0]);
     }
     return newArray;
-
   },
   APPROVE: '_approve',
   AUDITINFO: '_auditinfo',

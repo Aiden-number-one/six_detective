@@ -105,7 +105,7 @@ activitiModeler
       /* Helper method to fetch model from server (always needed) */
       function fetchModel(modelId) {
         const V = 'v2.0'; // 版本号
-        const N = 'bayconnect.superlop.get_process_resource'; // 接口名
+        const N = 'bayconnect.superlop.get_workflow_model_detail'; // 接口名
         const P = {
           modelId: modelId,
         }; // 参数
@@ -127,13 +127,13 @@ activitiModeler
         $http
           .post('/api/' + V + '/' + N + '.json', data, postCfg)
           .success(function(data, status, headers, config) {
-            var kdjson = data.kdjson;
+            var kdjson = data.bcjson;
             data = {};
             if (kdjson.flag === '0' || kdjson.len === 0) {
               console.error('Error loading model with id ' + modelId + ' ' + kdjson.msg);
               return;
             } else {
-              data = kdjson.items[0];
+              data = kdjson.items;
             }
             /**
              * 处理流条件 - xyx
