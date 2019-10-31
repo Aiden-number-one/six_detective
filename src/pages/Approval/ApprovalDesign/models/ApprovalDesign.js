@@ -84,7 +84,7 @@ export default {
       }
     },
     *downloadFile({ payload }, { call }) {
-      const response = yield call(downloadFile, { param: payload });
+      const response = yield call(downloadFile, { param: payload, method: 'GET' });
       if (response.bcjson.flag === '1') {
         //   message.success('部署成功');
       }
