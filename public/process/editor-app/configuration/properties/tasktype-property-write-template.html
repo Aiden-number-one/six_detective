@@ -1,0 +1,6 @@
+
+<div ng-controller="KisBpmTaskTypeCtrl">
+    <select ng-model="property.value" ng-options="x.value as x.name for x in items"
+            ng-change="multiInstanceChanged()">
+    </select>
+</div>

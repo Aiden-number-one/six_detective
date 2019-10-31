@@ -242,8 +242,8 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api': {
-      target: 'http://10.201.62.184:7567/superlop/restv2/admin/', // 线上
-      // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
+      // target: 'http://10.201.62.184:7567/superlop/restv2/admin/', // 线上
+      target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
       timeout: 10000,
@@ -254,6 +254,14 @@ export default {
       // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,
       pathRewrite: { '^/upload': '' },
+      timeout: 10000,
+    },
+    '/download': {
+      target:
+        'http://10.201.62.184:7567/superlop/rest/admin/v2.0/bayconnect.superlop.file_download_quick.json', // 线上
+      // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
+      changeOrigin: true,
+      pathRewrite: { '^/download': '' },
       timeout: 10000,
     },
   },

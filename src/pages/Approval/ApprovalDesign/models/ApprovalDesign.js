@@ -28,7 +28,9 @@ export default {
             type: 'setDatas',
             payload: response.bcjson.items,
           });
-          callback(response.bcjson.items[0].id);
+          callback(
+            response.bcjson.items && response.bcjson.items[0] && response.bcjson.items[0].id,
+          );
         }
       }
     },
@@ -62,16 +64,17 @@ export default {
         callback('1', '10');
       }
     },
-    *importModel({ payload }, { call }) {
+    *importModel({ payload, callback }, { call }) {
       const response = yield call(importModel, { param: payload });
       if (response.bcjson.flag === '1') {
         message.success('导入成功');
+        callback('1', '10');
       }
     },
-    *exportModel({ payload }, { call }) {
+    *exportModel({ payload, callback }, { call }) {
       const response = yield call(exportModel, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('导出成功');
+        callback(response.bcjson.items);
       }
     },
     *deployModel({ payload }, { call }) {
@@ -93,7 +96,7 @@ export default {
       return {
         ...state,
         data: action.payload,
-        chooseModelId: action.payload[0].id,
+        chooseModelId: action.payload && action.payload[0] && action.payload[0].id,
       };
     },
     changeModelId(state, action) {
