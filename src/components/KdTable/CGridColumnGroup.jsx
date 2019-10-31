@@ -4,10 +4,10 @@ import React from 'react';
 function getPropsObjectInternal(elements) {
   return {
     columns: React.Children.map(elements, item => {
-      const { props, children: caption, ...rest } = item;
+      const { props } = item;
       return {
-        caption,
-        ...rest,
+        caption: props.children,
+        ...props,
       };
     }),
   };
