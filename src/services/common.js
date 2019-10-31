@@ -31,4 +31,5 @@ export default {
   downloadFile: 'bayconnect.superlop.file_download_quick.json',
   getUserList: 'bayconnect.superlop.get_user_list_impl',
   addUser: 'bayconnect.superlop.set_add_customer',
+  operationUser: 'bayconnect.superlop.set_user_service_impl',
 };

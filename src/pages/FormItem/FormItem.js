@@ -3,7 +3,7 @@
  * @Description: 表单控件
  * @Author: lan
  * @Date: 2019-10-25 13:42:35
- * @LastEditTime: 2019-10-29 17:52:12
+ * @LastEditTime: 2019-10-30 14:15:57
  * @LastEditors: lan
  */
 import React, { Component } from 'react';
@@ -88,7 +88,7 @@ export default class FormItem extends Component {
                   initialValue: undefined,
                 })(
                   <LocaleProvider locale="en-us">
-                    <DatePicker style={{ width: '100%' }} disabled />
+                    <DatePicker style={{ width: '100%' }} />
                   </LocaleProvider>,
                 )}
               </Form.Item>
