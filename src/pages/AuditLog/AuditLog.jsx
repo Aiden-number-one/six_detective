@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Input, DatePicker, Table } from 'antd';
+import { Form, Input, Button, DatePicker, Table } from 'antd';
 import { connect } from 'dva';
+import moment from 'moment';
+
 import styles from './AuditLog.less';
 
 class OperatorForm extends Component {
@@ -28,7 +30,13 @@ class OperatorForm extends Component {
                     message: 'Please input your beginDate',
                   },
                 ],
-              })(<DatePicker onChange={this.changeBeginDate} className={styles['input-value']} />)}
+              })(
+                <DatePicker
+                  onChange={this.changeBeginDate}
+                  className={styles['input-value']}
+                  format="YYYY-MM-DD"
+                />,
+              )}
             </Form.Item>
             <Form.Item label="结束时间：">
               {getFieldDecorator('endDate', {
@@ -40,8 +48,9 @@ class OperatorForm extends Component {
                 ],
               })(
                 <DatePicker
-                  onChange={() => this.changeEndDate()}
+                  onChange={this.changeEndDate}
                   className={styles['input-value']}
+                  format="YYYY-MM-DD"
                 />,
               )}
             </Form.Item>
@@ -157,14 +166,22 @@ class AuditLog extends Component {
   auditLogForm = React.createRef();
 
   componentDidMount() {
-    this.getAuditLog();
+    // this.getAuditLog();
   }
 
-  getAuditLog = () => {
+  getAuditLog = (operatorName, beginDate, endDate) => {
+    const param = {
+      pageNumber: '1',
+      pageSize: '10',
+      operatorName,
+      beginDate,
+      endDate,
+    };
+    console.log('param=', param);
     const { dispatch } = this.props;
     dispatch({
       type: 'auditLog/getAuditLogList',
-      payload: {},
+      payload: param,
     });
   };
 
@@ -172,11 +189,24 @@ class AuditLog extends Component {
 
   changeEndDate = () => {};
 
+  queryLog = () => {
+    this.auditLogForm.current.validateFields((err, values) => {
+      this.getAuditLog(
+        values.operatorName,
+        moment(values.beginDate).format('YYYY-MM-DD'),
+        moment(values.endDate).format('YYYY-MM-DD'),
+      );
+    });
+  };
+
   render() {
     return (
       <Fragment>
         <div>
           <NewOperatorForm ref={this.auditLogForm}></NewOperatorForm>
+          <Button type="primary" onClick={() => this.queryLog()}>
+            查询
+          </Button>
           <Table
             dataSource={this.state.getAuditLogListData}
             pagination={{ pageSize: 5 }}
