@@ -84,6 +84,7 @@ class AuditLog extends Component {
         key: 'ipAddress',
       },
     ],
+    getAuditLogList: [],
   };
 
   auditLogForm = React.createRef();
@@ -100,7 +101,6 @@ class AuditLog extends Component {
       beginDate,
       endDate,
     };
-    console.log('param=', param);
     const { dispatch } = this.props;
     dispatch({
       type: 'auditLog/getAuditLogList',
@@ -114,7 +114,6 @@ class AuditLog extends Component {
 
   queryLog = () => {
     this.auditLogForm.current.validateFields((err, values) => {
-      console.log('values====', values);
       let beginDate = values.beginDate ? moment(values.beginDate).format('YYYY-MM-DD') : '';
       beginDate = beginDate.split('-').join('');
       let endDate = values.endDate ? moment(values.endDate || '').format('YYYY-MM-DD') : '';
@@ -124,6 +123,14 @@ class AuditLog extends Component {
   };
 
   render() {
+    let { getAuditLogList } = this.state;
+    getAuditLogList = this.props.getAuditLogListData.resultList;
+    // eslint-disable-next-line no-unused-expressions
+    getAuditLogList &&
+      getAuditLogList.forEach((element, index) => {
+        // eslint-disable-next-line no-param-reassign
+        element.index = index + 1;
+      });
     return (
       <Fragment>
         <div>
@@ -132,7 +139,7 @@ class AuditLog extends Component {
             查询
           </Button>
           <Table
-            dataSource={this.props.getAuditLogListData.resultList}
+            dataSource={getAuditLogList}
             pagination={{ pageSize: 5 }}
             columns={this.state.columns}
           ></Table>

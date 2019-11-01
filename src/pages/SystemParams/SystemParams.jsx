@@ -145,6 +145,7 @@ class SystemParams extends Component {
           ),
         },
       ],
+      getSystemParamsList: [],
       ParamsTypeData: {},
       paramObj: {},
     };
@@ -157,7 +158,6 @@ class SystemParams extends Component {
 
   updateSystemParamsComfirm = () => {
     this.modifyFormRef.current.validateFields((err, values) => {
-      console.log('err, values=', err, values);
       const { dispatch } = this.props;
       const param = {
         comments: values.comments,
@@ -184,7 +184,6 @@ class SystemParams extends Component {
   handleChange = () => {};
 
   updateSystemParams = (res, obj) => {
-    console.log('res===,obj==', res, obj);
     const paramObj = {
       comments: obj.comments,
       paramId: obj.paramId,
@@ -202,7 +201,6 @@ class SystemParams extends Component {
       pageNumber: '1',
       pageSize: '10',
     };
-    console.log('param=', param);
     dispatch({
       type: 'systemParams/getSystemParamsList',
       payload: param,
@@ -222,9 +220,14 @@ class SystemParams extends Component {
   };
 
   render() {
-    let { ParamsTypeData } = this.state;
+    let { ParamsTypeData, getSystemParamsList } = this.state;
     ParamsTypeData = this.props.getParamsTypeData;
-    console.log('ParamsTypeData===', ParamsTypeData);
+    getSystemParamsList = this.props.getSystemParamsListData;
+    // eslint-disable-next-line array-callback-return
+    getSystemParamsList.map((element, index) => {
+      // eslint-disable-next-line no-param-reassign
+      element.index = index + 1;
+    });
     return (
       <Fragment>
         <div>
@@ -250,10 +253,7 @@ class SystemParams extends Component {
             </Modal>
           </div>
           <div>
-            <Table
-              dataSource={this.props.getSystemParamsListData}
-              columns={this.state.columns}
-            ></Table>
+            <Table dataSource={getSystemParamsList} columns={this.state.columns}></Table>
           </div>
         </div>
       </Fragment>
