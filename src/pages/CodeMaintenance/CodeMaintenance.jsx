@@ -1,9 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Button, Input, Modal, Select, Table } from 'antd';
+import { connect } from 'dva';
+
 import styles from './code.less';
 
 const { Option } = Select;
 
+@connect(({ codeList, loading }) => ({
+  loading: loading.effects['codeList/getCodeList'],
+  getCodeListData: codeList.data,
+}))
 class CodeMaintenance extends Component {
   state = {
     visible: false,
@@ -139,6 +145,10 @@ class CodeMaintenance extends Component {
     ],
   };
 
+  componentDidMount() {
+    this.queryCodeList();
+  }
+
   addUser = () => {
     this.setState({ visible: true });
   };
@@ -158,6 +168,14 @@ class CodeMaintenance extends Component {
   setServer = () => {};
 
   handleSubmit = () => {};
+
+  queryCodeList = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'codeList/getCodeList',
+      payload: {},
+    });
+  };
 
   render() {
     return (
