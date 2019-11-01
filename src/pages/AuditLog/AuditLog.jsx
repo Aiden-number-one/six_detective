@@ -11,26 +11,12 @@ class OperatorForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline">
             <Form.Item label="操作员名称：">
-              {getFieldDecorator('operatorName', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your operatorName',
-                  },
-                ],
-              })(<Input className={styles['input-value']} />)}
+              {getFieldDecorator('operatorName', {})(<Input className={styles['input-value']} />)}
             </Form.Item>
             <Form.Item label="开始时间：">
-              {getFieldDecorator('beginDate', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your beginDate',
-                  },
-                ],
-              })(
+              {getFieldDecorator('beginDate', {})(
                 <DatePicker
                   onChange={this.changeBeginDate}
                   className={styles['input-value']}
@@ -39,14 +25,7 @@ class OperatorForm extends Component {
               )}
             </Form.Item>
             <Form.Item label="结束时间：">
-              {getFieldDecorator('endDate', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your beginDate',
-                  },
-                ],
-              })(
+              {getFieldDecorator('endDate', {})(
                 <DatePicker
                   onChange={this.changeEndDate}
                   className={styles['input-value']}
@@ -68,62 +47,6 @@ const NewOperatorForm = Form.create({})(OperatorForm);
 }))
 class AuditLog extends Component {
   state = {
-    getAuditLogListData: [
-      {
-        index: 1,
-        operatorTime: '2019-08-22',
-        operatorName: '李四1111',
-        businessName: 'aaa',
-        status: '成功',
-        returnInfo: '认证成功',
-        visitIp: '192.168.2.3',
-      },
-      {
-        index: 2,
-        operatorTime: '2019-08-22',
-        operatorName: '张三',
-        businessName: 'aaa',
-        status: '成功',
-        returnInfo: '认证成功',
-        visitIp: '192.168.2.3',
-      },
-      {
-        index: 3,
-        operatorTime: '2019-08-22',
-        operatorName: '张三',
-        businessName: 'aaa',
-        status: '成功',
-        returnInfo: '认证成功',
-        visitIp: '192.168.2.3',
-      },
-      {
-        index: 4,
-        operatorTime: '2019-08-22',
-        operatorName: '张三',
-        businessName: 'aaa',
-        status: '成功',
-        returnInfo: '认证成功',
-        visitIp: '192.168.2.3',
-      },
-      {
-        index: 5,
-        operatorTime: '2019-08-22',
-        operatorName: '张三',
-        businessName: 'aaa',
-        status: '成功',
-        returnInfo: '认证成功',
-        visitIp: '192.168.2.3',
-      },
-      {
-        index: 6,
-        operatorTime: '2019-08-22',
-        operatorName: '张三',
-        businessName: 'aaa',
-        status: '成功',
-        returnInfo: '认证成功',
-        visitIp: '192.168.2.3',
-      },
-    ],
     columns: [
       {
         title: '序号',
@@ -132,8 +55,8 @@ class AuditLog extends Component {
       },
       {
         title: '操作时间',
-        dataIndex: 'operatorTime',
-        key: 'operatorTime',
+        dataIndex: 'runtime',
+        key: 'runtime',
       },
       {
         title: '操作员名称',
@@ -142,23 +65,23 @@ class AuditLog extends Component {
       },
       {
         title: '业务名称',
-        dataIndex: 'businessName',
-        key: 'businessName',
+        dataIndex: 'bexDesc',
+        key: 'bexDesc',
       },
       {
         title: '状态',
-        dataIndex: 'status',
-        key: 'status',
+        dataIndex: 'errCodeName',
+        key: 'errCodeName',
       },
       {
         title: '返回信息',
-        dataIndex: 'returnInfo',
-        key: 'returnInfo',
+        dataIndex: 'errorCodeMessage',
+        key: 'errorCodeMessage',
       },
       {
         title: '来访IP',
-        dataIndex: 'visitIp',
-        key: 'visitIp',
+        dataIndex: 'ipAddress',
+        key: 'ipAddress',
       },
     ],
   };
@@ -166,7 +89,7 @@ class AuditLog extends Component {
   auditLogForm = React.createRef();
 
   componentDidMount() {
-    // this.getAuditLog();
+    this.getAuditLog();
   }
 
   getAuditLog = (operatorName, beginDate, endDate) => {
@@ -191,11 +114,12 @@ class AuditLog extends Component {
 
   queryLog = () => {
     this.auditLogForm.current.validateFields((err, values) => {
-      this.getAuditLog(
-        values.operatorName,
-        moment(values.beginDate).format('YYYY-MM-DD'),
-        moment(values.endDate).format('YYYY-MM-DD'),
-      );
+      console.log('values====', values);
+      let beginDate = values.beginDate ? moment(values.beginDate).format('YYYY-MM-DD') : '';
+      beginDate = beginDate.split('-').join('');
+      let endDate = values.endDate ? moment(values.endDate || '').format('YYYY-MM-DD') : '';
+      endDate = endDate.split('-').join('');
+      this.getAuditLog(values.operatorName, beginDate, endDate);
     });
   };
 
@@ -208,7 +132,7 @@ class AuditLog extends Component {
             查询
           </Button>
           <Table
-            dataSource={this.state.getAuditLogListData}
+            dataSource={this.props.getAuditLogListData.resultList}
             pagination={{ pageSize: 5 }}
             columns={this.state.columns}
           ></Table>

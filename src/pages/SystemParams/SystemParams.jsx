@@ -150,6 +150,7 @@ class SystemParams extends Component {
 
   componentDidMount() {
     this.querySystemParams();
+    this.getParamsTypeList();
   }
 
   updateSystemParamsComfirm = () => {
@@ -197,6 +198,17 @@ class SystemParams extends Component {
     dispatch({
       type: 'systemParams/getSystemParamsList',
       payload: {},
+    });
+  };
+
+  getParamsTypeList = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'systemParams/getParamsType',
+      payload: {},
+      callback: () => {
+        this.querySystemParams();
+      },
     });
   };
 
