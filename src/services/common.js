@@ -40,4 +40,5 @@ export default {
   systemParamsList: 'bayconnect.superlop.get_sys_params_config_list',
   systemParamsUpdate: 'bayconnect.superlop.set_sys_params_config_update',
   paramsType: 'bayconnect.superlop.get_sys_params_config_filter_list',
+  codeList: 'bayconnect.superlop.query_task_spm_dict_index',
 };
