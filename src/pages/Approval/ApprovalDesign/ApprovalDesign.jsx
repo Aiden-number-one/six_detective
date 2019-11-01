@@ -59,6 +59,13 @@ class ApprovalDesign extends PureComponent {
     });
   };
 
+  // 跳转到编辑页
+  goProcessPage = () => {
+    const { chooseModelId } = this.props;
+    const url = `/process/modeler.html?modelId=${chooseModelId}`;
+    window.location.href = url;
+  };
+
   // 删除模型
   deleteModel = param => {
     const { dispatch } = this.props;
@@ -128,8 +135,16 @@ class ApprovalDesign extends PureComponent {
         modelId: chooseModelId,
         type: 'xml',
       },
-      callback: filePath => this.downloadFile(filePath),
+      callback: filePath => this.downloadHerf(filePath),
     });
+  };
+
+  // 下载模型
+  downloadHerf = filePath => {
+    const a = document.createElement('a');
+    a.href = `/download?filePath=${filePath}`;
+    a.download = true;
+    a.click();
   };
 
   // 上传文件
@@ -210,7 +225,7 @@ class ApprovalDesign extends PureComponent {
               <Button onClick={this.deployModel} type="primary" icon="deployment-unit">
                 部署模型
               </Button>
-              <Button type="primary" icon="edit">
+              <Button onClick={this.goProcessPage} type="primary" icon="edit">
                 编辑模型
               </Button>
               <Button type="primary" icon="delete" onClick={this.delete}>

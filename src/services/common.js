@@ -28,7 +28,7 @@ export default {
   getModelImage: 'bayconnect.superlop.get_workflow_model_image',
   exportModel: 'bayconnect.superlop.set_workflow_model_export',
   deployModel: 'bayconnect.superlop.set_workflow_model_deploy',
-  downloadFile: 'bayconnect.superlop.file_download_quick.json',
+  downloadFile: 'bayconnect.superlop.file_download_quick',
   getUserList: 'bayconnect.superlop.get_user_list_impl',
   addUser: 'bayconnect.superlop.set_add_customer',
   updateUser: 'bayconnect.superlop./v2.0/bayconnect.superlop.set_user_edit',
@@ -37,4 +37,7 @@ export default {
   addEmail: 'bayconnect.superlop.set_mail_config_save',
   deleteEmail: 'bayconnect.superlop.set_mail_config_delete',
   getAuditLog: 'bayconnect.superlop.get_bex_run_log_list_page',
+  systemParamsList: 'bayconnect.superlop.get_sys_params_config_list',
+  systemParamsUpdate: 'bayconnect.superlop.set_sys_params_config_update',
+  paramsType: 'bayconnect.superlop.get_sys_params_config_filter_list',
 };
