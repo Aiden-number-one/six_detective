@@ -160,7 +160,9 @@ class AdvancedSearchForm extends Component {
     return itemArray.map((value, i) => (
       <Col xs={12} sm={12} lg={8} key={value} style={{ display: i < count ? 'block' : 'none' }}>
         <Form.Item label={value} colon={false}>
-          {getFieldDecorator(value, {})(<Select placeholder="Please Select" />)}
+          {getFieldDecorator(value, {})(
+            <Select placeholder="Please Select" dropdownClassName="selectDropdown" />,
+          )}
         </Form.Item>
       </Col>
     ));
@@ -176,9 +178,6 @@ class AdvancedSearchForm extends Component {
           </span>
         </div>
         <div className="clearFix btnArea">
-          <Button icon="plus" className="btn2">
-            New Data
-          </Button>
           <Button type="primary" className="btn1">
             Search
           </Button>
@@ -306,6 +305,11 @@ export default class DataSource extends PureComponent {
           <WrappedAdvancedSearchForm />
           <div className="tableHeader">
             <Checkbox>Select All</Checkbox>
+            <div>
+              <Button size="small" type="danger" icon="delete" className="btn2" />
+              <Button size="small" type="primary" icon="edit" className="btn2" />
+              <Button size="small" type="primary" icon="plus" className="btn2" />
+            </div>
           </div>
           <Table
             rowSelection={rowSelection}

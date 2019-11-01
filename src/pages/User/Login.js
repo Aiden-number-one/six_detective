@@ -2,7 +2,7 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-10-30 17:48:29
+ * @LastEditTime: 2019-11-01 10:55:25
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -35,17 +35,17 @@ class LoginPage extends Component {
     this.setState({
       submitting: true,
     });
-    const param = {
-      loginname: loginName,
-      password: window.kddes.getDes(loginPwd),
-      storeId: '100',
-      ipAddress: '127.0.0.1',
-      loginType: '0',
-      loginFromWay: '0',
-      // businessCode: '1001',
-    };
     if (!err) {
       const { dispatch } = this.props;
+      const param = {
+        loginname: loginName,
+        password: window.kddes.getDes(loginPwd),
+        storeId: '100',
+        ipAddress: '127.0.0.1',
+        loginType: '0',
+        loginFromWay: '0',
+        // businessCode: '1001',
+      };
       dispatch({
         type: 'login/getLogin',
         payload: param,
@@ -62,6 +62,9 @@ class LoginPage extends Component {
         },
       });
     }
+    this.setState({
+      submitting: false,
+    });
   };
 
   changeAutoLogin = e => {
