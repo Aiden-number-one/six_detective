@@ -41,7 +41,8 @@ const getSystemParamsListModel = {
             payload: response.bcjson.items,
           });
         }
-        callback();
+        // eslint-disable-next-line no-unused-expressions
+        callback && callback();
       }
     },
   },

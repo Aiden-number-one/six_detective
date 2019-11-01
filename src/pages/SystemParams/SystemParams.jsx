@@ -93,6 +93,7 @@ const NewModifyForm = Form.create({})(ModifyForm);
 @connect(({ systemParams, loading }) => ({
   loading: loading.effects['systemParams/getSystemParamsList'],
   getSystemParamsListData: systemParams.data,
+  getParamsTypeData: systemParams.getParamsData,
 }))
 class SystemParams extends Component {
   constructor() {
@@ -144,6 +145,7 @@ class SystemParams extends Component {
           ),
         },
       ],
+      ParamsTypeData: {},
       paramObj: {},
     };
   }
@@ -193,11 +195,17 @@ class SystemParams extends Component {
     this.setState({ updateSystemParamsVisible: true, paramObj });
   };
 
-  querySystemParams = () => {
+  querySystemParams = (paramType = '') => {
     const { dispatch } = this.props;
+    const param = {
+      paramType,
+      pageNumber: '1',
+      pageSize: '10',
+    };
+    console.log('param=', param);
     dispatch({
       type: 'systemParams/getSystemParamsList',
-      payload: {},
+      payload: param,
     });
   };
 
@@ -206,22 +214,27 @@ class SystemParams extends Component {
     dispatch({
       type: 'systemParams/getParamsType',
       payload: {},
-      callback: () => {
-        this.querySystemParams();
-      },
     });
   };
 
+  onChangeOption = value => {
+    this.querySystemParams(value);
+  };
+
   render() {
+    let { ParamsTypeData } = this.state;
+    ParamsTypeData = this.props.getParamsTypeData;
+    console.log('ParamsTypeData===', ParamsTypeData);
     return (
       <Fragment>
         <div>
           <div>
             <div>
               <span>参数类型：</span>
-              <Select>
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
+              <Select defaultValue="请选择" onChange={this.onChangeOption}>
+                <Option value="">请选择</Option>
+                {ParamsTypeData[0] &&
+                  ParamsTypeData[0].data.map(element => <Option value={element}>{element}</Option>)}
               </Select>
             </div>
             <Modal
