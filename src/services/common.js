@@ -38,4 +38,5 @@ export default {
   deleteEmail: 'bayconnect.superlop.set_mail_config_delete',
   getAuditLog: 'bayconnect.superlop.get_bex_run_log_list_page',
   systemParamsList: 'bayconnect.superlop.get_sys_params_config_list',
+  systemParamsUpdate: 'bayconnect.superlop.set_sys_params_config_update',
 };

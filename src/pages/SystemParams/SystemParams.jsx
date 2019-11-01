@@ -1,119 +1,204 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Modal, Select, Table } from 'antd';
+import { Input, Modal, Select, Table, Form } from 'antd';
+import { connect } from 'dva';
 import styles from './params.less';
 
 const { Option } = Select;
+
+class ModifyForm extends Component {
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { paramObj } = this.props;
+    return (
+      <Fragment>
+        <div>
+          <Form>
+            <Form.Item label="参数类型：">
+              {getFieldDecorator('paramType', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your paramType',
+                  },
+                ],
+                initialValue: paramObj.paramType,
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="参数key：">
+              {getFieldDecorator('paramId', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your paramId',
+                  },
+                ],
+                initialValue: paramObj.paramId,
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="参数值：">
+              {getFieldDecorator('paramValue', {
+                rules: [
+                  {
+                    type: 'email',
+                    message: 'The input is not valid paramValue!',
+                  },
+                  {
+                    required: true,
+                    message: 'Please input your paramValue',
+                  },
+                ],
+                initialValue: paramObj.paramValue,
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+            <Form.Item label="是否开启：">
+              {getFieldDecorator('paramStatus', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your paramStatus',
+                  },
+                ],
+                initialValue: paramObj.paramStatus,
+              })(
+                <Select
+                  defaultValue="0"
+                  style={{ width: 300 }}
+                  onChange={this.handleChange}
+                  placeholder="Please select"
+                >
+                  <Option value="0">停用</Option>
+                  <Option value="1">启用</Option>
+                </Select>,
+              )}
+            </Form.Item>
+            <Form.Item label="备注：">
+              {getFieldDecorator('comments', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your comments',
+                  },
+                ],
+                initialValue: paramObj.comments,
+              })(<Input className={styles['input-value']} />)}
+            </Form.Item>
+          </Form>
+        </div>
+      </Fragment>
+    );
+  }
+}
+
+const NewModifyForm = Form.create({})(ModifyForm);
+@connect(({ systemParams, loading }) => ({
+  loading: loading.effects['systemParams/getSystemParamsList'],
+  getSystemParamsListData: systemParams.data,
+}))
 class SystemParams extends Component {
-  state = {
-    visible: false,
-    dataSource: [
-      {
-        key: '1',
-        index: '1',
-        type: '文件服务器参数',
-        paramskey: 'file_upload',
-        params: '参数值',
-        isOpen: '上传文件到fileserver的请求',
-        remark: '创建',
-      },
-      {
-        key: '2',
-        index: '2',
-        type: '文件服务器参数',
-        paramskey: 'file_upload',
-        params: '参数值',
-        isOpen: '上传文件到fileserver的请求',
-        remark: '创建',
-      },
-      {
-        key: '3',
-        index: '3',
-        type: '文件服务器参数',
-        paramskey: 'file_upload',
-        params: '参数值',
-        isOpen: '上传文件到fileserver的请求',
-        remark: '创建',
-      },
-      {
-        key: '4',
-        index: '4',
-        type: '文件服务器参数',
-        paramskey: 'file_upload',
-        params: '参数值',
-        isOpen: '上传文件到fileserver的请求',
-        remark: '创建',
-      },
-      {
-        key: '5',
-        index: '5',
-        type: '文件服务器参数',
-        paramskey: 'file_upload',
-        params: '参数值',
-        isOpen: '上传文件到fileserver的请求',
-        remark: '创建',
-      },
-    ],
-    columns: [
-      {
-        title: '序号',
-        dataIndex: 'index',
-        key: 'index',
-      },
-      {
-        title: '参数类型',
-        dataIndex: 'type',
-        key: 'type',
-      },
-      {
-        title: '参数key',
-        dataIndex: 'paramskey',
-        key: 'paramskey',
-      },
-      {
-        title: '参数值',
-        dataIndex: 'params',
-        key: 'params',
-      },
-      {
-        title: '备注',
-        dataIndex: 'remark',
-        key: 'remark',
-      },
-      {
-        title: '操作',
-        dataIndex: 'operation',
-        key: 'operation',
-        render: (res, recode, index, active) => (
-          <span className={styles.operation}>
-            <a
-              href="#"
-              onClick={() => {
-                this.updateEmail(res, recode, index, active);
-              }}
-            >
-              修改
-            </a>
-          </span>
-        ),
-      },
-    ],
+  constructor() {
+    super();
+    this.modifyFormRef = React.createRef();
+    this.state = {
+      updateSystemParamsVisible: false,
+      columns: [
+        {
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+        },
+        {
+          title: '参数类型',
+          dataIndex: 'paramType',
+          key: 'paramType',
+        },
+        {
+          title: '参数key',
+          dataIndex: 'paramId',
+          key: 'paramId',
+        },
+        {
+          title: '参数值',
+          dataIndex: 'paramValue',
+          key: 'paramValue',
+        },
+        {
+          title: '备注',
+          dataIndex: 'comments',
+          key: 'comments',
+        },
+        {
+          title: '操作',
+          dataIndex: 'operation',
+          key: 'operation',
+          render: (res, recode, index, active) => (
+            <span className={styles.operation}>
+              <a
+                href="#"
+                onClick={() => {
+                  this.updateSystemParams(res, recode, index, active);
+                }}
+              >
+                修改
+              </a>
+            </span>
+          ),
+        },
+      ],
+      paramObj: {},
+    };
+  }
+
+  componentDidMount() {
+    this.querySystemParams();
+  }
+
+  updateSystemParamsComfirm = () => {
+    this.modifyFormRef.current.validateFields((err, values) => {
+      console.log('err, values=', err, values);
+      const { dispatch } = this.props;
+      const param = {
+        comments: values.comments,
+        paramId: values.paramId,
+        paramStatus: values.paramStatus,
+        paramType: values.paramType,
+        paramValue: values.paramValue,
+      };
+      dispatch({
+        type: 'systemParams/systemParamsUpdate',
+        payload: param,
+        callback: () => {
+          this.querySystemParams();
+        },
+      });
+    });
+    this.setState({ updateSystemParamsVisible: false });
   };
 
-  addUser = () => {
-    this.setState({ visible: true });
-  };
-
-  handleOk = () => {
-    this.setState({ visible: false });
-  };
-
-  handleCancel = () => {
-    this.setState({ visible: false });
+  updateSystemParamsCancel = () => {
+    this.setState({ updateSystemParamsVisible: false });
   };
 
   handleChange = () => {};
 
-  updateEmail = () => {};
+  updateSystemParams = (res, obj) => {
+    console.log('res===,obj==', res, obj);
+    const paramObj = {
+      comments: obj.comments,
+      paramId: obj.paramId,
+      paramStatus: obj.paramStatus,
+      paramType: obj.paramType,
+      paramValue: obj.paramValue,
+    };
+    this.setState({ updateSystemParamsVisible: true, paramObj });
+  };
+
+  querySystemParams = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'systemParams/getSystemParamsList',
+      payload: {},
+    });
+  };
 
   render() {
     return (
@@ -128,49 +213,22 @@ class SystemParams extends Component {
               </Select>
             </div>
             <Modal
-              title="新增绑定配置"
-              visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
+              title="修改系统参数"
+              visible={this.state.updateSystemParamsVisible}
+              onOk={this.updateSystemParamsComfirm}
+              onCancel={this.updateSystemParamsCancel}
             >
-              <ul className={styles['add-user']}>
-                <li>
-                  <span>服务器IP：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-                <li>
-                  <span>端口：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-                <li>
-                  <span>发件人邮箱地址：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-                <li>
-                  <span>发件人邮箱密码：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-                <li>
-                  <span>是否开启：</span>
-                  <Select
-                    defaultValue="lucy"
-                    style={{ width: 300 }}
-                    onChange={this.handleChange}
-                    placeholder="Please select"
-                  >
-                    <Option value="jack">开启</Option>
-                    <Option value="lucy">关闭</Option>
-                  </Select>
-                </li>
-                <li>
-                  <span>备注：</span>
-                  <Input className={styles['input-value']}></Input>
-                </li>
-              </ul>
+              <NewModifyForm
+                ref={this.modifyFormRef}
+                paramObj={this.state.paramObj}
+              ></NewModifyForm>
             </Modal>
           </div>
           <div>
-            <Table dataSource={this.state.dataSource} columns={this.state.columns}></Table>
+            <Table
+              dataSource={this.props.getSystemParamsListData}
+              columns={this.state.columns}
+            ></Table>
           </div>
         </div>
       </Fragment>
