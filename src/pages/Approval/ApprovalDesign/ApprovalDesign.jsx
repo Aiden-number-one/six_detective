@@ -194,8 +194,6 @@ class ApprovalDesign extends PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { modelList, modelImage } = this.props;
-    // const downloadHref = `http://10.201.62.184:7567/KBPM/WsDownloadServlet.ds?modelId=${chooseModelId}&type=xml&bex=f_kbpm_model_export`;
-    // console.log(modelImage);
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -208,7 +206,7 @@ class ApprovalDesign extends PureComponent {
     };
     const formTailLayout = {
       labelCol: { span: 8 },
-      wrapperCol: { span: 8, offset: 16 },
+      wrapperCol: { span: 12, offset: 12 },
     };
     return (
       <Fragment>

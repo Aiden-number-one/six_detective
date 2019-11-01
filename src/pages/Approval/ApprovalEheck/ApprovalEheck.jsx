@@ -4,6 +4,8 @@ import { connect } from 'dva';
 // import classNames from 'classnames';
 import styles from './ApprovalEheck.less';
 
+import moment from 'moment';
+
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 @connect(({ approvalCheck, loading }) => ({
@@ -51,8 +53,19 @@ class ApprovalEheck extends PureComponent {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        this.checkData();
+        // console.log('Received values of form: ', values);
+        const startDate = moment(values.approvalDate[0]).format('YYYYMMDD');
+        const endDate = moment(values.approvalDate[1]).format('YYYYMMDD');
+        const param = {
+          pageNumber: '1',
+          pageSize: '10',
+          businessCode: values.businessCode,
+          procInstStatus: values.procInstStatus,
+          businessInfo: values.businessInfo,
+          startDate,
+          endDate,
+        };
+        this.checkData(param);
       }
     });
   };
@@ -115,7 +128,7 @@ class ApprovalEheck extends PureComponent {
           </div>
           <Form layout="inline" onSubmit={this.handleSubmit}>
             <Form.Item label="业务名称" hasFeedback>
-              {getFieldDecorator('approvalProcessSelect', {
+              {getFieldDecorator('businessCode', {
                 rules: [{ required: false, message: '请选择业务名称' }],
                 initialValue: 'approvalProcessAll',
               })(
@@ -127,7 +140,7 @@ class ApprovalEheck extends PureComponent {
               )}
             </Form.Item>
             <Form.Item label="审批状态" hasFeedback>
-              {getFieldDecorator('approvalStatusSelect', {
+              {getFieldDecorator('procInstStatus', {
                 rules: [{ required: false, message: '请选审批状态' }],
                 initialValue: 'approvalStatusAll',
               })(
@@ -139,13 +152,13 @@ class ApprovalEheck extends PureComponent {
               )}
             </Form.Item>
             <Form.Item label="业务说明:">
-              {getFieldDecorator('businesDescription', {
+              {getFieldDecorator('businessInfo', {
                 rules: [{ required: false, message: '请输入说明' }],
               })(<Input placeholder="请输入说明" />)}
             </Form.Item>
             <br />
             <Form.Item label="审批日期:" style={{ marginTop: '5px' }}>
-              {getFieldDecorator('range-picker', rangeConfig)(<RangePicker />)}
+              {getFieldDecorator('approvalDate', rangeConfig)(<RangePicker />)}
             </Form.Item>
             <Form.Item style={{ marginTop: '5px' }}>
               <Button

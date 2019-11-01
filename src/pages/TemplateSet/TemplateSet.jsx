@@ -19,7 +19,7 @@ class TemplateSet extends PureComponent {
   };
 
   componentDidMount() {
-    this.createData();
+    // this.createData();
     this.getTemplateData();
   }
 
@@ -42,24 +42,24 @@ class TemplateSet extends PureComponent {
     });
   };
 
-  // 生成数据Data
-  createData = () => {
-    const data = [];
-    for (let i = 0; i < 46; i += 1) {
-      data.push({
-        key: i,
-        templateName: `modelName ${i}`,
-        templateId: `ID ${i}`,
-        status: '开启',
-        templateTitle: `标题 ${i}`,
-        templateContent: `模板内容 ${i}`,
-        templateKeys: '关键字',
-      });
-    }
-    this.setState({
-      dataSourceTest: data,
-    });
-  };
+  // // 生成数据Data
+  // createData = () => {
+  //   const data = [];
+  //   for (let i = 0; i < 46; i += 1) {
+  //     data.push({
+  //       key: i,
+  //       templateName: `modelName ${i}`,
+  //       templateId: `ID ${i}`,
+  //       status: '开启',
+  //       templateTitle: `标题 ${i}`,
+  //       templateContent: `模板内容 ${i}`,
+  //       templateKeys: '关键字',
+  //     });
+  //   }
+  //   this.setState({
+  //     dataSourceTest: data,
+  //   });
+  // };
 
   handleSubmit = e => {
     e.preventDefault();

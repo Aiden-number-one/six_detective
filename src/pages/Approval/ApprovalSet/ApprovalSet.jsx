@@ -2,7 +2,7 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
-import { Form, Icon, Input, Button, Divider, Table, Popconfirm } from 'antd';
+import { Form, Icon, Input, Button, Divider, Table, Popconfirm, Switch } from 'antd';
 import { connect } from 'dva';
 import ModelForm from './compontents/modelForm';
 // import classNames from 'classnames';
@@ -11,13 +11,14 @@ import styles from './ApprovalSet.less';
 @connect(({ approvalSet, loading }) => ({
   loading: loading.effects['approvalSet/approvalConfigDatas'],
   approvalConfigList: approvalSet.data,
+  diagramDatas: approvalSet.diagramDatas,
 }))
 class ApprovalSet extends PureComponent {
   state = {
     // dataSource: [],
     // count: 0,
-    formValue: '',
     visible: false,
+    formValue: {},
   };
 
   componentDidMount() {
@@ -26,6 +27,7 @@ class ApprovalSet extends PureComponent {
       pageNumber: '1',
       pageSize: '10',
     });
+    this.deployedModelList({ pageNumber: '1', pageSize: '10' });
     // this.createData();
   }
 
@@ -38,27 +40,39 @@ class ApprovalSet extends PureComponent {
     });
   };
 
-  // // 生成dataSource数据
-  // createData = () => {
-  //   const data = [];
-  //   for (let i = 0; i < 3; i++) {
-  //     data.push({
-  //       key: i,
-  //       number: i + 1,
-  //       name: `任务发布审批流程 ${i}`,
-  //       age: 32,
-  //       modelName: `一步发布审核 ${i}`,
-  //       phone: 18889898989,
-  //       IsDefault: '否',
-  //       isUseing: '是',
-  //       address: `London, Park Lane no. ${i}`,
-  //     });
-  //   }
-  //   this.setState({
-  //     dataSource: data,
-  //     count: data.length,
-  //   });
-  // };
+  // 获取已部署的模型列表
+  deployedModelList = param => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalSet/deployedModelListDatas',
+      payload: param,
+      callback: processDefinitionId => this.getFlowChart(processDefinitionId),
+      // callback: processDefinitionId =>
+      //   console.log('processDefinitionId----->', processDefinitionId),
+      callback2: processDefinitionId => this.getProcessResource(processDefinitionId),
+    });
+  };
+
+  // 查询动态流程图
+  getFlowChart = processDefinitionId => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalSet/getDiagramDatas',
+      payload: { processDefinitionId },
+    });
+  };
+
+  // 查询流程定义的资源图
+  getProcessResource = processDefinitionId => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalSet/getProcessResourceDatas',
+      payload: {
+        processDefinitionId,
+        type: 'image',
+      },
+    });
+  };
 
   // 查询表单提交
   handleSubmit = e => {
@@ -157,17 +171,17 @@ class ApprovalSet extends PureComponent {
         title: '是否启用',
         dataIndex: 'status',
         align: 'center',
-        // render: () => ({
-        //   children: <Switch checkedChildren="启用" unCheckedChildren="停用" defaultChecked />,
-        // }),
+        render: () => ({
+          children: <Switch checkedChildren="启用" unCheckedChildren="停用" defaultChecked />,
+        }),
       },
       {
         title: '是否默认',
         dataIndex: 'isDefault',
         align: 'center',
-        // render: () => ({
-        //   children: <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked />,
-        // }),
+        render: () => ({
+          children: <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked />,
+        }),
       },
       {
         title: '操作',
@@ -237,6 +251,8 @@ class ApprovalSet extends PureComponent {
           <ModelForm
             showModel={this.showModel}
             handleCancel={this.handleCancel}
+            getFlowChart={this.getFlowChart}
+            getProcessResource={this.getProcessResource}
             visible={visible}
             formValue={formValue}
           />
