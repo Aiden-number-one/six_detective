@@ -55,13 +55,22 @@ const BasicLayout = props => {
 
   useEffect(() => {
     if (dispatch) {
-      // dispatch({
-      //   type: 'menu/getMenuData',
-      //   payload: {
-      //     customerno: 'system',
-      //     endType: '1',
-      //   },
-      // });
+      dispatch({
+        type: 'login/getLoginStatus',
+        payload: {
+          loginName: window.localStorage.currentUser,
+          'user-Agent': window.navigator.userAgent,
+        },
+      });
+      setInterval(() => {
+        dispatch({
+          type: 'login/getLoginStatus',
+          payload: {
+            loginName: window.localStorage.currentUser,
+            'user-Agent': window.navigator.userAgent,
+          },
+        });
+      }, 25000);
     }
   }, []);
   /**

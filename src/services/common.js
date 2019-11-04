@@ -11,6 +11,7 @@ export default {
   // getMenu: 'bayconnect.superlop.get_acl_menu', // 获取数据门户主题列表
   getMenu: 'mock/run/7765f3a2-a030-4578-a016-cc13c4156136', // Mock
   getLogin: 'bayconnect.superlop.get_website_login', // 登录
+  getLoginStatus: 'bayconnect.superlop.get_user_operate_info', // 判断登录状态
   getDatas: 'kingdom.retl.getDatas',
   delDatas: 'kingdom.retl.delDatas',
   getDataSourceList: 'kingdom.retl.getDataSourceList',
