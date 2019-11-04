@@ -203,6 +203,8 @@ export default function request(url, option, NVPS) {
       return responseJson;
     })
     .catch(e => {
+      console.log(e);
+
       const status = e.name;
       if (status === 401) {
         // @HACK
