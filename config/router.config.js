@@ -24,7 +24,7 @@ export default [
           {
             path: '/data-management/dashboard',
             name: 'dashboard',
-            component: './Page404',
+            component: './DataPanel/DataPanel',
           },
           {
             path: '/data-management/data-import',
@@ -38,19 +38,20 @@ export default [
               {
                 path: '/data-management/data-import/market-data-import',
                 name: 'marketDataImport',
-                component: './Page404',
+                component: './Sheet/Sheet',
               },
             ],
           },
           {
             path: '/data-management/data-processing',
             name: 'dataProcessing',
-            component: './Page404',
+            component: './RulesEngine/RulesEngine',
           },
           {
             path: '/data-management/data-enquiry',
             name: 'dataEnquiry',
             component: './Page404',
+            // component: './Dragboard/Dragboard',
           },
           {
             path: '/data-management/data-maintenance',
