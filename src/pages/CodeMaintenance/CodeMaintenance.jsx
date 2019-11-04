@@ -1,70 +1,48 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Button, Input, Modal, Select, Table } from 'antd';
+import { Form, Button, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
 
 import styles from './code.less';
 
-const { Option } = Select;
+class CodeForm extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
 
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <div>
+        <Form layout="inline">
+          <Form.Item label="字典条目：">
+            {getFieldDecorator('dictItem', {})(<Input className={styles['input-value']}></Input>)}
+          </Form.Item>
+          <Form.Item label="字典子项：">
+            {getFieldDecorator('isShow', {})(<Input className={styles['input-value']}></Input>)}
+          </Form.Item>
+          <Form.Item label="子项名称：">
+            {getFieldDecorator('itemName', {})(<Input className={styles['input-value']}></Input>)}
+          </Form.Item>
+          <Form.Item label="条目排序：">
+            {getFieldDecorator('showOrder', {})(<Input className={styles['input-value']}></Input>)}
+          </Form.Item>
+        </Form>
+      </div>
+    );
+  }
+}
+
+const NewCodeForm = Form.create({})(CodeForm);
 @connect(({ codeList, loading }) => ({
   loading: loading.effects['codeList/getCodeList'],
   getCodeListData: codeList.data,
 }))
 class CodeMaintenance extends Component {
   state = {
-    visible: false,
-    dataSource: [
-      {
-        key: '1',
-        index: '1',
-        dictionaryItem: '233',
-        itemName: '192.168.5.22',
-        itemSort: 88,
-        operation: [1, 3],
-      },
-      {
-        key: '2',
-        index: '1',
-        dictionaryItem: '233',
-        itemName: '192.168.5.22',
-        itemSort: 88,
-      },
-      {
-        key: '3',
-        index: '1',
-        dictionaryItem: '233',
-        itemName: '192.168.5.22',
-        itemSort: 88,
-      },
-      {
-        key: '4',
-        index: '1',
-        dictionaryItem: '233',
-        itemName: '192.168.5.22',
-        itemSort: 88,
-      },
-      {
-        key: '5',
-        index: '1',
-        dictionaryItem: '233',
-        itemName: '192.168.5.22',
-        itemSort: 88,
-      },
-      {
-        key: '6',
-        index: '1',
-        dictionaryItem: '233',
-        itemName: '192.168.5.22',
-        itemSort: 88,
-      },
-      {
-        key: '7',
-        index: '1',
-        dictionaryItem: '233',
-        itemName: '192.168.5.22',
-        itemSort: 88,
-      },
-    ],
+    codeVisible: false,
+    // eslint-disable-next-line react/no-unused-state
+    itemNameValue: '',
     columns: [
       {
         title: '序号',
@@ -106,26 +84,6 @@ class CodeMaintenance extends Component {
       },
     ],
     // eslint-disable-next-line key-spacing
-    codeDataSource: [
-      {
-        key: '1',
-        index: 1,
-        dictionaryEntry: '1013',
-        entryName: '报表类型',
-      },
-      {
-        key: '2',
-        index: 2,
-        dictionaryEntry: '1014',
-        entryName: '报表类型4',
-      },
-      {
-        key: '3',
-        index: 3,
-        dictionaryEntry: '1015',
-        entryName: '报表类型5',
-      },
-    ],
     codeColumns: [
       {
         title: '序号',
@@ -134,31 +92,48 @@ class CodeMaintenance extends Component {
       },
       {
         title: '字典条目',
-        dataIndex: 'dictionaryEntry',
-        key: 'dictionaryEntry',
+        dataIndex: 'dictItem',
+        key: 'dictItem',
       },
       {
         title: '条目名称',
-        dataIndex: 'entryName',
-        key: 'entryName',
+        dataIndex: 'itemName',
+        key: 'itemName',
       },
     ],
+    pageNumber: 1,
+    pageSize: 10,
   };
+
+  codeFormRef = React.createRef();
 
   componentDidMount() {
     this.queryCodeList();
   }
 
-  addUser = () => {
-    this.setState({ visible: true });
+  addCode = () => {
+    this.setState({ codeVisible: true });
   };
 
-  handleOk = () => {
-    this.setState({ visible: false });
+  codeConfirm = () => {
+    const { dispatch } = this.props;
+    this.codeFormRef.current.validateFields((err, values) => {
+      const params = {
+        dictItem: values.dictItem,
+        itemName: values.itemName,
+        showOrder: values.showOrder,
+        isShow: values.isShow,
+      };
+      dispatch({
+        type: 'codeList/addCode',
+        payload: params,
+      });
+    });
+    this.setState({ codeVisible: false });
   };
 
-  handleCancel = () => {
-    this.setState({ visible: false });
+  codeCancel = () => {
+    this.setState({ codeVisible: false });
   };
 
   handleChange = () => {};
@@ -171,13 +146,65 @@ class CodeMaintenance extends Component {
 
   queryCodeList = () => {
     const { dispatch } = this.props;
+    const params = {
+      pageNumber: this.state.pageNumber || '1',
+      pageSize: this.state.pageSize || '10',
+      ItemName: this.state.itemNameValue || '',
+    };
     dispatch({
       type: 'codeList/getCodeList',
-      payload: {},
+      payload: params,
     });
   };
 
+  itemNameChange = e => {
+    this.setState({
+      // eslint-disable-next-line react/no-unused-state
+      itemNameValue: e.target.value,
+    });
+  };
+
+  queryCode = () => {
+    this.queryCodeList();
+  };
+
+  pageChange = pagination => {
+    this.setState(
+      {
+        pageNumber: pagination.current,
+        pageSize: pagination.pageSize,
+      },
+      () => {
+        this.queryCodeList();
+      },
+    );
+  };
+
+  onShowSizeChange = (current, pageSize) => {
+    this.setState(
+      {
+        // eslint-disable-next-line react/no-unused-state
+        pageNumber: current,
+        pageSize,
+      },
+      () => {
+        this.queryCodeList();
+      },
+    );
+  };
+
   render() {
+    const { getCodeListData } = this.props;
+    const totalCount = getCodeListData && getCodeListData.totalCount;
+    const { pageSize } = this.state;
+
+    const codeListData = getCodeListData && getCodeListData.items;
+    // eslint-disable-next-line no-unused-expressions
+    codeListData &&
+      codeListData.forEach((element, index) => {
+        // eslint-disable-next-line no-param-reassign
+        element.index = (this.state.pageNumber - 1) * this.state.pageSize + index + 1;
+      });
     return (
       <Fragment>
         <div>
@@ -185,19 +212,30 @@ class CodeMaintenance extends Component {
             <ul className={styles.clearfix}>
               <li className={styles.fl}>
                 <span>条目名称：</span>
-                <Input className={styles['login-name']}></Input>
+                <Input className={styles['login-name']} onChange={this.itemNameChange}></Input>
               </li>
               <li className={styles.fl}>
-                <Button type="primary" icon="search"></Button>
+                <Button type="primary" icon="search" onClick={this.queryCode}></Button>
               </li>
             </ul>
           </div>
           <div>
             <Table
-              dataSource={this.state.codeDataSource}
-              pagination={{ size: 'small', pageSize: 5 }}
+              dataSource={codeListData}
               columns={this.state.codeColumns}
+              pagination={{ total: totalCount, pageSize }}
+              onChange={this.pageChange}
             ></Table>
+            {/* <Pagination
+              showSizeChanger
+              showQuickJumper
+              total={totalCount}
+              showTotal={total => `总共${total}条`}
+              pageSizeOptions={['5', '10', '20', '30', '40']}
+              pageSize={pageSize}
+              onChange={this.pageChange}
+              onShowSizeChange={this.onShowSizeChange}
+            ></Pagination> */}
           </div>
         </div>
         <div>
@@ -205,67 +243,18 @@ class CodeMaintenance extends Component {
             <Button
               type="primary"
               onClick={() => {
-                this.addUser();
+                this.addCode();
               }}
             >
               添加
             </Button>
             <Modal
-              title="新增绑定配置"
-              visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
+              title="新增字典子项"
+              visible={this.state.codeVisible}
+              onOk={this.codeConfirm}
+              onCancel={this.codeCancel}
             >
-              <div>
-                <Form onSubmit={this.handleSubmit}>
-                  {/* <ul className={styles['add-user']}> */}
-                  <Form.Item label="服务器IP：">
-                    {/* <li> */}
-                    {/* <span>服务器IP：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="端口：">
-                    {/* <li> */}
-                    {/* <span>端口：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="发件人邮箱地址：">
-                    {/* <li> */}
-                    {/* <span>发件人邮箱地址：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="发件人邮箱密码：">
-                    {/* <li> */}
-                    {/* <span>发件人邮箱密码：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="是否开启：">
-                    {/* <li> */}
-                    {/* <span>是否开启：</span> */}
-                    <Select
-                      defaultValue="lucy"
-                      style={{ width: 300 }}
-                      onChange={this.handleChange}
-                      placeholder="Please select"
-                    >
-                      <Option value="jack">开启</Option>
-                      <Option value="lucy">关闭</Option>
-                    </Select>
-                    {/* </li> */}
-                  </Form.Item>
-                  <Form.Item label="备注：">
-                    {/* <li> */}
-                    {/* <span>备注：</span> */}
-                    <Input className={styles['input-value']}></Input>
-                    {/* </li> */}
-                  </Form.Item>
-                  {/* </ul> */}
-                </Form>
-              </div>
+              <NewCodeForm ref={this.codeFormRef}></NewCodeForm>
             </Modal>
           </div>
           <div>

@@ -2,7 +2,7 @@ import { parse, stringify } from 'qs';
 import { routerRedux } from 'dva/router';
 import Service from '@/utils/Service';
 
-const { getLogin } = Service;
+const { getLogin, getLoginStatus } = Service;
 
 export function getPageQuery() {
   return parse(window.location.href.split('?')[1]);
@@ -15,6 +15,10 @@ const Model = {
   effects: {
     *getLogin({ callback, payload }, { call }) {
       const response = yield call(getLogin, { param: payload });
+      if (callback) callback(response);
+    },
+    *getLoginStatus({ callback, payload }, { call }) {
+      const response = yield call(getLoginStatus, { param: payload });
       if (callback) callback(response);
     },
     *logout(_, { put }) {
