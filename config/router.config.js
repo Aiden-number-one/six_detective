@@ -192,6 +192,12 @@ export default [
         component: './FormItem/FormItem',
         hideInMenu: true,
       },
+      {
+        path: './stylespecification',
+        name: 'Stylespecification',
+        component: './Stylespecification/Stylespecification',
+        hideInMenu: true,
+      },
     ],
   },
   {

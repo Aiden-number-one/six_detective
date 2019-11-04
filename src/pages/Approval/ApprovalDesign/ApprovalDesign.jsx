@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
@@ -194,8 +193,6 @@ class ApprovalDesign extends PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { modelList, modelImage } = this.props;
-    // const downloadHref = `http://10.201.62.184:7567/KBPM/WsDownloadServlet.ds?modelId=${chooseModelId}&type=xml&bex=f_kbpm_model_export`;
-    // console.log(modelImage);
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -208,7 +205,7 @@ class ApprovalDesign extends PureComponent {
     };
     const formTailLayout = {
       labelCol: { span: 8 },
-      wrapperCol: { span: 8, offset: 16 },
+      wrapperCol: { span: 12, offset: 12 },
     };
     return (
       <Fragment>
@@ -258,7 +255,7 @@ class ApprovalDesign extends PureComponent {
                     {item.name}
                   </TabPane>
                 ))}
-                {modelImage ? <img src={modelImage} /> : null}
+                {modelImage ? <img src={modelImage} alt="" /> : null}
               </Tabs>
             </div>
           </div>
@@ -276,23 +273,8 @@ class ApprovalDesign extends PureComponent {
               </Form.Item>
 
               <Form.Item {...formTailLayout}>
-                <Button
-                  type="primary"
-                  onClick={this.handleCancel}
-                  style={{
-                    backgroundColor: '#fff',
-                    borderColor: '#d9d9d9',
-                    marginRight: '20px',
-                    color: 'rgba(0, 0, 0, 0.65)',
-                  }}
-                >
-                  取消
-                </Button>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-                >
+                <Button onClick={this.handleCancel}>取消</Button>
+                <Button type="primary" htmlType="submit">
                   确定
                 </Button>
               </Form.Item>

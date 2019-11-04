@@ -518,7 +518,7 @@ class EmailParameter extends Component {
           <div>
             <Table
               dataSource={this.props.getEmailListData}
-              pagination={{ pageSize: 5 }}
+              pagination={{ size: 'small', pageSize: 5 }}
               columns={this.state.columns}
             ></Table>
           </div>
