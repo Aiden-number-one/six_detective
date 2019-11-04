@@ -161,12 +161,7 @@ class ApprovalEheck extends PureComponent {
               {getFieldDecorator('approvalDate', rangeConfig)(<RangePicker />)}
             </Form.Item>
             <Form.Item style={{ marginTop: '5px' }}>
-              <Button
-                type="primary"
-                icon="search"
-                htmlType="submit"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-              >
+              <Button type="primary" icon="search" htmlType="submit">
                 查询
               </Button>
             </Form.Item>
