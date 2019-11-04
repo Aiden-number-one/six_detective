@@ -22,6 +22,7 @@ export default {
   'menu.systemManagement.systemParameters': '系统参数',
   'menu.systemManagement.codeMaintenance': '系统字典管理',
   'menu.systemManagement.auditLog': '操作日志',
+  'menu.systemManagement.authMaintenance': '权限管理',
   'menu.index': '首页',
   'menu.sheet': '电子表格',
   'menu.monitor': '监控预警',

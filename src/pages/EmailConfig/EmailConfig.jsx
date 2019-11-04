@@ -328,6 +328,7 @@ class EmailParameter extends Component {
 
   componentDidMount() {
     this.getEmailInit();
+    console.log(this.props.getEmailListData);
   }
 
   addUser = () => {
@@ -469,6 +470,8 @@ class EmailParameter extends Component {
   };
 
   render() {
+    console.log(this.props.getEmailListData);
+
     return (
       <Fragment>
         <div>
