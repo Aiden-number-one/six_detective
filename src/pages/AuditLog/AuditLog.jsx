@@ -150,8 +150,8 @@ class AuditLog extends Component {
   render() {
     let { getAuditLogList } = this.state;
     const { pageSize } = this.state;
-    getAuditLogList = this.props.getAuditLogListData.resultList;
-    const totalCount = this.props.getAuditLogListData.totalRows;
+    getAuditLogList = this.props.getAuditLogListData.items;
+    const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     // eslint-disable-next-line no-unused-expressions
     getAuditLogList &&
       getAuditLogList.forEach((element, index) => {
