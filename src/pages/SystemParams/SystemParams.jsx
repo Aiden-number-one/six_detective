@@ -101,6 +101,8 @@ class SystemParams extends Component {
     this.modifyFormRef = React.createRef();
     this.state = {
       updateSystemParamsVisible: false,
+      pageNum: '1',
+      pageSize: '10',
       columns: [
         {
           title: '序号',
@@ -198,8 +200,8 @@ class SystemParams extends Component {
     const { dispatch } = this.props;
     const param = {
       paramType,
-      pageNumber: '1',
-      pageSize: '10',
+      pageNumber: this.state.pageNum,
+      pageSize: this.state.pageSize,
     };
     dispatch({
       type: 'systemParams/getSystemParamsList',
@@ -219,15 +221,33 @@ class SystemParams extends Component {
     this.querySystemParams(value);
   };
 
+  pageChange = pagination => {
+    this.setState(
+      {
+        pageNum: pagination.current,
+        pageSize: pagination.pageSize,
+      },
+      () => {
+        this.querySystemParams();
+      },
+    );
+  };
+
   render() {
+    const { getParamsTypeData, getSystemParamsListData } = this.props;
     let { ParamsTypeData, getSystemParamsList } = this.state;
-    ParamsTypeData = this.props.getParamsTypeData;
-    getSystemParamsList = this.props.getSystemParamsListData;
+    const { pageSize } = this.state;
+    ParamsTypeData = getParamsTypeData;
+    getSystemParamsList = getSystemParamsListData.items;
+    const totalCount = getSystemParamsListData && getSystemParamsListData.totalCount;
     // eslint-disable-next-line array-callback-return
-    getSystemParamsList.map((element, index) => {
-      // eslint-disable-next-line no-param-reassign
-      element.index = index + 1;
-    });
+    // eslint-disable-next-line no-unused-expressions
+    getSystemParamsList &&
+      // eslint-disable-next-line array-callback-return
+      getSystemParamsList.map((element, index) => {
+        // eslint-disable-next-line no-param-reassign
+        element.index = (this.state.pageNum - 1) * pageSize + index + 1;
+      });
     return (
       <Fragment>
         <div>
@@ -256,7 +276,8 @@ class SystemParams extends Component {
             <Table
               dataSource={getSystemParamsList}
               columns={this.state.columns}
-              pagination={{ size: 'small' }}
+              pagination={{ total: totalCount, pageSize }}
+              onChange={this.pageChange}
             ></Table>
           </div>
         </div>
