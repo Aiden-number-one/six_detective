@@ -744,7 +744,11 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div>
-            <Table dataSource={this.props.userManagementData} columns={this.state.columns}></Table>
+            <Table
+              pagination={{ size: 'small' }}
+              dataSource={this.props.userManagementData}
+              columns={this.state.columns}
+            ></Table>
           </div>
         </div>
       </Fragment>

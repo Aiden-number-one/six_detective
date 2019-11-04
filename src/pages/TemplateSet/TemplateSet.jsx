@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 import React, { PureComponent, Fragment } from 'react';
 import { Form, Icon, Divider, Table, Modal, Input, Button, Select } from 'antd';
 import { connect } from 'dva';
@@ -13,7 +12,7 @@ const { Option } = Select;
 }))
 class TemplateSet extends PureComponent {
   state = {
-    dataSourceTest: [],
+    // dataSourceTest: [],
     formValue: {},
     visible: false,
   };
@@ -157,7 +156,7 @@ class TemplateSet extends PureComponent {
           <Table
             columns={checkColumns}
             dataSource={dataSource}
-            bordered
+            pagination={{ size: 'small' }}
             className={styles.tableBox}
           />
           <Modal title="模板设置修改" visible={this.state.visible} closable={false} footer={false}>

@@ -233,8 +233,10 @@ class ApprovalSet extends PureComponent {
           <Table
             columns={setColumns}
             dataSource={approvalConfigList}
-            bordered
             className={styles.tableBox}
+            pagination={{
+              size: 'small',
+            }}
           />
           <ModelForm
             showModel={this.showModel}
