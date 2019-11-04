@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Button, Input, Modal, Table, Pagination } from 'antd';
+import { Form, Button, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
 
 import styles from './code.less';
@@ -168,12 +168,11 @@ class CodeMaintenance extends Component {
     this.queryCodeList();
   };
 
-  pageChange = (page, pageSize) => {
+  pageChange = pagination => {
     this.setState(
       {
-        // eslint-disable-next-line react/no-unused-state
-        pageNumber: page,
-        pageSize,
+        pageNumber: pagination.current,
+        pageSize: pagination.pageSize,
       },
       () => {
         this.queryCodeList();
@@ -224,9 +223,10 @@ class CodeMaintenance extends Component {
             <Table
               dataSource={codeListData}
               columns={this.state.codeColumns}
-              pagination={false}
+              pagination={{ total: totalCount, pageSize }}
+              onChange={this.pageChange}
             ></Table>
-            <Pagination
+            {/* <Pagination
               showSizeChanger
               showQuickJumper
               total={totalCount}
@@ -235,7 +235,7 @@ class CodeMaintenance extends Component {
               pageSize={pageSize}
               onChange={this.pageChange}
               onShowSizeChange={this.onShowSizeChange}
-            ></Pagination>
+            ></Pagination> */}
           </div>
         </div>
         <div>
