@@ -26,7 +26,7 @@ const plugins = [
       locale: {
         // default false
         enable: true,
-        // default zh-CN
+        // default zh-CN en-US
         default: 'en-US',
         // default true, when it is true, will use `navigator.language` overwrite default
         baseNavigator: true,

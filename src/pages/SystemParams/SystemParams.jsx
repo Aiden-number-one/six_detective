@@ -93,6 +93,7 @@ const NewModifyForm = Form.create({})(ModifyForm);
 @connect(({ systemParams, loading }) => ({
   loading: loading.effects['systemParams/getSystemParamsList'],
   getSystemParamsListData: systemParams.data,
+  getParamsTypeData: systemParams.getParamsData,
 }))
 class SystemParams extends Component {
   constructor() {
@@ -144,17 +145,19 @@ class SystemParams extends Component {
           ),
         },
       ],
+      getSystemParamsList: [],
+      ParamsTypeData: {},
       paramObj: {},
     };
   }
 
   componentDidMount() {
     this.querySystemParams();
+    this.getParamsTypeList();
   }
 
   updateSystemParamsComfirm = () => {
     this.modifyFormRef.current.validateFields((err, values) => {
-      console.log('err, values=', err, values);
       const { dispatch } = this.props;
       const param = {
         comments: values.comments,
@@ -181,7 +184,6 @@ class SystemParams extends Component {
   handleChange = () => {};
 
   updateSystemParams = (res, obj) => {
-    console.log('res===,obj==', res, obj);
     const paramObj = {
       comments: obj.comments,
       paramId: obj.paramId,
@@ -192,24 +194,50 @@ class SystemParams extends Component {
     this.setState({ updateSystemParamsVisible: true, paramObj });
   };
 
-  querySystemParams = () => {
+  querySystemParams = (paramType = '') => {
     const { dispatch } = this.props;
+    const param = {
+      paramType,
+      pageNumber: '1',
+      pageSize: '10',
+    };
     dispatch({
       type: 'systemParams/getSystemParamsList',
+      payload: param,
+    });
+  };
+
+  getParamsTypeList = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'systemParams/getParamsType',
       payload: {},
     });
   };
 
+  onChangeOption = value => {
+    this.querySystemParams(value);
+  };
+
   render() {
+    let { ParamsTypeData, getSystemParamsList } = this.state;
+    ParamsTypeData = this.props.getParamsTypeData;
+    getSystemParamsList = this.props.getSystemParamsListData;
+    // eslint-disable-next-line array-callback-return
+    getSystemParamsList.map((element, index) => {
+      // eslint-disable-next-line no-param-reassign
+      element.index = index + 1;
+    });
     return (
       <Fragment>
         <div>
           <div>
             <div>
               <span>参数类型：</span>
-              <Select>
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
+              <Select defaultValue="请选择" onChange={this.onChangeOption}>
+                <Option value="">请选择</Option>
+                {ParamsTypeData[0] &&
+                  ParamsTypeData[0].data.map(element => <Option value={element}>{element}</Option>)}
               </Select>
             </div>
             <Modal
@@ -226,8 +254,9 @@ class SystemParams extends Component {
           </div>
           <div>
             <Table
-              dataSource={this.props.getSystemParamsListData}
+              dataSource={getSystemParamsList}
               columns={this.state.columns}
+              pagination={{ size: 'small' }}
             ></Table>
           </div>
         </div>

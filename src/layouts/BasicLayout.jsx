@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { setLocale } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
@@ -54,6 +55,7 @@ const BasicLayout = props => {
   const [openKeys, setOpenKeys] = useState([]);
 
   useEffect(() => {
+    setLocale('en-US');
     if (dispatch) {
       // dispatch({
       //   type: 'menu/getMenuData',

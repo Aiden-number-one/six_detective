@@ -1,11 +1,12 @@
 import Service from '@/utils/Service';
 
-const { systemParamsList, systemParamsUpdate } = Service;
+const { systemParamsList, systemParamsUpdate, paramsType } = Service;
 const getSystemParamsListModel = {
   namespace: 'systemParams',
   state: {
     data: [],
     obj: {},
+    getParamsData: [],
   },
   effects: {
     *getSystemParamsList({ payload }, { call, put }) {
@@ -31,6 +32,19 @@ const getSystemParamsListModel = {
         callback();
       }
     },
+    *getParamsType({ payload, callback }, { call, put }) {
+      const response = yield call(paramsType, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'getParamsData',
+            payload: response.bcjson.items,
+          });
+        }
+        // eslint-disable-next-line no-unused-expressions
+        callback && callback();
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
@@ -43,6 +57,12 @@ const getSystemParamsListModel = {
       return {
         ...state,
         obj: action.payload,
+      };
+    },
+    getParamsData(state, action) {
+      return {
+        ...state,
+        getParamsData: action.payload,
       };
     },
   },
