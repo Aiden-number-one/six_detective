@@ -253,7 +253,11 @@ class SystemParams extends Component {
             </Modal>
           </div>
           <div>
-            <Table dataSource={getSystemParamsList} columns={this.state.columns}></Table>
+            <Table
+              dataSource={getSystemParamsList}
+              columns={this.state.columns}
+              pagination={{ size: 'small' }}
+            ></Table>
           </div>
         </div>
       </Fragment>

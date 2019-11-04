@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 import React, { PureComponent, Fragment } from 'react';
 import { Form, Icon, Divider, Table, Modal, Input, Button, Select } from 'antd';
 import { connect } from 'dva';
@@ -13,13 +12,13 @@ const { Option } = Select;
 }))
 class TemplateSet extends PureComponent {
   state = {
-    dataSourceTest: [],
+    // dataSourceTest: [],
     formValue: {},
     visible: false,
   };
 
   componentDidMount() {
-    this.createData();
+    // this.createData();
     this.getTemplateData();
   }
 
@@ -42,24 +41,24 @@ class TemplateSet extends PureComponent {
     });
   };
 
-  // 生成数据Data
-  createData = () => {
-    const data = [];
-    for (let i = 0; i < 46; i += 1) {
-      data.push({
-        key: i,
-        templateName: `modelName ${i}`,
-        templateId: `ID ${i}`,
-        status: '开启',
-        templateTitle: `标题 ${i}`,
-        templateContent: `模板内容 ${i}`,
-        templateKeys: '关键字',
-      });
-    }
-    this.setState({
-      dataSourceTest: data,
-    });
-  };
+  // // 生成数据Data
+  // createData = () => {
+  //   const data = [];
+  //   for (let i = 0; i < 46; i += 1) {
+  //     data.push({
+  //       key: i,
+  //       templateName: `modelName ${i}`,
+  //       templateId: `ID ${i}`,
+  //       status: '开启',
+  //       templateTitle: `标题 ${i}`,
+  //       templateContent: `模板内容 ${i}`,
+  //       templateKeys: '关键字',
+  //     });
+  //   }
+  //   this.setState({
+  //     dataSourceTest: data,
+  //   });
+  // };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -157,7 +156,7 @@ class TemplateSet extends PureComponent {
           <Table
             columns={checkColumns}
             dataSource={dataSource}
-            bordered
+            pagination={{ size: 'small' }}
             className={styles.tableBox}
           />
           <Modal title="模板设置修改" visible={this.state.visible} closable={false} footer={false}>

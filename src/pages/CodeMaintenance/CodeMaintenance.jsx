@@ -260,7 +260,7 @@ class CodeMaintenance extends Component {
           <div>
             <Table
               dataSource={this.state.dataSource}
-              pagination={{ pageSize: 5 }}
+              pagination={{ size: 'small', pageSize: 5 }}
               columns={this.state.columns}
             ></Table>
           </div>

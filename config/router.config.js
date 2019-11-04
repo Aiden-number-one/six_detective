@@ -1,3 +1,4 @@
+import authRoutes from './router.config.auth';
 export default [
   {
     path: '/login',
@@ -180,8 +181,9 @@ export default [
           {
             path: '/system-management/audit-log',
             name: 'auditLog',
-            component: './AuditLog/AuditLog'
-          }
+            component: './AuditLog/AuditLog',
+          },
+          ...authRoutes,
         ],
       },
       {

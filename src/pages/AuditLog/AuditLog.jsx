@@ -140,7 +140,7 @@ class AuditLog extends Component {
           </Button>
           <Table
             dataSource={getAuditLogList}
-            pagination={{ pageSize: 5 }}
+            pagination={{ size: 'small', pageSize: 5 }}
             columns={this.state.columns}
           ></Table>
         </div>

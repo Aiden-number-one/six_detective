@@ -328,6 +328,7 @@ class EmailParameter extends Component {
 
   componentDidMount() {
     this.getEmailInit();
+    console.log(this.props.getEmailListData);
   }
 
   addUser = () => {
@@ -469,6 +470,8 @@ class EmailParameter extends Component {
   };
 
   render() {
+    console.log(this.props.getEmailListData);
+
     return (
       <Fragment>
         <div>
@@ -515,7 +518,7 @@ class EmailParameter extends Component {
           <div>
             <Table
               dataSource={this.props.getEmailListData}
-              pagination={{ pageSize: 5 }}
+              pagination={{ size: 'small', pageSize: 5 }}
               columns={this.state.columns}
             ></Table>
           </div>
