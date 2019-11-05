@@ -10,19 +10,19 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import router from 'umi/router';
-import { Checkbox, Alert } from 'antd';
-import Login from '@/components/Login';
+import { Alert } from 'antd';
+import LoginComponent from '@/components/Login';
 import styles from './Login.less';
 
-const { UserName, Password, Submit } = Login;
+const { UserName, Password, Submit } = LoginComponent;
 
 @connect(state => ({
   login: state.login,
 }))
-class LoginPage extends Component {
+class Login extends Component {
   state = {
     type: 'account',
-    autoLogin: true,
+    // autoLogin: true,
     submitting: false, // submit loading
   };
 
@@ -68,9 +68,9 @@ class LoginPage extends Component {
   };
 
   changeAutoLogin = e => {
-    this.setState({
-      autoLogin: e.target.checked,
-    });
+    // this.setState({
+    //   autoLogin: e.target.checked,
+    // });
   };
 
   renderMessage = content => (
@@ -78,7 +78,7 @@ class LoginPage extends Component {
   );
 
   render() {
-    const { type, autoLogin, submitting } = this.state;
+    const { type, submitting } = this.state;
     return (
       <div className={styles.main}>
         <Login
@@ -146,4 +146,4 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+export default Login;
