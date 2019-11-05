@@ -17,7 +17,7 @@ const judgeData = ['>=', '>', '=', '<', '<='];
 @connect(state => ({
   rulesEngine: state.rulesEngine,
 }))
-export default class DataSource extends PureComponent {
+export default class RulesEngine extends PureComponent {
   state = {
     visible: false,
     chooseData: [],
