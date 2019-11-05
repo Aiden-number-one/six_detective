@@ -13,6 +13,7 @@ import {
   Popover,
   DatePicker,
 } from 'antd';
+import TableHeader from '@/components/TableHeader';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import IconFont from '@/components/IconFont';
@@ -315,14 +316,7 @@ export default class DataSource extends PureComponent {
       <PageHeaderWrapper>
         <div className={styles.newList}>
           <WrappedAdvancedSearchForm />
-          <div className="tableHeader">
-            <Checkbox>Select All</Checkbox>
-            <div>
-              <Button size="small" type="danger" icon="delete" className="btn2" />
-              <Button size="small" type="primary" icon="edit" className="btn2" />
-              <Button size="small" type="primary" icon="plus" className="btn2" />
-            </div>
-          </div>
+          <TableHeader showSelect showEdit />
           <Table
             rowSelection={rowSelection}
             dataSource={tableData}

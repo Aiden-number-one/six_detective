@@ -1,5 +1,5 @@
-import { Badge, Icon, Spin, Tabs } from 'antd';
 import React, { Component } from 'react';
+import { Badge, Icon, Spin, Tabs } from 'antd';
 import classNames from 'classnames';
 import NoticeList from './NoticeList';
 import HeaderDropdown from '../HeaderDropdown';
