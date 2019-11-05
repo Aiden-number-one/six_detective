@@ -50,6 +50,7 @@ class CodeMaintenance extends Component {
   state = {
     codeVisible: false,
     updateCodeItemVisible: false,
+    deleteCodeItemVisible: false,
     // eslint-disable-next-line react/no-unused-state
     itemNameValue: '',
     columns: [
@@ -87,7 +88,14 @@ class CodeMaintenance extends Component {
             >
               修改
             </a>
-            <a href="#">删除</a>
+            <a
+              href="#"
+              onClick={() => {
+                this.deleteCodeItem(res, recode);
+              }}
+            >
+              删除
+            </a>
           </span>
         ),
       },
@@ -177,6 +185,23 @@ class CodeMaintenance extends Component {
   };
 
   updateCodeItemConfirm = () => {
+    const { dispatch } = this.props;
+    this.codeFormRef.current.validateFields((err, values) => {
+      const params = {
+        dictId: this.state.dictId,
+        dictItemId: this.state.updateCodeItemParams.dictItemId,
+        updDictItemId: values.dictItemId,
+        dictItemIdName: values.dictItemIdName,
+        sortNo: values.sortNo,
+      };
+      dispatch({
+        type: 'codeList/updateCodeItem',
+        payload: params,
+        callback: () => {
+          this.queryCodeItemList();
+        },
+      });
+    });
     this.setState({
       updateCodeItemVisible: false,
     });
@@ -185,6 +210,41 @@ class CodeMaintenance extends Component {
   updateCodeItemCancel = () => {
     this.setState({
       updateCodeItemVisible: false,
+    });
+  };
+
+  // 删除
+  deleteCodeItem = (res, recode) => {
+    const updateCodeItemParams = {
+      dictItemId: recode.dictItemId,
+    };
+    this.setState({
+      deleteCodeItemVisible: true,
+      updateCodeItemParams,
+    });
+  };
+
+  deleteCodeItemConfirm = () => {
+    const { dispatch } = this.props;
+    const params = {
+      dictId: this.state.dictId,
+      dictItemId: this.state.updateCodeItemParams.dictItemId,
+    };
+    dispatch({
+      type: 'codeList/deleteCodeItem',
+      payload: params,
+      callback: () => {
+        this.queryCodeItemList();
+        this.setState({
+          deleteCodeItemVisible: false,
+        });
+      },
+    });
+  };
+
+  deleteCodeItemCancel = () => {
+    this.setState({
+      deleteCodeItemVisible: false,
     });
   };
 
@@ -345,6 +405,7 @@ class CodeMaintenance extends Component {
             >
               <NewCodeForm ref={this.codeFormRef} dictId={this.state.dictId}></NewCodeForm>
             </Modal>
+            {/* 修改 */}
             <Modal
               title="修改字典子项"
               visible={this.state.updateCodeItemVisible}
@@ -352,6 +413,18 @@ class CodeMaintenance extends Component {
               onCancel={this.updateCodeItemCancel}
             >
               <NewCodeForm ref={this.codeFormRef} {...updateCodeItemParams}></NewCodeForm>
+            </Modal>
+            {/* 删除 */}
+            {/* 删除 */}
+            <Modal
+              title="提示"
+              visible={this.state.deleteCodeItemVisible}
+              onOk={this.deleteCodeItemConfirm}
+              onCancel={this.deleteCodeItemCancel}
+            >
+              <div>
+                <span>确定删除吗？</span>
+              </div>
             </Modal>
           </div>
           <div>
