@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Service from '@/utils/Service';
 
 const {
   getConfig,
   addConfig,
   deleteConfig,
+  setConfigStatus,
   saveConfig,
   deployedModelList,
-  getDiagram,
   getProcessResource,
+  getRoleGroup,
 } = Service;
 const approvalSetModel = {
   namespace: 'approvalSet',
@@ -17,6 +19,7 @@ const approvalSetModel = {
     processDefinitionId: '',
     diagramDatas: '',
     processImage: '',
+    roleGroupDatas: [],
   },
   effects: {
     *approvalConfigDatas({ payload }, { call, put }) {
@@ -63,7 +66,23 @@ const approvalSetModel = {
         });
       }
     },
-    *deployedModelListDatas({ payload, callback, callback2 }, { call, put }) {
+    *setConfigStatus({ payload }, { call }) {
+      const response = yield call(setConfigStatus, { param: payload });
+      // if (response.bcjson.flag === '1') {
+      // }
+    },
+    *getRoleGroupDatas({ payload }, { call, put }) {
+      const response = yield call(getRoleGroup, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'roleGroupData',
+            payload: response.bcjson.items,
+          });
+        }
+      }
+    },
+    *deployedModelListDatas({ payload, callback }, { call, put }) {
       const response = yield call(deployedModelList, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -72,21 +91,20 @@ const approvalSetModel = {
             payload: response.bcjson.items,
           });
           callback(response.bcjson.items[0].processDefinitionId);
-          callback2(response.bcjson.items[0].processDefinitionId);
         }
       }
     },
-    *getDiagramDatas({ payload }, { call, put }) {
-      const response = yield call(getDiagram, { param: payload });
-      if (response.bcjson.flag === '1') {
-        if (response.bcjson.items) {
-          yield put({
-            type: 'getDiagramDatas',
-            payload: response.bcjson.items,
-          });
-        }
-      }
-    },
+    // *getDiagramDatas({ payload }, { call, put }) {
+    //   const response = yield call(getDiagram, { param: payload });
+    //   if (response.bcjson.flag === '1') {
+    //     if (response.bcjson.items) {
+    //       yield put({
+    //         type: 'getDiagram',
+    //         payload: response.bcjson.items,
+    //       });
+    //     }
+    //   }
+    // },
     *getProcessResourceDatas({ payload }, { call, put }) {
       const response = yield call(getProcessResource, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -119,7 +137,7 @@ const approvalSetModel = {
         processDefinitionId: action.payload.processDefinitionId,
       };
     },
-    getDiagramDatas(state, action) {
+    getDiagram(state, action) {
       return {
         ...state,
         diagramDatas: action.payload,
@@ -129,6 +147,12 @@ const approvalSetModel = {
       return {
         ...state,
         processImage: action.payload,
+      };
+    },
+    roleGroupData(state, action) {
+      return {
+        ...state,
+        roleGroupDatas: action.payload,
       };
     },
   },
