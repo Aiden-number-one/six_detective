@@ -43,7 +43,7 @@ class OperatorForm extends Component {
           </Col>
         </Row>
         <div className="btnArea">
-          <Button type="primary" onPress={search}>
+          <Button type="primary" onClick={search}>
             Search
           </Button>
         </div>
@@ -59,6 +59,8 @@ const NewOperatorForm = Form.create({})(OperatorForm);
 }))
 class AuditLog extends Component {
   state = {
+    pageNum: '1',
+    pageSize: '10',
     columns: [
       {
         title: '序号',
@@ -105,10 +107,10 @@ class AuditLog extends Component {
     this.getAuditLog();
   }
 
-  getAuditLog = (operatorName, beginDate, endDate) => {
+  getAuditLog = (operatorName = '', beginDate = '', endDate = '') => {
     const param = {
-      pageNumber: '1',
-      pageSize: '10',
+      pageNumber: `${this.state.pageNum}`,
+      pageSize: `${this.state.pageSize}`,
       operatorName,
       beginDate,
       endDate,
@@ -118,6 +120,18 @@ class AuditLog extends Component {
       type: 'auditLog/getAuditLogList',
       payload: param,
     });
+  };
+
+  pageChange = pagination => {
+    this.setState(
+      {
+        pageNum: `${pagination.current}`,
+        pageSize: pagination.pageSize,
+      },
+      () => {
+        this.getAuditLog();
+      },
+    );
   };
 
   changeBeginDate = () => {};
@@ -136,12 +150,14 @@ class AuditLog extends Component {
 
   render() {
     let { getAuditLogList } = this.state;
-    getAuditLogList = this.props.getAuditLogListData.resultList;
+    const { pageSize } = this.state;
+    getAuditLogList = this.props.getAuditLogListData.items;
+    const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     // eslint-disable-next-line no-unused-expressions
     getAuditLogList &&
       getAuditLogList.forEach((element, index) => {
         // eslint-disable-next-line no-param-reassign
-        element.index = index + 1;
+        element.index = (this.state.pageNum - 1) * pageSize + index + 1;
       });
     return (
       <PageHeaderWrapper>
@@ -149,7 +165,8 @@ class AuditLog extends Component {
         <TableHeader />
         <Table
           dataSource={getAuditLogList}
-          pagination={{ size: 'small', pageSize: 5 }}
+          pagination={{ total: totalCount, pageSize }}
+          onChange={this.pageChange}
           columns={this.state.columns}
         />
       </PageHeaderWrapper>

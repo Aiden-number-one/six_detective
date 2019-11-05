@@ -1,10 +1,11 @@
 import Service from '@/utils/Service';
 
-const { codeList, addCode } = Service;
+const { codeList, codeItemList, addCode } = Service;
 const getCodeListModel = {
   namespace: 'codeList',
   state: {
     data: [],
+    itemData: [],
     obj: {},
   },
   effects: {
@@ -14,6 +15,17 @@ const getCodeListModel = {
         if (response.bcjson.items) {
           yield put({
             type: 'getDatas',
+            payload: response.bcjson,
+          });
+        }
+      }
+    },
+    *getCodeItemList({ payload }, { call, put }) {
+      const response = yield call(codeItemList, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'getItemDatas',
             payload: response.bcjson,
           });
         }
@@ -36,6 +48,12 @@ const getCodeListModel = {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    getItemDatas(state, action) {
+      return {
+        ...state,
+        itemData: action.payload,
       };
     },
     setDatas(state, action) {
