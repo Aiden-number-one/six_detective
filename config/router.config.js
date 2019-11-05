@@ -173,7 +173,7 @@ export default [
           {
             path: '/system-management/email-parameter',
             name: 'emailParameter',
-            component: './EmailConfig/EmailConfig',
+            component: './EmailParameter/EmailParameter',
           },
           {
             path: '/system-management/system-parameters',

@@ -6,7 +6,7 @@
  * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
-const Model = {
+const sheet = {
   namespace: 'sheet',
   state: {
     status: undefined,
@@ -14,4 +14,4 @@ const Model = {
   effects: {},
   reducers: {},
 };
-export default Model;
+export default sheet;

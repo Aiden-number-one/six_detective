@@ -227,7 +227,7 @@ const rowAndCol = [
 @SpreadSheet.createSpreadSheet
 class Sheet extends PureComponent {
   state = {
-    cellStyle: {},
+    // cellStyle: {},
     fontColor: '#000',
     bgColor: '#fff',
     borderColor: '#000',
@@ -238,12 +238,12 @@ class Sheet extends PureComponent {
   spreadSheetRef = React.createRef();
 
   componentDidMount() {
-    const { setCellCallback } = this.props;
-    setCellCallback(cellStyle => {
-      this.setState({
-        cellStyle,
-      });
-    });
+    // const { setCellCallback } = this.props;
+    // setCellCallback(cellStyle => {
+    //   this.setState({
+    //     cellStyle,
+    //   });
+    // });
   }
 
   setCellStyle = (property, value) => {
@@ -253,7 +253,7 @@ class Sheet extends PureComponent {
       setCellStyle(property, false);
     } else {
       setCellStyle(property, value);
-      const arr = [[0, 1], [2, 3], [4, 5]];
+      // const arr = [[0, 1], [2, 3], [4, 5]];
     }
   };
 
@@ -265,7 +265,7 @@ class Sheet extends PureComponent {
   render() {
     const { setCellType } = this.props;
     const { setCellStyle, editRowColumn } = this;
-    const { fontColor, bgColor, cellStyle, borderColor, borderStyle, visible } = this.state;
+    const { fontColor, bgColor, borderColor, borderStyle, visible } = this.state;
     return (
       <Fragment>
         <Button
