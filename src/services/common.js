@@ -11,6 +11,7 @@ export default {
   // getMenu: 'bayconnect.superlop.get_acl_menu', // 获取数据门户主题列表
   getMenu: 'mock/run/7765f3a2-a030-4578-a016-cc13c4156136', // Mock
   getLogin: 'bayconnect.superlop.get_website_login', // 登录
+  getLoginStatus: 'bayconnect.superlop.get_user_operate_info', // 判断登录状态
   getDatas: 'kingdom.retl.getDatas',
   delDatas: 'kingdom.retl.delDatas',
   getDataSourceList: 'kingdom.retl.getDataSourceList',
@@ -45,5 +46,10 @@ export default {
   systemParamsList: 'bayconnect.superlop.get_sys_params_config_list',
   systemParamsUpdate: 'bayconnect.superlop.set_sys_params_config_update',
   paramsType: 'bayconnect.superlop.get_sys_params_config_filter_list',
-  codeList: 'bayconnect.superlop.query_task_spm_dict_index',
+  codeList: 'bayconnect.superlop.get_system_dict_menu',
+  codeItemList: 'bayconnect.superlop.get_dict_son_config',
+  addCodeItem: 'bayconnect.superlop.set_dict_son_config',
+  updateCodeItem: 'bayconnect.superlop.set_dict_son_update',
+  deleteCodeItem: 'bayconnect.superlop.set_dict_son_del',
+  addCode: 'bayconnect.superlop.add_task_spm_dict_index',
 };

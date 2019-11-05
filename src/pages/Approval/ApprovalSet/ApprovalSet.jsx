@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
@@ -102,7 +101,6 @@ class ApprovalSet extends PureComponent {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         this.configData({
           pageNumber: '1',
           pageSize: '10',
@@ -251,23 +249,13 @@ class ApprovalSet extends PureComponent {
             </Form.Item>
 
             <Form.Item>
-              <Button
-                type="primary"
-                icon="search"
-                htmlType="submit"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-              >
+              <Button type="primary" icon="search" htmlType="submit">
                 查询
               </Button>
             </Form.Item>
             <br />
             <Form.Item style={{ marginTop: '5px' }}>
-              <Button
-                type="primary"
-                icon="file-add"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-                onClick={this.handleAdd}
-              >
+              <Button type="primary" icon="file-add" onClick={this.handleAdd}>
                 增加
               </Button>
             </Form.Item>
@@ -275,8 +263,10 @@ class ApprovalSet extends PureComponent {
           <Table
             columns={setColumns}
             dataSource={approvalConfigList}
-            bordered
             className={styles.tableBox}
+            pagination={{
+              size: 'small',
+            }}
           />
           <ModelForm
             showModel={this.showModel}

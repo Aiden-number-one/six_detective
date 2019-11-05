@@ -15,7 +15,7 @@ const getSystemParamsListModel = {
         if (response.bcjson.items) {
           yield put({
             type: 'getDatas',
-            payload: response.bcjson.items,
+            payload: response.bcjson,
           });
         }
       }

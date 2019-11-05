@@ -161,21 +161,12 @@ class ApprovalEheck extends PureComponent {
               {getFieldDecorator('approvalDate', rangeConfig)(<RangePicker />)}
             </Form.Item>
             <Form.Item style={{ marginTop: '5px' }}>
-              <Button
-                type="primary"
-                icon="search"
-                htmlType="submit"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-              >
+              <Button type="primary" icon="search" htmlType="submit">
                 查询
               </Button>
             </Form.Item>
             <Form.Item style={{ marginTop: '5px' }}>
-              <Button
-                type="primary"
-                icon="close"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-              >
+              <Button type="primary" icon="close">
                 重置
               </Button>
             </Form.Item>
@@ -183,8 +174,10 @@ class ApprovalEheck extends PureComponent {
           <Table
             columns={checkColumns}
             dataSource={dataSource}
-            bordered
             className={styles.tableBox}
+            pagination={{
+              size: 'small',
+            }}
           />
         </div>
       </Fragment>

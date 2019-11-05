@@ -5,6 +5,7 @@
   "description": "An out-of-box UI solution for enterprise applications",
   "scripts": {
     "bc-install": "npm install --registry=https://registry.npm.taobao.org ",
+    "bc-install-local": "npm install --registry=http://10.200.0.5:8081/repository/npmjs.org/",
     "analyze": "cross-env ANALYZE=1 umi build",
     "build": "umi build",
     "build:mock": "cross-env MOCK=1 umi build",

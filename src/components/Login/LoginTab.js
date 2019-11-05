@@ -12,7 +12,7 @@ const generateId = (() => {
   };
 })();
 
-class LoginTab extends Component {
+class LoginTabInside extends Component {
   constructor(props) {
     super(props);
     this.uniqueId = generateId('login-tab-');
@@ -29,13 +29,13 @@ class LoginTab extends Component {
   }
 }
 
-const wrapContext = props => (
+const LoginTab = props => (
   <LoginContext.Consumer>
-    {value => <LoginTab tabUtil={value.tabUtil} {...props} />}
+    {value => <LoginTabInside tabUtil={value.tabUtil} {...props} />}
   </LoginContext.Consumer>
 );
 
 // 标志位 用来判断是不是自定义组件
-wrapContext.typeName = 'LoginTab';
+LoginTab.typeName = 'LoginTab';
 
-export default wrapContext;
+export default LoginTab;

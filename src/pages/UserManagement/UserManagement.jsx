@@ -43,7 +43,6 @@ class UserForm extends Component {
                 ],
               })(
                 <Select
-                  defaultValue="lucy"
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
@@ -62,7 +61,7 @@ class UserForm extends Component {
                     message: 'Please input your 登陆密码',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input.Password className={styles['input-value']} />)}
             </Form.Item>
             <Form.Item label="确认密码：">
               {getFieldDecorator('confirm', {
@@ -90,7 +89,7 @@ class UserForm extends Component {
                     message: 'Please input your phone number!',
                   },
                 ],
-              })(<Input.Password className={styles['input-value']} />)}
+              })(<Input className={styles['input-value']} />)}
             </Form.Item>
             <Form.Item label="邮箱地址：">
               {getFieldDecorator('email', {
@@ -153,7 +152,6 @@ class UpdateForm extends Component {
                 ],
               })(
                 <Select
-                  defaultValue="lucy"
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
@@ -744,7 +742,11 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div>
-            <Table dataSource={this.props.userManagementData} columns={this.state.columns}></Table>
+            <Table
+              pagination={{ size: 'small' }}
+              dataSource={this.props.userManagementData}
+              columns={this.state.columns}
+            ></Table>
           </div>
         </div>
       </Fragment>

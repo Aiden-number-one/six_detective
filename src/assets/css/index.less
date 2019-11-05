@@ -1,3 +1,5 @@
+@import '~@/assets/css/utils.less';
+
 :global {
   // 基础表单
   .form-item {
@@ -12,16 +14,77 @@
       margin-right: 100px;
     }
   }
-  // 查询表单
+
+  /* 按钮相关 */
+  // 次按钮 取消按钮
+  .ant-btn {
+    width: 100px;
+    height: 36px;
+    margin-right: 14px;
+    color: #10416c;
+    font-size: 13px;
+    background-color: #dfd9e8;
+    border-color: #dfd9e8;
+    border-radius: 0;
+  }
+  .ant-btn:hover,
+  .ant-btn:focus {
+    color: #fff;
+    background-color: #567493;
+    border-color: #567493;
+  }
+  // 主按钮  确定按钮
+  .ant-btn-primary {
+    color: #fff;
+    background-color: #10416c;
+    border-color: #10416c;
+  }
+  .ant-btn-primary:hover,
+  .ant-btn-primary:focus {
+    background-color: #4d80ad;
+    border-color: #4d80ad;
+  }
+  // danger
+  .ant-btn-danger {
+    color: #fff;
+    background-color: #f3364c;
+    border-color: #f3364c;
+  }
+  .ant-btn-danger:hover,
+  .ant-btn-danger:focus {
+    background-color: #ff6778;
+    border-color: #ff6778;
+  }
+  // Icon按钮
+  .ant-btn-icon-only.ant-btn-sm {
+    margin-right: 8px;
+    font-size: 13px;
+    border-radius: 0;
+  }
+
+  // Table查询表单
   .ant-advanced-search-form {
     margin-top: -10px;
     padding-top: 0;
     padding-bottom: 20px;
+    border-bottom: 1px rgba(129, 154, 179, 0.5) solid;
     .ant-row {
       margin-left: 0 !important;
     }
     .ant-form-item-label {
       line-height: 20px;
+    }
+    .btnArea {
+      margin-top: 20px;
+      .clearfix();
+      .ant-btn {
+        float: right;
+        margin-right: 15px;
+        font-weight: normal;
+        &:first-child {
+          margin-right: 0;
+        }
+      }
     }
   }
 
@@ -99,51 +162,7 @@
     border: none;
     box-shadow: none;
   }
-  // 次按钮 取消按钮
-  .ant-btn {
-    width: 100px;
-    height: 36px;
-    margin-right: 14px;
-    color: #10416c;
-    font-size: 13px;
-    background-color: #dfd9e8;
-    border-color: #dfd9e8;
-    border-radius: 0;
-  }
-  .ant-btn:hover,
-  .ant-btn:focus {
-    color: #fff;
-    background-color: #567493;
-    border-color: #567493;
-  }
-  // 主按钮  确定按钮
-  .ant-btn-primary {
-    color: #fff;
-    background-color: #10416c;
-    border-color: #10416c;
-  }
-  .ant-btn-primary:hover,
-  .ant-btn-primary:focus {
-    background-color: #4d80ad;
-    border-color: #4d80ad;
-  }
-  // danger
-  .ant-btn-danger {
-    color: #fff;
-    background-color: #f3364c;
-    border-color: #f3364c;
-  }
-  .ant-btn-danger:hover,
-  .ant-btn-danger:focus {
-    background-color: #ff6778;
-    border-color: #ff6778;
-  }
-  // Icon按钮
-  .ant-btn-icon-only.ant-btn-sm {
-    margin-right: 8px;
-    font-size: 13px;
-    border-radius: 0;
-  }
+
   // 文本框
   .ant-input {
     height: 36px;
@@ -243,31 +262,26 @@
       background: #557597;
       border-radius: 10px;
     }
-    .ant-select-dropdown-menu::-webkit-scrollbar-thumb:hover {
-      background: #557597;
-    }
     .ant-select-dropdown-menu::-webkit-scrollbar-corner {
       // 边角，即两个滚动条的交汇处
       background: #10416c;
     }
+    .ant-select-dropdown-menu::-webkit-scrollbar-thumb:hover {
+      background: #557597;
+    }
   }
-  // 日期插件
+
+  /* 日期相关 */
   .ant-calendar {
     background-color: #f2f6f8;
     border-color: #f2f6f8;
   }
-  .ant-calendar-last-month-cell .ant-calendar-date,
-  .ant-calendar-next-month-btn-day .ant-calendar-date,
-  .ant-calendar-last-month-cell .ant-calendar-date:hover,
-  .ant-calendar-next-month-btn-day .ant-calendar-date:hover {
+  .ant-calendar-date {
     color: #10416c;
   }
   .ant-calendar-date:hover {
     color: #fff;
     background-color: #557597;
-  }
-  .ant-calendar-date {
-    color: #10416c;
   }
   .ant-calendar-selected-day .ant-calendar-date {
     color: #fff;
@@ -275,6 +289,15 @@
   }
   .ant-calendar-selected-date .ant-calendar-date {
     background-color: #557597;
+  }
+  .ant-calendar-last-month-cell .ant-calendar-date,
+  .ant-calendar-next-month-btn-day .ant-calendar-date,
+  .ant-calendar-last-month-cell .ant-calendar-date:hover,
+  .ant-calendar-next-month-btn-day .ant-calendar-date:hover {
+    color: #10416c;
+  }
+  .ant-calendar-picker {
+    width: 100%;
   }
   .ant-calendar-picker-container {
     color: #10416c;
@@ -306,7 +329,8 @@
   .ant-calendar-input-wrap {
     display: none;
   }
-  // 单选框
+
+  /* radio相关 */
   .ant-radio-inner {
     border-color: #10416c;
   }
@@ -446,5 +470,33 @@
   }
   .ant-popover-arrow {
     display: none;
+  }
+
+  // 折叠面板
+  .ant-collapse.ant-collapse-icon-position-right,
+  .ant-collapse.ant-collapse-icon-position-right > .ant-collapse-item {
+    border: none;
+  }
+  .ant-collapse-item .ant-collapse-content {
+    border: none;
+  }
+  .ant-collapse.ant-collapse-icon-position-right {
+    border-bottom: 1px solid #10416c;
+    border-radius: 0;
+  }
+  .ant-collapse.ant-collapse-icon-position-right > .ant-collapse-item > .ant-collapse-header {
+    color: #10416c;
+    font-weight: 500;
+    font-size: 16px;
+    background-color: #fff;
+  }
+  .ant-collapse-content-box {
+    color: #10416c;
+    p {
+      color: #59626a;
+    }
+  }
+  .normalCollapse.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    background-color: #f2f6f8;
   }
 }

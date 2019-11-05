@@ -1,20 +1,25 @@
-import React, { Component, Fragment } from 'react';
-import { Form, Input, Button, DatePicker, Table } from 'antd';
+import React, { Component } from 'react';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { Form, Input, Button, DatePicker, Table, Row, Col } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import TableHeader from '@/components/TableHeader';
 
 import styles from './AuditLog.less';
 
 class OperatorForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { search } = this.props;
     return (
-      <Fragment>
-        <div>
-          <Form layout="inline">
+      <Form className="ant-advanced-search-form">
+        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
+          <Col xs={12} sm={12} lg={8}>
             <Form.Item label="操作员名称：">
               {getFieldDecorator('operatorName', {})(<Input className={styles['input-value']} />)}
             </Form.Item>
+          </Col>
+          <Col xs={12} sm={12} lg={8}>
             <Form.Item label="开始时间：">
               {getFieldDecorator('beginDate', {})(
                 <DatePicker
@@ -24,6 +29,8 @@ class OperatorForm extends Component {
                 />,
               )}
             </Form.Item>
+          </Col>
+          <Col xs={12} sm={12} lg={8}>
             <Form.Item label="结束时间：">
               {getFieldDecorator('endDate', {})(
                 <DatePicker
@@ -33,9 +40,14 @@ class OperatorForm extends Component {
                 />,
               )}
             </Form.Item>
-          </Form>
+          </Col>
+        </Row>
+        <div className="btnArea">
+          <Button type="primary" onClick={search}>
+            Search
+          </Button>
         </div>
-      </Fragment>
+      </Form>
     );
   }
 }
@@ -47,6 +59,8 @@ const NewOperatorForm = Form.create({})(OperatorForm);
 }))
 class AuditLog extends Component {
   state = {
+    pageNum: '1',
+    pageSize: '10',
     columns: [
       {
         title: '序号',
@@ -93,10 +107,10 @@ class AuditLog extends Component {
     this.getAuditLog();
   }
 
-  getAuditLog = (operatorName, beginDate, endDate) => {
+  getAuditLog = (operatorName = '', beginDate = '', endDate = '') => {
     const param = {
-      pageNumber: '1',
-      pageSize: '10',
+      pageNumber: `${this.state.pageNum}`,
+      pageSize: `${this.state.pageSize}`,
       operatorName,
       beginDate,
       endDate,
@@ -106,6 +120,18 @@ class AuditLog extends Component {
       type: 'auditLog/getAuditLogList',
       payload: param,
     });
+  };
+
+  pageChange = pagination => {
+    this.setState(
+      {
+        pageNum: `${pagination.current}`,
+        pageSize: pagination.pageSize,
+      },
+      () => {
+        this.getAuditLog();
+      },
+    );
   };
 
   changeBeginDate = () => {};
@@ -124,27 +150,26 @@ class AuditLog extends Component {
 
   render() {
     let { getAuditLogList } = this.state;
-    getAuditLogList = this.props.getAuditLogListData.resultList;
+    const { pageSize } = this.state;
+    getAuditLogList = this.props.getAuditLogListData.items;
+    const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     // eslint-disable-next-line no-unused-expressions
     getAuditLogList &&
       getAuditLogList.forEach((element, index) => {
         // eslint-disable-next-line no-param-reassign
-        element.index = index + 1;
+        element.index = (this.state.pageNum - 1) * pageSize + index + 1;
       });
     return (
-      <Fragment>
-        <div>
-          <NewOperatorForm ref={this.auditLogForm}></NewOperatorForm>
-          <Button type="primary" onClick={() => this.queryLog()}>
-            查询
-          </Button>
-          <Table
-            dataSource={getAuditLogList}
-            pagination={{ pageSize: 5 }}
-            columns={this.state.columns}
-          ></Table>
-        </div>
-      </Fragment>
+      <PageHeaderWrapper>
+        <NewOperatorForm search={this.queryLog} ref={this.auditLogForm} />
+        <TableHeader />
+        <Table
+          dataSource={getAuditLogList}
+          pagination={{ total: totalCount, pageSize }}
+          onChange={this.pageChange}
+          columns={this.state.columns}
+        />
+      </PageHeaderWrapper>
     );
   }
 }
