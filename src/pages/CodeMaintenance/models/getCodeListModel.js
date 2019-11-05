@@ -1,6 +1,6 @@
 import Service from '@/utils/Service';
 
-const { codeList, codeItemList, addCode } = Service;
+const { codeList, codeItemList, addCodeItem } = Service;
 const getCodeListModel = {
   namespace: 'codeList',
   state: {
@@ -31,15 +31,16 @@ const getCodeListModel = {
         }
       }
     },
-    *addCode({ payload }, { call, put }) {
-      const response = yield call(addCode, { param: payload });
+    *addCodeItem({ payload, callback }, { call, put }) {
+      const response = yield call(addCodeItem, { param: payload });
       if (response.bcjson.flag === '1') {
-        if (response.bcjson.items) {
+        if (response.bcjson) {
           yield put({
             type: 'setDatas',
-            payload: response.bcjson.items,
+            payload: response.bcjson,
           });
         }
+        callback();
       }
     },
   },
