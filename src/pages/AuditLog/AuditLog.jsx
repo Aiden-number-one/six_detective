@@ -3,6 +3,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Button, DatePicker, Table, Row, Col } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import TableHeader from '@/components/TableHeader';
 
 import styles from './AuditLog.less';
 
@@ -161,12 +162,13 @@ class AuditLog extends Component {
     return (
       <PageHeaderWrapper>
         <NewOperatorForm search={this.queryLog} ref={this.auditLogForm} />
+        <TableHeader />
         <Table
           dataSource={getAuditLogList}
           pagination={{ total: totalCount, pageSize }}
           onChange={this.pageChange}
           columns={this.state.columns}
-        ></Table>
+        />
       </PageHeaderWrapper>
     );
   }
