@@ -3,6 +3,7 @@ import { Form, Button, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
 
 import styles from './code.less';
+// import { thisExpression } from '@babel/types';
 
 class CodeForm extends Component {
   constructor() {
@@ -101,8 +102,13 @@ class CodeMaintenance extends Component {
         key: 'itemName',
       },
     ],
-    pageNumber: 1,
-    pageSize: 10,
+    pageNumber: '1',
+    pageSize: '10',
+    dictId: '',
+    itemPage: {
+      pageNum: '1',
+      pageSize: '10',
+    },
   };
 
   codeFormRef = React.createRef();
@@ -147,9 +153,9 @@ class CodeMaintenance extends Component {
   queryCodeList = () => {
     const { dispatch } = this.props;
     const params = {
-      pageNumber: this.state.pageNumber || '1',
-      pageSize: this.state.pageSize || '10',
-      ItemName: this.state.itemNameValue || '',
+      pageNumber: `${this.state.pageNumber}` || '1',
+      pageSize: `${this.state.pageSize}` || '10',
+      itemName: this.state.itemNameValue || '',
     };
     dispatch({
       type: 'codeList/getCodeList',
@@ -193,6 +199,32 @@ class CodeMaintenance extends Component {
     );
   };
 
+  connectCodeList = record => {
+    this.setState(
+      {
+        // eslint-disable-next-line no-underscore-dangle
+        dictId: record.ROWNUM_,
+      },
+      () => {
+        this.queryCodeItemList();
+      },
+    );
+  };
+
+  // 字典子项)
+  queryCodeItemList = () => {
+    const { dispatch } = this.props;
+    const params = {
+      pageNumber: `${this.state.itemPage.pageNum}` || '1',
+      pageSize: `${this.state.itemPage.pageSize}` || '10',
+      dictId: `${this.state.dictId}`,
+    };
+    dispatch({
+      type: 'codeList/getCodeItemList',
+      payload: params,
+    });
+  };
+
   render() {
     const { getCodeListData } = this.props;
     const totalCount = getCodeListData && getCodeListData.totalCount;
@@ -225,6 +257,11 @@ class CodeMaintenance extends Component {
               columns={this.state.codeColumns}
               pagination={{ total: totalCount, pageSize }}
               onChange={this.pageChange}
+              onRow={record => ({
+                onClick: () => {
+                  this.connectCodeList(record);
+                }, // 点击行
+              })}
             ></Table>
             {/* <Pagination
               showSizeChanger

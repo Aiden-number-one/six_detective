@@ -108,8 +108,8 @@ class AuditLog extends Component {
 
   getAuditLog = (operatorName = '', beginDate = '', endDate = '') => {
     const param = {
-      pageNumber: this.state.pageNum,
-      pageSize: this.state.pageSize,
+      pageNumber: `${this.state.pageNum}`,
+      pageSize: `${this.state.pageSize}`,
       operatorName,
       beginDate,
       endDate,
