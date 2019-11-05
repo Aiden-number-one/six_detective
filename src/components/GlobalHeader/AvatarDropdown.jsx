@@ -26,7 +26,7 @@ class AvatarDropdown extends React.Component {
   };
 
   render() {
-    const { currentUser = {}, menu } = this.props;
+    const { currentUser = {} } = this.props;
     currentUser.name = localStorage.getItem('currentUser')
       ? localStorage.getItem('currentUser')
       : '';
