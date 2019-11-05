@@ -158,6 +158,7 @@ class TemplateSet extends PureComponent {
             dataSource={dataSource}
             pagination={{ size: 'small' }}
             className={styles.tableBox}
+            scroll={{ x: 'max-content' }}
           />
           <Modal title="模板设置修改" visible={this.state.visible} closable={false} footer={false}>
             <Form {...formItemLayout} onSubmit={this.handleSubmit}>

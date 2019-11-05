@@ -61,7 +61,7 @@ const BasicLayout = props => {
         type: 'login/getLoginStatus',
         payload: {
           loginName: window.localStorage.currentUser,
-          'user-Agent': window.navigator.userAgent,
+          userAgent: window.navigator.userAgent,
         },
       });
       setInterval(() => {
@@ -69,7 +69,7 @@ const BasicLayout = props => {
           type: 'login/getLoginStatus',
           payload: {
             loginName: window.localStorage.currentUser,
-            'user-Agent': window.navigator.userAgent,
+            userAgent: window.navigator.userAgent,
           },
         });
       }, 25000);
