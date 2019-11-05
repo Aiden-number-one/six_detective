@@ -1,7 +1,7 @@
 import { Base64 } from 'js-base64';
 import request from '@/utils/request';
 
-const API_PREFFIX = '/api';
+const API_PREFFIX = '/mockapi';
 const VERSION = 'v2.0';
 const BUSINESS_PREFFIX = 'bayconnect.superlop';
 

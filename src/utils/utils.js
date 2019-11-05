@@ -74,4 +74,23 @@ const getRandowNVPS = () => {
   return newArray;
 };
 
+export function formatTree(arr) {
+  const map = {};
+  const tree = [];
+
+  arr.forEach(item => {
+    map[item.departmentId] = item;
+  });
+
+  arr.forEach(item => {
+    const parent = map[item.parentDepartmentId];
+    if (parent) {
+      (parent.children || (parent.children = [])).push(item);
+    } else {
+      tree.push(item);
+    }
+  });
+
+  return tree;
+}
 export { isProOrDev, isUrl, geneMenuData, getRandowNVPS };
