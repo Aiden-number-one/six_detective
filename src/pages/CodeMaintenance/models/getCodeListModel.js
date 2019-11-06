@@ -1,12 +1,14 @@
 import Service from '@/utils/Service';
 
-const { codeList, codeItemList, addCodeItem } = Service;
+const { codeList, codeItemList, addCodeItem, updateCodeItem, deleteCodeItem } = Service;
 const getCodeListModel = {
   namespace: 'codeList',
   state: {
     data: [],
     itemData: [],
     obj: {},
+    objUpdate: {},
+    objDelete: {},
   },
   effects: {
     *getCodeList({ payload }, { call, put }) {
@@ -43,6 +45,30 @@ const getCodeListModel = {
         callback();
       }
     },
+    *updateCodeItem({ payload, callback }, { call, put }) {
+      const response = yield call(updateCodeItem, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson) {
+          yield put({
+            type: 'updateDatas',
+            payload: response.bcjson,
+          });
+        }
+        callback();
+      }
+    },
+    *deleteCodeItem({ payload, callback }, { call, put }) {
+      const response = yield call(deleteCodeItem, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson) {
+          yield put({
+            type: 'deleteDatas',
+            payload: response.bcjson,
+          });
+        }
+        callback();
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
@@ -61,6 +87,18 @@ const getCodeListModel = {
       return {
         ...state,
         obj: action.payload,
+      };
+    },
+    updateDatas(state, action) {
+      return {
+        ...state,
+        objUpdate: action.payload,
+      };
+    },
+    deleteDatas(state, action) {
+      return {
+        ...state,
+        objDelete: action.payload,
       };
     },
   },

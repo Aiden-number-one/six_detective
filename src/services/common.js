@@ -33,6 +33,7 @@ export default {
   getDiagram: 'bayconnect.superlop.get_diagram_layout',
   getProcessResource: 'bayconnect.superlop.get_process_resource',
   setConfigStatus: 'bayconnect.superlop.set_audit_config_status_update',
+  getRoleGroup: 'bayconnect.superlop.get_role_group_query',
   downloadFile: 'bayconnect.superlop.file_download_quick',
   getUserList: 'bayconnect.superlop.get_user_list_impl',
   addUser: 'bayconnect.superlop.set_add_customer',
@@ -48,5 +49,7 @@ export default {
   codeList: 'bayconnect.superlop.get_system_dict_menu',
   codeItemList: 'bayconnect.superlop.get_dict_son_config',
   addCodeItem: 'bayconnect.superlop.set_dict_son_config',
+  updateCodeItem: 'bayconnect.superlop.set_dict_son_update',
+  deleteCodeItem: 'bayconnect.superlop.set_dict_son_del',
   addCode: 'bayconnect.superlop.add_task_spm_dict_index',
 };

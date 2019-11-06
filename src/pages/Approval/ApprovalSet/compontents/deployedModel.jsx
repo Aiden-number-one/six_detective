@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
 import React, { PureComponent } from 'react';
 import { Modal, Tabs } from 'antd';
 import { connect } from 'dva';
@@ -23,9 +22,9 @@ class DeployedModel extends PureComponent {
   }
 
   handleOk = () => {
-    const { processDefinitionId, getFlowChart, closeDeployedModel } = this.props;
+    const { closeDeployedModel } = this.props;
     // console.log('processDefinitionId------>', processDefinitionId);
-    getFlowChart(processDefinitionId);
+    // getFlowChart(processDefinitionId);
     closeDeployedModel();
     this.props.setFormValueType();
   };
@@ -68,7 +67,7 @@ class DeployedModel extends PureComponent {
               {item.name}
             </TabPane>
           ))}
-          {processImage ? <img src={processImage} style={{ width: '100%' }} /> : null}
+          {processImage ? <img alt="" src={processImage} style={{ width: '100%' }} /> : null}
         </Tabs>
       </Modal>
     );
