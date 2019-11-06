@@ -51,8 +51,7 @@ export default [
           {
             path: '/data-management/data-enquiry',
             name: 'dataEnquiry',
-            component: './Page404',
-            // component: './Dragboard/Dragboard',
+            component: './Dragboard/Dragboard',
           },
           {
             path: '/data-management/data-maintenance',
