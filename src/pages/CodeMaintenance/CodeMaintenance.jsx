@@ -17,7 +17,7 @@ class CodeForm extends Component {
           <Form.Item label="字典条目：">
             {getFieldDecorator('dictId', {
               initialValue: dictId || undefined,
-            })(<Input className={styles['input-value']}></Input>)}
+            })(<Input className={styles['input-value']} disabled></Input>)}
           </Form.Item>
           <Form.Item label="字典子项：">
             {getFieldDecorator('dictItemId', {
@@ -262,6 +262,17 @@ class CodeMaintenance extends Component {
     dispatch({
       type: 'codeList/getCodeList',
       payload: params,
+      callback: () => {
+        this.setState(
+          {
+            dictId:
+              this.props.getCodeListData.items[0] && this.props.getCodeListData.items[0].dictId,
+          },
+          () => {
+            this.queryCodeItemList();
+          },
+        );
+      },
     });
   };
 
