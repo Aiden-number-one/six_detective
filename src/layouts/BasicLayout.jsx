@@ -138,12 +138,13 @@ const BasicLayout = props => {
       // }}
       {...props}
       {...settings}
-      menuProps={{
-        openKeys,
-        onOpenChange: openKeysNew => {
-          setOpenKeys(openKeysNew);
-        },
-      }}
+      // 展开一个，其他默认收起
+      // menuProps={{
+      //   openKeys,
+      //   onOpenChange: openKeysNew => {
+      //     setOpenKeys(openKeysNew);
+      //   },
+      // }}
     >
       {children}
     </ProLayout>
