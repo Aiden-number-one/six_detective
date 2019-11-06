@@ -1,11 +1,8 @@
 import { getMenuData, getPageTitle } from '@ant-design/pro-layout';
 import DocumentTitle from 'react-document-title';
-import Link from 'umi/link';
-import classNames from 'classnames';
 import React from 'react';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
-import SelectLang from '@/components/SelectLang';
 import logoDark from '../assets/logo-dark.png';
 import logo from '../assets/logo.png';
 import loginBg from '../assets/loginBg.png';

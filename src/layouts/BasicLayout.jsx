@@ -5,6 +5,7 @@
  */
 import ProLayout from '@ant-design/pro-layout';
 import React, { useEffect, useState } from 'react';
+import { Icon } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -32,15 +33,7 @@ const footerRender = () => (
     <div>@ 2019 Hong Kong Exchanges and Clearing Limited. All rights reserved</div>
   </div>
 );
-const headerRender = () => (
-  <div className={styles.headerRender}>
-    <div className={styles.left}>
-      <div>Welcome,John</div>
-      <div>Last Login: 03-Jun-2019 21:00 HKT</div>
-    </div>
-    <div className={styles.right}></div>
-  </div>
-);
+
 const BasicLayout = props => {
   const {
     dispatch,
@@ -56,38 +49,54 @@ const BasicLayout = props => {
 
   useEffect(() => {
     setLocale('en-US');
-    if (dispatch) {
-      dispatch({
-        type: 'login/getLoginStatus',
-        payload: {
-          loginName: window.localStorage.currentUser,
-          userAgent: window.navigator.userAgent,
-        },
-      });
-      setInterval(() => {
-        dispatch({
-          type: 'login/getLoginStatus',
-          payload: {
-            loginName: window.localStorage.currentUser,
-            userAgent: window.navigator.userAgent,
-          },
-        });
-      }, 25000);
-    }
+    // if (dispatch) {
+    //   dispatch({
+    //     type: 'login/getLoginStatus',
+    //     payload: {
+    //       loginName: window.localStorage.currentUser,
+    //       userAgent: window.navigator.userAgent,
+    //     },
+    //   });
+    //   setInterval(() => {
+    //     dispatch({
+    //       type: 'login/getLoginStatus',
+    //       payload: {
+    //         loginName: window.localStorage.currentUser,
+    //         userAgent: window.navigator.userAgent,
+    //       },
+    //     });
+    //   }, 25000);
+    // }
   }, []);
   /**
    * init variables
    */
 
-  const handleMenuCollapse = payload =>
+  const handleMenuCollapse = () =>
     dispatch &&
     dispatch({
       type: 'global/changeLayoutCollapsed',
-      payload,
+      payload: !collapsed,
     });
+
+  const headerRender = () => (
+    <div className={styles.headerRender}>
+      <Icon
+        className={styles.collapsed}
+        type={collapsed ? 'menu-unfold' : 'menu-fold'}
+        onClick={() => handleMenuCollapse()}
+      />
+      <div className={styles.left}>
+        <div>Welcome,John</div>
+        <div>Last Login: 03-Jun-2019 21:00 HKT</div>
+      </div>
+      <div className={styles.right}></div>
+    </div>
+  );
 
   return (
     <ProLayout
+      iconfontUrl={`http://${window.location.host}/iconfont.js`}
       siderWidth={250}
       logo={collapsed ? logoSamll : logo}
       headerRender={headerRender}

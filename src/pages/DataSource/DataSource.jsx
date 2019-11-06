@@ -326,6 +326,7 @@ export default class DataSource extends PureComponent {
               total: 12,
               size: 'small',
             }}
+            scroll={{ x: 'max-content' }}
           />
         </div>
       </PageHeaderWrapper>

@@ -1,4 +1,15 @@
 .container {
-  width: 30%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
   min-height: 400px;
+  max-height: 500px;
+  .parent-group {
+    width: 26%;
+    overflow: auto;
+  }
+  .child-group {
+    flex: 1;
+    overflow: auto;
+  }
 }

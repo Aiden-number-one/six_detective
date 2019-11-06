@@ -20,6 +20,7 @@ export default [
       {
         path: '/data-management',
         name: 'dataManagement',
+        icon: 'icon-jinbao',
         routes: [
           {
             path: '/data-management/dashboard',
@@ -50,8 +51,7 @@ export default [
           {
             path: '/data-management/data-enquiry',
             name: 'dataEnquiry',
-            component: './Page404',
-            // component: './Dragboard/Dragboard',
+            component: './Dragboard/Dragboard',
           },
           {
             path: '/data-management/data-maintenance',
@@ -63,6 +63,7 @@ export default [
       {
         path: '/account-management',
         name: 'accountManagement',
+        icon: 'table',
         routes: [
           {
             path: '/account-management/dashboard',
@@ -84,6 +85,7 @@ export default [
       {
         path: '/surveillance',
         name: 'surveillance',
+        icon: 'table',
         routes: [
           {
             path: '/surveillance/rule-engine',
@@ -111,6 +113,7 @@ export default [
       {
         path: '/report',
         name: 'report',
+        icon: 'table',
         routes: [
           {
             path: '/report/high-sla-reports',
@@ -127,6 +130,7 @@ export default [
       {
         path: '/analysis',
         name: 'analysis',
+        icon: 'table',
         routes: [
           {
             path: '/analysis/investor-segment-analysis',
@@ -138,6 +142,7 @@ export default [
       {
         path: '/system-management',
         name: 'systemManagement',
+        icon: 'table',
         routes: [
           {
             path: '/system-management/user-maintenance',

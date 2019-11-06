@@ -1,9 +1,34 @@
 @import '~@/assets/css/utils.less';
 
+.footerRender {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 95px;
+  color: #9ab3ca;
+  text-align: right;
+  background-color: #10416c;
+  img {
+    height: 35px;
+    margin-left: 20px;
+  }
+  div {
+    margin-right: 20px;
+    font-size: 12px;
+  }
+}
+
 .headerRender {
+  position: relative;
   height: 100%;
   padding: 32px 0;
   border-bottom: 1px rgba(129, 154, 179, 0.7) solid;
+  .collapsed {
+    position: absolute;
+    top: 3px;
+    left: -22px;
+    font-size: 16px;
+  }
   .clearfix();
   .left {
     float: left;
@@ -24,20 +49,15 @@
     float: right;
   }
 }
-.footerRender {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 95px;
-  color: #9ab3ca;
-  text-align: right;
-  background-color: #10416c;
-  img {
-    height: 35px;
-    margin-left: 20px;
+:global {
+  .ant-menu-submenu .ant-menu-submenu-title {
+    .anticon {
+      display: none;
+    }
   }
-  div {
-    margin-right: 20px;
-    font-size: 12px;
+  .ant-menu-inline-collapsed .ant-menu-submenu .ant-menu-submenu-title {
+    .anticon {
+      display: block;
+    }
   }
 }

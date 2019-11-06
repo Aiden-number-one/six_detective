@@ -10,7 +10,6 @@ import styles from './ApprovalSet.less';
 @connect(({ approvalSet, loading }) => ({
   loading: loading.effects['approvalSet/approvalConfigDatas'],
   approvalConfigList: approvalSet.data,
-  diagramDatas: approvalSet.diagramDatas,
 }))
 class ApprovalSet extends PureComponent {
   state = {
@@ -27,6 +26,7 @@ class ApprovalSet extends PureComponent {
       pageSize: '10',
     });
     this.deployedModelList({ pageNumber: '1', pageSize: '10' });
+    this.fetchRoleGroupDatas();
     // this.createData();
   }
 
@@ -39,27 +39,50 @@ class ApprovalSet extends PureComponent {
     });
   };
 
+  // 获取角色树datas
+  fetchRoleGroupDatas = param => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalSet/getRoleGroupDatas',
+      payload: param,
+    });
+  };
+
   // 获取已部署的模型列表
   deployedModelList = param => {
     const { dispatch } = this.props;
     dispatch({
       type: 'approvalSet/deployedModelListDatas',
       payload: param,
-      callback: processDefinitionId => this.getFlowChart(processDefinitionId),
+      // callback: processDefinitionId => this.getFlowChart(processDefinitionId),
       // callback: processDefinitionId =>
       //   console.log('processDefinitionId----->', processDefinitionId),
-      callback2: processDefinitionId => this.getProcessResource(processDefinitionId),
+      callback: processDefinitionId => this.getProcessResource(processDefinitionId),
     });
   };
 
+  // // 修改审批设置状态
+  // handleSetConfigStatus = param => {
+  //   const { dispatch } = this.props;
+  //   console.log('param---->', param);
+  //   // dispatch({
+  //   //   type: 'approvalSet/setConfigStatus',
+  //   //   payload: {
+  //   //     configId: param.configId,
+  //   //     status: '',
+  //   //     isDefault: '',
+  //   //   },
+  //   // });
+  // };
+
   // 查询动态流程图
-  getFlowChart = processDefinitionId => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'approvalSet/getDiagramDatas',
-      payload: { processDefinitionId },
-    });
-  };
+  // getFlowChart = processDefinitionId => {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'approvalSet/getDiagramDatas',
+  //     payload: { processDefinitionId },
+  //   });
+  // };
 
   // 查询流程定义的资源图
   getProcessResource = processDefinitionId => {
@@ -177,8 +200,15 @@ class ApprovalSet extends PureComponent {
         title: '是否默认',
         dataIndex: 'isDefault',
         align: 'center',
-        render: () => ({
-          children: <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked />,
+        render: (text, record) => ({
+          children: (
+            <Switch
+              onChange={() => this.handleSetConfigStatus(record)}
+              checkedChildren="是"
+              unCheckedChildren="否"
+              defaultChecked
+            />
+          ),
         }),
       },
       {
@@ -241,7 +271,6 @@ class ApprovalSet extends PureComponent {
           <ModelForm
             showModel={this.showModel}
             handleCancel={this.handleCancel}
-            getFlowChart={this.getFlowChart}
             getProcessResource={this.getProcessResource}
             visible={visible}
             formValue={formValue}
