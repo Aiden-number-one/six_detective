@@ -1,17 +1,30 @@
 import fetch from '@/utils/request2';
+import { formatTree } from '@/utils/utils';
 
 export default {
   namespace: 'auth',
   state: {
+    orgs: [],
+    employees: [],
     departments: [],
   },
   reducers: {
+    getOrgs(state, { payload: orgs }) {
+      return {
+        ...state,
+        orgs: formatTree(orgs),
+      };
+    },
     getDepartments(state, { payload: departments }) {
-      // console.log('auth reducer', departments);
-
       return {
         ...state,
         departments,
+      };
+    },
+    getEmployees(state, { payload: employees }) {
+      return {
+        ...state,
+        employees,
       };
     },
   },
@@ -34,6 +47,14 @@ export default {
     // *delRoleMenu(action, { call, put }) {},
     // *queryRoleMenu(action, { call, put }) {},
     // department
+    *queryOrgs(action, { call, put }) {
+      const { bcjson } = yield call(fetch('get_departments_info'), action.params);
+
+      yield put({
+        type: 'getOrgs',
+        payload: bcjson.items,
+      });
+    },
     *queryDepartment(action, { call, put }) {
       const { bcjson } = yield call(fetch('get_department'), action.params);
       const { flag, items } = bcjson;
@@ -57,6 +78,13 @@ export default {
     *delDepartment(action, { call }) {
       const { bcjson } = yield call(fetch('set_department_delete'), action.params);
       console.log(bcjson);
+    },
+    *queryEmployees({ params }, { call, put }) {
+      const { bcjson } = yield call(fetch('get_user_list_impl'), params);
+      yield put({
+        type: 'getEmployees',
+        payload: bcjson.items,
+      });
     },
   },
 };

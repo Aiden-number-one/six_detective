@@ -1,24 +1,38 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react/no-unused-state */
 import React, { PureComponent } from 'react';
 import { Form, Input, Button, Modal } from 'antd';
 import { connect } from 'dva';
 import DeployedModel from './deployedModel';
+import TransferModal from './transferModal';
 // import classNames from 'classnames';
 // import styles from './ApprovalSet.less';
 const { Search } = Input;
+// let isShowTransferModal = false;
+// window.showAudit = function(processDefinitionIds, taskIds) {
+//   // console.log('taskIds------>', processDefinitionIds,taskIds);
+//   console.log('this--->', isShowTransferModal);
+
+//   isShowTransferModal = true;
+//   // console.log('this--->', isShowTransferModal);
+// };
 @connect(({ approvalSet, loading }) => ({
   loading: loading.effects['approvalSet/approvalConfigDatas'],
   approvalConfigList: approvalSet.data,
   deployedModelDatas: approvalSet.deployedModelDatas,
-  diagramDatas: approvalSet.diagramDatas,
+  processDefinitionId: approvalSet.processDefinitionId,
 }))
 class ModelForm extends PureComponent {
   state = {
     deployedModelVisible: false,
-    isShowDeafultFormValue: true,
+    isShowTransferModal: false,
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    window.showAudit = (processDefinitionIds, taskIds) => {
+      this.showTransferModal(taskIds);
+    };
+  }
 
   // 修改设置提交
   handleSubmit = e => {
@@ -63,18 +77,40 @@ class ModelForm extends PureComponent {
     });
   };
 
-  // 设置form表单值显示内容
-  setFormValueType = () => {
-    const { diagramDatas } = this.props;
-    this.props.form.setFieldsValue({
-      processName: diagramDatas.processDefinition.name,
+  // 打开审核人设置弹窗
+  showTransferModal = () => {
+    this.setState({
+      isShowTransferModal: true,
     });
   };
 
+  // 关闭审核人设置弹窗
+  closeTransferModal = () => {
+    this.setState({
+      isShowTransferModal: false,
+    });
+  };
+
+  // 设置form表单值显示内容
+  setFormValueType = () => {
+    // const { diagramDatas } = this.props;
+    // this.props.form.setFieldsValue({
+    //   processName: diagramDatas.processDefinition.name,
+    // });
+  };
+
   render() {
-    const { handleCancel, visible, formValue, getFlowChart, getProcessResource } = this.props;
+    const {
+      handleCancel,
+      visible,
+      formValue,
+      getProcessResource,
+      processDefinitionId,
+    } = this.props;
+    const diagramUrl = `/process/diagram-viewer/index.html?isClick=1&processDefinitionId=${processDefinitionId}`;
+    // console.log('diagramUrl------>', diagramUrl);
     const { getFieldDecorator } = this.props.form;
-    const { deployedModelVisible } = this.state;
+    const { deployedModelVisible, isShowTransferModal } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -91,12 +127,19 @@ class ModelForm extends PureComponent {
     };
     return (
       <div>
-        <Modal title="审批设置修改" visible={visible} closable={false} footer={false}>
+        <Modal
+          title="审批设置修改"
+          visible={visible}
+          closable={false}
+          footer={false}
+          width={1000}
+          height={1000}
+        >
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-            <Form.Item label="流程模型名称">
+            <Form.Item label="流程模型选择">
               {getFieldDecorator('processName', {
                 rules: [{ required: true, message: 'Please input your processName!' }],
-                initialValue: formValue.businessName,
+                initialValue: formValue.processName,
               })(<Search onClick={this.showDeployedModel} style={{ width: 200 }} />)}
             </Form.Item>
             <Form.Item label="说明">
@@ -123,11 +166,14 @@ class ModelForm extends PureComponent {
               </Button>
             </Form.Item>
           </Form>
-          <div>动态流程图</div>
+          <iframe title="diagram" width="100%" height="200px" src={diagramUrl}></iframe>
+          <TransferModal
+            closeTransferModal={this.closeTransferModal}
+            visible={isShowTransferModal}
+          />
         </Modal>
         <DeployedModel
           closeDeployedModel={this.closeDeployedModel}
-          getFlowChart={getFlowChart}
           getProcessResource={getProcessResource}
           setFormValueType={this.setFormValueType}
           visible={deployedModelVisible}
