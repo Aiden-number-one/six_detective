@@ -23,9 +23,9 @@ class DeployedModel extends PureComponent {
   }
 
   handleOk = () => {
-    const { processDefinitionId, getFlowChart, closeDeployedModel } = this.props;
+    const { closeDeployedModel } = this.props;
     // console.log('processDefinitionId------>', processDefinitionId);
-    getFlowChart(processDefinitionId);
+    // getFlowChart(processDefinitionId);
     closeDeployedModel();
     this.props.setFormValueType();
   };

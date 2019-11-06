@@ -1,6 +1,19 @@
 import React, { PureComponent, Fragment, Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Table, Icon, Input, Form, Row, Col, Button, Select, Checkbox, Popover } from 'antd';
+import {
+  Table,
+  Icon,
+  Input,
+  Form,
+  Row,
+  Col,
+  Button,
+  Select,
+  Checkbox,
+  Popover,
+  DatePicker,
+} from 'antd';
+import TableHeader from '@/components/TableHeader';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import IconFont from '@/components/IconFont';
@@ -161,7 +174,7 @@ class AdvancedSearchForm extends Component {
       <Col xs={12} sm={12} lg={8} key={value} style={{ display: i < count ? 'block' : 'none' }}>
         <Form.Item label={value} colon={false}>
           {getFieldDecorator(value, {})(
-            <Select placeholder="Please Select" dropdownClassName="selectDropdown" />,
+            <DatePicker placeholder="Please Select" dropdownClassName="selectDropdown" />,
           )}
         </Form.Item>
       </Col>
@@ -303,14 +316,7 @@ export default class DataSource extends PureComponent {
       <PageHeaderWrapper>
         <div className={styles.newList}>
           <WrappedAdvancedSearchForm />
-          <div className="tableHeader">
-            <Checkbox>Select All</Checkbox>
-            <div>
-              <Button size="small" type="danger" icon="delete" className="btn2" />
-              <Button size="small" type="primary" icon="edit" className="btn2" />
-              <Button size="small" type="primary" icon="plus" className="btn2" />
-            </div>
-          </div>
+          <TableHeader showSelect showEdit />
           <Table
             rowSelection={rowSelection}
             dataSource={tableData}
@@ -320,6 +326,7 @@ export default class DataSource extends PureComponent {
               total: 12,
               size: 'small',
             }}
+            scroll={{ x: 'max-content' }}
           />
         </div>
       </PageHeaderWrapper>

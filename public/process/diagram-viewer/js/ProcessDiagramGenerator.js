@@ -1,3 +1,4 @@
+/* eslint-disable */
  /**
   * Class to generate an image based the diagram interchange information in a
   * BPMN 2.0 process.
