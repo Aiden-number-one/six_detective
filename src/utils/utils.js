@@ -74,16 +74,17 @@ const getRandowNVPS = () => {
   return newArray;
 };
 
-export function formatTree(arr) {
+// flat -> tree
+export function formatTree(arr, key = 'departmentId', pKey = 'parentDepartmentId') {
   const map = {};
   const tree = [];
 
   arr.forEach(item => {
-    map[item.departmentId] = item;
+    map[item[key]] = item;
   });
 
   arr.forEach(item => {
-    const parent = map[item.parentDepartmentId];
+    const parent = map[item[pKey]];
     if (parent) {
       (parent.children || (parent.children = [])).push(item);
     } else {

@@ -58,6 +58,7 @@ class DeployedModel extends PureComponent {
       >
         <Tabs
           onChange={this.chooseTab}
+          onTabClick={this.kkkk}
           defaultActiveKey="1"
           tabPosition="left"
           style={{ height: 260 }}

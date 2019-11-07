@@ -10,7 +10,7 @@ const { Option } = Select;
   loading: loading.effects['templateConfig/templateDatas'],
   dataSource: templateConfig.data,
 }))
-class TemplateSet extends PureComponent {
+class TemplateConfig extends PureComponent {
   state = {
     // dataSourceTest: [],
     formValue: {},
@@ -225,6 +225,6 @@ class TemplateSet extends PureComponent {
   }
 }
 
-const TemplateSetForm = Form.create()(TemplateSet);
+const TemplateSet = Form.create()(TemplateConfig);
 
-export default TemplateSetForm;
+export default TemplateSet;

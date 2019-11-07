@@ -34,6 +34,7 @@ export default {
   getProcessResource: 'bayconnect.superlop.get_process_resource',
   setConfigStatus: 'bayconnect.superlop.set_audit_config_status_update',
   getRoleGroup: 'bayconnect.superlop.get_role_group_query',
+  getAuditorlist: 'bayconnect.superlop.get_auditor_list',
   downloadFile: 'bayconnect.superlop.file_download_quick',
   getUserList: 'bayconnect.superlop.get_user_list_impl',
   addUser: 'bayconnect.superlop.set_add_customer',
