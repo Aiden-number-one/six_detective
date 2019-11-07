@@ -33,6 +33,7 @@ export default {
   'menu.systemManagement.workflowDesign': 'Workflow Design',
   'menu.systemManagement.codeMaintenance': 'codeMaintenance',
   'menu.systemManagement.auditLog': 'Audit Log',
+  'menu.alertManagement': 'ALERT MANAGEMENT',
   'menu.welcome': 'Welcome',
   'menu.more-blocks': 'More Blocks',
   'menu.home': 'Home',

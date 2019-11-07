@@ -20,7 +20,7 @@ export default [
       {
         path: '/data-management',
         name: 'dataManagement',
-        icon: 'icon-jinbao',
+        icon: 'icon-zhuxian',
         routes: [
           {
             path: '/data-management/dashboard',
@@ -56,14 +56,14 @@ export default [
           {
             path: '/data-management/data-maintenance',
             name: 'dataMaintenance',
-            component: './Page404',
+            component: './AddDataSource/AddDataSource',
           },
         ],
       },
       {
         path: '/account-management',
         name: 'accountManagement',
-        icon: 'table',
+        icon: 'icon-user',
         routes: [
           {
             path: '/account-management/dashboard',
@@ -85,7 +85,7 @@ export default [
       {
         path: '/surveillance',
         name: 'surveillance',
-        icon: 'table',
+        icon: 'icon-shipin',
         routes: [
           {
             path: '/surveillance/rule-engine',
@@ -113,7 +113,7 @@ export default [
       {
         path: '/report',
         name: 'report',
-        icon: 'table',
+        icon: 'icon-text',
         routes: [
           {
             path: '/report/high-sla-reports',
@@ -130,7 +130,7 @@ export default [
       {
         path: '/analysis',
         name: 'analysis',
-        icon: 'table',
+        icon: 'icon-chartpie',
         routes: [
           {
             path: '/analysis/investor-segment-analysis',
@@ -142,7 +142,7 @@ export default [
       {
         path: '/system-management',
         name: 'systemManagement',
-        icon: 'table',
+        icon: 'icon-diannao',
         routes: [
           {
             path: '/system-management/user-maintenance',
@@ -193,17 +193,24 @@ export default [
         ],
       },
       {
-        path: './formItem',
-        name: 'formItem',
-        component: './FormItem/FormItem',
-        hideInMenu: true,
-      },
-      {
-        path: './stylespecification',
-        name: 'Stylespecification',
-        component: './Stylespecification/Stylespecification',
-        hideInMenu: true,
-      },
+        path: '/alert-management',
+        name: 'alertManagement',
+        icon: 'icon-jinggao',
+        routes: [
+          {
+            path: './alert-management/formItem',
+            name: 'formItem',
+            component: './FormItem/FormItem',
+            // hideInMenu: true,
+          },
+          {
+            path: './alert-management/stylespecification',
+            name: 'Stylespecification',
+            component: './Stylespecification/Stylespecification',
+            // hideInMenu: true,
+          },
+        ]
+      }
     ],
   },
   {
