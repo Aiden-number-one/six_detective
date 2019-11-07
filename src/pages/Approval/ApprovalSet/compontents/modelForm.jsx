@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react/no-unused-state */
 import React, { PureComponent } from 'react';
@@ -5,27 +6,25 @@ import { Form, Input, Button, Modal } from 'antd';
 import { connect } from 'dva';
 import DeployedModel from './deployedModel';
 import TransferModal from './transferModal';
+// import { async } from 'q';
 // import classNames from 'classnames';
 // import styles from './ApprovalSet.less';
 const { Search } = Input;
-// let isShowTransferModal = false;
-// window.showAudit = function(processDefinitionIds, taskIds) {
-//   // console.log('taskIds------>', processDefinitionIds,taskIds);
-//   console.log('this--->', isShowTransferModal);
-
-//   isShowTransferModal = true;
-//   // console.log('this--->', isShowTransferModal);
-// };
 @connect(({ approvalSet, loading }) => ({
   loading: loading.effects['approvalSet/approvalConfigDatas'],
   approvalConfigList: approvalSet.data,
   deployedModelDatas: approvalSet.deployedModelDatas,
   processDefinitionId: approvalSet.processDefinitionId,
+  auditorData: approvalSet.auditorData,
 }))
 class ModelForm extends PureComponent {
   state = {
     deployedModelVisible: false,
     isShowTransferModal: false,
+    taskIds: '',
+    targetKeys: [],
+    auditInfo: [],
+    allChooseObj: {},
   };
 
   componentDidMount() {
@@ -34,20 +33,47 @@ class ModelForm extends PureComponent {
     };
   }
 
+  handleTransferOk = () => {
+    const { targetKeys, allChooseObj, auditInfo, taskIds } = this.state;
+    allChooseObj[taskIds] = targetKeys;
+
+    // auditInfo.concat(nodeAuditInfo);
+    console.log('auditInfo------>', auditInfo, allChooseObj, targetKeys);
+    this.closeTransferModal();
+  };
+
+  onTransferChange = targetKeys => {
+    console.log('Target Keys:', targetKeys);
+    this.setState({ targetKeys });
+  };
+
   // 修改设置提交
   handleSubmit = e => {
     const { formValue } = this.props;
+    const { allChooseObj } = this.state;
+    const nodeAuditInfo = [];
+    for (const key in allChooseObj) {
+      if (allChooseObj.hasOwnProperty(key)) {
+        for (let i = 0; i < allChooseObj[key].length; i += 1) {
+          nodeAuditInfo.push({
+            stepId: key,
+            auditIds: allChooseObj[key][i],
+            auditType: '0',
+          });
+        }
+      }
+    }
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        this.props.handleCancel();
+        // console.log('Received values of form: ', values);
+        // this.props.handleCancel();
         const param = {
           configId: formValue.configId,
           processUuid: formValue.processUuid,
           remark: values.remark,
           processName: values.processName,
-          auditInfo: '',
+          auditInfo: JSON.stringify(nodeAuditInfo),
         };
         this.saveConfig(param);
       }
@@ -77,11 +103,46 @@ class ModelForm extends PureComponent {
     });
   };
 
+  // 查询审核人列表
+  getAuditorData = async (configId, stepId) => {
+    const { dispatch } = this.props;
+    await dispatch({
+      type: 'approvalSet/getAuditorlistDatas',
+      payload: {
+        configId,
+        stepId,
+      },
+    });
+  };
+
   // 打开审核人设置弹窗
-  showTransferModal = () => {
+  showTransferModal = async taskId => {
+    const { formValue } = this.props;
+    await this.getAuditorData(formValue.configId, taskId);
+    const { allChooseObj, taskIds } = this.state;
+    let targetKeysCurrent = [];
+    if (taskIds !== taskId && this.props.auditorData.length) {
+      for (let i = 0; i < this.props.auditorData.length; i += 1) {
+        targetKeysCurrent.push(this.props.auditorData[i].relateNo);
+      }
+    } else if (allChooseObj.hasOwnProperty(taskIds)) {
+      targetKeysCurrent = allChooseObj[taskIds];
+    }
     this.setState({
       isShowTransferModal: true,
+      targetKeys: targetKeysCurrent,
+      taskIds: taskId,
     });
+  };
+
+  setDefaultTargetKeys = auditorData => {
+    const targetKeysCurrent = [];
+    for (let i = 0; i < auditorData.length; i += 1) {
+      targetKeysCurrent.push(auditorData.relateNo);
+    }
+    // this.setState({
+    //   targetKeys: targetKeysCurrent,
+    // });
   };
 
   // 关闭审核人设置弹窗
@@ -108,9 +169,8 @@ class ModelForm extends PureComponent {
       processDefinitionId,
     } = this.props;
     const diagramUrl = `/process/diagram-viewer/index.html?isClick=1&processDefinitionId=${processDefinitionId}`;
-    // console.log('diagramUrl------>', diagramUrl);
     const { getFieldDecorator } = this.props.form;
-    const { deployedModelVisible, isShowTransferModal } = this.state;
+    const { deployedModelVisible, isShowTransferModal, taskIds, targetKeys } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -135,6 +195,7 @@ class ModelForm extends PureComponent {
           width={1000}
           height={1000}
         >
+          <iframe title="diagram" width="100%" height="200px" src={diagramUrl}></iframe>
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
             <Form.Item label="流程模型选择">
               {getFieldDecorator('processName', {
@@ -166,10 +227,14 @@ class ModelForm extends PureComponent {
               </Button>
             </Form.Item>
           </Form>
-          <iframe title="diagram" width="100%" height="200px" src={diagramUrl}></iframe>
+
           <TransferModal
             closeTransferModal={this.closeTransferModal}
             visible={isShowTransferModal}
+            taskIds={taskIds}
+            targetKeys={targetKeys}
+            onTransferChange={this.onTransferChange}
+            handleTransferOk={this.handleTransferOk}
           />
         </Modal>
         <DeployedModel

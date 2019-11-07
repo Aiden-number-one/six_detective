@@ -11,7 +11,7 @@ import styles from './ApprovalSet.less';
   loading: loading.effects['approvalSet/approvalConfigDatas'],
   approvalConfigList: approvalSet.data,
 }))
-class ApprovalSet extends PureComponent {
+class ApprovalConifg extends PureComponent {
   state = {
     // dataSource: [],
     // count: 0,
@@ -75,15 +75,6 @@ class ApprovalSet extends PureComponent {
   //   // });
   // };
 
-  // 查询动态流程图
-  // getFlowChart = processDefinitionId => {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'approvalSet/getDiagramDatas',
-  //     payload: { processDefinitionId },
-  //   });
-  // };
-
   // 查询流程定义的资源图
   getProcessResource = processDefinitionId => {
     const { dispatch } = this.props;
@@ -118,22 +109,6 @@ class ApprovalSet extends PureComponent {
       payload: '',
       callback: param => this.configData(param),
     });
-    // const { count, dataSource } = this.state;
-    // const newData = {
-    //   key: count,
-    //   number: count + 1,
-    //   name: `任务发布审批流程 ${count}`,
-    //   age: 32,
-    //   modelName: `一步发布审核 ${count}`,
-    //   phone: 18889898989,
-    //   IsDefault: '否',
-    //   isUseing: '是',
-    //   address: `London, Park Lane no. ${count}`,
-    // };
-    // this.setState({
-    //   dataSource: [...dataSource, newData],
-    //   count: count + 1,
-    // });
   };
 
   // 删除行
@@ -192,23 +167,23 @@ class ApprovalSet extends PureComponent {
         title: '是否启用',
         dataIndex: 'status',
         align: 'center',
-        render: () => ({
-          children: <Switch checkedChildren="启用" unCheckedChildren="停用" defaultChecked />,
+        render: (text, record) => ({
+          children: (
+            <Switch
+              checkedChildren="启用"
+              unCheckedChildren="停用"
+              onChange={() => this.handleSetConfigStatus(record)}
+              defaultChecked
+            />
+          ),
         }),
       },
       {
         title: '是否默认',
         dataIndex: 'isDefault',
         align: 'center',
-        render: (text, record) => ({
-          children: (
-            <Switch
-              onChange={() => this.handleSetConfigStatus(record)}
-              checkedChildren="是"
-              unCheckedChildren="否"
-              defaultChecked
-            />
-          ),
+        render: () => ({
+          children: <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked />,
         }),
       },
       {
@@ -281,6 +256,6 @@ class ApprovalSet extends PureComponent {
   }
 }
 
-const ApprovalSetForm = Form.create()(ApprovalSet);
+const ApprovalSet = Form.create()(ApprovalConifg);
 
-export default ApprovalSetForm;
+export default ApprovalSet;
