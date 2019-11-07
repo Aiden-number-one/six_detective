@@ -146,13 +146,6 @@ class TemplateConfig extends PureComponent {
     return (
       <Fragment>
         <div className={styles.templateSet}>
-          <div className={styles.titleBox}>
-            <div className={styles.title}>
-              <Icon type="unordered-list" className={styles.icon} />
-              <h2 className={styles.titleText}>模板设置</h2>
-            </div>
-            <Divider className={styles.divider} />
-          </div>
           <Table
             columns={checkColumns}
             dataSource={dataSource}
