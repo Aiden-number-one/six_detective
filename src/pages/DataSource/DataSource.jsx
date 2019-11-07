@@ -13,10 +13,10 @@ import {
   Popover,
   DatePicker,
 } from 'antd';
-import TableHeader from '@/components/TableHeader';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import IconFont from '@/components/IconFont';
+import TableHeader from '@/components/TableHeader';
 import styles from './DataSource.less';
 
 const { Option } = Select;
