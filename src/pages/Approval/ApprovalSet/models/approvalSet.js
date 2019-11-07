@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Service from '@/utils/Service';
 
 const {
@@ -66,11 +65,11 @@ const approvalSetModel = {
         });
       }
     },
-    *setConfigStatus({ payload }, { call }) {
-      const response = yield call(setConfigStatus, { param: payload });
-      // if (response.bcjson.flag === '1') {
-      // }
-    },
+    // *setConfigStatus({ payload }, { call }) {
+    //   // const response = yield call(setConfigStatus, { param: payload });
+    //   // if (response.bcjson.flag === '1') {
+    //   // }
+    // },
     *getRoleGroupDatas({ payload }, { call, put }) {
       const response = yield call(getRoleGroup, { param: payload });
       if (response.bcjson.flag === '1') {

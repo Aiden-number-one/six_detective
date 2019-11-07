@@ -51,8 +51,7 @@ export default [
           {
             path: '/data-management/data-enquiry',
             name: 'dataEnquiry',
-            component: './Page404',
-            // component: './Dragboard/Dragboard',
+            component: './Dragboard/Dragboard',
           },
           {
             path: '/data-management/data-maintenance',
@@ -181,7 +180,7 @@ export default [
             component: './SystemParams/SystemParams',
           },
           {
-            path: '/system-management/code-antenance',
+            path: '/system-management/code-maintenance',
             name: 'codeMaintenance',
             component: './CodeMaintenance/CodeMaintenance',
           },

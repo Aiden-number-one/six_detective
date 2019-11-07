@@ -32,7 +32,7 @@ export default {
   'menu.systemManagement.systemParameters': 'System Parameters',
   'menu.systemManagement.workflowConfig': 'Workflow Config',
   'menu.systemManagement.workflowDesign': 'Workflow Design',
-  'menu.systemManagement.codeMaintenance': 'codeMaintenance',
+  'menu.systemManagement.codeMaintenance': 'Code Maintenance',
   'menu.systemManagement.auditLog': 'Audit Log',
   'menu.welcome': 'Welcome',
   'menu.more-blocks': 'More Blocks',

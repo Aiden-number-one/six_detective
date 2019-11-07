@@ -1,6 +1,4 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable consistent-return */
-/* eslint-disable no-shadow */
+/* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable react/no-unused-state */
 import React, { PureComponent } from 'react';
 import { Modal, Tree, Transfer } from 'antd';
@@ -10,8 +8,8 @@ import { connect } from 'dva';
 const { TreeNode } = Tree;
 const isChecked = (selectedKeys, eventKey) => selectedKeys.indexOf(eventKey) !== -1;
 
-const generateTree = (treeNodes = [], checkedKeys = []) => {
-  return treeNodes.map(({ childRole, ...props }) => (
+const generateTree = (treeNodes = [], checkedKeys = []) =>
+  treeNodes.map(({ childRole, ...props }) => (
     <TreeNode
       {...props}
       disabled={checkedKeys.includes(childRole ? props.groupId : props.roleId)}
@@ -21,7 +19,6 @@ const generateTree = (treeNodes = [], checkedKeys = []) => {
       {generateTree(childRole, checkedKeys)}
     </TreeNode>
   ));
-};
 const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
   const transferDataSource = [];
   function flatten(list = []) {
@@ -76,6 +73,7 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
             </Tree>
           );
         }
+        return null;
       }}
     </Transfer>
   );
