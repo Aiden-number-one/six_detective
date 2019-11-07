@@ -15,7 +15,7 @@ class ModifyForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="参数类型：">
               {getFieldDecorator('paramType', {
                 rules: [
@@ -68,6 +68,7 @@ class ModifyForm extends Component {
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
+                  className={styles['input-value']}
                 >
                   <Option value="0">停用</Option>
                   <Option value="1">启用</Option>

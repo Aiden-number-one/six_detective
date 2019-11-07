@@ -25,6 +25,19 @@
   right: 0;
 }
 
+.formWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  :global {
+    .ant-form-item-label {
+      width: 130px;
+    }
+  }
+}
+
 .operation {
   a {
     margin-right: 10px;
