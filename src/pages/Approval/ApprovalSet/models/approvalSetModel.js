@@ -4,7 +4,8 @@ const {
   getConfig,
   addConfig,
   deleteConfig,
-  setConfigStatus,
+  // setConfigStatus,
+  getAuditorlist,
   saveConfig,
   deployedModelList,
   getProcessResource,
@@ -19,6 +20,7 @@ const approvalSetModel = {
     diagramDatas: '',
     processImage: '',
     roleGroupDatas: [],
+    auditorData: [],
   },
   effects: {
     *approvalConfigDatas({ payload }, { call, put }) {
@@ -81,6 +83,17 @@ const approvalSetModel = {
         }
       }
     },
+    *getAuditorlistDatas({ payload }, { call, put }) {
+      const response = yield call(getAuditorlist, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'auditorlist',
+            payload: response.bcjson.items,
+          });
+        }
+      }
+    },
     *deployedModelListDatas({ payload, callback }, { call, put }) {
       const response = yield call(deployedModelList, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -93,17 +106,6 @@ const approvalSetModel = {
         }
       }
     },
-    // *getDiagramDatas({ payload }, { call, put }) {
-    //   const response = yield call(getDiagram, { param: payload });
-    //   if (response.bcjson.flag === '1') {
-    //     if (response.bcjson.items) {
-    //       yield put({
-    //         type: 'getDiagram',
-    //         payload: response.bcjson.items,
-    //       });
-    //     }
-    //   }
-    // },
     *getProcessResourceDatas({ payload }, { call, put }) {
       const response = yield call(getProcessResource, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -152,6 +154,12 @@ const approvalSetModel = {
       return {
         ...state,
         roleGroupDatas: action.payload,
+      };
+    },
+    auditorlist(state, action) {
+      return {
+        ...state,
+        auditorData: action.payload,
       };
     },
   },

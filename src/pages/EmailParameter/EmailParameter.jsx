@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Button, Input, Modal, Select, Table } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { Form, Input, Modal, Select, Table } from 'antd';
 import { connect } from 'dva';
 import styles from './email.less';
 import KdTable from '@/components/KdTable';
 import generatePersons from '@/components/KdTable/genData';
+import TableHeader from '@/components/TableHeader';
 
 const { Option } = Select;
 class AddForm extends Component {
@@ -473,59 +475,54 @@ class EmailParameter extends Component {
     console.log(this.props.getEmailListData);
 
     return (
-      <Fragment>
-        <div>
+      <PageHeaderWrapper>
+        <Fragment>
           <div>
-            <Button
-              type="primary"
-              onClick={() => {
-                this.addUser();
-              }}
-            >
-              添加
-            </Button>
-            <Modal
-              title="新增绑定配置"
-              visible={this.state.addVisible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
-            >
-              <div>
-                <NewAddForm ref={this.addFormRef}></NewAddForm>
-              </div>
-            </Modal>
-            {/* 修改 */}
-            <Modal
-              title="修改邮件配置"
-              visible={this.state.modifyVisible}
-              onOk={this.modifyConfirm}
-              onCancel={this.modifyCancel}
-            >
-              <NewModifyForm ref={this.modifyForm} emailObj={this.state.emailObj}></NewModifyForm>
-            </Modal>
-            {/* 删除 */}
-            <Modal
-              title="修改邮件配置"
-              visible={this.state.deleteVisible}
-              onOk={this.deleteConfirm}
-              onCancel={this.deleteCancel}
-            >
-              <div>
-                <span>确定删除吗？</span>
-              </div>
-            </Modal>
+            <div>
+              <Modal
+                title="新增绑定配置"
+                visible={this.state.addVisible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+              >
+                <div>
+                  <NewAddForm ref={this.addFormRef}></NewAddForm>
+                </div>
+              </Modal>
+              {/* 修改 */}
+              <Modal
+                title="修改邮件配置"
+                visible={this.state.modifyVisible}
+                onOk={this.modifyConfirm}
+                onCancel={this.modifyCancel}
+              >
+                <NewModifyForm ref={this.modifyForm} emailObj={this.state.emailObj}></NewModifyForm>
+              </Modal>
+              {/* 删除 */}
+              <Modal
+                title="修改邮件配置"
+                visible={this.state.deleteVisible}
+                onOk={this.deleteConfirm}
+                onCancel={this.deleteCancel}
+              >
+                <div>
+                  <span>确定删除吗？</span>
+                </div>
+              </Modal>
+            </div>
+            <div>
+              <TableHeader showEdit showSelect addTableData={() => this.addUser()}></TableHeader>
+              <Table
+                dataSource={this.props.getEmailListData}
+                pagination={{ size: 'small', pageSize: 5 }}
+                columns={this.state.columns}
+              ></Table>
+            </div>
           </div>
-          <div>
-            <Table
-              dataSource={this.props.getEmailListData}
-              pagination={{ size: 'small', pageSize: 5 }}
-              columns={this.state.columns}
-            ></Table>
-          </div>
-        </div>
-        {/* 这是KdTable渲染的表格 */}
-        <KdTable dataSource={this.state.records}></KdTable>
-      </Fragment>
+          {/* 这是KdTable渲染的表格 */}
+          <KdTable dataSource={this.state.records}></KdTable>
+        </Fragment>
+      </PageHeaderWrapper>
     );
   }
 }

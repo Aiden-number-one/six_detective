@@ -10,7 +10,7 @@ const { Option } = Select;
   loading: loading.effects['templateConfig/templateDatas'],
   dataSource: templateConfig.data,
 }))
-class TemplateSet extends PureComponent {
+class TemplateConfig extends PureComponent {
   state = {
     // dataSourceTest: [],
     formValue: {},
@@ -146,13 +146,6 @@ class TemplateSet extends PureComponent {
     return (
       <Fragment>
         <div className={styles.templateSet}>
-          <div className={styles.titleBox}>
-            <div className={styles.title}>
-              <Icon type="unordered-list" className={styles.icon} />
-              <h2 className={styles.titleText}>模板设置</h2>
-            </div>
-            <Divider className={styles.divider} />
-          </div>
           <Table
             columns={checkColumns}
             dataSource={dataSource}
@@ -232,6 +225,6 @@ class TemplateSet extends PureComponent {
   }
 }
 
-const TemplateSetForm = Form.create()(TemplateSet);
+const TemplateSet = Form.create()(TemplateConfig);
 
-export default TemplateSetForm;
+export default TemplateSet;

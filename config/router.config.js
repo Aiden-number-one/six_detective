@@ -180,7 +180,7 @@ export default [
             component: './SystemParams/SystemParams',
           },
           {
-            path: '/system-management/code-antenance',
+            path: '/system-management/code-maintenance',
             name: 'codeMaintenance',
             component: './CodeMaintenance/CodeMaintenance',
           },
