@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Button, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
 
+import TableHeader from '@/components/TableHeader';
 import styles from './code.less';
 // import { thisExpression } from '@babel/types';
 
@@ -13,7 +15,7 @@ class CodeForm extends Component {
     const { dictId, dictItemId, dictItemIdName, sortNo } = this.props;
     return (
       <div>
-        <Form layout="inline">
+        <Form layout="inline" className={styles.formWrap}>
           <Form.Item label="字典条目：">
             {getFieldDecorator('dictId', {
               initialValue: dictId || undefined,
@@ -361,32 +363,33 @@ class CodeMaintenance extends Component {
       });
 
     return (
-      <Fragment>
-        <div>
+      <PageHeaderWrapper>
+        <Fragment>
           <div>
-            <ul className={styles.clearfix}>
-              <li className={styles.fl}>
-                <span>条目名称：</span>
-                <Input className={styles['login-name']} onChange={this.itemNameChange}></Input>
-              </li>
-              <li className={styles.fl}>
-                <Button type="primary" icon="search" onClick={this.queryCode}></Button>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <Table
-              dataSource={codeListData}
-              columns={this.state.codeColumns}
-              pagination={{ total: totalCount, pageSize }}
-              onChange={this.pageChange}
-              onRow={record => ({
-                onClick: () => {
-                  this.connectCodeList(record);
-                }, // 点击行
-              })}
-            ></Table>
-            {/* <Pagination
+            <div>
+              <ul className={styles.clearfix}>
+                <li className={styles.fl}>
+                  <span>条目名称：</span>
+                  <Input className={styles['login-name']} onChange={this.itemNameChange}></Input>
+                </li>
+                <li className={styles.fl}>
+                  <Button type="primary" icon="search" onClick={this.queryCode}></Button>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <Table
+                dataSource={codeListData}
+                columns={this.state.codeColumns}
+                pagination={{ total: totalCount, pageSize }}
+                onChange={this.pageChange}
+                onRow={record => ({
+                  onClick: () => {
+                    this.connectCodeList(record);
+                  }, // 点击行
+                })}
+              ></Table>
+              {/* <Pagination
               showSizeChanger
               showQuickJumper
               total={totalCount}
@@ -396,57 +399,59 @@ class CodeMaintenance extends Component {
               onChange={this.pageChange}
               onShowSizeChange={this.onShowSizeChange}
             ></Pagination> */}
-          </div>
-        </div>
-        <div>
-          <div>
-            <Button
-              type="primary"
-              onClick={() => {
-                this.addCode();
-              }}
-            >
-              添加
-            </Button>
-            <Modal
-              title="新增字典子项"
-              visible={this.state.codeVisible}
-              onOk={this.codeConfirm}
-              onCancel={this.codeCancel}
-            >
-              <NewCodeForm ref={this.codeFormRef} dictId={this.state.dictId}></NewCodeForm>
-            </Modal>
-            {/* 修改 */}
-            <Modal
-              title="修改字典子项"
-              visible={this.state.updateCodeItemVisible}
-              onOk={this.updateCodeItemConfirm}
-              onCancel={this.updateCodeItemCancel}
-            >
-              <NewCodeForm ref={this.codeFormRef} {...updateCodeItemParams}></NewCodeForm>
-            </Modal>
-            {/* 删除 */}
-            {/* 删除 */}
-            <Modal
-              title="提示"
-              visible={this.state.deleteCodeItemVisible}
-              onOk={this.deleteCodeItemConfirm}
-              onCancel={this.deleteCodeItemCancel}
-            >
-              <div>
-                <span>确定删除吗？</span>
-              </div>
-            </Modal>
+            </div>
           </div>
           <div>
-            <Table
-              dataSource={codeItemListData}
-              pagination={{ total: totalCountItem, pageSize: 10 }}
-              columns={this.state.columns}
-            ></Table>
+            <div>
+              {/* <Button
+                type="primary"
+                onClick={() => {
+                  this.addCode();
+                }}
+              >
+                添加
+              </Button> */}
+              <Modal
+                title="新增字典子项"
+                visible={this.state.codeVisible}
+                onOk={this.codeConfirm}
+                onCancel={this.codeCancel}
+              >
+                <NewCodeForm ref={this.codeFormRef} dictId={this.state.dictId}></NewCodeForm>
+              </Modal>
+              {/* 修改 */}
+              <Modal
+                title="修改字典子项"
+                visible={this.state.updateCodeItemVisible}
+                onOk={this.updateCodeItemConfirm}
+                onCancel={this.updateCodeItemCancel}
+              >
+                <NewCodeForm ref={this.codeFormRef} {...updateCodeItemParams}></NewCodeForm>
+              </Modal>
+              {/* 删除 */}
+              {/* 删除 */}
+              <Modal
+                title="提示"
+                visible={this.state.deleteCodeItemVisible}
+                onOk={this.deleteCodeItemConfirm}
+                onCancel={this.deleteCodeItemCancel}
+              >
+                <div>
+                  <span>确定删除吗？</span>
+                </div>
+              </Modal>
+            </div>
+            <div>
+              <TableHeader showEdit showSelect addTableData={() => this.addCode()} />
+              <Table
+                dataSource={codeItemListData}
+                pagination={{ total: totalCountItem, pageSize: 10 }}
+                columns={this.state.columns}
+              ></Table>
+            </div>
           </div>
-        </div>
-      </Fragment>
+        </Fragment>
+      </PageHeaderWrapper>
     );
   }
 }

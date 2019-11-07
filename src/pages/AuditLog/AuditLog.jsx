@@ -162,7 +162,7 @@ class AuditLog extends Component {
     return (
       <PageHeaderWrapper>
         <NewOperatorForm search={this.queryLog} ref={this.auditLogForm} />
-        <TableHeader />
+        <TableHeader showEdit showSelect />
         <Table
           dataSource={getAuditLogList}
           pagination={{ total: totalCount, pageSize }}

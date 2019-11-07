@@ -4,7 +4,7 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout from '@ant-design/pro-layout';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Icon } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
@@ -45,7 +45,7 @@ const BasicLayout = props => {
   /**
    * constructor
    */
-  const [openKeys, setOpenKeys] = useState([]);
+  // const [openKeys, setOpenKeys] = useState([]);
 
   useEffect(() => {
     setLocale('en-US');
@@ -79,20 +79,33 @@ const BasicLayout = props => {
       payload: !collapsed,
     });
 
-  const headerRender = () => (
-    <div className={styles.headerRender}>
-      <Icon
-        className={styles.collapsed}
-        type={collapsed ? 'menu-unfold' : 'menu-fold'}
-        onClick={() => handleMenuCollapse()}
-      />
-      <div className={styles.left}>
-        <div>Welcome,John</div>
-        <div>Last Login: 03-Jun-2019 21:00 HKT</div>
+  const headerRender = () => {
+    if (window.location.pathname === '/') {
+      return (
+        <div className={styles.headerRender} style={{ position: 'absolute', border: 'none' }}>
+          <Icon
+            className={styles.collapsed}
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={() => handleMenuCollapse()}
+          />
+        </div>
+      );
+    }
+    return (
+      <div className={styles.headerRender}>
+        <Icon
+          className={styles.collapsed}
+          type={collapsed ? 'menu-unfold' : 'menu-fold'}
+          onClick={() => handleMenuCollapse()}
+        />
+        <div className={styles.left}>
+          <div>Welcome,John</div>
+          <div>Last Login: 03-Jun-2019 21:00 HKT</div>
+        </div>
+        <div className={styles.right}></div>
       </div>
-      <div className={styles.right}></div>
-    </div>
-  );
+    );
+  };
 
   return (
     <ProLayout

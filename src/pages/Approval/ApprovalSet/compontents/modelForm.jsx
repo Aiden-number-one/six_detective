@@ -1,31 +1,30 @@
+/* eslint-disable no-restricted-syntax */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react/no-unused-state */
 import React, { PureComponent } from 'react';
-import { Form, Input, Button, Modal } from 'antd';
+import { Form, Input, Button, Modal, Row, Col } from 'antd';
 import { connect } from 'dva';
 import DeployedModel from './deployedModel';
 import TransferModal from './transferModal';
+// import { async } from 'q';
 // import classNames from 'classnames';
 // import styles from './ApprovalSet.less';
 const { Search } = Input;
-// let isShowTransferModal = false;
-// window.showAudit = function(processDefinitionIds, taskIds) {
-//   // console.log('taskIds------>', processDefinitionIds,taskIds);
-//   console.log('this--->', isShowTransferModal);
-
-//   isShowTransferModal = true;
-//   // console.log('this--->', isShowTransferModal);
-// };
 @connect(({ approvalSet, loading }) => ({
   loading: loading.effects['approvalSet/approvalConfigDatas'],
   approvalConfigList: approvalSet.data,
   deployedModelDatas: approvalSet.deployedModelDatas,
   processDefinitionId: approvalSet.processDefinitionId,
+  auditorData: approvalSet.auditorData,
 }))
 class ModelForm extends PureComponent {
   state = {
     deployedModelVisible: false,
     isShowTransferModal: false,
+    taskIds: '',
+    targetKeys: [],
+    auditInfo: [],
+    allChooseObj: {},
   };
 
   componentDidMount() {
@@ -34,20 +33,47 @@ class ModelForm extends PureComponent {
     };
   }
 
+  handleTransferOk = () => {
+    const { targetKeys, allChooseObj, auditInfo, taskIds } = this.state;
+    allChooseObj[taskIds] = targetKeys;
+
+    // auditInfo.concat(nodeAuditInfo);
+    console.log('auditInfo------>', auditInfo, allChooseObj, targetKeys);
+    this.closeTransferModal();
+  };
+
+  onTransferChange = targetKeys => {
+    console.log('Target Keys:', targetKeys);
+    this.setState({ targetKeys });
+  };
+
   // 修改设置提交
   handleSubmit = e => {
     const { formValue } = this.props;
+    const { allChooseObj } = this.state;
+    const nodeAuditInfo = [];
+    for (const key in allChooseObj) {
+      if (allChooseObj.hasOwnProperty(key)) {
+        for (let i = 0; i < allChooseObj[key].length; i += 1) {
+          nodeAuditInfo.push({
+            stepId: key,
+            auditIds: allChooseObj[key][i],
+            auditType: '0',
+          });
+        }
+      }
+    }
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        this.props.handleCancel();
+        // console.log('Received values of form: ', values);
+        // this.props.handleCancel();
         const param = {
           configId: formValue.configId,
           processUuid: formValue.processUuid,
           remark: values.remark,
           processName: values.processName,
-          auditInfo: '',
+          auditInfo: JSON.stringify(nodeAuditInfo),
         };
         this.saveConfig(param);
       }
@@ -77,11 +103,46 @@ class ModelForm extends PureComponent {
     });
   };
 
+  // 查询审核人列表
+  getAuditorData = async (configId, stepId) => {
+    const { dispatch } = this.props;
+    await dispatch({
+      type: 'approvalSet/getAuditorlistDatas',
+      payload: {
+        configId,
+        stepId,
+      },
+    });
+  };
+
   // 打开审核人设置弹窗
-  showTransferModal = () => {
+  showTransferModal = async taskId => {
+    const { formValue } = this.props;
+    await this.getAuditorData(formValue.configId, taskId);
+    const { allChooseObj, taskIds } = this.state;
+    let targetKeysCurrent = [];
+    if (taskIds !== taskId && this.props.auditorData.length) {
+      for (let i = 0; i < this.props.auditorData.length; i += 1) {
+        targetKeysCurrent.push(this.props.auditorData[i].relateNo);
+      }
+    } else if (allChooseObj.hasOwnProperty(taskIds)) {
+      targetKeysCurrent = allChooseObj[taskIds];
+    }
     this.setState({
       isShowTransferModal: true,
+      targetKeys: targetKeysCurrent,
+      taskIds: taskId,
     });
+  };
+
+  setDefaultTargetKeys = auditorData => {
+    const targetKeysCurrent = [];
+    for (let i = 0; i < auditorData.length; i += 1) {
+      targetKeysCurrent.push(auditorData.relateNo);
+    }
+    // this.setState({
+    //   targetKeys: targetKeysCurrent,
+    // });
   };
 
   // 关闭审核人设置弹窗
@@ -108,23 +169,8 @@ class ModelForm extends PureComponent {
       processDefinitionId,
     } = this.props;
     const diagramUrl = `/process/diagram-viewer/index.html?isClick=1&processDefinitionId=${processDefinitionId}`;
-    // console.log('diagramUrl------>', diagramUrl);
     const { getFieldDecorator } = this.props.form;
-    const { deployedModelVisible, isShowTransferModal } = this.state;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    const formTailLayout = {
-      labelCol: { span: 8 },
-      wrapperCol: { span: 12, offset: 12 },
-    };
+    const { deployedModelVisible, isShowTransferModal, taskIds, targetKeys } = this.state;
     return (
       <div>
         <Modal
@@ -135,20 +181,30 @@ class ModelForm extends PureComponent {
           width={1000}
           height={1000}
         >
-          <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-            <Form.Item label="流程模型选择">
-              {getFieldDecorator('processName', {
-                rules: [{ required: true, message: 'Please input your processName!' }],
-                initialValue: formValue.processName,
-              })(<Search onClick={this.showDeployedModel} style={{ width: 200 }} />)}
-            </Form.Item>
-            <Form.Item label="说明">
-              {getFieldDecorator('remark', {
-                rules: [{ required: true, message: 'Please input your name!' }],
-                initialValue: formValue.remark,
-              })(<Input />)}
-            </Form.Item>
-            <Form.Item {...formTailLayout}>
+          <iframe title="diagram" width="100%" height="300px" src={diagramUrl}></iframe>
+          <Form onSubmit={this.handleSubmit} className="ant-advanced-search-form">
+            <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }} style={{ marginTop: '20px' }}>
+              <Col xs={12} sm={12} lg={8}>
+                <Form.Item label="流程模型选择" colon={false}>
+                  {getFieldDecorator('processName', {
+                    rules: [{ required: true, message: 'Please input your processName!' }],
+                    initialValue: formValue.processName,
+                  })(<Search onClick={this.showDeployedModel} />)}
+                </Form.Item>
+              </Col>
+              <Col xs={12} sm={12} lg={8}>
+                <Form.Item label="说明" colon={false}>
+                  {getFieldDecorator('remark', {
+                    rules: [{ required: true, message: 'Please input your name!' }],
+                    initialValue: formValue.remark,
+                  })(<Input />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <div className="btnArea">
+              <Button type="primary" htmlType="submit">
+                确定
+              </Button>
               <Button
                 type="primary"
                 onClick={handleCancel}
@@ -161,15 +217,16 @@ class ModelForm extends PureComponent {
               >
                 取消
               </Button>
-              <Button type="primary" htmlType="submit">
-                确定
-              </Button>
-            </Form.Item>
+            </div>
           </Form>
-          <iframe title="diagram" width="100%" height="200px" src={diagramUrl}></iframe>
+
           <TransferModal
             closeTransferModal={this.closeTransferModal}
             visible={isShowTransferModal}
+            taskIds={taskIds}
+            targetKeys={targetKeys}
+            onTransferChange={this.onTransferChange}
+            handleTransferOk={this.handleTransferOk}
           />
         </Modal>
         <DeployedModel

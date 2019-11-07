@@ -2,8 +2,8 @@
  * @Description: Theme
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-08-28 18:53:16
- * @LastEditors: mus
+ * @LastEditTime: 2019-11-07 10:34:16
+ * @LastEditors: lan
  */
 export default {
   navTheme: 'dark',
@@ -19,5 +19,4 @@ export default {
   },
   title: '香港交易所',
   pwa: false,
-  iconfontUrl: '',
 };

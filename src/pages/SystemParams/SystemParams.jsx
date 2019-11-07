@@ -1,7 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { Input, Modal, Select, Table, Form } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+
 import { connect } from 'dva';
 import styles from './params.less';
+import TableHeader from '@/components/TableHeader';
 
 const { Option } = Select;
 
@@ -12,7 +15,7 @@ class ModifyForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="参数类型：">
               {getFieldDecorator('paramType', {
                 rules: [
@@ -65,6 +68,7 @@ class ModifyForm extends Component {
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
+                  className={styles['input-value']}
                 >
                   <Option value="0">停用</Option>
                   <Option value="1">启用</Option>
@@ -249,39 +253,44 @@ class SystemParams extends Component {
         element.index = (this.state.pageNum - 1) * pageSize + index + 1;
       });
     return (
-      <Fragment>
-        <div>
+      <PageHeaderWrapper>
+        <Fragment>
           <div>
             <div>
-              <span>参数类型：</span>
-              <Select defaultValue="请选择" onChange={this.onChangeOption}>
-                <Option value="">请选择</Option>
-                {ParamsTypeData[0] &&
-                  ParamsTypeData[0].data.map(element => <Option value={element}>{element}</Option>)}
-              </Select>
+              <div>
+                <span>参数类型：</span>
+                <Select defaultValue="请选择" onChange={this.onChangeOption}>
+                  <Option value="">请选择</Option>
+                  {ParamsTypeData[0] &&
+                    ParamsTypeData[0].data.map(element => (
+                      <Option value={element}>{element}</Option>
+                    ))}
+                </Select>
+              </div>
+              <Modal
+                title="修改系统参数"
+                visible={this.state.updateSystemParamsVisible}
+                onOk={this.updateSystemParamsComfirm}
+                onCancel={this.updateSystemParamsCancel}
+              >
+                <NewModifyForm
+                  ref={this.modifyFormRef}
+                  paramObj={this.state.paramObj}
+                ></NewModifyForm>
+              </Modal>
             </div>
-            <Modal
-              title="修改系统参数"
-              visible={this.state.updateSystemParamsVisible}
-              onOk={this.updateSystemParamsComfirm}
-              onCancel={this.updateSystemParamsCancel}
-            >
-              <NewModifyForm
-                ref={this.modifyFormRef}
-                paramObj={this.state.paramObj}
-              ></NewModifyForm>
-            </Modal>
+            <div>
+              <TableHeader showEdit showSelect></TableHeader>
+              <Table
+                dataSource={getSystemParamsList}
+                columns={this.state.columns}
+                pagination={{ total: totalCount, pageSize }}
+                onChange={this.pageChange}
+              ></Table>
+            </div>
           </div>
-          <div>
-            <Table
-              dataSource={getSystemParamsList}
-              columns={this.state.columns}
-              pagination={{ total: totalCount, pageSize }}
-              onChange={this.pageChange}
-            ></Table>
-          </div>
-        </div>
-      </Fragment>
+        </Fragment>
+      </PageHeaderWrapper>
     );
   }
 }

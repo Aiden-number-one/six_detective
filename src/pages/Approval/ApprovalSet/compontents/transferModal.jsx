@@ -88,26 +88,24 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
 }))
 class TransferModal extends PureComponent {
   state = {
-    deployedModelVisible: false,
-    isShowDeafultFormValue: true,
-    targetKeys: [],
+    // targetKeys: [],
+    // auditInfo: [],
+    // allChooseObj: {},
   };
 
   componentDidMount() {}
 
-  handleOk = () => {
-    console.log('提交');
-  };
-
-  onChange = targetKeys => {
-    console.log('Target Keys:', targetKeys);
-    this.setState({ targetKeys });
-  };
-
   render() {
-    const { visible, closeTransferModal, roleGroupTree } = this.props;
-    const { targetKeys } = this.state;
-
+    const {
+      visible,
+      closeTransferModal,
+      roleGroupTree,
+      handleTransferOk,
+      onTransferChange,
+      targetKeys,
+    } = this.props;
+    // const { targetKeys } = this.state;
+    // console.log('roleGroupTree-----',roleGroupTree,targetKeys)
     return (
       <div>
         <Modal
@@ -117,12 +115,12 @@ class TransferModal extends PureComponent {
           width={600}
           height={600}
           onCancel={closeTransferModal}
-          onOk={this.handleOk}
+          onOk={handleTransferOk}
         >
           <TreeTransfer
             dataSource={roleGroupTree}
             targetKeys={targetKeys}
-            onChange={this.onChange}
+            onChange={onTransferChange}
           />
         </Modal>
       </div>
