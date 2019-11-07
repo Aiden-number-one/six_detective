@@ -11,7 +11,7 @@ const getCodeListModel = {
     objDelete: {},
   },
   effects: {
-    *getCodeList({ payload }, { call, put }) {
+    *getCodeList({ payload, callback }, { call, put }) {
       const response = yield call(codeList, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -20,6 +20,7 @@ const getCodeListModel = {
             payload: response.bcjson,
           });
         }
+        callback();
       }
     },
     *getCodeItemList({ payload }, { call, put }) {

@@ -47,7 +47,6 @@ function DepartTable({ depart, form }) {
         }}
       >
         <Column
-          // key="extendKey"
           title="参数ID"
           dataIndex="extendKey"
           width="40"
@@ -78,7 +77,6 @@ function DepartTable({ depart, form }) {
           })}
         />
         <Column
-          key="remark"
           title="说明"
           dataIndex="remark"
           onCell={record => ({
@@ -88,7 +86,6 @@ function DepartTable({ depart, form }) {
           })}
         />
         <Column
-          key="action"
           title="操作"
           dataIndex="action"
           width="14%"

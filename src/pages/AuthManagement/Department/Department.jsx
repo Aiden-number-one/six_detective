@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import classNames from 'classnames';
 import { Tree, List, Modal, Form, Button, Input, Row, Col, Table, Divider } from 'antd';
 
-import styles from './AuthMangament.less';
+import styles from './Department.less';
 import DepartTable from './DepartTable';
 
 const { TreeNode } = Tree;
@@ -70,22 +70,42 @@ function DepartModal({ isModalVisible, depart, form, close }) {
 
 const WrapDepartModal = Form.create()(DepartModal);
 
-function loop(orgs) {
-  return orgs.map(item => {
-    const { children, departmentId, departmentName } = item;
+function loop(orgsTree) {
+  return orgsTree.map(item => {
+    const { children, departmentId, departmentName, parentDepartmentId } = item;
     if (children) {
       return (
-        <TreeNode key={departmentId} title={departmentName}>
-          {loop(item.children)}
+        <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId}>
+          {loop(children)}
         </TreeNode>
       );
     }
-    return <TreeNode key={departmentId} title={departmentName} />;
+    return <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId} />;
   });
 }
 
-function AuthManagement({ dispatch, orgs = [], employees = [] }) {
-  const [depart, setDepart] = useState({});
+function getOrgDetail(dispatch, curSelectOrg) {
+  const { departmentId, departmentName, parentDepartmentId } = curSelectOrg;
+  if (departmentId) {
+    dispatch({
+      type: 'auth/queryDepartments',
+      params: {
+        departmentId,
+        departmentName,
+        parentDepartmentId,
+      },
+    });
+
+    dispatch({
+      type: 'auth/queryEmployees',
+      params: {
+        treeLevel: '2',
+      },
+    });
+  }
+}
+
+function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
   useEffect(() => {
     dispatch({
       type: 'auth/queryOrgs',
@@ -95,33 +115,76 @@ function AuthManagement({ dispatch, orgs = [], employees = [] }) {
     });
   }, []);
 
-  const [childDeparts, setChildDeparts] = useState([]);
+  const [curSelectOrg, setOrg] = useState({});
   useEffect(() => {
-    if (orgs[0] && orgs[0].children) {
-      setChildDeparts(orgs[0].children);
+    if (orgs.length > 0) {
+      setOrg(orgs[0]);
     }
   }, [orgs]);
 
   useEffect(() => {
-    dispatch({
-      type: 'auth/queryEmployees',
-      params: {
-        treeLevel: '2',
-      },
-    });
-  }, [orgs]);
+    getOrgDetail(dispatch, curSelectOrg);
+  }, [curSelectOrg]);
+
+  const [childDeparts, setChildDeparts] = useState([]);
+  useEffect(() => {
+    if (departments.length > 0 && departments[0].childMenus) {
+      setChildDeparts(departments[0].childMenus);
+    }
+  }, [departments]);
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [curSelectDepart, setDepart] = useState({});
 
   function handleSelect(selectKey, info) {
-    console.log(1231, info);
+    const { title, parentId } = info.node.props;
+    setOrg({
+      departmentId: selectKey,
+      departmentName: title,
+      parentDepartmentId: parentId,
+    });
   }
-  function modifyDepart(dep) {
-    setDepart(dep);
+
+  async function saveDepart(dep, type) {
+    const TYPE = type === 1 ? 'auth/addDepartment' : 'auth/updateDepartment';
+    const { departmentId, departmentName, parentDepartmentId } = dep;
+    await dispatch({
+      type: TYPE,
+      params: {
+        departmentId,
+        departmentName,
+        parentDepartmentId,
+      },
+    });
+    await dispatch({
+      type: 'auth/queryDepartments',
+      params: {
+        departmentId,
+        departmentName,
+        parentDepartmentId,
+      },
+    });
+  }
+
+  async function modifyDepart(dep = {}) {
+    if (dep) {
+      setDepart(dep);
+    } else {
+      const { departmentId, departmentName, parentDepartmentId } = curSelectOrg;
+      await dispatch({
+        type: 'auth/queryDepartments',
+        params: {
+          departmentId,
+          departmentName,
+          parentDepartmentId,
+        },
+      });
+      setDepart(departments[0]);
+    }
     setModalVisible(true);
   }
 
-  async function deleteDepart(dep) {
+  async function deleteDepart(dep = {}) {
     const { departmentId } = dep;
     await dispatch({
       type: 'auth/delDepartment',
@@ -136,7 +199,9 @@ function AuthManagement({ dispatch, orgs = [], employees = [] }) {
     return <p>loading</p>;
   }
 
-  console.log(employees);
+  if (departments.length === 0) {
+    return <p>loading </p>;
+  }
 
   return (
     <div className={styles.container}>
@@ -144,24 +209,31 @@ function AuthManagement({ dispatch, orgs = [], employees = [] }) {
         <Tree
           onSelect={handleSelect}
           treeDefaultExpandAll
-          defaultSelectedKeys={[orgs[0].departmentId]}
+          defaultSelectedKeys={[curSelectOrg.departmentId]}
         >
           {loop(orgs)}
         </Tree>
       </div>
       <div className={classNames(styles['child-group'])}>
         <WrapDepartModal
-          depart={depart}
+          depart={curSelectDepart}
           isModalVisible={isModalVisible}
           close={() => setModalVisible(false)}
+          save={() => saveDepart(curSelectDepart)}
         />
         <List
           size="small"
           header={
             <div>
-              <Button type="primary">新增下级部门</Button>
-              <Button type="primary">修改部门</Button>
-              <Button type="danger">删除部门</Button>
+              <Button type="primary" onClick={() => setModalVisible(true)}>
+                新增下级部门
+              </Button>
+              <Button type="primary" onClick={() => modifyDepart()}>
+                修改部门
+              </Button>
+              <Button type="danger" onClick={() => deleteDepart()}>
+                删除部门
+              </Button>
             </div>
           }
           dataSource={childDeparts}
@@ -183,7 +255,7 @@ function AuthManagement({ dispatch, orgs = [], employees = [] }) {
             </List.Item>
           )}
         />
-        <Table dataSource={employees} bordered>
+        <Table dataSource={employees} bordered rowKey="loginName">
           <Column title="员工姓名" dataIndex="customerName" />
           <Column title="登录名" dataIndex="loginName" />
           <Column title="公司部门" dataIndex="departmentName" />
@@ -209,5 +281,6 @@ function AuthManagement({ dispatch, orgs = [], employees = [] }) {
 const mapStateToProps = state => ({
   orgs: state.auth.orgs,
   employees: state.auth.employees,
+  departments: state.auth.departments,
 });
-export default connect(mapStateToProps)(Form.create()(AuthManagement));
+export default connect(mapStateToProps)(Form.create()(Department));

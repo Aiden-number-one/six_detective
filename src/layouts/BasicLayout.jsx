@@ -96,7 +96,7 @@ const BasicLayout = props => {
 
   return (
     <ProLayout
-      iconfontUrl="http://at.alicdn.com/t/font_1472528_hdqzoavma.js"
+      iconfontUrl={`http://${window.location.host}/iconfont.js`}
       siderWidth={250}
       logo={collapsed ? logoSamll : logo}
       headerRender={headerRender}
@@ -138,12 +138,13 @@ const BasicLayout = props => {
       // }}
       {...props}
       {...settings}
-      menuProps={{
-        openKeys,
-        onOpenChange: openKeysNew => {
-          setOpenKeys(openKeysNew);
-        },
-      }}
+      // 展开一个，其他默认收起
+      // menuProps={{
+      //   openKeys,
+      //   onOpenChange: openKeysNew => {
+      //     setOpenKeys(openKeysNew);
+      //   },
+      // }}
     >
       {children}
     </ProLayout>
