@@ -7,6 +7,9 @@ export default {
     orgs: [],
     employees: [],
     departments: [],
+    roleGroups: [],
+    roleMenus: [],
+    checkedRoleMenus: [],
   },
   reducers: {
     getOrgs(state, { payload: orgs }) {
@@ -27,40 +30,76 @@ export default {
         employees,
       };
     },
+    getRoleGroups(state, { payload: roleGroups }) {
+      return {
+        ...state,
+        roleGroups,
+      };
+    },
+    getRoleMenus(state, { payload: roleMenus }) {
+      return {
+        ...state,
+        roleMenus: formatTree(roleMenus, 'menuId', 'parentMenuId'),
+      };
+    },
+    getCheckedRoleMenus(state, { payload: checkedRoleMenus }) {
+      return {
+        ...state,
+        checkedRoleMenus: checkedRoleMenus.map(item => item.menuId),
+      };
+    },
   },
   effects: {
     // user role
     // *setPersonRole(action, { call, put }) {},
     // *queryPersonRole(action, { call, put }) {},
     // *delPersonRole(action, { call, put }) {},
-    // // // role group
+    // role group
     // *addRoleGroup(action, { call, put }) {},
-    // *queryRoleGroup(action, { call, put }) {},
+    *queryRoleGroups({ params }, { call, put }) {
+      const { bcjson } = yield call(fetch('get_role_group_query'), params);
+      yield put({
+        type: 'getRoleGroups',
+        payload: bcjson.items,
+      });
+    },
     // *updateRoleGroup(action, { call, put }) {},
     // *delRoleGroup(action, { call, put }) {},
-    // // // roles
+    // roles
     // *queryRole(action, { call, put }) {},
     // *delRole(action, { call, put }) {},
     // *updateRole(action, { call, put }) {},
-    // // // role menu
-    // *setRoleMenu(action, { call, put }) {},
-    // *delRoleMenu(action, { call, put }) {},
-    // *queryRoleMenu(action, { call, put }) {},
+    // role menu
+    *setRoleMenu({ params }, { call }) {
+      const { bcjson } = yield call(fetch('set_role_menu_update'), params);
+      console.log(bcjson);
+    },
+    *queryRoleMenus(action, { call, put }) {
+      const { bcjson } = yield call(fetch('get_acl_menu'), action.params);
+      yield put({
+        type: 'getRoleMenus',
+        payload: bcjson.items,
+      });
+    },
+    *queryRoleMenusById(action, { call, put }) {
+      const { bcjson } = yield call(fetch('get_role_menu_info'), action.params);
+      yield put({
+        type: 'getCheckedRoleMenus',
+        payload: bcjson.items,
+      });
+    },
     // department
     *queryOrgs(action, { call, put }) {
       const { bcjson } = yield call(fetch('get_departments_info'), action.params);
-
       yield put({
         type: 'getOrgs',
         payload: bcjson.items,
       });
     },
-    *queryDepartment(action, { call, put }) {
+    *queryDepartments(action, { call, put }) {
       const { bcjson } = yield call(fetch('get_department'), action.params);
       const { flag, items } = bcjson;
       if (flag === '1' && items.length > 0) {
-        console.log('auth effect-queryDepartment');
-
         yield put({
           type: 'getDepartments',
           payload: items[0].menu || [],

@@ -24,6 +24,7 @@ export default {
   'menu.analysis.investorSegmentAnalysis': 'Investor Segment Analysis',
   'menu.systemManagement': 'SYSTEM MANAGEMENT',
   'menu.systemManagement.userMaintenance': 'User Maintenance',
+  'menu.systemManagement.departMaintenance': 'Depart Maintenance',
   'menu.systemManagement.authMaintenance': 'Auth Maintenance',
   'menu.systemManagement.mailContentTemplate': 'Mail Content Template',
   'menu.systemManagement.workflowHistory': 'Workflow History',
