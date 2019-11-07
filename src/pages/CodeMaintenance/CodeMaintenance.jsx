@@ -15,7 +15,7 @@ class CodeForm extends Component {
     const { dictId, dictItemId, dictItemIdName, sortNo } = this.props;
     return (
       <div>
-        <Form layout="inline">
+        <Form layout="inline" className={styles.formWrap}>
           <Form.Item label="字典条目：">
             {getFieldDecorator('dictId', {
               initialValue: dictId || undefined,
