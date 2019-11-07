@@ -1,0 +1,33 @@
+@import '~@/assets/css/utils.less';
+
+.titleBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  padding: 0 10px;
+  color: #10416c;
+  font-size: 16px;
+}
+
+.searchBox {
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.dataSourceList {
+  margin-top: 10px;
+  padding: 0 10px;
+  .dataSourceItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    padding: 0 10px;
+    .dataSourceName {
+      width: 120px;
+      .textOverflow();
+    }
+  }
+}

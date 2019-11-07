@@ -79,20 +79,33 @@ const BasicLayout = props => {
       payload: !collapsed,
     });
 
-  const headerRender = () => (
-    <div className={styles.headerRender}>
-      <Icon
-        className={styles.collapsed}
-        type={collapsed ? 'menu-unfold' : 'menu-fold'}
-        onClick={() => handleMenuCollapse()}
-      />
-      <div className={styles.left}>
-        <div>Welcome,John</div>
-        <div>Last Login: 03-Jun-2019 21:00 HKT</div>
+  const headerRender = () => {
+    if (window.location.pathname === '/') {
+      return (
+        <div className={styles.headerRender} style={{ position: 'absolute', border: 'none' }}>
+          <Icon
+            className={styles.collapsed}
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={() => handleMenuCollapse()}
+          />
+        </div>
+      );
+    }
+    return (
+      <div className={styles.headerRender}>
+        <Icon
+          className={styles.collapsed}
+          type={collapsed ? 'menu-unfold' : 'menu-fold'}
+          onClick={() => handleMenuCollapse()}
+        />
+        <div className={styles.left}>
+          <div>Welcome,John</div>
+          <div>Last Login: 03-Jun-2019 21:00 HKT</div>
+        </div>
+        <div className={styles.right}></div>
       </div>
-      <div className={styles.right}></div>
-    </div>
-  );
+    );
+  };
 
   return (
     <ProLayout
