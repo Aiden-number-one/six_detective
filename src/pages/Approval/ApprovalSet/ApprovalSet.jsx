@@ -1,7 +1,8 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
-import { Form, Icon, Input, Button, Divider, Table, Popconfirm, Switch } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { Form, Icon, Input, Button, Table, Popconfirm, Switch, Row, Col } from 'antd';
 import { connect } from 'dva';
 import ModelForm from './compontents/modelForm';
 // import classNames from 'classnames';
@@ -54,26 +55,37 @@ class ApprovalConifg extends PureComponent {
     dispatch({
       type: 'approvalSet/deployedModelListDatas',
       payload: param,
-      // callback: processDefinitionId => this.getFlowChart(processDefinitionId),
-      // callback: processDefinitionId =>
-      //   console.log('processDefinitionId----->', processDefinitionId),
       callback: processDefinitionId => this.getProcessResource(processDefinitionId),
     });
   };
 
-  // // 修改审批设置状态
-  // handleSetConfigStatus = param => {
-  //   const { dispatch } = this.props;
-  //   console.log('param---->', param);
-  //   // dispatch({
-  //   //   type: 'approvalSet/setConfigStatus',
-  //   //   payload: {
-  //   //     configId: param.configId,
-  //   //     status: '',
-  //   //     isDefault: '',
-  //   //   },
-  //   // });
-  // };
+  // 修改审批设置状态 是否启用
+  handleSetConfigStatus = param => {
+    const { dispatch } = this.props;
+    const newStatus = param.status === '1' ? '0' : '1';
+    dispatch({
+      type: 'approvalSet/setConfigStatus',
+      payload: {
+        configId: param.configId,
+        status: newStatus,
+        isDefault: param.isDefault,
+      },
+    });
+  };
+
+  // 修改审批设置状态 是否默认
+  handleSetConfigDefault = param => {
+    const { dispatch } = this.props;
+    const newDefault = param.isDefault === '1' ? '0' : '1';
+    dispatch({
+      type: 'approvalSet/setConfigStatus',
+      payload: {
+        configId: param.configId,
+        status: param.status,
+        isDefault: newDefault,
+      },
+    });
+  };
 
   // 查询流程定义的资源图
   getProcessResource = processDefinitionId => {
@@ -173,7 +185,7 @@ class ApprovalConifg extends PureComponent {
               checkedChildren="启用"
               unCheckedChildren="停用"
               onChange={() => this.handleSetConfigStatus(record)}
-              defaultChecked
+              defaultChecked={record.status === '1'}
             />
           ),
         }),
@@ -182,8 +194,15 @@ class ApprovalConifg extends PureComponent {
         title: '是否默认',
         dataIndex: 'isDefault',
         align: 'center',
-        render: () => ({
-          children: <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked />,
+        render: (text, record) => ({
+          children: (
+            <Switch
+              checkedChildren="是"
+              unCheckedChildren="否"
+              onChange={() => this.handleSetConfigDefault(record)}
+              defaultChecked={record.isDefault === '1'}
+            />
+          ),
         }),
       },
       {
@@ -207,50 +226,52 @@ class ApprovalConifg extends PureComponent {
 
     return (
       <Fragment>
-        <div className={styles.approvalSet}>
-          <div className={styles.titleBox}>
-            <div className={styles.title}>
-              <Icon type="unordered-list" className={styles.icon} />
-              <h2 className={styles.titleText}>审批设置</h2>
-            </div>
-            <Divider className={styles.divider} />
+        <PageHeaderWrapper>
+          <div className={styles.approvalSet}>
+            <Form onSubmit={this.handleSubmit} className="ant-advanced-search-form">
+              <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
+                <Col xs={12} sm={12} lg={8}>
+                  <Form.Item label="说明" colon={false}>
+                    {getFieldDecorator('remark', {
+                      rules: [{ required: false, message: '请输入说明' }],
+                    })(<Input />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <div className="btnArea">
+                <Button type="primary" htmlType="submit">
+                  Search
+                </Button>
+              </div>
+              <div className="">
+                <Button
+                  onClick={this.handleAdd}
+                  size="small"
+                  type="primary"
+                  icon="plus"
+                  className="btn2"
+                  style={{ marginRight: '0', marginTop: '36px', float: 'right' }}
+                />
+              </div>
+            </Form>
+
+            <Table
+              columns={setColumns}
+              dataSource={approvalConfigList}
+              className={styles.tableBox}
+              pagination={{
+                size: 'small',
+              }}
+            />
+            <ModelForm
+              showModel={this.showModel}
+              handleCancel={this.handleCancel}
+              getProcessResource={this.getProcessResource}
+              visible={visible}
+              formValue={formValue}
+            />
           </div>
-
-          <Form layout="inline" onSubmit={this.handleSubmit}>
-            <Form.Item label="说明:">
-              {getFieldDecorator('remark', {
-                rules: [{ required: false, message: '请输入说明' }],
-              })(<Input />)}
-            </Form.Item>
-
-            <Form.Item>
-              <Button type="primary" icon="search" htmlType="submit">
-                查询
-              </Button>
-            </Form.Item>
-            <br />
-            <Form.Item style={{ marginTop: '5px' }}>
-              <Button type="primary" icon="file-add" onClick={this.handleAdd}>
-                增加
-              </Button>
-            </Form.Item>
-          </Form>
-          <Table
-            columns={setColumns}
-            dataSource={approvalConfigList}
-            className={styles.tableBox}
-            pagination={{
-              size: 'small',
-            }}
-          />
-          <ModelForm
-            showModel={this.showModel}
-            handleCancel={this.handleCancel}
-            getProcessResource={this.getProcessResource}
-            visible={visible}
-            formValue={formValue}
-          />
-        </div>
+        </PageHeaderWrapper>
       </Fragment>
     );
   }

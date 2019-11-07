@@ -2,7 +2,7 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react/no-unused-state */
 import React, { PureComponent } from 'react';
-import { Form, Input, Button, Modal } from 'antd';
+import { Form, Input, Button, Modal, Row, Col } from 'antd';
 import { connect } from 'dva';
 import DeployedModel from './deployedModel';
 import TransferModal from './transferModal';
@@ -171,20 +171,6 @@ class ModelForm extends PureComponent {
     const diagramUrl = `/process/diagram-viewer/index.html?isClick=1&processDefinitionId=${processDefinitionId}`;
     const { getFieldDecorator } = this.props.form;
     const { deployedModelVisible, isShowTransferModal, taskIds, targetKeys } = this.state;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    const formTailLayout = {
-      labelCol: { span: 8 },
-      wrapperCol: { span: 12, offset: 12 },
-    };
     return (
       <div>
         <Modal
@@ -195,21 +181,30 @@ class ModelForm extends PureComponent {
           width={1000}
           height={1000}
         >
-          <iframe title="diagram" width="100%" height="200px" src={diagramUrl}></iframe>
-          <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-            <Form.Item label="流程模型选择">
-              {getFieldDecorator('processName', {
-                rules: [{ required: true, message: 'Please input your processName!' }],
-                initialValue: formValue.processName,
-              })(<Search onClick={this.showDeployedModel} style={{ width: 200 }} />)}
-            </Form.Item>
-            <Form.Item label="说明">
-              {getFieldDecorator('remark', {
-                rules: [{ required: true, message: 'Please input your name!' }],
-                initialValue: formValue.remark,
-              })(<Input />)}
-            </Form.Item>
-            <Form.Item {...formTailLayout}>
+          <iframe title="diagram" width="100%" height="300px" src={diagramUrl}></iframe>
+          <Form onSubmit={this.handleSubmit} className="ant-advanced-search-form">
+            <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }} style={{ marginTop: '20px' }}>
+              <Col xs={12} sm={12} lg={8}>
+                <Form.Item label="流程模型选择" colon={false}>
+                  {getFieldDecorator('processName', {
+                    rules: [{ required: true, message: 'Please input your processName!' }],
+                    initialValue: formValue.processName,
+                  })(<Search onClick={this.showDeployedModel} />)}
+                </Form.Item>
+              </Col>
+              <Col xs={12} sm={12} lg={8}>
+                <Form.Item label="说明" colon={false}>
+                  {getFieldDecorator('remark', {
+                    rules: [{ required: true, message: 'Please input your name!' }],
+                    initialValue: formValue.remark,
+                  })(<Input />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <div className="btnArea">
+              <Button type="primary" htmlType="submit">
+                确定
+              </Button>
               <Button
                 type="primary"
                 onClick={handleCancel}
@@ -222,10 +217,7 @@ class ModelForm extends PureComponent {
               >
                 取消
               </Button>
-              <Button type="primary" htmlType="submit">
-                确定
-              </Button>
-            </Form.Item>
+            </div>
           </Form>
 
           <TransferModal
