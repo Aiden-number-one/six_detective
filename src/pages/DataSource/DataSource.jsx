@@ -258,7 +258,6 @@ const WrappedAdvancedSearchForm = Form.create({ name: 'advanced_search' })(Advan
 @connect(({ api, loading }) => ({
   loading: loading.effects['api/queryDatas'],
   tableData: api.data,
-  dataSourceList: api.dataSourceList,
 }))
 export default class DataSource extends PureComponent {
   state = {
@@ -268,26 +267,10 @@ export default class DataSource extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'api/queryDataSourceList',
-      payload: { a: 1 },
-    });
-    dispatch({
       type: 'api/queryDatas',
       payload: { a: 1 },
     });
   }
-
-  getData = connectionId => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'api/queryDatas',
-      payload: { a: 1 },
-    });
-    dispatch({
-      type: 'api/changeActive',
-      payload: connectionId,
-    });
-  };
 
   setVisible = (columnName, value) => {
     const { visible } = this.state;
