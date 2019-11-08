@@ -159,6 +159,9 @@ class ApprovalConifg extends PureComponent {
         title: '序号',
         dataIndex: 'number',
         align: 'center',
+        render: (text, record) => ({
+          children: <div>{record.configId}</div>,
+        }),
       },
       {
         title: '业务名称',
@@ -250,7 +253,7 @@ class ApprovalConifg extends PureComponent {
                   type="primary"
                   icon="plus"
                   className="btn2"
-                  style={{ marginRight: '0', marginTop: '36px', float: 'right' }}
+                  style={{ marginRight: '0', marginTop: '36px', float: 'right', zIndex: '1' }}
                 />
               </div>
             </Form>
@@ -267,6 +270,7 @@ class ApprovalConifg extends PureComponent {
               showModel={this.showModel}
               handleCancel={this.handleCancel}
               getProcessResource={this.getProcessResource}
+              configData={this.configData}
               visible={visible}
               formValue={formValue}
             />

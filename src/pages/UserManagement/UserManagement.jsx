@@ -21,7 +21,7 @@ class UserForm extends Component {
                     message: 'Please input your 登陆名',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="员工姓名：">
               {getFieldDecorator('name', {
@@ -31,7 +31,7 @@ class UserForm extends Component {
                     message: 'Please input your 员工姓名',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="所属部门：">
               {getFieldDecorator('department', {
@@ -61,7 +61,7 @@ class UserForm extends Component {
                     message: 'Please input your 登陆密码',
                   },
                 ],
-              })(<Input.Password className={styles['input-value']} />)}
+              })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="确认密码：">
               {getFieldDecorator('confirm', {
@@ -74,12 +74,7 @@ class UserForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(
-                <Input.Password
-                  className={styles['input-value']}
-                  onBlur={this.handleConfirmBlur}
-                />,
-              )}
+              })(<Input.Password className={styles.inputValue} onBlur={this.handleConfirmBlur} />)}
             </Form.Item>
             <Form.Item label="联系电话：">
               {getFieldDecorator('phone', {
@@ -89,7 +84,7 @@ class UserForm extends Component {
                     message: 'Please input your phone number!',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="邮箱地址：">
               {getFieldDecorator('email', {
@@ -103,7 +98,7 @@ class UserForm extends Component {
                     message: 'Please confirm your 邮箱地址!',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
           </Form>
         </div>
@@ -130,7 +125,7 @@ class UpdateForm extends Component {
                     message: 'Please input your 登陆名',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="员工姓名：">
               {getFieldDecorator('name', {
@@ -140,7 +135,7 @@ class UpdateForm extends Component {
                     message: 'Please input your 员工姓名',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="所属部门：">
               {getFieldDecorator('department', {
@@ -174,7 +169,7 @@ class UpdateForm extends Component {
                     message: 'Please confirm your 邮箱地址!',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
           </Form>
         </div>
@@ -199,7 +194,7 @@ class PasswordForm extends Component {
                     message: 'Please input your 原密码',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="登陆密码：">
               {getFieldDecorator('password', {
@@ -209,7 +204,7 @@ class PasswordForm extends Component {
                     message: 'Please input your 登陆密码',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="确认密码：">
               {getFieldDecorator('confirmPassword', {
@@ -222,12 +217,7 @@ class PasswordForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(
-                <Input.Password
-                  className={styles['input-value']}
-                  onBlur={this.handleConfirmBlur}
-                />,
-              )}
+              })(<Input.Password className={styles.inputValue} onBlur={this.handleConfirmBlur} />)}
             </Form.Item>
           </Form>
         </div>
@@ -253,7 +243,7 @@ class ResetPasswordForm extends Component {
                     message: 'Please input your 登陆密码',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="确认密码：">
               {getFieldDecorator('confirmPassword', {
@@ -266,12 +256,7 @@ class ResetPasswordForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(
-                <Input.Password
-                  className={styles['input-value']}
-                  onBlur={this.handleConfirmBlur}
-                />,
-              )}
+              })(<Input.Password className={styles.inputValue} onBlur={this.handleConfirmBlur} />)}
             </Form.Item>
           </Form>
         </div>
