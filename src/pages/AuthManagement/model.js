@@ -1,4 +1,4 @@
-import fetch from '@/utils/request2';
+import fetch from '@/utils/request.default';
 import { formatTree } from '@/utils/utils';
 
 export default {
@@ -57,10 +57,10 @@ export default {
     // role group
     // *addRoleGroup(action, { call, put }) {},
     *queryRoleGroups({ params }, { call, put }) {
-      const { bcjson } = yield call(fetch('get_role_group_query'), params);
+      const { items } = yield call(fetch('get_role_group_query'), params);
       yield put({
         type: 'getRoleGroups',
-        payload: bcjson.items,
+        payload: items,
       });
     },
     // *updateRoleGroup(action, { call, put }) {},
@@ -71,35 +71,38 @@ export default {
     // *updateRole(action, { call, put }) {},
     // role menu
     *setRoleMenu({ params }, { call }) {
-      const { bcjson } = yield call(fetch('set_role_menu_update'), params);
-      console.log(bcjson);
+      const { items } = yield call(fetch('set_role_menu_update'), params);
+      console.log(items);
     },
     *queryRoleMenus(action, { call, put }) {
-      const { bcjson } = yield call(fetch('get_acl_menu'), action.params);
+      const { items } = yield call(fetch('get_acl_menu'), action.params);
       yield put({
         type: 'getRoleMenus',
-        payload: bcjson.items,
+        payload: items,
       });
     },
     *queryRoleMenusById(action, { call, put }) {
-      const { bcjson } = yield call(fetch('get_role_menu_info'), action.params);
+      const { items } = yield call(fetch('get_role_menu_info'), action.params);
       yield put({
         type: 'getCheckedRoleMenus',
-        payload: bcjson.items,
+        payload: items[0],
       });
     },
     // department
     *queryOrgs(action, { call, put }) {
-      const { bcjson } = yield call(fetch('get_departments_info'), action.params);
+      yield call(fetch('get_mail_config_list'));
+      const { items } = yield call(fetch('get_departments_info'), action.params);
+      console.log(items[0]);
+
       yield put({
         type: 'getOrgs',
-        payload: bcjson.items,
+        payload: items,
       });
     },
     *queryDepartments(action, { call, put }) {
-      const { bcjson } = yield call(fetch('get_department'), action.params);
-      const { flag, items } = bcjson;
-      if (flag === '1' && items.length > 0) {
+      const { items } = yield call(fetch('get_department'), action.params);
+
+      if (items.length > 0) {
         yield put({
           type: 'getDepartments',
           payload: items[0].menu || [],
@@ -107,22 +110,22 @@ export default {
       }
     },
     *addDepartment(action, { call }) {
-      const { bcjson } = yield call(fetch('set_department_add'), action.params);
-      console.log(bcjson);
+      const { items } = yield call(fetch('set_department_add'), action.params);
+      console.log(items);
     },
     *updateDepartment(action, { call }) {
-      const { bcjson } = yield call(fetch('set_department_update'), action.params);
-      console.log(bcjson);
+      const { items } = yield call(fetch('set_department_update'), action.params);
+      console.log(items);
     },
     *delDepartment(action, { call }) {
-      const { bcjson } = yield call(fetch('set_department_delete'), action.params);
-      console.log(bcjson);
+      const { items } = yield call(fetch('set_department_delete'), action.params);
+      console.log(items);
     },
     *queryEmployees({ params }, { call, put }) {
-      const { bcjson } = yield call(fetch('get_user_list_impl'), params);
+      const { items } = yield call(fetch('get_user_list_impl'), params);
       yield put({
         type: 'getEmployees',
-        payload: bcjson.items,
+        payload: items.items,
       });
     },
   },

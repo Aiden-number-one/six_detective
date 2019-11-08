@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Button, Input, Modal, Select, Table } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { Form, Input, Modal, Select, Table } from 'antd';
 import { connect } from 'dva';
 import styles from './email.less';
 import KdTable from '@/components/KdTable';
 import generatePersons from '@/components/KdTable/genData';
+import TableHeader from '@/components/TableHeader';
 
 const { Option } = Select;
 class AddForm extends Component {
@@ -12,7 +14,7 @@ class AddForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="服务器IP：">
               {getFieldDecorator('mailHost', {
                 rules: [
@@ -21,7 +23,7 @@ class AddForm extends Component {
                     message: 'Please input your mailHost',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="端口：">
               {getFieldDecorator('mailPort', {
@@ -31,7 +33,7 @@ class AddForm extends Component {
                     message: 'Please input your mailPort',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="发件人邮箱地址：">
               {getFieldDecorator('mailAddress', {
@@ -45,7 +47,7 @@ class AddForm extends Component {
                     message: 'Please input your mailAddress',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="发件人邮箱密码：">
               {getFieldDecorator('mailPassword', {
@@ -55,7 +57,7 @@ class AddForm extends Component {
                     message: 'Please input your mailPassword',
                   },
                 ],
-              })(<Input.Password className={styles['input-value']} />)}
+              })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="是否开启：">
               {getFieldDecorator('isopen', {
@@ -71,6 +73,7 @@ class AddForm extends Component {
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
+                  className={styles.inputValue}
                 >
                   <Option value="0">开启</Option>
                   <Option value="1">关闭</Option>
@@ -85,7 +88,7 @@ class AddForm extends Component {
                     message: 'Please input your remark',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
           </Form>
         </div>
@@ -103,7 +106,7 @@ class ModifyForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="服务器IP：">
               {getFieldDecorator('mailHost', {
                 rules: [
@@ -113,7 +116,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.mailHost,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="端口：">
               {getFieldDecorator('mailPort', {
@@ -124,7 +127,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.mailPort,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="发件人邮箱地址：">
               {getFieldDecorator('mailAddress', {
@@ -139,7 +142,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.mailAddress,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="发件人邮箱密码：">
               {getFieldDecorator('mailPassword', {
@@ -150,7 +153,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.mailPassword,
-              })(<Input.Password className={styles['input-value']} />)}
+              })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="是否开启：">
               {getFieldDecorator('isopen', {
@@ -167,6 +170,7 @@ class ModifyForm extends Component {
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
+                  className={styles.inputValue}
                 >
                   <Option value="0">开启</Option>
                   <Option value="1">关闭</Option>
@@ -182,7 +186,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.remark,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
           </Form>
         </div>
@@ -470,62 +474,55 @@ class EmailParameter extends Component {
   };
 
   render() {
-    console.log(this.props.getEmailListData);
-
     return (
-      <Fragment>
-        <div>
+      <PageHeaderWrapper>
+        <Fragment>
           <div>
-            <Button
-              type="primary"
-              onClick={() => {
-                this.addUser();
-              }}
-            >
-              添加
-            </Button>
-            <Modal
-              title="新增绑定配置"
-              visible={this.state.addVisible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
-            >
-              <div>
-                <NewAddForm ref={this.addFormRef}></NewAddForm>
-              </div>
-            </Modal>
-            {/* 修改 */}
-            <Modal
-              title="修改邮件配置"
-              visible={this.state.modifyVisible}
-              onOk={this.modifyConfirm}
-              onCancel={this.modifyCancel}
-            >
-              <NewModifyForm ref={this.modifyForm} emailObj={this.state.emailObj}></NewModifyForm>
-            </Modal>
-            {/* 删除 */}
-            <Modal
-              title="修改邮件配置"
-              visible={this.state.deleteVisible}
-              onOk={this.deleteConfirm}
-              onCancel={this.deleteCancel}
-            >
-              <div>
-                <span>确定删除吗？</span>
-              </div>
-            </Modal>
+            <div>
+              <Modal
+                title="新增绑定配置"
+                visible={this.state.addVisible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+              >
+                <div>
+                  <NewAddForm ref={this.addFormRef}></NewAddForm>
+                </div>
+              </Modal>
+              {/* 修改 */}
+              <Modal
+                title="修改邮件配置"
+                visible={this.state.modifyVisible}
+                onOk={this.modifyConfirm}
+                onCancel={this.modifyCancel}
+              >
+                <NewModifyForm ref={this.modifyForm} emailObj={this.state.emailObj}></NewModifyForm>
+              </Modal>
+              {/* 删除 */}
+              <Modal
+                title="修改邮件配置"
+                visible={this.state.deleteVisible}
+                onOk={this.deleteConfirm}
+                onCancel={this.deleteCancel}
+              >
+                <div>
+                  <span>确定删除吗？</span>
+                </div>
+              </Modal>
+            </div>
+            <div>
+              <TableHeader showEdit showSelect addTableData={() => this.addUser()}></TableHeader>
+              <Table
+                dataSource={this.props.getEmailListData}
+                pagination={{ size: 'small', pageSize: 5 }}
+                columns={this.state.columns}
+              ></Table>
+            </div>
           </div>
-          <div>
-            <Table
-              dataSource={this.props.getEmailListData}
-              pagination={{ size: 'small', pageSize: 5 }}
-              columns={this.state.columns}
-            ></Table>
-          </div>
-        </div>
-        {/* 这是KdTable渲染的表格 */}
-        <KdTable dataSource={this.state.records}></KdTable>
-      </Fragment>
+          {/* 这是KdTable渲染的表格 */}
+          <KdTable dataSource={this.state.records}></KdTable>
+        </Fragment>
+      </PageHeaderWrapper>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Checkbox, Button, Table, Modal } from 'antd';
+import { Checkbox, Button, Modal } from 'antd';
 import styles from './index.less';
 
 export default class StandardTable extends PureComponent {
