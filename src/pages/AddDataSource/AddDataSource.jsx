@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { connect } from 'dva';
 import {
   Table,
   Icon,
@@ -17,6 +18,7 @@ import {
 
 import styles from './AddDataSource.less';
 import DataSourceModal from './modals/DataSourceModal';
+import DataSoureceTypeModal from './modals/DataSoureceTypeModal';
 
 import TableHeader from '@/components/TableHeader';
 
@@ -188,31 +190,41 @@ const tableData = [
   },
 ];
 
-const Title = () => (
-  <span className={styles.titleBox}>
-    <span>Data Connected</span>
-    <Icon type="plus" />
-  </span>
-);
-
-const SearchBox = () => (
-  <div className={styles.searchBox}>
-    <Search />
-  </div>
-);
-
+@connect(({ dataSource }) => ({
+  activeData: dataSource.activeData,
+}))
 export default class AddDataSource extends PureComponent {
   state = {
     visible: {
       // TableData: false,
       dataSource: false,
+      dataSourceType: false,
     },
-    dataSourceType: '',
+    title: '',
+    operation: 'ADD',
   };
 
   componentDidMount() {}
 
-  toggleModal = key => {
+  Title = () => (
+    <span className={styles.titleBox}>
+      <span>Data Connected</span>
+      <Icon
+        type="plus"
+        onClick={() => {
+          this.toggleModal('dataSourceType', 'ADD');
+        }}
+      />
+    </span>
+  );
+
+  SearchBox = () => (
+    <div className={styles.searchBox}>
+      <Search />
+    </div>
+  );
+
+  toggleModal = (key, type) => {
     const { visible } = this.state;
     this.setState({
       visible: {
@@ -220,11 +232,16 @@ export default class AddDataSource extends PureComponent {
         [key]: !visible[key],
       },
     });
+    if (type) {
+      this.setState({
+        operation: type,
+      });
+    }
   };
 
   setAddDataSourceTitle = title => {
     this.setState({
-      dataSourceType: title,
+      title,
     });
   };
 
@@ -279,15 +296,17 @@ export default class AddDataSource extends PureComponent {
       type: 'checkbox',
     };
     const {
-      visible: { dataSource },
-      dataSourceType,
+      visible: { dataSource, dataSourceType },
+      title,
+      operation,
     } = this.state;
+    const { activeData } = this.props;
     return (
       <PageHeaderWrapper>
         <div style={{ display: 'flex', minHeight: 500 }}>
           <div style={{ flex: '0 0 200px', background: '#f2f6f8' }}>
-            {Title()}
-            {SearchBox()}
+            {this.Title()}
+            {this.SearchBox()}
             <div className={styles.dataSourceList}>
               {dataSourceList.map(item => (
                 <div
@@ -305,7 +324,13 @@ export default class AddDataSource extends PureComponent {
                       type="edit"
                       onClick={e => {
                         e.stopPropagation();
-                        this.toggleModal('dataSource');
+                        const { dispatch } = this.props;
+                        dispatch({
+                          type: 'dataSource/saveDate',
+                          payload: item,
+                        });
+                        this.setAddDataSourceTitle(item.type);
+                        this.toggleModal('dataSource', 'EDIT');
                       }}
                     />
                     <Icon
@@ -340,6 +365,13 @@ export default class AddDataSource extends PureComponent {
         </div>
         <DataSourceModal
           visible={dataSource}
+          toggleModal={this.toggleModal}
+          title={title}
+          operation={operation}
+          activeData={activeData}
+        />
+        <DataSoureceTypeModal
+          visible={dataSourceType}
           toggleModal={this.toggleModal}
           setAddDataSourceTitle={this.setAddDataSourceTitle}
         />

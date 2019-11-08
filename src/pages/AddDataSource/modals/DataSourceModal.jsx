@@ -10,16 +10,20 @@ export default class DataSourceModal extends PureComponent {
   componentDidMount() {}
 
   render() {
-    const { form, visible, toggleModal } = this.props;
+    const { form, visible, toggleModal, title, operation, activeData } = this.props;
     const { getFieldDecorator } = form;
     const Layout = {
       labelCol: { span: 7 },
       wrapperCol: { span: 13 },
     };
+    let formData = activeData;
+    if (operation === 'ADD') {
+      formData = {};
+    }
     return (
       <Modal
         visible={visible}
-        title="新增数据源"
+        title={title}
         width={600}
         onCancel={() => {
           form.resetFields();
@@ -35,7 +39,7 @@ export default class DataSourceModal extends PureComponent {
                   message: '请输入数据源配置列表显示名称',
                 },
               ],
-              initialValue: undefined,
+              initialValue: formData.connectionName,
             })(<Input placeholder="数据源配置列表显示名称" />)}
           </Form.Item>
           <Form.Item {...Layout} label="databaseAddress">
@@ -46,7 +50,7 @@ export default class DataSourceModal extends PureComponent {
                   message: '',
                 },
               ],
-              initialValue: undefined,
+              initialValue: formData.server,
             })(<Input placeholder="" />)}
           </Form.Item>
           <Form.Item {...Layout} label="port">
@@ -57,7 +61,7 @@ export default class DataSourceModal extends PureComponent {
                   message: '',
                 },
               ],
-              initialValue: undefined,
+              initialValue: formData.dbPort,
             })(<Input placeholder="" />)}
           </Form.Item>
           <Form.Item {...Layout} label="databaseName">
@@ -68,13 +72,13 @@ export default class DataSourceModal extends PureComponent {
                   message: '',
                 },
               ],
-              initialValue: undefined,
+              initialValue: formData.dbDatabase,
             })(<Input placeholder="" />)}
           </Form.Item>
           <Form.Item {...Layout} label="Schema">
             {getFieldDecorator('schema', {
               rules: [{ required: false }],
-              initialValue: undefined,
+              initialValue: formData.schema,
             })(<Input placeholder="Schema" />)}
           </Form.Item>
           <Form.Item {...Layout} label="userName">
@@ -85,7 +89,7 @@ export default class DataSourceModal extends PureComponent {
                   message: '',
                 },
               ],
-              initialValue: undefined,
+              initialValue: formData.dbUser,
             })(<Input placeholder="" />)}
           </Form.Item>
           <Form.Item {...Layout} label="password">
@@ -96,7 +100,7 @@ export default class DataSourceModal extends PureComponent {
                   message: '',
                 },
               ],
-              initialValue: undefined,
+              initialValue: formData.dbPassword,
             })(<Input type="password" placeholder="" autoComplete="new-password" />)}
           </Form.Item>
         </Form>

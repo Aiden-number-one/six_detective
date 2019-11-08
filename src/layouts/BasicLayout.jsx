@@ -4,7 +4,7 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout from '@ant-design/pro-layout';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Icon } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
@@ -45,7 +45,7 @@ const BasicLayout = props => {
   /**
    * constructor
    */
-  const [openKeys, setOpenKeys] = useState([]);
+  // const [openKeys, setOpenKeys] = useState([]);
 
   useEffect(() => {
     setLocale('en-US');

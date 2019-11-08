@@ -35,12 +35,12 @@ function loopRoleMenus(roleMenusTree) {
 
 function Auth({ dispatch, roleGroups = [], roleMenus = [], checkedRoleMenus = [] }) {
   useEffect(() => {
-    dispatch({
-      type: 'auth/queryRoleGroups',
-    });
-    dispatch({
-      type: 'auth/queryRoleMenus',
-    });
+    // dispatch({
+    //   type: 'auth/queryRoleGroups',
+    // });
+    // dispatch({
+    //   type: 'auth/queryRoleMenus',
+    // });
   }, []);
 
   const [curRoleId, setCurRoleId] = useState('');
@@ -100,7 +100,7 @@ function Auth({ dispatch, roleGroups = [], roleMenus = [], checkedRoleMenus = []
           </div>
           <Divider />
           {isAuthMenuVisible && (
-            <Tree checkable checkedMenuKeys={checkedMenuKeys}>
+            <Tree checkable checkedKeys={checkedMenuKeys}>
               {loopRoleMenus(roleMenus)}
             </Tree>
           )}

@@ -1,10 +1,11 @@
+import { message } from 'antd';
 import Service from '@/utils/Service';
 
 const {
   getConfig,
   addConfig,
   deleteConfig,
-  // setConfigStatus,
+  setConfigStatus,
   getAuditorlist,
   saveConfig,
   deployedModelList,
@@ -61,17 +62,21 @@ const approvalSetModel = {
     *saveConfigDatas({ payload, callback }, { call }) {
       const response = yield call(saveConfig, { param: payload });
       if (response.bcjson.flag === '1') {
+        message.success('保存成功');
         callback({
           pageNumber: '1',
           pageSize: '10',
         });
+      } else {
+        message.success('保存失败');
       }
     },
-    // *setConfigStatus({ payload }, { call }) {
-    //   // const response = yield call(setConfigStatus, { param: payload });
-    //   // if (response.bcjson.flag === '1') {
-    //   // }
-    // },
+    *setConfigStatus({ payload }, { call }) {
+      const response = yield call(setConfigStatus, { param: payload });
+      if (response.bcjson.flag === '1') {
+        message.success('修改成功');
+      }
+    },
     *getRoleGroupDatas({ payload }, { call, put }) {
       const response = yield call(getRoleGroup, { param: payload });
       if (response.bcjson.flag === '1') {
