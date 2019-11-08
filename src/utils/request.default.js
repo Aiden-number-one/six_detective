@@ -1,3 +1,4 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/camelcase */
 /**
  * des: default request interceptor
@@ -70,7 +71,6 @@ export function setReqHeaders(url, NVPS) {
 
 // unified error handle
 export function errorHandler(error) {
-  console.log('err', error);
   const { response } = error;
 
   if (error instanceof Error || !response) {
