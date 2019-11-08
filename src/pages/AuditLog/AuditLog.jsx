@@ -16,7 +16,7 @@ class OperatorForm extends Component {
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label="操作员名称：">
-              {getFieldDecorator('operatorName', {})(<Input className={styles['input-value']} />)}
+              {getFieldDecorator('operatorName', {})(<Input className={styles.inputvalue} />)}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
@@ -24,7 +24,7 @@ class OperatorForm extends Component {
               {getFieldDecorator('beginDate', {})(
                 <DatePicker
                   onChange={this.changeBeginDate}
-                  className={styles['input-value']}
+                  className={styles.inputvalue}
                   format="YYYY-MM-DD"
                 />,
               )}
@@ -35,7 +35,7 @@ class OperatorForm extends Component {
               {getFieldDecorator('endDate', {})(
                 <DatePicker
                   onChange={this.changeEndDate}
-                  className={styles['input-value']}
+                  className={styles.inputvalue}
                   format="YYYY-MM-DD"
                 />,
               )}

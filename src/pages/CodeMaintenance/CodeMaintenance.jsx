@@ -19,22 +19,22 @@ class CodeForm extends Component {
           <Form.Item label="字典条目：">
             {getFieldDecorator('dictId', {
               initialValue: dictId || undefined,
-            })(<Input className={styles['input-value']} disabled></Input>)}
+            })(<Input className={styles.inputValue} disabled></Input>)}
           </Form.Item>
           <Form.Item label="字典子项：">
             {getFieldDecorator('dictItemId', {
               initialValue: dictItemId || undefined,
-            })(<Input className={styles['input-value']}></Input>)}
+            })(<Input className={styles.inputValue}></Input>)}
           </Form.Item>
           <Form.Item label="子项名称：">
             {getFieldDecorator('dictItemIdName', {
               initialValue: dictItemIdName || undefined,
-            })(<Input className={styles['input-value']}></Input>)}
+            })(<Input className={styles.inputValue}></Input>)}
           </Form.Item>
           <Form.Item label="条目排序：">
             {getFieldDecorator('sortNo', {
               initialValue: sortNo || undefined,
-            })(<Input className={styles['input-value']}></Input>)}
+            })(<Input className={styles.inputValue}></Input>)}
           </Form.Item>
         </Form>
       </div>
