@@ -1,4 +1,12 @@
 @import '~@/assets/css/utils.less';
+@font-face {
+  font-family: 'AvenirHeavy';
+  src: url('../assets/AvenirHeavy.otf');
+}
+@font-face {
+  font-family: 'AvenirBook';
+  src: url('../assets/AvenirBook.ttc');
+}
 
 .footerRender {
   display: flex;
@@ -19,45 +27,104 @@
 }
 
 .headerRender {
-  position: relative;
+  display: flex;
+  justify-content: space-between;
   height: 100%;
-  padding: 32px 0;
-  border-bottom: 1px rgba(129, 154, 179, 0.7) solid;
-  .collapsed {
-    position: absolute;
-    top: 3px;
-    left: -22px;
-    font-size: 16px;
-  }
-  .clearfix();
+  box-shadow: 0 0 6px #e6e9ea;
   .left {
-    float: left;
-    line-height: 1;
-    div:nth-child(1) {
-      margin-bottom: 3px;
-      color: #10416c;
-      font-size: 16px;
-      font-family: AvenirHeavy, sans-serif !important;
-    }
-    div:nth-child(2) {
-      color: #10416c;
-      font-size: 11px;
-      font-family: AvenirBook, sans-serif !important;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    border-right: 1px dotted #aaa69c;
+    .collapsed {
+      font-size: 22px;
     }
   }
   .right {
-    float: right;
+    display: flex;
+    width: 200px;
+    height: 60px;
+    color: #10416c;
+    .info {
+      display: flex;
+      align-items: center;
+      width: 35px;
+      height: 60px;
+      border-right: 1px dotted #aaa69c;
+      .bell {
+        font-size: 22px;
+      }
+    }
+    .user {
+      display: flex;
+      align-items: center;
+      height: 60px;
+      .avatar {
+        margin-right: 5px;
+        margin-left: 13px;
+        font-size: 22px;
+      }
+      .username {
+        max-width: 100px;
+        margin-right: 5px;
+        overflow: hidden;
+        font-family: AvenirHeavy, sans-serif;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
   }
 }
-// :global {
-//   .ant-menu-submenu .ant-menu-submenu-title {
-//     .anticon {
-//       display: none;
-//     }
-//   }
-//   .ant-menu-inline-collapsed .ant-menu-submenu .ant-menu-submenu-title {
-//     .anticon {
-//       display: block;
-//     }
-//   }
-// }
+:global {
+  .userinfo.ant-popover-placement-bottomRight {
+    padding-top: 20px;
+  }
+}
+.popover {
+  display: flex;
+  flex-direction: column;
+  width: 290px;
+  height: 180px;
+  .popoverHeader {
+    height: 60px;
+    padding: 10px 20px;
+    color: #fff;
+    background: #10416c;
+    p {
+      margin-bottom: 0;
+      font-size: 12px;
+    }
+  }
+  .popoverContent {
+    display: flex;
+    height: 90px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    .left {
+      border-right: 1px dotted #aaa69c;
+    }
+    .left,
+    .right {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    .imgBox {
+      width: 40px;
+      height: 40px;
+      background-color: #f2f6f8;
+      border-radius: 50%;
+    }
+  }
+  .popoverFooter {
+    flex: 1;
+    color: #6e839a;
+    font-size: 12px;
+    line-height: 30px;
+    text-align: center;
+    background: #f2f6f8;
+  }
+}

@@ -2,7 +2,7 @@
  * @Description: 滚动表格
  * @Author: lan
  * @Date: 2019-10-21 14:10:56
- * @LastEditTime: 2019-10-22 16:25:10
+ * @LastEditTime: 2019-11-08 13:27:13
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -13,7 +13,7 @@ export default class ScrollTable extends PureComponent {
 
   render() {
     return (
-      <div className={styles.scrollTable}>
+      <div className={styles.scrollTables}>
         <div className={styles.lineHeader}>
           <div className={styles.columnTitle} style={{ width: '10%' }}>
             Level

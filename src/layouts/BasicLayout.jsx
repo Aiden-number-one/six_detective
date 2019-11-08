@@ -4,8 +4,11 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout from '@ant-design/pro-layout';
-import React, { useEffect, useState } from 'react';
-import { Icon } from 'antd';
+import React, {
+  useEffect,
+  // useState,
+} from 'react';
+import { Icon, Badge, Popover } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -16,7 +19,7 @@ import logo from '../assets/logo.png';
 import logoSamll from '../assets/logo-small.png';
 import styles from './BasicLayout.less';
 import '@/assets/css/index.less';
-
+import IconFont from '@/components/IconFont';
 /**
  * use Authorized check all menu item
  */
@@ -45,7 +48,7 @@ const BasicLayout = props => {
   /**
    * constructor
    */
-  const [openKeys, setOpenKeys] = useState([]);
+  // const [openKeys, setOpenKeys] = useState([]);
 
   useEffect(() => {
     setLocale('en-US');
@@ -79,30 +82,70 @@ const BasicLayout = props => {
       payload: !collapsed,
     });
 
+  const popoverContent = () => (
+    <div className={styles.popover}>
+      <div className={styles.popoverHeader}>
+        <p>Surveillacnce Dep.</p>
+        <p>thomaschow@hkex.com</p>
+      </div>
+      <div className={styles.popoverContent}>
+        <div className={styles.left}>
+          <div className={styles.imgBox}></div>
+          <span>Profile</span>
+        </div>
+        <div className={styles.right}>
+          <div className={styles.imgBox}></div>
+          <span>Setting</span>
+        </div>
+      </div>
+      <div className={styles.popoverFooter}>Sign Out</div>
+    </div>
+  );
+
   const headerRender = () => {
     if (window.location.pathname === '/') {
       return (
         <div className={styles.headerRender} style={{ position: 'absolute', border: 'none' }}>
+          <div className={styles.left} style={{ border: 'none' }}>
+            <Icon
+              className={styles.collapsed}
+              type={collapsed ? 'menu-unfold' : 'menu-fold'}
+              onClick={() => handleMenuCollapse()}
+            />
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className={styles.headerRender}>
+        <div className={styles.left}>
           <Icon
             className={styles.collapsed}
             type={collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={() => handleMenuCollapse()}
           />
         </div>
-      );
-    }
-    return (
-      <div className={styles.headerRender}>
-        <Icon
-          className={styles.collapsed}
-          type={collapsed ? 'menu-unfold' : 'menu-fold'}
-          onClick={() => handleMenuCollapse()}
-        />
-        <div className={styles.left}>
-          <div>Welcome,John</div>
-          <div>Last Login: 03-Jun-2019 21:00 HKT</div>
+        <div className={styles.right}>
+          <div className={styles.info}>
+            <Badge dot>
+              <IconFont type="icon-xiaoxi" className={styles.bell} />
+            </Badge>
+          </div>
+          <div className={styles.user}>
+            <IconFont type="icon-usercircle" className={styles.avatar} />
+            <span title="Thomas Chow" className={styles.username}>
+              Thomas Chow
+            </span>
+            <Popover
+              placement="bottomRight"
+              content={popoverContent()}
+              trigger="click"
+              overlayClassName="userinfo"
+            >
+              <Icon type="caret-down" />
+            </Popover>
+          </div>
         </div>
-        <div className={styles.right}></div>
       </div>
     );
   };
