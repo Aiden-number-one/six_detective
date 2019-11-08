@@ -8,6 +8,7 @@ export default {
   'menu.dataManagement.dataProcessing': 'Data Processing',
   'menu.dataManagement.dataEnquiry': 'Data Enquiry',
   'menu.dataManagement.dataMaintenance': 'Data Maintenance',
+  'menu.dataManagement.taskSwitch': 'Task Switch',
   'menu.accountManagement': 'ACCOUNT MANAGEMENT',
   'menu.accountManagement.dashboard': 'Dashboard',
   'menu.accountManagement.account': 'Account',
