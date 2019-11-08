@@ -62,10 +62,13 @@ const approvalSetModel = {
     *saveConfigDatas({ payload, callback }, { call }) {
       const response = yield call(saveConfig, { param: payload });
       if (response.bcjson.flag === '1') {
+        message.success('保存成功');
         callback({
           pageNumber: '1',
           pageSize: '10',
         });
+      } else {
+        message.success('保存失败');
       }
     },
     *setConfigStatus({ payload }, { call }) {

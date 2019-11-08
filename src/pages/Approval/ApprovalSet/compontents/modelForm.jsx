@@ -23,7 +23,6 @@ class ModelForm extends PureComponent {
     isShowTransferModal: false,
     taskIds: '',
     targetKeys: [],
-    auditInfo: [],
     allChooseObj: {},
   };
 
@@ -34,11 +33,11 @@ class ModelForm extends PureComponent {
   }
 
   handleTransferOk = () => {
-    const { targetKeys, allChooseObj, auditInfo, taskIds } = this.state;
+    const { targetKeys, allChooseObj, taskIds } = this.state;
     allChooseObj[taskIds] = targetKeys;
 
     // auditInfo.concat(nodeAuditInfo);
-    console.log('auditInfo------>', auditInfo, allChooseObj, targetKeys);
+    // console.log('auditInfo------>', auditInfo, allChooseObj, targetKeys);
     this.closeTransferModal();
   };
 
@@ -67,7 +66,7 @@ class ModelForm extends PureComponent {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // console.log('Received values of form: ', values);
-        // this.props.handleCancel();
+        this.props.handleCancel();
         const param = {
           configId: formValue.configId,
           processUuid: formValue.processUuid,
@@ -86,6 +85,7 @@ class ModelForm extends PureComponent {
     dispatch({
       type: 'approvalSet/saveConfigDatas',
       payload: param,
+      callback: obj => this.props.configData(obj),
     });
   };
 
