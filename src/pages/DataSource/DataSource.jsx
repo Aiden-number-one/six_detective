@@ -159,9 +159,9 @@ class AdvancedSearchForm extends Component {
 
   // To generate mock Form.Item
   getFields() {
-    const count = this.state.expand ? 10 : 6;
+    const { expand } = this.state;
+    const count = expand ? 10 : 5;
     const { getFieldDecorator } = this.props.form;
-    // const children = [];
     const itemArray = [
       'Source',
       'DataBase',
@@ -169,6 +169,9 @@ class AdvancedSearchForm extends Component {
       'Generation Date',
       'Last Update Date',
       'Last Update Marker',
+      'Generation Date1',
+      'Last Update Date1',
+      'Last Update Marker1',
     ];
     return itemArray.map((value, i) => (
       <Col xs={12} sm={12} lg={8} key={value} style={{ display: i < count ? 'block' : 'none' }}>
@@ -182,12 +185,23 @@ class AdvancedSearchForm extends Component {
   }
 
   render() {
+    const { expand } = this.state;
     return (
       <Form className="ant-advanced-search-form">
-        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>{this.getFields()}</Row>
+        <Row gutter={{ xs: 24, sm: 48, md: 96, lg: 48, xl: 96 }}>{this.getFields()}</Row>
         <div className="clearFix">
           <span className="filterArea">
-            <span className="text">More Filter</span>+
+            <span
+              className="text"
+              onClick={() => {
+                this.setState({
+                  expand: !expand,
+                });
+              }}
+            >
+              More Filter
+            </span>
+            +
           </span>
         </div>
         <div className="clearFix btnArea">

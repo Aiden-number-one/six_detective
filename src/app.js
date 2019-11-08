@@ -7,7 +7,7 @@ export const dva = {
       console.log(e);
       notification.error({
         description: e.toString(),
-        message: '响应异常',
+        message: '解析异常',
       });
     },
   },

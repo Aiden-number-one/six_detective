@@ -90,6 +90,7 @@ export default {
     },
     // department
     *queryOrgs(action, { call, put }) {
+      yield call(fetch('get_mail_config_list'));
       const { items } = yield call(fetch('get_departments_info'), action.params);
       console.log(items[0]);
 

@@ -106,6 +106,8 @@ function getOrgDetail(dispatch, curSelectOrg) {
 }
 
 function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
+  console.log(9090);
+
   useEffect(() => {
     dispatch({
       type: 'auth/queryOrgs',
