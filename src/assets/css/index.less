@@ -94,10 +94,28 @@
         float: right;
         margin-right: 14px;
         font-weight: normal;
-        // &:first-child {
-        //   margin-right: 0;
-        // }
       }
+    }
+    .filterArea {
+      float: left;
+      margin-left: 20px;
+      color: #10416c;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+      .text {
+        text-decoration: underline;
+      }
+    }
+  }
+  .btn2 {
+    float: right;
+  }
+  .clearFix {
+    &::after {
+      display: block;
+      clear: both;
+      content: '';
     }
   }
 
