@@ -122,7 +122,7 @@
     padding: 0;
   }
   .ant-checkbox-inner {
-    border: 1px solid #10416c;
+    border: 2px solid #10416c;
   }
   // .ant-checkbox .ant-checkbox-inner::after {
   //   position: absolute;
@@ -136,7 +136,10 @@
   //   content: ' ';
   // }
   .ant-checkbox-checked .ant-checkbox-inner::after {
-    border-color: #fff;
+    border-color: #104164;
+  }
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #fff;
   }
   .ant-checkbox-disabled .ant-checkbox-inner::after {
     border-color: #a9b3bb;
@@ -394,9 +397,12 @@
       display: none;
     }
   }
-  .ant-table-pagination.ant-pagination {
+  .ant-table-pagination .ant-pagination {
     float: none;
-    text-align: center;
+    text-align: right;
+  }
+  .ant-pagination-options-size-changer .ant-select-selection {
+    border: 1px solid #f7f7f7;
   }
 
   .ant-table-thead th {
@@ -439,27 +445,26 @@
     .ant-pagination-prev {
       margin-right: 23px;
       .ant-pagination-item-link {
-        color: #fff;
-        background: #567494;
+        color: #9ea6aa;
+        background: #fff;
         border-radius: 0;
       }
     }
     .ant-pagination-next {
       margin-left: 23px;
       .ant-pagination-item-link {
-        color: #fff;
-        background: #567494;
+        color: #9ea6aa;
+        background: #fff;
         border-radius: 0;
       }
     }
     .ant-pagination-item {
-      border: 0;
+      border-color: #10416c;
       a {
-        color: #9cb4c9;
+        color: #73787b;
       }
       &.ant-pagination-item-active a {
-        color: #567494;
-        text-decoration: underline;
+        color: #73787b;
       }
     }
   }

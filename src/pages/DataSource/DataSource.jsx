@@ -325,6 +325,7 @@ export default class DataSource extends PureComponent {
             pagination={{
               total: 12,
               size: 'small',
+              showSizeChanger: true,
             }}
             scroll={{ x: 'max-content' }}
           />
