@@ -31,9 +31,10 @@ class DeployedModel extends PureComponent {
 
   // 选择tab的选项,获取选中的模型id
   chooseTab = processDefinitionId => {
-    this.changeProcessDefinitionId(processDefinitionId);
-    this.props.getProcessResource(processDefinitionId);
-    // console.log('chooseModelId-->', processDefinitionId);
+    const obj = processDefinitionId.split(',');
+    this.changeProcessDefinitionId(obj);
+    this.props.getProcessResource(obj[0]);
+    // console.log('chooseModelId-->', processDefinitionId.split(','));
   };
 
   // 修改processDefinitionId
@@ -58,13 +59,12 @@ class DeployedModel extends PureComponent {
       >
         <Tabs
           onChange={this.chooseTab}
-          onTabClick={this.kkkk}
           defaultActiveKey="1"
           tabPosition="left"
           style={{ height: 260 }}
         >
           {deployedModelDatas.map(item => (
-            <TabPane tab={item.name} key={item.processDefinitionId}>
+            <TabPane tab={item.name} key={[item.processDefinitionId, item.name]}>
               {item.name}
             </TabPane>
           ))}
