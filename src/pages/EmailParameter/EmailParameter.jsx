@@ -23,7 +23,7 @@ class AddForm extends Component {
                     message: 'Please input your mailHost',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputvalue} />)}
             </Form.Item>
             <Form.Item label="端口：">
               {getFieldDecorator('mailPort', {
@@ -33,7 +33,7 @@ class AddForm extends Component {
                     message: 'Please input your mailPort',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputvalue} />)}
             </Form.Item>
             <Form.Item label="发件人邮箱地址：">
               {getFieldDecorator('mailAddress', {
@@ -47,7 +47,7 @@ class AddForm extends Component {
                     message: 'Please input your mailAddress',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputvalue} />)}
             </Form.Item>
             <Form.Item label="发件人邮箱密码：">
               {getFieldDecorator('mailPassword', {
@@ -57,7 +57,7 @@ class AddForm extends Component {
                     message: 'Please input your mailPassword',
                   },
                 ],
-              })(<Input.Password className={styles['input-value']} />)}
+              })(<Input.Password className={styles.inputvalue} />)}
             </Form.Item>
             <Form.Item label="是否开启：">
               {getFieldDecorator('isopen', {
@@ -73,7 +73,7 @@ class AddForm extends Component {
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
-                  className={styles['input-value']}
+                  className={styles.inputvalue}
                 >
                   <Option value="0">开启</Option>
                   <Option value="1">关闭</Option>
@@ -88,7 +88,7 @@ class AddForm extends Component {
                     message: 'Please input your remark',
                   },
                 ],
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputvalue} />)}
             </Form.Item>
           </Form>
         </div>
@@ -116,7 +116,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.mailHost,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputvalue} />)}
             </Form.Item>
             <Form.Item label="端口：">
               {getFieldDecorator('mailPort', {
@@ -127,7 +127,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.mailPort,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputvalue} />)}
             </Form.Item>
             <Form.Item label="发件人邮箱地址：">
               {getFieldDecorator('mailAddress', {
@@ -142,7 +142,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.mailAddress,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputvalue} />)}
             </Form.Item>
             <Form.Item label="发件人邮箱密码：">
               {getFieldDecorator('mailPassword', {
@@ -153,7 +153,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.mailPassword,
-              })(<Input.Password className={styles['input-value']} />)}
+              })(<Input.Password className={styles.inputvalue} />)}
             </Form.Item>
             <Form.Item label="是否开启：">
               {getFieldDecorator('isopen', {
@@ -170,7 +170,7 @@ class ModifyForm extends Component {
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
-                  className={styles['input-value']}
+                  className={styles.inputvalue}
                 >
                   <Option value="0">开启</Option>
                   <Option value="1">关闭</Option>
@@ -186,7 +186,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: emailObj.remark,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputvalue} />)}
             </Form.Item>
           </Form>
         </div>
