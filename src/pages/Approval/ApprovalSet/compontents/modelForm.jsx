@@ -15,6 +15,7 @@ const { Search } = Input;
   approvalConfigList: approvalSet.data,
   deployedModelDatas: approvalSet.deployedModelDatas,
   processDefinitionId: approvalSet.processDefinitionId,
+  processName: approvalSet.processName,
   auditorData: approvalSet.auditorData,
 }))
 class ModelForm extends PureComponent {
@@ -69,9 +70,9 @@ class ModelForm extends PureComponent {
         this.props.handleCancel();
         const param = {
           configId: formValue.configId,
-          processUuid: formValue.processUuid,
+          processUuid: this.props.processDefinitionId,
           remark: values.remark,
-          processName: values.processName,
+          processName: this.props.processName,
           auditInfo: JSON.stringify(nodeAuditInfo),
         };
         this.saveConfig(param);
@@ -154,10 +155,11 @@ class ModelForm extends PureComponent {
 
   // 设置form表单值显示内容
   setFormValueType = () => {
-    // const { diagramDatas } = this.props;
-    // this.props.form.setFieldsValue({
-    //   processName: diagramDatas.processDefinition.name,
-    // });
+    const { processName } = this.props;
+    console.log('processName--->', processName);
+    this.props.form.setFieldsValue({
+      processName,
+    });
   };
 
   render() {

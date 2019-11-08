@@ -18,6 +18,7 @@ const approvalSetModel = {
     data: [],
     deployedModelDatas: [],
     processDefinitionId: '',
+    processName: '',
     diagramDatas: '',
     processImage: '',
     roleGroupDatas: [],
@@ -135,12 +136,14 @@ const approvalSetModel = {
         ...state,
         deployedModelDatas: action.payload,
         processDefinitionId: action.payload[0].processDefinitionId,
+        processName: action.payload[0].name,
       };
     },
     chooseProcessDefinitionId(state, action) {
       return {
         ...state,
-        processDefinitionId: action.payload.processDefinitionId,
+        processDefinitionId: action.payload.processDefinitionId[0],
+        processName: action.payload.processDefinitionId[1],
       };
     },
     getDiagram(state, action) {
