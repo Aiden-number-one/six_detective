@@ -6,7 +6,7 @@ import { md5 } from 'md5js';
 import { notification } from 'antd';
 import { getRandowNVPS } from './utils';
 
-const API_PREFFIX = '/mockapi';
+const API_PREFFIX = '/api';
 const VERSION = 'v2.0';
 const BUSINESS_PREFFIX = 'bayconnect.superlop';
 const DEFAULT_PARAM = { bcLangType: 'ZHCN' };
@@ -88,7 +88,7 @@ export function errorHandler(error) {
   return response;
 }
 
-const request = extend({
+export const request = extend({
   // timeout: 1000,
   prefix: `${API_PREFFIX}/${VERSION}/${BUSINESS_PREFFIX}.`,
   suffix: '.json',
@@ -100,11 +100,14 @@ const request = extend({
 
 request.interceptors.request.use((url, opts) => {
   const timestamp = Date.now();
-  const cryptoParams = window.btoa({ ...DEFAULT_PARAM, ...opts.data });
-  // console.log(opts);
+  const strParams = JSON.stringify({ ...DEFAULT_PARAM, ...opts.data });
+  const cryptoParams = window.btoa(strParams);
 
   const NVPS = {
-    N: url,
+    N: url
+      .split('/')
+      .pop()
+      .replace(opts.suffix, ''),
     V: VERSION,
     P: cryptoParams,
     S: timestamp,
@@ -125,10 +128,15 @@ request.interceptors.request.use((url, opts) => {
   };
 });
 
-request.interceptors.response.use(async response => {
+request.interceptors.response.use(async (response, opts) => {
   if (response.status === 200) {
     try {
-      const { bcjson } = await response.clone().json();
+      const result = await response.clone().json();
+      // return complete response
+      if (opts.all) {
+        return result;
+      }
+      const { bcjson } = result;
       const { flag, msg } = bcjson;
       if (flag === '1') {
         return bcjson;

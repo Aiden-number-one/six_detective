@@ -63,7 +63,7 @@ const CGrid = props => {
 
   const header = setGridHeader(children);
 
-  console.log('header', header);
+  // console.log('header', header);
 
   useEffect(() => {
     const grid = new cheetahGrid.ListGrid({
