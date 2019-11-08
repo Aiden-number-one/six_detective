@@ -88,12 +88,9 @@ export default {
         payload: items[0],
       });
     },
-    // department
+    // org / department
     *queryOrgs(action, { call, put }) {
-      yield call(fetch('get_mail_config_list'));
       const { items } = yield call(fetch('get_departments_info'), action.params);
-      console.log(items[0]);
-
       yield put({
         type: 'getOrgs',
         payload: items,
@@ -125,7 +122,7 @@ export default {
       const { items } = yield call(fetch('get_user_list_impl'), params);
       yield put({
         type: 'getEmployees',
-        payload: items.items,
+        payload: items,
       });
     },
   },

@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
-
+/**
+ * des: default request interceptor
+ * author: iron
+ * email: chenggang@szkingdom.com.cn
+ * data: 2019.11.07
+ */
 import { extend } from 'umi-request';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
@@ -101,8 +106,10 @@ export const request = extend({
 request.interceptors.request.use((url, opts) => {
   const timestamp = Date.now();
   const strParams = JSON.stringify({ ...DEFAULT_PARAM, ...opts.data });
-  const cryptoParams = window.btoa(strParams);
-
+  const cryptoParams = window.btoa(unescape(encodeURIComponent(strParams)));
+  console.group('%c [====request params====]', 'font-size:14px;color:blue;');
+  console.info(opts.data);
+  console.groupEnd();
   const NVPS = {
     N: url
       .split('/')

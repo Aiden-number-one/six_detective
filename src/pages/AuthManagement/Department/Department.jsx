@@ -1,74 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
-import { Tree, List, Modal, Form, Button, Input, Row, Col, Table, Divider } from 'antd';
-
+import { Tree, List, Form, Button, Table, Divider } from 'antd';
+import DepartmentModal from './DepartmentModal';
 import styles from './Department.less';
-import DepartTable from './DepartTable';
 
 const { TreeNode } = Tree;
 const { Column } = Table;
-
-function DepartModal({ isModalVisible, depart, form, close }) {
-  function handleOk() {
-    close();
-  }
-
-  return (
-    <Modal title="修改部门" width="60%" visible={isModalVisible} onOk={handleOk} onCancel={close}>
-      <div>
-        <Form layout="inline">
-          <Row>
-            <Col span={12}>
-              <Form.Item label="部门ID" colon>
-                {form.getFieldDecorator('departmentId1', {
-                  initialValue: depart.departmentId,
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please input your departmentId!',
-                    },
-                  ],
-                })(<Input placeholder="部门ID" disabled />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="部门名称" colon>
-                {form.getFieldDecorator('departmentName', {
-                  initialValue: depart.departmentName,
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please input your departmentId!',
-                    },
-                  ],
-                })(<Input placeholder="部门名称" />)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[16, 30]}>
-            <Col span={12}>
-              <Form.Item label="部门类型" colon>
-                {form.getFieldDecorator('departmentType', {
-                  initialValue: depart.departmentType,
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please input your departmentId!',
-                    },
-                  ],
-                })(<Input placeholder="部门类型" />)}
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </div>
-      {depart.extendInfo && <DepartTable depart={depart} />}
-    </Modal>
-  );
-}
-
-const WrapDepartModal = Form.create()(DepartModal);
 
 function loop(orgsTree) {
   return orgsTree.map(item => {
@@ -98,16 +36,12 @@ function getOrgDetail(dispatch, curSelectOrg) {
 
     dispatch({
       type: 'auth/queryEmployees',
-      params: {
-        treeLevel: '2',
-      },
+      params: {},
     });
   }
 }
 
 function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
-  console.log(9090);
-
   useEffect(() => {
     dispatch({
       type: 'auth/queryOrgs',
@@ -117,21 +51,19 @@ function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
     });
   }, []);
 
+  // select default dept
   const [curSelectOrg, setOrg] = useState({});
   useEffect(() => {
     if (orgs.length > 0) {
       setOrg(orgs[0]);
+      getOrgDetail(dispatch, orgs[0]);
     }
   }, [orgs]);
 
-  useEffect(() => {
-    getOrgDetail(dispatch, curSelectOrg);
-  }, [curSelectOrg]);
-
   const [childDeparts, setChildDeparts] = useState([]);
   useEffect(() => {
-    if (departments.length > 0 && departments[0].childMenus) {
-      setChildDeparts(departments[0].childMenus);
+    if (departments.length > 0) {
+      setChildDeparts(departments);
     }
   }, [departments]);
 
@@ -139,12 +71,18 @@ function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
   const [curSelectDepart, setDepart] = useState({});
 
   function handleSelect(selectKey, info) {
-    const { title, parentId } = info.node.props;
-    setOrg({
-      departmentId: selectKey,
+    // console.log(selectKey, info.node.props);
+
+    const { title, eventKey, parentId } = info.node.props;
+    const dept = {
+      departmentId: eventKey,
       departmentName: title,
       parentDepartmentId: parentId,
-    });
+    };
+    console.log(dept);
+
+    setOrg(dept);
+    getOrgDetail(dispatch, dept);
   }
 
   async function saveDepart(dep, type) {
@@ -202,18 +140,20 @@ function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
   }
 
   if (departments.length === 0) {
+    console.log(departments);
+
     return <p>loading </p>;
   }
 
   return (
     <div className={styles.container}>
       <div className={classNames(styles['parent-group'])}>
-        <Tree onSelect={handleSelect} defaultSelectedKeys={[orgs[0].departmentId]}>
+        <Tree onSelect={handleSelect} defaultSelectedKeys={[curSelectOrg.departmentId]}>
           {loop(orgs)}
         </Tree>
       </div>
       <div className={classNames(styles['child-group'])}>
-        <WrapDepartModal
+        <DepartmentModal
           depart={curSelectDepart}
           isModalVisible={isModalVisible}
           close={() => setModalVisible(false)}
@@ -234,7 +174,7 @@ function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
               </Button>
             </div>
           }
-          dataSource={childDeparts}
+          dataSource={childDeparts.filter(item => item.departmentType === '1')}
           pagination={{
             pageSize: 5,
           }}
