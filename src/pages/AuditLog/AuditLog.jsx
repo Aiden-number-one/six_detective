@@ -10,7 +10,7 @@ import styles from './AuditLog.less';
 class OperatorForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { search } = this.props;
+    const { search, reset } = this.props;
     return (
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
@@ -43,6 +43,9 @@ class OperatorForm extends Component {
           </Col>
         </Row>
         <div className="btnArea">
+          <Button icon="close" onClick={reset}>
+            重置
+          </Button>
           <Button type="primary" onClick={search}>
             Search
           </Button>
@@ -148,6 +151,10 @@ class AuditLog extends Component {
     });
   };
 
+  operatorReset = () => {
+    this.auditLogForm.current.resetFields();
+  };
+
   render() {
     let { getAuditLogList } = this.state;
     const { pageSize } = this.state;
@@ -161,7 +168,11 @@ class AuditLog extends Component {
       });
     return (
       <PageHeaderWrapper>
-        <NewOperatorForm search={this.queryLog} ref={this.auditLogForm} />
+        <NewOperatorForm
+          search={this.queryLog}
+          reset={this.operatorReset}
+          ref={this.auditLogForm}
+        />
         <TableHeader showEdit showSelect />
         <Table
           dataSource={getAuditLogList}
