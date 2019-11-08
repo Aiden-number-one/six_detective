@@ -16,15 +16,10 @@ class DeployedModel extends PureComponent {
     // visible: false,
   };
 
-  componentDidMount() {
-    // const { processDefinitionId } = this.props;
-    // this.getProcessResource(processDefinitionId);
-  }
+  componentDidMount() {}
 
   handleOk = () => {
     const { closeDeployedModel } = this.props;
-    // console.log('processDefinitionId------>', processDefinitionId);
-    // getFlowChart(processDefinitionId);
     closeDeployedModel();
     this.props.setFormValueType();
   };
@@ -57,12 +52,7 @@ class DeployedModel extends PureComponent {
         onCancel={closeDeployedModel}
         onOk={this.handleOk}
       >
-        <Tabs
-          onChange={this.chooseTab}
-          defaultActiveKey="1"
-          tabPosition="left"
-          style={{ height: 260 }}
-        >
+        <Tabs onChange={this.chooseTab} tabPosition="left" style={{ height: 260 }} type="card">
           {deployedModelDatas.map(item => (
             <TabPane tab={item.name} key={[item.processDefinitionId, item.name]}>
               {item.name}

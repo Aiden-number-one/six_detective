@@ -159,6 +159,9 @@ class ApprovalConifg extends PureComponent {
         title: '序号',
         dataIndex: 'number',
         align: 'center',
+        render: (text, record) => ({
+          children: <div>{record.configId}</div>,
+        }),
       },
       {
         title: '业务名称',
