@@ -206,11 +206,7 @@ function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
   return (
     <div className={styles.container}>
       <div className={classNames(styles['parent-group'])}>
-        <Tree
-          onSelect={handleSelect}
-          treeDefaultExpandAll
-          defaultSelectedKeys={[curSelectOrg.departmentId]}
-        >
+        <Tree onSelect={handleSelect} defaultSelectedKeys={[orgs[0].departmentId]}>
           {loop(orgs)}
         </Tree>
       </div>
