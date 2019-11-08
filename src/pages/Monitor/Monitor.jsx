@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import classNames from 'classnames';
 import styles from './Monitor.less';
-import ScrollTable from './components/scrollTable';
+import ScrollTable from './components/ScrollTable';
 import AreaChart from './components/AreaChart';
 import LevelBox from './components/Level/LevelBox';
 import ChartsBox from './components/Charts/ChartsBox';

@@ -159,41 +159,94 @@ class AdvancedSearchForm extends Component {
 
   // To generate mock Form.Item
   getFields() {
-    const count = this.state.expand ? 10 : 6;
+    const { expand } = this.state;
     const { getFieldDecorator } = this.props.form;
-    // const children = [];
-    const itemArray = [
-      'Source',
-      'DataBase',
-      'Generation Marker',
-      'Generation Date',
-      'Last Update Date',
-      'Last Update Marker',
-    ];
-    return itemArray.map((value, i) => (
-      <Col xs={12} sm={12} lg={8} key={value} style={{ display: i < count ? 'block' : 'none' }}>
-        <Form.Item label={value} colon={false}>
-          {getFieldDecorator(value, {})(
-            <DatePicker placeholder="Please Select" dropdownClassName="selectDropdown" />,
-          )}
-        </Form.Item>
-      </Col>
-    ));
+    return (
+      <Row gutter={{ xs: 24, sm: 48, md: 96, lg: 48, xl: 96 }}>
+        <Col xs={12} sm={12} lg={8} key="Source">
+          <Form.Item label="Source" colon={false}>
+            {getFieldDecorator('Source', {})(
+              <DatePicker placeholder="Please Select" dropdownClassName="selectDropdown" />,
+            )}
+          </Form.Item>
+        </Col>
+        <Col xs={12} sm={12} lg={8} key="DataBase">
+          <Form.Item label="DataBase" colon={false}>
+            {getFieldDecorator('DataBase', {})(
+              <DatePicker placeholder="Please Select" dropdownClassName="selectDropdown" />,
+            )}
+          </Form.Item>
+        </Col>
+        <Col xs={12} sm={12} lg={8} key="Generation Marker">
+          <Form.Item label="Generation Marker" colon={false}>
+            {getFieldDecorator('Generation Marker', {})(
+              <DatePicker placeholder="Please Select" dropdownClassName="selectDropdown" />,
+            )}
+          </Form.Item>
+        </Col>
+        <Col
+          xs={12}
+          sm={12}
+          lg={8}
+          key="Generation Date"
+          style={{ display: expand ? 'block' : 'none' }}
+        >
+          <Form.Item label="Generation Date" colon={false}>
+            {getFieldDecorator('Generation Date', {})(
+              <DatePicker placeholder="Please Select" dropdownClassName="selectDropdown" />,
+            )}
+          </Form.Item>
+        </Col>
+        <Col
+          xs={12}
+          sm={12}
+          lg={8}
+          key="Last Update Date"
+          style={{ display: expand ? 'block' : 'none' }}
+        >
+          <Form.Item label="Last Update Date" colon={false}>
+            {getFieldDecorator('Last Update Date', {})(
+              <DatePicker placeholder="Please Select" dropdownClassName="selectDropdown" />,
+            )}
+          </Form.Item>
+        </Col>
+        <Col
+          xs={12}
+          sm={12}
+          lg={8}
+          key="Last Update Marker"
+          style={{ display: expand ? 'block' : 'none' }}
+        >
+          <Form.Item label="Last Update Marker" colon={false}>
+            {getFieldDecorator('Last Update Marker', {})(
+              <DatePicker placeholder="Please Select" dropdownClassName="selectDropdown" />,
+            )}
+          </Form.Item>
+        </Col>
+      </Row>
+    );
   }
 
   render() {
+    const { expand } = this.state;
     return (
       <Form className="ant-advanced-search-form">
-        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>{this.getFields()}</Row>
-        <div className="clearFix">
-          <span className="filterArea">
-            <span className="text">More Filter</span>+
-          </span>
-        </div>
+        {this.getFields()}
         <div className="clearFix btnArea">
-          <Button type="primary" className="btn1">
-            Search
-          </Button>
+          <span className="filterArea">
+            <span
+              className="text"
+              onClick={() => {
+                this.setState({
+                  expand: !expand,
+                });
+              }}
+            >
+              More Filter
+            </span>
+            +
+          </span>
+          <Button type="primary">Search</Button>
         </div>
       </Form>
     );
@@ -205,7 +258,6 @@ const WrappedAdvancedSearchForm = Form.create({ name: 'advanced_search' })(Advan
 @connect(({ api, loading }) => ({
   loading: loading.effects['api/queryDatas'],
   tableData: api.data,
-  dataSourceList: api.dataSourceList,
 }))
 export default class DataSource extends PureComponent {
   state = {
@@ -215,26 +267,10 @@ export default class DataSource extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'api/queryDataSourceList',
-      payload: { a: 1 },
-    });
-    dispatch({
       type: 'api/queryDatas',
       payload: { a: 1 },
     });
   }
-
-  getData = connectionId => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'api/queryDatas',
-      payload: { a: 1 },
-    });
-    dispatch({
-      type: 'api/changeActive',
-      payload: connectionId,
-    });
-  };
 
   setVisible = (columnName, value) => {
     const { visible } = this.state;

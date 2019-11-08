@@ -1,3 +1,4 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-restricted-syntax */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react/no-unused-state */

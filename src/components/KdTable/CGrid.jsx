@@ -1,3 +1,4 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useRef } from 'react';
 import { cheetahGrid } from './utils';
@@ -63,7 +64,7 @@ const CGrid = props => {
 
   const header = setGridHeader(children);
 
-  console.log('header', header);
+  // console.log('header', header);
 
   useEffect(() => {
     const grid = new cheetahGrid.ListGrid({

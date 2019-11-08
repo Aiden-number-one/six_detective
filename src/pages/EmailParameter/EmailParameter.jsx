@@ -474,8 +474,6 @@ class EmailParameter extends Component {
   };
 
   render() {
-    console.log(this.props.getEmailListData);
-
     return (
       <PageHeaderWrapper>
         <Fragment>

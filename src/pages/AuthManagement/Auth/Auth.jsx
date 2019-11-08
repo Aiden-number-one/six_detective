@@ -50,6 +50,7 @@ function Auth({ dispatch, roleGroups = [], roleMenus = [], checkedRoleMenus = []
   async function handleSelect(key, info) {
     const { roleId } = info.node.props;
     if (roleId) {
+      console.log(roleId);
       dispatch({
         type: 'auth/queryRoleMenusById',
         params: {

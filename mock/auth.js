@@ -1,10 +1,10 @@
 import { mp, baseRes } from './utils';
 
 export default {
-  [mp('get_departments_info')]: (req, res) => {
+  [mp('get_departments_info1')]: (req, res) => {
     res.status(200).send({ bcjson: { flag: '1' } });
   },
-  [mp('get_departments_info1')]: baseRes([
+  [mp('get_departments_info')]: baseRes([
     {
       departmentId: 'ZQ001',
       departmentName: '申万宏源有限责任公司',

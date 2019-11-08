@@ -5,6 +5,10 @@ export default [
     component: '../layouts/UserLayout',
     routes: [{ path: '/login', name: 'login', component: './User/Login' }],
   },
+  // {
+  //   path: '/report-designer',
+  //   component: './ReportDesigner/ReportDesigner',
+  // },
   {
     path: '/',
     component: '../layouts/BasicLayout',
@@ -57,6 +61,11 @@ export default [
             path: '/data-management/data-maintenance',
             name: 'dataMaintenance',
             component: './AddDataSource/AddDataSource',
+          },
+          {
+            path: '/data-management/task-switch',
+            name: 'taskSwitch',
+            component: './TaskSwitch/TaskSwitch',
           },
         ],
       },
