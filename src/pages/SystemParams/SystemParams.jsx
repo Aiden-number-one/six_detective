@@ -25,7 +25,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: paramObj.paramType,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="参数key：">
               {getFieldDecorator('paramId', {
@@ -36,7 +36,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: paramObj.paramId,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="参数值：">
               {getFieldDecorator('paramValue', {
@@ -51,7 +51,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: paramObj.paramValue,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="是否开启：">
               {getFieldDecorator('paramStatus', {
@@ -68,7 +68,7 @@ class ModifyForm extends Component {
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
-                  className={styles['input-value']}
+                  className={styles.inputValue}
                 >
                   <Option value="0">停用</Option>
                   <Option value="1">启用</Option>
@@ -84,7 +84,7 @@ class ModifyForm extends Component {
                   },
                 ],
                 initialValue: paramObj.comments,
-              })(<Input className={styles['input-value']} />)}
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
           </Form>
         </div>

@@ -16,24 +16,20 @@ class DeployedModel extends PureComponent {
     // visible: false,
   };
 
-  componentDidMount() {
-    // const { processDefinitionId } = this.props;
-    // this.getProcessResource(processDefinitionId);
-  }
+  componentDidMount() {}
 
   handleOk = () => {
     const { closeDeployedModel } = this.props;
-    // console.log('processDefinitionId------>', processDefinitionId);
-    // getFlowChart(processDefinitionId);
     closeDeployedModel();
     this.props.setFormValueType();
   };
 
   // 选择tab的选项,获取选中的模型id
   chooseTab = processDefinitionId => {
-    this.changeProcessDefinitionId(processDefinitionId);
-    this.props.getProcessResource(processDefinitionId);
-    // console.log('chooseModelId-->', processDefinitionId);
+    const obj = processDefinitionId.split(',');
+    this.changeProcessDefinitionId(obj);
+    this.props.getProcessResource(obj[0]);
+    // console.log('chooseModelId-->', processDefinitionId.split(','));
   };
 
   // 修改processDefinitionId
@@ -56,15 +52,9 @@ class DeployedModel extends PureComponent {
         onCancel={closeDeployedModel}
         onOk={this.handleOk}
       >
-        <Tabs
-          onChange={this.chooseTab}
-          onTabClick={this.kkkk}
-          defaultActiveKey="1"
-          tabPosition="left"
-          style={{ height: 260 }}
-        >
+        <Tabs onChange={this.chooseTab} tabPosition="left" style={{ height: 260 }} type="card">
           {deployedModelDatas.map(item => (
-            <TabPane tab={item.name} key={item.processDefinitionId}>
+            <TabPane tab={item.name} key={[item.processDefinitionId, item.name]}>
               {item.name}
             </TabPane>
           ))}
