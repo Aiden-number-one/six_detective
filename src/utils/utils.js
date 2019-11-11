@@ -73,7 +73,6 @@ const getRandowNVPS = () => {
 export function formatTree(list, key = 'departmentId', pKey = 'parentDepartmentId') {
   // deep clone
   const arr = JSON.parse(JSON.stringify(list));
-
   const map = {};
   const tree = [];
 
