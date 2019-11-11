@@ -66,6 +66,11 @@ export default [
             name: 'dataMaintenance',
             component: './AddDataSource/AddDataSource',
           },
+          {
+            path: '/data-management/task-switch',
+            name: 'taskSwitch',
+            component: './TaskSwitch/TaskSwitch',
+          },
         ],
       },
       {

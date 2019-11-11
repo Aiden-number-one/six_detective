@@ -1,10 +1,19 @@
 @import '~@/assets/css/utils.less';
 @import '~@/assets/css/variable.less';
 
+@font-face {
+  font-family: 'AvenirHeavy';
+  src: url('../AvenirHeavy.otf');
+}
+@font-face {
+  font-family: 'AvenirBook';
+  src: url('../AvenirBook.ttc');
+}
+
 :global {
   // 基础表单
   .form-item {
-    margin-right: 20px;
+    padding-right: 20px;
     background-color: #fff;
     .mainTitle {
       width: 300px;
@@ -12,7 +21,7 @@
   }
   @media (min-width: 991px) {
     .form-item {
-      margin-right: 100px;
+      padding-right: 100px;
     }
   }
 
@@ -59,40 +68,105 @@
   // Icon按钮
   .ant-btn-icon-only.ant-btn-sm {
     margin-right: 8px;
+    color: #10416c;
     font-size: 13px;
+    background-color: #e9f0fa;
+    border-color: #e9f0fa;
     border-radius: 0;
   }
 
   // Table查询表单
   .ant-advanced-search-form {
-    margin-top: -10px;
-    padding-top: 0;
-    padding-bottom: 20px;
-    border-bottom: 1px rgba(129, 154, 179, 0.5) solid;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 6px #e6e9ea;
     .ant-row {
+      margin-right: 0 !important;
       margin-left: 0 !important;
     }
     .ant-form-item-label {
-      line-height: 20px;
+      line-height: 24px;
     }
     .btnArea {
       margin-top: 20px;
       .clearfix();
       .ant-btn {
         float: right;
-        margin-right: 15px;
+        margin-right: 14px;
         font-weight: normal;
-        &:first-child {
-          margin-right: 0;
-        }
       }
     }
+    .filterArea {
+      float: left;
+      margin-left: 20px;
+      color: #10416c;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+      .text {
+        text-decoration: underline;
+      }
+    }
+  }
+  .btn2 {
+    float: right;
+  }
+  .clearFix {
+    &::after {
+      display: block;
+      clear: both;
+      content: '';
+    }
+  }
+
+  // content
+  .ant-layout {
+    background-color: #f6f9fa;
+  }
+  .ant-layout-content > div {
+    margin: -10px 0 0 0 !important;
+  }
+
+  // 面包屑
+  .ant-pro-page-header-wrap-page-header-warp {
+    background-color: transparent;
+  }
+  .ant-page-header {
+    padding: 16px 0;
+    background: transparent;
+  }
+  .ant-breadcrumb {
+    color: #10416c;
+    font-size: 12px;
+  }
+  .ant-breadcrumb a {
+    color: #10416c;
+  }
+  .ant-breadcrumb > span:last-child {
+    color: #10416c;
+    font-family: AvenirHeavy, sans-serif;
+  }
+  .ant-page-header-heading {
+    display: none;
+  }
+  .ant-badge-dot {
+    top: 3px;
+    right: 5px;
+  }
+
+  //
+  .ant-pro-page-header-wrap-children-content {
+    margin: 0;
+  }
+
+  .ant-pro-sider-menu-sider {
+    box-shadow: none;
   }
 
   /* 页头相关样式 */
   .ant-layout-header {
-    height: 95px;
-    padding: 0 25px 0 25px !important;
+    height: 60px;
     background-color: #fff;
   }
   // 表单相关
@@ -123,7 +197,7 @@
     padding: 0;
   }
   .ant-checkbox-inner {
-    border: 1px solid #10416c;
+    border: 2px solid #10416c;
   }
   // .ant-checkbox .ant-checkbox-inner::after {
   //   position: absolute;
@@ -137,7 +211,10 @@
   //   content: ' ';
   // }
   .ant-checkbox-checked .ant-checkbox-inner::after {
-    border-color: #fff;
+    border-color: #104164;
+  }
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #fff;
   }
   .ant-checkbox-disabled .ant-checkbox-inner::after {
     border-color: #a9b3bb;
@@ -155,12 +232,12 @@
     padding: 12px;
     color: #10416c;
     background-color: #f2f6f8;
-    border: #f2f6f8;
+    border: 1px solid #f2f6f8;
     resize: none;
   }
   textarea.ant-input:focus,
   textarea.ant-input:hover {
-    border: none;
+    border: 1px solid #10416c;
     box-shadow: none;
   }
 
@@ -168,7 +245,8 @@
   .ant-input {
     height: 36px;
     color: #10416c;
-    border-color: #10416c;
+    background-color: #f1f5f6;
+    border-color: transparent;
     border-radius: 0;
   }
   .ant-input:hover {
@@ -218,7 +296,8 @@
     line-height: 36px;
   }
   .ant-select-selection {
-    border: 1px solid #10416c;
+    background-color: #f1f5f6;
+    border: 1px solid transparent;
     border-radius: 0;
   }
   .ant-select-selection:hover {
@@ -357,10 +436,6 @@
   .ant-radio-wrapper {
     margin-right: 10px;
   }
-  // 面包屑
-  .ant-breadcrumb {
-    font-size: 12px;
-  }
   // 主标题
   h1.ant-typography {
     margin: 0 auto 22px !important;
@@ -390,6 +465,10 @@
   }
 
   // 表格
+  .basicTable {
+    padding: 20px 5px 0;
+    background-color: #fff;
+  }
   .ant-table-thead {
     .ant-checkbox-wrapper {
       display: none;
@@ -397,7 +476,11 @@
   }
   .ant-table-pagination.ant-pagination {
     float: none;
-    text-align: center;
+    text-align: right;
+  }
+  .ant-pagination-options-size-changer .ant-select-selection {
+    background-color: #fff;
+    border: 1px solid #f7f7f7;
   }
 
   .ant-table-thead th {
@@ -414,6 +497,9 @@
   }
   .ant-table-header-column .ant-table-column-title {
     font-size: 14px;
+  }
+  .ant-table-thead > tr > th {
+    background-color: #f1f6f8;
   }
   .ant-table-tbody > tr > td,
   .ant-table-thead > tr > th {
@@ -438,34 +524,38 @@
   }
   .ant-pagination.mini {
     .ant-pagination-prev {
-      margin-right: 23px;
+      margin-right: 5px;
       .ant-pagination-item-link {
-        color: #fff;
-        background: #567494;
+        color: #9ea6aa;
+        background: #fff;
         border-radius: 0;
       }
     }
     .ant-pagination-next {
-      margin-left: 23px;
+      // margin-left: 23px;
       .ant-pagination-item-link {
-        color: #fff;
-        background: #567494;
+        color: #9ea6aa;
+        background: #fff;
         border-radius: 0;
       }
     }
     .ant-pagination-item {
-      border: 0;
+      margin-right: 5px;
+      line-height: 24px;
+      border: 1px solid #10416c;
       a {
-        color: #9cb4c9;
+        color: #73787b;
       }
       &.ant-pagination-item-active a {
-        color: #567494;
-        text-decoration: underline;
+        color: #73787b;
       }
     }
   }
 
   // 气泡
+  .ant-popover-inner {
+    border-radius: 0;
+  }
   .ant-popover-inner-content {
     padding: 0;
   }

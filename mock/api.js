@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-07 13:33:44
- * @LastEditTime: 2019-10-24 14:25:19
+ * @LastEditTime: 2019-11-08 17:47:21
  * @LastEditors: lan
  */
 const getDatas = (req, res) => {
@@ -245,7 +245,7 @@ const getDataSourceList = (req, res) => {
 };
 
 export default {
-  'POST /api/v2.0/kingdom.retl.getDatas.json': getDatas,
-  'POST /api/v2.0/kingdom.retl.delDatas.json': delDatas,
-  'POST /api/v2.0/kingdom.retl.getDataSourceList.json': getDataSourceList,
+  'POST /api/v2.0/bayconnect.superlop.kingdom.retl.getDatas.json': getDatas,
+  'POST /api/v2.0/bayconnect.superlop.kingdom.retl.delDatas.json': delDatas,
+  'POST /api/v2.0/bayconnect.superlop.kingdom.retl.getDataSourceList.json': getDataSourceList,
 };
