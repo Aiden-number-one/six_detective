@@ -354,6 +354,7 @@ export default class DataSource extends PureComponent {
           <WrappedAdvancedSearchForm />
           <TableHeader showSelect showEdit />
           <Table
+            className="basicTable"
             rowSelection={rowSelection}
             dataSource={tableData}
             columns={columns}
