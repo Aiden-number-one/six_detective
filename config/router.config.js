@@ -5,10 +5,10 @@ export default [
     component: '../layouts/UserLayout',
     routes: [{ path: '/login', name: 'login', component: './User/Login' }],
   },
-  {
-    path: '/report-designer',
-    component: './ReportDesigner/ReportDesigner',
-  },
+  // {
+  //   path: '/report-designer',
+  //   component: './ReportDesigner/ReportDesigner',
+  // },
   {
     path: '/sheet',
     component: './Sheet/sheet',
