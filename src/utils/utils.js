@@ -56,12 +56,7 @@ const isUrl = path => reg.test(path);
 
 const isProOrDev = () => {
   const { NODE_ENV } = process.env;
-
-  if (NODE_ENV === 'development') {
-    return true;
-  }
-
-  return false;
+  return NODE_ENV === 'development';
 };
 // 得到随机的NVPS
 const getRandowNVPS = () => {

@@ -10,6 +10,7 @@ export default {
     roleGroups: [],
     roleMenus: [],
     checkedRoleMenus: [],
+    isDelDepartSuccess: false,
   },
   reducers: {
     getOrgs(state, { payload: orgs }) {
@@ -46,6 +47,12 @@ export default {
       return {
         ...state,
         checkedRoleMenus: checkedRoleMenus.map(item => item.menuId),
+      };
+    },
+    delDepartState(state, { payload: isDelDepartSuccess }) {
+      return {
+        ...state,
+        isDelDepartSuccess,
       };
     },
   },
@@ -111,12 +118,17 @@ export default {
       console.log(items);
     },
     *updateDepartment(action, { call }) {
-      const { items } = yield call(fetch('set_department_update'), action.params);
-      console.log(items);
+      yield call(fetch('set_department_update'), action.params);
     },
-    *delDepartment(action, { call }) {
-      const { items } = yield call(fetch('set_department_delete'), action.params);
-      console.log(items);
+    *delDepartment(action, { call, put }) {
+      try {
+        yield call(fetch('set_department_delete'), action.params);
+      } catch (error) {
+        yield put({
+          type: 'delDepartState',
+          payload: false,
+        });
+      }
     },
     *queryEmployees({ params }, { call, put }) {
       const { items } = yield call(fetch('get_user_list_impl'), params);

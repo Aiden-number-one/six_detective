@@ -41,7 +41,7 @@ function getOrgDetail(dispatch, curSelectOrg) {
   }
 }
 
-function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
+function Department({ dispatch, orgs = [], employees = [], departments = [], isDelDepartSuccess }) {
   useEffect(() => {
     dispatch({
       type: 'auth/queryOrgs',
@@ -79,7 +79,6 @@ function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
       departmentName: title,
       parentDepartmentId: parentId,
     };
-    console.log(dept);
 
     setOrg(dept);
     getOrgDetail(dispatch, dept);
@@ -126,13 +125,16 @@ function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
 
   async function deleteDepart(dep = {}) {
     const { departmentId } = dep;
-    await dispatch({
+    dispatch({
       type: 'auth/delDepartment',
       params: {
         departmentId,
       },
     });
-    setChildDeparts(childDeparts.filter(item => item.departmentId !== departmentId));
+
+    if (isDelDepartSuccess) {
+      setChildDeparts(childDeparts.filter(item => item.departmentId !== departmentId));
+    }
   }
 
   if (orgs.length === 0) {
@@ -140,8 +142,6 @@ function Department({ dispatch, orgs = [], employees = [], departments = [] }) {
   }
 
   if (departments.length === 0) {
-    console.log(departments);
-
     return <p>loading </p>;
   }
 
@@ -220,5 +220,6 @@ const mapStateToProps = state => ({
   orgs: state.auth.orgs,
   employees: state.auth.employees,
   departments: state.auth.departments,
+  isDelDepartSuccess: state.auth.isDelDepartSuccess,
 });
 export default connect(mapStateToProps)(Form.create()(Department));
