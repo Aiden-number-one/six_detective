@@ -4,71 +4,47 @@ import { Tree, Input } from 'antd';
 const { TreeNode } = Tree;
 const { Search } = Input;
 
-const x = 3;
-const y = 2;
-const z = 1;
-const gData = [];
-
-const generateData = (_level, _preKey, _tns) => {
-  const preKey = _preKey || '0';
-  const tns = _tns || gData;
-
-  const children = [];
-  for (let i = 0; i < x; i += 1) {
-    const key = `${preKey}-${i}`;
-    tns.push({ title: key, key });
-    if (i < y) {
-      children.push(key);
-    }
-  }
-  if (_level < 0) {
-    return tns;
-  }
-  const level = _level - 1;
-  children.forEach((key, index) => {
-    tns[index].children = [];
-    return generateData(level, key, tns[index].children);
-  });
-  return true;
-};
-generateData(z);
-
 const dataList = [];
-const generateList = data => {
-  for (let i = 0; i < data.length; i += 1) {
-    const node = data[i];
-    const { key } = node;
-    dataList.push({ key, title: key });
-    if (node.children) {
-      generateList(node.children);
-    }
-  }
-};
-generateList(gData);
+let searchValue = '';
 
-const getParentKey = (key, tree) => {
+const getParentKey = (folderId, tree) => {
   let parentKey;
   for (let i = 0; i < tree.length; i += 1) {
     const node = tree[i];
     if (node.children) {
-      if (node.children.some(item => item.key === key)) {
-        parentKey = node.key;
-      } else if (getParentKey(key, node.children)) {
-        parentKey = getParentKey(key, node.children);
+      if (node.children.some(item => item.folderId === folderId)) {
+        parentKey = node.folderId;
+      } else if (getParentKey(folderId, node.children)) {
+        parentKey = getParentKey(folderId, node.children);
       }
     }
   }
   return parentKey;
 };
 
+function pregQuote(str) {
+  return str.replace(/([\\.+*?[^]$(){}=!<>|:])/g, '\\$1');
+}
+
 function loop(orgsTree) {
   return (
     orgsTree &&
     orgsTree.map(item => {
       const { children, folderId, folderName, parentId } = item;
-      if (children) {
+      let index = -1;
+      if (searchValue) {
+        index = item.folderName.indexOf(searchValue);
+      }
+      let lineTitle = `<span>${item.folderName.replace(
+        new RegExp(`(${pregQuote(searchValue)})`, 'gi'),
+        "<span style='color:#f00'>$1</span>",
+      )}</span>`;
+      // eslint-disable-next-line react/no-danger
+      lineTitle = <div dangerouslySetInnerHTML={{ __html: lineTitle }} />;
+      const showTitle = index > -1 ? lineTitle : item.folderName;
+      if (children && showTitle) {
         return (
-          <TreeNode key={folderId} title={folderName} parentId={parentId}>
+          <TreeNode key={folderId} title={showTitle} parentId={parentId}>
             {loop(children)}
           </TreeNode>
         );
@@ -77,11 +53,20 @@ function loop(orgsTree) {
     })
   );
 }
+
 class LeftClassifyTree extends Component {
   state = {
+    initData: [],
     expandedKeys: [],
     autoExpandParent: true,
   };
+
+  static getDerivedStateFromProps(props) {
+    const items = props.getFolderMenuListData && props.getFolderMenuListData.items;
+    return {
+      initData: items,
+    };
+  }
 
   onExpand = expandedKeys => {
     this.setState({
@@ -90,16 +75,33 @@ class LeftClassifyTree extends Component {
     });
   };
 
+  generateList = data => {
+    for (let i = 0; i < data.length; i += 1) {
+      const node = data[i];
+      const { folderId, folderName } = node;
+      dataList.push({ folderId, folderName });
+      if (node.children) {
+        this.generateList(node.children);
+      }
+    }
+  };
+
   onChange = e => {
     const { value } = e.target;
-    const expandedKeys = dataList
-      .map(item => {
-        if (item.title.indexOf(value) > -1) {
-          return getParentKey(item.key, gData);
-        }
-        return null;
-      })
-      .filter((item, i, self) => item && self.indexOf(item) === i);
+    searchValue = value;
+    if (!value) {
+      this.setState({
+        autoExpandParent: false,
+      });
+      return;
+    }
+    const expandedKeys = dataList.map(item => {
+      if (item.folderName.indexOf(value) > -1) {
+        return getParentKey(item.folderId, this.state.initData);
+      }
+      return null;
+    });
+
     this.setState({
       expandedKeys,
       autoExpandParent: true,
@@ -109,32 +111,9 @@ class LeftClassifyTree extends Component {
   render() {
     const { expandedKeys, autoExpandParent } = this.state;
     const { getFolderMenuListData } = this.props;
-    // const loop = data =>
-    //   data.map(item => {
-    //     const index = item.title.indexOf(searchValue);
-    //     const beforeStr = item.title.substr(0, index);
-    //     const afterStr = item.title.substr(index + searchValue.length);
-    //     debugger
-    //     const title =
-    //       index > -1 ? (
-    //         <span>
-    //           {beforeStr}
-    //           <span style={{ color: '#f50' }}>{searchValue}</span>
-    //           {afterStr}
-    //         </span>
-    //       ) : (
-    //         <span>{item.title}</span>
-    //       );
-    //     if (item.children) {
-    //       return (
-    //         <TreeNode key={item.key} title={title}>
-    //           {loop(item.children)}
-    //         </TreeNode>
-    //       );
-    //     }
-    //     return <TreeNode key={item.key} title={title} />;
-    //   });
-
+    if (getFolderMenuListData.items) {
+      this.generateList(getFolderMenuListData.items);
+    }
     return (
       <div>
         <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
