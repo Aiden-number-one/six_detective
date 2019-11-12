@@ -56,4 +56,5 @@ export default {
   updateCodeItem: `${prefix}set_dict_son_update`,
   deleteCodeItem: `${prefix}set_dict_son_del`,
   addCode: `${prefix}add_task_spm_dict_index`,
+  getFolderMenu: `${prefix}get_folder_menu`,
 };

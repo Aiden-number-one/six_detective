@@ -10,6 +10,10 @@ export default [
   //   component: './ReportDesigner/ReportDesigner',
   // },
   {
+    path: '/sheet',
+    component: './Sheet/sheet',
+  },
+  {
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],

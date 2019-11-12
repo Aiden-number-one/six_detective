@@ -2,7 +2,7 @@
  * des: default request interceptor
  * author: iron
  * email: chenggang@szkingdom.com.cn
- * data: 2019.11.07
+ * date: 2019.11.07
  */
 import { notification } from 'antd';
 
@@ -11,8 +11,8 @@ export const dva = {
     onError(e) {
       e.preventDefault();
       notification.error({
-        description: e.toString(),
         message: '解析异常',
+        description: e.toString(),
       });
     },
   },

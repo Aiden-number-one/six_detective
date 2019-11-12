@@ -56,12 +56,7 @@ const isUrl = path => reg.test(path);
 
 const isProOrDev = () => {
   const { NODE_ENV } = process.env;
-
-  if (NODE_ENV === 'development') {
-    return true;
-  }
-
-  return false;
+  return NODE_ENV === 'development';
 };
 // 得到随机的NVPS
 const getRandowNVPS = () => {
@@ -78,7 +73,6 @@ const getRandowNVPS = () => {
 export function formatTree(list, key = 'departmentId', pKey = 'parentDepartmentId') {
   // deep clone
   const arr = JSON.parse(JSON.stringify(list));
-
   const map = {};
   const tree = [];
 

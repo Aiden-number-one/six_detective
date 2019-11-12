@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
 import { connect } from 'dva';
-import LeftClassifyTree from '../../components/LeftClassifyTree/LeftClassifyTree';
-import styles from './TaskSwitch.less';
+import LeftClassifyTree from '@/components/LeftClassifyTree';
+
+import styles from './workFlow.less';
 
 @connect(({ taskSwitch, loading }) => ({
   loading: loading.effects['taskSwitch/getFolderMenuList'],
@@ -28,13 +29,11 @@ class TaskSwitch extends Component {
   };
 
   render() {
-    const { getFolderMenuListData } = this.props;
-
     return (
       <PageHeaderWrapper>
         <div className={styles.taskSwitchWraper}>
           <div className={styles.sidebar}>
-            <LeftClassifyTree getFolderMenuListData={getFolderMenuListData}></LeftClassifyTree>
+            <LeftClassifyTree></LeftClassifyTree>
           </div>
           <div className={styles.main}>task</div>
         </div>
