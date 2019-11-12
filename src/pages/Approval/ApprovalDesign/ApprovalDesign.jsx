@@ -26,7 +26,7 @@ class ApprovalDesign extends PureComponent {
   }
 
   // 获取model列表
-  getModelList = (pageNumber, pageSize) => {
+  getModelList = (pageNumber, pageSize, isShowCallBack2 = false) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'approvalDesign/modelListDatas',
@@ -35,6 +35,7 @@ class ApprovalDesign extends PureComponent {
         pageSize,
       },
       callback: modelId => this.getModelImage(modelId),
+      callback2: isShowCallBack2 ? this.goProcessPage : null,
     });
   };
 
@@ -55,7 +56,7 @@ class ApprovalDesign extends PureComponent {
     dispatch({
       type: 'approvalDesign/createModel',
       payload: param,
-      callback: (pageNumber, pageSize) => this.getModelList(pageNumber, pageSize),
+      callback: (pageNumber, pageSize) => this.getModelList(pageNumber, pageSize, true),
     });
   };
 

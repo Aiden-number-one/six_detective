@@ -43,6 +43,7 @@ export default {
   'menu.systemManagement.workflowDesign': 'Workflow Design',
   'menu.systemManagement.codeMaintenance': 'Code Maintenance',
   'menu.systemManagement.auditLog': 'Audit Log',
+  'menu.systemManagement.scheduling': 'Scheduling Plan',
   'menu.alertManagement': 'ALERT MANAGEMENT',
   'menu.alertManagement.formItem': 'FormItem Reference',
   'menu.alertManagement.Stylespecification': 'Alert Specification',

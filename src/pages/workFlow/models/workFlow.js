@@ -1,18 +1,18 @@
 import Service from '@/utils/Service';
 
-const { getApproval } = Service;
-const approvalCheckModel = {
-  namespace: 'approvalCheck',
+const { getFolderMenu } = Service;
+const taskSwitch = {
+  namespace: 'taskSwitch',
   state: {
-    data: {},
+    data: [],
   },
   effects: {
-    *approvalCheckDatas({ payload }, { call, put }) {
-      const response = yield call(getApproval, { param: payload });
+    *getFolderMenuList({ payload }, { call, put }) {
+      const response = yield call(getFolderMenu, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
-            type: 'setDatas',
+            type: 'getDatas',
             payload: response.bcjson,
           });
         }
@@ -20,7 +20,7 @@ const approvalCheckModel = {
     },
   },
   reducers: {
-    setDatas(state, action) {
+    getDatas(state, action) {
       return {
         ...state,
         data: action.payload,
@@ -28,4 +28,5 @@ const approvalCheckModel = {
     },
   },
 };
-export default approvalCheckModel;
+
+export default taskSwitch;

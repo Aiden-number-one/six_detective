@@ -202,6 +202,11 @@ export default [
             name: 'auditLog',
             component: './AuditLog/AuditLog',
           },
+          {
+            path: '/system-management/scheduling',
+            name: 'scheduling',
+            component: './Scheduling/Scheduling',
+          },
           ...authRoutes,
         ],
       },
