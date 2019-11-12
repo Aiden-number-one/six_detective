@@ -1,11 +1,15 @@
+/*
+ * @Des: default request interceptor
+ * @Author: iron
+ * @Email: chenggang@szkingdom.com.cn
+ * @Date: 2019-11-08 18:06:37
+ * @LastEditors: iron
+ * @LastEditTime: 2019-11-12 10:31:17
+ */
+
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/camelcase */
-/**
- * des: default request interceptor
- * author: iron
- * email: chenggang@szkingdom.com.cn
- * date: 2019.11.07
- */
+
 import { extend } from 'umi-request';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
@@ -73,9 +77,10 @@ export function setReqHeaders(url, NVPS) {
 export function errorHandler(error) {
   if (!error || typeof error === 'string') {
     notification.warn({
-      message: 'operate fail',
+      message: 'oops operate fail',
       description: error || 'error happened',
     });
+
     // throw error,then model will catch
     return Promise.reject(error);
   }

@@ -11,7 +11,7 @@ export default [
   // },
   {
     path: '/sheet',
-    component: './Sheet/sheet',
+    component: './Sheet/Sheet',
   },
   {
     path: '/',

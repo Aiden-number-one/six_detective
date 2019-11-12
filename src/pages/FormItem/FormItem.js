@@ -2,8 +2,8 @@
  * @Description: 表单控件
  * @Author: lan
  * @Date: 2019-10-25 13:42:35
- * @LastEditTime: 2019-11-01 15:44:52
- * @LastEditors: lan
+ * @LastEditTime: 2019-11-11 15:35:16
+ * @LastEditors: iron
  */
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -377,7 +377,7 @@ export default class FormItem extends Component {
                 connection with the above debiting of the Units/Shares.
               </div>
               <div>
-                <Checkbox onChange={() => {}} value="Hedge">
+                <Checkbox onChange={() => {}}>
                   We Confirm that We Understand the above terms and conditions
                 </Checkbox>
               </div>
