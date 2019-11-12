@@ -3,7 +3,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Button, DatePicker, Table, Row, Col } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-// import TableHeader from '@/components/TableHeader';
+import TableHeader from '@/components/TableHeader';
 
 import styles from './AuditLog.less';
 
@@ -175,7 +175,7 @@ class AuditLog extends Component {
           reset={this.operatorReset}
           ref={this.auditLogForm}
         />
-        {/* <TableHeader showEdit showSelect /> */}
+        <TableHeader showEdit={false} showSelect={false} />
         <Table
           dataSource={getAuditLogList}
           pagination={{ total: totalCount, pageSize }}

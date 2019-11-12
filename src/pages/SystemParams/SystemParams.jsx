@@ -284,7 +284,7 @@ class SystemParams extends Component {
               </Modal>
             </div>
             <div>
-              <TableHeader showEdit showSelect></TableHeader>
+              <TableHeader showEdit={false} showSelect={false}></TableHeader>
               <Table
                 dataSource={getSystemParamsList}
                 columns={this.state.columns}
