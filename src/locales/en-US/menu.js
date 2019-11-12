@@ -1,3 +1,11 @@
+/*
+ * @Des: Please Modify First
+ * @Author: iron
+ * @Email: chenggang@szkingdom.com.cn
+ * @Date: 2019-11-08 18:06:37
+ * @LastEditors: iron
+ * @LastEditTime: 2019-11-11 15:31:03
+ */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
   'menu.dataManagement': 'DATA MANAGEMENT',
@@ -35,7 +43,10 @@ export default {
   'menu.systemManagement.workflowDesign': 'Workflow Design',
   'menu.systemManagement.codeMaintenance': 'Code Maintenance',
   'menu.systemManagement.auditLog': 'Audit Log',
+  'menu.systemManagement.scheduling': 'Scheduling Plan',
   'menu.alertManagement': 'ALERT MANAGEMENT',
+  'menu.alertManagement.formItem': 'FormItem Reference',
+  'menu.alertManagement.Stylespecification': 'Alert Specification',
   'menu.welcome': 'Welcome',
   'menu.more-blocks': 'More Blocks',
   'menu.home': 'Home',
