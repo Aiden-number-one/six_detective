@@ -259,7 +259,11 @@ class SystemParams extends Component {
             <div>
               <div>
                 <span>参数类型：</span>
-                <Select defaultValue="请选择" onChange={this.onChangeOption}>
+                <Select
+                  defaultValue="请选择"
+                  onChange={this.onChangeOption}
+                  style={{ width: '220px' }}
+                >
                   <Option value="">请选择</Option>
                   {ParamsTypeData[0] &&
                     ParamsTypeData[0].data.map(element => (

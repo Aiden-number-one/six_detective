@@ -26,6 +26,7 @@ class OperatorForm extends Component {
                   onChange={this.changeBeginDate}
                   className={styles.inputvalue}
                   format="YYYY-MM-DD"
+                  placeholder=""
                 />,
               )}
             </Form.Item>
@@ -37,6 +38,7 @@ class OperatorForm extends Component {
                   onChange={this.changeEndDate}
                   className={styles.inputvalue}
                   format="YYYY-MM-DD"
+                  placeholder=""
                 />,
               )}
             </Form.Item>
