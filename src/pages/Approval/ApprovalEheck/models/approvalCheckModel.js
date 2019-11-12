@@ -13,7 +13,7 @@ const approvalCheckModel = {
         if (response.bcjson.items) {
           yield put({
             type: 'setDatas',
-            payload: response.bcjson.items,
+            payload: response.bcjson,
           });
         }
       }
