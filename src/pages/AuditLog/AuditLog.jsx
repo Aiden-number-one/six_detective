@@ -3,7 +3,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Button, DatePicker, Table, Row, Col } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import TableHeader from '@/components/TableHeader';
+// import TableHeader from '@/components/TableHeader';
 
 import styles from './AuditLog.less';
 
@@ -89,13 +89,13 @@ class AuditLog extends Component {
       },
       {
         title: '状态',
-        dataIndex: 'errCodeName',
-        key: 'errCodeName',
+        dataIndex: 'errorCodeName',
+        key: 'errorCodeName',
       },
       {
         title: '返回信息',
-        dataIndex: 'errorCodeMessage',
-        key: 'errorCodeMessage',
+        dataIndex: 'errorMessage',
+        key: 'errorMessage',
       },
       {
         title: '来访IP',
@@ -175,7 +175,7 @@ class AuditLog extends Component {
           reset={this.operatorReset}
           ref={this.auditLogForm}
         />
-        <TableHeader showEdit showSelect />
+        {/* <TableHeader showEdit showSelect /> */}
         <Table
           dataSource={getAuditLogList}
           pagination={{ total: totalCount, pageSize }}
