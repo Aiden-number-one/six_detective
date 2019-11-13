@@ -42,7 +42,7 @@ export default {
   downloadFile: `${prefix}file_download_quick`,
   getUserList: `${prefix}get_user_list_impl`,
   addUser: `${prefix}set_add_customer`,
-  updateUser: `${prefix}/v2.0prefix+/set_user_edit`,
+  updateUser: `${prefix}set_user_edit`,
   operationUser: `${prefix}set_user_service_impl`,
   emailList: `${prefix}get_mail_config_list`,
   addEmail: `${prefix}set_mail_config_save`,
