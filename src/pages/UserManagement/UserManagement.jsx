@@ -1,29 +1,60 @@
 import React, { Component, Fragment } from 'react';
 
-import { Form, Tree, Button, Input, Modal, Select, Table } from 'antd';
+import { Form, TreeSelect, Tree, Button, Input, Modal, Select, Table } from 'antd';
 import { connect } from 'dva';
 import styles from './user.less';
 
-// const { Option } = Select;
-const { TreeNode } = Tree;
+const { TreeNode } = TreeSelect;
 
 function loop(orgsTree) {
   return orgsTree.map(item => {
     const { children, departmentId, departmentName, parentDepartmentId } = item;
     if (children) {
       return (
-        <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId}>
+        <TreeNode
+          key={departmentId}
+          departmentId={departmentId}
+          value={departmentName}
+          title={departmentName}
+          parentId={parentDepartmentId}
+        >
           {loop(children)}
         </TreeNode>
       );
     }
-    return <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId} />;
+    return (
+      <TreeNode
+        key={departmentId}
+        departmentId={departmentId}
+        value={departmentName}
+        title={departmentName}
+        parentId={parentDepartmentId}
+      />
+    );
   });
 }
 
 class UserForm extends Component {
+  state = {
+    selectValue: undefined,
+    departmentId: '',
+  };
+
+  componentDidUpdate() {
+    this.props.getDepartmentId(this.state.departmentId);
+  }
+
+  selectChange = (value, node) => {
+    this.setState({
+      selectValue: value,
+      departmentId: node.props.eventKey,
+    });
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { orgs } = this.props;
+    const { selectValue } = this.state;
     return (
       <Fragment>
         <div>
@@ -49,7 +80,7 @@ class UserForm extends Component {
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="所属部门：">
-              {getFieldDecorator('department', {
+              {getFieldDecorator('departmentId', {
                 rules: [
                   {
                     required: true,
@@ -57,11 +88,15 @@ class UserForm extends Component {
                   },
                 ],
               })(
-                <Select
+                <TreeSelect
+                  treeDefaultExpandAll
+                  value={selectValue}
                   style={{ width: 300 }}
-                  onChange={this.handleChange}
+                  onSelect={this.selectChange}
                   placeholder="Please select"
-                ></Select>,
+                >
+                  {loop(orgs)}
+                </TreeSelect>,
               )}
             </Form.Item>
             <Form.Item label="登陆密码：">
@@ -350,6 +385,8 @@ class UserManagement extends Component {
     ],
   };
 
+  newDepartmentId = '';
+
   formRef = React.createRef();
 
   updateFormRef = React.createRef();
@@ -455,16 +492,19 @@ class UserManagement extends Component {
     return grade;
   };
 
+  // 获取id
+  getDepartmentId = departmentId => {
+    this.newDepartmentId = departmentId;
+  };
+
   handleOk = () => {
-    // this.setState({ visible: false });
-    // console.log('this.form=', this.form)
     const { dispatch } = this.props;
     this.formRef.current.validateFields((err, values) => {
       const passwordStrength = this.passWordStrength(values.password);
       const param = {
         loginName: values.login,
         customerName: values.name,
-        departmentId: 1001,
+        departmentId: this.newDepartmentId,
         password: values.password,
         passwordStrength,
         mobile: values.phone,
@@ -704,7 +744,11 @@ class UserManagement extends Component {
               onOk={this.handleOk}
               onCancel={this.handleCancel}
             >
-              <NewUserForm ref={this.formRef} orgs={orgs}></NewUserForm>
+              <NewUserForm
+                ref={this.formRef}
+                orgs={orgs}
+                getDepartmentId={this.getDepartmentId}
+              ></NewUserForm>
             </Modal>
             {/* 修改用户 */}
             <Modal
