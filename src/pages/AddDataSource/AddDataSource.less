@@ -8,12 +8,16 @@
   margin-top: 10px;
   padding: 0 10px;
   color: #10416c;
+  font-weight: 500;
   font-size: 16px;
 }
 
 .searchBox {
   margin-top: 10px;
   padding: 0 10px;
+  :global(.ant-input) {
+    background-color: #fff;
+  }
 }
 
 .dataSourceList {
@@ -25,9 +29,14 @@
     justify-content: space-between;
     height: 40px;
     padding: 0 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
     .dataSourceName {
       width: 120px;
       .textOverflow();
+      &:hover {
+        color: #10416c;
+      }
     }
   }
 }

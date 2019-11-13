@@ -230,6 +230,7 @@ function Department({ dispatch, loading, orgs, employees, departments }) {
             </div>
           }
           dataSource={childDeparts}
+          loading={loading['auth/queryDepartments']}
           pagination={
             childDeparts.length > 5
               ? {
@@ -252,7 +253,13 @@ function Department({ dispatch, loading, orgs, employees, departments }) {
             </List.Item>
           )}
         />
-        <Table dataSource={employees} bordered rowKey="loginName" pagination={{ pageSize: 5 }}>
+        <Table
+          bordered
+          rowKey="loginName"
+          loading={loading['auth/queryEmployees']}
+          dataSource={employees}
+          pagination={{ pageSize: 5 }}
+        >
           <Column title="员工姓名" dataIndex="customerName" align="center" />
           <Column title="登录名" dataIndex="loginName" align="center" />
           <Column title="公司部门" dataIndex="departmentName" align="center" />
