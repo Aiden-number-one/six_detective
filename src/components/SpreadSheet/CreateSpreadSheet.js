@@ -8,6 +8,7 @@
  */
 import React, { Component } from 'react';
 import _ from 'lodash';
+import { generateJson } from './spreadSheetUtil';
 
 const styleKeyMap = {
   'font-bold': 'bold',
@@ -25,9 +26,15 @@ export default WrapperComponent =>
       this.clickCellReflectFunc = () => {};
       // 点击cell
       this.clickCell = _.debounce(this.clickCell, 500);
+      // WrapperComponent的ref
+      this.WrapperComponentRef = React.createRef();
     }
 
     componentDidMount() {
+      //
+    }
+
+    initSheet = options => {
       const { data = {} } = this.props;
       const xsOptions = {
         showGrid: true, // 是否显示默认网格
@@ -44,19 +51,19 @@ export default WrapperComponent =>
         fxObj: document.querySelector('#fxFn'),
         row: {
           len: 10,
-          height: 30,
+          height: 23,
           minHeight: 2, // 设置高度可调最小高度
         },
         col: {
           len: 20,
-          width: 50,
+          width: 180,
           indexWidth: 20,
           minWidth: 2, // 设置列最小宽度
           colAttr: [],
         },
         streamCharts: [
-          { finalFirstRows: 0, finalLastRows: 0 },
-          { finalFirstRows: 3, finalLastRows: 10 },
+          // { finalFirstRows: 0, finalLastRows: 0 },
+          // { finalFirstRows: 3, finalLastRows: 10 },
         ],
         isCalCulatorFormula: true, // 是否运算公式
         isCalculatorDropdownRange: true, // 是否运算下拉项
@@ -196,14 +203,17 @@ export default WrapperComponent =>
           },
           requestData({ startRow, endRow, conditions }, callback) {},
         },
+        ...options,
         // hideCol: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       };
       window.xsObj.spreadsheet.locale('zhCn');
       this.spreadSheet = window.xsObj
         .spreadsheet('#x-spreadsheet', xsOptions)
         .loadData(data)
-        .change(() => {});
-    }
+        .change(changeData => {
+          generateJson(changeData);
+        });
+    };
 
     // 点击单元格
     clickCell = (sri, sci) => {
@@ -303,8 +313,9 @@ export default WrapperComponent =>
         getCellStyle: this.getCellStyle,
         setCellCallback: this.setCellCallback,
         insertDeleteRowColumn: this.insertDeleteRowColumn,
+        initSheet: this.initSheet,
         ...this.props,
       };
-      return <WrapperComponent {...props} />;
+      return <WrapperComponent {...props} ref={this.WrapperComponentRef} />;
     }
   };

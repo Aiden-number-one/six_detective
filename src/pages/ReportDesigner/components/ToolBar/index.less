@@ -1,0 +1,310 @@
+.tabs {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 100px;
+  padding: 6px 10px 0;
+  overflow: hidden;
+  font-size: 12px;
+  background: #496699;
+}
+
+.logo {
+  height: 14px;
+  margin: 5px 20px 0 3px;
+}
+
+.group {
+  display: inline-block;
+  padding: 0 10px;
+  vertical-align: top;
+  & + .group {
+    border-left: 1px solid #10416c;
+  }
+}
+
+.tableFormat {
+  max-width: 416px;
+  padding: 10px;
+  background: #fff;
+}
+.table {
+  float: left;
+  margin: 4px;
+  background: #fff;
+  border: 1px solid transparent;
+  cursor: pointer;
+  &:hover {
+    background: #efefef;
+  }
+}
+
+.row {
+  height: 10px;
+  background-color: inherit;
+  border-color: inherit;
+  & + .row {
+    border-top: inherit;
+  }
+}
+.cell {
+  display: inline-block;
+  height: 10px;
+  padding: 0 2px;
+  border-left: 1px solid transparent;
+  i {
+    position: relative;
+    top: 4px;
+    display: inline-block;
+    width: 8px;
+    height: 1px;
+    vertical-align: top;
+    background: #000;
+    & + i {
+      margin-left: 4px;
+    }
+  }
+}
+.horizontalBorder {
+  .row + .row {
+    border-top: inherit;
+  }
+}
+.verticalBorder {
+  .row {
+    .cell + .cell {
+      border-left-color: inherit;
+    }
+  }
+}
+.radioStyle {
+  display: block;
+  height: 40px;
+  line-height: 40px;
+}
+.fileBox {
+  .fileBoxBtn {
+    height: 28px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 26px;
+    background: transparent;
+    border: transparent;
+  }
+}
+
+:global {
+  .loop(@counter) when (@counter > 0) {
+    .loop((@counter - 1)); // next iteration
+
+    .mt@{counter} {
+      margin-top: ~'@{counter}px';
+    }
+
+    .ml@{counter} {
+      margin-left: ~'@{counter}px';
+    }
+
+    .mr@{counter} {
+      margin-right: ~'@{counter}px';
+    }
+
+    .mb@{counter} {
+      margin-bottom: ~'@{counter}px';
+    }
+  }
+  .loop(30);
+
+  .card-container > .ant-tabs-card {
+    position: static;
+  }
+
+  .card-container > .ant-tabs-card > .ant-tabs-content {
+    position: absolute;
+    left: 0;
+    height: 100px;
+    margin-top: -16px;
+  }
+
+  .card-container > .ant-tabs-card > .ant-tabs-content > .ant-tabs-tabpane {
+    padding: 16px;
+    background: rgb(241, 241, 241);
+  }
+
+  .card-container > .ant-tabs-card > .ant-tabs-bar {
+    border-bottom: none;
+  }
+
+  .card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+    // padding: 0 32px;
+    height: 28px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 26px;
+    background: transparent;
+    border-color: transparent;
+    border-radius: 2px 2px 0 0;
+
+    &:hover {
+      background: lighten(#496699, 7%);
+    }
+  }
+
+  .card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
+    color: #333;
+    background: rgb(241, 241, 241);
+    border-color: rgb(241, 241, 241);
+
+    &:hover {
+      background: rgb(241, 241, 241);
+    }
+  }
+
+  .card-container .ant-tabs-nav-container {
+    height: 29px !important;
+  }
+
+  .btn-group-dropmenu {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    &:hover {
+      .btn {
+        border: 1px solid darken(rgb(241, 241, 241), 7%);
+      }
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      height: 28px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .btn-group {
+      border: none;
+    }
+
+    .btn-group .btn {
+      height: 24px;
+      border-top-left-radius: 0 !important;
+      border-top-right-radius: 0 !important;
+      i {
+        transform: scale(0.65) !important;
+      }
+    }
+  }
+
+  .ant-btn {
+    line-height: 1.499;
+  }
+
+  .ant-btn > .anticon + span,
+  .ant-btn > span + .anticon {
+    margin-left: 0;
+  }
+
+  .ant-btn .anticon {
+    vertical-align: middle;
+  }
+
+  .ant-btn.with-icon {
+    width: 10px;
+    padding: 0 !important;
+    text-align: center;
+
+    i {
+      position: relative;
+      top: -1px;
+      left: -2px;
+      color: #999;
+      transform: scale(0.65) !important;
+    }
+
+    &:focus {
+      background: darken(rgb(241, 241, 241), 12%);
+      border-color: darken(rgb(241, 241, 241), 12%);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+
+      i {
+        color: #fff;
+      }
+    }
+  }
+
+  .btn-group {
+    display: inline-block;
+    border: 1px solid transparent;
+
+    &:hover {
+      .ant-btn {
+        border: 1px solid darken(rgb(241, 241, 241), 7%);
+      }
+    }
+
+    &.active {
+      .ant-btn {
+        background: darken(rgb(241, 241, 241), 12%);
+        border: 1px solid darken(rgb(241, 241, 241), 7%);
+        i {
+          color: #fff;
+        }
+      }
+    }
+
+    > .ant-btn:last-child:not(:first-child),
+    .ant-btn-group > span:last-child:not(:first-child) > .ant-btn {
+      border-top-right-radius: 1px;
+      border-bottom-right-radius: 1px;
+    }
+
+    > .ant-btn:first-child:not(:last-child),
+    > span:first-child:not(:last-child) > .ant-btn {
+      border-top-left-radius: 1px;
+      border-bottom-left-radius: 1px;
+    }
+  }
+
+  .ant-btn.btn {
+    height: 24px;
+    padding: 0 2px;
+    color: #333;
+    font-size: 12px;
+    vertical-align: top;
+    background: rgb(241, 241, 241);
+    border: 1px solid transparent;
+    border-radius: 2px;
+    box-shadow: none;
+
+    &.btn-lg {
+      height: 52px;
+      padding: 0 5px;
+      i {
+        font-size: 16px;
+      }
+
+      p {
+        margin-bottom: 0;
+      }
+    }
+
+    &:hover {
+      color: #333;
+      background: darken(rgb(241, 241, 241), 7%);
+      border-color: darken(rgb(241, 241, 241), 7%);
+    }
+
+    &.active {
+      background: darken(rgb(241, 241, 241), 12%);
+      border-color: darken(rgb(241, 241, 241), 12%);
+
+      i {
+        color: #fff;
+      }
+    }
+  }
+}
