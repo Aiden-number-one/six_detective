@@ -15,7 +15,7 @@ export const userManagementModel = {
   effects: {
     *userManagemetDatas({ payload }, { call, put }) {
       const response = yield call(getUserList, { param: payload });
-      if (response.bcjson.flag === '1') {
+      if (response.bcjson.flag === '1' || !response.bcjson.flag) {
         if (response.bcjson.items) {
           yield put({
             type: 'setDatas',
@@ -35,7 +35,7 @@ export const userManagementModel = {
         }
       }
     },
-    *updateUserModelDatas({ payload }, { call, put }) {
+    *updateUserModelDatas({ payload, callback }, { call, put }) {
       const response = yield call(updateUser, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -44,6 +44,7 @@ export const userManagementModel = {
             payload: response.bcjson.items,
           });
         }
+        callback();
       }
     },
     *operationUserModelDatas({ payload, callback }, { call, put }) {

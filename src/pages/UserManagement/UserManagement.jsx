@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { Form, TreeSelect, Tree, Button, Input, Modal, Select, Table } from 'antd';
+import { Form, TreeSelect, Button, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
 import styles from './user.less';
 
@@ -155,11 +155,27 @@ class UserForm extends Component {
 const NewUserForm = Form.create({})(UserForm);
 
 class UpdateForm extends Component {
-  state = {};
+  state = {
+    selectValue: undefined,
+    departmentId: '',
+  };
+
+  componentDidUpdate() {
+    this.props.getDepartmentId(this.state.departmentId);
+  }
+
+  selectChange = (value, node) => {
+    this.setState({
+      selectValue: value,
+      departmentId: node.props.eventKey,
+    });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { orgs } = this.props;
+    const { orgs, userInfo } = this.props;
+    console.log('userInfo=', userInfo);
+    const { selectValue } = this.state;
     return (
       <Fragment>
         <div>
@@ -172,6 +188,7 @@ class UpdateForm extends Component {
                     message: 'Please input your 登陆名',
                   },
                 ],
+                initialValue: userInfo.login,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="员工姓名：">
@@ -182,26 +199,28 @@ class UpdateForm extends Component {
                     message: 'Please input your 员工姓名',
                   },
                 ],
+                initialValue: userInfo.name,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="所属部门：">
-              {getFieldDecorator('department', {
+              {getFieldDecorator('departmentId', {
                 rules: [
                   {
                     required: true,
                     message: 'Please input your 所属部门',
                   },
                 ],
+                initialValue: userInfo.departmentName,
               })(
-                <Select
+                <TreeSelect
+                  treeDefaultExpandAll
+                  value={selectValue}
                   style={{ width: 300 }}
-                  onChange={this.handleChange}
+                  onSelect={this.selectChange}
                   placeholder="Please select"
                 >
-                  <div>
-                    <Tree>{loop(orgs)}</Tree>
-                  </div>
-                </Select>,
+                  {loop(orgs)}
+                </TreeSelect>,
               )}
             </Form.Item>
             <Form.Item label="邮箱地址：">
@@ -216,6 +235,7 @@ class UpdateForm extends Component {
                     message: 'Please confirm your 邮箱地址!',
                   },
                 ],
+                initialValue: userInfo.email,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
           </Form>
@@ -331,10 +351,7 @@ class UserManagement extends Component {
     userInfo: {
       login: '',
       name: '',
-      department: '',
-      password: '',
-      confirm: '',
-      phone: '',
+      departmentId: '',
       email: '',
     },
     columns: [
@@ -355,8 +372,8 @@ class UserManagement extends Component {
       },
       {
         title: '状态',
-        dataIndex: 'custStatusName',
-        key: 'custStatusName',
+        dataIndex: 'custStatus',
+        key: 'custStatus',
       },
       {
         title: '操作',
@@ -518,8 +535,24 @@ class UserManagement extends Component {
   };
 
   updateConfirm = () => {
+    const { dispatch } = this.props;
     this.updateFormRef.current.validateFields((err, values) => {
-      console.log('err, values=', err, values);
+      const param = {
+        custCustomerno: '77029',
+        loginName: values.login,
+        customerName: values.name,
+        departmentId: this.newDepartmentId,
+        email: values.email,
+      };
+      dispatch({
+        type: 'userManagement/updateUserModelDatas',
+        payload: param,
+        callback: () => {
+          this.queryUser({
+            customerno: '77029',
+          });
+        },
+      });
     });
     this.setState({
       updateVisible: false,
@@ -540,8 +573,21 @@ class UserManagement extends Component {
 
   updateUser = (res, obj) => {
     console.log('obj=', obj, res);
+    const userInfo = {
+      login: '',
+      name: '',
+      departmentName: '',
+      departmentId: '',
+      email: '',
+    };
+    userInfo.login = obj.loginName;
+    userInfo.name = obj.customerName;
+    userInfo.departmentName = obj.departmentName;
+    userInfo.departmentId = obj.departmentId;
+    userInfo.email = obj.email;
     this.setState({
       updateVisible: true,
+      userInfo,
     });
   };
 
@@ -716,6 +762,7 @@ class UserManagement extends Component {
 
   render() {
     const { orgs } = this.props;
+    const { userInfo } = this.state;
     return (
       <Fragment>
         <div>
@@ -757,7 +804,12 @@ class UserManagement extends Component {
               onOk={this.updateConfirm}
               onCancel={this.updateCancel}
             >
-              <NewUpdateForm ref={this.updateFormRef}></NewUpdateForm>
+              <NewUpdateForm
+                ref={this.updateFormRef}
+                orgs={orgs}
+                userInfo={userInfo}
+                getDepartmentId={this.getDepartmentId}
+              ></NewUpdateForm>
             </Modal>
             {/* 锁定 */}
             <Modal
