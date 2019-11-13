@@ -1,6 +1,7 @@
+import { message } from 'antd';
 import Service from '@/utils/Service';
 
-const { getSchedule } = Service;
+const { getSchedule, scheduleDelete } = Service;
 
 const scheduleModel = {
   namespace: 'schedule',
@@ -17,6 +18,13 @@ const scheduleModel = {
             payload: response.bcjson,
           });
         }
+      }
+    },
+    *deleteScheduleBatch({ payload, callback }, { call }) {
+      const response = yield call(scheduleDelete, { param: payload });
+      if (response.bcjson.flag === '1') {
+        message.success('删除成功');
+        callback();
       }
     },
   },
