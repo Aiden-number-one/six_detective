@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Input, Button, DatePicker, Table, Row, Col, Select, Switch } from 'antd';
+import { Form, Input, Button, DatePicker, Table, Row, Col, Select, Switch, Modal } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import TableHeader from '@/components/TableHeader';
@@ -96,6 +96,7 @@ class Scheduling extends Component {
     pageSize: '10',
     otherParam: {},
     selectedRows: [],
+    modifyVisible: false,
     columns: [
       {
         title: '序号',
@@ -241,6 +242,24 @@ class Scheduling extends Component {
     });
   };
 
+  modifySchedule = () => {
+    this.setState({
+      modifyVisible: true,
+    });
+  };
+
+  modifyConfirm = () => {
+    this.setState({
+      modifyVisible: false,
+    });
+  };
+
+  modifyCancel = () => {
+    this.setState({
+      modifyVisible: false,
+    });
+  };
+
   render() {
     const { scheduleListData } = this.props;
     const { pageSize } = this.state;
@@ -262,7 +281,12 @@ class Scheduling extends Component {
           reset={this.operatorReset}
           ref={this.auditLogForm}
         />
-        <TableHeader showEdit showSelect deleteTableData={this.deleteScheduleRow} />
+        <TableHeader
+          showEdit
+          showSelect
+          editTableData={this.modifySchedule}
+          deleteTableData={this.deleteScheduleRow}
+        />
         <Table
           dataSource={scheduleList}
           pagination={{ total: totalCount, pageSize, showSizeChanger: true }}
@@ -270,6 +294,12 @@ class Scheduling extends Component {
           columns={this.state.columns}
           rowSelection={rowSelection}
         />
+        <Modal
+          title="修改调度计划"
+          visible={this.state.modifyVisible}
+          onOk={this.modifyConfirm}
+          onCancel={this.modifyCancel}
+        ></Modal>
       </PageHeaderWrapper>
     );
   }
