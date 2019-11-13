@@ -59,7 +59,7 @@ class UserForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="登陆名：">
               {getFieldDecorator('login', {
                 rules: [
@@ -92,7 +92,7 @@ class UserForm extends Component {
                 <TreeSelect
                   treeDefaultExpandAll
                   value={selectValue}
-                  style={{ width: 300 }}
+                  style={{ width: 220 }}
                   onSelect={this.selectChange}
                   placeholder="Please select"
                 >
@@ -179,7 +179,7 @@ class UpdateForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="登陆名：">
               {getFieldDecorator('login', {
                 rules: [
@@ -215,7 +215,7 @@ class UpdateForm extends Component {
                 <TreeSelect
                   treeDefaultExpandAll
                   value={selectValue}
-                  style={{ width: 300 }}
+                  style={{ width: 220 }}
                   onSelect={this.selectChange}
                   placeholder="Please select"
                 >
@@ -252,7 +252,7 @@ class PasswordForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="原密码：">
               {getFieldDecorator('oldPassword', {
                 rules: [
@@ -301,7 +301,7 @@ class ResetPasswordForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="登陆密码：">
               {getFieldDecorator('password', {
                 rules: [
