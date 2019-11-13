@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { Tree, Col, Row, Divider, Button } from 'antd';
+import styles from './Auth.less';
 
 const { TreeNode } = Tree;
 
@@ -33,34 +34,43 @@ function loopRoleMenus(roleMenusTree) {
   });
 }
 
-function Auth({ dispatch, roleGroups = [], roleMenus = [], checkedRoleMenus = [] }) {
+function Auth({ dispatch, roleGroups, publicMenus, checkedRoleMenus }) {
   useEffect(() => {
-    // dispatch({
-    //   type: 'auth/queryRoleGroups',
-    // });
-    // dispatch({
-    //   type: 'auth/queryRoleMenus',
-    // });
+    dispatch({
+      type: 'auth/queryRoleGroups',
+    });
+    dispatch({
+      type: 'auth/queryPublicMenus',
+      params: {
+        endType: '0',
+      },
+    });
   }, []);
 
   const [curRoleId, setCurRoleId] = useState('');
   const [checkedMenuKeys, setCheckedMenuKeys] = useState([]);
   const [isAuthMenuVisible, setAuthMenuVisible] = useState(false);
 
-  async function handleSelect(key, info) {
+  useEffect(() => {
+    setCheckedMenuKeys(checkedRoleMenus);
+  }, [checkedRoleMenus]);
+
+  async function handleSelect(selectedKeys, info) {
     const { roleId } = info.node.props;
     if (roleId) {
-      console.log(roleId);
+      setCurRoleId(roleId);
       dispatch({
         type: 'auth/queryRoleMenusById',
         params: {
           roleId,
         },
       });
-      setCurRoleId(roleId);
-      setCheckedMenuKeys(checkedRoleMenus);
     }
     setAuthMenuVisible(!!roleId);
+  }
+
+  function checkHandle(checkedKeys) {
+    setCheckedMenuKeys(checkedKeys);
   }
 
   function setRoleMenu() {
@@ -73,17 +83,19 @@ function Auth({ dispatch, roleGroups = [], roleMenus = [], checkedRoleMenus = []
     });
   }
 
-  if (roleGroups.length === 0 && roleMenus.length === 0) {
+  if (roleGroups.length === 0 && publicMenus.length === 0) {
     return <p>loading</p>;
   }
 
   return (
     <div>
-      <Row>
-        <Col span={12}>
-          <Tree onSelect={handleSelect}>{loopRoleGroups(roleGroups)}</Tree>
+      <Row className={styles.container}>
+        <Col span={8}>
+          <Tree className={styles.tree} onSelect={handleSelect}>
+            {loopRoleGroups(roleGroups)}
+          </Tree>
         </Col>
-        <Col span={12}>
+        <Col span={8} offset={4}>
           <div>
             <Button type="danger" onClick={setRoleMenu} disabled={!isAuthMenuVisible}>
               授权菜单权限
@@ -91,7 +103,7 @@ function Auth({ dispatch, roleGroups = [], roleMenus = [], checkedRoleMenus = []
             <Button
               type="danger"
               disabled={!isAuthMenuVisible}
-              onClick={() => setCheckedMenuKeys(roleMenus.map(menu => menu.menuId))}
+              onClick={() => setCheckedMenuKeys(publicMenus.map(menu => menu.menuId))}
             >
               选择全部权限
             </Button>
@@ -101,8 +113,13 @@ function Auth({ dispatch, roleGroups = [], roleMenus = [], checkedRoleMenus = []
           </div>
           <Divider />
           {isAuthMenuVisible && (
-            <Tree checkable checkedKeys={checkedMenuKeys}>
-              {loopRoleMenus(roleMenus)}
+            <Tree
+              className={styles.tree}
+              checkable
+              checkedKeys={checkedMenuKeys}
+              onCheck={checkHandle}
+            >
+              {loopRoleMenus(publicMenus)}
             </Tree>
           )}
         </Col>
@@ -111,9 +128,9 @@ function Auth({ dispatch, roleGroups = [], roleMenus = [], checkedRoleMenus = []
   );
 }
 
-const mapStateToProps = state => ({
-  roleGroups: state.auth.roleGroups,
-  roleMenus: state.auth.roleMenus,
-  checkedRoleMenus: state.auth.checkedRoleMenus,
+const mapStateToProps = ({ auth: { roleGroups, publicMenus, checkedRoleMenus } }) => ({
+  roleGroups,
+  publicMenus,
+  checkedRoleMenus,
 });
 export default connect(mapStateToProps)(Auth);

@@ -5,13 +5,13 @@ export default [
     component: '../layouts/UserLayout',
     routes: [{ path: '/login', name: 'login', component: './User/Login' }],
   },
-  {
-    path: '/report-designer',
-    component: './ReportDesigner/ReportDesigner',
-  },
+  // {
+  //   path: '/report-designer',
+  //   component: './ReportDesigner/ReportDesigner',
+  // },
   {
     path: '/sheet',
-    component: './Sheet/sheet',
+    component: './Sheet/Sheet',
   },
   {
     path: '/',
@@ -201,6 +201,11 @@ export default [
             path: '/system-management/audit-log',
             name: 'auditLog',
             component: './AuditLog/AuditLog',
+          },
+          {
+            path: '/system-management/scheduling',
+            name: 'scheduling',
+            component: './Scheduling/Scheduling',
           },
           ...authRoutes,
         ],

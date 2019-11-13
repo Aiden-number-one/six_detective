@@ -1,10 +1,25 @@
 import React, { Component, Fragment } from 'react';
 
-import { Form, Button, Input, Modal, Select, Table } from 'antd';
+import { Form, Tree, Button, Input, Modal, Select, Table } from 'antd';
 import { connect } from 'dva';
 import styles from './user.less';
 
-const { Option } = Select;
+// const { Option } = Select;
+const { TreeNode } = Tree;
+
+function loop(orgsTree) {
+  return orgsTree.map(item => {
+    const { children, departmentId, departmentName, parentDepartmentId } = item;
+    if (children) {
+      return (
+        <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId}>
+          {loop(children)}
+        </TreeNode>
+      );
+    }
+    return <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId} />;
+  });
+}
 
 class UserForm extends Component {
   render() {
@@ -46,11 +61,7 @@ class UserForm extends Component {
                   style={{ width: 300 }}
                   onChange={this.handleChange}
                   placeholder="Please select"
-                >
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="Yiminghe">yiminghe</Option>
-                </Select>,
+                ></Select>,
               )}
             </Form.Item>
             <Form.Item label="登陆密码：">
@@ -113,6 +124,7 @@ class UpdateForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { orgs } = this.props;
     return (
       <Fragment>
         <div>
@@ -151,9 +163,9 @@ class UpdateForm extends Component {
                   onChange={this.handleChange}
                   placeholder="Please select"
                 >
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="Yiminghe">yiminghe</Option>
+                  <div>
+                    <Tree>{loop(orgs)}</Tree>
+                  </div>
                 </Select>,
               )}
             </Form.Item>
@@ -270,6 +282,7 @@ const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
 @connect(({ userManagement, loading }) => ({
   loading: loading.effects['userManagement/userManagemetDatas'],
   userManagementData: userManagement.data,
+  orgs: userManagement.orgs,
 }))
 class UserManagement extends Component {
   state = {
@@ -501,7 +514,7 @@ class UserManagement extends Component {
   lockConfirm = () => {
     const { dispatch } = this.props;
     const param = {
-      custCustomerno: 3047,
+      custCustomerno: 77029,
       operationType: 1,
     };
     console.log(11111111112222);
@@ -511,7 +524,7 @@ class UserManagement extends Component {
       callback: () => {
         console.log('okk');
         this.queryUser({
-          customerno: '3047',
+          customerno: '77029',
         });
       },
     });
@@ -536,7 +549,7 @@ class UserManagement extends Component {
   closingConfirm = () => {
     const { dispatch } = this.props;
     const param = {
-      custCustomerno: 3047,
+      custCustomerno: 77029,
       operationType: 3,
     };
     dispatch({
@@ -544,7 +557,7 @@ class UserManagement extends Component {
       payload: param,
       callback: () => {
         this.queryUser({
-          customerno: '3047',
+          customerno: '77029',
         });
         this.setState({
           closingVisible: false,
@@ -572,7 +585,7 @@ class UserManagement extends Component {
       console.log('err, values=', err, values);
       const passwordStrength = this.passWordStrength(values.password);
       const param = {
-        custCustomerno: 3047,
+        custCustomerno: 77029,
         operationType: 5,
         oldPassword: values.oldPassword,
         password: values.password,
@@ -609,7 +622,7 @@ class UserManagement extends Component {
       console.log('err, values=', err, values);
       const passwordStrength = this.passWordStrength(values.password);
       const param = {
-        custCustomerno: 3047,
+        custCustomerno: 77029,
         operationType: 6,
         password: values.password,
         passwordStrength,
@@ -642,14 +655,27 @@ class UserManagement extends Component {
     });
   };
 
+  // 查询部门
+  queryDepartment = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'userManagement/queryOrgs',
+      params: {
+        treeLevel: '2',
+      },
+    });
+  };
+
   componentDidMount() {
     const obj = {
-      customerno: '3047',
+      customerno: '77029',
     };
     this.queryUser(obj);
+    this.queryDepartment();
   }
 
   render() {
+    const { orgs } = this.props;
     return (
       <Fragment>
         <div>
@@ -678,7 +704,7 @@ class UserManagement extends Component {
               onOk={this.handleOk}
               onCancel={this.handleCancel}
             >
-              <NewUserForm ref={this.formRef}></NewUserForm>
+              <NewUserForm ref={this.formRef} orgs={orgs}></NewUserForm>
             </Modal>
             {/* 修改用户 */}
             <Modal

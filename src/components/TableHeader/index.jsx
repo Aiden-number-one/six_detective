@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Checkbox, Button, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import styles from './index.less';
 
 export default class StandardTable extends PureComponent {
@@ -14,13 +14,10 @@ export default class StandardTable extends PureComponent {
   };
 
   render() {
-    const { showEdit, showSelect, deleteTableData, editTableData, addTableData } = this.props;
+    const { showEdit, deleteTableData, editTableData, addTableData } = this.props;
     return (
       <>
         <div className={styles.tableHeader}>
-          <Checkbox style={{ visibility: showSelect ? 'visible' : 'hidden' }} showSelect>
-            Select All
-          </Checkbox>
           {showEdit && (
             <div>
               <Button

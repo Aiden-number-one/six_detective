@@ -20,7 +20,7 @@ export default {
   },
 
   effects: {
-    *modelListDatas({ payload, callback }, { call, put }) {
+    *modelListDatas({ payload, callback, callback2 }, { call, put }) {
       const response = yield call(getModelList, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -31,6 +31,9 @@ export default {
           callback(
             response.bcjson.items && response.bcjson.items[0] && response.bcjson.items[0].id,
           );
+          if (callback2) {
+            callback2();
+          }
         }
       }
     },

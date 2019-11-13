@@ -2,7 +2,7 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-11-04 16:27:02
+ * @LastEditTime: 2019-11-13 09:26:52
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -67,11 +67,11 @@ class Login extends Component {
     });
   };
 
-  changeAutoLogin = e => {
-    // this.setState({
-    //   autoLogin: e.target.checked,
-    // });
-  };
+  // changeAutoLogin = e => {
+  // this.setState({
+  //   autoLogin: e.target.checked,
+  // });
+  // };
 
   renderMessage = content => (
     <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
@@ -81,7 +81,7 @@ class Login extends Component {
     const { type, submitting } = this.state;
     return (
       <div className={styles.main}>
-        <Login
+        <LoginComponent
           defaultActiveKey={type}
           onTabChange={this.onTabChange}
           onSubmit={this.handleSubmit}
@@ -140,7 +140,7 @@ class Login extends Component {
           <Submit loading={submitting} style={{ height: 40 }}>
             <FormattedMessage id="LOG IN" />
           </Submit>
-        </Login>
+        </LoginComponent>
       </div>
     );
   }

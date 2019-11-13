@@ -31,6 +31,10 @@ class ApprovalEheck extends PureComponent {
     });
   };
 
+  handleReset = () => {
+    this.props.form.resetFields();
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -60,26 +64,26 @@ class ApprovalEheck extends PureComponent {
     // const { dataSource } = this.state;
     const { getFieldDecorator } = this.props.form;
     const { approvalData = {} } = this.props;
-    const dataSource = approvalData.resultList;
+    const dataSource = approvalData.items;
     const checkColumns = [
       {
         title: '审批号',
-        dataIndex: 'businessCode',
+        dataIndex: 'procInst',
         align: 'center',
       },
       {
         title: '业务名称',
-        dataIndex: 'createrName',
+        dataIndex: 'taskName',
         align: 'center',
       },
       {
         title: '业务说明',
-        dataIndex: 'procDef',
+        dataIndex: 'businessInfo',
         align: 'center',
       },
       {
         title: '发起人',
-        dataIndex: 'taskName',
+        dataIndex: 'createrName',
         align: 'center',
       },
       {
@@ -150,7 +154,7 @@ class ApprovalEheck extends PureComponent {
                 </Col>
               </Row>
               <div className="btnArea">
-                <Button type="primary" icon="close">
+                <Button type="primary" icon="close" onClick={this.handleReset}>
                   重置
                 </Button>
                 <Button type="primary" htmlType="submit">

@@ -26,6 +26,7 @@ class OperatorForm extends Component {
                   onChange={this.changeBeginDate}
                   className={styles.inputvalue}
                   format="YYYY-MM-DD"
+                  placeholder=""
                 />,
               )}
             </Form.Item>
@@ -37,6 +38,7 @@ class OperatorForm extends Component {
                   onChange={this.changeEndDate}
                   className={styles.inputvalue}
                   format="YYYY-MM-DD"
+                  placeholder=""
                 />,
               )}
             </Form.Item>
@@ -87,13 +89,13 @@ class AuditLog extends Component {
       },
       {
         title: '状态',
-        dataIndex: 'errCodeName',
-        key: 'errCodeName',
+        dataIndex: 'errorCodeName',
+        key: 'errorCodeName',
       },
       {
         title: '返回信息',
-        dataIndex: 'errorCodeMessage',
-        key: 'errorCodeMessage',
+        dataIndex: 'errorMessage',
+        key: 'errorMessage',
       },
       {
         title: '来访IP',
@@ -173,7 +175,7 @@ class AuditLog extends Component {
           reset={this.operatorReset}
           ref={this.auditLogForm}
         />
-        <TableHeader showEdit showSelect />
+        <TableHeader showEdit={false} showSelect={false} />
         <Table
           dataSource={getAuditLogList}
           pagination={{ total: totalCount, pageSize }}
