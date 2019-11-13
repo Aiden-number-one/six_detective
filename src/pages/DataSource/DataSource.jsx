@@ -363,6 +363,7 @@ export default class DataSource extends PureComponent {
               total: 12,
               size: 'small',
               showSizeChanger: true,
+              showTotal: total => `Total ${total} items`,
             }}
             scroll={{ x: 'max-content' }}
           />

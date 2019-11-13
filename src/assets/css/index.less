@@ -196,7 +196,8 @@
     padding: 0;
   }
   .ant-checkbox-inner {
-    border: 2px solid #10416c;
+    background-color: #cfddea;
+    border: 1px solid #cfddea;
   }
   // .ant-checkbox .ant-checkbox-inner::after {
   //   position: absolute;
@@ -210,10 +211,10 @@
   //   content: ' ';
   // }
   .ant-checkbox-checked .ant-checkbox-inner::after {
-    border-color: #104164;
+    border-color: #fff;
   }
   .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #fff;
+    background-color: #104164;
   }
   .ant-checkbox-disabled .ant-checkbox-inner::after {
     border-color: #a9b3bb;
@@ -411,7 +412,8 @@
 
   /* radio相关 */
   .ant-radio-inner {
-    border-color: #10416c;
+    background-color: #cfddea;
+    border-color: #cfddea;
   }
   .ant-radio-checked .ant-radio-inner {
     background-color: #10416c;
@@ -468,11 +470,11 @@
     padding: 20px 5px 0;
     background-color: #fff;
   }
-  .ant-table-thead {
-    .ant-checkbox-wrapper {
-      display: none;
-    }
-  }
+  // .ant-table-thead {
+  //   .ant-checkbox-wrapper {
+  //     display: none;
+  //   }
+  // }
   .ant-table-pagination.ant-pagination {
     float: none;
     text-align: right;
@@ -522,6 +524,7 @@
     background: transparent;
   }
   .ant-pagination.mini {
+    padding-left: 15px;
     .ant-pagination-prev {
       margin-right: 5px;
       .ant-pagination-item-link {
@@ -548,6 +551,9 @@
       &.ant-pagination-item-active a {
         color: #73787b;
       }
+    }
+    .ant-pagination-total-text {
+      float: left;
     }
   }
 
