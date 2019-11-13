@@ -1,10 +1,13 @@
 import Service from '@/utils/Service';
+import fetch from '@/utils/request.default';
+import { formatTree } from '@/utils/utils';
 
 const { getUserList, addUser, updateUser, operationUser } = Service;
 export const userManagementModel = {
   namespace: 'userManagement',
   state: {
     data: [],
+    orgs: [],
     datas: {},
     operationDatas: {},
     updateDatas: {},
@@ -55,6 +58,13 @@ export const userManagementModel = {
         }
       }
     },
+    *queryOrgs(action, { call, put }) {
+      const { items } = yield call(fetch('get_departments_info'), action.params);
+      yield put({
+        type: 'getOrgs',
+        payload: items,
+      });
+    },
   },
   reducers: {
     setDatas(state, action) {
@@ -79,6 +89,12 @@ export const userManagementModel = {
       return {
         ...state,
         datas: action.payload,
+      };
+    },
+    getOrgs(state, { payload: orgs }) {
+      return {
+        ...state,
+        orgs: formatTree(orgs),
       };
     },
   },

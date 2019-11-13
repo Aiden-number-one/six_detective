@@ -1,3 +1,12 @@
+/*
+ * @Des: Dept table comp
+ * @Author: iron
+ * @Email: chenggang@szkingdom.com.cn
+ * @Date: 2019-11-05 14:54:02
+ * @LastEditors: iron
+ * @LastEditTime: 2019-11-11 16:28:42
+ */
+
 import React, { useState } from 'react';
 import { Table, Input, Form, Divider } from 'antd';
 

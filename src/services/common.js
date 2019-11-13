@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-11-12 17:32:37
+ * @LastEditTime: 2019-11-13 09:25:23
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -17,7 +17,7 @@ export default {
   delDatas: 'kingdom.retl.delDatas',
   getDataSourceList: 'kingdom.retl.getDataSourceList',
   getLogin: 'get_website_login', // 登录
-  getApproval: `${prefix}get_approval_list_page`,
+  getApproval: `${prefix}get_audit_history_list_page`,
   getConfig: `${prefix}get_audit_config_list_page`,
   addConfig: `${prefix}set_audit_config_add`,
   saveConfig: `${prefix}set_audit_config_save`,
@@ -37,6 +37,7 @@ export default {
   setConfigStatus: `${prefix}set_audit_config_status_update`,
   getRoleGroup: `${prefix}get_role_group_query`,
   getAuditorlist: `${prefix}get_auditor_list`,
+  getSchedule: `${prefix}get_schedule_list_page`,
   downloadFile: `${prefix}file_download_quick`,
   getUserList: `${prefix}get_user_list_impl`,
   addUser: `${prefix}set_add_customer`,
@@ -55,4 +56,5 @@ export default {
   updateCodeItem: `${prefix}set_dict_son_update`,
   deleteCodeItem: `${prefix}set_dict_son_del`,
   addCode: `${prefix}add_task_spm_dict_index`,
+  getFolderMenu: `${prefix}get_folder_menu`,
 };

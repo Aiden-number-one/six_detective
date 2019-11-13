@@ -10,6 +10,10 @@ export default [
   //   component: './ReportDesigner/ReportDesigner',
   // },
   {
+    path: '/sheet',
+    component: './Sheet/Sheet',
+  },
+  {
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
@@ -197,6 +201,11 @@ export default [
             path: '/system-management/audit-log',
             name: 'auditLog',
             component: './AuditLog/AuditLog',
+          },
+          {
+            path: '/system-management/scheduling',
+            name: 'scheduling',
+            component: './Scheduling/Scheduling',
           },
           ...authRoutes,
         ],

@@ -1,16 +1,20 @@
+/*
+ * @Des: default request interceptor
+ * @Author: iron
+ * @Email: chenggang@szkingdom.com.cn
+ * @Date: 2019-11-08 18:06:37
+ * @LastEditors: iron
+ * @LastEditTime: 2019-11-12 10:31:17
+ */
+
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/camelcase */
-/**
- * des: default request interceptor
- * author: iron
- * email: chenggang@szkingdom.com.cn
- * data: 2019.11.07
- */
+
 import { extend } from 'umi-request';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
 import { notification } from 'antd';
-import { getRandowNVPS } from './utils';
+import { getRandowNVPS, isProOrDev } from './utils';
 
 const API_PREFFIX = '/api';
 const VERSION = 'v2.0';
@@ -71,15 +75,26 @@ export function setReqHeaders(url, NVPS) {
 
 // unified error handle
 export function errorHandler(error) {
-  const { response } = error;
-
-  if (error instanceof Error || !response) {
-    notification.error({
-      description: error.toString(),
-      message: '响应异常',
+  if (!error || typeof error === 'string') {
+    notification.warn({
+      message: 'oops operate fail',
+      description: error || 'error happened',
     });
-    return error;
+
+    // throw error,then model will catch
+    return Promise.reject(error);
   }
+
+  if (error instanceof Error) {
+    notification.error({
+      message: '响应异常',
+      description: error.toString(),
+    });
+
+    return Promise.reject(error);
+  }
+
+  const { response } = error;
 
   if (response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
@@ -90,11 +105,11 @@ export function errorHandler(error) {
       description: errorText,
     });
   }
-  return response;
+  return Promise.reject(response.statusText);
 }
 
 export const request = extend({
-  // timeout: 1000,
+  // timeout: 10000,
   prefix: `${API_PREFFIX}/${VERSION}/${BUSINESS_PREFFIX}.`,
   suffix: '.json',
   method: 'post',
@@ -107,9 +122,7 @@ request.interceptors.request.use((url, opts) => {
   const timestamp = Date.now();
   const strParams = JSON.stringify({ ...DEFAULT_PARAM, ...opts.data });
   const cryptoParams = window.btoa(unescape(encodeURIComponent(strParams)));
-  console.group('%c [====request params====]', 'font-size:14px;color:blue;');
-  console.info(opts.data);
-  console.groupEnd();
+
   const NVPS = {
     N: url
       .split('/')
@@ -122,6 +135,7 @@ request.interceptors.request.use((url, opts) => {
 
   const options = {
     ...opts,
+    params: isProOrDev() ? opts.data : {},
     data: {
       bcp: cryptoParams,
       s: timestamp,
@@ -148,7 +162,7 @@ request.interceptors.response.use(async (response, opts) => {
       if (flag === '1') {
         return bcjson;
       }
-      return Promise.reject(new Error(msg));
+      return Promise.reject(msg);
     } catch (error) {
       return Promise.reject(new Error(error));
     }
