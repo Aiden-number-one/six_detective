@@ -2,7 +2,7 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-11-12 17:27:27
+ * @LastEditTime: 2019-11-13 09:26:52
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -67,11 +67,11 @@ class Login extends Component {
     });
   };
 
-  changeAutoLogin = e => {
-    // this.setState({
-    //   autoLogin: e.target.checked,
-    // });
-  };
+  // changeAutoLogin = e => {
+  // this.setState({
+  //   autoLogin: e.target.checked,
+  // });
+  // };
 
   renderMessage = content => (
     <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
