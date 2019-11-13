@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { Form, TreeSelect, Button, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
 import styles from './user.less';
+import { passWordStrength } from '@/utils/utils';
 
 const { TreeNode } = TreeSelect;
 
@@ -120,7 +121,7 @@ class UserForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(<Input.Password className={styles.inputValue} onBlur={this.handleConfirmBlur} />)}
+              })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="联系电话：">
               {getFieldDecorator('phone', {
@@ -174,7 +175,6 @@ class UpdateForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { orgs, userInfo } = this.props;
-    console.log('userInfo=', userInfo);
     const { selectValue } = this.state;
     return (
       <Fragment>
@@ -284,7 +284,7 @@ class PasswordForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(<Input.Password className={styles.inputValue} onBlur={this.handleConfirmBlur} />)}
+              })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
           </Form>
         </div>
@@ -323,7 +323,7 @@ class ResetPasswordForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(<Input.Password className={styles.inputValue} onBlur={this.handleConfirmBlur} />)}
+              })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
           </Form>
         </div>
@@ -347,10 +347,10 @@ class UserManagement extends Component {
     closingVisible: false,
     updatePasswordVisible: false,
     resetPasswordVisible: false,
-    // eslint-disable-next-line react/no-unused-state
     userInfo: {
       login: '',
       name: '',
+      departmentName: '',
       departmentId: '',
       email: '',
     },
@@ -417,98 +417,6 @@ class UserManagement extends Component {
     this.setState({ visible: true });
   };
 
-  // 密码级别
-  // eslint-disable-next-line arrow-parens
-  passWordStrength = passwd => {
-    // 密码强度
-    let grade = 0;
-    // 判断密码是否存在
-    if (!passwd) {
-      return grade;
-    }
-    // 判断长度。并给出分数
-    /*
-    密码长度：
-    0 分: 小于等于 4 个字符
-    10 分: 5 到 7 字符
-    20 分: 大于8 个字符
-    */
-    // grade += passwd.length<=4?0:(passwd.length>8?20:10);
-    if (passwd.length <= 4) {
-      grade += 0;
-    } else if (passwd.length > 8) {
-      grade += 20;
-    } else {
-      grade += 10;
-    }
-    /*
-    字母:
-    0 分: 没有字母
-    10 分: 全都是小（大）写字母
-    20 分: 大小写混合字母
-    */
-    // grade += !passwd.match(/[a-z]/i)?0:(passwd.match(/[a-z]/) && passwd.match(/[A-Z]/)?20:10);
-    if (!passwd.match(/[a-z]/i)) {
-      grade += 0;
-    } else if (passwd.match(/[a-z]/) && passwd.match(/[A-Z]/)) {
-      grade += 20;
-    } else {
-      grade += 10;
-    }
-    /*
-    数字:
-    0 分: 没有数字
-    10 分: 1 个数字
-    15 分: 大于等于 3 个数字
-    */
-    // grade += !passwd.match(/[0-9]/)?0:(passwd.match(/[0-9]/g).length >= 3?15:10);
-    if (!passwd.match(/[0-9]/)) {
-      grade += 0;
-    } else if (passwd.match(/[0-9]/g).length > 3) {
-      grade += 15;
-    } else {
-      grade += 10;
-    }
-    /*
-    符号:
-    0 分: 没有符号
-    10 分: 1 个符号
-    20 分: 大于 1 个符号
-    */
-    // grade += !passwd.match(/\W/)?0:(passwd.match(/\W/g).length > 1?20:10);
-    if (!passwd.match(/\W/)) {
-      grade += 0;
-    } else if (passwd.match(/\W/g).length > 1) {
-      grade += 20;
-    } else {
-      grade += 10;
-    }
-    if (!passwd.match(/(.+)\1{2,}/gi)) {
-      grade += 10;
-    } else {
-      grade += 5;
-    }
-    /*
-    奖励:
-    0 分: 只有字母或数字
-    5 分: 只有字母和数字
-    10 分: 字母、数字和符号
-    15 分: 大小写字母、数字和符号
-    */
-    // eslint-disable-next-line max-len
-    // grade += !passwd.match(/[0-9]/) || !passwd.match(/[a-z]/i)?0:(!passwd.match(/\W/)?5:(!passwd.match(/[a-z]/) || !passwd.match(/[A-Z]/)?10:15));
-    if (!passwd.match(/[0-9]/) || !passwd.match(/[a-z]/i)) {
-      grade += 0;
-    } else if (!passwd.match(/\W/)) {
-      grade += 5;
-    } else if (!passwd.match(/[a-z]/) || !passwd.match(/[A-Z]/)) {
-      grade += 10;
-    } else {
-      grade += 15;
-    }
-    return grade;
-  };
-
   // 获取id
   getDepartmentId = departmentId => {
     this.newDepartmentId = departmentId;
@@ -517,7 +425,7 @@ class UserManagement extends Component {
   handleOk = () => {
     const { dispatch } = this.props;
     this.formRef.current.validateFields((err, values) => {
-      const passwordStrength = this.passWordStrength(values.password);
+      const passwordStrength = passWordStrength(values.password);
       const param = {
         loginName: values.login,
         customerName: values.name,
@@ -541,7 +449,7 @@ class UserManagement extends Component {
         custCustomerno: '77029',
         loginName: values.login,
         customerName: values.name,
-        departmentId: this.newDepartmentId,
+        departmentId: this.newDepartmentId || this.state.userInfo.departmentId,
         email: values.email,
       };
       dispatch({
@@ -572,7 +480,6 @@ class UserManagement extends Component {
   handleChange = () => {};
 
   updateUser = (res, obj) => {
-    console.log('obj=', obj, res);
     const userInfo = {
       login: '',
       name: '',
@@ -603,12 +510,10 @@ class UserManagement extends Component {
       custCustomerno: 77029,
       operationType: 1,
     };
-    console.log(11111111112222);
     dispatch({
       type: 'userManagement/operationUserModelDatas',
       payload: param,
       callback: () => {
-        console.log('okk');
         this.queryUser({
           customerno: '77029',
         });
@@ -668,8 +573,7 @@ class UserManagement extends Component {
   updatePasswordConfirm = () => {
     const { dispatch } = this.props;
     this.passwordFormRef.current.validateFields((err, values) => {
-      console.log('err, values=', err, values);
-      const passwordStrength = this.passWordStrength(values.password);
+      const passwordStrength = passWordStrength(values.password);
       const param = {
         custCustomerno: 77029,
         operationType: 5,
@@ -705,8 +609,7 @@ class UserManagement extends Component {
   resetPasswordConfirm = () => {
     const { dispatch } = this.props;
     this.resetPasswordFormRef.current.validateFields((err, values) => {
-      console.log('err, values=', err, values);
-      const passwordStrength = this.passWordStrength(values.password);
+      const passwordStrength = passWordStrength(values.password);
       const param = {
         custCustomerno: 77029,
         operationType: 6,
@@ -761,8 +664,26 @@ class UserManagement extends Component {
   }
 
   render() {
-    const { orgs } = this.props;
+    const { orgs, userManagementData } = this.props;
     const { userInfo } = this.state;
+
+    // let userData = Object.assign([], userManagementData)
+    // userData = userData.length > 0 && userData.map(element => {
+    //   const newCustStatus = userStatus(element.custStatus);
+    //   return {
+    //     custStatus: newCustStatus,
+    //     custCustomerno: element.custCustomerno,
+    //     custStatusName: element.custStatusName,
+    //     customerName: element.customerName,
+    //     customerno: element.customerno,
+    //     departmentId: element.departmentId,
+    //     departmentName: element.departmentName,
+    //     displaypath: element.displaypath,
+    //     email: element.email,
+    //     lastupdatetime: element.lastupdatetime,
+    //     loginName: element.loginName,
+    //   };
+    // });
     return (
       <Fragment>
         <div>
@@ -851,7 +772,7 @@ class UserManagement extends Component {
           <div>
             <Table
               pagination={{ size: 'small' }}
-              dataSource={this.props.userManagementData}
+              dataSource={userManagementData}
               columns={this.state.columns}
             ></Table>
           </div>

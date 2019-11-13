@@ -69,6 +69,97 @@ const getRandowNVPS = () => {
   return newArray;
 };
 
+// 密码级别
+const passWordStrength = passwd => {
+  // 密码强度
+  let grade = 0;
+  // 判断密码是否存在
+  if (!passwd) {
+    return grade;
+  }
+  // 判断长度。并给出分数
+  /*
+  密码长度：
+  0 分: 小于等于 4 个字符
+  10 分: 5 到 7 字符
+  20 分: 大于8 个字符
+  */
+  // grade += passwd.length<=4?0:(passwd.length>8?20:10);
+  if (passwd.length <= 4) {
+    grade += 0;
+  } else if (passwd.length > 8) {
+    grade += 20;
+  } else {
+    grade += 10;
+  }
+  /*
+  字母:
+  0 分: 没有字母
+  10 分: 全都是小（大）写字母
+  20 分: 大小写混合字母
+  */
+  // grade += !passwd.match(/[a-z]/i)?0:(passwd.match(/[a-z]/) && passwd.match(/[A-Z]/)?20:10);
+  if (!passwd.match(/[a-z]/i)) {
+    grade += 0;
+  } else if (passwd.match(/[a-z]/) && passwd.match(/[A-Z]/)) {
+    grade += 20;
+  } else {
+    grade += 10;
+  }
+  /*
+  数字:
+  0 分: 没有数字
+  10 分: 1 个数字
+  15 分: 大于等于 3 个数字
+  */
+  // grade += !passwd.match(/[0-9]/)?0:(passwd.match(/[0-9]/g).length >= 3?15:10);
+  if (!passwd.match(/[0-9]/)) {
+    grade += 0;
+  } else if (passwd.match(/[0-9]/g).length > 3) {
+    grade += 15;
+  } else {
+    grade += 10;
+  }
+  /*
+  符号:
+  0 分: 没有符号
+  10 分: 1 个符号
+  20 分: 大于 1 个符号
+  */
+  // grade += !passwd.match(/\W/)?0:(passwd.match(/\W/g).length > 1?20:10);
+  if (!passwd.match(/\W/)) {
+    grade += 0;
+  } else if (passwd.match(/\W/g).length > 1) {
+    grade += 20;
+  } else {
+    grade += 10;
+  }
+  if (!passwd.match(/(.+)\1{2,}/gi)) {
+    grade += 10;
+  } else {
+    grade += 5;
+  }
+  /*
+  奖励:
+  0 分: 只有字母或数字
+  5 分: 只有字母和数字
+  10 分: 字母、数字和符号
+  15 分: 大小写字母、数字和符号
+  */
+  // eslint-disable-next-line max-len
+  // grade += !passwd.match(/[0-9]/) || !passwd.match(/[a-z]/i)?0:(!passwd.match(/\W/)?5:(!passwd.match(/[a-z]/) || !passwd.match(/[A-Z]/)?10:15));
+  if (!passwd.match(/[0-9]/) || !passwd.match(/[a-z]/i)) {
+    grade += 0;
+  } else if (!passwd.match(/\W/)) {
+    grade += 5;
+  } else if (!passwd.match(/[a-z]/) || !passwd.match(/[A-Z]/)) {
+    grade += 10;
+  } else {
+    grade += 15;
+  }
+  return grade;
+};
+
 // flat -> tree
 export function formatTree(list, key = 'departmentId', pKey = 'parentDepartmentId') {
   // deep clone
@@ -91,4 +182,4 @@ export function formatTree(list, key = 'departmentId', pKey = 'parentDepartmentI
 
   return tree;
 }
-export { isProOrDev, isUrl, geneMenuData, getRandowNVPS };
+export { isProOrDev, isUrl, geneMenuData, getRandowNVPS, passWordStrength };
