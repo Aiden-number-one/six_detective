@@ -46,26 +46,23 @@ export const userManagementModel = {
         }
       }
     },
-    *addUserModelDatas({ payload }, { call, put }) {
+    *addUserModelDatas({ payload, callback }, { call, put }) {
       const response = yield call(addUser, { param: payload });
       if (response.bcjson.flag === '1') {
-        if (response.bcjson.items) {
-          yield put({
-            type: 'addDatas',
-            payload: response.bcjson.items,
-          });
-        }
+        yield put({
+          type: 'addDatas',
+          payload: response.bcjson.items,
+        });
+        callback();
       }
     },
     *updateUserModelDatas({ payload, callback }, { call, put }) {
       const response = yield call(updateUser, { param: payload });
       if (response.bcjson.flag === '1') {
-        if (response.bcjson.items) {
-          yield put({
-            type: 'updateDatas',
-            payload: response.bcjson.items,
-          });
-        }
+        yield put({
+          type: 'updateDatas',
+          payload: response.bcjson.items,
+        });
         callback();
       }
     },

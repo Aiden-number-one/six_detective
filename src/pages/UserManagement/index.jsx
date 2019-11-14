@@ -132,6 +132,12 @@ class UserManagement extends Component {
       dispatch({
         type: 'userManagement/addUserModelDatas',
         payload: param,
+        callback: () => {
+          this.setState({
+            visible: false,
+          });
+          this.queryUser();
+        },
       });
     });
   };
