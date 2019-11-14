@@ -31,7 +31,7 @@ function loop(orgsTree) {
     );
   });
 }
-export default class UpdateForm extends Component {
+export default class UserForm extends Component {
   state = {
     selectValue: undefined,
     departmentId: '',
@@ -50,7 +50,7 @@ export default class UpdateForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { orgs, userInfo } = this.props;
+    const { orgs } = this.props;
     const { selectValue } = this.state;
     return (
       <Fragment>
@@ -64,7 +64,6 @@ export default class UpdateForm extends Component {
                     message: 'Please input your 登陆名',
                   },
                 ],
-                initialValue: userInfo.login,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="员工姓名：">
@@ -75,7 +74,6 @@ export default class UpdateForm extends Component {
                     message: 'Please input your 员工姓名',
                   },
                 ],
-                initialValue: userInfo.name,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="所属部门：">
@@ -86,7 +84,6 @@ export default class UpdateForm extends Component {
                     message: 'Please input your 所属部门',
                   },
                 ],
-                initialValue: userInfo.departmentName,
               })(
                 <TreeSelect
                   treeDefaultExpandAll
@@ -98,6 +95,39 @@ export default class UpdateForm extends Component {
                   {loop(orgs)}
                 </TreeSelect>,
               )}
+            </Form.Item>
+            <Form.Item label="登陆密码：">
+              {getFieldDecorator('password', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your 登陆密码',
+                  },
+                ],
+              })(<Input.Password className={styles.inputValue} />)}
+            </Form.Item>
+            <Form.Item label="确认密码：">
+              {getFieldDecorator('confirm', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please confirm your password!',
+                  },
+                  {
+                    validator: this.compareToFirstPassword,
+                  },
+                ],
+              })(<Input.Password className={styles.inputValue} />)}
+            </Form.Item>
+            <Form.Item label="联系电话：">
+              {getFieldDecorator('phone', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your phone number!',
+                  },
+                ],
+              })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="邮箱地址：">
               {getFieldDecorator('email', {
@@ -111,7 +141,6 @@ export default class UpdateForm extends Component {
                     message: 'Please confirm your 邮箱地址!',
                   },
                 ],
-                initialValue: userInfo.email,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
           </Form>

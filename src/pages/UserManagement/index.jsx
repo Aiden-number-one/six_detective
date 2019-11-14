@@ -1,142 +1,21 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, TreeSelect, Input, Modal, Table } from 'antd';
+import { Form, Modal, Table } from 'antd';
 import { connect } from 'dva';
 import TableHeader from '@/components/TableHeader';
 import styles from './index.less';
 import { passWordStrength } from '@/utils/utils';
 
 import SearchForm from './components/SearchForm';
+import AddForm from './components/AddForm';
 import ModifyForm from './components/ModifyForm';
 import PasswordForm from './components/PasswordForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
 
-const { TreeNode } = TreeSelect;
-function loop(orgsTree) {
-  return orgsTree.map(item => {
-    const { children, departmentId, departmentName, parentDepartmentId } = item;
-    if (children) {
-      return (
-        <TreeNode
-          key={departmentId}
-          departmentId={departmentId}
-          value={departmentName}
-          title={departmentName}
-          parentId={parentDepartmentId}
-        >
-          {loop(children)}
-        </TreeNode>
-      );
-    }
-    return (
-      <TreeNode
-        key={departmentId}
-        departmentId={departmentId}
-        value={departmentName}
-        title={departmentName}
-        parentId={parentDepartmentId}
-      />
-    );
-  });
-}
-
 const NewSearchForm = Form.create({})(SearchForm);
-
-const NewUserForm = Form.create({})(ModifyForm);
-
-class UpdateForm extends Component {
-  state = {
-    selectValue: undefined,
-    departmentId: '',
-  };
-
-  componentDidUpdate() {
-    this.props.getDepartmentId(this.state.departmentId);
-  }
-
-  selectChange = (value, node) => {
-    this.setState({
-      selectValue: value,
-      departmentId: node.props.eventKey,
-    });
-  };
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { orgs, userInfo } = this.props;
-    const { selectValue } = this.state;
-    return (
-      <Fragment>
-        <div>
-          <Form layout="inline" className={styles.formWrap}>
-            <Form.Item label="登陆名：">
-              {getFieldDecorator('login', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 登陆名',
-                  },
-                ],
-                initialValue: userInfo.login,
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="员工姓名：">
-              {getFieldDecorator('name', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 员工姓名',
-                  },
-                ],
-                initialValue: userInfo.name,
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="所属部门：">
-              {getFieldDecorator('departmentId', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 所属部门',
-                  },
-                ],
-                initialValue: userInfo.departmentName,
-              })(
-                <TreeSelect
-                  treeDefaultExpandAll
-                  value={selectValue}
-                  style={{ width: 220 }}
-                  onSelect={this.selectChange}
-                  placeholder="Please select"
-                >
-                  {loop(orgs)}
-                </TreeSelect>,
-              )}
-            </Form.Item>
-            <Form.Item label="邮箱地址：">
-              {getFieldDecorator('email', {
-                rules: [
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                  {
-                    required: true,
-                    message: 'Please confirm your 邮箱地址!',
-                  },
-                ],
-                initialValue: userInfo.email,
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-          </Form>
-        </div>
-      </Fragment>
-    );
-  }
-}
-const NewUpdateForm = Form.create({})(UpdateForm);
-
+const NewUserForm = Form.create({})(AddForm);
+const NewUpdateForm = Form.create({})(ModifyForm);
 const NewPasswordForm = Form.create({})(PasswordForm);
-
 const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
 
 @connect(({ userManagement, loading }) => ({
@@ -263,9 +142,7 @@ class UserManagement extends Component {
         type: 'userManagement/updateUserModelDatas',
         payload: param,
         callback: () => {
-          this.queryUser({
-            customerno: '77029',
-          });
+          this.queryUser({});
         },
       });
     });
@@ -321,9 +198,7 @@ class UserManagement extends Component {
       type: 'userManagement/operationUserModelDatas',
       payload: param,
       callback: () => {
-        this.queryUser({
-          customerno: '77029',
-        });
+        this.queryUser({});
       },
     });
     this.setState({
@@ -354,9 +229,7 @@ class UserManagement extends Component {
       type: 'userManagement/operationUserModelDatas',
       payload: param,
       callback: () => {
-        this.queryUser({
-          customerno: '77029',
-        });
+        this.queryUser({});
         this.setState({
           closingVisible: false,
         });
@@ -466,7 +339,6 @@ class UserManagement extends Component {
   queryLog = () => {
     this.searchForm.current.validateFields((err, values) => {
       const params = {
-        customerno: '77029',
         searchParam: values.searchParam,
         displaypath: values.displaypath,
         email: values.email,
@@ -481,9 +353,7 @@ class UserManagement extends Component {
   };
 
   componentDidMount() {
-    const obj = {
-      customerno: '77029',
-    };
+    const obj = {};
     this.queryUser(obj);
     this.queryDepartment();
   }
