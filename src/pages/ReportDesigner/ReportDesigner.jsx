@@ -21,10 +21,26 @@ export default class ReportDesigner extends PureComponent {
     });
   }
 
+  setCellStyle = (property, value) => {
+    const { setCellStyle, getCellStyle } = this.props;
+    const result = getCellStyle(property);
+    if (result === value) {
+      setCellStyle(property, false);
+    } else {
+      setCellStyle(property, value);
+      // const arr = [[0, 1], [2, 3], [4, 5]];
+    }
+  };
+
+  editRowColumn = (type, opera) => {
+    const { insertDeleteRowColumn } = this.props;
+    insertDeleteRowColumn(type, opera);
+  };
+
   render() {
     return (
       <Fragment>
-        <ToolBar />
+        <ToolBar setCellStyle={this.setCellStyle} editRowColumn={this.editRowColumn} />
         <Layout>
           <Sider width={200} />
           <Content

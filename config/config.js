@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-11-05 13:21:53
+ * @LastEditTime: 2019-11-13 15:47:13
  * @LastEditors: lan
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
@@ -247,7 +247,7 @@ export default {
       // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
-      timeout: 10000,
+      timeout: 15000,
     },
     '/upload': {
       target:

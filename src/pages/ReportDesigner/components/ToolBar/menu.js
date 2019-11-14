@@ -13,71 +13,74 @@ const borderMenu = [
   {
     name: '无框线(N)',
     icon: 'noBorder',
-    params: '{"border":""}',
+    params: 'none',
   },
   {
     name: '所有框线(A)',
     icon: 'allBorder',
-    params: '{"border":"1px solid black"}',
+    params: 'all',
   },
   {
     name: '外侧框线(S)',
     icon: 'outsideBorder',
-    params: '{"border":"1px solid black","border-type":"out"}',
+    params: 'outside',
   },
-  {
-    name: '粗匣框线(T)',
-    icon: 'boldBorder',
-    params: '{"border":"3px solid black"}',
-  },
+  // {
+  //   name: '粗匣框线(T)',
+  //   icon: 'boldBorder',
+  //   params: '{"border":"3px solid black"}',
+  // },
   {
     name: '下框线(O)',
     icon: 'bottomBorder',
-    params: '{"border":"1px solid black","border-type":"out-bottom"}',
+    params: 'bottom',
   },
   {
     name: '上框线(P)',
     icon: 'topBorder',
-    params: '{"border":"1px solid black","border-type":"out-top"}',
+    params: 'top',
   },
   {
     name: '左框线(L)',
     icon: 'leftBorder',
-    params: '{"border":"1px solid black","border-type":"out-left"}',
+    params: 'left',
   },
   {
     name: '右框线(R)',
     icon: 'rightBorder',
-    params: '{"border":"1px solid black","border-type":"out-right"}',
+    params: 'right',
   },
-  {
-    name: '双底框线(B)',
-    icon: 'doubleBottomBorder',
-    params: '{"border":"3px double black","border-type":"out-bottom"}',
-  },
-  {
-    name: '粗底框线(H)',
-    icon: 'boldBottomBorder',
-    params: '{"border-bottom":"3px solid black"}',
-  },
-  {
-    name: '上下框线(D)',
-    icon: 'topBottomBorder',
-    params:
-      '{"border-top":"1px solid black","border-bottom":"1px solid black","border-type":"out-top,out-bottom"}',
-  },
-  {
-    name: '上下框线和粗下框线(C)',
-    icon: 'topAndBoldBottomBorder',
-    params:
-      '{"border-top":"1px solid black","border-bottom":"3px solid black","border-type":"out-top,out-bottom"}',
-  },
-  {
-    name: '上框线和双下框线(U)',
-    icon: 'topAndDoubleBottomBorder',
-    params:
-      '{"border-top":"1px solid black","border-bottom":"3px double black","border-type":"out-top,out-bottom"}',
-  },
+  // {
+  //   name: '双底框线(B)',
+  //   icon: 'doubleBottomBorder',
+  //   params: '{"border":"3px double black","border-type":"out-bottom"}',
+  // },
+  // {
+  //   name: '粗底框线(H)',
+  //   icon: 'boldBottomBorder',
+  //   params: '{"border-bottom":"3px solid black"}',
+  // },
+  // {
+  //   name: '上下框线(D)',
+  //   icon: 'topBottomBorder',
+  //   params:
+  //     '{"border-top":"1px solid black",
+  //      "border-bottom":"1px solid black","border-type":"out-top,out-bottom"}',
+  // },
+  // {
+  //   name: '上下框线和粗下框线(C)',
+  //   icon: 'topAndBoldBottomBorder',
+  //   params:
+  //   '{"border-top":"1px solid black",
+  // "border-bottom":"3px solid black","border-type":"out-top,out-bottom"}',
+  // },
+  // {
+  //   name: '上框线和双下框线(U)',
+  //   icon: 'topAndDoubleBottomBorder',
+  //   params:
+  //     '{"border-top":"1px solid black",
+  // "border-bottom":"3px double black","border-type":"out-top,out-bottom"}',
+  // },
 ];
 
 const drawingBorderMenu = [
@@ -105,25 +108,33 @@ const drawingBorderMenu = [
 
 const rowsAndColsMenu = [
   {
-    name: '行高(H)',
-    icon: 'lineHeight',
-  },
-  {
-    name: '列宽(W)',
-    icon: 'colWidth',
-  },
-  {
-    name: '插入单元格(E)',
+    name: '插入行',
     icon: 'insertCell',
+    operatype: 'row',
+    value: 'insert-row',
   },
   {
-    name: '删除单元格(C)',
+    name: '删除行',
     icon: 'delCell',
+    operatype: 'row',
+    value: 'delete-row',
   },
   {
-    name: '隐藏与取消隐藏(U)',
-    icon: 'hideOrShow',
+    name: '插入列',
+    icon: 'insertCell',
+    operatype: 'column',
+    value: 'insert-column',
   },
+  {
+    name: '删除列',
+    icon: 'delCell',
+    operatype: 'column',
+    value: 'delete-column',
+  },
+  // {
+  //   name: '隐藏与取消隐藏(U)',
+  //   icon: 'hideOrShow',
+  // },
 ];
 
 const clearMenu = [
