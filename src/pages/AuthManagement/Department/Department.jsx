@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
-import { Tree, List, Form, Button, Table, Divider } from 'antd';
+import { Tree, List, Form, Button, Table, Divider, message } from 'antd';
 import DepartmentModal from './DepartmentModal';
 import styles from './Department.less';
 
@@ -114,8 +114,9 @@ function Department({ dispatch, loading, orgs, employees, departments }) {
           });
 
           setChildDeparts(childDeparts.filter(item => item.departmentId !== departmentId));
+          message.success('delete success');
         } catch (error) {
-          console.log(error);
+          message.error(error);
         }
       }
     }
@@ -152,7 +153,7 @@ function Department({ dispatch, loading, orgs, employees, departments }) {
       }
       setModalVisible(false);
     } catch (error) {
-      console.log(error);
+      message.error(error);
     }
   }
 
@@ -177,10 +178,10 @@ function Department({ dispatch, loading, orgs, employees, departments }) {
           departmentId,
         },
       });
-
       setChildDeparts(childDeparts.filter(item => item.departmentId !== departmentId));
+      message.success('delete success');
     } catch (error) {
-      console.log(error);
+      message.error(error);
     }
   }
 

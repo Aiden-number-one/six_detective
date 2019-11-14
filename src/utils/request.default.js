@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
  * @LastEditors: lan
- * @LastEditTime: 2019-11-14 11:15:51
+ * @LastEditTime: 2019-11-14 11:19:57
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -79,41 +79,22 @@ export function setReqHeaders(url, NVPS) {
 
 // unified error handle
 export function errorHandler(error) {
-  if (!error || typeof error === 'string') {
-    notification.warn({
-      message: 'oops operate fail',
-      description: error || 'error happened',
-    });
-
-    // throw error,then model will catch
-    return Promise.reject(error);
-  }
-
-  if (error instanceof Error) {
-    notification.error({
-      message: '响应异常',
-      description: error.toString(),
-    });
-
-    return Promise.reject(error);
-  }
-
+  console.log('requst error:', error);
   const { response } = error;
 
-  if (response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-
+  if (response && response.status) {
+    const { status, statusText, url } = response;
+    const errorText = codeMessage[status] || statusText;
     notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
+      message: errorText,
+      description: `request error ${status}: ${/[^/]*\.json/.exec(url)}`,
     });
   }
-  return Promise.reject(response.statusText);
+  return response;
 }
 
 export const request = extend({
-  // timeout: 10000,
+  // timeout: 3000,
   prefix: `${API_PREFFIX}/${VERSION}/${BUSINESS_PREFFIX}.`,
   suffix: '.json',
   method: 'post',
@@ -154,30 +135,23 @@ request.interceptors.request.use((url, opts) => {
 });
 
 request.interceptors.response.use(async (response, opts) => {
-  if (response.status === 200) {
-    try {
-      const result = await response.clone().json();
-      // return complete response
-      const { bcjson } = result;
-      const { flag, msg } = bcjson;
-      if (flag === '001') {
-        // eslint-disable-next-line no-underscore-dangle
-        // window.g_app._store.dispatch({ type: 'login/logout' });
-        router.push('/login');
-        return result;
-      }
-      if (opts.all) {
-        return result;
-      }
-      if (flag === '1') {
-        return bcjson;
-      }
-      return Promise.reject(msg);
-    } catch (error) {
-      return Promise.reject(new Error(error));
-    }
+  if (response.status !== 200) {
+    return response;
   }
-  return response;
+
+  try {
+    const result = await response.clone().json();
+    // return complete response
+    if (opts.all) {
+      return result;
+    }
+    const { bcjson } = result;
+    const { flag, items, msg } = bcjson;
+    return +flag === 1 ? { items } : { msg: msg || 'response data error' };
+  } catch (error) {
+    // return { msg: error };
+    throw new Error(error);
+  }
 });
 
 export default url => async (params = {}) => request(url, { data: params });
