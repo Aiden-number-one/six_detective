@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-10-31 19:19:30
  * @LastEditors: iron
- * @LastEditTime: 2019-11-12 16:34:42
+ * @LastEditTime: 2019-11-13 16:15:34
  */
 
 import fetch from '@/utils/request.default';
@@ -52,8 +52,6 @@ export default {
       };
     },
     getCheckedRoleMenus(state, { payload: checkedRoleMenus }) {
-      console.log('reducer checkRoleMenus', checkedRoleMenus);
-
       return {
         ...state,
         checkedRoleMenus: checkedRoleMenus.map(item => item.menuId),
@@ -61,12 +59,6 @@ export default {
     },
   },
   effects: {
-    // user role
-    // *setPersonRole(action, { call, put }) {},
-    // *queryPersonRole(action, { call, put }) {},
-    // *delPersonRole(action, { call, put }) {},
-    // role group
-    // *addRoleGroup(action, { call, put }) {},
     *queryRoleGroups({ params }, { call, put }) {
       const { items } = yield call(fetch('get_role_group_query'), params);
       yield put({
@@ -74,12 +66,6 @@ export default {
         payload: items,
       });
     },
-    // *updateRoleGroup(action, { call, put }) {},
-    // *delRoleGroup(action, { call, put }) {},
-    // roles
-    // *queryRole(action, { call, put }) {},
-    // *delRole(action, { call, put }) {},
-    // *updateRole(action, { call, put }) {},
     // role menu
     *queryPublicMenus({ params }, { call, put }) {
       const { items } = yield call(fetch('get_public_menu_info'), params);
@@ -100,15 +86,16 @@ export default {
       });
     },
     *queryRoleMenusById(action, { call, put }) {
-      const { items } = yield call(fetch('get_role_menu_info'), action.params);
+      const res = yield call(fetch('get_role_menu_info'), action.params);
       yield put({
         type: 'getCheckedRoleMenus',
-        payload: items,
+        payload: res,
       });
     },
     // org / department
     *queryOrgs(action, { call, put }) {
       const { items } = yield call(fetch('get_departments_info'), action.params);
+
       if (items && items.length > 0) {
         yield put({
           type: 'getOrgs',
@@ -119,6 +106,9 @@ export default {
     *queryDepartments(action, { call, put }) {
       const { items } = yield call(fetch('get_department'), action.params);
 
+      if (!items) {
+        // throw
+      }
       if (items.length > 0) {
         yield put({
           type: 'getDepartments',
@@ -127,23 +117,21 @@ export default {
       }
     },
     *addDepartment(action, { call }) {
-      try {
-        return yield call(fetch('set_department_add'), action.params);
-      } catch (error) {
-        // error will be captuered by component
-        // `throw new Error(error)` -> app.js onError event
-        return Promise.reject(error);
+      const { msg } = yield call(fetch('set_department_add'), action.params);
+      if (msg) {
+        return Promise.reject(msg);
       }
+      return undefined;
     },
     *updateDepartment(action, { call }) {
       yield call(fetch('set_department_update'), action.params);
     },
     *delDepartment(action, { call }) {
-      try {
-        return yield call(fetch('set_department_delete'), action.params);
-      } catch (error) {
-        return Promise.reject(error);
+      const { msg } = yield call(fetch('set_department_delete'), action.params);
+      if (msg) {
+        return Promise.reject(msg);
       }
+      return undefined;
     },
     *queryEmployees({ params }, { call, put }) {
       const { items } = yield call(fetch('get_user_list_impl'), params);

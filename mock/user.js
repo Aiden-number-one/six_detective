@@ -192,6 +192,7 @@ export default {
     });
   },
   // 用户管理
+  /*
   'POST /api/v2.0/bayconnect.superlop.get_user_list_impl.json': Mock.mock({
     'bcjson|1-10': {
       api: 'kingdom.kgrp.get_user_list_imp11111111111l',
@@ -204,5 +205,5 @@ export default {
       msg: '查询成功',
       timespent: 61,
     },
-  }),
+  }), */
 };

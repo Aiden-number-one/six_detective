@@ -156,6 +156,7 @@ export default [
         path: '/system-management',
         name: 'systemManagement',
         icon: 'icon-diannao',
+        Routes: ['src/pages/Authorized'],
         routes: [
           {
             path: '/system-management/user-maintenance',
@@ -227,8 +228,8 @@ export default [
             component: './Stylespecification/Stylespecification',
             // hideInMenu: true,
           },
-        ]
-      }
+        ],
+      },
     ],
   },
   {

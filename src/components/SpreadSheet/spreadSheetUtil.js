@@ -20,7 +20,19 @@ const generateJson = spreedSheetData => {
     .fill([])
     .map(() => new Array(colLength).fill(defaultCellProps));
 
-  Object.keys(rows).forEach(rowIndex => {});
+  Object.keys(rows).forEach(rowIndex => {
+    Object.keys(rows[rowIndex].cells).forEach(cellIndex => {
+      const cellContent = rows[rowIndex].cells[cellIndex];
+
+      // 处理单元格内的内容
+      data[rowIndex][cellIndex] = cellContent.text;
+
+      // 对样式进行处理
+      const currentCellProps = cellAttrs[rowIndex][cellIndex].cellProps;
+      currentCellProps.style.bgc = cellContent.style['background-color']; // 背景颜色
+      cellAttrs[rowIndex][cellIndex].cellProps.style.bgc = cellContent;
+    });
+  });
 };
 
 export { generateJson };

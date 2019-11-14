@@ -2,7 +2,7 @@
  * @Description: 获取数据源列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime: 2019-11-12 17:59:10
+ * @LastEditTime: 2019-11-14 13:25:40
  * @LastEditors: lan
  */
 import Service from '@/utils/Service';
@@ -19,16 +19,18 @@ export default {
   effects: {
     *getDataSourceList({ payload, callback }, { call, put }) {
       const response = yield call(getDataSourceList, { param: payload });
-      yield put({
-        type: 'setDataSourceList',
-        payload: response.bcjson.items,
-      });
-      if (response.bcjson.items[0]) {
+      if (response.bcjson.flag === '1') {
         yield put({
-          type: 'setActiveCID',
-          payload: response.bcjson.items[0].connectionId,
+          type: 'setDataSourceList',
+          payload: response.bcjson.items,
         });
-        if (callback) callback(response);
+        if (response.bcjson.items[0]) {
+          yield put({
+            type: 'setActiveCID',
+            payload: response.bcjson.items[0].connectionId,
+          });
+          if (callback) callback(response);
+        }
       }
     },
   },

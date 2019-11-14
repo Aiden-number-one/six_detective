@@ -2,7 +2,7 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-11-13 09:26:52
+ * @LastEditTime: 2019-11-14 13:33:42
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -25,6 +25,8 @@ class Login extends Component {
     // autoLogin: true,
     submitting: false, // submit loading
   };
+
+  componentDidMount() {}
 
   onTabChange = type => {
     this.setState({ type });
@@ -56,8 +58,9 @@ class Login extends Component {
           if (response.bcjson.flag === '0') {
             return;
           }
-          const items = response.bcjson.items[0];
-          localStorage.setItem('currentUser', items.name);
+          const item = response.bcjson.items[0];
+          localStorage.setItem('loginName', item.loginName);
+          localStorage.setItem('loginTime', item.loginTime);
           router.push('/');
         },
       });

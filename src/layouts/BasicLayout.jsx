@@ -52,24 +52,24 @@ const BasicLayout = props => {
 
   useEffect(() => {
     setLocale('en-US');
-    // if (dispatch) {
-    //   dispatch({
-    //     type: 'login/getLoginStatus',
-    //     payload: {
-    //       loginName: window.localStorage.currentUser,
-    //       userAgent: window.navigator.userAgent,
-    //     },
-    //   });
-    //   setInterval(() => {
-    //     dispatch({
-    //       type: 'login/getLoginStatus',
-    //       payload: {
-    //         loginName: window.localStorage.currentUser,
-    //         userAgent: window.navigator.userAgent,
-    //       },
-    //     });
-    //   }, 25000);
-    // }
+    if (dispatch) {
+      dispatch({
+        type: 'login/getLoginStatus',
+        payload: {
+          // loginName: window.localStorage.currentUser,
+          // userAgent: window.navigator.userAgent,
+        },
+      });
+      setInterval(() => {
+        dispatch({
+          type: 'login/getLoginStatus',
+          payload: {
+            // loginName: window.localStorage.currentUser,
+            // userAgent: window.navigator.userAgent,
+          },
+        });
+      }, 25000);
+    }
   }, []);
   /**
    * init variables
