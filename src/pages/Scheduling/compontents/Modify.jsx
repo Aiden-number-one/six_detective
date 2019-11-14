@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Tabs, Modal } from 'antd';
 import { connect } from 'dva';
 // import moment from 'moment';
-// import SearchForm from './compontents/SearchForm';
 
 import BasicModifyForm from './BasicModifyForm';
+import PlanModifyForm from './PlanModifyForm';
 
 const { TabPane } = Tabs;
 
@@ -18,7 +18,6 @@ class Modify extends Component {
   state = {
     // modifyVisible: false,
   };
-  //   searchForm = React.createRef();
 
   componentDidMount() {}
 
@@ -27,7 +26,14 @@ class Modify extends Component {
   };
 
   render() {
-    const { modifyVisible, modifyConfirm, modifyCancel } = this.props;
+    const {
+      modifyVisible,
+      basicModifyForm,
+      planModifyForm,
+      selectedRows,
+      modifyConfirm,
+      modifyCancel,
+    } = this.props;
     return (
       <Modal
         title="修改调度计划"
@@ -41,10 +47,10 @@ class Modify extends Component {
           style={{ marginTop: '-26px', textAlign: 'center' }}
         >
           <TabPane tab="基本信息" key="1">
-            <BasicModifyForm />
+            <BasicModifyForm ref={basicModifyForm} selectedRows={selectedRows} />
           </TabPane>
           <TabPane tab="计划设置" key="2">
-            Content of Tab Pane 2
+            <PlanModifyForm ref={planModifyForm} selectedRows={selectedRows} />
           </TabPane>
         </Tabs>
         ,
