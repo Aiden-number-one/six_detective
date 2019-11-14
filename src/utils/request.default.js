@@ -3,14 +3,15 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: iron
- * @LastEditTime: 2019-11-12 10:31:17
+ * @LastEditors: lan
+ * @LastEditTime: 2019-11-14 11:19:57
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { extend } from 'umi-request';
+import router from 'umi/router';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
 import { notification } from 'antd';
@@ -50,6 +51,7 @@ export function setReqHeaders(url, NVPS) {
     window.x_trace_page_id = x_trace_page_id;
   }
 
+  const rid = `RID${uuidv1().replace(/-/g, '')}`;
   return {
     'X-Kweb-Menu-Id': document.location.href,
     'X-Kweb-Trace-Req-Id': uuidv1(),
@@ -67,49 +69,32 @@ export function setReqHeaders(url, NVPS) {
       randowNVPS.forEach(value => {
         signText += value + NVPS[value];
       });
+      signText += `I${rid}`;
       return signMode + md5(signText, 32).toUpperCase();
     })(),
-    'X-Bc-T': `BCT${uuidv1().replace(/-/g, '')}`,
+    'X-Bc-T': `BCT${localStorage.getItem('BCTID')}`,
+    'X-Bc-I': rid,
   };
 }
 
 // unified error handle
 export function errorHandler(error) {
-  if (!error || typeof error === 'string') {
-    notification.warn({
-      message: 'oops operate fail',
-      description: error || 'error happened',
-    });
-
-    // throw error,then model will catch
-    return Promise.reject(error);
-  }
-
-  if (error instanceof Error) {
-    notification.error({
-      message: '响应异常',
-      description: error.toString(),
-    });
-
-    return Promise.reject(error);
-  }
-
+  console.log('requst error:', error);
   const { response } = error;
 
-  if (response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-
+  if (response && response.status) {
+    const { status, statusText, url } = response;
+    const errorText = codeMessage[status] || statusText;
     notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
+      message: errorText,
+      description: `request error ${status}: ${/[^/]*\.json/.exec(url)}`,
     });
   }
-  return Promise.reject(response.statusText);
+  return response;
 }
 
 export const request = extend({
-  // timeout: 10000,
+  // timeout: 3000,
   prefix: `${API_PREFFIX}/${VERSION}/${BUSINESS_PREFFIX}.`,
   suffix: '.json',
   method: 'post',
@@ -150,24 +135,23 @@ request.interceptors.request.use((url, opts) => {
 });
 
 request.interceptors.response.use(async (response, opts) => {
-  if (response.status === 200) {
-    try {
-      const result = await response.clone().json();
-      // return complete response
-      if (opts.all) {
-        return result;
-      }
-      const { bcjson } = result;
-      const { flag, msg } = bcjson;
-      if (flag === '1') {
-        return bcjson;
-      }
-      return Promise.reject(msg);
-    } catch (error) {
-      return Promise.reject(new Error(error));
-    }
+  if (response.status !== 200) {
+    return response;
   }
-  return response;
+
+  try {
+    const result = await response.clone().json();
+    // return complete response
+    if (opts.all) {
+      return result;
+    }
+    const { bcjson } = result;
+    const { flag, items, msg } = bcjson;
+    return +flag === 1 ? { items } : { msg: msg || 'response data error' };
+  } catch (error) {
+    // return { msg: error };
+    throw new Error(error);
+  }
 });
 
 export default url => async (params = {}) => request(url, { data: params });
