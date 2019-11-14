@@ -65,13 +65,30 @@ export default class ToolBar extends Component {
       fontSize: '10', // 默认字号
       fontFamily: 'Arial', // 默认字体
       isMerge: false, // 单元格是否合并
+      freeze: false, // 单元格是否冻结
     },
   };
 
   componentDidMount() {
     const { setCellCallback } = this.props;
     const { btnActiveStatus } = this.state;
-    setCellCallback(cellStyle => {
+    setCellCallback(data => {
+      const cellStyle = data.getSelectedCellStyle();
+      const cell = data.getSelectedCell();
+      console.log(cellStyle, cell, data.freeze);
+      let isMerge = false;
+      let freeze = false;
+      if (cell && cell.merge) {
+        isMerge = true;
+      }
+      if (
+        data.freeze[0] !== 0 &&
+        data.freeze[1] !== 0 &&
+        data.freeze[0] === data.selector.ri &&
+        data.freeze[1] === data.selector.ci
+      ) {
+        freeze = true;
+      }
       this.setState({
         backgroundColor: cellStyle.bgcolor,
         fontColor: cellStyle.color,
@@ -85,9 +102,10 @@ export default class ToolBar extends Component {
           fontSize: cellStyle.font.size,
           fontFamily: cellStyle.font.name,
           textDecoration: cellStyle.underline ? 'underline' : 'none',
+          isMerge,
+          freeze,
         },
       });
-      console.log(cellStyle);
     });
   }
 
@@ -369,12 +387,48 @@ export default class ToolBar extends Component {
                     ))}
                   </Select>
                 </Popover>
-                <Popover content="增大字号" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="增大字号"
+                  {...popoverProps}
+                  onClick={() => {
+                    let index = fontSizeSelect.findIndex(item => item === btnActiveStatus.fontSize);
+                    if (index === 16) {
+                      index = 0;
+                    } else {
+                      index += 1;
+                    }
+                    this.setState({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        fontSize: fontSizeSelect[index],
+                      },
+                    });
+                    setCellStyle('font-size', fontSizeSelect[index]);
+                  }}
+                >
                   <Button className="btn mr6">
                     <Icon component={() => <CustomizeIcon type="increaseFont" />} />
                   </Button>
                 </Popover>
-                <Popover content="减小字号" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="减小字号"
+                  {...popoverProps}
+                  onClick={() => {
+                    let index = fontSizeSelect.findIndex(item => item === btnActiveStatus.fontSize);
+                    if (index === 0) {
+                      index = 16;
+                    } else {
+                      index -= 1;
+                    }
+                    this.setState({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        fontSize: fontSizeSelect[index],
+                      },
+                    });
+                    setCellStyle('font-size', fontSizeSelect[index]);
+                  }}
+                >
                   <Button className="btn mr6">
                     <Icon component={() => <CustomizeIcon type="decreaseFont" />} />
                   </Button>
@@ -577,6 +631,12 @@ export default class ToolBar extends Component {
                   content="顶端对齐"
                   {...popoverProps}
                   onClick={() => {
+                    this.setState({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        verticalAlign: btnActiveStatus.verticalAlign === 'top' ? 'middle' : 'top',
+                      },
+                    });
                     setCellStyle('valign', 'top');
                   }}
                 >
@@ -594,6 +654,12 @@ export default class ToolBar extends Component {
                   content="垂直居中"
                   {...popoverProps}
                   onClick={() => {
+                    this.setState({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        verticalAlign: 'middle',
+                      },
+                    });
                     setCellStyle('valign', 'middle');
                   }}
                 >
@@ -611,6 +677,13 @@ export default class ToolBar extends Component {
                   content="底端对齐"
                   {...popoverProps}
                   onClick={() => {
+                    this.setState({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        verticalAlign:
+                          btnActiveStatus.verticalAlign === 'bottom' ? 'middle' : 'bottom',
+                      },
+                    });
                     setCellStyle('valign', 'bottom');
                   }}
                 >
@@ -638,6 +711,12 @@ export default class ToolBar extends Component {
                   <Button
                     className={classNames('btn', btnActiveStatus.isMerge && 'active')}
                     onClick={() => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          isMerge: !btnActiveStatus.isMerge,
+                        },
+                      });
                       setCellStyle('merge', true);
                     }}
                   >
@@ -651,6 +730,12 @@ export default class ToolBar extends Component {
                   content="左对齐"
                   {...popoverProps}
                   onClick={() => {
+                    this.setState({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        textAlign: 'left',
+                      },
+                    });
                     setCellStyle('align', 'left');
                   }}
                 >
@@ -668,6 +753,12 @@ export default class ToolBar extends Component {
                   content="水平居中"
                   {...popoverProps}
                   onClick={() => {
+                    this.setState({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        textAlign: btnActiveStatus.textAlign === 'center' ? 'left' : 'center',
+                      },
+                    });
                     setCellStyle('align', 'center');
                   }}
                 >
@@ -685,6 +776,12 @@ export default class ToolBar extends Component {
                   content="右对齐"
                   {...popoverProps}
                   onClick={() => {
+                    this.setState({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        textAlign: btnActiveStatus.textAlign === 'right' ? 'left' : 'right',
+                      },
+                    });
                     setCellStyle('align', 'right');
                   }}
                 >
@@ -728,6 +825,12 @@ export default class ToolBar extends Component {
                   <Button
                     className={classNames('btn', btnActiveStatus.autoLineBreak && 'active')}
                     onClick={() => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          autoLineBreak: !btnActiveStatus.autoLineBreak,
+                        },
+                      });
                       setCellStyle('textwrap', true);
                     }}
                   >
@@ -891,13 +994,19 @@ export default class ToolBar extends Component {
                   {/* <ButtonGroup className="btn-group"> */}
                   <Popover content="冻结窗格" {...popoverProps}>
                     <Button
-                      className="btn"
+                      className={classNames('btn', btnActiveStatus.freeze && 'active')}
                       onClick={() => {
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            freeze: !btnActiveStatus.freeze,
+                          },
+                        });
                         setCellStyle('freeze', true);
                       }}
                     >
                       <Icon component={() => <CustomizeIcon type="freeze" />} />
-                      冻结
+                      {btnActiveStatus.freeze ? '取消冻结' : '冻结'}
                     </Button>
                   </Popover>
                   {/* <Dropdown
