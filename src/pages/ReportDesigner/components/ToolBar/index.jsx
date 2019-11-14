@@ -17,8 +17,8 @@ import {
 import {
   previewMenu,
   borderMenu,
-  drawingBorderMenu,
-  clearMenu,
+  // drawingBorderMenu,
+  // clearMenu,
   rowsAndColsMenu,
   freezeMenu,
 } from './menu';
@@ -50,15 +50,9 @@ export default class ToolBar extends Component {
       param: '{"border":""}',
     },
     // 默认白色背景
-    backgroundColor: {
-      color: 'rgba(255,255,255,100)',
-      param: '{"background-color":"rgba(255,255,255,100)"}',
-    },
+    backgroundColor: '#fff',
     // 默认黑色字体
-    fontColor: {
-      color: 'rgba(0,0,0,100)',
-      param: '{"color":"rgba(0,0,0,100)"}',
-    },
+    fontColor: '#000',
     btnActiveStatus: {
       autoLineBreak: false, // 是否自动换行
       textAlign: 'inherit', // 水平方向对齐
@@ -88,15 +82,16 @@ export default class ToolBar extends Component {
   };
 
   creatMenu = (menu, type) => {
+    const { setCellStyle, editRowColumn } = this.props;
     if (type === 'freeze') {
       return (
         <Menu
-          onClick={e => {
-            this.handleMenuClick(type, e);
+          onClick={() => {
+            // this.handleMenuClick(type, e);
           }}
         >
-          {menu.map(({ icon, name, params }, key) => (
-            <Menu.Item params={params} icon={icon}>
+          {menu.map(({ icon, name, params }) => (
+            <Menu.Item params={params} icon={icon} key={name}>
               {icon && <Icon component={() => <CustomizeIcon type={icon} />} />}
               {params ? '取消冻结窗格(F)' : name}
             </Menu.Item>
@@ -104,14 +99,40 @@ export default class ToolBar extends Component {
         </Menu>
       );
     }
+    if (type === 'rowAndCol') {
+      return (
+        <Menu>
+          {menu.map(({ icon, name, operatype, value }) => (
+            <Menu.Item
+              key={name}
+              onClick={() => {
+                editRowColumn(operatype, value);
+              }}
+            >
+              {icon && <Icon component={() => <CustomizeIcon type={icon} />} />}
+              {name}
+            </Menu.Item>
+          ))}
+        </Menu>
+      );
+    }
     return (
       <Menu
-        onClick={e => {
-          this.handleMenuClick(type, e);
+        onClick={() => {
+          // this.handleMenuClick(type, e);
         }}
       >
-        {menu.map(({ icon, name, params }, key) => (
-          <Menu.Item params={params} icon={icon}>
+        {menu.map(({ icon, name, params }) => (
+          <Menu.Item
+            params={params}
+            icon={icon}
+            key={name}
+            onClick={() => {
+              setCellStyle(type, {
+                mode: params,
+              });
+            }}
+          >
             {icon && <Icon component={() => <CustomizeIcon type={icon} />} />}
             {name}
           </Menu.Item>
@@ -121,6 +142,8 @@ export default class ToolBar extends Component {
   };
 
   render() {
+    const { setCellStyle } = this.props;
+    const { btnActiveStatus, backgroundColor, fontColor } = this.state;
     const popoverProps = {
       placement: 'bottom',
       mouseEnterDelay: 0.2,
@@ -266,7 +289,9 @@ export default class ToolBar extends Component {
                     'btn-lg',
                     this.props.formatPainter && 'active',
                   )}
-                  onClick={() => {}}
+                  onClick={() => {
+                    setCellStyle('paintformat', true);
+                  }}
                 >
                   <Icon component={() => <CustomizeIcon type="formatBrush" size="lg" />} />
                   <p>格式刷</p>
@@ -280,10 +305,16 @@ export default class ToolBar extends Component {
                     className="select mr6"
                     style={{ width: '140px' }}
                     defaultValue="3"
-                    value={this.state.btnActiveStatus.fontFamily}
+                    value={btnActiveStatus.fontFamily}
                     size="small"
-                    onChange={e => {
-                      this.handleSelectChange('fontfamily', e);
+                    onChange={(value, e) => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          fontFamily: value,
+                        },
+                      });
+                      setCellStyle('font-name', e.props.children);
                     }}
                   >
                     <Option value="1">仿宋</Option>
@@ -313,9 +344,17 @@ export default class ToolBar extends Component {
                     className="select mr6"
                     style={{ width: '66px' }}
                     defaultValue="6"
-                    value={this.state.btnActiveStatus.fontSize}
+                    value={btnActiveStatus.fontSize}
                     size="small"
-                    onChange={e => {}}
+                    onChange={(value, e) => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          fontSize: value,
+                        },
+                      });
+                      setCellStyle('font-size', e.props.children);
+                    }}
                   >
                     <Option value="1">6</Option>
                     <Option value="2">8</Option>
@@ -348,34 +387,52 @@ export default class ToolBar extends Component {
                 </Popover>
               </div>
               <div>
-                <Popover content="加粗(ctrl+B)" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="加粗(ctrl+B)"
+                  {...popoverProps}
+                  onClick={() => {
+                    setCellStyle('font-bold', true);
+                  }}
+                >
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.fontWeight === 'bold' && 'active',
+                      btnActiveStatus.fontWeight === 'bold' && 'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="boldFont" />} />
                   </Button>
                 </Popover>
-                <Popover content="斜体(ctrl+I)" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="斜体(ctrl+I)"
+                  {...popoverProps}
+                  onClick={() => {
+                    setCellStyle('font-italic', true);
+                  }}
+                >
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.fontStyle === 'italic' && 'active',
+                      btnActiveStatus.fontStyle === 'italic' && 'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="italicFont" />} />
                   </Button>
                 </Popover>
-                <Popover content="下划线(ctrl+U)" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="下划线(ctrl+U)"
+                  {...popoverProps}
+                  onClick={() => {
+                    setCellStyle('underline', true);
+                  }}
+                >
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.textDecoration === 'underline' && 'active',
+                      btnActiveStatus.textDecoration === 'underline' && 'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="underlineFont" />} />
@@ -399,7 +456,7 @@ export default class ToolBar extends Component {
                     </Button>
                   </Dropdown>
                 </ButtonGroup>
-                <ButtonGroup className="btn-group mr6">
+                {/* <ButtonGroup className="btn-group mr6">
                   <Popover content="绘图边框" {...popoverProps}>
                     <Button className="btn" onClick={this.handleButtonClick}>
                       <Icon component={() => <CustomizeIcon type="drawingBorder" />} />
@@ -414,13 +471,13 @@ export default class ToolBar extends Component {
                       <Icon type="down" style={{}} />
                     </Button>
                   </Dropdown>
-                </ButtonGroup>
+                </ButtonGroup> */}
                 <ButtonGroup className="btn-group mr6">
                   <Popover content="填充颜色" {...popoverProps}>
                     <Button
                       className="btn"
                       onClick={() => {
-                        this.handleButtonClick('style', this.state.backgroundColor.param);
+                        setCellStyle('bgcolor', backgroundColor);
                       }}
                     >
                       <Icon component={() => <CustomizeIcon type="filling" />} />
@@ -429,9 +486,12 @@ export default class ToolBar extends Component {
                   <Dropdown
                     overlay={
                       <SketchPicker
-                        color={this.state.backgroundColor.color}
+                        color={backgroundColor}
                         onChange={value => {
-                          this.handleSelectColor('backgroundColor', value);
+                          this.setState({
+                            backgroundColor: value.hex,
+                          });
+                          setCellStyle('bgcolor', value.hex);
                         }}
                       />
                     }
@@ -448,7 +508,7 @@ export default class ToolBar extends Component {
                     <Button
                       className="btn"
                       onClick={() => {
-                        this.handleButtonClick('style', this.state.fontColor.param);
+                        setCellStyle('color', fontColor);
                       }}
                     >
                       <Icon component={() => <CustomizeIcon type="coloring" />} />
@@ -457,9 +517,12 @@ export default class ToolBar extends Component {
                   <Dropdown
                     overlay={
                       <SketchPicker
-                        color={this.state.fontColor.color}
+                        color={fontColor}
                         onChange={value => {
-                          this.handleSelectColor('fontColor', value);
+                          this.setState({
+                            fontColor: value.hex,
+                          });
+                          setCellStyle('color', value.hex);
                         }}
                       />
                     }
@@ -472,11 +535,18 @@ export default class ToolBar extends Component {
                   </Dropdown>
                 </ButtonGroup>
 
-                <ButtonGroup className="btn-group">
-                  <Button className="btn">
+                {/* <ButtonGroup className="btn-group"> */}
+                <Popover content="清除格式" {...popoverProps}>
+                  <Button
+                    className="btn"
+                    onClick={() => {
+                      setCellStyle('clearformat');
+                    }}
+                  >
                     <Icon component={() => <CustomizeIcon type="clear" />} />
                   </Button>
-                  <Dropdown
+                </Popover>
+                {/* <Dropdown
                     overlay={this.creatMenu(clearMenu, 'clear')}
                     trigger={['click']}
                     placement="bottomLeft"
@@ -485,45 +555,63 @@ export default class ToolBar extends Component {
                       <Icon type="down" style={{}} />
                     </Button>
                   </Dropdown>
-                </ButtonGroup>
+                </ButtonGroup> */}
               </div>
             </div>
             <div className={styles.group}>
               <div className="mb4">
-                <Popover content="顶端对齐" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="顶端对齐"
+                  {...popoverProps}
+                  onClick={() => {
+                    setCellStyle('valign', 'top');
+                  }}
+                >
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.verticalAlign === 'top' && 'active',
+                      btnActiveStatus.verticalAlign === 'top' && 'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="alignTop" />} />
                   </Button>
                 </Popover>
-                <Popover content="垂直居中" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="垂直居中"
+                  {...popoverProps}
+                  onClick={() => {
+                    setCellStyle('valign', 'middle');
+                  }}
+                >
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.verticalAlign === 'middle' && 'active',
+                      btnActiveStatus.verticalAlign === 'middle' && 'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="alignMiddle" />} />
                   </Button>
                 </Popover>
-                <Popover content="底端对齐" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="底端对齐"
+                  {...popoverProps}
+                  onClick={() => {
+                    setCellStyle('valign', 'bottom');
+                  }}
+                >
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.verticalAlign === 'bottom' && 'active',
+                      btnActiveStatus.verticalAlign === 'bottom' && 'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="alignBottom" />} />
                   </Button>
                 </Popover>
-                <Popover content="减少缩进量" {...popoverProps} onClick={() => {}}>
+                {/* <Popover content="减少缩进量" {...popoverProps} onClick={() => {}}>
                   <Button className="btn mr6">
                     <Icon component={() => <CustomizeIcon type="decreaseIndent" />} />
                   </Button>
@@ -532,11 +620,13 @@ export default class ToolBar extends Component {
                   <Button className="btn mr6">
                     <Icon component={() => <CustomizeIcon type="increaseIndent" />} />
                   </Button>
-                </Popover>
+                </Popover> */}
                 <Popover content="合并居中" {...popoverProps}>
                   <Button
-                    className={classNames('btn', this.state.btnActiveStatus.isMerge && 'active')}
-                    onClick={() => {}}
+                    className={classNames('btn', btnActiveStatus.isMerge && 'active')}
+                    onClick={() => {
+                      setCellStyle('merge', true);
+                    }}
                   >
                     <Icon component={() => <CustomizeIcon type="mergeAndCentered" size="lg" />} />
                     合并居中
@@ -544,46 +634,64 @@ export default class ToolBar extends Component {
                 </Popover>
               </div>
               <div>
-                <Popover content="左对齐" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="左对齐"
+                  {...popoverProps}
+                  onClick={() => {
+                    setCellStyle('align', 'left');
+                  }}
+                >
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.textAlign === 'left' && 'active',
+                      btnActiveStatus.textAlign === 'left' && 'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="alignLeft" />} />
                   </Button>
                 </Popover>
-                <Popover content="水平居中" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="水平居中"
+                  {...popoverProps}
+                  onClick={() => {
+                    setCellStyle('align', 'center');
+                  }}
+                >
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.textAlign === 'center' && 'active',
+                      btnActiveStatus.textAlign === 'center' && 'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="alignCenter" />} />
                   </Button>
                 </Popover>
-                <Popover content="右对齐" {...popoverProps} onClick={() => {}}>
+                <Popover
+                  content="右对齐"
+                  {...popoverProps}
+                  onClick={() => {
+                    setCellStyle('align', 'right');
+                  }}
+                >
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.textAlign === 'right' && 'active',
+                      btnActiveStatus.textAlign === 'right' && 'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="alignRight" />} />
                   </Button>
                 </Popover>
-                <Popover content="两端对齐" {...popoverProps} onClick={() => {}}>
+                {/* <Popover content="两端对齐" {...popoverProps} onClick={() => {}}>
                   <Button
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.textAlign === 'justify' &&
-                        this.state.btnActiveStatus.textAlignLast !== 'justify' &&
+                      btnActiveStatus.textAlign === 'justify' &&
+                        btnActiveStatus.textAlignLast !== 'justify' &&
                         'active',
                     )}
                   >
@@ -595,21 +703,20 @@ export default class ToolBar extends Component {
                     className={classNames(
                       'btn',
                       'mr6',
-                      this.state.btnActiveStatus.textAlign === 'justify' &&
-                        this.state.btnActiveStatus.textAlignLast === 'justify' &&
+                      btnActiveStatus.textAlign === 'justify' &&
+                        btnActiveStatus.textAlignLast === 'justify' &&
                         'active',
                     )}
                   >
                     <Icon component={() => <CustomizeIcon type="alignBoth" />} />
                   </Button>
-                </Popover>
+                </Popover> */}
                 <Popover content="自动换行" {...popoverProps}>
                   <Button
-                    className={classNames(
-                      'btn',
-                      this.state.btnActiveStatus.autoLineBreak && 'active',
-                    )}
-                    onClick={() => {}}
+                    className={classNames('btn', btnActiveStatus.autoLineBreak && 'active')}
+                    onClick={() => {
+                      setCellStyle('textwrap', true);
+                    }}
                   >
                     <Icon component={() => <CustomizeIcon type="autoLineBreak" size="lg" />} />
                     自动换行
@@ -624,7 +731,7 @@ export default class ToolBar extends Component {
                     className="select"
                     style={{ width: '139px' }}
                     defaultValue="1"
-                    value={this.state.btnActiveStatus.numericFormat}
+                    value={btnActiveStatus.numericFormat}
                     size="small"
                     onChange={e => {
                       this.handleNumeric(e);
@@ -768,14 +875,19 @@ export default class ToolBar extends Component {
                   </Popover>
                 </div>
                 <div>
-                  <ButtonGroup className="btn-group">
-                    <Popover content="冻结窗格" {...popoverProps}>
-                      <Button className="btn">
-                        <Icon component={() => <CustomizeIcon type="freeze" />} />
-                        冻结
-                      </Button>
-                    </Popover>
-                    <Dropdown
+                  {/* <ButtonGroup className="btn-group"> */}
+                  <Popover content="冻结窗格" {...popoverProps}>
+                    <Button
+                      className="btn"
+                      onClick={() => {
+                        setCellStyle('freeze', true);
+                      }}
+                    >
+                      <Icon component={() => <CustomizeIcon type="freeze" />} />
+                      冻结
+                    </Button>
+                  </Popover>
+                  {/* <Dropdown
                       overlay={this.creatMenu(freezeMenu, 'freeze')}
                       trigger={['click']}
                       placement="bottomLeft"
@@ -784,7 +896,7 @@ export default class ToolBar extends Component {
                         <Icon type="down" style={{}} />
                       </Button>
                     </Dropdown>
-                  </ButtonGroup>
+                  </ButtonGroup> */}
                 </div>
               </div>
               <div className="mr6" style={{ display: 'inline-block', verticalAlign: 'top' }}>
@@ -1327,7 +1439,7 @@ export default class ToolBar extends Component {
           width={400}
           wrapClassName="modal"
         >
-          <RadioGroup onChange={e => {}} value={this.state.radioValue}>
+          <RadioGroup onChange={() => {}} value={this.state.radioValue}>
             <Radio className={styles.radioStyle} value={1}>
               活动单元格左移
             </Radio>
