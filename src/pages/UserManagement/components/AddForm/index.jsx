@@ -41,6 +41,23 @@ export default class UserForm extends Component {
     this.props.getDepartmentId(this.state.departmentId);
   }
 
+  validateToNextPassword = (rule, value, callback) => {
+    const { form } = this.props;
+    if (value && this.state.confirmDirty) {
+      form.validateFields(['confirm'], { force: true });
+    }
+    callback();
+  };
+
+  compareToFirstPassword = (rule, value, callback) => {
+    const { form } = this.props;
+    if (value && value !== form.getFieldValue('password')) {
+      callback('Two passwords that you enter is inconsistent!');
+    } else {
+      callback();
+    }
+  };
+
   selectChange = (value, node) => {
     this.setState({
       selectValue: value,
@@ -103,6 +120,9 @@ export default class UserForm extends Component {
                     required: true,
                     message: 'Please input your 登陆密码',
                   },
+                  {
+                    validator: this.validateToNextPassword,
+                  },
                 ],
               })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
@@ -121,12 +141,7 @@ export default class UserForm extends Component {
             </Form.Item>
             <Form.Item label="联系电话：">
               {getFieldDecorator('phone', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your phone number!',
-                  },
-                ],
+                rules: [],
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="邮箱地址：">
@@ -135,10 +150,6 @@ export default class UserForm extends Component {
                   {
                     type: 'email',
                     message: 'The input is not valid E-mail!',
-                  },
-                  {
-                    required: true,
-                    message: 'Please confirm your 邮箱地址!',
                   },
                 ],
               })(<Input className={styles.inputValue} />)}
