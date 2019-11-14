@@ -84,6 +84,10 @@ class UserManagement extends Component {
         ),
       },
     ],
+    page: {
+      pageNumber: '1',
+      pageSize: '10',
+    },
   };
 
   newDepartmentId = '';
@@ -142,7 +146,7 @@ class UserManagement extends Component {
         type: 'userManagement/updateUserModelDatas',
         payload: param,
         callback: () => {
-          this.queryUser({});
+          this.queryUser();
         },
       });
     });
@@ -198,7 +202,7 @@ class UserManagement extends Component {
       type: 'userManagement/operationUserModelDatas',
       payload: param,
       callback: () => {
-        this.queryUser({});
+        this.queryUser();
       },
     });
     this.setState({
@@ -229,7 +233,7 @@ class UserManagement extends Component {
       type: 'userManagement/operationUserModelDatas',
       payload: param,
       callback: () => {
-        this.queryUser({});
+        this.queryUser();
         this.setState({
           closingVisible: false,
         });
@@ -315,12 +319,20 @@ class UserManagement extends Component {
   };
 
   // 获取查询列表数据
-  queryUser = param => {
+  queryUser = (param = { searchParam: '', displaypath: '', email: '', custStatus: '' }) => {
     const { dispatch } = this.props;
-
+    const { searchParam, displaypath, email, custStatus } = param;
+    const params = {
+      pageNumber: this.state.page.pageNumber,
+      pageSize: this.state.page.pageSize,
+      searchParam,
+      displaypath,
+      email,
+      custStatus,
+    };
     dispatch({
       type: 'userManagement/userManagemetDatas',
-      payload: param,
+      payload: params,
     });
   };
 
@@ -353,8 +365,7 @@ class UserManagement extends Component {
   };
 
   componentDidMount() {
-    const obj = {};
-    this.queryUser(obj);
+    this.queryUser();
     this.queryDepartment();
   }
 
