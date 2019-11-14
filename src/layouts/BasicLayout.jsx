@@ -50,8 +50,13 @@ const BasicLayout = props => {
    */
   // const [openKeys, setOpenKeys] = useState([]);
 
+  // const listenClose = () => {
+  //   window.localStorage.clear();
+  // }
+
   useEffect(() => {
     setLocale('en-US');
+    // window.addEventListener('beforeunload', listenClose, false);
     if (dispatch) {
       dispatch({
         type: 'login/getLoginStatus',

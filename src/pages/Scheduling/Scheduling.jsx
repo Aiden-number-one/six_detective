@@ -1,90 +1,14 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Input, Button, DatePicker, Table, Row, Col, Select, Switch, Modal } from 'antd';
+import { Table, Switch } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import TableHeader from '@/components/TableHeader';
 
-import styles from './Scheduling.less';
+import SearchForm from './compontents/SearchForm';
+import Modify from './compontents/Modify';
 
-const { Option } = Select;
-class OperatorForm extends Component {
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { search, reset } = this.props;
-    return (
-      <Form className="ant-advanced-search-form">
-        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="选择操作类型">
-              {getFieldDecorator('operationType', {
-                rules: [{ required: false, message: '请选择业务名称' }],
-                initialValue: 'scheduleName',
-              })(
-                <Select>
-                  <Option value="scheduleName">计划名称</Option>
-                  <Option value="jobName">作业名称</Option>
-                  <Option value="jobNo">作业编号</Option>
-                </Select>,
-              )}
-            </Form.Item>
-          </Col>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="操作值:">
-              {getFieldDecorator('operationName', {
-                rules: [{ required: false, message: '请输入操作值' }],
-              })(<Input placeholder="" />)}
-            </Form.Item>
-          </Col>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="最后一次执行状态">
-              {getFieldDecorator('lastExecState', {
-                rules: [{ required: false, message: '请选择状态' }],
-                initialValue: '',
-              })(
-                <Select>
-                  <Option value="">请选择</Option>
-                  <Option value="S">成功完成</Option>
-                  <Option value="F">出错完成</Option>
-                  <Option value="R">执行中</Option>
-                  <Option value="U">未执行</Option>
-                </Select>,
-              )}
-            </Form.Item>
-          </Col>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="上次执行时间：">
-              {getFieldDecorator('startTime', {})(
-                <DatePicker
-                  onChange={this.changeBeginDate}
-                  className={styles.inputvalue}
-                  format="YYYY-MM-DD HH:mm:ss"
-                  showTime
-                />,
-              )}
-            </Form.Item>
-          </Col>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="结束时间：">
-              {getFieldDecorator('endTime', {})(
-                <DatePicker onChange={this.changeEndDate} className={styles.inputvalue} showTime />,
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <div className="btnArea">
-          <Button icon="close" onClick={reset}>
-            重置
-          </Button>
-          <Button type="primary" onClick={search}>
-            Search
-          </Button>
-        </div>
-      </Form>
-    );
-  }
-}
-const NewOperatorForm = Form.create({})(OperatorForm);
+// import styles from './Scheduling.less';
 
 @connect(({ schedule, loading }) => ({
   loading: loading.effects['schedule/getScheduleList'],
@@ -161,7 +85,7 @@ class Scheduling extends Component {
     ],
   };
 
-  auditLogForm = React.createRef();
+  searchForm = React.createRef();
 
   componentDidMount() {
     this.getSchedul();
@@ -197,7 +121,7 @@ class Scheduling extends Component {
 
   // 搜索查询列表
   queryScheduleList = () => {
-    this.auditLogForm.current.validateFields((err, values) => {
+    this.searchForm.current.validateFields((err, values) => {
       const startTime = values.startTime ? moment(values.startTime).format('YYYYMMDDHHmmss') : '';
       const endTime = values.endTime ? moment(values.endTime || '').format('YYYYMMDDHHmmss') : '';
       const type = values.operationType;
@@ -216,7 +140,7 @@ class Scheduling extends Component {
 
   // 重置
   operatorReset = () => {
-    this.auditLogForm.current.resetFields();
+    this.searchForm.current.resetFields();
   };
 
   // 选择表格行，checkbox
@@ -262,7 +186,7 @@ class Scheduling extends Component {
 
   render() {
     const { scheduleListData } = this.props;
-    const { pageSize } = this.state;
+    const { pageSize, modifyVisible } = this.state;
     const scheduleList = scheduleListData.items;
     const totalCount = scheduleListData && scheduleListData.totalCount;
     // eslint-disable-next-line no-unused-expressions
@@ -276,10 +200,10 @@ class Scheduling extends Component {
     };
     return (
       <PageHeaderWrapper>
-        <NewOperatorForm
+        <SearchForm
           search={this.queryScheduleList}
           reset={this.operatorReset}
-          ref={this.auditLogForm}
+          ref={this.searchForm}
         />
         <TableHeader
           showEdit
@@ -294,12 +218,11 @@ class Scheduling extends Component {
           columns={this.state.columns}
           rowSelection={rowSelection}
         />
-        <Modal
-          title="修改调度计划"
-          visible={this.state.modifyVisible}
-          onOk={this.modifyConfirm}
-          onCancel={this.modifyCancel}
-        ></Modal>
+        <Modify
+          modifyVisible={modifyVisible}
+          modifyConfirm={this.modifyConfirm}
+          modifyCancel={this.modifyCancel}
+        />
       </PageHeaderWrapper>
     );
   }
