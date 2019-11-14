@@ -1,13 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, TreeSelect, Button, Input, Modal, Table, Row, Col, Select } from 'antd';
+import { Form, TreeSelect, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
 import TableHeader from '@/components/TableHeader';
-import styles from './user.less';
+import styles from './index.less';
 import { passWordStrength } from '@/utils/utils';
 
+import SearchForm from './components/SearchForm';
+import ModifyForm from './components/ModifyForm';
+import PasswordForm from './components/PasswordForm';
+import ResetPasswordForm from './components/ResetPasswordForm';
+
 const { TreeNode } = TreeSelect;
-const { Option } = Select;
 function loop(orgsTree) {
   return orgsTree.map(item => {
     const { children, departmentId, departmentName, parentDepartmentId } = item;
@@ -36,186 +40,9 @@ function loop(orgsTree) {
   });
 }
 
-class SearchForm extends Component {
-  state = {};
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { search, reset } = this.props;
-    return (
-      <Form className="ant-advanced-search-form">
-        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="登录名/员工姓名：">
-              {getFieldDecorator('searchParam', {})(<Input className={styles.inputvalue} />)}
-            </Form.Item>
-          </Col>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="公司部门：">
-              {getFieldDecorator('displaypath', {})(<Input className={styles.inputvalue} />)}
-            </Form.Item>
-          </Col>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="邮    箱：">
-              {getFieldDecorator('email', {
-                rules: [
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                ],
-              })(<Input className={styles.inputvalue} />)}
-            </Form.Item>
-          </Col>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="状　　态：">
-              {getFieldDecorator('custStatus', {
-                initialValue: '',
-              })(
-                <Select>
-                  <Option value="">请选择</Option>
-                  <Option value="0">正常</Option>
-                  <Option value="1">销户</Option>
-                  <Option value="3">锁定</Option>
-                </Select>,
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <div className="btnArea">
-          <Button icon="close" onClick={reset}>
-            Reset
-          </Button>
-          <Button type="primary" onClick={search}>
-            Search
-          </Button>
-        </div>
-      </Form>
-    );
-  }
-}
-
 const NewSearchForm = Form.create({})(SearchForm);
 
-class UserForm extends Component {
-  state = {
-    selectValue: undefined,
-    departmentId: '',
-  };
-
-  componentDidUpdate() {
-    this.props.getDepartmentId(this.state.departmentId);
-  }
-
-  selectChange = (value, node) => {
-    this.setState({
-      selectValue: value,
-      departmentId: node.props.eventKey,
-    });
-  };
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { orgs } = this.props;
-    const { selectValue } = this.state;
-    return (
-      <Fragment>
-        <div>
-          <Form layout="inline" className={styles.formWrap}>
-            <Form.Item label="登陆名：">
-              {getFieldDecorator('login', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 登陆名',
-                  },
-                ],
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="员工姓名：">
-              {getFieldDecorator('name', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 员工姓名',
-                  },
-                ],
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="所属部门：">
-              {getFieldDecorator('departmentId', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 所属部门',
-                  },
-                ],
-              })(
-                <TreeSelect
-                  treeDefaultExpandAll
-                  value={selectValue}
-                  style={{ width: 220 }}
-                  onSelect={this.selectChange}
-                  placeholder="Please select"
-                >
-                  {loop(orgs)}
-                </TreeSelect>,
-              )}
-            </Form.Item>
-            <Form.Item label="登陆密码：">
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 登陆密码',
-                  },
-                ],
-              })(<Input.Password className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="确认密码：">
-              {getFieldDecorator('confirm', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please confirm your password!',
-                  },
-                  {
-                    validator: this.compareToFirstPassword,
-                  },
-                ],
-              })(<Input.Password className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="联系电话：">
-              {getFieldDecorator('phone', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your phone number!',
-                  },
-                ],
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="邮箱地址：">
-              {getFieldDecorator('email', {
-                rules: [
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                  {
-                    required: true,
-                    message: 'Please confirm your 邮箱地址!',
-                  },
-                ],
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-          </Form>
-        </div>
-      </Fragment>
-    );
-  }
-}
-const NewUserForm = Form.create({})(UserForm);
+const NewUserForm = Form.create({})(ModifyForm);
 
 class UpdateForm extends Component {
   state = {
@@ -308,91 +135,7 @@ class UpdateForm extends Component {
 }
 const NewUpdateForm = Form.create({})(UpdateForm);
 
-class PasswordForm extends Component {
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    return (
-      <Fragment>
-        <div>
-          <Form layout="inline" className={styles.formWrap}>
-            <Form.Item label="原密码：">
-              {getFieldDecorator('oldPassword', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 原密码',
-                  },
-                ],
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="登陆密码：">
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 登陆密码',
-                  },
-                ],
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="确认密码：">
-              {getFieldDecorator('confirmPassword', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please confirm your password!',
-                  },
-                  {
-                    validator: this.compareToFirstPassword,
-                  },
-                ],
-              })(<Input.Password className={styles.inputValue} />)}
-            </Form.Item>
-          </Form>
-        </div>
-      </Fragment>
-    );
-  }
-}
-
 const NewPasswordForm = Form.create({})(PasswordForm);
-
-class ResetPasswordForm extends Component {
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    return (
-      <Fragment>
-        <div>
-          <Form layout="inline" className={styles.formWrap}>
-            <Form.Item label="登陆密码：">
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your 登陆密码',
-                  },
-                ],
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="确认密码：">
-              {getFieldDecorator('confirmPassword', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please confirm your password!',
-                  },
-                  {
-                    validator: this.compareToFirstPassword,
-                  },
-                ],
-              })(<Input.Password className={styles.inputValue} />)}
-            </Form.Item>
-          </Form>
-        </div>
-      </Fragment>
-    );
-  }
-}
 
 const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
 
