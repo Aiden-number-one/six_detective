@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
-
-import { Form, TreeSelect, Button, Input, Modal, Table } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { Form, TreeSelect, Button, Input, Modal, Table, Row, Col, Select } from 'antd';
 import { connect } from 'dva';
+import TableHeader from '@/components/TableHeader';
 import styles from './user.less';
 import { passWordStrength } from '@/utils/utils';
 
 const { TreeNode } = TreeSelect;
-
+const { Option } = Select;
 function loop(orgsTree) {
   return orgsTree.map(item => {
     const { children, departmentId, departmentName, parentDepartmentId } = item;
@@ -34,6 +35,67 @@ function loop(orgsTree) {
     );
   });
 }
+
+class SearchForm extends Component {
+  state = {};
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { search, reset } = this.props;
+    return (
+      <Form className="ant-advanced-search-form">
+        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
+          <Col xs={12} sm={12} lg={8}>
+            <Form.Item label="登录名/员工姓名：">
+              {getFieldDecorator('searchParam', {})(<Input className={styles.inputvalue} />)}
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={12} lg={8}>
+            <Form.Item label="公司部门：">
+              {getFieldDecorator('displaypath', {})(<Input className={styles.inputvalue} />)}
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={12} lg={8}>
+            <Form.Item label="邮    箱：">
+              {getFieldDecorator('email', {
+                rules: [
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
+                ],
+              })(<Input className={styles.inputvalue} />)}
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={12} lg={8}>
+            <Form.Item label="状　　态：">
+              {getFieldDecorator('custStatus', {
+                initialValue: '',
+              })(
+                <Select>
+                  <Option value="">请选择</Option>
+                  <Option value="0">正常</Option>
+                  <Option value="1">销户</Option>
+                  <Option value="3">锁定</Option>
+                </Select>,
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <div className="btnArea">
+          <Button icon="close" onClick={reset}>
+            Reset
+          </Button>
+          <Button type="primary" onClick={search}>
+            Search
+          </Button>
+        </div>
+      </Form>
+    );
+  }
+}
+
+const NewSearchForm = Form.create({})(SearchForm);
 
 class UserForm extends Component {
   state = {
@@ -404,6 +466,8 @@ class UserManagement extends Component {
 
   newDepartmentId = '';
 
+  searchForm = React.createRef();
+
   formRef = React.createRef();
 
   updateFormRef = React.createRef();
@@ -655,6 +719,24 @@ class UserManagement extends Component {
     });
   };
 
+  // 搜索
+  queryLog = () => {
+    this.searchForm.current.validateFields((err, values) => {
+      const params = {
+        customerno: '77029',
+        searchParam: values.searchParam,
+        displaypath: values.displaypath,
+        email: values.email,
+        custStatus: values.custStatus,
+      };
+      this.queryUser(params);
+    });
+  };
+
+  operatorReset = () => {
+    this.searchForm.current.resetFields();
+  };
+
   componentDidMount() {
     const obj = {
       customerno: '77029',
@@ -667,45 +749,17 @@ class UserManagement extends Component {
     const { orgs, userManagementData } = this.props;
     const { userInfo } = this.state;
 
-    // let userData = Object.assign([], userManagementData)
-    // userData = userData.length > 0 && userData.map(element => {
-    //   const newCustStatus = userStatus(element.custStatus);
-    //   return {
-    //     custStatus: newCustStatus,
-    //     custCustomerno: element.custCustomerno,
-    //     custStatusName: element.custStatusName,
-    //     customerName: element.customerName,
-    //     customerno: element.customerno,
-    //     departmentId: element.departmentId,
-    //     departmentName: element.departmentName,
-    //     displaypath: element.displaypath,
-    //     email: element.email,
-    //     lastupdatetime: element.lastupdatetime,
-    //     loginName: element.loginName,
-    //   };
-    // });
     return (
-      <Fragment>
+      <PageHeaderWrapper>
         <div>
           <div>
-            <ul className={styles.clearfix}>
-              <li className={styles.fl}>
-                <span>登陆名：</span>
-                <Input className={styles['login-name']}></Input>
-              </li>
-              <li className={styles.fl}>
-                <span>公司部门：</span>
-                <Input className={styles['login-name']}></Input>
-              </li>
-              <li className={styles.fl}>
-                <Button type="primary" icon="search"></Button>
-              </li>
-            </ul>
+            <NewSearchForm
+              search={this.queryLog}
+              reset={this.operatorReset}
+              ref={this.searchForm}
+            ></NewSearchForm>
           </div>
           <div>
-            <Button type="primary" onClick={this.addUser}>
-              新增用户
-            </Button>
             <Modal
               title="新增用户"
               visible={this.state.visible}
@@ -770,6 +824,7 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div>
+            <TableHeader showEdit addTableData={this.addUser}></TableHeader>
             <Table
               pagination={{ size: 'small' }}
               dataSource={userManagementData}
@@ -777,7 +832,7 @@ class UserManagement extends Component {
             ></Table>
           </div>
         </div>
-      </Fragment>
+      </PageHeaderWrapper>
     );
   }
 }

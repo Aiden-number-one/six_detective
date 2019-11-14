@@ -75,9 +75,9 @@ export const userManagementModel = {
             type: 'operationDatas',
             payload: response.bcjson.items,
           });
-          callback();
         }
       }
+      callback();
     },
     *queryOrgs(action, { call, put }) {
       const { items } = yield call(fetch('get_departments_info'), action.params);
