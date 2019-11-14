@@ -25,8 +25,20 @@ const Model = {
         message.error(response.bcjson.msg);
       }
     },
-    *getLoginStatus({ callback, payload }, { call }) {
+    *getLoginStatus({ callback, payload }, { call, put }) {
       const response = yield call(getLoginStatus, { param: payload });
+      if (response.bcjson.flag === '1') {
+        const item = response.bcjson.items[0];
+        if (item.isNeedLock === 'Y' || item.IpOrAgentOrAlllow !== 'Allow') {
+          message.warning('您的账号在其他地方登录,请重新登录');
+          yield put({
+            type: 'logout',
+          });
+        }
+      }
+      // if (response.bcjson.flag === '001') {
+      //   message.error('您的登录信息已失效,请重新登录')
+      // }
       if (callback) callback(response);
     },
     *logout(_, { put }) {
