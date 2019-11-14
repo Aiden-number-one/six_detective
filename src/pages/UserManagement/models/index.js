@@ -17,6 +17,7 @@ export const userManagementModel = {
     *userManagemetDatas({ payload }, { call, put }) {
       const response = yield call(getUserList, { param: payload });
       if (response.bcjson.flag === '1' || !response.bcjson.flag) {
+        const bcjson = Object.assign([], response.bcjson);
         let userData = Object.assign([], response.bcjson.items);
         yield (userData =
           userData.length > 0 &&
@@ -36,10 +37,11 @@ export const userManagementModel = {
               loginName: element.loginName,
             };
           }));
+        bcjson.items = userData;
         if (response.bcjson.items) {
           yield put({
             type: 'setDatas',
-            payload: userData,
+            payload: bcjson,
           });
         }
       }

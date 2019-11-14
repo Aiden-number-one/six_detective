@@ -102,7 +102,11 @@ class UserManagement extends Component {
 
   resetPasswordFormRef = React.createRef();
 
-  // eslint-disable-next-line react/sort-comp
+  componentDidMount() {
+    this.queryUser();
+    this.queryDepartment();
+  }
+
   addUser = () => {
     this.setState({ visible: true });
   };
@@ -319,16 +323,23 @@ class UserManagement extends Component {
   };
 
   // 获取查询列表数据
-  queryUser = (param = { searchParam: '', displaypath: '', email: '', custStatus: '' }) => {
+  queryUser = (
+    param = {
+      searchParam: undefined,
+      displaypath: undefined,
+      email: undefined,
+      custStatus: undefined,
+    },
+  ) => {
     const { dispatch } = this.props;
     const { searchParam, displaypath, email, custStatus } = param;
     const params = {
-      pageNumber: this.state.page.pageNumber,
-      pageSize: this.state.page.pageSize,
       searchParam,
       displaypath,
       email,
       custStatus,
+      pageNumber: this.state.page.pageNumber,
+      pageSize: this.state.page.pageSize,
     };
     dispatch({
       type: 'userManagement/userManagemetDatas',
@@ -364,14 +375,26 @@ class UserManagement extends Component {
     this.searchForm.current.resetFields();
   };
 
-  componentDidMount() {
-    this.queryUser();
-    this.queryDepartment();
-  }
+  // 分页
+  pageChange = pagination => {
+    const page = {
+      pageNumber: pagination.current.toString(),
+      pageSize: pagination.pageSize.toString(),
+    };
+
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUser();
+      },
+    );
+  };
 
   render() {
     const { orgs, userManagementData } = this.props;
-    const { userInfo } = this.state;
+    const { userInfo, page } = this.state;
 
     return (
       <PageHeaderWrapper>
@@ -450,8 +473,9 @@ class UserManagement extends Component {
           <div>
             <TableHeader showEdit addTableData={this.addUser}></TableHeader>
             <Table
-              pagination={{ size: 'small' }}
-              dataSource={userManagementData}
+              pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
+              onChange={this.pageChange}
+              dataSource={userManagementData.items}
               columns={this.state.columns}
             ></Table>
           </div>
