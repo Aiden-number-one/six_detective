@@ -1,33 +1,127 @@
 import React, { Component, Fragment } from 'react';
-
-import { Form, Tree, Button, Input, Modal, Select, Table } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { Form, TreeSelect, Button, Input, Modal, Table, Row, Col, Select } from 'antd';
 import { connect } from 'dva';
+import TableHeader from '@/components/TableHeader';
 import styles from './user.less';
+import { passWordStrength } from '@/utils/utils';
 
-// const { Option } = Select;
-const { TreeNode } = Tree;
-
+const { TreeNode } = TreeSelect;
+const { Option } = Select;
 function loop(orgsTree) {
   return orgsTree.map(item => {
     const { children, departmentId, departmentName, parentDepartmentId } = item;
     if (children) {
       return (
-        <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId}>
+        <TreeNode
+          key={departmentId}
+          departmentId={departmentId}
+          value={departmentName}
+          title={departmentName}
+          parentId={parentDepartmentId}
+        >
           {loop(children)}
         </TreeNode>
       );
     }
-    return <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId} />;
+    return (
+      <TreeNode
+        key={departmentId}
+        departmentId={departmentId}
+        value={departmentName}
+        title={departmentName}
+        parentId={parentDepartmentId}
+      />
+    );
   });
 }
 
-class UserForm extends Component {
+class SearchForm extends Component {
+  state = {};
+
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { search, reset } = this.props;
+    return (
+      <Form className="ant-advanced-search-form">
+        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
+          <Col xs={12} sm={12} lg={8}>
+            <Form.Item label="登录名/员工姓名：">
+              {getFieldDecorator('searchParam', {})(<Input className={styles.inputvalue} />)}
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={12} lg={8}>
+            <Form.Item label="公司部门：">
+              {getFieldDecorator('displaypath', {})(<Input className={styles.inputvalue} />)}
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={12} lg={8}>
+            <Form.Item label="邮    箱：">
+              {getFieldDecorator('email', {
+                rules: [
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
+                ],
+              })(<Input className={styles.inputvalue} />)}
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={12} lg={8}>
+            <Form.Item label="状　　态：">
+              {getFieldDecorator('custStatus', {
+                initialValue: '',
+              })(
+                <Select>
+                  <Option value="">请选择</Option>
+                  <Option value="0">正常</Option>
+                  <Option value="1">销户</Option>
+                  <Option value="3">锁定</Option>
+                </Select>,
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <div className="btnArea">
+          <Button icon="close" onClick={reset}>
+            Reset
+          </Button>
+          <Button type="primary" onClick={search}>
+            Search
+          </Button>
+        </div>
+      </Form>
+    );
+  }
+}
+
+const NewSearchForm = Form.create({})(SearchForm);
+
+class UserForm extends Component {
+  state = {
+    selectValue: undefined,
+    departmentId: '',
+  };
+
+  componentDidUpdate() {
+    this.props.getDepartmentId(this.state.departmentId);
+  }
+
+  selectChange = (value, node) => {
+    this.setState({
+      selectValue: value,
+      departmentId: node.props.eventKey,
+    });
+  };
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { orgs } = this.props;
+    const { selectValue } = this.state;
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="登陆名：">
               {getFieldDecorator('login', {
                 rules: [
@@ -49,7 +143,7 @@ class UserForm extends Component {
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="所属部门：">
-              {getFieldDecorator('department', {
+              {getFieldDecorator('departmentId', {
                 rules: [
                   {
                     required: true,
@@ -57,11 +151,15 @@ class UserForm extends Component {
                   },
                 ],
               })(
-                <Select
-                  style={{ width: 300 }}
-                  onChange={this.handleChange}
+                <TreeSelect
+                  treeDefaultExpandAll
+                  value={selectValue}
+                  style={{ width: 220 }}
+                  onSelect={this.selectChange}
                   placeholder="Please select"
-                ></Select>,
+                >
+                  {loop(orgs)}
+                </TreeSelect>,
               )}
             </Form.Item>
             <Form.Item label="登陆密码：">
@@ -85,7 +183,7 @@ class UserForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(<Input.Password className={styles.inputValue} onBlur={this.handleConfirmBlur} />)}
+              })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="联系电话：">
               {getFieldDecorator('phone', {
@@ -120,15 +218,30 @@ class UserForm extends Component {
 const NewUserForm = Form.create({})(UserForm);
 
 class UpdateForm extends Component {
-  state = {};
+  state = {
+    selectValue: undefined,
+    departmentId: '',
+  };
+
+  componentDidUpdate() {
+    this.props.getDepartmentId(this.state.departmentId);
+  }
+
+  selectChange = (value, node) => {
+    this.setState({
+      selectValue: value,
+      departmentId: node.props.eventKey,
+    });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { orgs } = this.props;
+    const { orgs, userInfo } = this.props;
+    const { selectValue } = this.state;
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="登陆名：">
               {getFieldDecorator('login', {
                 rules: [
@@ -137,6 +250,7 @@ class UpdateForm extends Component {
                     message: 'Please input your 登陆名',
                   },
                 ],
+                initialValue: userInfo.login,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="员工姓名：">
@@ -147,26 +261,28 @@ class UpdateForm extends Component {
                     message: 'Please input your 员工姓名',
                   },
                 ],
+                initialValue: userInfo.name,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="所属部门：">
-              {getFieldDecorator('department', {
+              {getFieldDecorator('departmentId', {
                 rules: [
                   {
                     required: true,
                     message: 'Please input your 所属部门',
                   },
                 ],
+                initialValue: userInfo.departmentName,
               })(
-                <Select
-                  style={{ width: 300 }}
-                  onChange={this.handleChange}
+                <TreeSelect
+                  treeDefaultExpandAll
+                  value={selectValue}
+                  style={{ width: 220 }}
+                  onSelect={this.selectChange}
                   placeholder="Please select"
                 >
-                  <div>
-                    <Tree>{loop(orgs)}</Tree>
-                  </div>
-                </Select>,
+                  {loop(orgs)}
+                </TreeSelect>,
               )}
             </Form.Item>
             <Form.Item label="邮箱地址：">
@@ -181,6 +297,7 @@ class UpdateForm extends Component {
                     message: 'Please confirm your 邮箱地址!',
                   },
                 ],
+                initialValue: userInfo.email,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
           </Form>
@@ -197,7 +314,7 @@ class PasswordForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="原密码：">
               {getFieldDecorator('oldPassword', {
                 rules: [
@@ -229,7 +346,7 @@ class PasswordForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(<Input.Password className={styles.inputValue} onBlur={this.handleConfirmBlur} />)}
+              })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
           </Form>
         </div>
@@ -246,7 +363,7 @@ class ResetPasswordForm extends Component {
     return (
       <Fragment>
         <div>
-          <Form>
+          <Form layout="inline" className={styles.formWrap}>
             <Form.Item label="登陆密码：">
               {getFieldDecorator('password', {
                 rules: [
@@ -268,7 +385,7 @@ class ResetPasswordForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(<Input.Password className={styles.inputValue} onBlur={this.handleConfirmBlur} />)}
+              })(<Input.Password className={styles.inputValue} />)}
             </Form.Item>
           </Form>
         </div>
@@ -292,14 +409,11 @@ class UserManagement extends Component {
     closingVisible: false,
     updatePasswordVisible: false,
     resetPasswordVisible: false,
-    // eslint-disable-next-line react/no-unused-state
     userInfo: {
       login: '',
       name: '',
-      department: '',
-      password: '',
-      confirm: '',
-      phone: '',
+      departmentName: '',
+      departmentId: '',
       email: '',
     },
     columns: [
@@ -320,8 +434,8 @@ class UserManagement extends Component {
       },
       {
         title: '状态',
-        dataIndex: 'custStatusName',
-        key: 'custStatusName',
+        dataIndex: 'custStatus',
+        key: 'custStatus',
       },
       {
         title: '操作',
@@ -350,6 +464,10 @@ class UserManagement extends Component {
     ],
   };
 
+  newDepartmentId = '';
+
+  searchForm = React.createRef();
+
   formRef = React.createRef();
 
   updateFormRef = React.createRef();
@@ -363,108 +481,19 @@ class UserManagement extends Component {
     this.setState({ visible: true });
   };
 
-  // 密码级别
-  // eslint-disable-next-line arrow-parens
-  passWordStrength = passwd => {
-    // 密码强度
-    let grade = 0;
-    // 判断密码是否存在
-    if (!passwd) {
-      return grade;
-    }
-    // 判断长度。并给出分数
-    /*
-    密码长度：
-    0 分: 小于等于 4 个字符
-    10 分: 5 到 7 字符
-    20 分: 大于8 个字符
-    */
-    // grade += passwd.length<=4?0:(passwd.length>8?20:10);
-    if (passwd.length <= 4) {
-      grade += 0;
-    } else if (passwd.length > 8) {
-      grade += 20;
-    } else {
-      grade += 10;
-    }
-    /*
-    字母:
-    0 分: 没有字母
-    10 分: 全都是小（大）写字母
-    20 分: 大小写混合字母
-    */
-    // grade += !passwd.match(/[a-z]/i)?0:(passwd.match(/[a-z]/) && passwd.match(/[A-Z]/)?20:10);
-    if (!passwd.match(/[a-z]/i)) {
-      grade += 0;
-    } else if (passwd.match(/[a-z]/) && passwd.match(/[A-Z]/)) {
-      grade += 20;
-    } else {
-      grade += 10;
-    }
-    /*
-    数字:
-    0 分: 没有数字
-    10 分: 1 个数字
-    15 分: 大于等于 3 个数字
-    */
-    // grade += !passwd.match(/[0-9]/)?0:(passwd.match(/[0-9]/g).length >= 3?15:10);
-    if (!passwd.match(/[0-9]/)) {
-      grade += 0;
-    } else if (passwd.match(/[0-9]/g).length > 3) {
-      grade += 15;
-    } else {
-      grade += 10;
-    }
-    /*
-    符号:
-    0 分: 没有符号
-    10 分: 1 个符号
-    20 分: 大于 1 个符号
-    */
-    // grade += !passwd.match(/\W/)?0:(passwd.match(/\W/g).length > 1?20:10);
-    if (!passwd.match(/\W/)) {
-      grade += 0;
-    } else if (passwd.match(/\W/g).length > 1) {
-      grade += 20;
-    } else {
-      grade += 10;
-    }
-    if (!passwd.match(/(.+)\1{2,}/gi)) {
-      grade += 10;
-    } else {
-      grade += 5;
-    }
-    /*
-    奖励:
-    0 分: 只有字母或数字
-    5 分: 只有字母和数字
-    10 分: 字母、数字和符号
-    15 分: 大小写字母、数字和符号
-    */
-    // eslint-disable-next-line max-len
-    // grade += !passwd.match(/[0-9]/) || !passwd.match(/[a-z]/i)?0:(!passwd.match(/\W/)?5:(!passwd.match(/[a-z]/) || !passwd.match(/[A-Z]/)?10:15));
-    if (!passwd.match(/[0-9]/) || !passwd.match(/[a-z]/i)) {
-      grade += 0;
-    } else if (!passwd.match(/\W/)) {
-      grade += 5;
-    } else if (!passwd.match(/[a-z]/) || !passwd.match(/[A-Z]/)) {
-      grade += 10;
-    } else {
-      grade += 15;
-    }
-    return grade;
+  // 获取id
+  getDepartmentId = departmentId => {
+    this.newDepartmentId = departmentId;
   };
 
   handleOk = () => {
-    // this.setState({ visible: false });
-    // console.log('this.form=', this.form)
     const { dispatch } = this.props;
     this.formRef.current.validateFields((err, values) => {
-      const passwordStrength = this.passWordStrength(values.password);
+      const passwordStrength = passWordStrength(values.password);
       const param = {
         loginName: values.login,
         customerName: values.name,
-        departmentId: 1001,
+        departmentId: this.newDepartmentId,
         password: values.password,
         passwordStrength,
         mobile: values.phone,
@@ -478,8 +507,24 @@ class UserManagement extends Component {
   };
 
   updateConfirm = () => {
+    const { dispatch } = this.props;
     this.updateFormRef.current.validateFields((err, values) => {
-      console.log('err, values=', err, values);
+      const param = {
+        custCustomerno: '77029',
+        loginName: values.login,
+        customerName: values.name,
+        departmentId: this.newDepartmentId || this.state.userInfo.departmentId,
+        email: values.email,
+      };
+      dispatch({
+        type: 'userManagement/updateUserModelDatas',
+        payload: param,
+        callback: () => {
+          this.queryUser({
+            customerno: '77029',
+          });
+        },
+      });
     });
     this.setState({
       updateVisible: false,
@@ -499,9 +544,21 @@ class UserManagement extends Component {
   handleChange = () => {};
 
   updateUser = (res, obj) => {
-    console.log('obj=', obj, res);
+    const userInfo = {
+      login: '',
+      name: '',
+      departmentName: '',
+      departmentId: '',
+      email: '',
+    };
+    userInfo.login = obj.loginName;
+    userInfo.name = obj.customerName;
+    userInfo.departmentName = obj.departmentName;
+    userInfo.departmentId = obj.departmentId;
+    userInfo.email = obj.email;
     this.setState({
       updateVisible: true,
+      userInfo,
     });
   };
 
@@ -517,12 +574,10 @@ class UserManagement extends Component {
       custCustomerno: 77029,
       operationType: 1,
     };
-    console.log(11111111112222);
     dispatch({
       type: 'userManagement/operationUserModelDatas',
       payload: param,
       callback: () => {
-        console.log('okk');
         this.queryUser({
           customerno: '77029',
         });
@@ -582,8 +637,7 @@ class UserManagement extends Component {
   updatePasswordConfirm = () => {
     const { dispatch } = this.props;
     this.passwordFormRef.current.validateFields((err, values) => {
-      console.log('err, values=', err, values);
-      const passwordStrength = this.passWordStrength(values.password);
+      const passwordStrength = passWordStrength(values.password);
       const param = {
         custCustomerno: 77029,
         operationType: 5,
@@ -619,8 +673,7 @@ class UserManagement extends Component {
   resetPasswordConfirm = () => {
     const { dispatch } = this.props;
     this.resetPasswordFormRef.current.validateFields((err, values) => {
-      console.log('err, values=', err, values);
-      const passwordStrength = this.passWordStrength(values.password);
+      const passwordStrength = passWordStrength(values.password);
       const param = {
         custCustomerno: 77029,
         operationType: 6,
@@ -666,6 +719,24 @@ class UserManagement extends Component {
     });
   };
 
+  // 搜索
+  queryLog = () => {
+    this.searchForm.current.validateFields((err, values) => {
+      const params = {
+        customerno: '77029',
+        searchParam: values.searchParam,
+        displaypath: values.displaypath,
+        email: values.email,
+        custStatus: values.custStatus,
+      };
+      this.queryUser(params);
+    });
+  };
+
+  operatorReset = () => {
+    this.searchForm.current.resetFields();
+  };
+
   componentDidMount() {
     const obj = {
       customerno: '77029',
@@ -675,36 +746,31 @@ class UserManagement extends Component {
   }
 
   render() {
-    const { orgs } = this.props;
+    const { orgs, userManagementData } = this.props;
+    const { userInfo } = this.state;
+
     return (
-      <Fragment>
+      <PageHeaderWrapper>
         <div>
           <div>
-            <ul className={styles.clearfix}>
-              <li className={styles.fl}>
-                <span>登陆名：</span>
-                <Input className={styles['login-name']}></Input>
-              </li>
-              <li className={styles.fl}>
-                <span>公司部门：</span>
-                <Input className={styles['login-name']}></Input>
-              </li>
-              <li className={styles.fl}>
-                <Button type="primary" icon="search"></Button>
-              </li>
-            </ul>
+            <NewSearchForm
+              search={this.queryLog}
+              reset={this.operatorReset}
+              ref={this.searchForm}
+            ></NewSearchForm>
           </div>
           <div>
-            <Button type="primary" onClick={this.addUser}>
-              新增用户
-            </Button>
             <Modal
               title="新增用户"
               visible={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
             >
-              <NewUserForm ref={this.formRef} orgs={orgs}></NewUserForm>
+              <NewUserForm
+                ref={this.formRef}
+                orgs={orgs}
+                getDepartmentId={this.getDepartmentId}
+              ></NewUserForm>
             </Modal>
             {/* 修改用户 */}
             <Modal
@@ -713,7 +779,12 @@ class UserManagement extends Component {
               onOk={this.updateConfirm}
               onCancel={this.updateCancel}
             >
-              <NewUpdateForm ref={this.updateFormRef}></NewUpdateForm>
+              <NewUpdateForm
+                ref={this.updateFormRef}
+                orgs={orgs}
+                userInfo={userInfo}
+                getDepartmentId={this.getDepartmentId}
+              ></NewUpdateForm>
             </Modal>
             {/* 锁定 */}
             <Modal
@@ -753,14 +824,15 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div>
+            <TableHeader showEdit addTableData={this.addUser}></TableHeader>
             <Table
               pagination={{ size: 'small' }}
-              dataSource={this.props.userManagementData}
+              dataSource={userManagementData}
               columns={this.state.columns}
             ></Table>
           </div>
         </div>
-      </Fragment>
+      </PageHeaderWrapper>
     );
   }
 }
