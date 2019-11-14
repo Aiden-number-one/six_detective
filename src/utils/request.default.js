@@ -3,14 +3,15 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: iron
- * @LastEditTime: 2019-11-12 10:31:17
+ * @LastEditors: lan
+ * @LastEditTime: 2019-11-14 11:15:51
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { extend } from 'umi-request';
+import router from 'umi/router';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
 import { notification } from 'antd';
@@ -50,6 +51,7 @@ export function setReqHeaders(url, NVPS) {
     window.x_trace_page_id = x_trace_page_id;
   }
 
+  const rid = `RID${uuidv1().replace(/-/g, '')}`;
   return {
     'X-Kweb-Menu-Id': document.location.href,
     'X-Kweb-Trace-Req-Id': uuidv1(),
@@ -67,9 +69,11 @@ export function setReqHeaders(url, NVPS) {
       randowNVPS.forEach(value => {
         signText += value + NVPS[value];
       });
+      signText += `I${rid}`;
       return signMode + md5(signText, 32).toUpperCase();
     })(),
-    'X-Bc-T': `BCT${uuidv1().replace(/-/g, '')}`,
+    'X-Bc-T': `BCT${localStorage.getItem('BCTID')}`,
+    'X-Bc-I': rid,
   };
 }
 
@@ -154,11 +158,17 @@ request.interceptors.response.use(async (response, opts) => {
     try {
       const result = await response.clone().json();
       // return complete response
+      const { bcjson } = result;
+      const { flag, msg } = bcjson;
+      if (flag === '001') {
+        // eslint-disable-next-line no-underscore-dangle
+        // window.g_app._store.dispatch({ type: 'login/logout' });
+        router.push('/login');
+        return result;
+      }
       if (opts.all) {
         return result;
       }
-      const { bcjson } = result;
-      const { flag, msg } = bcjson;
       if (flag === '1') {
         return bcjson;
       }
