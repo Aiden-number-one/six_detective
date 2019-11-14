@@ -1,53 +1,3 @@
-import Mock from 'mockjs';
-
-const getUserList = count => {
-  const userList = [];
-
-  const menuList = [];
-  // eslint-disable-next-line no-plusplus
-  for (let k = 0; k < count; k++) {
-    const menuCount = 10
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < menuCount; i++) {
-      menuList.push(
-        Mock.mock({
-          'custStatus|1': ['0', '1'],
-          'endtype|1': ['0', '1'],
-          funcComment: '',
-          icon: 'icon-home',
-          'isdefault|1': ['0', '1'],
-          'isonline|1': ['0', '1'],
-          linecss: '',
-          menuId: Mock.Random.id(),
-          menuName: Mock.Random.ctitle(2, 20),
-          'menuType|1': ['0', '1', '2'],
-          page: Mock.Random.url(),
-          parentMenuId: Mock.Random.id(),
-          permission: Mock.Random.ctitle(2, 20),
-          pos: Mock.Random.id(),
-          textcss: Mock.Random.ctitle(2, 20),
-        }),
-      );
-    }
-    userList.push(
-      Mock.mock({
-        custCustomerno: Mock.Random.id(),
-        'custStatus|1': ['0', '1'],
-        custStatusName: Mock.Random.ctitle(2, 20),
-        customerName: Mock.Random.ctitle(2, 20),
-        customerno: Mock.Random.id(),
-        departmentId: Mock.Random.id(),
-        departmentName: Mock.Random.ctitle(2, 20),
-        displaypath: Mock.Random.county(true),
-        email: Mock.Random.email(),
-        lastupdatetime: Mock.Random.datetime(),
-        loginName: Mock.Random.ctitle(2, 20),
-        menuList,
-      }),
-    );
-  }
-  return userList
-};
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 export default {
   // 支持值为 Object 和 Array
@@ -191,19 +141,4 @@ export default {
       path: '/base/category/list',
     });
   },
-  // 用户管理
-  /*
-  'POST /api/v2.0/bayconnect.superlop.get_user_list_impl.json': Mock.mock({
-    'bcjson|1-10': {
-      api: 'kingdom.kgrp.get_user_list_imp11111111111l',
-      code: '0',
-      detail: '',
-      flag: '1',
-      items: getUserList(20),
-      len: 10,
-      lengths: getUserList(20).length,
-      msg: '查询成功',
-      timespent: 61,
-    },
-  }), */
 };
