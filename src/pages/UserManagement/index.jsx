@@ -116,7 +116,7 @@ class UserManagement extends Component {
         loginName: values.login,
         customerName: values.name,
         departmentId: this.newDepartmentId,
-        password: values.password,
+        password: window.kddes.getDes(values.password),
         passwordStrength,
         mobile: values.phone,
         email: values.email,
@@ -258,7 +258,7 @@ class UserManagement extends Component {
         custCustomerno: 77029,
         operationType: 5,
         oldPassword: values.oldPassword,
-        password: values.password,
+        password: window.kddes.getDes(values.password),
         passwordStrength,
       };
       dispatch({
@@ -293,7 +293,7 @@ class UserManagement extends Component {
       const param = {
         custCustomerno: 77029,
         operationType: 6,
-        password: values.password,
+        password: window.kddes.getDes(values.password),
         passwordStrength,
       };
       dispatch({
