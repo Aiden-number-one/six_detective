@@ -2,7 +2,7 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-11-14 10:13:23
+ * @LastEditTime: 2019-11-14 13:33:42
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -11,7 +11,6 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import router from 'umi/router';
 import { Alert } from 'antd';
-import uuidv1 from 'uuid/v1';
 import LoginComponent from '@/components/Login';
 import styles from './Login.less';
 
@@ -27,10 +26,7 @@ class Login extends Component {
     submitting: false, // submit loading
   };
 
-  componentDidMount() {
-    const BCTID = uuidv1().replace(/-/g, '');
-    localStorage.setItem('BCTID', BCTID);
-  }
+  componentDidMount() {}
 
   onTabChange = type => {
     this.setState({ type });
@@ -62,8 +58,9 @@ class Login extends Component {
           if (response.bcjson.flag === '0') {
             return;
           }
-          const items = response.bcjson.items[0];
-          localStorage.setItem('currentUser', items.name);
+          const item = response.bcjson.items[0];
+          localStorage.setItem('loginName', item.loginName);
+          localStorage.setItem('loginTime', item.loginTime);
           router.push('/');
         },
       });

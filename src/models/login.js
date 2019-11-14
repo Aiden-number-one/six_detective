@@ -1,6 +1,7 @@
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
+import uuidv1 from 'uuid/v1';
 import Service from '@/utils/Service';
 
 const { getLogin, getLoginStatus } = Service;
@@ -15,6 +16,8 @@ const Model = {
   },
   effects: {
     *getLogin({ callback, payload }, { call }) {
+      const BCTID = uuidv1().replace(/-/g, '');
+      localStorage.setItem('BCTID', BCTID);
       const response = yield call(getLogin, { param: payload });
       if (response.bcjson.flag === '1') {
         if (callback) callback(response);
@@ -27,9 +30,9 @@ const Model = {
       if (callback) callback(response);
     },
     *logout(_, { put }) {
-      const { redirect } = getPageQuery();
+      // const { redirect } = getPageQuery();
 
-      if (window.location.pathname !== '/login' && !redirect) {
+      if (window.location.pathname !== '/login') {
         yield put(
           routerRedux.replace({
             pathname: '/login',
