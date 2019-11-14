@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-10-31 19:19:30
  * @LastEditors: iron
- * @LastEditTime: 2019-11-13 15:28:21
+ * @LastEditTime: 2019-11-13 16:15:34
  */
 
 import fetch from '@/utils/request.default';
@@ -106,6 +106,9 @@ export default {
     *queryDepartments(action, { call, put }) {
       const { items } = yield call(fetch('get_department'), action.params);
 
+      if (!items) {
+        // throw
+      }
       if (items.length > 0) {
         yield put({
           type: 'getDepartments',
