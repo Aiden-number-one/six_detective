@@ -42,8 +42,8 @@ export default class SearchForm extends Component {
                 <Select>
                   <Option value="">请选择</Option>
                   <Option value="0">正常</Option>
-                  <Option value="1">销户</Option>
-                  <Option value="3">锁定</Option>
+                  <Option value="3">销户</Option>
+                  <Option value="1">锁定</Option>
                 </Select>,
               )}
             </Form.Item>
