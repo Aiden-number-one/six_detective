@@ -2,8 +2,8 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-25 18:15:08
- * @LastEditors: mus
+ * @LastEditTime: 2019-11-14 18:35:05
+ * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -25,7 +25,7 @@ export default WrapperComponent =>
       // 点击单元格回调函数
       this.clickCellReflectFunc = () => {};
       // 点击cell
-      this.clickCell = _.debounce(this.clickCell, 500);
+      // this.clickCell = _.debounce(this.clickCell, 500);
       // WrapperComponent的ref
       this.WrapperComponentRef = React.createRef();
     }
@@ -211,7 +211,7 @@ export default WrapperComponent =>
         .spreadsheet('#x-spreadsheet', xsOptions)
         .loadData(data)
         .change(changeData => {
-          generateJson(changeData);
+          // generateJson(changeData);
         });
     };
 
@@ -231,7 +231,8 @@ export default WrapperComponent =>
           toolbar.paintformatActive = () => false;
         }, 0);
       }
-      this.clickCellReflectFunc(data.getCellStyle(sri, sci) || {});
+      // this.clickCellReflectFunc(data.getCellStyle(sri, sci) || {});
+      this.clickCellReflectFunc(data.getSelectedCellStyle() || {});
     };
 
     // 设置cell属性
@@ -305,6 +306,8 @@ export default WrapperComponent =>
     setCellCallback = callback => {
       this.clickCellReflectFunc = callback;
     };
+
+    // 返回单元格合并等属性
 
     render() {
       const props = {

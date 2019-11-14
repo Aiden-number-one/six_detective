@@ -38,9 +38,14 @@ export default class ReportDesigner extends PureComponent {
   };
 
   render() {
+    const { setCellCallback } = this.props;
     return (
       <Fragment>
-        <ToolBar setCellStyle={this.setCellStyle} editRowColumn={this.editRowColumn} />
+        <ToolBar
+          setCellStyle={this.setCellStyle}
+          editRowColumn={this.editRowColumn}
+          setCellCallback={setCellCallback}
+        />
         <Layout>
           <Sider width={200} />
           <Content

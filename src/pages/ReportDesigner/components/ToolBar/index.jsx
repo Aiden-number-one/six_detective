@@ -9,9 +9,9 @@ import {
   Icon,
   Dropdown,
   Popover,
-  Modal,
-  Input,
-  Radio,
+  // Modal,
+  // Input,
+  // Radio,
   Upload,
 } from 'antd';
 import {
@@ -20,8 +20,9 @@ import {
   // drawingBorderMenu,
   // clearMenu,
   rowsAndColsMenu,
-  freezeMenu,
+  // freezeMenu,
 } from './menu';
+import { fontSizeSelect, fontFamilySelect } from './select';
 import CustomizeIcon from '../CustomizeIcon';
 import styles from './index.less';
 import IconFont from '@/components/IconFont';
@@ -29,21 +30,21 @@ import IconFont from '@/components/IconFont';
 const { TabPane } = Tabs;
 const { Option } = Select;
 const ButtonGroup = Button.Group;
-const RadioGroup = Radio.Group;
+// const RadioGroup = Radio.Group;
 const { SubMenu, ItemGroup } = Menu;
 
 export default class ToolBar extends Component {
   state = {
-    rowHeightVisible: false, // 显示行高弹框
-    rowHeight: '', // 行高
-    colWidthVisible: false, // 显示列宽弹框
-    colWidth: '', // 列宽
-    insertCellVisible: false, // 显示插入单元格弹框
-    deleteCellVisible: false, // 显示删除单元格弹框
-    radioValue: 1, // 单元格操作默认选择第一个
-    selectedRow: '', // 选中的行数
-    selectedCol: '', // 选中的列数
-    showAndHideVisible: false, // 显示和隐藏弹框
+    // rowHeightVisible: false, // 显示行高弹框
+    // rowHeight: '', // 行高
+    // colWidthVisible: false, // 显示列宽弹框
+    // colWidth: '', // 列宽
+    // insertCellVisible: false, // 显示插入单元格弹框
+    // deleteCellVisible: false, // 显示删除单元格弹框/
+    // radioValue: 1, // 单元格操作默认选择第一个
+    // selectedRow: '', // 选中的行数
+    // selectedCol: '', // 选中的列数
+    // showAndHideVisible: false, // 显示和隐藏弹框
     // 默认无边框
     borderParams: {
       icon: 'noBorder',
@@ -55,35 +56,59 @@ export default class ToolBar extends Component {
     fontColor: '#000',
     btnActiveStatus: {
       autoLineBreak: false, // 是否自动换行
-      textAlign: 'inherit', // 水平方向对齐
-      textAlignLast: 'inherit', // 最后一行两端对齐
-      verticalAlign: 'inherit', // 垂直方向对齐
+      textAlign: 'left', // 水平方向对齐
+      // textAlignLast: 'inherit', // 最后一行两端对齐
+      verticalAlign: 'middle', // 垂直方向对齐
       fontWeight: 'normal', // 字体加粗
       fontStyle: 'normal', // 斜体
       textDecoration: 'none', // 下划线
-      fontSize: '6', // 默认字号
-      fontFamily: '3', // 默认字体
+      fontSize: '10', // 默认字号
+      fontFamily: 'Arial', // 默认字体
       isMerge: false, // 单元格是否合并
     },
   };
 
-  // 取消设置行高
-  cancelRowHeight = () => {
-    this.setState({
-      rowHeightVisible: false,
+  componentDidMount() {
+    const { setCellCallback } = this.props;
+    const { btnActiveStatus } = this.state;
+    setCellCallback(cellStyle => {
+      this.setState({
+        backgroundColor: cellStyle.bgcolor,
+        fontColor: cellStyle.color,
+        btnActiveStatus: {
+          ...btnActiveStatus,
+          autoLineBreak: cellStyle.textwrap,
+          textAlign: cellStyle.align,
+          verticalAlign: cellStyle.valign,
+          fontWeight: cellStyle.font.bold ? 'bold' : 'normal',
+          fontStyle: cellStyle.font.italic ? 'italic' : 'normal',
+          fontSize: cellStyle.font.size,
+          fontFamily: cellStyle.font.name,
+          textDecoration: cellStyle.underline ? 'underline' : 'none',
+        },
+      });
+      console.log(cellStyle);
     });
-  };
+  }
+
+  // 取消设置行高
+  // cancelRowHeight = () => {
+  //   this.setState({
+  //     rowHeightVisible: false,
+  //   });
+  // };
 
   // 取消设置单元格
-  cancelInsertCell = () => {
-    this.setState({
-      insertCellVisible: false,
-    });
-  };
+  // cancelInsertCell = () => {
+  //   this.setState({
+  //     insertCellVisible: false,
+  //   });
+  // };
 
+  // 按钮下拉菜单
   creatMenu = (menu, type) => {
     const { setCellStyle, editRowColumn } = this.props;
-    if (type === 'freeze') {
+    if (type === 'border') {
       return (
         <Menu
           onClick={() => {
@@ -91,9 +116,18 @@ export default class ToolBar extends Component {
           }}
         >
           {menu.map(({ icon, name, params }) => (
-            <Menu.Item params={params} icon={icon} key={name}>
+            <Menu.Item
+              params={params}
+              icon={icon}
+              key={name}
+              onClick={() => {
+                setCellStyle(type, {
+                  mode: params,
+                });
+              }}
+            >
               {icon && <Icon component={() => <CustomizeIcon type={icon} />} />}
-              {params ? '取消冻结窗格(F)' : name}
+              {name}
             </Menu.Item>
           ))}
         </Menu>
@@ -123,16 +157,7 @@ export default class ToolBar extends Component {
         }}
       >
         {menu.map(({ icon, name, params }) => (
-          <Menu.Item
-            params={params}
-            icon={icon}
-            key={name}
-            onClick={() => {
-              setCellStyle(type, {
-                mode: params,
-              });
-            }}
-          >
+          <Menu.Item params={params} icon={icon} key={name}>
             {icon && <Icon component={() => <CustomizeIcon type={icon} />} />}
             {name}
           </Menu.Item>
@@ -307,36 +332,19 @@ export default class ToolBar extends Component {
                     defaultValue="3"
                     value={btnActiveStatus.fontFamily}
                     size="small"
-                    onChange={(value, e) => {
+                    onChange={value => {
                       this.setState({
                         btnActiveStatus: {
                           ...btnActiveStatus,
                           fontFamily: value,
                         },
                       });
-                      setCellStyle('font-name', e.props.children);
+                      setCellStyle('font-name', value);
                     }}
                   >
-                    <Option value="1">仿宋</Option>
-                    <Option value="2">楷体</Option>
-                    <Option value="3">宋体</Option>
-                    <Option value="4">宋体_方正超大字符集</Option>
-                    <Option value="5">Microsoft YaHei</Option>
-                    <Option value="6">新宋体</Option>
-                    <Option value="7">Arial</Option>
-                    <Option value="8">Arial Black</Option>
-                    <Option value="9">Book Antiqua</Option>
-                    <Option value="10">Calibri</Option>
-                    <Option value="11">Comic Sans MS</Option>
-                    <Option value="12">Courier New</Option>
-                    <Option value="13">Garamond</Option>
-                    <Option value="14">Georgia</Option>
-                    <Option value="15">Lucida Console</Option>
-                    <Option value="16">SimHei</Option>
-                    <Option value="17">Tahoma</Option>
-                    <Option value="18">Times New Roman</Option>
-                    <Option value="19">Trebuchet MS</Option>
-                    <Option value="20">Verdana</Option>
+                    {fontFamilySelect.map(item => (
+                      <Option value={item.value}>{item.key}</Option>
+                    ))}
                   </Select>
                 </Popover>
                 <Popover content="字号" {...popoverProps}>
@@ -346,33 +354,19 @@ export default class ToolBar extends Component {
                     defaultValue="6"
                     value={btnActiveStatus.fontSize}
                     size="small"
-                    onChange={(value, e) => {
+                    onChange={value => {
                       this.setState({
                         btnActiveStatus: {
                           ...btnActiveStatus,
                           fontSize: value,
                         },
                       });
-                      setCellStyle('font-size', e.props.children);
+                      setCellStyle('font-size', value);
                     }}
                   >
-                    <Option value="1">6</Option>
-                    <Option value="2">8</Option>
-                    <Option value="3">9</Option>
-                    <Option value="4">10</Option>
-                    <Option value="5">11</Option>
-                    <Option value="6">12</Option>
-                    <Option value="7">14</Option>
-                    <Option value="8">16</Option>
-                    <Option value="9">18</Option>
-                    <Option value="10">20</Option>
-                    <Option value="11">22</Option>
-                    <Option value="12">24</Option>
-                    <Option value="13">26</Option>
-                    <Option value="14">28</Option>
-                    <Option value="15">36</Option>
-                    <Option value="16">48</Option>
-                    <Option value="17">72</Option>
+                    {fontSizeSelect.map(item => (
+                      <Option value={item}>{item}</Option>
+                    ))}
                   </Select>
                 </Popover>
                 <Popover content="增大字号" {...popoverProps} onClick={() => {}}>
@@ -391,6 +385,12 @@ export default class ToolBar extends Component {
                   content="加粗(ctrl+B)"
                   {...popoverProps}
                   onClick={() => {
+                    this.setState(() => ({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        fontWeight: btnActiveStatus.fontWeight === 'normal' ? 'bold' : 'normal',
+                      },
+                    }));
                     setCellStyle('font-bold', true);
                   }}
                 >
@@ -408,6 +408,12 @@ export default class ToolBar extends Component {
                   content="斜体(ctrl+I)"
                   {...popoverProps}
                   onClick={() => {
+                    this.setState(() => ({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        fontStyle: btnActiveStatus.fontStyle === 'normal' ? 'italic' : 'normal',
+                      },
+                    }));
                     setCellStyle('font-italic', true);
                   }}
                 >
@@ -425,6 +431,13 @@ export default class ToolBar extends Component {
                   content="下划线(ctrl+U)"
                   {...popoverProps}
                   onClick={() => {
+                    this.setState(() => ({
+                      btnActiveStatus: {
+                        ...btnActiveStatus,
+                        textDecoration:
+                          btnActiveStatus.textDecoration === 'none' ? 'underline' : 'none',
+                      },
+                    }));
                     setCellStyle('underline', true);
                   }}
                 >
@@ -1327,7 +1340,7 @@ export default class ToolBar extends Component {
           </TabPane>
         </Tabs>
         {/* 行高modal */}
-        <Modal
+        {/* <Modal
           title="设置行高"
           visible={this.state.rowHeightVisible}
           onOk={this.cancelRowHeight}
@@ -1347,10 +1360,10 @@ export default class ToolBar extends Component {
               });
             }}
           />
-        </Modal>
+        </Modal> */}
 
         {/* 列宽modal */}
-        <Modal
+        {/* <Modal
           title="设置列宽"
           visible={this.state.colWidthVisible}
           onOk={this.handleColWidth}
@@ -1370,10 +1383,10 @@ export default class ToolBar extends Component {
               });
             }}
           />
-        </Modal>
+        </Modal> */}
 
         {/* 插入单元格modal */}
-        <Modal
+        {/* <Modal
           title="插入"
           visible={this.state.insertCellVisible}
           onOk={this.handleInsertCell}
@@ -1426,10 +1439,10 @@ export default class ToolBar extends Component {
               />
             </Radio>
           </RadioGroup>
-        </Modal>
+        </Modal> */}
 
         {/* 删除单元格modal */}
-        <Modal
+        {/* <Modal
           title="删除"
           visible={this.state.deleteCellVisible}
           onOk={this.handleDeleteCell}
@@ -1453,10 +1466,10 @@ export default class ToolBar extends Component {
               整列
             </Radio>
           </RadioGroup>
-        </Modal>
+        </Modal> */}
 
         {/* 显示与隐藏modal */}
-        <Modal
+        {/* <Modal
           title="显示与隐藏"
           visible={this.state.showAndHideVisible}
           onOk={this.handleShowAndHide}
@@ -1487,7 +1500,7 @@ export default class ToolBar extends Component {
               显示隐藏列
             </Radio>
           </RadioGroup>
-        </Modal>
+        </Modal> */}
       </div>
     );
   }
