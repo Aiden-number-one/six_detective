@@ -211,7 +211,7 @@ export default WrapperComponent =>
         .spreadsheet('#x-spreadsheet', xsOptions)
         .loadData(data)
         .change(changeData => {
-          generateJson(changeData);
+          // generateJson(changeData);
         });
     };
 
