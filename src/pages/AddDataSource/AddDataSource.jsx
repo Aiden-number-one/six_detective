@@ -6,6 +6,7 @@ import {
   Icon,
   Input,
   Tabs,
+  Modal,
   // Form,
   // Row,
   // Col,
@@ -27,27 +28,31 @@ const { Search } = Input;
 const { TabPane } = Tabs;
 
 @connect(({ dataSource, tableData }) => ({
-  activeData: dataSource.activeData,
-  dataSourceList: dataSource.dataSourceList,
-  activeCID: dataSource.activeCID,
-  tableData: tableData.tableData,
+  activeData: dataSource.activeData, // 编辑的数据源信息
+  dataSourceList: dataSource.dataSourceList, // 数据源列表信息
+  activeCID: dataSource.activeCID, // 点击的数据源ID
+  driverInfo: dataSource.driverInfo, // 数据源驱动
+  activeDriver: dataSource.activeDriver, // 新增数据源时选中的数据源类型对应的驱动信息
+  tableData: tableData.tableData, // 数据源表格
 }))
 export default class AddDataSource extends PureComponent {
   state = {
     visible: {
-      // TableData: false,
-      dataSource: false,
-      dataSourceType: false,
-      importMetaData: false,
+      dataSource: false, // 新增修改数据源弹框
+      dataSourceType: false, // 新增数据源类型弹框
+      importMetaData: false, // 导入元数据弹框
     },
-    title: '',
-    operation: 'ADD',
+    title: '', // 弹框标题
+    operation: 'ADD', // 数据源操作类型
   };
 
   componentDidMount() {
+    // 获取数据源列表
     this.getDataSourceList();
+    this.getDataDriver();
   }
 
+  // 获取数据源列表
   getDataSourceList = connectionName => {
     const { dispatch } = this.props;
     dispatch({
@@ -56,6 +61,7 @@ export default class AddDataSource extends PureComponent {
         connectionName,
       },
       callback: response => {
+        // 成功时默认选中第一个获取表信息
         dispatch({
           type: 'tableData/getTableData',
           payload: {
@@ -68,6 +74,16 @@ export default class AddDataSource extends PureComponent {
     });
   };
 
+  // 获取数据驱动
+  getDataDriver = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dataSource/getDataDriver',
+      payload: {},
+    });
+  };
+
+  // 数据源列表标题
   Title = () => (
     <span className={styles.titleBox}>
       <span>Data Connected</span>
@@ -80,6 +96,7 @@ export default class AddDataSource extends PureComponent {
     </span>
   );
 
+  // 数据源列表查询框
   SearchBox = () => (
     <div className={styles.searchBox}>
       <Search
@@ -90,6 +107,7 @@ export default class AddDataSource extends PureComponent {
     </div>
   );
 
+  // 隐藏显示弹框
   toggleModal = (key, type) => {
     const { visible } = this.state;
     this.setState({
@@ -98,6 +116,7 @@ export default class AddDataSource extends PureComponent {
         [key]: !visible[key],
       },
     });
+    // 设置操作类型
     if (type) {
       this.setState({
         operation: type,
@@ -105,13 +124,71 @@ export default class AddDataSource extends PureComponent {
     }
   };
 
+  // 设置弹框title
   setAddDataSourceTitle = title => {
     this.setState({
       title,
     });
   };
 
+  // 设置当前选择的驱动类型
+  setActiveDriver = name => {
+    const { driverInfo, dispatch } = this.props;
+    let activeDriver = {};
+    driverInfo.forEach(item => {
+      if (item.driverName === name) {
+        activeDriver = item;
+      }
+    });
+    dispatch({
+      type: 'dataSource/setActiveDriver',
+      payload: activeDriver,
+    });
+  };
+
+  // 操作数据源
+  operateDataSource = values => {
+    const { operation } = this.state;
+    const { dispatch, activeData, activeDriver } = this.props;
+    if (operation === 'DEL') {
+      dispatch({
+        type: 'dataSource/delDataSource',
+        payload: {
+          connectionId: values,
+        },
+      });
+      return;
+    }
+    const driverInfo = activeDriver.className || activeData.driverInfo;
+    const params = values;
+    if (params.dbPassword !== activeData.dbPassword) {
+      params.dbPassword = window.kddes.getDes(params.dbPassword);
+    }
+    // 新增数据源
+    if (operation === 'ADD') {
+      dispatch({
+        type: 'dataSource/setDatasource',
+        payload: {
+          ...params,
+          driverInfo,
+        },
+      });
+    }
+    // 修改数据源
+    if (operation === 'EDIT') {
+      dispatch({
+        type: 'dataSource/updDataSource',
+        payload: {
+          ...params,
+          driverInfo,
+          connectionId: activeData.connectionId,
+        },
+      });
+    }
+  };
+
   render() {
+    // 表格表头
     const columns = [
       {
         title: '对象名称',
@@ -158,6 +235,7 @@ export default class AddDataSource extends PureComponent {
         ),
       },
     ];
+    // 表格多选框
     const rowSelection = {
       type: 'checkbox',
     };
@@ -166,7 +244,14 @@ export default class AddDataSource extends PureComponent {
       title,
       operation,
     } = this.state;
-    const { activeData, dataSourceList, activeCID, tableData } = this.props;
+    const {
+      activeData,
+      dataSourceList,
+      activeCID,
+      tableData,
+      driverInfo,
+      activeDriver,
+    } = this.props;
     return (
       <PageHeaderWrapper>
         <div style={{ display: 'flex', minHeight: 500 }}>
@@ -180,6 +265,7 @@ export default class AddDataSource extends PureComponent {
                   className={styles.dataSourceItem}
                   onClick={e => {
                     e.stopPropagation();
+                    // 点击获取数据源表格信息
                     const { dispatch } = this.props;
                     dispatch({
                       type: 'dataSource/setActiveCID',
@@ -208,6 +294,7 @@ export default class AddDataSource extends PureComponent {
                       type="edit"
                       onClick={e => {
                         e.stopPropagation();
+                        // 编辑数据源
                         const { dispatch } = this.props;
                         dispatch({
                           type: 'dataSource/saveDate',
@@ -221,6 +308,19 @@ export default class AddDataSource extends PureComponent {
                       type="delete"
                       onClick={e => {
                         e.stopPropagation();
+                        this.setState({
+                          operation: 'DEL',
+                        });
+                        Modal.confirm({
+                          title: 'Do you Want to delete this items?',
+                          // content: 'Some descriptions',
+                          onOk: () => {
+                            this.operateDataSource(item.connectionId);
+                          },
+                          onCancel: () => {
+                            // console.log('Cancel');
+                          },
+                        });
                       }}
                     />
                   </span>
@@ -236,6 +336,7 @@ export default class AddDataSource extends PureComponent {
                     showSelect
                     showEdit
                     addTableData={() => {
+                      // 获取元数据
                       const { dispatch } = this.props;
                       dispatch({
                         type: 'tableData/clearMetaData',
@@ -263,19 +364,31 @@ export default class AddDataSource extends PureComponent {
             </div>
           </div>
         </div>
+        {/* 新增修改数据源弹框 */}
         <DataSourceModal
           visible={dataSource}
           toggleModal={this.toggleModal}
           title={title}
           operation={operation}
           activeData={activeData}
+          driverInfo={driverInfo}
+          activeDriver={activeDriver}
+          setActiveDriver={this.setActiveDriver}
+          operateDataSource={this.operateDataSource}
         />
+        {/* 新增数据源类型弹框 */}
         <DataSoureceTypeModal
           visible={dataSourceType}
           toggleModal={this.toggleModal}
           setAddDataSourceTitle={this.setAddDataSourceTitle}
+          setActiveDriver={this.setActiveDriver}
         />
-        <ImportMetaData visible={importMetaData} toggleModal={this.toggleModal} />
+        {/* 导入元数据弹框 */}
+        <ImportMetaData
+          visible={importMetaData}
+          toggleModal={this.toggleModal}
+          activeCID={activeCID}
+        />
       </PageHeaderWrapper>
     );
   }
