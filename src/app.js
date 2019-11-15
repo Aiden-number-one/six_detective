@@ -1,13 +1,14 @@
 /*
- * @Des: unified error message
+ * @Des: unified error message for model (dva)
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-07 17:09:07
  * @LastEditors: iron
- * @LastEditTime: 2019-11-13 15:05:03
+ * @LastEditTime: 2019-11-14 19:06:56
  */
 
 import { notification } from 'antd';
+// import dvaLogger from 'dva-logger';
 
 export const dva = {
   config: {
@@ -20,4 +21,5 @@ export const dva = {
       });
     },
   },
+  // plugins: [dvaLogger()],
 };

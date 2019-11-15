@@ -3,7 +3,7 @@ import styles from './index.less';
 import kdTableTheme from './kdTableTheme';
 import CGrid from './CGrid';
 import CGridColumn from './CGridColumn';
-import CGridColumnGroup from './CGridColumnGroup';
+// import CGridColumnGroup from './CGridColumnGroup';
 import CGridButtonColumn from './CGridButtonColumn';
 
 const KdTable = ({ dataSource }) => {
@@ -15,12 +15,14 @@ const KdTable = ({ dataSource }) => {
     <div className={styles.container}>
       <CGrid data={dataSource} theme={kdTableTheme}>
         <CGridColumn
+          width={80}
           field="personid"
           style={{
             textAlign: 'center',
           }}
           headerStyle={{
             textAlign: 'center',
+            font: 'bold 16px microsoft yahei',
           }}
         >
           ID
@@ -32,6 +34,7 @@ const KdTable = ({ dataSource }) => {
           }}
           headerStyle={{
             textAlign: 'center',
+            font: 'bold 16px microsoft yahei',
           }}
         >
           First Name
@@ -43,6 +46,7 @@ const KdTable = ({ dataSource }) => {
           }}
           headerStyle={{
             textAlign: 'center',
+            font: 'bold 16px microsoft yahei',
           }}
         >
           Last Name
@@ -54,46 +58,20 @@ const KdTable = ({ dataSource }) => {
           }}
           headerStyle={{
             textAlign: 'center',
+            font: 'bold 16px microsoft yahei',
           }}
         >
           Email
         </CGridColumn>
-        <CGridColumnGroup
-          caption="name"
-          headerStyle={{
-            textAlign: 'center',
-          }}
-        >
-          <CGridColumn
-            field="fname"
-            style={{
-              textAlign: 'center',
-            }}
-            headerStyle={{
-              textAlign: 'center',
-            }}
-          >
-            First Name
-          </CGridColumn>
-          <CGridColumn
-            field="lname"
-            style={{
-              textAlign: 'center',
-            }}
-            headerStyle={{
-              textAlign: 'center',
-            }}
-          >
-            Last Name
-          </CGridColumn>
-        </CGridColumnGroup>
         <CGridButtonColumn
           onClick={handleBtnClick}
+          width={100}
           headerStyle={{
             textAlign: 'center',
+            font: 'bold 16px microsoft yahei',
           }}
         >
-          修改
+          操作
         </CGridButtonColumn>
       </CGrid>
     </div>
