@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Table, Switch } from 'antd';
+import { Table, Switch, message } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import TableHeader from '@/components/TableHeader';
@@ -13,6 +13,7 @@ import Modify from './compontents/Modify';
 @connect(({ schedule, loading }) => ({
   loading: loading.effects['schedule/getScheduleList'],
   scheduleListData: schedule.scheduleList,
+  folderMenuData: schedule.folderMenuDatas,
 }))
 class Scheduling extends Component {
   state = {
@@ -87,9 +88,25 @@ class Scheduling extends Component {
 
   searchForm = React.createRef();
 
+  basicModifyForm = React.createRef();
+
+  planModifyForm = React.createRef();
+
   componentDidMount() {
     this.getSchedul();
+    this.getFolderMenuList();
   }
+
+  getFolderMenuList = () => {
+    const { dispatch } = this.props;
+    const params = {
+      fileType: '1',
+    };
+    dispatch({
+      type: 'schedule/getFolderMenuList',
+      payload: params,
+    });
+  };
 
   // 分页查询调度计划列表
   getSchedul = (otherParam = {}) => {
@@ -167,14 +184,25 @@ class Scheduling extends Component {
   };
 
   modifySchedule = () => {
+    const { selectedRows } = this.state;
+    if (selectedRows.length !== 1) {
+      message.success('请选择一项进行修改');
+      return;
+    }
     this.setState({
       modifyVisible: true,
     });
   };
 
   modifyConfirm = () => {
-    this.setState({
-      modifyVisible: false,
+    this.basicModifyForm.current.validateFields((err, values) => {
+      console.log('values----', values);
+    });
+    this.planModifyForm.current.validateFields((err, values) => {
+      console.log('values----planModifyForm', values);
+      this.setState({
+        modifyVisible: false,
+      });
     });
   };
 
@@ -186,7 +214,7 @@ class Scheduling extends Component {
 
   render() {
     const { scheduleListData } = this.props;
-    const { pageSize, modifyVisible } = this.state;
+    const { pageSize, modifyVisible, selectedRows } = this.state;
     const scheduleList = scheduleListData.items;
     const totalCount = scheduleListData && scheduleListData.totalCount;
     // eslint-disable-next-line no-unused-expressions
@@ -222,6 +250,9 @@ class Scheduling extends Component {
           modifyVisible={modifyVisible}
           modifyConfirm={this.modifyConfirm}
           modifyCancel={this.modifyCancel}
+          basicModifyForm={this.basicModifyForm}
+          planModifyForm={this.planModifyForm}
+          selectedRows={selectedRows}
         />
       </PageHeaderWrapper>
     );

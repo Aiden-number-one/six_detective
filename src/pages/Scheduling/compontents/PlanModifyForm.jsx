@@ -2,12 +2,9 @@ import React, { Component } from 'react';
 import { Form, Input, DatePicker } from 'antd';
 
 const { RangePicker } = DatePicker;
-const { TextArea } = Input;
-class BasicModifyForm extends Component {
-  chooseJobId = () => {
-    console.log('00000');
-  };
 
+// eslint-disable-next-line react/prefer-stateless-function
+class PlanModifyForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     // const { emailObj } = this.props;
@@ -35,7 +32,7 @@ class BasicModifyForm extends Component {
               },
             ],
             initialValue: '',
-          })(<Input placeholder="请输入最长64位字符（中文占两个字符）" />)}
+          })(<Input />)}
         </Form.Item>
 
         <Form.Item label="调度作业:">
@@ -47,7 +44,7 @@ class BasicModifyForm extends Component {
               },
             ],
             initialValue: '',
-          })(<Input onClick={this.chooseJobId} />)}
+          })(<Input />)}
         </Form.Item>
         <Form.Item label="计划有效时间:">
           {getFieldDecorator('validDate', rangeConfig)(<RangePicker />)}
@@ -61,11 +58,11 @@ class BasicModifyForm extends Component {
               },
             ],
             initialValue: '',
-          })(<TextArea rows={2} placeholder="请输入最长1024位字符（中文占两个字符）" />)}
+          })(<Input />)}
         </Form.Item>
       </Form>
     );
   }
 }
 
-export default Form.create({})(BasicModifyForm);
+export default Form.create({})(PlanModifyForm);

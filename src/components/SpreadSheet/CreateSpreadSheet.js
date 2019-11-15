@@ -2,8 +2,8 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-09-25 18:15:08
- * @LastEditors: mus
+ * @LastEditTime: 2019-11-14 18:53:45
+ * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -24,8 +24,9 @@ export default WrapperComponent =>
       this.spreadSheet = null;
       // 点击单元格回调函数
       this.clickCellReflectFunc = () => {};
+      // 点击单元格返回属性
       // 点击cell
-      this.clickCell = _.debounce(this.clickCell, 500);
+      // this.clickCell = _.debounce(this.clickCell, 500);
       // WrapperComponent的ref
       this.WrapperComponentRef = React.createRef();
     }
@@ -211,7 +212,7 @@ export default WrapperComponent =>
         .spreadsheet('#x-spreadsheet', xsOptions)
         .loadData(data)
         .change(changeData => {
-          generateJson(changeData);
+          // generateJson(changeData);
         });
     };
 
@@ -231,7 +232,8 @@ export default WrapperComponent =>
           toolbar.paintformatActive = () => false;
         }, 0);
       }
-      this.clickCellReflectFunc(data.getCellStyle(sri, sci) || {});
+      // this.clickCellReflectFunc(data.getCellStyle(sri, sci) || {});
+      this.clickCellReflectFunc(data || {});
     };
 
     // 设置cell属性
