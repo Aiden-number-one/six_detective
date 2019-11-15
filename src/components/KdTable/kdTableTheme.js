@@ -1,27 +1,32 @@
-/**
- *
- * des: theme config for KdTable
- * author: iron
- * email: chenggang@szkingdom.com
- * date: 2019/10/24
+/*
+ * @Des: theme config for KdTable
+ * @Author: iron
+ * @Email: chenggang@szkingdom.com.cn
+ * @Date: 2019-10-24 16:15:55
+ * @LastEditors: iron
+ * @LastEditTime: 2019-11-15 09:20:00
  */
+
 export default {
   header: {
     sortArrowColor: '#333',
   },
-  color: 'rgba(0, 0, 0, 0.65)',
-  defaultBgColor: '#f0f2f5',
+
   // 表头配置项
-  frozenRowsColor: 'rgba(0, 0, 0, 0.85)',
-  frozenRowsBgColor: '#fff',
-  frozenRowsBorderColor: ['', '', '#e8e8e8', ''],
-  underlayBackgroundColor: '#fff',
+  frozenRowsColor: '#10416c',
+  frozenRowsBgColor: '#f1f6f8',
+  frozenRowsBorderColor: '',
+  underlayBackgroundColor: 'transparent',
+  color: '#10416c',
+  defaultBgColor(args) {
+    return args.row % 2 === 0 ? '#f1f6f8' : '#fff';
+  },
   // 单元格选中背景颜色
-  selectionBgColor: '#10416c',
+  selectionBgColor: '',
   // 单元格选中边框颜色
-  highlightBorderColor: '#10416c',
+  highlightBorderColor: '',
   borderColor() {
-    return ['', '', '#e8e8e8', ''];
+    return 'transparent';
   },
   checkbox: {
     uncheckBgColor: '#FDD',
@@ -32,5 +37,5 @@ export default {
     color: '#10416c',
     bgColor: 'transparent',
   },
-  font: '14px sans-serif',
+  // font: '14px microsoft yahei',
 };

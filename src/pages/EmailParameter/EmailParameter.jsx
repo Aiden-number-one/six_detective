@@ -332,7 +332,7 @@ class EmailParameter extends Component {
 
   componentDidMount() {
     this.getEmailInit();
-    console.log(this.props.getEmailListData);
+    // console.log(this.props.getEmailListData);
   }
 
   addUser = () => {
