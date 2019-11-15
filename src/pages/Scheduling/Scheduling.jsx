@@ -50,8 +50,8 @@ class Scheduling extends Component {
       },
       {
         title: '上次执行时间',
-        dataIndex: 'modifiedTime',
-        key: 'modifiedTime',
+        dataIndex: 'validStartDate',
+        key: 'validStartDate',
       },
       {
         title: '最后一次执行状态',
@@ -60,8 +60,8 @@ class Scheduling extends Component {
       },
       {
         title: '下次执行时间',
-        dataIndex: 'nextTime',
-        key: 'nextTime',
+        dataIndex: 'validEndDate',
+        key: 'validEndDate',
       },
       {
         title: '执行结果',
@@ -87,10 +87,6 @@ class Scheduling extends Component {
   };
 
   searchForm = React.createRef();
-
-  basicModifyForm = React.createRef();
-
-  planModifyForm = React.createRef();
 
   componentDidMount() {
     this.getSchedul();
@@ -194,18 +190,6 @@ class Scheduling extends Component {
     });
   };
 
-  modifyConfirm = () => {
-    this.basicModifyForm.current.validateFields((err, values) => {
-      console.log('values----', values);
-    });
-    this.planModifyForm.current.validateFields((err, values) => {
-      console.log('values----planModifyForm', values);
-      this.setState({
-        modifyVisible: false,
-      });
-    });
-  };
-
   modifyCancel = () => {
     this.setState({
       modifyVisible: false,
@@ -213,10 +197,11 @@ class Scheduling extends Component {
   };
 
   render() {
-    const { scheduleListData } = this.props;
+    const { scheduleListData, folderMenuData } = this.props;
     const { pageSize, modifyVisible, selectedRows } = this.state;
     const scheduleList = scheduleListData.items;
     const totalCount = scheduleListData && scheduleListData.totalCount;
+    // console.log('selectedRows-00000-->', selectedRows);
     // eslint-disable-next-line no-unused-expressions
     scheduleList &&
       scheduleList.forEach((item, index) => {
@@ -248,11 +233,10 @@ class Scheduling extends Component {
         />
         <Modify
           modifyVisible={modifyVisible}
-          modifyConfirm={this.modifyConfirm}
           modifyCancel={this.modifyCancel}
-          basicModifyForm={this.basicModifyForm}
-          planModifyForm={this.planModifyForm}
           selectedRows={selectedRows}
+          getSchedul={this.getSchedul}
+          folderMenuData={folderMenuData}
         />
       </PageHeaderWrapper>
     );

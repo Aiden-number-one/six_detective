@@ -53,12 +53,7 @@ class SearchForm extends Component {
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label="上次执行时间：">
               {getFieldDecorator('startTime', {})(
-                <DatePicker
-                  onChange={this.changeBeginDate}
-                  className={styles.inputvalue}
-                  format="YYYY-MM-DD HH:mm:ss"
-                  showTime
-                />,
+                <DatePicker className={styles.inputvalue} format="YYYY-MM-DD HH:mm:ss" showTime />,
               )}
             </Form.Item>
           </Col>
