@@ -59,7 +59,7 @@ class OperatorForm extends Component {
 const NewOperatorForm = Form.create({})(OperatorForm);
 
 @connect(({ auditLog, loading }) => ({
-  loading: loading.effects['auditLog/getAuditLogList'],
+  loading: loading.effects,
   getAuditLogListData: auditLog.data,
 }))
 class AuditLog extends Component {
@@ -158,6 +158,7 @@ class AuditLog extends Component {
   };
 
   render() {
+    const { loading } = this.props;
     let { getAuditLogList } = this.state;
     const { pageSize } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
@@ -177,6 +178,7 @@ class AuditLog extends Component {
         />
         <TableHeader showEdit={false} showSelect={false} />
         <Table
+          loading={loading['auditLog/getAuditLogList']}
           dataSource={getAuditLogList}
           pagination={{ total: totalCount, pageSize }}
           onChange={this.pageChange}

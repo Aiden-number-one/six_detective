@@ -95,7 +95,7 @@ class ModifyForm extends Component {
 
 const NewModifyForm = Form.create({})(ModifyForm);
 @connect(({ systemParams, loading }) => ({
-  loading: loading.effects['systemParams/getSystemParamsList'],
+  loading: loading.effects,
   getSystemParamsListData: systemParams.data,
   getParamsTypeData: systemParams.getParamsData,
 }))
@@ -238,7 +238,7 @@ class SystemParams extends Component {
   };
 
   render() {
-    const { getParamsTypeData, getSystemParamsListData } = this.props;
+    const { loading, getParamsTypeData, getSystemParamsListData } = this.props;
     let { ParamsTypeData, getSystemParamsList } = this.state;
     const { pageSize } = this.state;
     ParamsTypeData = getParamsTypeData;
@@ -286,6 +286,7 @@ class SystemParams extends Component {
             <div>
               <TableHeader showEdit={false} showSelect={false}></TableHeader>
               <Table
+                loading={loading['systemParams/getSystemParamsList']}
                 dataSource={getSystemParamsList}
                 columns={this.state.columns}
                 pagination={{ total: totalCount, pageSize }}

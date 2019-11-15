@@ -1,6 +1,7 @@
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
+import uuidv1 from 'uuid/v1';
 import Service from '@/utils/Service';
 
 const { getLogin, getLoginStatus } = Service;
@@ -15,6 +16,8 @@ const Model = {
   },
   effects: {
     *getLogin({ callback, payload }, { call }) {
+      const BCTID = uuidv1().replace(/-/g, '');
+      localStorage.setItem('BCTID', BCTID);
       const response = yield call(getLogin, { param: payload });
       if (response.bcjson.flag === '1') {
         if (callback) callback(response);
@@ -22,14 +25,26 @@ const Model = {
         message.error(response.bcjson.msg);
       }
     },
-    *getLoginStatus({ callback, payload }, { call }) {
+    *getLoginStatus({ callback, payload }, { call, put }) {
       const response = yield call(getLoginStatus, { param: payload });
+      if (response.bcjson.flag === '1') {
+        const item = response.bcjson.items[0];
+        if (item.isNeedLock === 'Y' || item.IpOrAgentOrAlllow !== 'Allow') {
+          message.warning('您的账号在其他地方登录,请重新登录');
+          yield put({
+            type: 'logout',
+          });
+        }
+      }
+      // if (response.bcjson.flag === '001') {
+      //   message.error('您的登录信息已失效,请重新登录')
+      // }
       if (callback) callback(response);
     },
     *logout(_, { put }) {
-      const { redirect } = getPageQuery();
+      // const { redirect } = getPageQuery();
 
-      if (window.location.pathname !== '/login' && !redirect) {
+      if (window.location.pathname !== '/login') {
         yield put(
           routerRedux.replace({
             pathname: '/login',
