@@ -55,7 +55,7 @@ const CGrid = props => {
     children,
     data = [],
     theme = null,
-    frozenColCount = 1,
+    frozenColCount = 0,
     filterHandler = null,
     options = {},
   } = props;
