@@ -1,154 +1,85 @@
-const fontSizeSelect = [
-  {
-    value: '1',
-    param: '{"font-size":"6px"}',
-  },
-  {
-    value: '2',
-    param: '{"font-size":"8px"}',
-  },
-  {
-    value: '3',
-    param: '{"font-size":"9px"}',
-  },
-  {
-    value: '4',
-    param: '{"font-size":"10px"}',
-  },
-  {
-    value: '5',
-    param: '{"font-size":"11px"}',
-  },
-  {
-    value: '6',
-    param: '{"font-size":"12px"}',
-  },
-  {
-    value: '7',
-    param: '{"font-size":"14px"}',
-  },
-  {
-    value: '8',
-    param: '{"font-size":"16px"}',
-  },
-  {
-    value: '9',
-    param: '{"font-size":"18px"}',
-  },
-  {
-    value: '10',
-    param: '{"font-size":"20px"}',
-  },
-  {
-    value: '11',
-    param: '{"font-size":"22px"}',
-  },
-  {
-    value: '12',
-    param: '{"font-size":"24px"}',
-  },
-  {
-    value: '13',
-    param: '{"font-size":"26px"}',
-  },
-  {
-    value: '14',
-    param: '{"font-size":"28px"}',
-  },
-  {
-    value: '15',
-    param: '{"font-size":"36px"}',
-  },
-  {
-    value: '16',
-    param: '{"font-size":"48px"}',
-  },
-  {
-    value: '17',
-    param: '{"font-size":"72px"}',
-  },
-];
+const fontSizeSelect = [6, 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
 
 const fontFamilySelect = [
   {
-    value: '1',
-    param: '{"font-family":"FangSong"}',
+    key: '仿宋',
+    value: 'FangSong',
   },
   {
-    value: '2',
-    param: '{"font-family":"KaiTi"}',
+    key: '楷体',
+    value: 'KaiTi',
   },
   {
-    value: '3',
-    param: '{"font-family":"SimSun"}',
+    key: '宋体',
+    value: 'SimSun',
   },
   {
-    value: '4',
-    param: '{"font-family":"宋体_方正超大字符集"}',
+    key: '宋体_方正超大字符集',
+    value: '宋体_方正超大字符集',
   },
   {
-    value: '5',
-    param: '{"font-family":"Microsoft YaHei"}',
+    key: 'Microsoft YaHei',
+    value: 'Microsoft YaHei',
   },
   {
-    value: '6',
-    param: '{"font-family":"NSimSun"}',
+    key: '新宋体',
+    value: 'NSimSun',
   },
   {
-    value: '7',
-    param: '{"font-family":"Arial"}',
+    key: 'Arial',
+    value: 'Arial',
   },
   {
-    value: '8',
-    param: '{"font-family":"Arial Black"}',
+    key: 'Arial Black',
+    value: 'Arial Black',
   },
   {
-    value: '9',
-    param: '{"font-family":"Book Antiqua"}',
+    key: 'Book Antiqua',
+    value: 'Book Antiqua',
   },
   {
-    value: '10',
-    param: '{"font-family":"calibri"}',
+    key: 'Calibri',
+    value: 'calibri',
   },
   {
-    value: '11',
-    param: '{"font-family":"Comic Sans MS"}',
+    key: 'Comic Sans MS',
+    value: 'Comic Sans MS',
   },
   {
-    value: '12',
-    param: '{"font-family":"Courier New"}',
+    key: 'Courier New',
+    value: 'Courier New',
   },
   {
-    value: '13',
-    param: '{"font-family":"Garamond"}',
+    key: 'Garamond',
+    value: 'Garamond',
   },
   {
-    value: '14',
-    param: '{"font-family":"Georgia"}',
+    key: 'Georgia',
+    value: 'Georgia',
   },
   {
-    value: '15',
-    param: '{"font-family":"Lucida Console"}',
+    key: 'Lucida Console',
+    value: 'Lucida Console',
   },
   {
-    value: '16',
-    param: '{"font-family":"SimHei"}',
+    key: 'SimHei',
+    value: 'SimHei',
   },
   {
-    value: '17',
-    param: '{"font-family":"Tahoma"}',
+    key: 'Tahoma',
+    value: 'Tahoma',
   },
   {
-    value: '18',
-    param: '{"font-family":"Times New Roman"}',
+    key: 'Times New Roman',
+    value: 'Times New Roman',
   },
   {
-    value: '19',
-    param: '{"font-family":"Trebuchet MS"}',
+    key: 'Trebuchet MS',
+    value: 'Trebuchet MS',
   },
   {
-    value: '20',
-    param: '{"font-family":"Verdana"}',
+    key: 'Verdana',
+    value: 'Verdana',
   },
 ];
 

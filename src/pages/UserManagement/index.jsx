@@ -1,3 +1,11 @@
+/*
+ * @Description: This is for userManagement page.
+ * @Author: dailinbo
+ * @Date: 2019-11-12 19:03:58
+ * @LastEditors: dailinbo
+ * @LastEditTime: 2019-11-15 13:47:03
+ */
+
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table } from 'antd';
@@ -19,7 +27,7 @@ const NewPasswordForm = Form.create({})(PasswordForm);
 const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
 
 @connect(({ userManagement, loading }) => ({
-  loading: loading.effects['userManagement/userManagemetDatas'],
+  loading: loading.effects,
   userManagementData: userManagement.data,
   orgs: userManagement.orgs,
 }))
@@ -102,17 +110,74 @@ class UserManagement extends Component {
 
   resetPasswordFormRef = React.createRef();
 
-  // eslint-disable-next-line react/sort-comp
-  addUser = () => {
-    this.setState({ visible: true });
+  componentDidMount() {
+    this.queryUserList();
+    this.queryDepartments();
+  }
+
+  /**
+   * @description: This is for query user list function.
+   * @param {type} null
+   * @return: undefined
+   */
+  queryUserList = (
+    param = {
+      searchParam: undefined,
+      displaypath: undefined,
+      email: undefined,
+      custStatus: undefined,
+    },
+  ) => {
+    const { dispatch } = this.props;
+    const { searchParam, displaypath, email, custStatus } = param;
+    const params = {
+      searchParam,
+      displaypath,
+      email,
+      custStatus,
+      pageNumber: this.state.page.pageNumber,
+      pageSize: this.state.page.pageSize,
+    };
+    dispatch({
+      type: 'userManagement/userManagemetDatas',
+      payload: params,
+    });
   };
 
-  // 获取id
+  /**
+   * @description: This is for query departments function.
+   * @param {type} null
+   * @return: undefined
+   */
+  queryDepartments = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'userManagement/queryOrgs',
+      params: {
+        treeLevel: '2',
+      },
+    });
+  };
+
+  /**
+   * @description: This is for get the departmentId and set value to the newDepartmentId function.
+   * @param {type} departmentId
+   * @return: undefined
+   */
   getDepartmentId = departmentId => {
     this.newDepartmentId = departmentId;
   };
 
-  handleOk = () => {
+  /**
+   * @description: This is for add user function.
+   * @param {type} null
+   * @return: undefined
+   */
+  addUser = () => {
+    this.setState({ visible: true });
+  };
+
+  addConfrim = () => {
     const { dispatch } = this.props;
     this.formRef.current.validateFields((err, values) => {
       const passwordStrength = passWordStrength(values.password);
@@ -128,45 +193,25 @@ class UserManagement extends Component {
       dispatch({
         type: 'userManagement/addUserModelDatas',
         payload: param,
-      });
-    });
-  };
-
-  updateConfirm = () => {
-    const { dispatch } = this.props;
-    this.updateFormRef.current.validateFields((err, values) => {
-      const param = {
-        custCustomerno: '77029',
-        loginName: values.login,
-        customerName: values.name,
-        departmentId: this.newDepartmentId || this.state.userInfo.departmentId,
-        email: values.email,
-      };
-      dispatch({
-        type: 'userManagement/updateUserModelDatas',
-        payload: param,
         callback: () => {
-          this.queryUser();
+          this.setState({
+            visible: false,
+          });
+          this.queryUserList();
         },
       });
     });
-    this.setState({
-      updateVisible: false,
-    });
   };
 
-  updateCancel = () => {
-    this.setState({
-      updateVisible: false,
-    });
-  };
-
-  handleCancel = () => {
+  addCancel = () => {
     this.setState({ visible: false });
   };
 
-  handleChange = () => {};
-
+  /**
+   * @description: This is for update user function.
+   * @param {type} null
+   * @return: undefined
+   */
   updateUser = (res, obj) => {
     const userInfo = {
       login: '',
@@ -186,6 +231,39 @@ class UserManagement extends Component {
     });
   };
 
+  updateConfirm = () => {
+    const { dispatch } = this.props;
+    this.updateFormRef.current.validateFields((err, values) => {
+      const param = {
+        loginName: values.login,
+        customerName: values.name,
+        departmentId: this.newDepartmentId || this.state.userInfo.departmentId,
+        email: values.email,
+      };
+      dispatch({
+        type: 'userManagement/updateUserModelDatas',
+        payload: param,
+        callback: () => {
+          this.queryUserList();
+        },
+      });
+    });
+    this.setState({
+      updateVisible: false,
+    });
+  };
+
+  updateCancel = () => {
+    this.setState({
+      updateVisible: false,
+    });
+  };
+
+  /**
+   * @description: This is for lock user function.
+   * @param {type} null
+   * @return: undefined
+   */
   lockUser = () => {
     this.setState({
       lockVisible: true,
@@ -195,14 +273,13 @@ class UserManagement extends Component {
   lockConfirm = () => {
     const { dispatch } = this.props;
     const param = {
-      custCustomerno: 77029,
-      operationType: 1,
+      operationType: '1',
     };
     dispatch({
       type: 'userManagement/operationUserModelDatas',
       payload: param,
       callback: () => {
-        this.queryUser();
+        this.queryUserList();
       },
     });
     this.setState({
@@ -216,7 +293,11 @@ class UserManagement extends Component {
     });
   };
 
-  // 销户
+  /**
+   * @description: This is for closing user function.
+   * @param {type} null
+   * @return: undefined
+   */
   closingUser = () => {
     this.setState({
       closingVisible: true,
@@ -226,14 +307,13 @@ class UserManagement extends Component {
   closingConfirm = () => {
     const { dispatch } = this.props;
     const param = {
-      custCustomerno: 77029,
-      operationType: 3,
+      operationType: '3',
     };
     dispatch({
       type: 'userManagement/operationUserModelDatas',
       payload: param,
       callback: () => {
-        this.queryUser();
+        this.queryUserList();
         this.setState({
           closingVisible: false,
         });
@@ -247,7 +327,11 @@ class UserManagement extends Component {
     });
   };
 
-  // 修改密码
+  /**
+   * @description: This is for update password function.
+   * @param {type} null
+   * @return: undefined
+   */
   updatePassword = () => {
     this.setState({
       updatePasswordVisible: true,
@@ -259,8 +343,7 @@ class UserManagement extends Component {
     this.passwordFormRef.current.validateFields((err, values) => {
       const passwordStrength = passWordStrength(values.password);
       const param = {
-        custCustomerno: 77029,
-        operationType: 5,
+        operationType: '5',
         oldPassword: values.oldPassword,
         password: window.kddes.getDes(values.password),
         passwordStrength,
@@ -283,7 +366,11 @@ class UserManagement extends Component {
     });
   };
 
-  // 重置密码
+  /**
+   * @description: This is for reset password function.
+   * @param {type} null
+   * @return: undefined
+   */
   resetPassword = () => {
     this.setState({
       resetPasswordVisible: true,
@@ -295,8 +382,7 @@ class UserManagement extends Component {
     this.resetPasswordFormRef.current.validateFields((err, values) => {
       const passwordStrength = passWordStrength(values.password);
       const param = {
-        custCustomerno: 77029,
-        operationType: 6,
+        operationType: '6',
         password: window.kddes.getDes(values.password),
         passwordStrength,
       };
@@ -318,36 +404,11 @@ class UserManagement extends Component {
     });
   };
 
-  // 获取查询列表数据
-  queryUser = (param = { searchParam: '', displaypath: '', email: '', custStatus: '' }) => {
-    const { dispatch } = this.props;
-    const { searchParam, displaypath, email, custStatus } = param;
-    const params = {
-      pageNumber: this.state.page.pageNumber,
-      pageSize: this.state.page.pageSize,
-      searchParam,
-      displaypath,
-      email,
-      custStatus,
-    };
-    dispatch({
-      type: 'userManagement/userManagemetDatas',
-      payload: params,
-    });
-  };
-
-  // 查询部门
-  queryDepartment = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'userManagement/queryOrgs',
-      params: {
-        treeLevel: '2',
-      },
-    });
-  };
-
-  // 搜索
+  /**
+   * @description: This is for query userinfo log function.
+   * @param {type} null
+   * @return: undefined
+   */
   queryLog = () => {
     this.searchForm.current.validateFields((err, values) => {
       const params = {
@@ -356,22 +417,43 @@ class UserManagement extends Component {
         email: values.email,
         custStatus: values.custStatus,
       };
-      this.queryUser(params);
+      this.queryUserList(params);
     });
   };
 
+  /**
+   * @description: This is for reset form function.
+   * @param {type} null
+   * @return: undefined
+   */
   operatorReset = () => {
     this.searchForm.current.resetFields();
   };
 
-  componentDidMount() {
-    this.queryUser();
-    this.queryDepartment();
-  }
+  /**
+   * @description: This is for paging function.
+   * @param {type} null
+   * @return: undefined
+   */
+  pageChange = pagination => {
+    const page = {
+      pageNumber: pagination.current.toString(),
+      pageSize: pagination.pageSize.toString(),
+    };
+
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
+  };
 
   render() {
-    const { orgs, userManagementData } = this.props;
-    const { userInfo } = this.state;
+    const { loading, orgs, userManagementData } = this.props;
+    const { userInfo, page } = this.state;
 
     return (
       <PageHeaderWrapper>
@@ -387,8 +469,8 @@ class UserManagement extends Component {
             <Modal
               title="新增用户"
               visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
+              onOk={this.addConfrim}
+              onCancel={this.addCancel}
             >
               <NewUserForm
                 ref={this.formRef}
@@ -450,8 +532,10 @@ class UserManagement extends Component {
           <div>
             <TableHeader showEdit addTableData={this.addUser}></TableHeader>
             <Table
-              pagination={{ size: 'small' }}
-              dataSource={userManagementData}
+              loading={loading['userManagement/userManagemetDatas']}
+              pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
+              onChange={this.pageChange}
+              dataSource={userManagementData.items}
               columns={this.state.columns}
             ></Table>
           </div>
