@@ -89,11 +89,11 @@ export default class UpdateForm extends Component {
                 initialValue: userInfo.departmentName,
               })(
                 <TreeSelect
-                  treeDefaultExpandAll
                   value={selectValue}
                   style={{ width: 220 }}
                   onSelect={this.selectChange}
                   placeholder="Please select"
+                  dropdownStyle={{ height: '300px', width: '220px' }}
                 >
                   {loop(orgs)}
                 </TreeSelect>,

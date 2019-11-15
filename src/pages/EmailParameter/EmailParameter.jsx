@@ -197,7 +197,7 @@ class ModifyForm extends Component {
 
 const NewModifyForm = Form.create({})(ModifyForm);
 @connect(({ getEmail, loading }) => ({
-  loading: loading.effects['getEmail/getEmailList'],
+  loading: loading.effects,
   getEmailListData: getEmail.data,
 }))
 class EmailParameter extends Component {
@@ -474,6 +474,7 @@ class EmailParameter extends Component {
   };
 
   render() {
+    const { loading, getEmailListData } = this.props;
     return (
       <PageHeaderWrapper>
         <Fragment>
@@ -513,7 +514,8 @@ class EmailParameter extends Component {
             <div>
               <TableHeader showEdit showSelect addTableData={() => this.addUser()}></TableHeader>
               <Table
-                dataSource={this.props.getEmailListData}
+                loading={loading['getEmail/getEmailList']}
+                dataSource={getEmailListData}
                 pagination={{ size: 'small', pageSize: 5 }}
                 columns={this.state.columns}
               ></Table>

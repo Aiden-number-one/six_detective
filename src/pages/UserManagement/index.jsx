@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-15 13:01:49
+ * @LastEditTime: 2019-11-15 13:47:03
  */
 
 import React, { Component } from 'react';
@@ -27,7 +27,7 @@ const NewPasswordForm = Form.create({})(PasswordForm);
 const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
 
 @connect(({ userManagement, loading }) => ({
-  loading: loading.effects['userManagement/userManagemetDatas'],
+  loading: loading.effects,
   userManagementData: userManagement.data,
   orgs: userManagement.orgs,
 }))
@@ -452,7 +452,7 @@ class UserManagement extends Component {
   };
 
   render() {
-    const { orgs, userManagementData } = this.props;
+    const { loading, orgs, userManagementData } = this.props;
     const { userInfo, page } = this.state;
 
     return (
@@ -532,6 +532,7 @@ class UserManagement extends Component {
           <div>
             <TableHeader showEdit addTableData={this.addUser}></TableHeader>
             <Table
+              loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
               onChange={this.pageChange}
               dataSource={userManagementData.items}
