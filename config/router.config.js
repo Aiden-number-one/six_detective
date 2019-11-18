@@ -186,22 +186,22 @@ export default [
           {
             path: '/system-management/email-parameter',
             name: 'emailParameter',
-            component: './EmailParameter/EmailParameter',
+            component: './EmailParameter',
           },
           {
             path: '/system-management/system-parameters',
             name: 'systemParameters',
-            component: './SystemParams/SystemParams',
+            component: './SystemParams',
           },
           {
             path: '/system-management/code-maintenance',
             name: 'codeMaintenance',
-            component: './CodeMaintenance/CodeMaintenance',
+            component: './CodeMaintenance',
           },
           {
             path: '/system-management/audit-log',
             name: 'auditLog',
-            component: './AuditLog/AuditLog',
+            component: './AuditLog',
           },
           {
             path: '/system-management/scheduling',

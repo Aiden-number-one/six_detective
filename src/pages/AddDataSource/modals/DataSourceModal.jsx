@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Select } from 'antd';
+
+const { Option } = Select;
 
 // import styles from '../AddDataSource.less';
 
@@ -9,8 +11,28 @@ export default class DataSourceModal extends PureComponent {
 
   componentDidMount() {}
 
+  handleOK = () => {
+    const { form, operateDataSource, toggleModal } = this.props;
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        operateDataSource(values);
+      }
+    });
+    toggleModal('dataSource');
+  };
+
   render() {
-    const { form, visible, toggleModal, title, operation, activeData } = this.props;
+    const {
+      form,
+      visible,
+      toggleModal,
+      title,
+      operation,
+      activeData,
+      driverInfo,
+      activeDriver,
+      setActiveDriver,
+    } = this.props;
     const { getFieldDecorator } = form;
     const Layout = {
       labelCol: { span: 7 },
@@ -29,20 +51,46 @@ export default class DataSourceModal extends PureComponent {
           form.resetFields();
           toggleModal('dataSource');
         }}
+        onOk={this.handleOK}
       >
         <Form>
+          <Form.Item {...Layout} label="Data Source Type">
+            {getFieldDecorator('connectionType', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Error',
+                },
+              ],
+              initialValue: formData.connectionTypeOri || activeDriver.driverId,
+            })(
+              <Select
+                placeholder="Please Select"
+                dropdownClassName="selectDropdown"
+                onChange={(value, e) => {
+                  setActiveDriver(e.props.children);
+                }}
+              >
+                {driverInfo.map(item => (
+                  <Option key={item.driverId} value={item.driverId}>
+                    {item.driverName}
+                  </Option>
+                ))}
+              </Select>,
+            )}
+          </Form.Item>
           <Form.Item {...Layout} label="Data Source Name">
             {getFieldDecorator('connectionName', {
               rules: [
                 {
                   required: true,
-                  message: '请输入数据源配置列表显示名称',
+                  message: 'Error',
                 },
               ],
               initialValue: formData.connectionName,
-            })(<Input placeholder="数据源配置列表显示名称" />)}
+            })(<Input placeholder="" />)}
           </Form.Item>
-          <Form.Item {...Layout} label="databaseAddress">
+          <Form.Item {...Layout} label="Database Address">
             {getFieldDecorator('server', {
               rules: [
                 {
@@ -53,7 +101,7 @@ export default class DataSourceModal extends PureComponent {
               initialValue: formData.server,
             })(<Input placeholder="" />)}
           </Form.Item>
-          <Form.Item {...Layout} label="port">
+          <Form.Item {...Layout} label="Port">
             {getFieldDecorator('dbPort', {
               rules: [
                 {
@@ -64,7 +112,7 @@ export default class DataSourceModal extends PureComponent {
               initialValue: formData.dbPort,
             })(<Input placeholder="" />)}
           </Form.Item>
-          <Form.Item {...Layout} label="databaseName">
+          <Form.Item {...Layout} label="Database Name">
             {getFieldDecorator('dbDatabase', {
               rules: [
                 {
@@ -75,13 +123,7 @@ export default class DataSourceModal extends PureComponent {
               initialValue: formData.dbDatabase,
             })(<Input placeholder="" />)}
           </Form.Item>
-          <Form.Item {...Layout} label="Schema">
-            {getFieldDecorator('schema', {
-              rules: [{ required: false }],
-              initialValue: formData.schema,
-            })(<Input placeholder="Schema" />)}
-          </Form.Item>
-          <Form.Item {...Layout} label="userName">
+          <Form.Item {...Layout} label="User Name">
             {getFieldDecorator('dbUser', {
               rules: [
                 {
@@ -92,7 +134,7 @@ export default class DataSourceModal extends PureComponent {
               initialValue: formData.dbUser,
             })(<Input placeholder="" />)}
           </Form.Item>
-          <Form.Item {...Layout} label="password">
+          <Form.Item {...Layout} label="Password">
             {getFieldDecorator('dbPassword', {
               rules: [
                 {
@@ -102,6 +144,28 @@ export default class DataSourceModal extends PureComponent {
               ],
               initialValue: formData.dbPassword,
             })(<Input type="password" placeholder="" autoComplete="new-password" />)}
+          </Form.Item>
+          <Form.Item {...Layout} label="Max Connect Count">
+            {getFieldDecorator('maxConnectCount', {
+              rules: [
+                {
+                  required: true,
+                  message: '',
+                },
+              ],
+              initialValue: formData.maxConnectCount,
+            })(<Input placeholder="" />)}
+          </Form.Item>
+          <Form.Item {...Layout} label="URL">
+            {getFieldDecorator('jdbcString', {
+              rules: [
+                {
+                  required: true,
+                  message: '',
+                },
+              ],
+              initialValue: formData.jdbcString || activeDriver.urlInfo,
+            })(<Input disabled />)}
           </Form.Item>
         </Form>
       </Modal>
