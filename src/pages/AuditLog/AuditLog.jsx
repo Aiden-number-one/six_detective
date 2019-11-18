@@ -5,7 +5,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import TableHeader from '@/components/TableHeader';
 
-import styles from './index.less';
+import styles from './AuditLog.less';
 
 class OperatorForm extends Component {
   render() {

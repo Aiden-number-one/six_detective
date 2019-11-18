@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-18 17:12:20
+ * @LastEditTime: 2019-11-18 19:16:40
  */
 
 import React, { Component } from 'react';
@@ -11,7 +11,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table } from 'antd';
 import { connect } from 'dva';
 import TableHeader from '@/components/TableHeader';
-import styles from './index.less';
+import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 
 import SearchForm from './components/SearchForm';

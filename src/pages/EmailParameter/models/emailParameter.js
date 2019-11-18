@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2019-11-05 14:04:16
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-15 14:54:59
+ * @LastEditTime: 2019-11-18 19:16:06
  */
 import Service from '@/utils/Service';
 
 const { emailList, addEmail, deleteEmail } = Service;
-const getEmailListModel = {
+const emailParameter = {
   namespace: 'getEmail',
   state: {
     data: [],
@@ -74,4 +74,4 @@ const getEmailListModel = {
   },
 };
 
-export default getEmailListModel;
+export default emailParameter;

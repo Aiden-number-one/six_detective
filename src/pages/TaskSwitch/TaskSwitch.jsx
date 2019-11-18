@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
 import { connect } from 'dva';
-import LeftClassifyTree from '../../components/LeftClassifyTree/LeftClassifyTree';
+import LeftClassifyTree from '../../components/LeftClassifyTree';
 import styles from './TaskSwitch.less';
 
 @connect(({ taskSwitch, loading }) => ({
