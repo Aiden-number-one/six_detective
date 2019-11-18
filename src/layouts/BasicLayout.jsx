@@ -103,7 +103,19 @@ const BasicLayout = props => {
           <span>Setting</span>
         </div>
       </div>
-      <div className={styles.popoverFooter}>Sign Out</div>
+      <div className={styles.popoverFooter}>
+        <a
+          onClick={() => {
+            if (dispatch) {
+              dispatch({
+                type: 'login/logout',
+              });
+            }
+          }}
+        >
+          Sign Out
+        </a>
+      </div>
     </div>
   );
 
@@ -139,7 +151,7 @@ const BasicLayout = props => {
           <div className={styles.user}>
             <IconFont type="icon-usercircle" className={styles.avatar} />
             <span title="Thomas Chow" className={styles.username}>
-              Thomas Chow
+              {window.localStorage.loginName}
             </span>
             <Popover
               placement="bottomRight"

@@ -75,7 +75,6 @@ export default class ToolBar extends Component {
     setCellCallback(data => {
       const cellStyle = data.getSelectedCellStyle();
       const cell = data.getSelectedCell();
-      console.log(cellStyle, cell, data.freeze);
       let isMerge = false;
       let freeze = false;
       if (cell && cell.merge) {

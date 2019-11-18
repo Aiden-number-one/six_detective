@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Tree, Spin } from 'antd';
 import { connect } from 'dva';
-import { formatMessage } from 'umi/locale';
+// import { formatMessage } from 'umi/locale';
 import styles from '../AddDataSource.less';
 
 const { TreeNode } = Tree;
@@ -39,7 +39,7 @@ class ImportMetaData extends Component {
     if (this.preventClick) {
       return false;
     }
-    const { dispatch, nowActiveDataSource, toggleModal } = this.props;
+    const { dispatch, activeCID, toggleModal } = this.props;
     const { checkedKeys } = this.state;
     const selectKey = checkedKeys
       .filter(value => value.indexOf('schemaParentFilter') === -1)
@@ -47,24 +47,23 @@ class ImportMetaData extends Component {
     // 此处代码较慢，所以暂时阻止点击
     this.preventClick = true;
     dispatch({
-      type: 'datasource/addMetaData',
+      type: 'tableData/addMetaData',
       payload: {
-        connection_id: nowActiveDataSource.otherInfo && nowActiveDataSource.otherInfo.connectionId,
-        tables_info: selectKey,
-        successCallback: () => {
-          // 调用完毕后，恢复preventClick
-          this.preventClick = false;
-          toggleModal('importMetaData');
-          dispatch({
-            type: 'datasource/getMetadataTableInfo',
-            payload: {
-              connection_id:
-                nowActiveDataSource.otherInfo && nowActiveDataSource.otherInfo.connectionId,
-              pageNumber: '1',
-              pageSize: '10',
-            },
-          });
-        },
+        connectionId: activeCID,
+        tablesInfo: selectKey,
+      },
+      callback: () => {
+        // 调用完毕后，恢复preventClick
+        this.preventClick = false;
+        toggleModal('importMetaData');
+        dispatch({
+          type: 'tableData/getTableData',
+          payload: {
+            connection_id: activeCID,
+            pageNumber: '1',
+            pageSize: '10',
+          },
+        });
       },
     });
     return false;
@@ -98,7 +97,7 @@ class ImportMetaData extends Component {
     return (
       <Modal
         destroyOnClose
-        title={formatMessage({ id: 'index.metadata' })}
+        title="Import Mete Data"
         visible={visible}
         onOk={okHandle}
         onCancel={() => toggleModal('importMetaData')}

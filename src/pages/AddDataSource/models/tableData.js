@@ -7,7 +7,7 @@
  */
 import Service from '@/utils/Service';
 
-const { getTableData, getMetaData } = Service;
+const { getTableData, getMetaData, addMetaData } = Service;
 
 export default {
   namespace: 'tableData',
@@ -29,6 +29,12 @@ export default {
         type: 'setMetaData',
         payload: response.bcjson.items,
       });
+    },
+    *addMetaData({ payload, callback }, { call }) {
+      const response = yield call(addMetaData, { param: payload });
+      if (response.bcjson.flag === '1') {
+        callback();
+      }
     },
   },
   reducers: {

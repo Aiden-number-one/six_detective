@@ -9,11 +9,12 @@ export default class DataSoureceTypeModal extends PureComponent {
   };
 
   chooseType = index => {
-    const { toggleModal, setAddDataSourceTitle } = this.props;
+    const { toggleModal, setAddDataSourceTitle, setActiveDriver } = this.props;
     const { drivenArray } = this.state;
     toggleModal('dataSourceType');
     const { name } = drivenArray[index];
     setAddDataSourceTitle(name);
+    setActiveDriver(name);
     setTimeout(() => {
       toggleModal('dataSource');
     }, 0);
