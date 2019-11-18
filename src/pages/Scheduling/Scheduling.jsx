@@ -7,6 +7,7 @@ import TableHeader from '@/components/TableHeader';
 
 import SearchForm from './compontents/SearchForm';
 import Modify from './compontents/Modify';
+import Add from './compontents/Add';
 
 // import styles from './Scheduling.less';
 
@@ -22,6 +23,7 @@ class Scheduling extends Component {
     otherParam: {},
     selectedRows: [],
     modifyVisible: false,
+    addVisible: false,
     columns: [
       {
         title: '序号',
@@ -196,9 +198,21 @@ class Scheduling extends Component {
     });
   };
 
+  addSchedule = () => {
+    this.setState({
+      addVisible: true,
+    });
+  };
+
+  addCancel = () => {
+    this.setState({
+      addVisible: false,
+    });
+  };
+
   render() {
     const { scheduleListData, folderMenuData } = this.props;
-    const { pageSize, modifyVisible, selectedRows } = this.state;
+    const { pageSize, modifyVisible, addVisible, selectedRows } = this.state;
     const scheduleList = scheduleListData.items;
     const totalCount = scheduleListData && scheduleListData.totalCount;
     // console.log('selectedRows-00000-->', selectedRows);
@@ -222,6 +236,7 @@ class Scheduling extends Component {
           showEdit
           showSelect
           editTableData={this.modifySchedule}
+          addTableData={this.addSchedule}
           deleteTableData={this.deleteScheduleRow}
         />
         <Table
@@ -235,6 +250,12 @@ class Scheduling extends Component {
           modifyVisible={modifyVisible}
           modifyCancel={this.modifyCancel}
           selectedRows={selectedRows}
+          getSchedul={this.getSchedul}
+          folderMenuData={folderMenuData}
+        />
+        <Add
+          addVisible={addVisible}
+          addCancel={this.addCancel}
           getSchedul={this.getSchedul}
           folderMenuData={folderMenuData}
         />
