@@ -6,6 +6,7 @@ import styles from './email.less';
 import KdTable from '@/components/KdTable';
 import generatePersons from '@/components/KdTable/genData';
 import TableHeader from '@/components/TableHeader';
+import CustomizePagination from '@/components/CustomizePagination';
 
 const { Option } = Select;
 class AddForm extends Component {
@@ -263,66 +264,10 @@ class EmailParameter extends Component {
         ),
       },
     ],
-    // header: [
-    //   {
-    //     field: 'personid',
-    //     caption: 'ID',
-    //     width: 100,
-    //     headerStyle: { textAlign: 'center' },
-    //     style: { textAlign: 'center' },
-    //   },
-    //   {
-    //     field: 'fname',
-    //     caption: 'First Name',
-    //     width: 200,
-    //     sort: true,
-    //     style: { textAlign: 'center' },
-    //   },
-    //   {
-    //     field: 'lname',
-    //     caption: 'Last Name',
-    //     width: 100,
-    //     headerStyle: { textAlign: 'center' },
-    //     style: { textAlign: 'center' },
-    //   },
-    //   {
-    //     field: 'email',
-    //     caption: 'Email',
-    //     width: 'auto',
-    //     headerStyle: { textAlign: 'center' },
-    //     style: { textAlign: 'center' },
-    //   },
-    //   // {
-    //   //   field: 'action',
-    //   //   caption: 'Action',
-    //   //   width: 60,
-    //   //   headerStyle: { textAlign: 'center' },
-    //   //   style: { textAlign: 'center' },
-    //   //   columnType: new cheetahGrid.columns.type.ButtonColumn({
-    //   //     caption: '修改',
-    //   //   }),
-    //   //   action: new cheetahGrid.columns.action.ButtonAction({
-    //   //     action() {
-    //   //       alert('click modify');
-    //   //     },
-    //   //   }),
-    //   // },
-    //   // {
-    //   //   field: 'action1',
-    //   //   caption: '',
-    //   //   width: 60,
-    //   //   headerStyle: { textAlign: 'center' },
-    //   //   style: { textAlign: 'center' },
-    //   //   columnType: new cheetahGrid.columns.type.ButtonColumn({
-    //   //     caption: '删除',
-    //   //   }),
-    //   //   action: new cheetahGrid.columns.action.ButtonAction({
-    //   //     action() {
-    //   //       alert('click delete');
-    //   //     },
-    //   //   }),
-    //   // },
-    // ],
+    page: {
+      pageNumber: '1',
+      pageSize: '10',
+    },
     records: generatePersons(10),
   };
 
@@ -426,7 +371,6 @@ class EmailParameter extends Component {
 
   // 删除
   deleteEmail = (res, obj) => {
-    console.log('res=', res);
     this.setState({
       mailId: obj.mailId,
       deleteVisible: true,
@@ -458,9 +402,13 @@ class EmailParameter extends Component {
 
   getEmailInit = () => {
     const { dispatch } = this.props;
+    const params = {
+      pageNumber: this.state.page.pageNumber,
+      pageSize: this.state.page.pageSize,
+    };
     dispatch({
       type: 'getEmail/getEmailList',
-      payload: {},
+      payload: params,
     });
   };
 
@@ -473,8 +421,34 @@ class EmailParameter extends Component {
     return obj[value];
   };
 
+  /**
+   * @description: This is for paging function.
+   * @param {type} null
+   * @return: undefined
+   */
+  pageChange = (pageNumber, pageSize) => {
+    const page = {
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
+    };
+
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.getEmailInit();
+      },
+    );
+  };
+
+  onShowSizeChange = (pageNumber, pageSize) => {
+    console.log('pageNumber, pageSize=', pageNumber, pageSize);
+  };
+
   render() {
     const { loading, getEmailListData } = this.props;
+    const { page } = this.state;
     return (
       <PageHeaderWrapper>
         <Fragment>
@@ -514,11 +488,17 @@ class EmailParameter extends Component {
             <div>
               <TableHeader showEdit showSelect addTableData={() => this.addUser()}></TableHeader>
               <Table
+                pagination={false}
                 loading={loading['getEmail/getEmailList']}
-                dataSource={getEmailListData}
-                pagination={{ size: 'small', pageSize: 5 }}
+                dataSource={getEmailListData.items}
                 columns={this.state.columns}
               ></Table>
+              <CustomizePagination
+                total={getEmailListData.totalCount}
+                pageSize={page.pageSize}
+                showSizeChanger
+                onChange={this.pageChange}
+              ></CustomizePagination>
             </div>
           </div>
           {/* 这是KdTable渲染的表格 */}
