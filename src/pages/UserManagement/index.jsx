@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-15 13:47:03
+ * @LastEditTime: 2019-11-18 17:12:20
  */
 
 import React, { Component } from 'react';
@@ -344,7 +344,7 @@ class UserManagement extends Component {
       const passwordStrength = passWordStrength(values.password);
       const param = {
         operationType: '5',
-        oldPassword: values.oldPassword,
+        oldPassword: window.kddes.getDes(values.oldPassword),
         password: window.kddes.getDes(values.password),
         passwordStrength,
       };
