@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Form, Input, DatePicker } from 'antd';
 
-const { RangePicker } = DatePicker;
+import moment from 'moment';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class PlanModifyForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    // const { emailObj } = this.props;
-    const rangeConfig = {
-      rules: [{ type: 'array', required: false, message: '请选择时间' }],
-    };
+    const { selectedRows } = this.props;
+    const defaultSelectedValue = selectedRows[0];
+    // const { selectValue } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -23,42 +22,43 @@ class PlanModifyForm extends Component {
     };
     return (
       <Form {...formItemLayout}>
-        <Form.Item label=" 计划名称:">
-          {getFieldDecorator('scheduleName', {
+        <Form.Item label="计划开始执行时间:">
+          {getFieldDecorator('executeTime', {
+            initialValue: moment(defaultSelectedValue.executeTime, 'YYYY-MM-DD HH:mm:ss'),
+          })(<DatePicker format="YYYY-MM-DD HH:mm:ss" showTime />)}
+        </Form.Item>
+        <Form.Item label=" cron表达式:">
+          {getFieldDecorator('cronExpression', {
             rules: [
               {
                 required: true,
-                message: 'Please input your scheduleName',
+                message: 'Please input your cronExpression',
               },
             ],
-            initialValue: '',
-          })(<Input />)}
+            initialValue: defaultSelectedValue.cronExpression,
+          })(<Input placeholder="" />)}
         </Form.Item>
-
-        <Form.Item label="调度作业:">
-          {getFieldDecorator('jobId', {
+        <Form.Item label=" 成功邮件:">
+          {getFieldDecorator('succeedMailId', {
             rules: [
               {
                 required: true,
-                message: 'Please input your jobId',
+                message: 'Please input your succeedMailId',
               },
             ],
-            initialValue: '',
-          })(<Input />)}
+            initialValue: defaultSelectedValue.succeedMailId,
+          })(<Input placeholder="" />)}
         </Form.Item>
-        <Form.Item label="计划有效时间:">
-          {getFieldDecorator('validDate', rangeConfig)(<RangePicker />)}
-        </Form.Item>
-        <Form.Item label="计划描述:">
-          {getFieldDecorator('scheduleDesc', {
+        <Form.Item label="出错邮件:">
+          {getFieldDecorator('faultMailId', {
             rules: [
               {
-                required: false,
-                message: 'Please input your scheduleDesc',
+                required: true,
+                message: 'Please input your faultMailId',
               },
             ],
-            initialValue: '',
-          })(<Input />)}
+            initialValue: defaultSelectedValue.faultMailId,
+          })(<Input placeholder="" />)}
         </Form.Item>
       </Form>
     );

@@ -39,6 +39,7 @@ export default {
   getAuditorlist: `${prefix}get_auditor_list`,
   getSchedule: `${prefix}get_schedule_list_page`,
   scheduleDelete: `${prefix}set_schedule_delete_batch`,
+  scheduleModify: `${prefix}set_schedule_modify`,
   downloadFile: `${prefix}file_download_quick`,
   getUserList: `${prefix}get_user_list_impl`,
   addUser: `${prefix}set_add_customer`,

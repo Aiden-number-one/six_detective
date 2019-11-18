@@ -1,7 +1,8 @@
 import { message } from 'antd';
 import Service from '@/utils/Service';
+import { formatTree } from '@/utils/utils';
 
-const { getSchedule, scheduleDelete, getFolderMenu } = Service;
+const { getSchedule, scheduleDelete, scheduleModify, getFolderMenu } = Service;
 
 const scheduleModel = {
   namespace: 'schedule',
@@ -28,13 +29,20 @@ const scheduleModel = {
         callback();
       }
     },
+    *modifyScheduleBatch({ payload, callback }, { call }) {
+      const response = yield call(scheduleModify, { param: payload });
+      if (response.bcjson.flag === '1') {
+        message.success('修改成功');
+        callback();
+      }
+    },
     *getFolderMenuList({ payload }, { call, put }) {
       const response = yield call(getFolderMenu, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
             type: 'getFolderMenuDatas',
-            payload: response.bcjson,
+            payload: response.bcjson.items,
           });
         }
       }
@@ -50,7 +58,7 @@ const scheduleModel = {
     getFolderMenuDatas(state, action) {
       return {
         ...state,
-        folderMenuDatas: action.payload,
+        folderMenuDatas: formatTree(action.payload, 'folderId', 'parentId'),
       };
     },
   },

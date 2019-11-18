@@ -1,0 +1,58 @@
+.clearfix::after {
+  display: block; /* 将文本转为块级元素 */
+  clear: both; /* 清除浮动 */
+  height: 0; /* 高度为0 */
+  line-height: 0; /* 行高为0 */
+  visibility: hidden; /* 将元素隐藏 */
+  content: ''; /* 设置内容为空 */
+}
+.clearfix {
+  zoom: 1;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.formWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  :global {
+    .ant-form-item-label {
+      width: 130px;
+    }
+  }
+}
+.login-name {
+  width: 200px;
+}
+.header li {
+  right: 20px;
+}
+.header li:last-child {
+  right: 0;
+}
+
+// model
+.add-user {
+  span {
+    display: inline-block;
+    width: 120px;
+  }
+  li {
+    margin-bottom: 10px;
+  }
+}
+.inputValue {
+  width: 220px !important;
+}
+
+.operation {
+  a {
+    margin-right: 10px;
+  }
+}
