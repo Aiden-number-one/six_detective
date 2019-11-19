@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-18 19:16:40
+ * @LastEditTime: 2019-11-19 10:38:22
  */
 
 import React, { Component } from 'react';
@@ -39,6 +39,7 @@ class UserManagement extends Component {
     closingVisible: false,
     updatePasswordVisible: false,
     resetPasswordVisible: false,
+    customerno: null,
     userInfo: {
       login: '',
       name: '',
@@ -228,13 +229,16 @@ class UserManagement extends Component {
     this.setState({
       updateVisible: true,
       userInfo,
+      customerno: obj.customerno,
     });
   };
 
   updateConfirm = () => {
     const { dispatch } = this.props;
+    const { customerno } = this.state;
     this.updateFormRef.current.validateFields((err, values) => {
       const param = {
+        custCustomerno: customerno,
         loginName: values.login,
         customerName: values.name,
         departmentId: this.newDepartmentId || this.state.userInfo.departmentId,
