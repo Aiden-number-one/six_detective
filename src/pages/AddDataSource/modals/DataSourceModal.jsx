@@ -3,8 +3,6 @@ import { Modal, Form, Input, Select } from 'antd';
 
 const { Option } = Select;
 
-// import styles from '../AddDataSource.less';
-
 @Form.create()
 export default class DataSourceModal extends PureComponent {
   state = {};

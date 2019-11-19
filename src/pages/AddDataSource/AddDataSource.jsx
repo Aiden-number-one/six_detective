@@ -401,33 +401,15 @@ export default class AddDataSource extends PureComponent {
         connectionId: activeCID,
       },
       callback: response => {
-        this.getDownloadToken({
-          fileClass: 'ZIP',
-          filePath: response.bcjson.items[0].filePatch,
-        })
+        this.downloadFile(response.bcjson.items[0].filePatch)
       },
     });
   };
 
-  // 导出文件路径
-  getDownloadToken = params => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'tableData/getToken',
-      payload: params,
-      callback: response => {
-        this.downloadFile({
-          fileClass: 'ZIP',
-          downloadToken: response.kdjson.items[0].downloadToken,
-        })
-      },
-    });
-  }
-
   // 下载文件
-  downloadFile = params => {
+  downloadFile = filePath => {
     const a = document.createElement('a');
-    a.href = `/download?p=${encodeURI(JSON.stringify(params))}`;
+    a.href = `/download?fileClass=ZIP&filePath=/${filePath}`;
     a.download = true;
     a.click();
   };

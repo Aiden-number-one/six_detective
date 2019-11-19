@@ -21,5 +21,4 @@ export default {
   getColumnInfo: 'get_metadata_column_info', // 获取元数据列信息
   getMetadataPerform: 'get_metadata_table_perform', // 数据预览
   exportInfo: 'get_metadata_table_export_info', // 生成导出文件
-  getToken: 'file_download_quick', // 获取downloadToken
 };

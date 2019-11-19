@@ -84,7 +84,7 @@ export default class DataSourceModal extends PureComponent {
       columnData,
       metadataPerform,
     } = this.props;
-    const column = [];
+    const column = []; // 数据预览表头
     if (metadataPerform.length > 0) {
       column.push({
         title: 'index',
