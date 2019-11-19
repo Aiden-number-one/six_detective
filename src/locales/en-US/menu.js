@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: iron
- * @LastEditTime: 2019-11-11 15:31:03
+ * @LastEditors: lan
+ * @LastEditTime: 2019-11-19 16:33:21
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
@@ -16,6 +16,7 @@ export default {
   'menu.dataManagement.dataProcessing': 'Data Processing',
   'menu.dataManagement.dataEnquiry': 'Data Enquiry',
   'menu.dataManagement.dataMaintenance': 'Data Maintenance',
+  'menu.dataManagement.driveManagement': 'Drive Management',
   'menu.dataManagement.taskSwitch': 'Task Switch',
   'menu.accountManagement': 'ACCOUNT MANAGEMENT',
   'menu.accountManagement.dashboard': 'Dashboard',

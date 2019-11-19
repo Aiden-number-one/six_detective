@@ -67,6 +67,11 @@ export default [
             component: './AddDataSource/AddDataSource',
           },
           {
+            path: '/data-management/drive-management',
+            name: 'driveManagement',
+            component: './DriveManagement/DriveManagement',
+          },
+          {
             path: '/data-management/task-switch',
             name: 'taskSwitch',
             component: './TaskSwitch/TaskSwitch',

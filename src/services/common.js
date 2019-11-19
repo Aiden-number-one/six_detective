@@ -2,14 +2,13 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-11-14 14:04:30
+ * @LastEditTime: 2019-11-19 17:04:57
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
 const prefix = '';
 
 export default {
-  getDict: 'kingdom.retl.get_all_dict_data_list', // 获取字典
   // getMenu: 'bayconnect.superlop.get_acl_menu', // 获取数据门户主题列表
   getMenu: 'mock/run/7765f3a2-a030-4578-a016-cc13c4156136', // Mock
   getDatas: 'kingdom.retl.getDatas',
@@ -17,6 +16,7 @@ export default {
   getDataSourceList: 'kingdom.retl.getDataSourceList',
   getLogin: 'get_website_login', // 登录
   getLoginStatus: 'get_user_operate_info', // 判断登录状态
+  getDict: 'get_all_dict_data_list', // 获取字典
   getApproval: `${prefix}get_audit_history_list_page`,
   getConfig: `${prefix}get_audit_config_list_page`,
   addConfig: `${prefix}set_audit_config_add`,
