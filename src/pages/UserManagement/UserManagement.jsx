@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-19 10:38:22
+ * @LastEditTime: 2019-11-19 13:25:52
  */
 
 import React, { Component } from 'react';
@@ -50,6 +50,11 @@ class UserManagement extends Component {
     columns: [
       {
         title: '登陆名',
+        dataIndex: 'loginName',
+        key: 'loginName',
+      },
+      {
+        title: '员工姓名',
         dataIndex: 'customerName',
         key: 'customerName',
       },
@@ -344,9 +349,11 @@ class UserManagement extends Component {
 
   updatePasswordConfirm = () => {
     const { dispatch } = this.props;
+    const { customerno } = this.state;
     this.passwordFormRef.current.validateFields((err, values) => {
       const passwordStrength = passWordStrength(values.password);
       const param = {
+        custCustomerno: customerno,
         operationType: '5',
         oldPassword: window.kddes.getDes(values.oldPassword),
         password: window.kddes.getDes(values.password),
