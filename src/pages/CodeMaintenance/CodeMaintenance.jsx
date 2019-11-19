@@ -4,7 +4,7 @@ import { Form, Button, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
 
 import TableHeader from '@/components/TableHeader';
-import styles from './index.less';
+import styles from './CodeMaintenance.less';
 // import { thisExpression } from '@babel/types';
 
 class CodeForm extends Component {

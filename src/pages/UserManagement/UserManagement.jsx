@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-15 13:47:03
+ * @LastEditTime: 2019-11-19 13:25:52
  */
 
 import React, { Component } from 'react';
@@ -11,7 +11,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table } from 'antd';
 import { connect } from 'dva';
 import TableHeader from '@/components/TableHeader';
-import styles from './index.less';
+import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 
 import SearchForm from './components/SearchForm';
@@ -39,6 +39,7 @@ class UserManagement extends Component {
     closingVisible: false,
     updatePasswordVisible: false,
     resetPasswordVisible: false,
+    customerno: null,
     userInfo: {
       login: '',
       name: '',
@@ -49,6 +50,11 @@ class UserManagement extends Component {
     columns: [
       {
         title: '登陆名',
+        dataIndex: 'loginName',
+        key: 'loginName',
+      },
+      {
+        title: '员工姓名',
         dataIndex: 'customerName',
         key: 'customerName',
       },
@@ -228,13 +234,16 @@ class UserManagement extends Component {
     this.setState({
       updateVisible: true,
       userInfo,
+      customerno: obj.customerno,
     });
   };
 
   updateConfirm = () => {
     const { dispatch } = this.props;
+    const { customerno } = this.state;
     this.updateFormRef.current.validateFields((err, values) => {
       const param = {
+        custCustomerno: customerno,
         loginName: values.login,
         customerName: values.name,
         departmentId: this.newDepartmentId || this.state.userInfo.departmentId,
@@ -340,11 +349,13 @@ class UserManagement extends Component {
 
   updatePasswordConfirm = () => {
     const { dispatch } = this.props;
+    const { customerno } = this.state;
     this.passwordFormRef.current.validateFields((err, values) => {
       const passwordStrength = passWordStrength(values.password);
       const param = {
+        custCustomerno: customerno,
         operationType: '5',
-        oldPassword: values.oldPassword,
+        oldPassword: window.kddes.getDes(values.oldPassword),
         password: window.kddes.getDes(values.password),
         passwordStrength,
       };

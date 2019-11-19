@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Form, TreeSelect, Input } from 'antd';
 
-import styles from '../../index.less';
+import styles from '../UserManagement.less';
 
 const { TreeNode } = TreeSelect;
 function loop(orgsTree) {
@@ -31,7 +31,7 @@ function loop(orgsTree) {
     );
   });
 }
-export default class UpdateForm extends Component {
+export default class UserForm extends Component {
   state = {
     selectValue: undefined,
     departmentId: '',
@@ -40,6 +40,23 @@ export default class UpdateForm extends Component {
   componentDidUpdate() {
     this.props.getDepartmentId(this.state.departmentId);
   }
+
+  validateToNextPassword = (rule, value, callback) => {
+    const { form } = this.props;
+    if (value && this.state.confirmDirty) {
+      form.validateFields(['confirm'], { force: true });
+    }
+    callback();
+  };
+
+  compareToFirstPassword = (rule, value, callback) => {
+    const { form } = this.props;
+    if (value && value !== form.getFieldValue('password')) {
+      callback('Two passwords that you enter is inconsistent!');
+    } else {
+      callback();
+    }
+  };
 
   selectChange = (value, node) => {
     this.setState({
@@ -50,7 +67,7 @@ export default class UpdateForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { orgs, userInfo } = this.props;
+    const { orgs } = this.props;
     const { selectValue } = this.state;
     return (
       <Fragment>
@@ -64,7 +81,6 @@ export default class UpdateForm extends Component {
                     message: 'Please input your 登陆名',
                   },
                 ],
-                initialValue: userInfo.login,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="员工姓名：">
@@ -75,7 +91,6 @@ export default class UpdateForm extends Component {
                     message: 'Please input your 员工姓名',
                   },
                 ],
-                initialValue: userInfo.name,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
             <Form.Item label="所属部门：">
@@ -86,7 +101,6 @@ export default class UpdateForm extends Component {
                     message: 'Please input your 所属部门',
                   },
                 ],
-                initialValue: userInfo.departmentName,
               })(
                 <TreeSelect
                   value={selectValue}
@@ -99,6 +113,37 @@ export default class UpdateForm extends Component {
                 </TreeSelect>,
               )}
             </Form.Item>
+            <Form.Item label="登陆密码：">
+              {getFieldDecorator('password', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your 登陆密码',
+                  },
+                  {
+                    validator: this.validateToNextPassword,
+                  },
+                ],
+              })(<Input.Password className={styles.inputValue} />)}
+            </Form.Item>
+            <Form.Item label="确认密码：">
+              {getFieldDecorator('confirm', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please confirm your password!',
+                  },
+                  {
+                    validator: this.compareToFirstPassword,
+                  },
+                ],
+              })(<Input.Password className={styles.inputValue} />)}
+            </Form.Item>
+            <Form.Item label="联系电话：">
+              {getFieldDecorator('phone', {
+                rules: [],
+              })(<Input className={styles.inputValue} />)}
+            </Form.Item>
             <Form.Item label="邮箱地址：">
               {getFieldDecorator('email', {
                 rules: [
@@ -106,12 +151,7 @@ export default class UpdateForm extends Component {
                     type: 'email',
                     message: 'The input is not valid E-mail!',
                   },
-                  {
-                    required: true,
-                    message: 'Please confirm your 邮箱地址!',
-                  },
                 ],
-                initialValue: userInfo.email,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
           </Form>
