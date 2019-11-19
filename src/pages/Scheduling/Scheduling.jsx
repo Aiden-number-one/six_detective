@@ -41,19 +41,14 @@ class Scheduling extends Component {
         key: 'jobNo',
       },
       {
-        title: '文件名',
-        dataIndex: 'folderName',
-        key: 'folderName',
-      },
-      {
         title: '作业名称',
         dataIndex: 'jobName',
         key: 'jobName',
       },
       {
         title: '上次执行时间',
-        dataIndex: 'validStartDate',
-        key: 'validStartDate',
+        dataIndex: 'modifiedTime',
+        key: 'modifiedTime',
       },
       {
         title: '最后一次执行状态',
@@ -62,13 +57,8 @@ class Scheduling extends Component {
       },
       {
         title: '下次执行时间',
-        dataIndex: 'validEndDate',
-        key: 'validEndDate',
-      },
-      {
-        title: '执行结果',
-        dataIndex: 'scheduleLog',
-        key: 'scheduleLog',
+        dataIndex: 'nextTime',
+        key: 'nextTime',
       },
       {
         title: '操作',
@@ -79,7 +69,7 @@ class Scheduling extends Component {
             <Switch
               checkedChildren="NO"
               unCheckedChildren="OFF"
-              // onChange={() => this.handleSetConfigStatus(record)}
+              onChange={checked => this.handleSetConfigStatus(checked, record)}
               defaultChecked={record.startFlag === '2'}
             />
           ),
@@ -179,6 +169,20 @@ class Scheduling extends Component {
       },
       callback: this.getSchedul,
     });
+  };
+
+  handleSetConfigStatus = (checked, record) => {
+    const { dispatch } = this.props;
+    const startFlag = checked ? 2 : 3;
+    dispatch({
+      type: 'schedule/modifyScheduleBatch',
+      payload: {
+        scheduleId: record.scheduleId,
+        startFlag,
+      },
+      callback: this.props.getSchedul,
+    });
+    // console.log('record-------->', checked, record);
   };
 
   modifySchedule = () => {

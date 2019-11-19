@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, DatePicker, TreeSelect } from 'antd';
+import { Form, Input, DatePicker, TreeSelect, Checkbox, Row, Col } from 'antd';
 
 import moment from 'moment';
 
@@ -33,11 +33,8 @@ function loop(orgsTree) {
     );
   });
 }
+// eslint-disable-next-line react/prefer-stateless-function
 class BasicModifyForm extends Component {
-  chooseJobId = () => {
-    console.log('00000');
-  };
-
   render() {
     const { getFieldDecorator } = this.props.form;
     const { folderMenuData, selectChange, selectedRows } = this.props;
@@ -89,7 +86,14 @@ class BasicModifyForm extends Component {
           )}
         </Form.Item>
         <Form.Item label="计划有效时间:">
-          {getFieldDecorator('validDate', rangeConfig)(<RangePicker showTime />)}
+          <Row gutter={8}>
+            <Col span={16}>
+              {getFieldDecorator('validDate', rangeConfig)(
+                <RangePicker showTime style={{ width: '100%' }} />,
+              )}
+            </Col>
+            <Col span={8}>{getFieldDecorator('Checkbox')(<Checkbox>永久有效</Checkbox>)}</Col>
+          </Row>
         </Form.Item>
         <Form.Item label="计划描述:">
           {getFieldDecorator('scheduleDesc', {
