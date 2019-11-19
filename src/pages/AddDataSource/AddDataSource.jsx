@@ -119,6 +119,7 @@ export default class AddDataSource extends PureComponent {
     title: '', // 弹框标题
     operation: 'ADD', // 数据源操作类型
     selectedRowKeys: '',
+    tabTitle: 'Data Connected',
   };
 
   searchFrom = React.createRef();
@@ -138,6 +139,9 @@ export default class AddDataSource extends PureComponent {
         connectionName,
       },
       callback: response => {
+        this.setState({
+          tabTitle: response.bcjson.items[0].connectionName,
+        })
         const param = {
           connection_id: response.bcjson.items[0].connectionId,
         }
@@ -487,6 +491,7 @@ export default class AddDataSource extends PureComponent {
       title,
       operation,
       selectedRowKeys,
+      tabTitle,
     } = this.state;
     // 表格多选框
     const rowSelection = {
@@ -529,6 +534,9 @@ export default class AddDataSource extends PureComponent {
                   onClick={e => {
                     e.stopPropagation();
                     // 点击获取数据源表格信息
+                    this.setState({
+                      tabTitle: item.connectionName,
+                    })
                     dispatch({
                       type: 'dataSource/setActiveCID',
                       payload: item.connectionId,
@@ -592,7 +600,7 @@ export default class AddDataSource extends PureComponent {
           <div style={{ flex: 1, overflowX: 'auto' }}>
             <div style={{ height: '100%', padding: '0 20px' }}>
               <Tabs defaultActiveKey="0">
-                <TabPane tab="数据连接" key="0">
+                <TabPane tab={tabTitle} key="0">
                   <WrappedAdvancedSearchForm
                     schemasNames={schemasNames}
                     getTableData={this.getTableData}
