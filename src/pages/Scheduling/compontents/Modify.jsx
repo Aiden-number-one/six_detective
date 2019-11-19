@@ -25,10 +25,6 @@ class Modify extends Component {
 
   componentDidMount() {}
 
-  callback = key => {
-    console.log(key);
-  };
-
   modifyOk = () => {
     const { folderId } = this.state;
     const { selectedRows } = this.props;
@@ -56,6 +52,9 @@ class Modify extends Component {
       const params2 = {
         executeTime: validDate,
         cronExpression: values.cronExpression,
+        scheduleLaw: values.scheduleLaw,
+        scheduleInterval: values.scheduleInterval,
+        frequency: values.frequency,
         succeedMailId: values.succeedMailId,
         faultMailId: values.faultMailId,
       };
@@ -91,12 +90,9 @@ class Modify extends Component {
         visible={modifyVisible}
         onOk={this.modifyOk}
         onCancel={modifyCancel}
+        width={700}
       >
-        <Tabs
-          defaultActiveKey="1"
-          onChange={this.callback}
-          style={{ marginTop: '-26px', textAlign: 'center' }}
-        >
+        <Tabs defaultActiveKey="1" style={{ marginTop: '-26px', textAlign: 'center' }}>
           <TabPane tab="基本信息" key="1">
             <BasicModifyForm
               ref={this.basicModifyForm}

@@ -1,38 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { Tree, Col, Row, Divider, Button } from 'antd';
+import { loopRoleGroups, loopRoleMenus } from '../common';
 import styles from './Auth.less';
-
-const { TreeNode } = Tree;
-
-function loopRoleGroups(roleGroupsTree) {
-  return roleGroupsTree.map(item => {
-    const { childRole, groupId, groupName, roleId, roleName } = item;
-    if (childRole) {
-      return (
-        <TreeNode key={groupId} title={groupName} groupId={groupId}>
-          {loopRoleGroups(childRole)}
-        </TreeNode>
-      );
-    }
-    return <TreeNode key={roleId} title={roleName} groupId={groupId} roleId={roleId} />;
-  });
-}
-
-function loopRoleMenus(roleMenusTree) {
-  return roleMenusTree.map(item => {
-    const { children, menuId, menuName, parentMenuId } = item;
-
-    if (children) {
-      return (
-        <TreeNode key={menuId} title={menuName} pId={parentMenuId}>
-          {loopRoleMenus(children)}
-        </TreeNode>
-      );
-    }
-    return <TreeNode key={menuId} title={menuName} pId={parentMenuId} />;
-  });
-}
 
 function Auth({ dispatch, roleGroups, publicMenus, checkedRoleMenus }) {
   useEffect(() => {
@@ -95,7 +65,7 @@ function Auth({ dispatch, roleGroups, publicMenus, checkedRoleMenus }) {
             {loopRoleGroups(roleGroups)}
           </Tree>
         </Col>
-        <Col span={8} offset={4}>
+        <Col span={8} offset={1}>
           <div>
             <Button type="danger" onClick={setRoleMenu} disabled={!isAuthMenuVisible}>
               授权菜单权限

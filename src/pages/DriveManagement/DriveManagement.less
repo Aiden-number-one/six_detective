@@ -1,0 +1,185 @@
+@import '~@/assets/css/utils.less';
+
+.titleBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  padding: 0 10px;
+  color: #10416c;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.searchBox {
+  margin-top: 10px;
+  padding: 0 10px;
+  :global(.ant-input) {
+    background-color: #fff;
+  }
+}
+
+.driverInfoList {
+  margin-top: 10px;
+  padding: 0 10px;
+  .driverInfoItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    .driverInfoName {
+      width: 120px;
+      .textOverflow();
+      &:hover {
+        color: #10416c;
+      }
+    }
+  }
+}
+
+.winbd {
+  padding: 10px 0 10px 0;
+  // .excel,
+  // .hive,
+  // .oracle,
+  // .kylin,
+  // .spark,
+  // .cheetah,
+  // .impala,
+  // .monetdb,
+  // .sqlserver,
+  // .hana,
+  // .greenplum,
+  // .transwarp,
+  // .text-csv,
+  // .teradata,
+  // .prestodb,
+  // .postgresql,
+  // .vertica,
+  // .mammut,
+  // .custom,
+  // .api,
+  .mysql,
+  .db2 {
+    display: inline-block;
+    width: 112px;
+    height: 80px;
+    vertical-align: middle;
+    background: url(@/assets/drivensvg.svg) no-repeat -999px -999px;
+    background-size: cover;
+  }
+
+  ul {
+    overflow: auto;
+    zoom: 1;
+    li {
+      display: inline-block;
+      // float: left;
+      margin: 0 5px 10px;
+      text-align: center;
+      box-shadow: 0 2px 4px #cacaca;
+      cursor: pointer;
+      .txt {
+        padding: 5px 0;
+        font-size: 12px;
+        background-color: #fff;
+      }
+      &:hover {
+        box-shadow: 0 2px 4px #b8bff9;
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  // .excel {
+  //   background-position: 0, 0;
+  // }
+
+  .mysql {
+    background-position: -112px, 0;
+  }
+
+  // .hive {
+  //   background-position: -224px, 0;
+  // }
+
+  // .oracle {
+  //   background-position: -336px, 0;
+  // }
+
+  // .kylin {
+  //   background-position: -448px, 0;
+  // }
+
+  // .spark {
+  //   background-position: -560px, 0;
+  // }
+
+  // .cheetah {
+  //   background-position: -672px, 0;
+  // }
+
+  // .impala {
+  //   background-position: -784px, 0;
+  // }
+
+  // .monetdb {
+  //   background-position: -896px, 0;
+  // }
+
+  // .sqlserver {
+  //   background-position: -1008px, 0;
+  // }
+
+  .db2 {
+    background-position: -1120px, 0;
+  }
+
+  // .hana {
+  //   background-position: -1232px, 0;
+  // }
+
+  // .greenplum {
+  //   background-position: -1344px, 0;
+  // }
+
+  // .transwarp {
+  //   background-position: -1456px, 0;
+  // }
+
+  // .text-csv {
+  //   background-position: -1568px, 0;
+  // }
+
+  // .teradata {
+  //   background-position: -1680px, 0;
+  // }
+
+  // .prestodb {
+  //   background-position: -1792px, 0;
+  // }
+
+  // .postgresql {
+  //   background-position: -1904px, 0;
+  // }
+
+  // .vertica {
+  //   background-position: -2016px, 0;
+  // }
+
+  // .mammut {
+  //   background-position: -2128px, 0;
+  // }
+
+  // .custom {
+  //   background-position: -2240px, 0;
+  // }
+
+  // .api {
+  //   background-position: -2353px, 0;
+  // }
+}

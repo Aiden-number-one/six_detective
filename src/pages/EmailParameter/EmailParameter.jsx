@@ -264,11 +264,67 @@ class EmailParameter extends Component {
         ),
       },
     ],
-    page: {
-      pageNumber: '1',
-      pageSize: '10',
-    },
-    records: generatePersons(10),
+    // header: [
+    //   {
+    //     field: 'personid',
+    //     caption: 'ID',
+    //     width: 100,
+    //     headerStyle: { textAlign: 'center' },
+    //     style: { textAlign: 'center' },
+    //   },
+    //   {
+    //     field: 'fname',
+    //     caption: 'First Name',
+    //     width: 200,
+    //     sort: true,
+    //     style: { textAlign: 'center' },
+    //   },
+    //   {
+    //     field: 'lname',
+    //     caption: 'Last Name',
+    //     width: 100,
+    //     headerStyle: { textAlign: 'center' },
+    //     style: { textAlign: 'center' },
+    //   },
+    //   {
+    //     field: 'email',
+    //     caption: 'Email',
+    //     width: 'auto',
+    //     headerStyle: { textAlign: 'center' },
+    //     style: { textAlign: 'center' },
+    //   },
+    //   // {
+    //   //   field: 'action',
+    //   //   caption: 'Action',
+    //   //   width: 60,
+    //   //   headerStyle: { textAlign: 'center' },
+    //   //   style: { textAlign: 'center' },
+    //   //   columnType: new cheetahGrid.columns.type.ButtonColumn({
+    //   //     caption: '修改',
+    //   //   }),
+    //   //   action: new cheetahGrid.columns.action.ButtonAction({
+    //   //     action() {
+    //   //       alert('click modify');
+    //   //     },
+    //   //   }),
+    //   // },
+    //   // {
+    //   //   field: 'action1',
+    //   //   caption: '',
+    //   //   width: 60,
+    //   //   headerStyle: { textAlign: 'center' },
+    //   //   style: { textAlign: 'center' },
+    //   //   columnType: new cheetahGrid.columns.type.ButtonColumn({
+    //   //     caption: '删除',
+    //   //   }),
+    //   //   action: new cheetahGrid.columns.action.ButtonAction({
+    //   //     action() {
+    //   //       alert('click delete');
+    //   //     },
+    //   //   }),
+    //   // },
+    // ],
+    records: generatePersons(1000),
   };
 
   addFormRef = React.createRef();

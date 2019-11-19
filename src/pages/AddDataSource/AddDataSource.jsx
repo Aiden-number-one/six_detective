@@ -7,33 +7,102 @@ import {
   Input,
   Tabs,
   Modal,
-  // Form,
-  // Row,
-  // Col,
-  // Button,
-  // Select,
+  Form,
+  Row,
+  Col,
+  Button,
+  Select,
+  message,
   // Checkbox,
   // Popover,
-  // DatePicker,
 } from 'antd';
 
 import styles from './AddDataSource.less';
 import DataSourceModal from './modals/DataSourceModal';
 import DataSoureceTypeModal from './modals/DataSoureceTypeModal';
 import ImportMetaData from './modals/ImportMetaData';
+import ColumnDetail from './modals/ColumnDetail';
 
 import TableHeader from '@/components/TableHeader';
 
 const { Search } = Input;
 const { TabPane } = Tabs;
+const { Option } = Select;
+
+class AdvancedSearchForm extends PureComponent {
+  state = {};
+
+  getFields() {
+    const { schemasNames } = this.props;
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Row gutter={{ xs: 24, sm: 24, md: 24, lg: 24, xl: 24 }}>
+        <Col xs={24} sm={24} md={12} lg={8}>
+          <Form.Item label="Table Name">
+            {getFieldDecorator('tableName', {})(<Input placeholder="Type Here" />)}
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={24} md={12} lg={8}>
+          <Form.Item label="Schem Name">
+            {getFieldDecorator('schemName', {})(
+              <Select placeholder="please select" dropdownClassName="selectDropdown" allowClear>
+                {schemasNames.map(item => (
+                  <Option value={item.schemName}>{item.schemName}</Option>
+                ))}
+              </Select>,
+            )}
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={24} md={12} lg={8}>
+          <Form.Item label=" ">
+            <Button type="primary" htmlType="submit">
+              Search
+            </Button>
+          </Form.Item>
+        </Col>
+      </Row>
+    );
+  }
+
+  // 查询操作
+  handleSearch = e => {
+    e.preventDefault();
+    const { getTableData, form, activeCID } = this.props;
+    form.validateFields((err, values) => {
+      if (!err) {
+        const param = {
+          ...values,
+          connection_id: activeCID,
+          pageSize: 10,
+          pageNumber: 1,
+        };
+        getTableData(param);
+      }
+    });
+  };
+
+  render() {
+    return (
+      <Form className="ant-advanced-search-form" onSubmit={this.handleSearch}>
+        {this.getFields()}
+      </Form>
+    );
+  }
+}
+
+const WrappedAdvancedSearchForm = Form.create({ name: 'advanced_search' })(AdvancedSearchForm);
 
 @connect(({ dataSource, tableData }) => ({
-  activeData: dataSource.activeData, // 编辑的数据源信息
   dataSourceList: dataSource.dataSourceList, // 数据源列表信息
+  activeData: dataSource.activeData, // 编辑的数据源信息
   activeCID: dataSource.activeCID, // 点击的数据源ID
   driverInfo: dataSource.driverInfo, // 数据源驱动
   activeDriver: dataSource.activeDriver, // 新增数据源时选中的数据源类型对应的驱动信息
   tableData: tableData.tableData, // 数据源表格
+  activeTableData: tableData.activeTableData, // 查看的数据表
+  schemasNames: tableData.schemasNames, // 所属用户
+  columnData: tableData.columnData, // 列信息
+  metadataPerform: tableData.metadataPerform, // 表格前20条数据
 }))
 export default class AddDataSource extends PureComponent {
   state = {
@@ -41,10 +110,15 @@ export default class AddDataSource extends PureComponent {
       dataSource: false, // 新增修改数据源弹框
       dataSourceType: false, // 新增数据源类型弹框
       importMetaData: false, // 导入元数据弹框
+      columnDetail: false, // 对象结构详情
     },
     title: '', // 弹框标题
     operation: 'ADD', // 数据源操作类型
+    selectedRowKeys: '',
+    tabTitle: 'Data Connected',
   };
+
+  searchFrom = React.createRef();
 
   componentDidMount() {
     // 获取数据源列表
@@ -61,15 +135,31 @@ export default class AddDataSource extends PureComponent {
         connectionName,
       },
       callback: response => {
+        this.setState({
+          tabTitle: response.bcjson.items[0].connectionName,
+        })
+        const param = {
+          connection_id: response.bcjson.items[0].connectionId,
+        };
         // 成功时默认选中第一个获取表信息
+        this.getTableData(param);
         dispatch({
-          type: 'tableData/getTableData',
-          payload: {
-            pageNumber: 1,
-            pageSize: 10,
-            connection_id: response.bcjson.items[0].connectionId,
-          },
+          type: 'tableData/getSchemas',
+          payload: param,
         });
+      },
+    });
+  };
+
+  // 获取数据源表信息
+  getTableData = param => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'tableData/getTableData',
+      payload: {
+        pageNumber: 1,
+        pageSize: 10,
+        ...param,
       },
     });
   };
@@ -187,6 +277,160 @@ export default class AddDataSource extends PureComponent {
     }
   };
 
+  // 测试连接
+  connectTest = values => {
+    const { dispatch, activeData, activeDriver } = this.props;
+    const driverInfo = activeDriver.className || activeData.driverInfo;
+    const params = values;
+    if (params.dbPassword !== activeData.dbPassword) {
+      params.dbPassword = window.kddes.getDes(params.dbPassword);
+    }
+    dispatch({
+      type: 'dataSource/connectTest',
+      payload: {
+        ...params,
+        driverInfo,
+      },
+    });
+  };
+
+  // 获取元数据
+  getMetaData = () => {
+    // 获取元数据
+    const { dispatch, activeCID } = this.props;
+    dispatch({
+      type: 'tableData/clearMetaData',
+    });
+    dispatch({
+      type: 'tableData/getMetaData',
+      payload: {
+        connection_id: activeCID,
+      },
+    });
+    this.toggleModal('importMetaData');
+  };
+
+  // 查看表数据详情
+  showDetail = record => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'tableData/setActiveTableData',
+      payload: record,
+    });
+    dispatch({
+      type: 'tableData/getColumnInfo',
+      payload: {
+        table_id: record.tableId,
+      },
+    });
+    dispatch({
+      type: 'tableData/getMetadataPerform',
+      payload: {
+        connection_id: record.connectionId,
+        schema: record.schemName,
+        table_name: record.tableName,
+      },
+    });
+    this.toggleModal('columnDetail');
+  };
+
+  // 删除表格数据
+  delTableData = () => {
+    if (!this.tableIds) {
+      message.info('Please Select Row');
+      return;
+    }
+    Modal.confirm({
+      title: 'Do you Want to delete this items?',
+      onOk: () => {
+        const { dispatch, activeCID } = this.props;
+        dispatch({
+          type: 'tableData/delTableData',
+          payload: {
+            connectionId: activeCID,
+            tableIds: this.tableIds,
+          },
+          callback: () => {
+            this.tableIds = '';
+            const params = this.searchFrom.current.props.form.getFieldsValue();
+            params.connection_id = activeCID;
+            params.pageSize = 10;
+            params.pageNumber = 1;
+            this.getTableData(params);
+            this.setState({
+              selectedRowKeys: '',
+            });
+          },
+        });
+      },
+      onCancel: () => {
+        // console.log('Cancel');
+      },
+    });
+  };
+
+  // 更新字段/批量更新字段
+  updMetadataOrColumn = (type, api) => {
+    const { dispatch, activeCID } = this.props;
+    if (type === 'all') {
+      dispatch({
+        type: `tableData/${api}`,
+        payload: {
+          allCheckFlag: 'Y',
+          connectionId: activeCID,
+        },
+        callback: () => {
+          const params = this.searchFrom.current.props.form.getFieldsValue();
+          params.connection_id = activeCID;
+          params.pageSize = 10;
+          params.pageNumber = 1;
+          this.getTableData(params);
+        },
+      });
+      return;
+    }
+    if (!this.tableIds) {
+      message.info('Please Select Row');
+      return;
+    }
+    dispatch({
+      type: `tableData/${api}`,
+      payload: {
+        tablesId: this.tableIds,
+        connectionId: activeCID,
+      },
+      callback: () => {
+        const params = this.searchFrom.current.props.form.getFieldsValue();
+        params.connection_id = activeCID;
+        params.pageSize = 10;
+        params.pageNumber = 1;
+        this.getTableData(params);
+      },
+    });
+  };
+
+  // 生成导出文件
+  exportList = () => {
+    const { dispatch, activeCID } = this.props;
+    dispatch({
+      type: 'tableData/exportInfo',
+      payload: {
+        connectionId: activeCID,
+      },
+      callback: response => {
+        this.downloadFile(response.bcjson.items[0].filePatch);
+      },
+    });
+  };
+
+  // 下载文件
+  downloadFile = filePath => {
+    const a = document.createElement('a');
+    a.href = `/download?fileClass=ZIP&filePath=/${filePath}`;
+    a.download = true;
+    a.click();
+  };
+
   render() {
     // 表格表头
     const columns = [
@@ -228,29 +472,51 @@ export default class AddDataSource extends PureComponent {
       {
         title: '操作',
         key: 'action',
-        render: () => (
+        render: (text, record) => (
           <span>
-            <Icon type="eye" />
+            <Icon
+              type="eye"
+              onClick={() => {
+                this.showDetail(record);
+              }}
+            />
           </span>
         ),
       },
     ];
-    // 表格多选框
-    const rowSelection = {
-      type: 'checkbox',
-    };
     const {
-      visible: { dataSource, dataSourceType, importMetaData },
+      visible: { dataSource, dataSourceType, importMetaData, columnDetail },
       title,
       operation,
+      selectedRowKeys,
+      tabTitle,
     } = this.state;
+    // 表格多选框
+    const rowSelection = {
+      selectedRowKeys,
+      type: 'checkbox',
+      onSelect: (record, selected, selectedRows) => {
+        const tableIds = selectedRows.map(item => item.tableId);
+        this.tableIds = tableIds.join(',');
+      },
+      onChange: selectedRowKey => {
+        this.setState({
+          selectedRowKeys: selectedRowKey,
+        });
+      },
+    };
     const {
-      activeData,
+      dispatch,
       dataSourceList,
+      activeData,
       activeCID,
       tableData,
+      activeTableData,
       driverInfo,
       activeDriver,
+      schemasNames,
+      columnData,
+      metadataPerform,
     } = this.props;
     return (
       <PageHeaderWrapper>
@@ -266,7 +532,9 @@ export default class AddDataSource extends PureComponent {
                   onClick={e => {
                     e.stopPropagation();
                     // 点击获取数据源表格信息
-                    const { dispatch } = this.props;
+                    this.setState({
+                      tabTitle: item.connectionName,
+                    })
                     dispatch({
                       type: 'dataSource/setActiveCID',
                       payload: item.connectionId,
@@ -295,7 +563,6 @@ export default class AddDataSource extends PureComponent {
                       onClick={e => {
                         e.stopPropagation();
                         // 编辑数据源
-                        const { dispatch } = this.props;
                         dispatch({
                           type: 'dataSource/saveDate',
                           payload: item,
@@ -331,31 +598,65 @@ export default class AddDataSource extends PureComponent {
           <div style={{ flex: 1, overflowX: 'auto' }}>
             <div style={{ height: '100%', padding: '0 20px' }}>
               <Tabs defaultActiveKey="0">
-                <TabPane tab="数据连接">
+                <TabPane tab={tabTitle} key="0">
+                  <WrappedAdvancedSearchForm
+                    schemasNames={schemasNames}
+                    getTableData={this.getTableData}
+                    activeCID={activeCID}
+                    wrappedComponentRef={this.searchFrom}
+                  />
                   <TableHeader
                     showSelect
                     showEdit
-                    addTableData={() => {
-                      // 获取元数据
-                      const { dispatch } = this.props;
-                      dispatch({
-                        type: 'tableData/clearMetaData',
-                      });
-                      dispatch({
-                        type: 'tableData/getMetaData',
-                        payload: {
-                          connection_id: activeCID,
-                        },
-                      });
-                      this.toggleModal('importMetaData');
-                    }}
+                    addTableData={this.getMetaData}
+                    editTableData={this.showDetail}
+                    deleteTableData={this.delTableData}
                   />
+                  <Button.Group>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.updMetadataOrColumn('some', 'updMetadata');
+                      }}
+                    >
+                      更新字段
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.updMetadataOrColumn('all', 'updMetadata');
+                      }}
+                    >
+                      批量更新字段
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.updMetadataOrColumn('some', 'updRecordCount');
+                      }}
+                    >
+                      更新行数
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.updMetadataOrColumn('all', 'updRecordCount');
+                      }}
+                    >
+                      批量更新行数
+                    </Button>
+                    <Button type="primary" onClick={this.exportList}>
+                      导出全部列表
+                    </Button>
+                  </Button.Group>
                   <Table
+                    className="basicTable"
                     rowSelection={rowSelection}
                     columns={columns}
                     dataSource={tableData}
                     pagination={{
                       size: 'small',
+                      showSizeChanger: true,
                     }}
                     scroll={{ x: 'max-content' }}
                   />
@@ -375,6 +676,7 @@ export default class AddDataSource extends PureComponent {
           activeDriver={activeDriver}
           setActiveDriver={this.setActiveDriver}
           operateDataSource={this.operateDataSource}
+          connectTest={this.connectTest}
         />
         {/* 新增数据源类型弹框 */}
         <DataSoureceTypeModal
@@ -388,6 +690,14 @@ export default class AddDataSource extends PureComponent {
           visible={importMetaData}
           toggleModal={this.toggleModal}
           activeCID={activeCID}
+        />
+        {/* 查看详情 */}
+        <ColumnDetail
+          visible={columnDetail}
+          toggleModal={this.toggleModal}
+          activeTableData={activeTableData}
+          columnData={columnData}
+          metadataPerform={metadataPerform}
         />
       </PageHeaderWrapper>
     );

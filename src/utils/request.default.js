@@ -3,15 +3,15 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: lan
- * @LastEditTime: 2019-11-14 13:37:59
+ * @LastEditors: iron
+ * @LastEditTime: 2019-11-15 11:09:10
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { extend } from 'umi-request';
-import router from 'umi/router';
+// import router from 'umi/router';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
 import { notification } from 'antd';
@@ -37,31 +37,31 @@ export const codeMessage = {
 };
 
 export function setReqHeaders(url, NVPS) {
-  let x_trace_user_id = localStorage.getItem('x-trace-user-id');
+  // let x_trace_user_id = localStorage.getItem('x-trace-user-id');
 
-  if (!x_trace_user_id) {
-    x_trace_user_id = uuidv1();
-    localStorage.setItem('x-trace-user-id', x_trace_user_id);
-  }
+  // if (!x_trace_user_id) {
+  //   x_trace_user_id = uuidv1();
+  //   localStorage.setItem('x-trace-user-id', x_trace_user_id);
+  // }
 
-  let { x_trace_page_id } = window;
+  // let { x_trace_page_id } = window;
 
-  if (!x_trace_page_id) {
-    x_trace_page_id = uuidv1();
-    window.x_trace_page_id = x_trace_page_id;
-  }
+  // if (!x_trace_page_id) {
+  //   x_trace_page_id = uuidv1();
+  //   window.x_trace_page_id = x_trace_page_id;
+  // }
 
   const rid = `RID${uuidv1().replace(/-/g, '')}`;
   return {
-    'X-Kweb-Menu-Id': document.location.href,
-    'X-Kweb-Trace-Req-Id': uuidv1(),
-    'X-Kweb-Trace-Page-Id': x_trace_page_id,
-    'X-Kweb-Trace-User-Id': x_trace_user_id,
-    'X-Kweb-Location-Href': document.location.href,
-    'X-Kweb-Timestamp': `${new Date().getTime()}`,
-    'X-Kweb-Sign': md5(document.location.href),
-    'X-Kweb-Api-Name': url.trim(),
-    'X-Kweb-Api-Version': '4.0',
+    // 'X-Kweb-Menu-Id': document.location.href,
+    // 'X-Kweb-Trace-Req-Id': uuidv1(),
+    // 'X-Kweb-Trace-Page-Id': x_trace_page_id,
+    // 'X-Kweb-Trace-User-Id': x_trace_user_id,
+    // 'X-Kweb-Location-Href': document.location.href,
+    // 'X-Kweb-Timestamp': `${new Date().getTime()}`,
+    // 'X-Kweb-Sign': md5(document.location.href),
+    // 'X-Kweb-Api-Name': url.trim(),
+    // 'X-Kweb-Api-Version': '4.0',
     'X-Bc-S': (() => {
       const randowNVPS = getRandowNVPS();
       const signMode = randowNVPS.join('');
@@ -73,7 +73,7 @@ export function setReqHeaders(url, NVPS) {
       return signMode + md5(signText, 32).toUpperCase();
     })(),
     'X-Bc-T': `BCT${localStorage.getItem('BCTID')}`,
-    'X-Bc-I': rid,
+    'X-Bc-I': rid, // ensure unique request
   };
 }
 

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-10-31 19:19:30
  * @LastEditors: iron
- * @LastEditTime: 2019-11-13 16:15:34
+ * @LastEditTime: 2019-11-19 12:17:23
  */
 
 import fetch from '@/utils/request.default';
@@ -86,10 +86,10 @@ export default {
       });
     },
     *queryRoleMenusById(action, { call, put }) {
-      const res = yield call(fetch('get_role_menu_info'), action.params);
+      const { items } = yield call(fetch('get_role_menu_info'), action.params);
       yield put({
         type: 'getCheckedRoleMenus',
-        payload: res,
+        payload: items,
       });
     },
     // org / department
@@ -133,6 +133,7 @@ export default {
       }
       return undefined;
     },
+    // employee
     *queryEmployees({ params }, { call, put }) {
       const { items } = yield call(fetch('get_user_list_impl'), params);
       yield put({
