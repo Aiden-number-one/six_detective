@@ -4,7 +4,7 @@ import { Form, Button, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
 
 import TableHeader from '@/components/TableHeader';
-import styles from './code.less';
+import styles from './CodeMaintenance.less';
 // import { thisExpression } from '@babel/types';
 
 class CodeForm extends Component {
@@ -44,7 +44,7 @@ class CodeForm extends Component {
 
 const NewCodeForm = Form.create({})(CodeForm);
 @connect(({ codeList, loading }) => ({
-  loading: loading.effects['codeList/getCodeList'],
+  loading: loading.effects,
   getCodeListData: codeList.data,
   getCodeItemListData: codeList.itemData,
 }))
@@ -341,7 +341,7 @@ class CodeMaintenance extends Component {
   };
 
   render() {
-    const { getCodeListData, getCodeItemListData } = this.props;
+    const { loading, getCodeListData, getCodeItemListData } = this.props;
     const totalCount = getCodeListData && getCodeListData.totalCount;
     const totalCountItem = getCodeItemListData && getCodeItemListData.totalCount;
     const { pageSize, updateCodeItemParams } = this.state;
@@ -379,6 +379,7 @@ class CodeMaintenance extends Component {
             </div>
             <div>
               <Table
+                loading={loading['codeList/getCodeList']}
                 dataSource={codeListData}
                 columns={this.state.codeColumns}
                 pagination={{ total: totalCount, pageSize }}
@@ -444,6 +445,7 @@ class CodeMaintenance extends Component {
             <div>
               <TableHeader showEdit showSelect addTableData={() => this.addCode()} />
               <Table
+                loading={loading['codeList/getCodeItemList']}
                 dataSource={codeItemListData}
                 pagination={{ total: totalCountItem, pageSize: 10 }}
                 columns={this.state.columns}

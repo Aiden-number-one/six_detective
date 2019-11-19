@@ -21,7 +21,6 @@ export default class StandardTable extends PureComponent {
           {showEdit && (
             <div>
               <Button
-                style={{ visibility: showEdit ? 'visible' : 'hidden' }}
                 onClick={deleteTableData}
                 size="small"
                 type="danger"

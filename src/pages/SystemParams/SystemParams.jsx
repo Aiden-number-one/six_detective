@@ -3,7 +3,7 @@ import { Input, Modal, Select, Table, Form } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
 import { connect } from 'dva';
-import styles from './params.less';
+import styles from './SystemParams.less';
 import TableHeader from '@/components/TableHeader';
 
 const { Option } = Select;
@@ -95,7 +95,7 @@ class ModifyForm extends Component {
 
 const NewModifyForm = Form.create({})(ModifyForm);
 @connect(({ systemParams, loading }) => ({
-  loading: loading.effects['systemParams/getSystemParamsList'],
+  loading: loading.effects,
   getSystemParamsListData: systemParams.data,
   getParamsTypeData: systemParams.getParamsData,
 }))
@@ -238,17 +238,15 @@ class SystemParams extends Component {
   };
 
   render() {
-    const { getParamsTypeData, getSystemParamsListData } = this.props;
+    const { loading, getParamsTypeData, getSystemParamsListData } = this.props;
     let { ParamsTypeData, getSystemParamsList } = this.state;
     const { pageSize } = this.state;
     ParamsTypeData = getParamsTypeData;
     getSystemParamsList = getSystemParamsListData.items;
     const totalCount = getSystemParamsListData && getSystemParamsListData.totalCount;
-    // eslint-disable-next-line array-callback-return
     // eslint-disable-next-line no-unused-expressions
     getSystemParamsList &&
-      // eslint-disable-next-line array-callback-return
-      getSystemParamsList.map((element, index) => {
+      getSystemParamsList.forEach((element, index) => {
         // eslint-disable-next-line no-param-reassign
         element.index = (this.state.pageNum - 1) * pageSize + index + 1;
       });
@@ -286,6 +284,7 @@ class SystemParams extends Component {
             <div>
               <TableHeader showEdit={false} showSelect={false}></TableHeader>
               <Table
+                loading={loading['systemParams/getSystemParamsList']}
                 dataSource={getSystemParamsList}
                 columns={this.state.columns}
                 pagination={{ total: totalCount, pageSize }}

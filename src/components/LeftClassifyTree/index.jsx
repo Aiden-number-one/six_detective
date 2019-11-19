@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
-import { Tree, Input } from 'antd';
+import React, { Component, Fragment } from 'react';
+import { Tree, Input, Icon } from 'antd';
+
+import styles from './index.less';
 
 const { TreeNode } = Tree;
 const { Search } = Input;
@@ -26,6 +28,38 @@ function pregQuote(str) {
   return str.replace(/([\\.+*?[^]$(){}=!<>|:])/g, '\\$1');
 }
 
+class HoverText extends Component {
+  state = {};
+
+  render() {
+    return (
+      <Fragment>
+        <span className={styles.hoverText}>
+          <Icon type="plus-circle" />
+          <Icon type="edit" />
+          <Icon type="minus-circle" />
+        </span>
+      </Fragment>
+    );
+  }
+}
+
+class TitleMessage extends Component {
+  state = {};
+
+  render() {
+    const { title, nodeKeys } = this.props;
+    return (
+      <Fragment>
+        <div className={styles.titleWraper}>
+          <span>{title}</span>
+          <HoverText nodeKeys={nodeKeys} />
+        </div>
+      </Fragment>
+    );
+  }
+}
+
 function loop(orgsTree) {
   return (
     orgsTree &&
@@ -44,12 +78,22 @@ function loop(orgsTree) {
       const showTitle = index > -1 ? lineTitle : item.folderName;
       if (children && showTitle) {
         return (
-          <TreeNode key={folderId} title={showTitle} parentId={parentId}>
+          <TreeNode
+            key={folderId}
+            title={<TitleMessage title={showTitle} nodeKeys={item} />}
+            parentId={parentId}
+          >
             {loop(children)}
           </TreeNode>
         );
       }
-      return <TreeNode key={folderId} title={folderName} parentId={parentId} />;
+      return (
+        <TreeNode
+          key={folderId}
+          title={<TitleMessage title={folderName} nodeKeys={item} />}
+          parentId={parentId}
+        />
+      );
     })
   );
 }

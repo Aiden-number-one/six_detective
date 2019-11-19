@@ -1,7 +1,7 @@
 import Service from '@/utils/Service';
 
 const { codeList, codeItemList, addCodeItem, updateCodeItem, deleteCodeItem } = Service;
-const getCodeListModel = {
+const codeMaintenance = {
   namespace: 'codeList',
   state: {
     data: [],
@@ -105,4 +105,4 @@ const getCodeListModel = {
   },
 };
 
-export default getCodeListModel;
+export default codeMaintenance;

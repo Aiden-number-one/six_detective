@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Form, TreeSelect, Input } from 'antd';
 
-import styles from '../../index.less';
+import styles from '../UserManagement.less';
 
 const { TreeNode } = TreeSelect;
 function loop(orgsTree) {
@@ -103,11 +103,11 @@ export default class UserForm extends Component {
                 ],
               })(
                 <TreeSelect
-                  treeDefaultExpandAll
                   value={selectValue}
                   style={{ width: 220 }}
                   onSelect={this.selectChange}
                   placeholder="Please select"
+                  dropdownStyle={{ height: '300px', width: '220px' }}
                 >
                   {loop(orgs)}
                 </TreeSelect>,

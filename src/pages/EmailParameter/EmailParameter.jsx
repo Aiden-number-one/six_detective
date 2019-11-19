@@ -2,10 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Modal, Select, Table } from 'antd';
 import { connect } from 'dva';
-import styles from './email.less';
+import styles from './EmailParameter.less';
 import KdTable from '@/components/KdTable';
 import generatePersons from '@/components/KdTable/genData';
 import TableHeader from '@/components/TableHeader';
+import CustomizePagination from '@/components/CustomizePagination';
 
 const { Option } = Select;
 class AddForm extends Component {
@@ -197,7 +198,7 @@ class ModifyForm extends Component {
 
 const NewModifyForm = Form.create({})(ModifyForm);
 @connect(({ getEmail, loading }) => ({
-  loading: loading.effects['getEmail/getEmailList'],
+  loading: loading.effects,
   getEmailListData: getEmail.data,
 }))
 class EmailParameter extends Component {
@@ -426,7 +427,6 @@ class EmailParameter extends Component {
 
   // 删除
   deleteEmail = (res, obj) => {
-    console.log('res=', res);
     this.setState({
       mailId: obj.mailId,
       deleteVisible: true,
@@ -458,9 +458,13 @@ class EmailParameter extends Component {
 
   getEmailInit = () => {
     const { dispatch } = this.props;
+    const params = {
+      pageNumber: this.state.page.pageNumber,
+      pageSize: this.state.page.pageSize,
+    };
     dispatch({
       type: 'getEmail/getEmailList',
-      payload: {},
+      payload: params,
     });
   };
 
@@ -473,7 +477,34 @@ class EmailParameter extends Component {
     return obj[value];
   };
 
+  /**
+   * @description: This is for paging function.
+   * @param {type} null
+   * @return: undefined
+   */
+  pageChange = (pageNumber, pageSize) => {
+    const page = {
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
+    };
+
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.getEmailInit();
+      },
+    );
+  };
+
+  onShowSizeChange = (pageNumber, pageSize) => {
+    console.log('pageNumber, pageSize=', pageNumber, pageSize);
+  };
+
   render() {
+    const { loading, getEmailListData } = this.props;
+    const { page } = this.state;
     return (
       <PageHeaderWrapper>
         <Fragment>
@@ -513,10 +544,17 @@ class EmailParameter extends Component {
             <div>
               <TableHeader showEdit showSelect addTableData={() => this.addUser()}></TableHeader>
               <Table
-                dataSource={this.props.getEmailListData}
-                pagination={{ size: 'small', pageSize: 5 }}
+                pagination={false}
+                loading={loading['getEmail/getEmailList']}
+                dataSource={getEmailListData.items}
                 columns={this.state.columns}
               ></Table>
+              <CustomizePagination
+                total={getEmailListData.totalCount}
+                pageSize={page.pageSize}
+                showSizeChanger
+                onChange={this.pageChange}
+              ></CustomizePagination>
             </div>
           </div>
           {/* 这是KdTable渲染的表格 */}

@@ -46,7 +46,6 @@ function Department({ dispatch, loading, curSelectOrg, departments }) {
               departmentId,
             },
           });
-
           setChildDeparts(childDeparts.filter(item => item.departmentId !== departmentId));
           message.success('delete success');
         } catch (error) {

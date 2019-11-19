@@ -1,9 +1,17 @@
+/*
+ * @Description: This is for userManagement page.
+ * @Author: dailinbo
+ * @Date: 2019-11-12 19:03:58
+ * @LastEditors: dailinbo
+ * @LastEditTime: 2019-11-19 13:25:52
+ */
+
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table } from 'antd';
 import { connect } from 'dva';
 import TableHeader from '@/components/TableHeader';
-import styles from './index.less';
+import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 
 import SearchForm from './components/SearchForm';
@@ -19,7 +27,7 @@ const NewPasswordForm = Form.create({})(PasswordForm);
 const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
 
 @connect(({ userManagement, loading }) => ({
-  loading: loading.effects['userManagement/userManagemetDatas'],
+  loading: loading.effects,
   userManagementData: userManagement.data,
   orgs: userManagement.orgs,
 }))
@@ -31,6 +39,7 @@ class UserManagement extends Component {
     closingVisible: false,
     updatePasswordVisible: false,
     resetPasswordVisible: false,
+    customerno: null,
     userInfo: {
       login: '',
       name: '',
@@ -41,6 +50,11 @@ class UserManagement extends Component {
     columns: [
       {
         title: '登陆名',
+        dataIndex: 'loginName',
+        key: 'loginName',
+      },
+      {
+        title: '员工姓名',
         dataIndex: 'customerName',
         key: 'customerName',
       },
@@ -103,233 +117,16 @@ class UserManagement extends Component {
   resetPasswordFormRef = React.createRef();
 
   componentDidMount() {
-    this.queryUser();
-    this.queryDepartment();
+    this.queryUserList();
+    this.queryDepartments();
   }
 
-  addUser = () => {
-    this.setState({ visible: true });
-  };
-
-  // 获取id
-  getDepartmentId = departmentId => {
-    this.newDepartmentId = departmentId;
-  };
-
-  handleOk = () => {
-    const { dispatch } = this.props;
-    this.formRef.current.validateFields((err, values) => {
-      const passwordStrength = passWordStrength(values.password);
-      const param = {
-        loginName: values.login,
-        customerName: values.name,
-        departmentId: this.newDepartmentId,
-        password: window.kddes.getDes(values.password),
-        passwordStrength,
-        mobile: values.phone,
-        email: values.email,
-      };
-      dispatch({
-        type: 'userManagement/addUserModelDatas',
-        payload: param,
-        callback: () => {
-          this.setState({
-            visible: false,
-          });
-          this.queryUser();
-        },
-      });
-    });
-  };
-
-  updateConfirm = () => {
-    const { dispatch } = this.props;
-    this.updateFormRef.current.validateFields((err, values) => {
-      const param = {
-        custCustomerno: '77029',
-        loginName: values.login,
-        customerName: values.name,
-        departmentId: this.newDepartmentId || this.state.userInfo.departmentId,
-        email: values.email,
-      };
-      dispatch({
-        type: 'userManagement/updateUserModelDatas',
-        payload: param,
-        callback: () => {
-          this.queryUser();
-        },
-      });
-    });
-    this.setState({
-      updateVisible: false,
-    });
-  };
-
-  updateCancel = () => {
-    this.setState({
-      updateVisible: false,
-    });
-  };
-
-  handleCancel = () => {
-    this.setState({ visible: false });
-  };
-
-  handleChange = () => {};
-
-  updateUser = (res, obj) => {
-    const userInfo = {
-      login: '',
-      name: '',
-      departmentName: '',
-      departmentId: '',
-      email: '',
-    };
-    userInfo.login = obj.loginName;
-    userInfo.name = obj.customerName;
-    userInfo.departmentName = obj.departmentName;
-    userInfo.departmentId = obj.departmentId;
-    userInfo.email = obj.email;
-    this.setState({
-      updateVisible: true,
-      userInfo,
-    });
-  };
-
-  lockUser = () => {
-    this.setState({
-      lockVisible: true,
-    });
-  };
-
-  lockConfirm = () => {
-    const { dispatch } = this.props;
-    const param = {
-      custCustomerno: 77029,
-      operationType: 1,
-    };
-    dispatch({
-      type: 'userManagement/operationUserModelDatas',
-      payload: param,
-      callback: () => {
-        this.queryUser();
-      },
-    });
-    this.setState({
-      lockVisible: false,
-    });
-  };
-
-  lockCancel = () => {
-    this.setState({
-      lockVisible: false,
-    });
-  };
-
-  // 销户
-  closingUser = () => {
-    this.setState({
-      closingVisible: true,
-    });
-  };
-
-  closingConfirm = () => {
-    const { dispatch } = this.props;
-    const param = {
-      custCustomerno: 77029,
-      operationType: 3,
-    };
-    dispatch({
-      type: 'userManagement/operationUserModelDatas',
-      payload: param,
-      callback: () => {
-        this.queryUser();
-        this.setState({
-          closingVisible: false,
-        });
-      },
-    });
-  };
-
-  closingCancel = () => {
-    this.setState({
-      closingVisible: false,
-    });
-  };
-
-  // 修改密码
-  updatePassword = () => {
-    this.setState({
-      updatePasswordVisible: true,
-    });
-  };
-
-  updatePasswordConfirm = () => {
-    const { dispatch } = this.props;
-    this.passwordFormRef.current.validateFields((err, values) => {
-      const passwordStrength = passWordStrength(values.password);
-      const param = {
-        custCustomerno: 77029,
-        operationType: 5,
-        oldPassword: values.oldPassword,
-        password: window.kddes.getDes(values.password),
-        passwordStrength,
-      };
-      dispatch({
-        type: 'userManagement/operationUserModelDatas',
-        payload: param,
-        callback: () => {
-          this.setState({
-            updatePasswordVisible: false,
-          });
-        },
-      });
-    });
-  };
-
-  updatePasswordCancel = () => {
-    this.setState({
-      updatePasswordVisible: false,
-    });
-  };
-
-  // 重置密码
-  resetPassword = () => {
-    this.setState({
-      resetPasswordVisible: true,
-    });
-  };
-
-  resetPasswordConfirm = () => {
-    const { dispatch } = this.props;
-    this.resetPasswordFormRef.current.validateFields((err, values) => {
-      const passwordStrength = passWordStrength(values.password);
-      const param = {
-        custCustomerno: 77029,
-        operationType: 6,
-        password: window.kddes.getDes(values.password),
-        passwordStrength,
-      };
-      dispatch({
-        type: 'userManagement/operationUserModelDatas',
-        payload: param,
-        callback: () => {
-          this.setState({
-            resetPasswordVisible: false,
-          });
-        },
-      });
-    });
-  };
-
-  resetPasswordCancel = () => {
-    this.setState({
-      resetPasswordVisible: false,
-    });
-  };
-
-  // 获取查询列表数据
-  queryUser = (
+  /**
+   * @description: This is for query user list function.
+   * @param {type} null
+   * @return: undefined
+   */
+  queryUserList = (
     param = {
       searchParam: undefined,
       displaypath: undefined,
@@ -353,8 +150,12 @@ class UserManagement extends Component {
     });
   };
 
-  // 查询部门
-  queryDepartment = () => {
+  /**
+   * @description: This is for query departments function.
+   * @param {type} null
+   * @return: undefined
+   */
+  queryDepartments = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'userManagement/queryOrgs',
@@ -364,7 +165,261 @@ class UserManagement extends Component {
     });
   };
 
-  // 搜索
+  /**
+   * @description: This is for get the departmentId and set value to the newDepartmentId function.
+   * @param {type} departmentId
+   * @return: undefined
+   */
+  getDepartmentId = departmentId => {
+    this.newDepartmentId = departmentId;
+  };
+
+  /**
+   * @description: This is for add user function.
+   * @param {type} null
+   * @return: undefined
+   */
+  addUser = () => {
+    this.setState({ visible: true });
+  };
+
+  addConfrim = () => {
+    const { dispatch } = this.props;
+    this.formRef.current.validateFields((err, values) => {
+      const passwordStrength = passWordStrength(values.password);
+      const param = {
+        loginName: values.login,
+        customerName: values.name,
+        departmentId: this.newDepartmentId,
+        password: window.kddes.getDes(values.password),
+        passwordStrength,
+        mobile: values.phone,
+        email: values.email,
+      };
+      dispatch({
+        type: 'userManagement/addUserModelDatas',
+        payload: param,
+        callback: () => {
+          this.setState({
+            visible: false,
+          });
+          this.queryUserList();
+        },
+      });
+    });
+  };
+
+  addCancel = () => {
+    this.setState({ visible: false });
+  };
+
+  /**
+   * @description: This is for update user function.
+   * @param {type} null
+   * @return: undefined
+   */
+  updateUser = (res, obj) => {
+    const userInfo = {
+      login: '',
+      name: '',
+      departmentName: '',
+      departmentId: '',
+      email: '',
+    };
+    userInfo.login = obj.loginName;
+    userInfo.name = obj.customerName;
+    userInfo.departmentName = obj.departmentName;
+    userInfo.departmentId = obj.departmentId;
+    userInfo.email = obj.email;
+    this.setState({
+      updateVisible: true,
+      userInfo,
+      customerno: obj.customerno,
+    });
+  };
+
+  updateConfirm = () => {
+    const { dispatch } = this.props;
+    const { customerno } = this.state;
+    this.updateFormRef.current.validateFields((err, values) => {
+      const param = {
+        custCustomerno: customerno,
+        loginName: values.login,
+        customerName: values.name,
+        departmentId: this.newDepartmentId || this.state.userInfo.departmentId,
+        email: values.email,
+      };
+      dispatch({
+        type: 'userManagement/updateUserModelDatas',
+        payload: param,
+        callback: () => {
+          this.queryUserList();
+        },
+      });
+    });
+    this.setState({
+      updateVisible: false,
+    });
+  };
+
+  updateCancel = () => {
+    this.setState({
+      updateVisible: false,
+    });
+  };
+
+  /**
+   * @description: This is for lock user function.
+   * @param {type} null
+   * @return: undefined
+   */
+  lockUser = () => {
+    this.setState({
+      lockVisible: true,
+    });
+  };
+
+  lockConfirm = () => {
+    const { dispatch } = this.props;
+    const param = {
+      operationType: '1',
+    };
+    dispatch({
+      type: 'userManagement/operationUserModelDatas',
+      payload: param,
+      callback: () => {
+        this.queryUserList();
+      },
+    });
+    this.setState({
+      lockVisible: false,
+    });
+  };
+
+  lockCancel = () => {
+    this.setState({
+      lockVisible: false,
+    });
+  };
+
+  /**
+   * @description: This is for closing user function.
+   * @param {type} null
+   * @return: undefined
+   */
+  closingUser = () => {
+    this.setState({
+      closingVisible: true,
+    });
+  };
+
+  closingConfirm = () => {
+    const { dispatch } = this.props;
+    const param = {
+      operationType: '3',
+    };
+    dispatch({
+      type: 'userManagement/operationUserModelDatas',
+      payload: param,
+      callback: () => {
+        this.queryUserList();
+        this.setState({
+          closingVisible: false,
+        });
+      },
+    });
+  };
+
+  closingCancel = () => {
+    this.setState({
+      closingVisible: false,
+    });
+  };
+
+  /**
+   * @description: This is for update password function.
+   * @param {type} null
+   * @return: undefined
+   */
+  updatePassword = () => {
+    this.setState({
+      updatePasswordVisible: true,
+    });
+  };
+
+  updatePasswordConfirm = () => {
+    const { dispatch } = this.props;
+    const { customerno } = this.state;
+    this.passwordFormRef.current.validateFields((err, values) => {
+      const passwordStrength = passWordStrength(values.password);
+      const param = {
+        custCustomerno: customerno,
+        operationType: '5',
+        oldPassword: window.kddes.getDes(values.oldPassword),
+        password: window.kddes.getDes(values.password),
+        passwordStrength,
+      };
+      dispatch({
+        type: 'userManagement/operationUserModelDatas',
+        payload: param,
+        callback: () => {
+          this.setState({
+            updatePasswordVisible: false,
+          });
+        },
+      });
+    });
+  };
+
+  updatePasswordCancel = () => {
+    this.setState({
+      updatePasswordVisible: false,
+    });
+  };
+
+  /**
+   * @description: This is for reset password function.
+   * @param {type} null
+   * @return: undefined
+   */
+  resetPassword = () => {
+    this.setState({
+      resetPasswordVisible: true,
+    });
+  };
+
+  resetPasswordConfirm = () => {
+    const { dispatch } = this.props;
+    this.resetPasswordFormRef.current.validateFields((err, values) => {
+      const passwordStrength = passWordStrength(values.password);
+      const param = {
+        operationType: '6',
+        password: window.kddes.getDes(values.password),
+        passwordStrength,
+      };
+      dispatch({
+        type: 'userManagement/operationUserModelDatas',
+        payload: param,
+        callback: () => {
+          this.setState({
+            resetPasswordVisible: false,
+          });
+        },
+      });
+    });
+  };
+
+  resetPasswordCancel = () => {
+    this.setState({
+      resetPasswordVisible: false,
+    });
+  };
+
+  /**
+   * @description: This is for query userinfo log function.
+   * @param {type} null
+   * @return: undefined
+   */
   queryLog = () => {
     this.searchForm.current.validateFields((err, values) => {
       const params = {
@@ -373,15 +428,24 @@ class UserManagement extends Component {
         email: values.email,
         custStatus: values.custStatus,
       };
-      this.queryUser(params);
+      this.queryUserList(params);
     });
   };
 
+  /**
+   * @description: This is for reset form function.
+   * @param {type} null
+   * @return: undefined
+   */
   operatorReset = () => {
     this.searchForm.current.resetFields();
   };
 
-  // 分页
+  /**
+   * @description: This is for paging function.
+   * @param {type} null
+   * @return: undefined
+   */
   pageChange = pagination => {
     const page = {
       pageNumber: pagination.current.toString(),
@@ -393,13 +457,13 @@ class UserManagement extends Component {
         page,
       },
       () => {
-        this.queryUser();
+        this.queryUserList();
       },
     );
   };
 
   render() {
-    const { orgs, userManagementData } = this.props;
+    const { loading, orgs, userManagementData } = this.props;
     const { userInfo, page } = this.state;
 
     return (
@@ -416,8 +480,8 @@ class UserManagement extends Component {
             <Modal
               title="新增用户"
               visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
+              onOk={this.addConfrim}
+              onCancel={this.addCancel}
             >
               <NewUserForm
                 ref={this.formRef}
@@ -479,6 +543,7 @@ class UserManagement extends Component {
           <div>
             <TableHeader showEdit addTableData={this.addUser}></TableHeader>
             <Table
+              loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
               onChange={this.pageChange}
               dataSource={userManagementData.items}

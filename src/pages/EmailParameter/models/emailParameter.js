@@ -1,7 +1,14 @@
+/*
+ * @Description: This is for EmailListModel asynchronization request function.
+ * @Author: dailinbo
+ * @Date: 2019-11-05 14:04:16
+ * @LastEditors: dailinbo
+ * @LastEditTime: 2019-11-18 19:16:06
+ */
 import Service from '@/utils/Service';
 
 const { emailList, addEmail, deleteEmail } = Service;
-const getEmailListModel = {
+const emailParameter = {
   namespace: 'getEmail',
   state: {
     data: [],
@@ -15,7 +22,7 @@ const getEmailListModel = {
         if (response.bcjson.items) {
           yield put({
             type: 'getDatas',
-            payload: response.bcjson.items,
+            payload: response.bcjson,
           });
         }
       }
@@ -67,4 +74,4 @@ const getEmailListModel = {
   },
 };
 
-export default getEmailListModel;
+export default emailParameter;

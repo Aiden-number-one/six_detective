@@ -161,7 +161,7 @@ export default [
           {
             path: '/system-management/user-maintenance',
             name: 'userMaintenance',
-            component: './UserManagement',
+            component: './UserManagement/UserManagement',
           },
           {
             path: '/system-management/mail-content-template',

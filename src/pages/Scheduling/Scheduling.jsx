@@ -7,6 +7,7 @@ import TableHeader from '@/components/TableHeader';
 
 import SearchForm from './compontents/SearchForm';
 import Modify from './compontents/Modify';
+import Add from './compontents/Add';
 
 // import styles from './Scheduling.less';
 
@@ -22,6 +23,7 @@ class Scheduling extends Component {
     otherParam: {},
     selectedRows: [],
     modifyVisible: false,
+    addVisible: false,
     columns: [
       {
         title: '序号',
@@ -37,11 +39,6 @@ class Scheduling extends Component {
         title: '作业编号',
         dataIndex: 'jobNo',
         key: 'jobNo',
-      },
-      {
-        title: '文件名',
-        dataIndex: 'folderName',
-        key: 'folderName',
       },
       {
         title: '作业名称',
@@ -64,11 +61,6 @@ class Scheduling extends Component {
         key: 'nextTime',
       },
       {
-        title: '执行结果',
-        dataIndex: 'scheduleLog',
-        key: 'scheduleLog',
-      },
-      {
         title: '操作',
         dataIndex: 'startFlag',
         key: 'startFlag',
@@ -77,7 +69,7 @@ class Scheduling extends Component {
             <Switch
               checkedChildren="NO"
               unCheckedChildren="OFF"
-              // onChange={() => this.handleSetConfigStatus(record)}
+              onChange={checked => this.handleSetConfigStatus(checked, record)}
               defaultChecked={record.startFlag === '2'}
             />
           ),
@@ -87,10 +79,6 @@ class Scheduling extends Component {
   };
 
   searchForm = React.createRef();
-
-  basicModifyForm = React.createRef();
-
-  planModifyForm = React.createRef();
 
   componentDidMount() {
     this.getSchedul();
@@ -183,6 +171,20 @@ class Scheduling extends Component {
     });
   };
 
+  handleSetConfigStatus = (checked, record) => {
+    const { dispatch } = this.props;
+    const startFlag = checked ? 2 : 3;
+    dispatch({
+      type: 'schedule/modifyScheduleBatch',
+      payload: {
+        scheduleId: record.scheduleId,
+        startFlag,
+      },
+      callback: this.props.getSchedul,
+    });
+    // console.log('record-------->', checked, record);
+  };
+
   modifySchedule = () => {
     const { selectedRows } = this.state;
     if (selectedRows.length !== 1) {
@@ -194,29 +196,30 @@ class Scheduling extends Component {
     });
   };
 
-  modifyConfirm = () => {
-    this.basicModifyForm.current.validateFields((err, values) => {
-      console.log('values----', values);
-    });
-    this.planModifyForm.current.validateFields((err, values) => {
-      console.log('values----planModifyForm', values);
-      this.setState({
-        modifyVisible: false,
-      });
-    });
-  };
-
   modifyCancel = () => {
     this.setState({
       modifyVisible: false,
     });
   };
 
+  addSchedule = () => {
+    this.setState({
+      addVisible: true,
+    });
+  };
+
+  addCancel = () => {
+    this.setState({
+      addVisible: false,
+    });
+  };
+
   render() {
-    const { scheduleListData } = this.props;
-    const { pageSize, modifyVisible, selectedRows } = this.state;
+    const { scheduleListData, folderMenuData } = this.props;
+    const { pageSize, modifyVisible, addVisible, selectedRows } = this.state;
     const scheduleList = scheduleListData.items;
     const totalCount = scheduleListData && scheduleListData.totalCount;
+    // console.log('selectedRows-00000-->', selectedRows);
     // eslint-disable-next-line no-unused-expressions
     scheduleList &&
       scheduleList.forEach((item, index) => {
@@ -237,6 +240,7 @@ class Scheduling extends Component {
           showEdit
           showSelect
           editTableData={this.modifySchedule}
+          addTableData={this.addSchedule}
           deleteTableData={this.deleteScheduleRow}
         />
         <Table
@@ -248,11 +252,16 @@ class Scheduling extends Component {
         />
         <Modify
           modifyVisible={modifyVisible}
-          modifyConfirm={this.modifyConfirm}
           modifyCancel={this.modifyCancel}
-          basicModifyForm={this.basicModifyForm}
-          planModifyForm={this.planModifyForm}
           selectedRows={selectedRows}
+          getSchedul={this.getSchedul}
+          folderMenuData={folderMenuData}
+        />
+        <Add
+          addVisible={addVisible}
+          addCancel={this.addCancel}
+          getSchedul={this.getSchedul}
+          folderMenuData={folderMenuData}
         />
       </PageHeaderWrapper>
     );

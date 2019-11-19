@@ -4,7 +4,7 @@ import { formatTree } from '@/utils/utils';
 import { userStatus } from '@/utils/filter';
 
 const { getUserList, addUser, updateUser, operationUser } = Service;
-export const userManagementModel = {
+export const userManagement = {
   namespace: 'userManagement',
   state: {
     data: [],
@@ -119,4 +119,4 @@ export const userManagementModel = {
     },
   },
 };
-export default userManagementModel;
+export default userManagement;
