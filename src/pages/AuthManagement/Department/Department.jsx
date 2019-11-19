@@ -1,66 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
-import { Tree, List, Form, Button, Table, Divider, message } from 'antd';
+import { List, Button, message } from 'antd';
 import DepartmentModal from './DepartmentModal';
 import styles from './Department.less';
 
-const { TreeNode } = Tree;
-const { Column } = Table;
-
-function loop(orgsTree) {
-  return orgsTree.map(item => {
-    const { children, departmentId, departmentName, parentDepartmentId } = item;
-    if (children) {
-      return (
-        <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId}>
-          {loop(children)}
-        </TreeNode>
-      );
-    }
-    return <TreeNode key={departmentId} title={departmentName} parentId={parentDepartmentId} />;
-  });
-}
-
-function getOrgDetail(dispatch, curSelectOrg) {
-  const { departmentId } = curSelectOrg;
-  if (departmentId) {
-    dispatch({
-      type: 'auth/queryDepartments',
-      params: {
-        departmentId,
-      },
-    });
-
-    dispatch({
-      type: 'auth/queryEmployees',
-      params: {
-        departmentId,
-      },
-    });
-  }
-}
-
-function Department({ dispatch, loading, orgs, employees, departments }) {
-  useEffect(() => {
-    dispatch({
-      type: 'auth/queryOrgs',
-      params: {
-        treeLevel: '2',
-      },
-    });
-  }, []);
-
-  // select default dept
-  const [curSelectOrg, setOrg] = useState({});
-
-  useEffect(() => {
-    if (orgs.length > 0) {
-      setOrg(orgs[0]);
-      getOrgDetail(dispatch, orgs[0]);
-    }
-  }, [orgs]);
-
+function Department({ dispatch, loading, curSelectOrg, departments }) {
   const [curSelectDepart, setDepart] = useState({});
   const [curChildDept, setCurChildDept] = useState({});
   const [childDeparts, setChildDeparts] = useState([]);
@@ -76,17 +21,6 @@ function Department({ dispatch, loading, orgs, employees, departments }) {
 
   const [actionType, setActionType] = useState(1);
   const [isModalVisible, setModalVisible] = useState(false);
-
-  function handleSelect(selectKey, info) {
-    const { title, eventKey, parentId } = info.node.props;
-    const dept = {
-      departmentId: eventKey,
-      departmentName: title,
-      parentDepartmentId: parentId,
-    };
-    setOrg(dept);
-    getOrgDetail(dispatch, dept);
-  }
 
   function modifyOrg() {
     setCurChildDept(null);
@@ -185,26 +119,8 @@ function Department({ dispatch, loading, orgs, employees, departments }) {
     }
   }
 
-  if (loading['auth/queryOrgs']) {
-    return <p>loading</p>;
-  }
-  if (orgs.length === 0) {
-    return <p>暂无数据</p>;
-  }
-
   return (
     <div className={styles.container}>
-      <div className={classNames(styles['parent-group'])}>
-        <Tree
-          blockNode
-          selectable
-          onSelect={handleSelect}
-          selectedKeys={[curSelectOrg.departmentId]}
-          defaultSelectedKeys={[curSelectOrg.departmentId]}
-        >
-          {loop(orgs)}
-        </Tree>
-      </div>
       <div className={classNames(styles['child-group'])}>
         <DepartmentModal
           type={actionType}
@@ -254,41 +170,12 @@ function Department({ dispatch, loading, orgs, employees, departments }) {
             </List.Item>
           )}
         />
-        <Table
-          bordered
-          rowKey="loginName"
-          loading={loading['auth/queryEmployees']}
-          dataSource={employees}
-          pagination={{ pageSize: 5 }}
-        >
-          <Column title="员工姓名" dataIndex="customerName" align="center" />
-          <Column title="登录名" dataIndex="loginName" align="center" />
-          <Column title="公司部门" dataIndex="departmentName" align="center" />
-          <Column title="联系电话" dataIndex="mobile" width="100px" align="center" />
-          <Column title="邮箱地址" dataIndex="email" align="center" />
-          <Column
-            title="Action"
-            key="操作"
-            width="120px"
-            align="center"
-            render={() => (
-              <span>
-                <a>编辑</a>
-                <Divider type="vertical" />
-                <a>查看职能</a>
-              </span>
-            )}
-          />
-        </Table>
       </div>
     </div>
   );
 }
 
-const mapStateToProps = ({ loading, auth: { orgs, employees, departments } }) => ({
+const mapStateToProps = ({ loading }) => ({
   loading: loading.effects,
-  orgs,
-  employees,
-  departments,
 });
-export default connect(mapStateToProps)(Form.create()(Department));
+export default connect(mapStateToProps)(Department);

@@ -323,7 +323,7 @@ class EmailParameter extends Component {
     //   //   }),
     //   // },
     // ],
-    records: generatePersons(10),
+    records: generatePersons(1000),
   };
 
   addFormRef = React.createRef();
