@@ -161,7 +161,7 @@ export default [
           {
             path: '/system-management/user-maintenance',
             name: 'userMaintenance',
-            component: './UserManagement',
+            component: './UserManagement/UserManagement',
           },
           {
             path: '/system-management/mail-content-template',
@@ -186,22 +186,22 @@ export default [
           {
             path: '/system-management/email-parameter',
             name: 'emailParameter',
-            component: './EmailParameter',
+            component: './EmailParameter/EmailParameter',
           },
           {
             path: '/system-management/system-parameters',
             name: 'systemParameters',
-            component: './SystemParams',
+            component: './SystemParams/SystemParams',
           },
           {
             path: '/system-management/code-maintenance',
             name: 'codeMaintenance',
-            component: './CodeMaintenance',
+            component: './CodeMaintenance/CodeMaintenance',
           },
           {
             path: '/system-management/audit-log',
             name: 'auditLog',
-            component: './AuditLog',
+            component: './AuditLog/AuditLog',
           },
           {
             path: '/system-management/scheduling',

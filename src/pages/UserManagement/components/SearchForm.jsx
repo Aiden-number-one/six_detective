@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col, Select } from 'antd';
-import styles from '../../index.less';
+import styles from '../UserManagement.less';
 
 const { Option } = Select;
 export default class SearchForm extends Component {
