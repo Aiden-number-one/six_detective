@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: lan
- * @LastEditTime: 2019-11-19 16:33:21
+ * @LastEditors: iron
+ * @LastEditTime: 2019-11-19 19:42:18
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
@@ -45,6 +45,7 @@ export default {
   'menu.systemManagement.codeMaintenance': 'Code Maintenance',
   'menu.systemManagement.auditLog': 'Audit Log',
   'menu.systemManagement.scheduling': 'Scheduling Plan',
+  'menu.systemManagement.taskMonitor': 'Task Monitor',
   'menu.alertManagement': 'ALERT MANAGEMENT',
   'menu.alertManagement.formItem': 'FormItem Reference',
   'menu.alertManagement.Stylespecification': 'Alert Specification',
