@@ -2,11 +2,12 @@
  * @Description: 数据源相关接口
  * @Author: lan
  * @Date: 2019-11-12 13:48:28
- * @LastEditTime: 2019-11-19 13:38:18
+ * @LastEditTime: 2019-11-19 14:51:01
  * @LastEditors: lan
  */
 export default {
   getDataSourceList: 'get_data_source_config', // 获取数据源列表
+  connectTest: 'get_data_source_connect_test', // 测试连接
   getTableData: 'get_metadata_table_info', // 获取表数据
   delTableData: 'set_metadata_tables_del', // 删除表数据
   getMetaData: 'get_db_metadata_schemas', // 获取元数据

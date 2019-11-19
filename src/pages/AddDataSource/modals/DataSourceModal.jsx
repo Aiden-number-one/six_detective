@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Form, Input, Select, Button } from 'antd';
 
 const { Option } = Select;
 
@@ -18,6 +18,15 @@ export default class DataSourceModal extends PureComponent {
     });
     toggleModal('dataSource');
   };
+
+  test = () => {
+    const { form, connectTest } = this.props;
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        connectTest(values);
+      }
+    });
+  }
 
   render() {
     const {
@@ -49,7 +58,16 @@ export default class DataSourceModal extends PureComponent {
           form.resetFields();
           toggleModal('dataSource');
         }}
-        onOk={this.handleOK}
+        footer={
+          <div>
+            <Button type="danger" onClick={this.test} >
+              测试连接
+            </Button>
+            <Button type="primary" onClick={this.handleOK}>
+              保存
+            </Button>
+          </div>
+        }
       >
         <Form>
           <Form.Item {...Layout} label="Data Source Type">

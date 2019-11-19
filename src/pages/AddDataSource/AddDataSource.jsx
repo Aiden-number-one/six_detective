@@ -277,6 +277,23 @@ export default class AddDataSource extends PureComponent {
     }
   };
 
+  // 测试连接
+  connectTest = values => {
+    const { dispatch, activeData, activeDriver } = this.props;
+    const driverInfo = activeDriver.className || activeData.driverInfo;
+    const params = values;
+    if (params.dbPassword !== activeData.dbPassword) {
+      params.dbPassword = window.kddes.getDes(params.dbPassword);
+    }
+    dispatch({
+      type: 'dataSource/connectTest',
+      payload: {
+        ...params,
+        driverInfo,
+      },
+    });
+  }
+
   // 获取元数据
   getMetaData = () => {
     // 获取元数据
@@ -623,6 +640,7 @@ export default class AddDataSource extends PureComponent {
           activeDriver={activeDriver}
           setActiveDriver={this.setActiveDriver}
           operateDataSource={this.operateDataSource}
+          connectTest={this.connectTest}
         />
         {/* 新增数据源类型弹框 */}
         <DataSoureceTypeModal

@@ -2,12 +2,20 @@
  * @Description: 获取数据源列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime: 2019-11-15 17:40:27
+ * @LastEditTime: 2019-11-19 15:02:22
  * @LastEditors: lan
  */
+import { message } from 'antd';
 import Service from '@/utils/Service';
 
-const { getDataSourceList, getDataDriver, setDataSource, updDataSource, delDataSource } = Service;
+const {
+  getDataSourceList,
+  getDataDriver,
+  setDataSource,
+  updDataSource,
+  delDataSource,
+  connectTest,
+} = Service;
 
 export default {
   namespace: 'dataSource',
@@ -36,6 +44,14 @@ export default {
           });
           if (callback) callback(response);
         }
+      }
+    },
+    *connectTest({ payload }, { call }) {
+      const response = yield call(connectTest, { param: payload });
+      if (response.bcjson.flag === '1') {
+        message.success(response.bcjson.msg);
+      } else {
+        message.error('连接失败');
       }
     },
     // 新建数据源
