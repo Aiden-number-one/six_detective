@@ -31,13 +31,38 @@ function pregQuote(str) {
 class HoverText extends Component {
   state = {};
 
+  addTree = treeNode => {
+    this.props.handleAddTree(true, treeNode);
+    // console.log('nodeKeys=', this.props.nodeKeys);
+    // const { nodeKeys } = this.props;
+    // const nodeObj = Object.assign({}, nodeKeys);
+    // if (nodeObj.hasOwnProperty('children')) {
+    //   nodeObj.children.push({
+    //     folderName: 'aaa',
+    //   });
+    // } else {
+    //   nodeObj.children = [];
+    //   nodeObj.children.push({
+    //     folderName: 'aaa',
+    //   });
+    // }
+  };
+
+  modifyTree = treeNode => {
+    this.props.handleModifyTree(treeNode);
+  };
+
+  deleteTree = treeNode => {
+    this.props.handleDeleteTree(treeNode);
+  };
+
   render() {
     return (
       <Fragment>
         <span className={styles.hoverText}>
-          <Icon type="plus-circle" />
-          <Icon type="edit" />
-          <Icon type="minus-circle" />
+          <Icon type="plus-circle" onClick={this.addTree} />
+          <Icon type="edit" onClick={this.modifyTree} />
+          <Icon type="minus-circle" onClick={this.deleteTree} />
         </span>
       </Fragment>
     );
@@ -45,22 +70,48 @@ class HoverText extends Component {
 }
 
 class TitleMessage extends Component {
-  state = {};
+  state = {
+    operaterTree: false,
+  };
+
+  onMouseEnter = () => {
+    this.setState({
+      operaterTree: true,
+    });
+  };
+
+  onMouseLeave = () => {
+    this.setState({
+      operaterTree: false,
+    });
+  };
 
   render() {
-    const { title, nodeKeys } = this.props;
+    const { title, nodeKeys, handleAddTree, handleModifyTree, handleDeleteTree } = this.props;
+    const { operaterTree } = this.state;
     return (
       <Fragment>
-        <div className={styles.titleWraper}>
+        <div
+          className={styles.titleWraper}
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+        >
           <span>{title}</span>
-          <HoverText nodeKeys={nodeKeys} />
+          {operaterTree && (
+            <HoverText
+              nodeKeys={nodeKeys}
+              handleAddTree={handleAddTree}
+              handleModifyTree={handleModifyTree}
+              handleDeleteTree={handleDeleteTree}
+            />
+          )}
         </div>
       </Fragment>
     );
   }
 }
 
-function loop(orgsTree) {
+function loop(orgsTree, handleAddTree, handleModifyTree, handleDeleteTree) {
   return (
     orgsTree &&
     orgsTree.map(item => {
@@ -80,17 +131,33 @@ function loop(orgsTree) {
         return (
           <TreeNode
             key={folderId}
-            title={<TitleMessage title={showTitle} nodeKeys={item} />}
+            title={
+              <TitleMessage
+                title={showTitle}
+                nodeKeys={item}
+                handleAddTree={handleAddTree}
+                handleModifyTree={handleModifyTree}
+                handleDeleteTree={handleDeleteTree}
+              />
+            }
             parentId={parentId}
           >
-            {loop(children)}
+            {loop(children, handleAddTree, handleModifyTree)}
           </TreeNode>
         );
       }
       return (
         <TreeNode
           key={folderId}
-          title={<TitleMessage title={folderName} nodeKeys={item} />}
+          title={
+            <TitleMessage
+              title={folderName}
+              nodeKeys={item}
+              handleAddTree={handleAddTree}
+              handleModifyTree={handleModifyTree}
+              handleDeleteTree={handleDeleteTree}
+            />
+          }
           parentId={parentId}
         />
       );
@@ -154,7 +221,8 @@ class LeftClassifyTree extends Component {
 
   render() {
     const { expandedKeys, autoExpandParent } = this.state;
-    const { getFolderMenuListData } = this.props;
+    console.log('expandedKeys===', expandedKeys);
+    const { getFolderMenuListData, handleAddTree, handleModifyTree, handleDeleteTree } = this.props;
     if (getFolderMenuListData.items) {
       this.generateList(getFolderMenuListData.items);
     }
@@ -167,7 +235,7 @@ class LeftClassifyTree extends Component {
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
         >
-          {loop(getFolderMenuListData.items)}
+          {loop(getFolderMenuListData.items, handleAddTree, handleModifyTree, handleDeleteTree)}
         </Tree>
       </div>
     );
