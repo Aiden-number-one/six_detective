@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Input } from 'antd';
 
-import styles from '../../index.less';
+import styles from '../UserManagement.less';
 
-export default class ResetPasswordForm extends Component {
+export default class PasswordForm extends Component {
   state = {};
 
   validateToNextPassword = (rule, value, callback) => {
@@ -29,6 +29,16 @@ export default class ResetPasswordForm extends Component {
       <Fragment>
         <div>
           <Form layout="inline" className={styles.formWrap}>
+            <Form.Item label="原密码：">
+              {getFieldDecorator('oldPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your 原密码',
+                  },
+                ],
+              })(<Input className={styles.inputValue} />)}
+            </Form.Item>
             <Form.Item label="登陆密码：">
               {getFieldDecorator('password', {
                 rules: [

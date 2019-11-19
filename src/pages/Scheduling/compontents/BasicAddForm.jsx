@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, DatePicker, TreeSelect, Checkbox, Row, Col } from 'antd';
 
-import moment from 'moment';
-
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { TreeNode } = TreeSelect;
@@ -34,18 +32,14 @@ function loop(orgsTree) {
   });
 }
 // eslint-disable-next-line react/prefer-stateless-function
-class BasicModifyForm extends Component {
+class BasicAddForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { folderMenuData, selectChange, selectedRows } = this.props;
-    const defaultSelectedValue = selectedRows[0];
+    const { folderMenuData, selectChange } = this.props;
     // const { selectValue } = this.state;
     const rangeConfig = {
-      rules: [{ type: 'array', required: false, message: '请选择时间' }],
-      initialValue: [
-        moment(defaultSelectedValue.validStartDate, 'YYYY-MM-DD HH:mm:ss'),
-        moment(defaultSelectedValue.validEndDate, 'YYYY-MM-DD HH:mm:ss'),
-      ],
+      rules: [{ type: 'array', required: true, message: '请选择时间' }],
+      initialValue: '',
     };
     const formItemLayout = {
       labelCol: {
@@ -67,7 +61,7 @@ class BasicModifyForm extends Component {
                 message: 'Please input your scheduleName',
               },
             ],
-            initialValue: defaultSelectedValue.scheduleName,
+            initialValue: '',
           })(<Input placeholder="请输入最长64位字符（中文占两个字符）" />)}
         </Form.Item>
         <Form.Item label="调度作业:">
@@ -78,9 +72,13 @@ class BasicModifyForm extends Component {
                 message: 'Please input your 调度作业',
               },
             ],
-            initialValue: defaultSelectedValue.jobNo,
+            initialValue: '',
           })(
-            <TreeSelect onSelect={selectChange} placeholder="Please select">
+            <TreeSelect
+              // value={selectValue}
+              onSelect={selectChange}
+              placeholder="Please select"
+            >
               {loop(folderMenuData)}
             </TreeSelect>,
           )}
@@ -103,7 +101,7 @@ class BasicModifyForm extends Component {
                 message: 'Please input your scheduleDesc',
               },
             ],
-            initialValue: defaultSelectedValue.scheduleDesc,
+            initialValue: '',
           })(<TextArea rows={2} placeholder="请输入最长1024位字符（中文占两个字符）" />)}
         </Form.Item>
       </Form>
@@ -111,4 +109,4 @@ class BasicModifyForm extends Component {
   }
 }
 
-export default Form.create({})(BasicModifyForm);
+export default Form.create({})(BasicAddForm);

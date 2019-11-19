@@ -7,6 +7,7 @@ import TableHeader from '@/components/TableHeader';
 
 import SearchForm from './compontents/SearchForm';
 import Modify from './compontents/Modify';
+import Add from './compontents/Add';
 
 // import styles from './Scheduling.less';
 
@@ -22,6 +23,7 @@ class Scheduling extends Component {
     otherParam: {},
     selectedRows: [],
     modifyVisible: false,
+    addVisible: false,
     columns: [
       {
         title: '序号',
@@ -39,19 +41,14 @@ class Scheduling extends Component {
         key: 'jobNo',
       },
       {
-        title: '文件名',
-        dataIndex: 'folderName',
-        key: 'folderName',
-      },
-      {
         title: '作业名称',
         dataIndex: 'jobName',
         key: 'jobName',
       },
       {
         title: '上次执行时间',
-        dataIndex: 'validStartDate',
-        key: 'validStartDate',
+        dataIndex: 'modifiedTime',
+        key: 'modifiedTime',
       },
       {
         title: '最后一次执行状态',
@@ -60,13 +57,8 @@ class Scheduling extends Component {
       },
       {
         title: '下次执行时间',
-        dataIndex: 'validEndDate',
-        key: 'validEndDate',
-      },
-      {
-        title: '执行结果',
-        dataIndex: 'scheduleLog',
-        key: 'scheduleLog',
+        dataIndex: 'nextTime',
+        key: 'nextTime',
       },
       {
         title: '操作',
@@ -77,7 +69,7 @@ class Scheduling extends Component {
             <Switch
               checkedChildren="NO"
               unCheckedChildren="OFF"
-              // onChange={() => this.handleSetConfigStatus(record)}
+              onChange={checked => this.handleSetConfigStatus(checked, record)}
               defaultChecked={record.startFlag === '2'}
             />
           ),
@@ -179,6 +171,20 @@ class Scheduling extends Component {
     });
   };
 
+  handleSetConfigStatus = (checked, record) => {
+    const { dispatch } = this.props;
+    const startFlag = checked ? 2 : 3;
+    dispatch({
+      type: 'schedule/modifyScheduleBatch',
+      payload: {
+        scheduleId: record.scheduleId,
+        startFlag,
+      },
+      callback: this.props.getSchedul,
+    });
+    // console.log('record-------->', checked, record);
+  };
+
   modifySchedule = () => {
     const { selectedRows } = this.state;
     if (selectedRows.length !== 1) {
@@ -196,9 +202,21 @@ class Scheduling extends Component {
     });
   };
 
+  addSchedule = () => {
+    this.setState({
+      addVisible: true,
+    });
+  };
+
+  addCancel = () => {
+    this.setState({
+      addVisible: false,
+    });
+  };
+
   render() {
     const { scheduleListData, folderMenuData } = this.props;
-    const { pageSize, modifyVisible, selectedRows } = this.state;
+    const { pageSize, modifyVisible, addVisible, selectedRows } = this.state;
     const scheduleList = scheduleListData.items;
     const totalCount = scheduleListData && scheduleListData.totalCount;
     // console.log('selectedRows-00000-->', selectedRows);
@@ -222,6 +240,7 @@ class Scheduling extends Component {
           showEdit
           showSelect
           editTableData={this.modifySchedule}
+          addTableData={this.addSchedule}
           deleteTableData={this.deleteScheduleRow}
         />
         <Table
@@ -235,6 +254,12 @@ class Scheduling extends Component {
           modifyVisible={modifyVisible}
           modifyCancel={this.modifyCancel}
           selectedRows={selectedRows}
+          getSchedul={this.getSchedul}
+          folderMenuData={folderMenuData}
+        />
+        <Add
+          addVisible={addVisible}
+          addCancel={this.addCancel}
           getSchedul={this.getSchedul}
           folderMenuData={folderMenuData}
         />

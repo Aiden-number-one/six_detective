@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import { Form, Input, DatePicker, Select, Radio, Row, Col } from 'antd';
-
-import moment from 'moment';
+import { Form, Input, DatePicker, Radio, Select, Row, Col } from 'antd';
 
 const { Option } = Select;
-
 // eslint-disable-next-line react/prefer-stateless-function
-class PlanModifyForm extends Component {
+class PlanAddForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { selectedRows } = this.props;
-    const defaultSelectedValue = selectedRows[0];
     // const { selectValue } = this.state;
     const formItemLayout = {
       labelCol: {
@@ -26,7 +21,13 @@ class PlanModifyForm extends Component {
       <Form {...formItemLayout}>
         <Form.Item label="计划开始执行时间:">
           {getFieldDecorator('executeTime', {
-            initialValue: moment(defaultSelectedValue.executeTime, 'YYYY-MM-DD HH:mm:ss'),
+            rules: [
+              {
+                required: true,
+                message: 'Please input your executeTime',
+              },
+            ],
+            initialValue: '',
           })(<DatePicker format="YYYY-MM-DD HH:mm:ss" showTime />)}
         </Form.Item>
         <Form.Item label="执行频度:">
@@ -39,7 +40,7 @@ class PlanModifyForm extends Component {
                     message: 'Please input your scheduleInterval',
                   },
                 ],
-                initialValue: defaultSelectedValue.scheduleInterval || '',
+                initialValue: '',
               })(<Input placeholder="请输入最长32位字符" />)}
             </Col>
             <Col span={8}>
@@ -50,10 +51,9 @@ class PlanModifyForm extends Component {
                     message: 'Please input your frequency',
                   },
                 ],
-                initialValue: defaultSelectedValue.frequency || '',
+                initialValue: 'D',
               })(
                 <Select>
-                  <Option value="">请选择</Option>
                   <Option value="D">日</Option>
                   <Option value="H">小时</Option>
                   <Option value="M">分钟</Option>
@@ -70,7 +70,7 @@ class PlanModifyForm extends Component {
                 message: 'Please input your cronExpression',
               },
             ],
-            initialValue: defaultSelectedValue.cronExpression,
+            initialValue: '',
           })(<Input placeholder="" />)}
         </Form.Item>
         <Form.Item label=" 调度规律:" style={{ textAlign: 'left' }}>
@@ -81,11 +81,11 @@ class PlanModifyForm extends Component {
                 message: 'Please input your scheduleLaw',
               },
             ],
-            initialValue: defaultSelectedValue.scheduleLaw,
+            initialValue: 1,
           })(
             <Radio.Group>
-              <Radio value="1">按交易日</Radio>
-              <Radio value="2">按自然日</Radio>
+              <Radio value={1}>按交易日</Radio>
+              <Radio value={2}>按自然日</Radio>
             </Radio.Group>,
           )}
         </Form.Item>
@@ -93,22 +93,22 @@ class PlanModifyForm extends Component {
           {getFieldDecorator('succeedMailId', {
             rules: [
               {
-                required: true,
+                required: false,
                 message: 'Please input your succeedMailId',
               },
             ],
-            initialValue: defaultSelectedValue.succeedMailId,
+            initialValue: '',
           })(<Input placeholder="" />)}
         </Form.Item>
         <Form.Item label="出错邮件:">
           {getFieldDecorator('faultMailId', {
             rules: [
               {
-                required: true,
+                required: false,
                 message: 'Please input your faultMailId',
               },
             ],
-            initialValue: defaultSelectedValue.faultMailId,
+            initialValue: '',
           })(<Input placeholder="" />)}
         </Form.Item>
       </Form>
@@ -116,4 +116,4 @@ class PlanModifyForm extends Component {
   }
 }
 
-export default Form.create({})(PlanModifyForm);
+export default Form.create({})(PlanAddForm);

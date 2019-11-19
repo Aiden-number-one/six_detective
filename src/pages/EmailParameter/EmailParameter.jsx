@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Modal, Select, Table } from 'antd';
 import { connect } from 'dva';
-import styles from './index.less';
+import styles from './EmailParameter.less';
 import KdTable from '@/components/KdTable';
 import generatePersons from '@/components/KdTable/genData';
 import TableHeader from '@/components/TableHeader';

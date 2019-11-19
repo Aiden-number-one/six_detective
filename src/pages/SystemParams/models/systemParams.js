@@ -1,7 +1,14 @@
+/*
+ * @Description:
+ * @Author: dailinbo
+ * @Date: 2019-11-01 11:02:37
+ * @LastEditors: dailinbo
+ * @LastEditTime: 2019-11-18 19:13:07
+ */
 import Service from '@/utils/Service';
 
 const { systemParamsList, systemParamsUpdate, paramsType } = Service;
-const getSystemParamsListModel = {
+const systemParams = {
   namespace: 'systemParams',
   state: {
     data: [],
@@ -68,4 +75,4 @@ const getSystemParamsListModel = {
   },
 };
 
-export default getSystemParamsListModel;
+export default systemParams;
