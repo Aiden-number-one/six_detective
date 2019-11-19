@@ -10,8 +10,8 @@ const { TreeNode } = Tree;
 @connect(({ dataSource, tableData, loading }) => ({
   metaData: tableData.metaData,
   activeCID: dataSource.activeCID,
-  loading: loading.effects['dataSource/addMetaData'],
-  fetchloading: loading.effects['dataSource/getMetaData'],
+  loading: loading.effects['tableData/addMetaData'],
+  fetchloading: loading.effects['tableData/getMetaData'],
 }))
 class ImportMetaData extends Component {
   state = {
