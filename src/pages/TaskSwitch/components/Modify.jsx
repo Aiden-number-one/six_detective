@@ -3,7 +3,7 @@ import { Form, Input } from 'antd';
 
 import styles from '../TaskSwitch.less';
 
-export default class PasswordForm extends Component {
+export default class ModifyForm extends Component {
   state = {};
 
   render() {
