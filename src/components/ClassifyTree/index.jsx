@@ -3,10 +3,10 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-20 16:57:46
+ * @LastEditTime: 2019-11-20 17:08:09
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
- *  treeData                treeNodes数据                          Array                         []
+ *  treeData                treeNodes数据                          Array
  *  treeKey                 包含当前节点id、名称和父节点id,          Object{currentKey:string,
  *                          用于处理数据                            currentName:string,parentKey:string}
  * @Events:
@@ -178,7 +178,7 @@ function loop(orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTr
   );
 }
 
-class LeftClassifyTree extends Component {
+class ClassifyTree extends Component {
   state = {
     menuList: [],
     initData: [],
@@ -273,4 +273,4 @@ class LeftClassifyTree extends Component {
   }
 }
 
-export default LeftClassifyTree;
+export default ClassifyTree;
