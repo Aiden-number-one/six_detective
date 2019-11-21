@@ -151,9 +151,7 @@ const BasicLayout = props => {
           </div>
           <div className={styles.user}>
             <IconFont type="icon-usercircle" className={styles.avatar} />
-            <span className={styles.lang}>
-              <CustomizeSelectLang />
-            </span>
+            <CustomizeSelectLang />
             <span title="Thomas Chow" className={styles.username}>
               {window.localStorage.loginName}
             </span>
