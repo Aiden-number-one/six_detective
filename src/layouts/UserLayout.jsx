@@ -7,6 +7,7 @@ import logoDark from '../assets/logo-dark.png';
 import logo from '../assets/logo.png';
 import loginBg from '../assets/loginBg.png';
 import styles from './UserLayout.less';
+import CustomizeSelectLang from '@/components/CustomizeSelectLang';
 
 const UserLayout = props => {
   const {
@@ -32,9 +33,10 @@ const UserLayout = props => {
       })}
     >
       <div className={styles.container}>
-        {/* <div className={styles.lang}>
-          <SelectLang />
-        </div> */}
+        <div className={styles.lang}>
+          {/* <SelectLang /> */}
+          <CustomizeSelectLang />
+        </div>
         <div className={styles.content}>
           <div className={styles.top}>
             <div className={styles.header}>
