@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Form, TreeSelect, Input } from 'antd';
+import { formatMessage } from 'umi/locale';
 
 import styles from '../UserManagement.less';
 
@@ -83,7 +84,7 @@ export default class UserForm extends Component {
                 ],
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
-            <Form.Item label="员工姓名：">
+            <Form.Item label={formatMessage({ id: 'app.common.username' })}>
               {getFieldDecorator('name', {
                 rules: [
                   {
@@ -113,7 +114,7 @@ export default class UserForm extends Component {
                 </TreeSelect>,
               )}
             </Form.Item>
-            <Form.Item label="登陆密码：">
+            <Form.Item label={formatMessage({ id: 'app.common.password' })}>
               {getFieldDecorator('password', {
                 rules: [
                   {

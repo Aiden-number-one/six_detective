@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col, Select } from 'antd';
+import { formatMessage } from 'umi/locale';
 import styles from '../UserManagement.less';
 
 const { Option } = Select;
@@ -13,7 +14,7 @@ export default class SearchForm extends Component {
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="登录名/员工姓名：">
+            <Form.Item label={formatMessage({ id: 'app.common.username' })}>
               {getFieldDecorator('searchParam', {})(<Input className={styles.inputvalue} />)}
             </Form.Item>
           </Col>
@@ -23,7 +24,7 @@ export default class SearchForm extends Component {
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="邮    箱：">
+            <Form.Item label={formatMessage({ id: 'app.common.email' })}>
               {getFieldDecorator('email', {
                 rules: [
                   {
@@ -35,7 +36,9 @@ export default class SearchForm extends Component {
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="状　　态：">
+            <Form.Item
+              label={formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' })}
+            >
               {getFieldDecorator('custStatus', {
                 initialValue: '',
               })(
@@ -54,7 +57,7 @@ export default class SearchForm extends Component {
             Reset
           </Button>
           <Button type="primary" onClick={search}>
-            Search
+            {formatMessage({ id: 'app.common.search' })}
           </Button>
         </div>
       </Form>
