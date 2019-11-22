@@ -21,6 +21,7 @@ import logoSamll from '../assets/logo-small.png';
 import styles from './BasicLayout.less';
 import '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
+import { isProOrDev } from '@/utils/utils';
 /**
  * use Authorized check all menu item
  */
@@ -66,15 +67,17 @@ const BasicLayout = props => {
           // userAgent: window.navigator.userAgent,
         },
       });
-      setInterval(() => {
-        dispatch({
-          type: 'login/getLoginStatus',
-          payload: {
-            // loginName: window.localStorage.currentUser,
-            // userAgent: window.navigator.userAgent,
-          },
-        });
-      }, 25000);
+      if (!isProOrDev) {
+        setInterval(() => {
+          dispatch({
+            type: 'login/getLoginStatus',
+            payload: {
+              // loginName: window.localStorage.currentUser,
+              // userAgent: window.navigator.userAgent,
+            },
+          });
+        }, 25000);
+      }
     }
   }, []);
   /**
@@ -178,6 +181,7 @@ const BasicLayout = props => {
       menuHeaderRender={logoItem => <a>{logoItem}</a>}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
+        debugger;
         if (menuItemProps.isUrl) {
           return defaultDom;
         }
