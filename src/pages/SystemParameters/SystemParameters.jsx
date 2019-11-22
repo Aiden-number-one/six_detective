@@ -3,7 +3,7 @@ import { Input, Modal, Select, Table, Form } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import styles from './SystemParams.less';
+import styles from './SystemParameters.less';
 import TableHeader from '@/components/TableHeader';
 
 const { Option } = Select;

@@ -181,7 +181,6 @@ const BasicLayout = props => {
       menuHeaderRender={logoItem => <a>{logoItem}</a>}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
-        debugger;
         if (menuItemProps.isUrl) {
           return defaultDom;
         }

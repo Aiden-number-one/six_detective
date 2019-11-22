@@ -197,7 +197,7 @@ export default [
           {
             path: '/system-management/system-parameters',
             name: 'systemParameters',
-            component: './SystemParams/SystemParams',
+            component: './SystemParameters/SystemParameters',
           },
           {
             path: '/system-management/code-maintenance',
