@@ -2,8 +2,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-11-13 15:47:13
- * @LastEditors: lan
+ * @LastEditTime: 2019-11-21 10:15:55
+ * @LastEditors: iron
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
@@ -89,116 +89,6 @@ export default {
   devtool: isAntDesignProPreview ? 'source-map' : false,
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: router,
-  // routes: [
-  //   {
-  //     path: '/login',
-  //     component: '../layouts/UserLayout',
-  //     routes: [{ path: '/login', name: 'login', component: './User/Login' }],
-  //   },
-  //   {
-  //     path: '/',
-  //     component: '../layouts/BasicLayout',
-  //     Routes: ['src/pages/Authorized'],
-  //     authority: ['admin', 'user'],
-  //     routes: [
-  //       {
-  //         path: '/',
-  //         name: 'welcome',
-  //         icon: 'database',
-  //         component: './DataSource/DataSource',
-  //       },
-  //       {
-  //         path: '/datapanel',
-  //         name: 'datapanel',
-  //         icon: 'environment',
-  //         component: './DataPanel/DataPanel',
-  //       },
-  //       {
-  //         path: '/usermanagement',
-  //         name: 'usermanagement',
-  //         icon: 'table',
-  //         component: './UserManagement/UserManagement',
-  //       },
-  //       {
-  //         path: '/emailconfig',
-  //         name: 'emailconfig',
-  //         icon: 'table',
-  //         component: './EmailConfig/EmailConfig',
-  //       },
-  //       {
-  //         path: '/systemparams',
-  //         name: 'systemparams',
-  //         icon: 'table',
-  //         component: './SystemParams/SystemParams',
-  //       },
-  //       {
-  //         path: '/sheet',
-  //         name: 'sheet',
-  //         icon: 'table',
-  //         component: './Sheet/Sheet',
-  //       },
-  //       {
-  //         path: '/dragboard',
-  //         name: 'dragboard',
-  //         icon: 'table',
-  //         component: './Dragboard/Dragboard',
-  //       },
-  //       {
-  //         path: '/monitor',
-  //         name: 'monitor',
-  //         icon: 'table',
-  //         component: './Monitor/Monitor',
-  //       },
-  //       {
-  //         path: '/rulesEngine',
-  //         name: 'rulesEngine',
-  //         icon: 'build',
-  //         component: './RulesEngine/RulesEngine',
-  //       },
-  //       {
-  //         path: '/templateSet',
-  //         name: 'templateSet',
-  //         icon: 'build',
-  //         component: './TemplateSet/TemplateSet',
-  //       },
-  //       {
-  //         path: '/approval',
-  //         name: 'approval',
-  //         icon: 'build',
-  //         routes: [
-  //           {
-  //             path: '/approval/design',
-  //             name: 'approvalDesign',
-  //             component: './Approval/ApprovalDesign/ApprovalDesign',
-  //           },
-  //           {
-  //             path: '/approval/set',
-  //             name: 'approvalSet',
-  //             component: './Approval/ApprovalSet/ApprovalSet',
-  //           },
-  //           {
-  //             path: '/approval/check',
-  //             name: 'approvalEheck',
-  //             component: './Approval/ApprovalEheck/ApprovalEheck',
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         path: '/formItem',
-  //         name: 'formItem',
-  //         icon: 'build',
-  //         component: './FormItem/FormItem',
-  //       },
-  //       {
-  //         component: './Page404',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     component: './Page404',
-  //   },
-  // ],
-  // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': primaryColor,
   },
@@ -240,6 +130,10 @@ export default {
     basePath: '/',
   },
   chainWebpack: webpackPlugin,
+  externals: {
+    react: 'window.React',
+    'react-dom': 'window.ReactDOM',
+  },
   proxy: {
     '/api': {
       // target: 'http://10.60.62.60:7567/superlop/restv2/admin/', // 季旋

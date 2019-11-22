@@ -91,6 +91,8 @@ export default config => {
         },
       },
     });
+
+
 };
 
 const getAntdSerials = color => {

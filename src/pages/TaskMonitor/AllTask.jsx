@@ -5,21 +5,30 @@ const { TreeNode } = Tree;
 
 function loopTasks(tasks) {
   return tasks.map(item => {
-    const { children, monitorId, jobName, parentMonitorId } = item;
+    const { children, jobName, jobId, batchNo, type, name } = item;
     if (children) {
       return (
-        <TreeNode key={monitorId} title={jobName} parentId={parentMonitorId}>
+        <TreeNode key={jobId || type} title={`${name}(${children.length})`}>
           {loopTasks(children)}
         </TreeNode>
       );
     }
-    return <TreeNode key={monitorId} title={jobName} parentId={parentMonitorId} />;
+    return <TreeNode key={jobId || type} title={jobName || name} jobId={jobId} batchNo={batchNo} />;
   });
 }
-export default function({ tasks }) {
+
+export default function({ tasks, getTask }) {
+  function handleSelect(selectKey, info) {
+    const { jobId, batchNo } = info.node.props;
+    if (jobId && batchNo) {
+      getTask(jobId, batchNo);
+    }
+  }
   return (
     <div>
-      <Tree>{loopTasks(tasks)}</Tree>
+      <Tree showLine onSelect={handleSelect}>
+        {loopTasks(tasks)}
+      </Tree>
     </div>
   );
 }

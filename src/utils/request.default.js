@@ -4,14 +4,13 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
  * @LastEditors: iron
- * @LastEditTime: 2019-11-19 20:09:44
+ * @LastEditTime: 2019-11-22 09:10:07
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { extend } from 'umi-request';
-// import router from 'umi/router';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
 import { notification } from 'antd';
@@ -36,32 +35,9 @@ export const codeMessage = {
   504: '网关超时。',
 };
 
-export function setReqHeaders(url, NVPS) {
-  // let x_trace_user_id = localStorage.getItem('x-trace-user-id');
-
-  // if (!x_trace_user_id) {
-  //   x_trace_user_id = uuidv1();
-  //   localStorage.setItem('x-trace-user-id', x_trace_user_id);
-  // }
-
-  // let { x_trace_page_id } = window;
-
-  // if (!x_trace_page_id) {
-  //   x_trace_page_id = uuidv1();
-  //   window.x_trace_page_id = x_trace_page_id;
-  // }
-
+export function setReqHeaders(NVPS) {
   const rid = `RID${uuidv1().replace(/-/g, '')}`;
   return {
-    // 'X-Kweb-Menu-Id': document.location.href,
-    // 'X-Kweb-Trace-Req-Id': uuidv1(),
-    // 'X-Kweb-Trace-Page-Id': x_trace_page_id,
-    // 'X-Kweb-Trace-User-Id': x_trace_user_id,
-    // 'X-Kweb-Location-Href': document.location.href,
-    // 'X-Kweb-Timestamp': `${new Date().getTime()}`,
-    // 'X-Kweb-Sign': md5(document.location.href),
-    // 'X-Kweb-Api-Name': url.trim(),
-    // 'X-Kweb-Api-Version': '4.0',
     'X-Bc-S': (() => {
       const randowNVPS = getRandowNVPS();
       const signMode = randowNVPS.join('');
@@ -80,6 +56,7 @@ export function setReqHeaders(url, NVPS) {
 // unified error handle
 export function errorHandler(error) {
   console.log('requst error:', error);
+
   const { response } = error;
 
   if (response && response.status) {
@@ -125,7 +102,7 @@ request.interceptors.request.use((url, opts) => {
       bcp: cryptoParams,
       s: timestamp,
     },
-    headers: setReqHeaders(url, NVPS),
+    headers: setReqHeaders(NVPS),
   };
 
   return {
@@ -139,28 +116,22 @@ request.interceptors.response.use(async (response, opts) => {
     return response;
   }
 
-  try {
-    const result = await response.clone().json();
-    // return complete response
-    if (opts.all) {
-      if (result.bcjson.flag === '001') {
-        // eslint-disable-next-line no-underscore-dangle
-        window.g_app._store.dispatch({ type: 'login/logout' });
-      }
-      return result;
-    }
-    const { bcjson } = result;
-    const { flag, items, msg } = bcjson;
-    if (flag === '001') {
-      // eslint-disable-next-line no-underscore-dangle
-      window.g_app._store.dispatch({ type: 'login/logout' });
-      return { msg: msg || 'response data error' };
-    }
-    return +flag === 1 ? { items } : { msg: msg || 'response data error' };
-  } catch (error) {
-    // return { msg: error };
-    throw new Error(error);
+  const result = await response.clone().json();
+
+  const { bcjson } = result || {};
+  const { flag, items, msg } = bcjson;
+
+  // login invalid
+  if (flag === '001') {
+    // eslint-disable-next-line no-underscore-dangle
+    window.g_app._store.dispatch({ type: 'login/logout' });
   }
+  // return complete response
+  if (opts.all) {
+    return result;
+  }
+
+  return +flag === 1 ? { items } : { msg: msg || 'response data error' };
 });
 
 export default url => async (params = {}) => request(url, { data: params });

@@ -5,12 +5,28 @@ import AllTask from './AllTask';
 import styles from './index.less';
 import TaskDetail from './TaskDetail';
 
-function TaskMonitor({ dispatch, loading, tasks }) {
+function TaskMonitor({ dispatch, loading, tasks, taskBatches, eachBatches }) {
   useEffect(() => {
     dispatch({
       type: 'tm/queryTasks',
     });
   }, []);
+
+  function handleBatch(jobId, batchNo) {
+    dispatch({
+      type: 'tm/queryTaskBatches',
+      params: {
+        jobId,
+        batchNo,
+      },
+    });
+    dispatch({
+      type: 'tm/queryEachBatch',
+      params: {
+        jobId,
+      },
+    });
+  }
 
   if (loading['tm/queryTask']) {
     return <p>loading</p>;
@@ -19,21 +35,24 @@ function TaskMonitor({ dispatch, loading, tasks }) {
   if (tasks.length === 0) {
     return <p>暂无数据</p>;
   }
+
   return (
     <div className={styles.container}>
       <Row>
         <Col span={5}>
-          <AllTask tasks={tasks} />
+          <AllTask tasks={tasks} getTask={handleBatch} />
         </Col>
         <Col span={18} offset={1}>
-          <TaskDetail />
+          <TaskDetail taskBatches={taskBatches} eachBatches={eachBatches} />
         </Col>
       </Row>
     </div>
   );
 }
-const mapStateToProps = ({ loading, tm: { tasks } }) => ({
+const mapStateToProps = ({ loading, tm: { tasks, taskBatches, eachBatches } }) => ({
   loading: loading.effects,
   tasks,
+  taskBatches,
+  eachBatches,
 });
 export default connect(mapStateToProps)(TaskMonitor);
