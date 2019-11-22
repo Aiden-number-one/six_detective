@@ -181,9 +181,22 @@ const BasicLayout = props => {
       menuHeaderRender={logoItem => <a>{logoItem}</a>}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
-        debugger;
-        if (menuItemProps.isUrl) {
+        if (menuItemProps.isUrl || menuItemProps.children) {
           return defaultDom;
+        }
+        if (menuItemProps.isIframe) {
+          return (
+            <Link
+              to={{
+                pathname: menuItemProps.path,
+                query: {
+                  iframeUrl: menuItemProps.iframeUrl,
+                },
+              }}
+            >
+              {defaultDom}
+            </Link>
+          );
         }
 
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './IframePage.less';
 
 const ref = React.createRef();
 
 const IframePage = props => {
-  const [iFrameHeight, setIframeHeighet] = useState(800);
+  const [iFrameHeight] = useState(800);
 
   useEffect(() => {
     const frame = ref.current;
@@ -21,15 +22,17 @@ const IframePage = props => {
   } = props;
 
   return (
-    <div style={{ margin: '-24px -30px -8px' }}>
-      <iframe
-        title="11111"
-        className={styles.iframe}
-        src={iframeUrl}
-        ref={ref}
-        height={iFrameHeight}
-      />
-    </div>
+    <PageHeaderWrapper>
+      <div>
+        <iframe
+          title="11111"
+          className={styles.iframe}
+          src={`${iframeUrl}?BCTID=${localStorage.getItem('BCTID')}`}
+          ref={ref}
+          height={iFrameHeight}
+        />
+      </div>
+    </PageHeaderWrapper>
   );
 };
 
