@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Button, Input, Modal, Table } from 'antd';
 import { connect } from 'dva';
+import { formatMessage } from 'umi/locale';
 
 import TableHeader from '@/components/TableHeader';
 import styles from './CodeMaintenance.less';
@@ -16,22 +17,22 @@ class CodeForm extends Component {
     return (
       <div>
         <Form layout="inline" className={styles.formWrap}>
-          <Form.Item label="字典条目：">
+          <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.codeID' })}>
             {getFieldDecorator('dictId', {
               initialValue: dictId || undefined,
             })(<Input className={styles.inputValue} disabled></Input>)}
           </Form.Item>
-          <Form.Item label="字典子项：">
+          <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.subitemID' })}>
             {getFieldDecorator('dictItemId', {
               initialValue: dictItemId || undefined,
             })(<Input className={styles.inputValue}></Input>)}
           </Form.Item>
-          <Form.Item label="子项名称：">
+          <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.subitemName' })}>
             {getFieldDecorator('dictItemIdName', {
               initialValue: dictItemIdName || undefined,
             })(<Input className={styles.inputValue}></Input>)}
           </Form.Item>
-          <Form.Item label="条目排序：">
+          <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.sequence' })}>
             {getFieldDecorator('sortNo', {
               initialValue: sortNo || undefined,
             })(<Input className={styles.inputValue}></Input>)}
@@ -57,27 +58,27 @@ class CodeMaintenance extends Component {
     itemNameValue: '',
     columns: [
       {
-        title: '序号',
+        title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
       },
       {
-        title: '字典子项',
+        title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemID' }),
         dataIndex: 'dictItemId',
         key: 'dictItemId',
       },
       {
-        title: '子项名称',
+        title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemName' }),
         dataIndex: 'dictItemIdName',
         key: 'dictItemIdName',
       },
       {
-        title: '子项排序',
+        title: formatMessage({ id: 'systemManagement.codeMaintenance.sequence' }),
         dataIndex: 'sortNo',
         key: 'sortNo',
       },
       {
-        title: '操作',
+        title: formatMessage({ id: 'app.common.operation' }),
         dataIndex: 'operation',
         key: 'operation',
         render: (res, recode, index, active) => (
@@ -88,7 +89,7 @@ class CodeMaintenance extends Component {
                 this.updateCode(res, recode, index, active);
               }}
             >
-              修改
+              {formatMessage({ id: 'app.common.modify' })}
             </a>
             <a
               href="#"
@@ -96,7 +97,7 @@ class CodeMaintenance extends Component {
                 this.deleteCodeItem(res, recode);
               }}
             >
-              删除
+              {formatMessage({ id: 'app.common.delete' })}
             </a>
           </span>
         ),
@@ -105,17 +106,17 @@ class CodeMaintenance extends Component {
     // eslint-disable-next-line key-spacing
     codeColumns: [
       {
-        title: '序号',
+        title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
       },
       {
-        title: '字典条目',
+        title: formatMessage({ id: 'systemManagement.codeMaintenance.codeID' }),
         dataIndex: 'dictId',
         key: 'dictId',
       },
       {
-        title: '条目名称',
+        title: formatMessage({ id: 'systemManagement.codeMaintenance.codeName' }),
         dataIndex: 'dictIdName',
         key: 'dictIdName',
       },
@@ -369,7 +370,9 @@ class CodeMaintenance extends Component {
             <div>
               <ul className={styles.clearfix}>
                 <li className={styles.fl}>
-                  <span>条目名称：</span>
+                  <span>
+                    {formatMessage({ id: 'systemManagement.codeMaintenance.codeName' })}：
+                  </span>
                   <Input className={styles['login-name']} onChange={this.itemNameChange}></Input>
                 </li>
                 <li className={styles.fl}>
@@ -417,6 +420,8 @@ class CodeMaintenance extends Component {
                 visible={this.state.codeVisible}
                 onOk={this.codeConfirm}
                 onCancel={this.codeCancel}
+                cancelText={formatMessage({ id: 'app.common.cancel' })}
+                okText={formatMessage({ id: 'app.common.save' })}
               >
                 <NewCodeForm ref={this.codeFormRef} dictId={this.state.dictId}></NewCodeForm>
               </Modal>
@@ -426,6 +431,8 @@ class CodeMaintenance extends Component {
                 visible={this.state.updateCodeItemVisible}
                 onOk={this.updateCodeItemConfirm}
                 onCancel={this.updateCodeItemCancel}
+                cancelText={formatMessage({ id: 'app.common.cancel' })}
+                okText={formatMessage({ id: 'app.common.save' })}
               >
                 <NewCodeForm ref={this.codeFormRef} {...updateCodeItemParams}></NewCodeForm>
               </Modal>
@@ -436,6 +443,8 @@ class CodeMaintenance extends Component {
                 visible={this.state.deleteCodeItemVisible}
                 onOk={this.deleteCodeItemConfirm}
                 onCancel={this.deleteCodeItemCancel}
+                cancelText={formatMessage({ id: 'app.common.cancel' })}
+                okText={formatMessage({ id: 'app.common.save' })}
               >
                 <div>
                   <span>确定删除吗？</span>

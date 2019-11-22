@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-21 19:36:14
+ * @LastEditTime: 2019-11-22 13:57:10
  */
 
 import React, { Component } from 'react';
@@ -75,7 +75,7 @@ class UserManagement extends Component {
         key: 'custStatus',
       },
       {
-        title: `${formatMessage({ id: 'app.common.operation' })}`,
+        title: formatMessage({ id: 'app.common.operation' }),
         dataIndex: 'operation',
         key: 'operation',
         render: (res, obj) => (
@@ -483,6 +483,8 @@ class UserManagement extends Component {
               visible={this.state.visible}
               onOk={this.addConfrim}
               onCancel={this.addCancel}
+              cancelText={formatMessage({ id: 'app.common.cancel' })}
+              okText={formatMessage({ id: 'app.common.save' })}
             >
               <NewUserForm
                 ref={this.formRef}
@@ -496,6 +498,8 @@ class UserManagement extends Component {
               visible={this.state.updateVisible}
               onOk={this.updateConfirm}
               onCancel={this.updateCancel}
+              cancelText={formatMessage({ id: 'app.common.cancel' })}
+              okText={formatMessage({ id: 'app.common.save' })}
             >
               <NewUpdateForm
                 ref={this.updateFormRef}
@@ -510,6 +514,8 @@ class UserManagement extends Component {
               visible={this.state.lockVisible}
               onOk={this.lockConfirm}
               onCancel={this.lockCancel}
+              cancelText={formatMessage({ id: 'app.common.cancel' })}
+              okText={formatMessage({ id: 'app.common.save' })}
             >
               <span>是否锁定？</span>
             </Modal>
@@ -519,6 +525,8 @@ class UserManagement extends Component {
               visible={this.state.closingVisible}
               onOk={this.closingConfirm}
               onCancel={this.closingCancel}
+              cancelText={formatMessage({ id: 'app.common.cancel' })}
+              okText={formatMessage({ id: 'app.common.save' })}
             >
               <span>是否销户？</span>
             </Modal>
@@ -528,6 +536,8 @@ class UserManagement extends Component {
               visible={this.state.updatePasswordVisible}
               onOk={this.updatePasswordConfirm}
               onCancel={this.updatePasswordCancel}
+              cancelText={formatMessage({ id: 'app.common.cancel' })}
+              okText={formatMessage({ id: 'app.common.save' })}
             >
               <NewPasswordForm ref={this.passwordFormRef}></NewPasswordForm>
             </Modal>
@@ -537,6 +547,8 @@ class UserManagement extends Component {
               visible={this.state.resetPasswordVisible}
               onOk={this.resetPasswordConfirm}
               onCancel={this.resetPasswordCancel}
+              cancelText={formatMessage({ id: 'app.common.cancel' })}
+              okText={formatMessage({ id: 'app.common.save' })}
             >
               <NewResetPasswordForm ref={this.resetPasswordFormRef}></NewResetPasswordForm>
             </Modal>

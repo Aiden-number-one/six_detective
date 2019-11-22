@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Input, Modal, Select, Table, Form } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-
+import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import styles from './SystemParams.less';
+import styles from './SystemParameters.less';
 import TableHeader from '@/components/TableHeader';
 
 const { Option } = Select;
@@ -16,7 +16,9 @@ class ModifyForm extends Component {
       <Fragment>
         <div>
           <Form layout="inline" className={styles.formWrap}>
-            <Form.Item label="参数类型：">
+            <Form.Item
+              label={formatMessage({ id: 'systemManagement.systemParameters.parameterType' })}
+            >
               {getFieldDecorator('paramType', {
                 rules: [
                   {
@@ -27,7 +29,9 @@ class ModifyForm extends Component {
                 initialValue: paramObj.paramType,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
-            <Form.Item label="参数key：">
+            <Form.Item
+              label={formatMessage({ id: 'systemManagement.systemParameters.parameterKey' })}
+            >
               {getFieldDecorator('paramId', {
                 rules: [
                   {
@@ -38,7 +42,9 @@ class ModifyForm extends Component {
                 initialValue: paramObj.paramId,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
-            <Form.Item label="参数值：">
+            <Form.Item
+              label={formatMessage({ id: 'systemManagement.systemParameters.parameterValue' })}
+            >
               {getFieldDecorator('paramValue', {
                 rules: [
                   {
@@ -75,7 +81,7 @@ class ModifyForm extends Component {
                 </Select>,
               )}
             </Form.Item>
-            <Form.Item label="备注：">
+            <Form.Item label={formatMessage({ id: 'app.common.note' })}>
               {getFieldDecorator('comments', {
                 rules: [
                   {
@@ -109,32 +115,32 @@ class SystemParams extends Component {
       pageSize: '10',
       columns: [
         {
-          title: '序号',
+          title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
         },
         {
-          title: '参数类型',
+          title: formatMessage({ id: 'systemManagement.systemParameters.parameterType' }),
           dataIndex: 'paramType',
           key: 'paramType',
         },
         {
-          title: '参数key',
+          title: formatMessage({ id: 'systemManagement.systemParameters.parameterKey' }),
           dataIndex: 'paramId',
           key: 'paramId',
         },
         {
-          title: '参数值',
+          title: formatMessage({ id: 'systemManagement.systemParameters.parameterValue' }),
           dataIndex: 'paramValue',
           key: 'paramValue',
         },
         {
-          title: '备注',
+          title: formatMessage({ id: 'app.common.note' }),
           dataIndex: 'comments',
           key: 'comments',
         },
         {
-          title: '操作',
+          title: formatMessage({ id: 'app.common.operation' }),
           dataIndex: 'operation',
           key: 'operation',
           render: (res, recode, index, active) => (
@@ -145,7 +151,7 @@ class SystemParams extends Component {
                   this.updateSystemParams(res, recode, index, active);
                 }}
               >
-                修改
+                {formatMessage({ id: 'app.common.modify' })}
               </a>
             </span>
           ),
@@ -256,7 +262,9 @@ class SystemParams extends Component {
           <div>
             <div>
               <div>
-                <span>参数类型：</span>
+                <span>
+                  {formatMessage({ id: 'systemManagement.systemParameters.parameterType' })}：
+                </span>
                 <Select
                   defaultValue="请选择"
                   onChange={this.onChangeOption}
@@ -274,6 +282,8 @@ class SystemParams extends Component {
                 visible={this.state.updateSystemParamsVisible}
                 onOk={this.updateSystemParamsComfirm}
                 onCancel={this.updateSystemParamsCancel}
+                cancelText={formatMessage({ id: 'app.common.cancel' })}
+                okText={formatMessage({ id: 'app.common.save' })}
               >
                 <NewModifyForm
                   ref={this.modifyFormRef}

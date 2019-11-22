@@ -2,13 +2,13 @@
  * @Description: 滚动表格
  * @Author: lan
  * @Date: 2019-10-21 14:10:56
- * @LastEditTime: 2019-11-08 13:27:13
+ * @LastEditTime: 2019-11-22 10:04:51
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
 import styles from '../Monitor.less';
 
-export default class ScrollTable extends PureComponent {
+export default class TableScroll extends PureComponent {
   componentDidMount() {}
 
   render() {

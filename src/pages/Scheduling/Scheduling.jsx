@@ -182,7 +182,6 @@ class Scheduling extends Component {
       },
       callback: this.props.getSchedul,
     });
-    // console.log('record-------->', checked, record);
   };
 
   modifySchedule = () => {
@@ -220,11 +219,6 @@ class Scheduling extends Component {
     const scheduleList = scheduleListData.items;
     const totalCount = scheduleListData && scheduleListData.totalCount;
     // console.log('selectedRows-00000-->', selectedRows);
-    // eslint-disable-next-line no-unused-expressions
-    scheduleList &&
-      scheduleList.forEach((item, index) => {
-        item.index = (this.state.pageNum - 1) * pageSize + index + 1;
-      });
     const rowSelection = {
       type: 'checkbox',
       onChange: this.selectedRow,
