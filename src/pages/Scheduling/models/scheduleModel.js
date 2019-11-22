@@ -17,7 +17,10 @@ const scheduleModel = {
         if (response.bcjson.items) {
           yield put({
             type: 'getDatas',
-            payload: response.bcjson,
+            payload: {
+              data: response.bcjson,
+              param: payload,
+            },
           });
         }
       }
@@ -57,9 +60,16 @@ const scheduleModel = {
   },
   reducers: {
     getDatas(state, action) {
+      const scheduleData = action.payload.data.items;
+      const { pageNumber, pageSize } = action.payload.param;
+      // eslint-disable-next-line no-unused-expressions
+      scheduleData &&
+        scheduleData.forEach((item, index) => {
+          item.index = (pageNumber - 1) * pageSize + index + 1;
+        });
       return {
         ...state,
-        scheduleList: action.payload,
+        scheduleList: action.payload.data,
       };
     },
     getFolderMenuDatas(state, action) {
