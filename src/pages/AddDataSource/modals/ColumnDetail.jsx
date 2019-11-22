@@ -13,7 +13,7 @@ const formItemLayout = {
   },
 };
 export default class DataSourceModal extends PureComponent {
-  state={};
+  state = {};
 
   static defaultProps = {
     visible: false, // 是否显示弹框
@@ -75,15 +75,8 @@ export default class DataSourceModal extends PureComponent {
         dataIndex: 'columnDesc',
         key: 'columnDesc',
       },
-
-    ]
-    const {
-      visible,
-      toggleModal,
-      activeTableData,
-      columnData,
-      metadataPerform,
-    } = this.props;
+    ];
+    const { visible, toggleModal, activeTableData, columnData, metadataPerform } = this.props;
     const column = []; // 数据预览表头
     if (metadataPerform.length > 0) {
       column.push({
@@ -98,7 +91,7 @@ export default class DataSourceModal extends PureComponent {
           dataIndex: item,
           key: item,
         });
-      })
+      });
     }
     return (
       <Modal
@@ -128,18 +121,10 @@ export default class DataSourceModal extends PureComponent {
             </Form>
           </TabPane>
           <TabPane tab="列" key="1">
-            <Table
-              columns={columns}
-              dataSource={columnData}
-              scroll={{ x: 'max-content' }}
-            />
+            <Table columns={columns} dataSource={columnData} scroll={{ x: 'max-content' }} />
           </TabPane>
           <TabPane tab="数据预览" key="3">
-            <Table
-              columns={column}
-              dataSource={metadataPerform}
-              scroll={{ x: 'max-content' }}
-            />
+            <Table columns={column} dataSource={metadataPerform} scroll={{ x: 'max-content' }} />
           </TabPane>
         </Tabs>
       </Modal>

@@ -39,19 +39,13 @@ class AdvancedSearchForm extends PureComponent {
       <Row gutter={{ xs: 24, sm: 24, md: 24, lg: 24, xl: 24 }}>
         <Col xs={24} sm={24} md={12} lg={8}>
           <Form.Item label="Table Name">
-            {getFieldDecorator('tableName', {})(
-              <Input placeholder="Type Here" />,
-            )}
+            {getFieldDecorator('tableName', {})(<Input placeholder="Type Here" />)}
           </Form.Item>
         </Col>
         <Col xs={24} sm={24} md={12} lg={8}>
           <Form.Item label="Schem Name">
             {getFieldDecorator('schemName', {})(
-              <Select
-                placeholder="please select"
-                dropdownClassName="selectDropdown"
-                allowClear
-              >
+              <Select placeholder="please select" dropdownClassName="selectDropdown" allowClear>
                 {schemasNames.map(item => (
                   <Option value={item.schemName}>{item.schemName}</Option>
                 ))}
@@ -61,7 +55,9 @@ class AdvancedSearchForm extends PureComponent {
         </Col>
         <Col xs={24} sm={24} md={12} lg={8}>
           <Form.Item label=" ">
-            <Button type="primary" htmlType="submit">Search</Button>
+            <Button type="primary" htmlType="submit">
+              Search
+            </Button>
           </Form.Item>
         </Col>
       </Row>
@@ -83,7 +79,7 @@ class AdvancedSearchForm extends PureComponent {
         getTableData(param);
       }
     });
-  }
+  };
 
   render() {
     return (
@@ -144,20 +140,20 @@ export default class AddDataSource extends PureComponent {
         })
         const param = {
           connection_id: response.bcjson.items[0].connectionId,
-        }
+        };
         // 成功时默认选中第一个获取表信息
-        this.getTableData(param)
+        this.getTableData(param);
         dispatch({
           type: 'tableData/getSchemas',
           payload: param,
-        })
+        });
       },
     });
   };
 
   // 获取数据源表信息
   getTableData = param => {
-    const { dispatch } = this.props
+    const { dispatch } = this.props;
     dispatch({
       type: 'tableData/getTableData',
       payload: {
@@ -296,7 +292,7 @@ export default class AddDataSource extends PureComponent {
         driverInfo,
       },
     });
-  }
+  };
 
   // 获取元数据
   getMetaData = () => {
@@ -320,13 +316,13 @@ export default class AddDataSource extends PureComponent {
     dispatch({
       type: 'tableData/setActiveTableData',
       payload: record,
-    })
+    });
     dispatch({
       type: 'tableData/getColumnInfo',
       payload: {
         table_id: record.tableId,
       },
-    })
+    });
     dispatch({
       type: 'tableData/getMetadataPerform',
       payload: {
@@ -334,7 +330,7 @@ export default class AddDataSource extends PureComponent {
         schema: record.schemName,
         table_name: record.tableName,
       },
-    })
+    });
     this.toggleModal('columnDetail');
   };
 
@@ -363,14 +359,14 @@ export default class AddDataSource extends PureComponent {
             this.getTableData(params);
             this.setState({
               selectedRowKeys: '',
-            })
+            });
           },
-        })
+        });
       },
       onCancel: () => {
         // console.log('Cancel');
       },
-    })
+    });
   };
 
   // 更新字段/批量更新字段
@@ -390,7 +386,7 @@ export default class AddDataSource extends PureComponent {
           params.pageNumber = 1;
           this.getTableData(params);
         },
-      })
+      });
       return;
     }
     if (!this.tableIds) {
@@ -410,8 +406,8 @@ export default class AddDataSource extends PureComponent {
         params.pageNumber = 1;
         this.getTableData(params);
       },
-    })
-  }
+    });
+  };
 
   // 生成导出文件
   exportList = () => {
@@ -422,7 +418,7 @@ export default class AddDataSource extends PureComponent {
         connectionId: activeCID,
       },
       callback: response => {
-        this.downloadFile(response.bcjson.items[0].filePatch)
+        this.downloadFile(response.bcjson.items[0].filePatch);
       },
     });
   };
@@ -480,7 +476,9 @@ export default class AddDataSource extends PureComponent {
           <span>
             <Icon
               type="eye"
-              onClick={() => { this.showDetail(record) }}
+              onClick={() => {
+                this.showDetail(record);
+              }}
             />
           </span>
         ),
@@ -504,7 +502,7 @@ export default class AddDataSource extends PureComponent {
       onChange: selectedRowKey => {
         this.setState({
           selectedRowKeys: selectedRowKey,
-        })
+        });
       },
     };
     const {
@@ -615,11 +613,41 @@ export default class AddDataSource extends PureComponent {
                     deleteTableData={this.delTableData}
                   />
                   <Button.Group>
-                    <Button type="primary" onClick={() => { this.updMetadataOrColumn('some', 'updMetadata') }}>更新字段</Button>
-                    <Button type="primary" onClick={() => { this.updMetadataOrColumn('all', 'updMetadata') }}>批量更新字段</Button>
-                    <Button type="primary" onClick={() => { this.updMetadataOrColumn('some', 'updRecordCount') }}>更新行数</Button>
-                    <Button type="primary" onClick={() => { this.updMetadataOrColumn('all', 'updRecordCount') }}>批量更新行数</Button>
-                    <Button type="primary" onClick={this.exportList}>导出全部列表</Button>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.updMetadataOrColumn('some', 'updMetadata');
+                      }}
+                    >
+                      更新字段
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.updMetadataOrColumn('all', 'updMetadata');
+                      }}
+                    >
+                      批量更新字段
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.updMetadataOrColumn('some', 'updRecordCount');
+                      }}
+                    >
+                      更新行数
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        this.updMetadataOrColumn('all', 'updRecordCount');
+                      }}
+                    >
+                      批量更新行数
+                    </Button>
+                    <Button type="primary" onClick={this.exportList}>
+                      导出全部列表
+                    </Button>
                   </Button.Group>
                   <Table
                     className="basicTable"

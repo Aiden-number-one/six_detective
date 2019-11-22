@@ -26,7 +26,7 @@ export default class DataSourceModal extends PureComponent {
         connectTest(values);
       }
     });
-  }
+  };
 
   render() {
     const {
@@ -60,7 +60,7 @@ export default class DataSourceModal extends PureComponent {
         }}
         footer={
           <div>
-            <Button type="danger" onClick={this.test} >
+            <Button type="danger" onClick={this.test}>
               测试连接
             </Button>
             <Button type="primary" onClick={this.handleOK}>

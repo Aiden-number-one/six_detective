@@ -214,6 +214,11 @@ export default [
             name: 'scheduling',
             component: './Scheduling/Scheduling',
           },
+          {
+            path: '/system-management/task-monitor',
+            name: 'taskMonitor',
+            component: './TaskMonitor',
+          },
           ...authRoutes,
         ],
       },

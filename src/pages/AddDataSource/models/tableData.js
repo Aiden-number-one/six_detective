@@ -107,7 +107,7 @@ export default {
         yield put({
           type: 'setColumnData',
           payload: response.bcjson.items,
-        })
+        });
       }
     },
     // 预览数据
@@ -117,7 +117,7 @@ export default {
         yield put({
           type: 'setMetadataPerform',
           payload: response.bcjson.items,
-        })
+        });
       }
     },
   },
@@ -138,7 +138,7 @@ export default {
       return {
         ...state,
         activeTableData: action.payload,
-      }
+      };
     },
     setMetaData(state, action) {
       return {

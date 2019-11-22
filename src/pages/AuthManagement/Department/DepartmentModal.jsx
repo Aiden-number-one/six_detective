@@ -7,10 +7,6 @@ function DepartModal({ type, isModalVisible, depart: dept, childDept, form, clos
   const title = type === 1 ? '新增' : '修改';
   const [depart, setDept] = useState({});
 
-  // console.log('type', type);
-  // console.log('dept', dept);
-  // console.log('childDept', childDept);
-
   useEffect(() => {
     if (type !== 1) {
       if (dept) {

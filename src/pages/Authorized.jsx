@@ -6,6 +6,7 @@ import Authorized from '@/utils/Authorized';
 
 const getRouteAuthority = (path, routeData) => {
   let authorities;
+
   routeData.forEach(route => {
     // match prefix
     if (pathToRegexp(`${route.path}(.*)`).test(path)) {
@@ -35,6 +36,8 @@ const AuthComponent = ({
 }) => {
   const { currentUser } = user;
   const { routes = [] } = route;
+  // console.log(children);
+
   const isLogin = currentUser && currentUser.name;
   return (
     <Authorized

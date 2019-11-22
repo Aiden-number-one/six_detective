@@ -4,11 +4,10 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-07 17:09:07
  * @LastEditors: iron
- * @LastEditTime: 2019-11-14 19:06:56
+ * @LastEditTime: 2019-11-21 10:59:11
  */
 
 import { notification } from 'antd';
-// import dvaLogger from 'dva-logger';
 
 export const dva = {
   config: {
@@ -21,5 +20,4 @@ export const dva = {
       });
     },
   },
-  // plugins: [dvaLogger()],
 };
