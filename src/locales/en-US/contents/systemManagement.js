@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 15:04:48
+ * @LastEditTime: 2019-11-22 16:20:16
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -18,4 +18,9 @@ export default {
   'systemManagement.systemParameters.parameterType': 'Parameter Type',
   'systemManagement.systemParameters.parameterKey': 'Parameter Key',
   'systemManagement.systemParameters.parameterValue': 'Parameter Value',
+  'systemManagement.codeMaintenance.codeName': 'Code Name',
+  'systemManagement.codeMaintenance.codeID': 'Code ID',
+  'systemManagement.codeMaintenance.subitemID': 'Sub-item ID',
+  'systemManagement.codeMaintenance.subitemName': 'Sub-item Name',
+  'systemManagement.codeMaintenance.sequence': 'Sequence',
 };
