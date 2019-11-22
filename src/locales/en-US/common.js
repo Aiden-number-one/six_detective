@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 17:50:23
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 10:34:46
+ * @LastEditTime: 2019-11-22 14:27:38
  */
 export default {
   'app.common.userId': 'User ID',
@@ -17,4 +17,6 @@ export default {
   'app.common.delete': 'Delete',
   'app.common.cancel': 'Cancel',
   'app.common.save': 'Save',
+  'app.common.dateFrom': 'Date from',
+  'app.common.dateTo': 'Date to',
 };

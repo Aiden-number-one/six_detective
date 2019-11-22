@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: iron
- * @LastEditTime: 2019-11-19 19:42:18
+ * @LastEditors: dailinbo
+ * @LastEditTime: 2019-11-22 14:19:37
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
@@ -43,7 +43,7 @@ export default {
   'menu.systemManagement.workflowConfig': 'Workflow Config',
   'menu.systemManagement.workflowDesign': 'Workflow Design',
   'menu.systemManagement.codeMaintenance': 'Code Maintenance',
-  'menu.systemManagement.auditLog': 'Audit Log',
+  'menu.systemManagement.auditTrailLogging': 'Audit Trail Logging',
   'menu.systemManagement.scheduling': 'Scheduling Plan',
   'menu.systemManagement.taskMonitor': 'Task Monitor',
   'menu.alertManagement': 'ALERT MANAGEMENT',
