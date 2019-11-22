@@ -244,7 +244,7 @@ export default [
           },
           {
             path: '/system-management/audit-log',
-            name: 'auditLog',
+            name: 'auditTrailLogging',
             component: './AuditLog/AuditLog',
           },
           {

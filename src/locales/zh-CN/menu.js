@@ -2,8 +2,8 @@
  * @Description: 菜单
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-11-12 16:06:16
- * @LastEditors: lan
+ * @LastEditTime: 2019-11-22 14:20:12
+ * @LastEditors: dailinbo
  */
 export default {
   'menu.welcome': '欢迎',
@@ -21,7 +21,7 @@ export default {
   'menu.systemManagement.emailParameter': '邮箱配置',
   'menu.systemManagement.systemParameters': '系统参数',
   'menu.systemManagement.codeMaintenance': '系统字典管理',
-  'menu.systemManagement.auditLog': '操作日志',
+  'menu.systemManagement.auditTrailLogging': '操作日志',
   'menu.systemManagement.authMaintenance': '权限管理',
   'menu.index': '首页',
   'menu.sheet': '电子表格',
