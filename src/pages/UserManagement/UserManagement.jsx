@@ -3,12 +3,13 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-19 13:25:52
+ * @LastEditTime: 2019-11-21 19:36:14
  */
 
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table } from 'antd';
+import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import TableHeader from '@/components/TableHeader';
 import styles from './UserManagement.less';
@@ -54,7 +55,7 @@ class UserManagement extends Component {
         key: 'loginName',
       },
       {
-        title: '员工姓名',
+        title: `${formatMessage({ id: 'app.common.username' })}`,
         dataIndex: 'customerName',
         key: 'customerName',
       },
@@ -69,18 +70,18 @@ class UserManagement extends Component {
         key: 'departmentName',
       },
       {
-        title: '状态',
+        title: `${formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' })}`,
         dataIndex: 'custStatus',
         key: 'custStatus',
       },
       {
-        title: '操作',
+        title: `${formatMessage({ id: 'app.common.operation' })}`,
         dataIndex: 'operation',
         key: 'operation',
         render: (res, obj) => (
           <span className={styles.operation}>
             <a href="#" onClick={() => this.updateUser(res, obj)}>
-              修改用户
+              {formatMessage({ id: 'app.common.modify' })}
             </a>
             <a href="#" onClick={() => this.lockUser()}>
               锁定

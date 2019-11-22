@@ -12,7 +12,8 @@ import { Icon, Badge, Popover } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
-import { setLocale } from 'umi/locale';
+import CustomizeSelectLang from '@/components/CustomizeSelectLang';
+// import { setLocale } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
@@ -56,7 +57,7 @@ const BasicLayout = props => {
   // }
 
   useEffect(() => {
-    setLocale('en-US');
+    // setLocale('zh-CN');
     // window.addEventListener('beforeunload', listenClose, false);
     if (dispatch) {
       dispatch({
@@ -153,6 +154,7 @@ const BasicLayout = props => {
           </div>
           <div className={styles.user}>
             <IconFont type="icon-usercircle" className={styles.avatar} />
+            <CustomizeSelectLang />
             <span title="Thomas Chow" className={styles.username}>
               {window.localStorage.loginName}
             </span>
