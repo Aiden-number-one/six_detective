@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 14:19:37
+ * @LastEditors: lan
+ * @LastEditTime: 2019-11-22 15:38:36
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
@@ -17,6 +17,11 @@ export default {
   'menu.dataManagement.dataEnquiry': 'Data Enquiry',
   'menu.dataManagement.dataMaintenance': 'Data Maintenance',
   'menu.dataManagement.driveManagement': 'Drive Management',
+  'menu.dataManagement.taskConfigSetting': 'Task Config Setting',
+  'menu.dataManagement.jobManage': 'Job Management',
+  'menu.dataManagement.taskPlanSetting': 'Task Plan Setting',
+  'menu.dataManagement.performMonitoring': 'Perform Monitoring',
+  'menu.dataManagement.logQuery': 'Log Query',
   'menu.dataManagement.taskSwitch': 'Task Switch',
   'menu.accountManagement': 'ACCOUNT MANAGEMENT',
   'menu.accountManagement.dashboard': 'Dashboard',
