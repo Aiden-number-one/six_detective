@@ -69,7 +69,7 @@ class AuditLog extends Component {
     pageSize: '10',
     columns: [
       {
-        title: '序号',
+        title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
       },

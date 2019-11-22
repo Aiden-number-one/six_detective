@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:26:09
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 13:40:57
+ * @LastEditTime: 2019-11-22 15:05:20
  */
 export default {
   'systemManagement.userMaintenance.userId': '用户 ID',
@@ -15,4 +15,7 @@ export default {
   'systemManagement.emailParameter.senderEmailAddress': '发件人邮箱',
   'systemManagement.emailParameter.senderEmailPassword': '发件人邮箱密码',
   'systemManagement.emailParameter.forbidden': '禁止',
+  'systemManagement.systemParameters.parameterType': '参数类型',
+  'systemManagement.systemParameters.parameterKey': '参数Key',
+  'systemManagement.systemParameters.parameterValue': '参数值',
 };
