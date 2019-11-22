@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 17:54:31
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-21 19:37:46
+ * @LastEditTime: 2019-11-22 10:35:01
  */
 export default {
   'app.common.userId': '用户ID',
@@ -15,4 +15,6 @@ export default {
   'app.common.newUser': '新增',
   'app.common.modify': '修改',
   'app.common.delete': '删除',
+  'app.common.cancel': '取消',
+  'app.common.save': '确定',
 };
