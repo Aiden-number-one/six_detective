@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-11-20 10:41:04
+ * @LastEditTime: 2019-11-22 14:29:12
  * @LastEditors: iron
  */
 
@@ -181,5 +181,17 @@ export function formatTree(list, key = 'departmentId', pKey = 'parentDepartmentI
   });
 
   return tree;
+}
+
+// 日期时间 格式化(yyyy-MM-dd HH:mm:ss) 2015-12-04 14:27:29
+export function formatTimeString(time) {
+  if (!time) {
+    return '';
+  }
+
+  return `${time.substring(0, 4)}-${time.substring(4, 6)}-${time.substring(6, 8)} ${time.substring(
+    8,
+    10,
+  )}:${time.substring(10, 12)}:${time.substring(12, 14)}`;
 }
 export { isProOrDev, isUrl, geneMenuData, getRandowNVPS, passWordStrength };

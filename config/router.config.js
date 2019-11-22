@@ -214,9 +214,9 @@ export default [
             component: './Scheduling/Scheduling',
           },
           {
-            path: '/system-management/task-monitor',
-            name: 'taskMonitor',
-            component: './TaskMonitor',
+            path: '/system-management/job-monitor',
+            name: 'jobMonitor',
+            component: './JobMonitor',
           },
           ...authRoutes,
         ],

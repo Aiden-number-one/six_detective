@@ -3,13 +3,13 @@ import { Tree } from 'antd';
 
 const { TreeNode } = Tree;
 
-function loopTasks(tasks) {
-  return tasks.map(item => {
+function loopjobs(jobs) {
+  return jobs.map(item => {
     const { children, jobName, jobId, batchNo, type, name } = item;
     if (children) {
       return (
         <TreeNode key={jobId || type} title={`${name}(${children.length})`}>
-          {loopTasks(children)}
+          {loopjobs(children)}
         </TreeNode>
       );
     }
@@ -17,17 +17,17 @@ function loopTasks(tasks) {
   });
 }
 
-export default function({ tasks, getTask }) {
+export default function({ jobs, getJob }) {
   function handleSelect(selectKey, info) {
     const { jobId, batchNo } = info.node.props;
     if (jobId && batchNo) {
-      getTask(jobId, batchNo);
+      getJob(jobId, batchNo);
     }
   }
   return (
     <div>
       <Tree showLine onSelect={handleSelect}>
-        {loopTasks(tasks)}
+        {loopjobs(jobs)}
       </Tree>
     </div>
   );
