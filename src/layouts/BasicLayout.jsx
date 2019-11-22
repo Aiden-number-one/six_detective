@@ -12,7 +12,8 @@ import { Icon, Badge, Popover } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
-import { setLocale } from 'umi/locale';
+import CustomizeSelectLang from '@/components/CustomizeSelectLang';
+// import { setLocale } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
@@ -20,6 +21,7 @@ import logoSamll from '../assets/logo-small.png';
 import styles from './BasicLayout.less';
 import '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
+import { isProOrDev } from '@/utils/utils';
 /**
  * use Authorized check all menu item
  */
@@ -55,7 +57,7 @@ const BasicLayout = props => {
   // }
 
   useEffect(() => {
-    setLocale('en-US');
+    // setLocale('zh-CN');
     // window.addEventListener('beforeunload', listenClose, false);
     if (dispatch) {
       dispatch({
@@ -65,15 +67,17 @@ const BasicLayout = props => {
           // userAgent: window.navigator.userAgent,
         },
       });
-      setInterval(() => {
-        dispatch({
-          type: 'login/getLoginStatus',
-          payload: {
-            // loginName: window.localStorage.currentUser,
-            // userAgent: window.navigator.userAgent,
-          },
-        });
-      }, 25000);
+      if (!isProOrDev) {
+        setInterval(() => {
+          dispatch({
+            type: 'login/getLoginStatus',
+            payload: {
+              // loginName: window.localStorage.currentUser,
+              // userAgent: window.navigator.userAgent,
+            },
+          });
+        }, 25000);
+      }
     }
   }, []);
   /**
@@ -150,6 +154,7 @@ const BasicLayout = props => {
           </div>
           <div className={styles.user}>
             <IconFont type="icon-usercircle" className={styles.avatar} />
+            <CustomizeSelectLang />
             <span title="Thomas Chow" className={styles.username}>
               {window.localStorage.loginName}
             </span>
@@ -176,6 +181,7 @@ const BasicLayout = props => {
       menuHeaderRender={logoItem => <a>{logoItem}</a>}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
+        debugger;
         if (menuItemProps.isUrl) {
           return defaultDom;
         }

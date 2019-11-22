@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Button, DatePicker, Table, Row, Col } from 'antd';
 import { connect } from 'dva';
+import { formatMessage } from 'umi/locale';
 import moment from 'moment';
 import TableHeader from '@/components/TableHeader';
 
@@ -15,12 +16,12 @@ class OperatorForm extends Component {
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="操作员名称：">
+            <Form.Item label={formatMessage({ id: 'app.common.username' })}>
               {getFieldDecorator('operatorName', {})(<Input className={styles.inputvalue} />)}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="开始时间：">
+            <Form.Item label={formatMessage({ id: 'app.common.dateFrom' })}>
               {getFieldDecorator('beginDate', {})(
                 <DatePicker
                   onChange={this.changeBeginDate}
@@ -32,7 +33,7 @@ class OperatorForm extends Component {
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label="结束时间：">
+            <Form.Item label={formatMessage({ id: 'app.common.dateTo' })}>
               {getFieldDecorator('endDate', {})(
                 <DatePicker
                   onChange={this.changeEndDate}
@@ -49,7 +50,7 @@ class OperatorForm extends Component {
             重置
           </Button>
           <Button type="primary" onClick={search}>
-            Search
+            {formatMessage({ id: 'app.common.search' })}
           </Button>
         </div>
       </Form>

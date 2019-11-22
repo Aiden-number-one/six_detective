@@ -2,7 +2,7 @@
  * @Description: 获取数据源表格
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime: 2019-11-19 13:38:26
+ * @LastEditTime: 2019-11-19 14:28:28
  * @LastEditors: lan
  */
 import { message } from 'antd';
@@ -19,7 +19,6 @@ const {
   updMetadata,
   updRecordCount,
   exportInfo,
-  getToken,
 } = Service;
 
 export default {
@@ -33,39 +32,51 @@ export default {
     metadataPerform: [],
   },
   effects: {
+    // 获取用户信息
     *getSchemas({ payload }, { call, put }) {
       const response = yield call(getSchemas, { param: payload });
-      yield put({
-        type: 'setSchemas',
-        payload: response.bcjson.items,
-      });
+      if (response.bcjson.flag === '1') {
+        yield put({
+          type: 'setSchemas',
+          payload: response.bcjson.items,
+        });
+      }
     },
+    // 获取表格信息
     *getTableData({ payload }, { call, put }) {
       const response = yield call(getTableData, { param: payload });
-      yield put({
-        type: 'setTableData',
-        payload: response.bcjson.items,
-      });
+      if (response.bcjson.flag === '1') {
+        yield put({
+          type: 'setTableData',
+          payload: response.bcjson.items,
+        });
+      }
     },
+    // 删除表格数据
     *delTableData({ payload, callback }, { call }) {
       const response = yield call(delTableData, { param: payload });
-      if (response.bcjson.flag) {
+      if (response.bcjson.flag === '1') {
         if (callback) callback();
       }
     },
+    // 获取元数据
     *getMetaData({ payload }, { call, put }) {
       const response = yield call(getMetaData, { param: payload });
-      yield put({
-        type: 'setMetaData',
-        payload: response.bcjson.items,
-      });
+      if (response.bcjson.flag === '1') {
+        yield put({
+          type: 'setMetaData',
+          payload: response.bcjson.items,
+        });
+      }
     },
+    // 添加元数据
     *addMetaData({ payload, callback }, { call }) {
       const response = yield call(addMetaData, { param: payload });
       if (response.bcjson.flag === '1') {
         callback();
       }
     },
+    // 更新表格元数据
     *updMetadata({ payload, callback }, { call }) {
       const response = yield call(updMetadata, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -73,6 +84,7 @@ export default {
         callback();
       }
     },
+    // 更新行数
     *updRecordCount({ payload, callback }, { call }) {
       const response = yield call(updRecordCount, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -80,6 +92,7 @@ export default {
         callback();
       }
     },
+    // 导出
     *exportInfo({ payload, callback }, { call }) {
       const response = yield call(exportInfo, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -87,29 +100,24 @@ export default {
         callback(response);
       }
     },
-    *getToken({ payload, callback }, { call }) {
-      const response = yield call(getToken, { param: payload });
-      if (response.bcjson.flag === '1') {
-        // message.success('updata success');
-        callback(response);
-      }
-    },
+    // 获取表列信息
     *getColumnInfo({ payload }, { call, put }) {
       const response = yield call(getColumnInfo, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'setColumnData',
           payload: response.bcjson.items,
-        })
+        });
       }
     },
+    // 预览数据
     *getMetadataPerform({ payload }, { call, put }) {
       const response = yield call(getMetadataPerform, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'setMetadataPerform',
           payload: response.bcjson.items,
-        })
+        });
       }
     },
   },
@@ -130,7 +138,7 @@ export default {
       return {
         ...state,
         activeTableData: action.payload,
-      }
+      };
     },
     setMetaData(state, action) {
       return {

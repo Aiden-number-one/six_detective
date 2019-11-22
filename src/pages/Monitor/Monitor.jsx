@@ -1,12 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import classNames from 'classnames';
 import styles from './Monitor.less';
-import ScrollTable from './components/ScrollTable';
+import TableScroll from './components/TableScroll';
 import AreaChart from './components/AreaChart';
 import LevelBox from './components/Level/LevelBox';
 import ChartsBox from './components/Charts/ChartsBox';
 import TotalMsg from './components/TotalMsg/TotalMsg';
 import TotalMsgWithTit from './components/TotalMsg/TotalMsgWithTit';
+// import CustomizeSelectLang from '@/components/CustomizeSelectLang';
 
 const mockData = [
   { text: 'Number of alerts for lop', total: 18 },
@@ -62,6 +63,7 @@ export default class Monitor extends PureComponent {
             <div className={styles.title}>
               <span className={styles.firstTitle}>Surveillance Overview</span>
               <span className={styles.secondTitle}>Trade Date: 20190824</span>
+              {/* <CustomizeSelectLang /> */}
             </div>
             <div className={classNames(styles.content)}>
               <div className={styles.alert_msg}>
@@ -101,7 +103,7 @@ export default class Monitor extends PureComponent {
                   </div>
                 </div>
                 <div style={{ width: '100%', height: 418 }}>
-                  <ScrollTable />
+                  <TableScroll />
                 </div>
                 <div style={{ width: '100%', height: 130, marginTop: 40 }}>
                   <TotalMsgWithTit

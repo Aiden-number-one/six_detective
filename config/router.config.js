@@ -52,6 +52,7 @@ export default [
             ],
           },
           {
+            // <iframe style={{ width: '100%', height: '800px', border: 'none' }} title="iframe" src={`http://localhost:10080/index.html#data-driven?${localStorage.getItem('BCTID')}`} />
             path: '/data-management/data-processing',
             name: 'dataProcessing',
             component: './RulesEngine/RulesEngine',
@@ -64,7 +65,12 @@ export default [
           {
             path: '/data-management/data-maintenance',
             name: 'dataMaintenance',
-            component: './AddDataSource/AddDataSource',
+            component: './IframePage/IframePage',
+          },
+          {
+            path: '/data-management/drive-management',
+            name: 'driveManagement',
+            component: './DriveManagement/DriveManagement',
           },
           {
             path: '/data-management/task-switch',
@@ -200,13 +206,18 @@ export default [
           },
           {
             path: '/system-management/audit-log',
-            name: 'auditLog',
+            name: 'auditTrailLogging',
             component: './AuditLog/AuditLog',
           },
           {
             path: '/system-management/scheduling',
             name: 'scheduling',
             component: './Scheduling/Scheduling',
+          },
+          {
+            path: '/system-management/task-monitor',
+            name: 'taskMonitor',
+            component: './TaskMonitor',
           },
           ...authRoutes,
         ],

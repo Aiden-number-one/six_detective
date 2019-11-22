@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Modal, Select, Table } from 'antd';
 import { connect } from 'dva';
+import { formatMessage } from 'umi/locale';
 import styles from './EmailParameter.less';
 import KdTable from '@/components/KdTable';
 import generatePersons from '@/components/KdTable/genData';
@@ -16,7 +17,7 @@ class AddForm extends Component {
       <Fragment>
         <div>
           <Form layout="inline" className={styles.formWrap}>
-            <Form.Item label="服务器IP：">
+            <Form.Item label={formatMessage({ id: 'systemManagement.emailParameter.severIP' })}>
               {getFieldDecorator('mailHost', {
                 rules: [
                   {
@@ -26,7 +27,7 @@ class AddForm extends Component {
                 ],
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
-            <Form.Item label="端口：">
+            <Form.Item label={formatMessage({ id: 'systemManagement.emailParameter.port' })}>
               {getFieldDecorator('mailPort', {
                 rules: [
                   {
@@ -36,7 +37,9 @@ class AddForm extends Component {
                 ],
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
-            <Form.Item label="发件人邮箱地址：">
+            <Form.Item
+              label={formatMessage({ id: 'systemManagement.emailParameter.senderEmailAddress' })}
+            >
               {getFieldDecorator('mailAddress', {
                 rules: [
                   {
@@ -50,7 +53,9 @@ class AddForm extends Component {
                 ],
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
-            <Form.Item label="发件人邮箱密码：">
+            <Form.Item
+              label={formatMessage({ id: 'systemManagement.emailParameter.senderEmailPassword' })}
+            >
               {getFieldDecorator('mailPassword', {
                 rules: [
                   {
@@ -108,7 +113,7 @@ class ModifyForm extends Component {
       <Fragment>
         <div>
           <Form layout="inline" className={styles.formWrap}>
-            <Form.Item label="服务器IP：">
+            <Form.Item label={formatMessage({ id: 'systemManagement.emailParameter.severIP' })}>
               {getFieldDecorator('mailHost', {
                 rules: [
                   {
@@ -119,7 +124,7 @@ class ModifyForm extends Component {
                 initialValue: emailObj.mailHost,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
-            <Form.Item label="端口：">
+            <Form.Item label={formatMessage({ id: 'systemManagement.emailParameter.port' })}>
               {getFieldDecorator('mailPort', {
                 rules: [
                   {
@@ -130,7 +135,9 @@ class ModifyForm extends Component {
                 initialValue: emailObj.mailPort,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
-            <Form.Item label="发件人邮箱地址：">
+            <Form.Item
+              label={formatMessage({ id: 'systemManagement.emailParameter.senderEmailAddress' })}
+            >
               {getFieldDecorator('mailAddress', {
                 rules: [
                   {
@@ -145,7 +152,9 @@ class ModifyForm extends Component {
                 initialValue: emailObj.mailAddress,
               })(<Input className={styles.inputValue} />)}
             </Form.Item>
-            <Form.Item label="发件人邮箱密码：">
+            <Form.Item
+              label={formatMessage({ id: 'systemManagement.emailParameter.senderEmailPassword' })}
+            >
               {getFieldDecorator('mailPassword', {
                 rules: [
                   {
@@ -207,6 +216,10 @@ class EmailParameter extends Component {
     modifyVisible: false,
     deleteVisible: false,
     mailId: '',
+    page: {
+      pageNumber: '1',
+      pageSize: '10',
+    },
     columns: [
       {
         title: '配置ID',
@@ -214,17 +227,17 @@ class EmailParameter extends Component {
         key: 'mailId',
       },
       {
-        title: '服务器IP',
+        title: formatMessage({ id: 'systemManagement.emailParameter.severIP' }),
         dataIndex: 'mailHost',
         key: 'mailHost',
       },
       {
-        title: '端口',
+        title: formatMessage({ id: 'systemManagement.emailParameter.port' }),
         dataIndex: 'mailPort',
         key: 'mailPort',
       },
       {
-        title: '发件人邮箱',
+        title: formatMessage({ id: 'systemManagement.emailParameter.senderEmailAddress' }),
         dataIndex: 'mailAddress',
         key: 'mailAddress',
       },
@@ -239,7 +252,7 @@ class EmailParameter extends Component {
         key: 'remark',
       },
       {
-        title: '操作',
+        title: formatMessage({ id: 'app.common.operation' }),
         dataIndex: 'operation',
         key: 'operation',
         render: (res, recode) => (
@@ -250,7 +263,7 @@ class EmailParameter extends Component {
                 this.updateEmail(res, recode);
               }}
             >
-              修改
+              {formatMessage({ id: 'app.common.modify' })}
             </a>
             <a
               href="#"
@@ -258,17 +271,73 @@ class EmailParameter extends Component {
                 this.deleteEmail(res, recode);
               }}
             >
-              删除
+              {formatMessage({ id: 'app.common.delete' })}
             </a>
           </span>
         ),
       },
     ],
-    page: {
-      pageNumber: '1',
-      pageSize: '10',
-    },
-    records: generatePersons(10),
+    // header: [
+    //   {
+    //     field: 'personid',
+    //     caption: 'ID',
+    //     width: 100,
+    //     headerStyle: { textAlign: 'center' },
+    //     style: { textAlign: 'center' },
+    //   },
+    //   {
+    //     field: 'fname',
+    //     caption: 'First Name',
+    //     width: 200,
+    //     sort: true,
+    //     style: { textAlign: 'center' },
+    //   },
+    //   {
+    //     field: 'lname',
+    //     caption: 'Last Name',
+    //     width: 100,
+    //     headerStyle: { textAlign: 'center' },
+    //     style: { textAlign: 'center' },
+    //   },
+    //   {
+    //     field: 'email',
+    //     caption: 'Email',
+    //     width: 'auto',
+    //     headerStyle: { textAlign: 'center' },
+    //     style: { textAlign: 'center' },
+    //   },
+    //   // {
+    //   //   field: 'action',
+    //   //   caption: 'Action',
+    //   //   width: 60,
+    //   //   headerStyle: { textAlign: 'center' },
+    //   //   style: { textAlign: 'center' },
+    //   //   columnType: new cheetahGrid.columns.type.ButtonColumn({
+    //   //     caption: '修改',
+    //   //   }),
+    //   //   action: new cheetahGrid.columns.action.ButtonAction({
+    //   //     action() {
+    //   //       alert('click modify');
+    //   //     },
+    //   //   }),
+    //   // },
+    //   // {
+    //   //   field: 'action1',
+    //   //   caption: '',
+    //   //   width: 60,
+    //   //   headerStyle: { textAlign: 'center' },
+    //   //   style: { textAlign: 'center' },
+    //   //   columnType: new cheetahGrid.columns.type.ButtonColumn({
+    //   //     caption: '删除',
+    //   //   }),
+    //   //   action: new cheetahGrid.columns.action.ButtonAction({
+    //   //     action() {
+    //   //       alert('click delete');
+    //   //     },
+    //   //   }),
+    //   // },
+    // ],
+    records: generatePersons(1000),
   };
 
   addFormRef = React.createRef();
@@ -459,6 +528,8 @@ class EmailParameter extends Component {
                 visible={this.state.addVisible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
+                cancelText={formatMessage({ id: 'app.common.cancel' })}
+                okText={formatMessage({ id: 'app.common.save' })}
               >
                 <div>
                   <NewAddForm ref={this.addFormRef}></NewAddForm>
@@ -470,6 +541,8 @@ class EmailParameter extends Component {
                 visible={this.state.modifyVisible}
                 onOk={this.modifyConfirm}
                 onCancel={this.modifyCancel}
+                cancelText={formatMessage({ id: 'app.common.cancel' })}
+                okText={formatMessage({ id: 'app.common.save' })}
               >
                 <NewModifyForm ref={this.modifyForm} emailObj={this.state.emailObj}></NewModifyForm>
               </Modal>
@@ -479,6 +552,8 @@ class EmailParameter extends Component {
                 visible={this.state.deleteVisible}
                 onOk={this.deleteConfirm}
                 onCancel={this.deleteCancel}
+                cancelText={formatMessage({ id: 'app.common.cancel' })}
+                okText={formatMessage({ id: 'app.common.save' })}
               >
                 <div>
                   <span>确定删除吗？</span>

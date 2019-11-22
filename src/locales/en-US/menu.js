@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: iron
- * @LastEditTime: 2019-11-11 15:31:03
+ * @LastEditors: dailinbo
+ * @LastEditTime: 2019-11-22 14:19:37
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
@@ -16,6 +16,7 @@ export default {
   'menu.dataManagement.dataProcessing': 'Data Processing',
   'menu.dataManagement.dataEnquiry': 'Data Enquiry',
   'menu.dataManagement.dataMaintenance': 'Data Maintenance',
+  'menu.dataManagement.driveManagement': 'Drive Management',
   'menu.dataManagement.taskSwitch': 'Task Switch',
   'menu.accountManagement': 'ACCOUNT MANAGEMENT',
   'menu.accountManagement.dashboard': 'Dashboard',
@@ -42,8 +43,9 @@ export default {
   'menu.systemManagement.workflowConfig': 'Workflow Config',
   'menu.systemManagement.workflowDesign': 'Workflow Design',
   'menu.systemManagement.codeMaintenance': 'Code Maintenance',
-  'menu.systemManagement.auditLog': 'Audit Log',
+  'menu.systemManagement.auditTrailLogging': 'Audit Trail Logging',
   'menu.systemManagement.scheduling': 'Scheduling Plan',
+  'menu.systemManagement.taskMonitor': 'Task Monitor',
   'menu.alertManagement': 'ALERT MANAGEMENT',
   'menu.alertManagement.formItem': 'FormItem Reference',
   'menu.alertManagement.Stylespecification': 'Alert Specification',
