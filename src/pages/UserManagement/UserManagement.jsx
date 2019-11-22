@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 10:48:24
+ * @LastEditTime: 2019-11-22 13:57:10
  */
 
 import React, { Component } from 'react';
@@ -75,7 +75,7 @@ class UserManagement extends Component {
         key: 'custStatus',
       },
       {
-        title: `${formatMessage({ id: 'app.common.operation' })}`,
+        title: formatMessage({ id: 'app.common.operation' }),
         dataIndex: 'operation',
         key: 'operation',
         render: (res, obj) => (
