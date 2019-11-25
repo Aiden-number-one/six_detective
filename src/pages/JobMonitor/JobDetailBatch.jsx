@@ -3,7 +3,7 @@ import { Row, Col, Icon } from 'antd';
 import TaskConfigModal from './JobConfigModal';
 
 export default function({ batch, taskPoints }) {
-  const [cfgVisible, setCfgVisible] = useState(true);
+  const [cfgVisible, setCfgVisible] = useState(false);
   function handleTaskConfig() {
     setCfgVisible(true);
   }
