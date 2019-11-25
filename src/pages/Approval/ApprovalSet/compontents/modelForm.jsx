@@ -5,6 +5,7 @@
 import React, { PureComponent } from 'react';
 import { Form, Input, Button, Modal, Row, Col } from 'antd';
 import { connect } from 'dva';
+import { formatMessage } from 'umi/locale';
 import DeployedModel from './deployedModel';
 import TransferModal from './transferModal';
 // import { async } from 'q';
@@ -183,12 +184,17 @@ class ModelForm extends PureComponent {
           footer={false}
           width={1000}
           height={1000}
+          cancelText={formatMessage({ id: 'app.common.cancel' })}
+          okText={formatMessage({ id: 'app.common.save' })}
         >
           <iframe title="diagram" width="100%" height="300px" src={diagramUrl}></iframe>
           <Form onSubmit={this.handleSubmit} className="ant-advanced-search-form">
             <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }} style={{ marginTop: '20px' }}>
               <Col xs={12} sm={12} lg={8}>
-                <Form.Item label="流程模型选择" colon={false}>
+                <Form.Item
+                  label={formatMessage({ id: 'systemManagement.flowConfig.flowChart' })}
+                  colon={false}
+                >
                   {getFieldDecorator('processName', {
                     rules: [{ required: true, message: 'Please input your processName!' }],
                     initialValue: formValue.processName,

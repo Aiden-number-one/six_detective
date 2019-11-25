@@ -4,6 +4,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Icon, Input, Button, Table, Popconfirm, Switch, Row, Col } from 'antd';
 import { connect } from 'dva';
+import { formatMessage } from 'umi/locale';
 import ModelForm from './compontents/modelForm';
 // import classNames from 'classnames';
 import styles from './ApprovalSet.less';
@@ -169,7 +170,7 @@ class ApprovalConifg extends PureComponent {
         align: 'center',
       },
       {
-        title: '流程模型名称',
+        title: formatMessage({ id: 'systemManagement.flowConfig.flowName' }),
         dataIndex: 'processName',
         align: 'center',
       },
@@ -209,7 +210,7 @@ class ApprovalConifg extends PureComponent {
         }),
       },
       {
-        title: '操作',
+        title: formatMessage({ id: 'app.common.operation' }),
         dataIndex: 'operation',
         align: 'center',
         render: (text, record) => (

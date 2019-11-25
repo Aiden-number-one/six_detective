@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 18:55:29
+ * @LastEditTime: 2019-11-25 09:40:17
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -29,4 +29,6 @@ export default {
   'systemManagement.flowDesign.flowDelete': 'Delete',
   'systemManagement.flowDesign.flowImport': 'Import',
   'systemManagement.flowDesign.flowExport': 'Export',
+  'systemManagement.flowConfig.flowName': 'Flow Name',
+  'systemManagement.flowConfig.flowChart': 'Flow Chart',
 };

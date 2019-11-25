@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:26:09
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 18:56:34
+ * @LastEditTime: 2019-11-25 09:41:21
  */
 export default {
   'systemManagement.userMaintenance.userId': '用户 ID',
@@ -29,4 +29,6 @@ export default {
   'systemManagement.flowDesign.flowDelete': '删除模型',
   'systemManagement.flowDesign.flowImport': '导入模型',
   'systemManagement.flowDesign.flowExport': '导出模型',
+  'systemManagement.flowConfig.flowName': '流程模型名称',
+  'systemManagement.flowConfig.flowChart': '流程模型选择',
 };
