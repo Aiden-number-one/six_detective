@@ -13,7 +13,7 @@ function JobBatch({ form, batch }) {
       <Form.Item label="作业流程">
         {getFieldDecorator('jobname', {
           initialValue: jobname,
-          rules: [{ required: true, message: 'Please input your note!' }],
+          rules: [{ required: true, message: 'Please input job name!' }],
         })(<Input disabled />)}
       </Form.Item>
       <Form.Item label="是否强制执行">
@@ -36,6 +36,10 @@ function SelectJob({ form, taskPoints }) {
 
   function handleChange(e) {
     setRadioVal(e.target.value);
+  }
+
+  function handleSelectChange(val) {
+    console.log(val);
   }
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -60,12 +64,14 @@ function SelectJob({ form, taskPoints }) {
       </Form.Item>
       {radioVal === '1' && (
         <Form.Item>
-          {getFieldDecorator('select', {
-            rules: [{ required: true, message: 'Please select your favourite colors!' }],
+          {getFieldDecorator('taskOption', {
+            rules: [{ required: true, message: 'Please select node name!' }],
           })(
-            <Select placeholder="Please select favourite colors">
+            <Select placeholder="Please select node name" onChange={handleSelectChange}>
               {taskPoints.map(({ taskId, nodeName }) => (
-                <Option value={taskId}>{nodeName}</Option>
+                <Option value={taskId} key={taskId}>
+                  {nodeName}
+                </Option>
               ))}
             </Select>,
           )}
