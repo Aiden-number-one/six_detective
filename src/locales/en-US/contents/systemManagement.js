@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 16:20:16
+ * @LastEditTime: 2019-11-22 18:55:29
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -23,4 +23,10 @@ export default {
   'systemManagement.codeMaintenance.subitemID': 'Sub-item ID',
   'systemManagement.codeMaintenance.subitemName': 'Sub-item Name',
   'systemManagement.codeMaintenance.sequence': 'Sequence',
+  'systemManagement.flowDesign.newFlowChart': 'New Flow Chart',
+  'systemManagement.flowDesign.flowRelease': 'Release',
+  'systemManagement.flowDesign.flowModify': 'Modify',
+  'systemManagement.flowDesign.flowDelete': 'Delete',
+  'systemManagement.flowDesign.flowImport': 'Import',
+  'systemManagement.flowDesign.flowExport': 'Export',
 };

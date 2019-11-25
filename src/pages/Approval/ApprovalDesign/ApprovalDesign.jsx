@@ -4,6 +4,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Button, Tabs, Modal, Upload, message } from 'antd';
 import { connect } from 'dva';
+import { formatMessage } from 'umi/locale';
 // import classNames from 'classnames';
 import styles from './ApprovalDesign.less';
 
@@ -216,20 +217,20 @@ class ApprovalDesign extends PureComponent {
             <div className={styles.contentBox}>
               <div className={styles.buttonBox}>
                 <Button onClick={this.deployModel} type="primary" icon="deployment-unit">
-                  部署模型
+                  {formatMessage({ id: 'systemManagement.flowDesign.flowRelease' })}
                 </Button>
                 <Button onClick={this.goProcessPage} type="primary" icon="edit">
-                  编辑模型
+                  {formatMessage({ id: 'systemManagement.flowDesign.flowModify' })}
                 </Button>
                 <Button type="primary" icon="delete" onClick={this.delete}>
-                  删除模型
+                  {formatMessage({ id: 'systemManagement.flowDesign.flowDelete' })}
                 </Button>
                 <Button onClick={this.exportModel} type="primary" icon="export">
-                  导出模型
+                  {formatMessage({ id: 'systemManagement.flowDesign.flowExport' })}
                 </Button>
                 <Upload onChange={info => this.importFileStatus(info)} action="/upload">
                   <Button type="primary" icon="import">
-                    导入模型
+                    {formatMessage({ id: 'systemManagement.flowDesign.flowImport' })}
                   </Button>
                 </Upload>
               </div>
@@ -244,7 +245,7 @@ class ApprovalDesign extends PureComponent {
                     onClick={this.showModal}
                     style={{ marginRight: '0', float: 'right' }}
                   >
-                    新建模型
+                    {formatMessage({ id: 'systemManagement.flowDesign.newFlowChart' })}
                   </Button>
                 </div>
                 <Tabs

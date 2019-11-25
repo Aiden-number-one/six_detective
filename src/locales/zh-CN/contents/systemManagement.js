@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:26:09
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 16:18:25
+ * @LastEditTime: 2019-11-22 18:56:34
  */
 export default {
   'systemManagement.userMaintenance.userId': '用户 ID',
@@ -23,4 +23,10 @@ export default {
   'systemManagement.codeMaintenance.subitemID': '字典子项',
   'systemManagement.codeMaintenance.subitemName': '子项名称',
   'systemManagement.codeMaintenance.sequence': '条目排序',
+  'systemManagement.flowDesign.newFlowChart': '新建模型',
+  'systemManagement.flowDesign.flowRelease': '部署模型',
+  'systemManagement.flowDesign.flowModify': '编辑模型',
+  'systemManagement.flowDesign.flowDelete': '删除模型',
+  'systemManagement.flowDesign.flowImport': '导入模型',
+  'systemManagement.flowDesign.flowExport': '导出模型',
 };
