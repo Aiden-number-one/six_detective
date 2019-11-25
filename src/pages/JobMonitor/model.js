@@ -1,23 +1,25 @@
 /*
- * @Des: Please Modify First
+ * @Des: job monitor model
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-19 19:31:10
  * @LastEditors: iron
- * @LastEditTime: 2019-11-21 14:01:03
+ * @LastEditTime: 2019-11-22 19:14:34
  */
 import fetch from '@/utils/request.default';
+import { formatTimeString, formatTree } from '@/utils/utils';
 
 export default {
   namespace: 'tm',
   state: {
+    jobs: [],
+    jobDetail: {},
     tasks: [],
-    taskDetail: {},
-    taskBatches: [],
+    taskPoints: [],
     eachBatches: [],
   },
   reducers: {
-    getTasks(state, { payload: t }) {
+    getJobs(state, { payload: t }) {
       const list = [
         { type: 0, name: '出错中断', children: [] },
         { type: 1, name: '执行中', children: [] },
@@ -26,7 +28,7 @@ export default {
         { type: 4, name: '新建', children: [] },
       ];
 
-      const l = list.map(item => {
+      const jobs = list.map(item => {
         t.forEach(v => {
           const { executeFlag } = v;
           if (item.type === 0 && executeFlag === 'B') {
@@ -44,49 +46,83 @@ export default {
 
       return {
         ...state,
-        tasks: l,
+        jobs,
       };
     },
-    getTaskDetail(state, { payload: taskDetail }) {
+    getJobDetail(state, { payload: jobDetail }) {
       return {
         ...state,
-        taskDetail,
+        jobDetail,
       };
     },
-    getTaskBatches(state, { payload: taskBatches }) {
+    getTasksOfJob(state, { payload: tasks }) {
       return {
         ...state,
-        taskBatches,
+        tasks: formatTree(tasks, 'monitorId', 'parentMonitorId'),
+      };
+    },
+    getTaskPointsOfJob(state, { payload: taskPoints }) {
+      return {
+        ...state,
+        taskPoints,
       };
     },
     getEachBatch(state, { payload: eachBatches }) {
+      const batches = eachBatches.map(item => {
+        const { successNum, errorNum, taskSum, startTime, endTime } = item;
+
+        if (taskSum > 0) {
+          const unExcuteNum = taskSum - successNum - errorNum;
+          return {
+            ...item,
+            startTimeFormat: formatTimeString(startTime),
+            endTimeFormat: formatTimeString(endTime),
+            result: [
+              { name: '执行成功', value: successNum },
+              { name: '执行失败', value: errorNum },
+              { name: '未执行', value: unExcuteNum },
+            ],
+          };
+        }
+        return {
+          result: [{ name: '执行中', value: 0 }],
+        };
+      });
+
       return {
         ...state,
-        eachBatches,
+        eachBatches: batches,
       };
     },
   },
   effects: {
-    *queryTasks({ params }, { call, put }) {
+    *queryJobs({ params }, { call, put }) {
       const { items } = yield call(fetch('get_all_job_deal_info'), params);
       yield put({
-        type: 'getTasks',
+        type: 'getJobs',
         payload: items,
       });
     },
-    *queryTaskDetail({ params }, { call, put }) {
+    *queryJobDetail({ params }, { call, put }) {
       const { items } = yield call(fetch('get_job_finish_rate_info'), params);
       if (items.length > 0) {
         yield put({
-          type: 'getTaskDetail',
+          type: 'getJobDetail',
           payload: items,
         });
       }
     },
-    *queryTaskBatches({ params }, { call, put }) {
+    *queryTasksOfJob({ params }, { call, put }) {
       const { items } = yield call(fetch('get_job_detail_flow_info'), params);
       yield put({
-        type: 'getTaskBatches',
+        type: 'getTasksOfJob',
+        payload: items,
+      });
+    },
+    *queryTaskPointsOfJob({ params }, { call, put }) {
+      const { items } = yield call(fetch('get_job_xml_nodeinfo'), params);
+      yield put({
+        type: 'getTaskPointsOfJob',
         payload: items,
       });
     },
