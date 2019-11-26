@@ -38,12 +38,12 @@ function JobMonitor({ dispatch, loading, jobs, tasks, taskPoints, eachBatches })
     });
   }
 
-  if (loading['tm/queryJob']) {
+  if (loading['tm/queryJobs']) {
     return <p>loading</p>;
   }
 
   if (jobs.length === 0) {
-    return <p>暂无数据1</p>;
+    return <p>暂无数据</p>;
   }
 
   return (
@@ -54,6 +54,7 @@ function JobMonitor({ dispatch, loading, jobs, tasks, taskPoints, eachBatches })
         </Col>
         <Col span={18} offset={1}>
           <JobDetail
+            loading={loading}
             tasks={tasks}
             taskPoints={taskPoints}
             eachBatches={eachBatches}

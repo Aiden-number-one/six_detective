@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-11-22 14:29:12
+ * @LastEditTime: 2019-11-26 11:27:11
  * @LastEditors: iron
  */
 
@@ -188,10 +188,31 @@ export function formatTimeString(time) {
   if (!time) {
     return '';
   }
+  let t = time.toString();
+  const len = t.length;
+  t = len > 14 ? t.slice(0, 14) : t;
+  t = len < 14 ? `${t}${Array(14 - len + 1).join('0')}` : t;
 
-  return `${time.substring(0, 4)}-${time.substring(4, 6)}-${time.substring(6, 8)} ${time.substring(
-    8,
-    10,
-  )}:${time.substring(10, 12)}:${time.substring(12, 14)}`;
+  return t.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/g, '$1-$2-$3 $4:$5:$6');
+}
+
+export function msFormat(ms) {
+  const s = Math.floor(parseInt(ms, 10) / 1000);
+  let min = 0;
+  let h = 0;
+  let sec = 0;
+  if (s >= 60) {
+    min = Math.floor(s / 60);
+    sec = Math.floor(s % 60);
+  }
+
+  if (min >= 60) {
+    h = Math.floor(sec / 60);
+    min = Math.floor(min % 60);
+  }
+
+  [h, min, sec] = [h, min, sec].map(t => (t >= 10 ? t : `0${t}`));
+
+  return `${h}:${min}:${sec}`;
 }
 export { isProOrDev, isUrl, geneMenuData, getRandowNVPS, passWordStrength };

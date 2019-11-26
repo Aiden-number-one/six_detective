@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Table, Divider } from 'antd';
+import { Row, Col, Table, Divider, Modal, Spin } from 'antd';
 import TaskDetailCharts from './JobDetailCharts';
 import TaskDetailBatch from './JobDetailBatch';
-// import styles from './index.less';
+import styles from './index.less';
 
 const { Column } = Table;
 
-export default function({ tasks, taskPoints, eachBatches, getTasks }) {
+function Loading({ visible, children }) {
+  return <Spin spinning={!!visible}>{children}</Spin>;
+}
+
+export default function({ loading, tasks, taskPoints, eachBatches, getTasks }) {
   const [batch, setBatch] = useState({
     executeMsg: '-',
     nodeName: '-',
@@ -32,12 +36,14 @@ export default function({ tasks, taskPoints, eachBatches, getTasks }) {
 
   return (
     <div>
-      <Row type="flex" align="middle">
+      <Loading visible={loading['tm/queryEachBatch']}>
         <TaskDetailBatch batch={batch} taskPoints={taskPoints} />
-      </Row>
+      </Loading>
       <Divider />
       <Row>
-        <TaskDetailCharts dataSource={eachBatches} getEachBatch={getEachBatch} />
+        <Loading visible={loading['tm/queryEachBatch']}>
+          <TaskDetailCharts dataSource={eachBatches} getEachBatch={getEachBatch} />
+        </Loading>
         <Divider />
         <Row>
           <Col span={5}>作业批次：{batch.batchNo}</Col>
@@ -47,7 +53,14 @@ export default function({ tasks, taskPoints, eachBatches, getTasks }) {
           <Col span={3}>执行类型：{batch.executeTypeName}</Col>
           <Col>111</Col>
         </Row>
-        <Table rowKey="nodeName" dataSource={tasks} scroll={{ x: '100%' }} pagination={false}>
+        <Table
+          rowKey="nodeName"
+          dataSource={tasks}
+          scroll={{ x: '100%' }}
+          pagination={false}
+          defaultExpandAllRows
+          loading={loading['tm/queryTasksOfJob']}
+        >
           <Column title="节点" ellipsis dataIndex="nodeName" width={120} />
           <Column title="任务名称" ellipsis dataIndex="jobname" width={150} />
           <Column title="任务名称" dataIndex="memberTypeName" width={100} />
@@ -56,7 +69,29 @@ export default function({ tasks, taskPoints, eachBatches, getTasks }) {
           <Column title="开始时间" dataIndex="startTime" width={150} />
           <Column title="执行时长" dataIndex="zxsj" width={100} />
           <Column title="执行状态" dataIndex="executeFlagName" width={100} />
-          <Column title="执行信息(点击显示全部信息)" ellipsis dataIndex="executeMsg" width={200} />
+          <Column
+            ellipsis
+            title="执行信息(点击显示全部信息)"
+            dataIndex="executeMsg"
+            width={200}
+            className={styles.pointer}
+            onCell={record => ({
+              onClick() {
+                const msg = record.executeMsg.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;');
+                Modal.warn({
+                  title: '查看日志',
+                  width: '60%',
+                  maxHeight: 200,
+                  content: (
+                    <div
+                      // eslint-disable-next-line react/no-danger
+                      dangerouslySetInnerHTML={{ __html: msg }}
+                    />
+                  ),
+                });
+              },
+            })}
+          />
         </Table>
       </Row>
     </div>

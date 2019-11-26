@@ -4,10 +4,10 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-19 19:31:10
  * @LastEditors: iron
- * @LastEditTime: 2019-11-22 19:14:34
+ * @LastEditTime: 2019-11-26 10:59:38
  */
 import fetch from '@/utils/request.default';
-import { formatTimeString, formatTree } from '@/utils/utils';
+import { formatTimeString, msFormat, formatTree } from '@/utils/utils';
 
 export default {
   namespace: 'tm',
@@ -69,12 +69,13 @@ export default {
     },
     getEachBatch(state, { payload: eachBatches }) {
       const batches = eachBatches.map(item => {
-        const { successNum, errorNum, taskSum, startTime, endTime } = item;
+        const { successNum, errorNum, taskSum, startTime, endTime, zxsj } = item;
 
         if (taskSum > 0) {
           const unExcuteNum = taskSum - successNum - errorNum;
           return {
             ...item,
+            zxsjFormat: msFormat(zxsj),
             startTimeFormat: formatTimeString(startTime),
             endTimeFormat: formatTimeString(endTime),
             result: [

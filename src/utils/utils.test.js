@@ -1,4 +1,4 @@
-import { isUrl, formatTree } from './utils';
+import { isUrl, formatTree, formatTimeString, msFormat } from './utils';
 
 describe('isUrl tests', () => {
   it('should return false for invalid and corner case inputs', () => {
@@ -97,5 +97,27 @@ describe('formatTree test', () => {
 
   it('should input will generate output', () => {
     expect(formatTree(input)).toEqual(output);
+  });
+});
+
+describe('formatTimeString test', () => {
+  it('should void string', () => {
+    expect(formatTimeString('')).toEqual('');
+    expect(formatTimeString(NaN)).toEqual('');
+    expect(formatTimeString(undefined)).toEqual('');
+  });
+
+  it('should return  date and time format', () => {
+    expect(formatTimeString(2019112610)).toEqual('2019-11-26 10:00:00');
+    expect(formatTimeString(20191126103312)).toEqual('2019-11-26 10:33:12');
+    expect(formatTimeString(20191126103312789)).toEqual('2019-11-26 10:33:12');
+    expect(formatTimeString('20191126103312789')).toEqual('2019-11-26 10:33:12');
+  });
+});
+
+describe('msFormat test', () => {
+  it('should return time format', () => {
+    expect(msFormat(92964)).toEqual('00:01:32');
+    expect(msFormat('92964')).toEqual('00:01:32');
   });
 });

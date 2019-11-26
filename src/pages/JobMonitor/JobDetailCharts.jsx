@@ -16,8 +16,8 @@ export default function({ dataSource, getEachBatch }) {
   return (
     <ul className={styles['chart-container']}>
       {dataSource.map(({ result, ...item }) => (
-        <li onClick={() => handleClick(item)}>
-          <Chart width="240" height="140" data={result} padding={[10, 'auto']}>
+        <li key={item.batchNo} onClick={() => handleClick(item)}>
+          <Chart width={240} height={140} data={result} padding={[10, 'auto']}>
             <Coord type="theta" radius={0.8} innerRadius={0.7} />
             <Legend position="left-center" />
             <Guide>

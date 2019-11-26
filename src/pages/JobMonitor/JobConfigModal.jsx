@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Modal, Steps, Input, Form, Radio, Select, Table } from 'antd';
+import { Modal, Steps, Input, Form, Radio, Select, Table, Button } from 'antd';
 
 const { Option } = Select;
 const { Column } = Table;
 const { Step } = Steps;
+const EditableContext = React.createContext();
 
-function JobBatch({ form, batch }) {
+function JobBatch({ form, batch, visible }) {
   const { jobname } = batch;
   const { getFieldDecorator } = form;
   return (
-    <Form labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
+    <Form
+      labelCol={{ span: 5 }}
+      wrapperCol={{ span: 16 }}
+      style={{ display: visible ? 'block' : 'none' }}
+    >
       <Form.Item label="作业流程">
         {getFieldDecorator('jobname', {
           initialValue: jobname,
@@ -30,7 +35,7 @@ function JobBatch({ form, batch }) {
   );
 }
 
-function SelectJob({ form, taskPoints }) {
+function SelectJob({ form, taskPoints, visible, getTaskIds }) {
   const [radioVal, setRadioVal] = useState('1');
   const { getFieldDecorator } = form;
 
@@ -41,17 +46,13 @@ function SelectJob({ form, taskPoints }) {
   function handleSelectChange(val) {
     console.log(val);
   }
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-    getCheckboxProps: record => ({
-      disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      name: record.name,
-    }),
-  };
+
   return (
-    <Form labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
+    <Form
+      labelCol={{ span: 5 }}
+      wrapperCol={{ span: 16 }}
+      style={{ display: visible ? 'block' : 'none' }}
+    >
       <Form.Item label="">
         {getFieldDecorator('isPartialExcu', {
           initialValue: radioVal,
@@ -80,10 +81,14 @@ function SelectJob({ form, taskPoints }) {
       {radioVal === '0' && (
         <Table
           rowKey="taskId"
-          rowSelection={rowSelection}
           scroll={{ y: 220 }}
           dataSource={taskPoints}
           pagination={false}
+          rowSelection={{
+            onChange: selectedRowKeys => {
+              getTaskIds(selectedRowKeys);
+            },
+          }}
         >
           <Column title="节点名称" ellipsis dataIndex="nodeName" />
           <Column title="任务名称" ellipsis dataIndex="taskName" />
@@ -94,12 +99,151 @@ function SelectJob({ form, taskPoints }) {
   );
 }
 
-function EnvSetting() {
-  return <div>env setting</div>;
+function EditableCell({ editable, children, dataIndex, restProps }) {
+  return (
+    <td {...restProps}>
+      {editable ? (
+        <EditableContext.Consumer>
+          {({ getFieldDecorator }) => (
+            <Form.Item style={{ margin: 0 }}>
+              {dataIndex === 'title' &&
+                getFieldDecorator('envTitle', {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'title is required.',
+                    },
+                  ],
+                })(
+                  <Select placeholder="please select title" style={{ width: 120 }}>
+                    <Option value="aa">1231</Option>
+                    <Option value="bb">789</Option>
+                  </Select>,
+                )}
+
+              {dataIndex === 'name' &&
+                getFieldDecorator('envName', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: true,
+                      message: 'name is required.',
+                    },
+                  ],
+                })(<Input placeholder="please input name" />)}
+            </Form.Item>
+          )}
+        </EditableContext.Consumer>
+      ) : (
+        children
+      )}
+    </td>
+  );
 }
 
-const WrapJobBatch = Form.create()(JobBatch);
-const WrapSelectJob = Form.create()(SelectJob);
+function EnvSetting({ form, visible, taskIds }) {
+  const [count, setCount] = useState(1);
+  const [dataSource, setDataSource] = useState([]);
+
+  function handleAdd() {
+    setDataSource([
+      ...dataSource,
+      {
+        no: count,
+      },
+    ]);
+    setCount(count + 1);
+  }
+
+  function handleDeleteAll() {
+    setCount(1);
+    setDataSource([]);
+  }
+
+  function handleDeleteOne({ no }) {
+    setDataSource(dataSource.filter(item => item.no !== no));
+  }
+
+  function handleCommit() {
+    form.validateFields((err, values) => {
+      console.log(values);
+      console.log(taskIds);
+    });
+  }
+
+  return (
+    <div style={{ display: visible ? 'block' : 'none' }}>
+      <div>
+        <Button type="primary" onClick={handleAdd}>
+          新增
+        </Button>
+        <Button type="danger" onClick={handleDeleteAll}>
+          删除全部
+        </Button>
+      </div>
+      <EditableContext.Provider value={form}>
+        <Table
+          rowKey="no"
+          dataSource={dataSource}
+          pagination={false}
+          scroll={{ y: 200 }}
+          style={{ margin: '20px 0' }}
+          components={{
+            body: {
+              cell: EditableCell,
+            },
+          }}
+        >
+          <Column title="序号" align="center" dataIndex="no" width={60} />
+          <Column
+            title="名称"
+            align="center"
+            onCell={record => ({
+              record,
+              dataIndex: 'title',
+              editable: true,
+            })}
+          />
+          <Column
+            title="变量值"
+            align="center"
+            onCell={record => ({
+              record,
+              dataIndex: 'name',
+              editable: true,
+            })}
+          />
+          <Column
+            title="操作"
+            align="center"
+            width={80}
+            dataIndex="action"
+            render={(_text, record) => <a onClick={() => handleDeleteOne(record)}>删除</a>}
+          />
+        </Table>
+      </EditableContext.Provider>
+      <Button type="primary" onClick={handleCommit}>
+        执行
+      </Button>
+    </div>
+  );
+}
+
+function StepContent({ step, batch, taskPoints, form }) {
+  const [taskIds, setTaskIds] = useState('');
+  function getTaskIds(ids) {
+    setTaskIds(ids);
+  }
+  return (
+    <>
+      <JobBatch batch={batch} form={form} visible={step === 0} />
+      <SelectJob taskPoints={taskPoints} form={form} visible={step === 1} getTaskIds={getTaskIds} />
+      <EnvSetting form={form} visible={step === 2} taskIds={taskIds} />
+    </>
+  );
+}
+
+const WrapStepContent = Form.create({ name: 'jobStep' })(StepContent);
 
 export default function({ visible, onCancelModal, batch, taskPoints }) {
   const [curStep, setCurStep] = useState(0);
@@ -119,9 +263,7 @@ export default function({ visible, onCancelModal, batch, taskPoints }) {
         <Step title="选择任务" />
         <Step title="变量设置" />
       </Steps>
-      {curStep === 0 && <WrapJobBatch batch={batch} />}
-      {curStep === 1 && <WrapSelectJob taskPoints={taskPoints} />}
-      {curStep === 2 && <EnvSetting />}
+      <WrapStepContent step={curStep} batch={batch} taskPoints={taskPoints} />
     </Modal>
   );
 }

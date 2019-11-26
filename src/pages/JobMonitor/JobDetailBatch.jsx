@@ -9,7 +9,7 @@ export default function({ batch, taskPoints }) {
   }
 
   return (
-    <>
+    <Row type="flex" align="middle">
       <TaskConfigModal
         visible={cfgVisible}
         taskPoints={taskPoints}
@@ -38,13 +38,13 @@ export default function({ batch, taskPoints }) {
               onClick={() => handleTaskConfig()}
             />
           </Col>
-          <Col span={12}>时长：{batch.zxsj}</Col>
+          <Col span={12}>时长：{batch.zxsjFormat}</Col>
         </Row>
       </Col>
       <Col span={8}>
         <Row>开始时间：{batch.startTimeFormat}</Row>
         <Row>结束时间：{batch.endTimeFormat}</Row>
       </Col>
-    </>
+    </Row>
   );
 }
