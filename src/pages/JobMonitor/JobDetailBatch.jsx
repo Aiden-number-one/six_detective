@@ -9,7 +9,7 @@ export default function({ batch, taskPoints }) {
   }
 
   return (
-    <Row type="flex" align="middle">
+    <>
       <TaskConfigModal
         visible={cfgVisible}
         taskPoints={taskPoints}
@@ -18,7 +18,9 @@ export default function({ batch, taskPoints }) {
       />
       <Col span={8}>
         <Row type="flex" align="middle">
-          <Col span={12}>{batch.executeMsg}</Col>
+          <Col span={12} align="center">
+            {batch.executeMsg}
+          </Col>
           <Col span={12}>
             <Row>{batch.memberNo}</Row>
             <Row>{batch.nodeName}</Row>
@@ -45,6 +47,6 @@ export default function({ batch, taskPoints }) {
         <Row>开始时间：{batch.startTimeFormat}</Row>
         <Row>结束时间：{batch.endTimeFormat}</Row>
       </Col>
-    </Row>
+    </>
   );
 }

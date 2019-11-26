@@ -25,10 +25,8 @@ export default function({ jobs, getJob }) {
     }
   }
   return (
-    <div>
-      <Tree showLine onSelect={handleSelect}>
-        {loopjobs(jobs)}
-      </Tree>
-    </div>
+    <Tree showLine onSelect={handleSelect} style={{ maxHeight: 800, overflowY: 'auto' }}>
+      {loopjobs(jobs)}
+    </Tree>
   );
 }
