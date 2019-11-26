@@ -16,7 +16,7 @@ import { md5 } from 'md5js';
 import { notification } from 'antd';
 import { getRandowNVPS, isProOrDev } from './utils';
 
-const API_PREFFIX = '/mockapi';
+const API_PREFFIX = '/api';
 const VERSION = 'v2.0';
 const BUSINESS_PREFFIX = 'bayconnect.superlop';
 const DEFAULT_PARAM = { bcLangType: 'ZHCN' };
