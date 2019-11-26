@@ -1,0 +1,8 @@
+
+
+1.download
+https://nodejs.org/dist/v12.13.1/node-v12.13.1-x64.msi
+
+2.set NODE_HOME env var
+
+3.add NODE_HOME to Path env var

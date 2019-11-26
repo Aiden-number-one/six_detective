@@ -2,6 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Icon, Table, Modal, Input, Button, Select } from 'antd';
 import { connect } from 'dva';
+import { formatMessage } from 'umi/locale';
 // import classNames from 'classnames';
 import styles from './TemplateSet.less';
 
@@ -107,12 +108,12 @@ class TemplateConfig extends PureComponent {
     // };
     const checkColumns = [
       {
-        title: '模板名称',
+        title: formatMessage({ id: 'systemManagement.template.templateName' }),
         align: 'center',
         dataIndex: 'templateName',
       },
       {
-        title: '模板ID',
+        title: formatMessage({ id: 'systemManagement.template.templateId' }),
         align: 'center',
         dataIndex: 'templateId',
       },
@@ -122,22 +123,22 @@ class TemplateConfig extends PureComponent {
         dataIndex: 'status',
       },
       {
-        title: '标题',
+        title: formatMessage({ id: 'systemManagement.template.templateTitle' }),
         align: 'center',
         dataIndex: 'templateTitle',
       },
       {
-        title: '模板内容',
+        title: formatMessage({ id: 'systemManagement.template.templateContent' }),
         align: 'center',
         dataIndex: 'templateContent',
       },
       {
-        title: '关键字',
+        title: formatMessage({ id: 'systemManagement.template.keyword' }),
         align: 'center',
         dataIndex: 'templateKeys',
       },
       {
-        title: '操作',
+        title: formatMessage({ id: 'app.common.operation' }),
         dataIndex: 'operation',
         align: 'center',
         render: (text, record) => <Icon type="edit" onClick={() => this.showModel(record)} />,
@@ -160,15 +161,17 @@ class TemplateConfig extends PureComponent {
               visible={this.state.visible}
               closable={false}
               footer={false}
+              cancelText={formatMessage({ id: 'app.common.cancel' })}
+              okText={formatMessage({ id: 'app.common.save' })}
             >
               <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                <Form.Item label="模板名称">
+                <Form.Item label={formatMessage({ id: 'systemManagement.template.templateName' })}>
                   {getFieldDecorator('templateName', {
                     rules: [{ required: true, message: 'Please input your name!' }],
                     initialValue: formValue.templateName,
                   })(<Input disabled />)}
                 </Form.Item>
-                <Form.Item label="模板ID">
+                <Form.Item label={formatMessage({ id: 'systemManagement.template.templateId' })}>
                   {getFieldDecorator('templateId', {
                     rules: [{ required: true, message: 'Please input your id!' }],
                     initialValue: formValue.templateId,
@@ -185,19 +188,21 @@ class TemplateConfig extends PureComponent {
                     </Select>,
                   )}
                 </Form.Item>
-                <Form.Item label="标题">
+                <Form.Item label={formatMessage({ id: 'systemManagement.template.templateTitle' })}>
                   {getFieldDecorator('templateTitle', {
                     rules: [{ required: true, message: 'Please input your title!' }],
                     initialValue: formValue.templateTitle,
                   })(<Input />)}
                 </Form.Item>
-                <Form.Item label="模板内容:">
+                <Form.Item
+                  label={formatMessage({ id: 'systemManagement.template.templateContent' })}
+                >
                   {getFieldDecorator('templateContent', {
                     rules: [{ required: true, message: 'Please input your content!' }],
                     initialValue: formValue.templateContent,
                   })(<TextArea rows={4} />)}
                 </Form.Item>
-                <Form.Item label="关键字">
+                <Form.Item label={formatMessage({ id: 'systemManagement.template.keyword' })}>
                   {getFieldDecorator('templateKeys', {
                     rules: [{ required: true, message: 'Please input your keyword!' }],
                     initialValue: formValue.templateKeys,

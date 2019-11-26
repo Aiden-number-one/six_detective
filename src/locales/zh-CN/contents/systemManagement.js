@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:26:09
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-25 09:41:21
+ * @LastEditTime: 2019-11-25 10:23:00
  */
 export default {
   'systemManagement.userMaintenance.userId': '用户 ID',
@@ -31,4 +31,9 @@ export default {
   'systemManagement.flowDesign.flowExport': '导出模型',
   'systemManagement.flowConfig.flowName': '流程模型名称',
   'systemManagement.flowConfig.flowChart': '流程模型选择',
+  'systemManagement.template.templateName': '模板名称',
+  'systemManagement.template.templateId': '模板ID',
+  'systemManagement.template.templateTitle': '标题',
+  'systemManagement.template.templateContent': '模板内容',
+  'systemManagement.template.keyword': '关键字',
 };
