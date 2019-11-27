@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-10-31 16:15:52
  * @LastEditors: iron
- * @LastEditTime: 2019-11-13 15:23:51
+ * @LastEditTime: 2019-11-27 14:27:19
  -->
 
 # Super LOP Web
@@ -69,7 +69,7 @@ npm test
 const { items, msg } = yield call(/* url */,/* params */)
 ```
 
-2. unified error handle just deal with status code
+2. unified error handle, just deal with status code
 
 ```javascript
 function errorHandler(error) {

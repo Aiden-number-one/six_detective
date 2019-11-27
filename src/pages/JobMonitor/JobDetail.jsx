@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import dynamic from 'umi/dynamic';
 import { Row, Col, Table, Divider, Modal, Spin } from 'antd';
-import TaskDetailCharts from './JobDetailCharts';
+
 import TaskDetailBatch from './JobDetailBatch';
 import styles from './index.less';
 
 const { Column } = Table;
 
-function Loading({ visible, children }) {
+// ssr or unit test
+// refer: https://github.com/alibaba/BizCharts/issues/603
+export const TaskDetailCharts = dynamic({
+  async loader() {
+    return import('./JobDetailCharts');
+  },
+});
+
+export function Loading({ visible, children }) {
   return <Spin spinning={!!visible}>{children}</Spin>;
 }
 
-function TaskTable({ loading, tasks }) {
+export function TaskTable({ loading, tasks }) {
   return (
     <Table
       rowKey="nodeName"
@@ -55,7 +64,8 @@ function TaskTable({ loading, tasks }) {
     </Table>
   );
 }
-function FlowFrame({ visible, batch, onload }) {
+
+export function FlowFrame({ visible, batch, onload }) {
   return (
     <Loading visible={visible}>
       <iframe
