@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Row, Col, Icon } from 'antd';
+import { Row, Col, Icon, Message } from 'antd';
 import TaskConfigModal from './JobConfigModal';
 
 export default function({ batch, taskPoints }) {
   const [cfgVisible, setCfgVisible] = useState(false);
   function handleTaskConfig() {
-    setCfgVisible(true);
+    if (batch.jobId) {
+      setCfgVisible(true);
+    } else {
+      Message.warn('please select one job first !!!');
+    }
   }
 
   return (
@@ -37,7 +41,7 @@ export default function({ batch, taskPoints }) {
                 fontSize: 28,
                 cursor: 'pointer',
               }}
-              onClick={() => handleTaskConfig()}
+              onClick={handleTaskConfig}
             />
           </Col>
           <Col span={12}>时长：{batch.zxsjFormat}</Col>

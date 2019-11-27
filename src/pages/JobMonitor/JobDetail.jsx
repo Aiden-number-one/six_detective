@@ -81,8 +81,10 @@ export default function({ loading, tasks, taskPoints, eachBatches, getTasks }) {
     memberNo: '-',
     batchNo: '-',
     errorNum: 0,
+    zxsjFormat: 0,
     startTimeFormat: '-',
     endTimeFormat: '-',
+    executeTypeName: '-',
   });
 
   useEffect(() => {
