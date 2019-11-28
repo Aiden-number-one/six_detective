@@ -2,8 +2,8 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-11-19 17:04:57
- * @LastEditors: lan
+ * @LastEditTime: 2019-11-27 16:53:01
+ * @LastEditors: dailinbo
  * @Email: mus@szkingdom.com
  */
 const prefix = '';
@@ -42,7 +42,8 @@ export default {
   scheduleModify: `${prefix}set_schedule_modify`,
   scheduleAdd: `${prefix}set_schedule_add`,
   downloadFile: `${prefix}file_download_quick`,
-  getUserList: `${prefix}get_user_list_impl`,
+  // getUserList: `${prefix}get_user_list_impl`,
+  getUserList: `${prefix}get_sysuser_list`,
   addUser: `${prefix}set_add_customer`,
   updateUser: `${prefix}set_user_edit`,
   operationUser: `${prefix}set_user_service_impl`,

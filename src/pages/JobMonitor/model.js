@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-19 19:31:10
  * @LastEditors: iron
- * @LastEditTime: 2019-11-26 10:59:38
+ * @LastEditTime: 2019-11-27 11:00:36
  */
 import fetch from '@/utils/request.default';
 import { formatTimeString, msFormat, formatTree } from '@/utils/utils';
@@ -21,24 +21,24 @@ export default {
   reducers: {
     getJobs(state, { payload: t }) {
       const list = [
-        { type: 0, name: '出错中断', children: [] },
-        { type: 1, name: '执行中', children: [] },
-        { type: 2, name: '成功完成', children: [] },
-        { type: 3, name: '出错完成', children: [] },
-        { type: 4, name: '新建', children: [] },
+        { type: 0, name: '出错中断', color: '#ea6b74', icon: 'close-circle', children: [] },
+        { type: 1, name: '执行中', color: '#333333', icon: 'fire', children: [] },
+        { type: 2, name: '成功完成', color: '#63c9d5', icon: 'check-circle', children: [] },
+        { type: 3, name: '出错完成', color: '#f1c40f', icon: 'close-circle', children: [] },
+        { type: 4, name: '新建', color: '#bac3d0', icon: 'plus-circle', children: [] },
       ];
 
       const jobs = list.map(item => {
         t.forEach(v => {
           const { executeFlag } = v;
           if (item.type === 0 && executeFlag === 'B') {
-            item.children.push(v);
+            item.children.push({ ...v, color: item.color });
           }
           if (item.type === 2 && executeFlag === 'S') {
-            item.children.push(v);
+            item.children.push({ ...v, color: item.color });
           }
           if (item.type === 4 && executeFlag === null) {
-            item.children.push(v);
+            item.children.push({ ...v, color: item.color });
           }
         });
         return item;

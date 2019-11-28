@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 13:57:10
+ * @LastEditTime: 2019-11-28 14:23:51
  */
 
 import React, { Component } from 'react';
@@ -50,29 +50,29 @@ class UserManagement extends Component {
     },
     columns: [
       {
-        title: '登陆名',
-        dataIndex: 'loginName',
-        key: 'loginName',
+        title: formatMessage({ id: 'app.common.userId' }),
+        dataIndex: 'roleId',
+        key: 'roleId',
       },
       {
-        title: `${formatMessage({ id: 'app.common.username' })}`,
-        dataIndex: 'customerName',
-        key: 'customerName',
+        title: formatMessage({ id: 'app.common.username' }),
+        dataIndex: 'roleName',
+        key: 'roleName',
       },
       {
-        title: '邮箱',
-        dataIndex: 'email',
-        key: 'email',
+        title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
+        dataIndex: 'userState',
+        key: 'userState',
       },
       {
-        title: '公司部门',
-        dataIndex: 'departmentName',
-        key: 'departmentName',
+        title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
+        dataIndex: 'updateTime',
+        key: 'updateTime',
       },
       {
-        title: `${formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' })}`,
-        dataIndex: 'custStatus',
-        key: 'custStatus',
+        title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
+        dataIndex: 'updateTime',
+        key: 'updateTime',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -466,7 +466,7 @@ class UserManagement extends Component {
   render() {
     const { loading, orgs, userManagementData } = this.props;
     const { userInfo, page } = this.state;
-
+    console.log('userManagementData.items=', userManagementData.items);
     return (
       <PageHeaderWrapper>
         <div>
