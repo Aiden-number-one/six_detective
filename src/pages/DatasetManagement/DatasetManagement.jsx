@@ -27,6 +27,7 @@ export default class DatasetManagement extends PureComponent {
 
   render() {
     const { classifyTreeData } = this.props;
+    console.log('classifyTreeData=', classifyTreeData);
     return (
       <PageHeaderWrapper>
         <div>
