@@ -1,0 +1,12 @@
+{{#if flag}}
+{{else}}
+<option value="">--请选择--</option>
+{{#each this}}
+	{{#if jdbcString}}
+		<option value="{{driverId}}" urlInfo="{{jdbcString}}" className="{{className}}" driverId="{{driverId}}" driverName="{{driverName}}">{{driverName}}</option>
+	
+	{{else}}
+		<option value="{{driverId}}" urlInfo="{{urlInfo}}" className="{{className}}" driverId="{{driverId}}" driverName="{{driverName}}">{{driverName}}</option>
+	 {{/if}}
+{{/each}}
+{{/if}}

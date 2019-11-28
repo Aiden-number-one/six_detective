@@ -1,0 +1,96 @@
+<html>
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<!--div>
+    <input type="button" id="J_fullScreen" value="全屏">
+    <input type="button" id="J_larger" value="放大（默认x1.1）">
+    <input type="button" id="J_smaller" value="缩小（默认x0.9）">
+    <input type="text" id="J_displayScale" value="100">%
+    <input type="button" id="J_scaleTo" value="缩放到">
+</div>
+<div>点击回调测试：<span id="J_clickCallback"></span></div-->
+<div id="add_table">
+	<input type="button" value="往table1中添加表" data-type="table1">
+	<input type="button" value="往table2中添加表" data-type="table2">
+	<input type="button" value="往根中添加表">
+</div>
+<div>
+    <div id="J_svgContainer" style="width:1200px;height:600px"style="width:1200px;height:600px">
+        <svg id="svg" style="width:100%;height:100%"></svg>
+    </div>
+</div>
+<script src="./js/jQuery-1.11.3.min.js"></script>
+<script src="./js/d3.v4.js" charset="utf-8"></script>
+<script src="./js/tableRelationChart.js" charset="utf-8"></script>
+<script>
+	var tableArray = [
+		{
+			id : "table1",
+			text : "表名表名表名表名表名表名表名表名表名表名表名表名表名"
+		},{
+			id : "table2",
+			text : "22222222222222222222222222222222222"
+		},{
+			id : "table3",
+			text : "3333333333333333333333333333333333333"
+		},{
+			id : "table4",
+			text : "444444444444444444444444444444444444444444"
+		},{
+			id : "table5",
+			text : "55555555555555555555555555555555555555555555555555555"
+		},{
+			id : "table6",
+			text : "666666666666666666666666666666666"
+		}
+	];
+	var ralationArray = [
+		// type -- left right mid none init
+		{
+			type : "mid",
+			start : "table1",
+			end : "table2"
+		},{
+			type : "left",
+			start : "table2",
+			end : "table3"
+		},{
+			type : "right",
+			start : "table2",
+			end : "table4"
+		},{
+			type : "none",
+			start : "table1",
+			end : "table5"
+		},{
+			type : "init",
+			start : "table1",
+			end : "table6"
+		}
+	];
+	// 初始化
+	var tableRelationChartObject = new TableRelationChart("#svg", tableArray, ralationArray, {
+		relation: {
+			clickCallback : function(relationData){
+				console.log("该显示页面了---" + JSON.stringify(relationData));
+			}
+		}
+	});
+	
+	var n = 6
+	$("#add_table input").click(function(){
+		var start = $(this).attr("data-type") || "";
+		var id = "table" + (++n);
+		tableRelationChartObject.add({
+			id : id,
+			text : id + "KKKKKKKKKKKKKKKKKKKKKKKKKK",
+			start : start// 没有，则为空
+		});
+	})
+</script>
+
+</body>
+</html>

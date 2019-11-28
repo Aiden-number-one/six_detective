@@ -1,0 +1,11 @@
+ {{#if flag}} {{else}} {{#each this}}
+<tr data-params='{"orderNo":"{{orderNo}}","nodeName":"{{nodeName}}","taskId":"{{taskId}}","taskName":"{{taskName}}","taskNo":"{{taskNo}}","taskType":"{{taskType}}","taskVars":"{{taskVars}}"}'>
+    <td class="t-c">
+        <input type="checkbox" taskId={{taskId}} />
+    </td>
+    <td class="t-c"> {{nodeName}} </td>
+    <td class="t-c">{{taskName}} </td>
+    <td class="t-c">{{taskTypeName}} </td>
+    <td class="t-l">{{taskVars}} </td>
+</tr>
+{{/each}} {{/if}}

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!--[if lt IE 9]>
+    <script src="assets/plugins/html5shiv.min.js"></script>
+    <script src="assets/plugins/respond.min.js"></script>
+<![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+
+<head>
+    <meta charset="utf-8" />
+    <title>融汇通金数据交换系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link rel="shortcut icon" href="favicon.ico" id="logo"/>
+    <style type="text/css">
+        .loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10050;
+            background-color: #1f262d;
+            -webkit-transition: background-color 0.6s ease-in-out 0s;
+            transition: background-color 0.6s ease-in-out 0s;
+        }
+
+        .spinner {
+            width: 240px;
+            height: 40px;
+            background: url(assets/img/layouts/toubao_logo.png) no-repeat;
+            margin: 200px auto;
+            -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+            animation: sk-bounce 2.0s infinite ease-in-out;
+        }
+
+        @-webkit-keyframes sk-bounce {
+            0%,
+            100% {
+                -webkit-transform: scale(0.8)
+            }
+            50% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+
+        @keyframes sk-bounce {
+            0%,
+            100% {
+                transform: scale(0.8);
+                -webkit-transform: scale(0.8);
+            }
+            50% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0);
+            }
+        }
+
+        .maxW500 {
+            max-width: 500px;
+        }
+
+        .maxW100 {
+            max-width: 100px;
+        }
+
+        .overW {
+            width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        a:hover {
+            text-decoration: none !important;
+        }
+    </style>
+    <!--#include virtual="assets/html/style.html"-->
+
+    <!-- node style start -->
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/assets/css/global/dataTables.tableTools.css">
+    <link href="/assets/plugins/intro/introjs.min.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN PAGE LEVEL PLUGINS   for datatables-->
+    <link href="/assets/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css"
+    />
+    <!-- for date&time picker-->
+    <link href="/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css"
+    />
+    <link href="/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css"
+    />
+    <link href="assets/plugins/bootstrap-datepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/bootstrap-select/bootstrap-select.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css" />
+    <!--END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href="/assets/css/global/components-md.css" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="/assets/css/global/plugins-md.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/assets/plugins/fullcalendar/fullcalendar.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/plugins/fullcalendar/fullcalendar.print.css" type="text/css media='print'">
+    <!-- END THEME GLOBAL STYLES -->
+    <!-- BEGIN THEME LAYOUT STYLES -->
+    <link href="/assets/css/layouts/layout.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/layouts/themes/blue.min.css" rel="stylesheet" type="text/css" id="style_color" />
+    <!-- END THEME LAYOUT STYLES -->
+    <link rel="stylesheet" href="/assets/css/layouts/bms.custom.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/global/bms.custom.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/pages/kd-loading.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/fonts/iconfont.css" type="text/css">
+    <link rel="stylesheet" href="./assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" type="text/css">
+    <!-- node style end -->
+
+
+</head>
+<style>
+    html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .login-form .help-block {
+            color: red;
+            margin-top: -26px;
+            width: 100%;
+            left: 0;
+            bottom: -18px;
+        }
+        .login-user {
+            position: relative;
+        }
+        .authorization{
+            position: absolute;
+            top: 30px;
+            left: 40%;
+        }
+        .authorization p{
+            color: red;
+            font-size:16px
+        }
+        .hide{
+            display:none
+        }
+    </style>
+<!-- END HEAD -->
+
+<body>
+    <div class="wrap clearfix mt20">
+        <div class="portlet light bordered" style="min-height: 600px;">
+            <div class="portlet-title" style="border: none;">
+                <div class="caption font-dark" style="padding:40px 0">
+                    <i class="icon-settings"></i>
+                    <span class="caption-subject bold uppercase">平台信息管理</span>
+                </div>
+            </div>
+            <div class="portlet-body" style="margin-top: -7px;">
+                    <div class="row">
+                      <form class="login-authorization-date hide" id="login_authorization_date" action="javascript:;" novalidate="novalidate">                   
+                      </form>
+                        <form class="form-horizontal" id="J_authorization_platform_date" name="J_authorization_platform_date">
+                        <div class="form-group">                            
+                            <label class="control-label col-md-4">授权到期日:</label>
+                            <div class="col-md-4">              
+                                <input type="text" class="form-control" readonly name="date" id="authorization_date" value="">
+                            </div>
+                        </div>                
+                        <div class="form-group">
+                             <label class="control-label col-md-4" style="margin-right:14px;position:relative;left:-3px;top:2px" ><span class="required" aria-required="true" > * </span>更新授权码:</label>              
+                             <div style="padding-top: 5px;"> 
+                                    <input type="file" name="file" accept="text/plain" style="display: inline-block;">
+                                    <input type="hidden" name="type" accept="text/plain" value="OUT">
+                                    <label class="control-label remind" style="margin-left:-60px">提示：仅支持txt类型文件</label>
+                             </div>                                          
+                        </div>            
+                        <div class="form-group">
+                            <label class="control-label col-md-4"><span class="required" aria-required="true" > * </span>用户名称：</label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="userName" id="userName" value="" maxlength="50" placeholder="请输入最长50个字符">
+                            </div>
+                        </div>                
+                        <div class="form-group">
+                            <label class="control-label col-md-4"><span class="required" aria-required="true" > * </span>登陆密码：</label>
+                            <div class="col-md-4">
+                                <input type="password" class="form-control" name="passWord" id="passWord" value="" maxlength="50" placeholder="请输入最长50个字符">
+                            </div>
+                        </div> 
+                        <div class="form-group" style="margin-top: 30px;">
+                            <div class="col-md-4 col-md-offset-4">
+                                <button type="button" style="width: 100%;" class="btn green" id="J_authorization_sys_platform_save">立即授权
+                                </button>
+                                <input type="reset"  id="authorization_reset" class="hide">
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 上传弹框 -->
+    <div id="J_authorization_upload_modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title title-color-blue">导入文件（授权文件名必须是license.txt）</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="javascript:;" class="form-horizontal" id="J_authorization_upload_code" name="J_upload_code" method="POST" novalidate="novalidate" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">
+                                    <span class="required" aria-required="true"> * </span>选择文件：</label>
+                                <div class="col-md-6" style="padding-top: 5px;"> 
+                                    <input type="file" name="file" accept="text/plain">
+                                    <input type="hidden" name="type" accept="text/plain" value="IN">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" style="border-top: none;">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+                    <button type="button" class="btn green" id="J_authorization_upload">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="assets/plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/seajs/sea.js"></script>
+    <script type="text/javascript" src="assets/js/kingdom/seajs_config.js"></script>
+    <script type="text/javascript" src="./assets/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
+    <script type="text/javascript" src="assets/js/kingdom/seajs_config.js"></script>
+    <script type="text/javascript" src="assets/plugins/form/jquery.form.js"></script>
+    <script type="text/javascript">  seajs.use(["app", "js/kingdom/authorization"]); </script>
+    
+</body>
+
+</html>

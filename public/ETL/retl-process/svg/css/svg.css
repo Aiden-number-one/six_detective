@@ -1,0 +1,291 @@
+.hidden{
+  display: none;
+}
+
+
+
+/*布局*/
+html,body{
+  height:100%;
+}
+.svgbox-wrap{
+  position: relative;
+  height:100%;
+}
+#svgbox{
+  margin-left:45px;
+  width:2000px;
+  height:4000px;
+  background: url(../images/paintbg.gif) repeat;
+  overflow: auto;
+}
+/*工具样式*/
+.toolbox{
+  position:absolute;
+  top:0px;
+  left:40px;
+  border:1px solid #ccc;
+  background: #f2f2f2;
+  padding:0 5px;
+  border-radius: 2px;
+}
+.toolbox>input{
+  display: inline-block;
+  margin:2px 0px;
+  font-size: 18px;
+  color:#0073b7;
+  outline-color:#0073b7;
+  cursor:pointer;
+  background: #f2f2f2;
+  border-radius: 2px;
+  border:1px solid #F2F2F2;
+}
+.s-svg-cursor-liner{
+  cursor:crosshair;
+}
+/*.toolbox>input.on{
+  background: yellow;
+}*/
+.s-svg{
+  display: block;
+  
+}
+.s-circle{
+  fill:#fff;
+  stroke:#29b2e6;
+  stroke-width:1px;
+}
+.s-rect{
+  fill:#fff;
+  stroke:#29b2e6;
+  stroke-width:2px;
+}
+.s-text{
+  fill:#29b2e6;
+  font-family: Arial, "Microsoft YaHei", sans-serif;
+  font-size:12px;
+  stroke-width:2px;
+}
+
+.s-path{
+  stroke-width:2px;
+  fill:none;
+}
+
+.s-selected>rect{
+  stroke-width:4px;
+}
+.s-selected>text{
+  font-weight: bolder;
+  font-style:italic;
+}
+.s-torfimg{
+  width:16px;
+  height: 16px;
+}
+.s-selected-path{
+  stroke-width:3px;
+}
+.s-disabled-path{
+  stroke-width:3px;
+}
+.s-move-cursor{
+  cursor: move; 
+}
+.s-searCH>rect{
+	    fill:#00BE9D;
+}
+
+.s-sel-rect{
+  stroke:#0099FF;
+  stroke-width:1px;
+  fill: #C3D5ED;
+  opacity:0.6;
+}
+.tab_Label{
+	width:250px;
+  position: absolute;
+  top:0;
+  z-index:999;
+}
+#temp_task{
+	margin-top:40px;
+}
+#tt1{
+	margin-top:75px;
+	
+}
+.ssou{
+	width:249px;
+	padding-top:40px;
+  position: absolute;
+  top:0px;
+  z-index:998;
+  background:#fff;
+}
+/*弹窗*/
+
+/*拖拽节点样式*/
+.nodelistbox-wrap{
+  position: absolute;
+  box-sizing: border-box;
+  left:0;
+  top:0;
+  background: #f2f2f2;
+  width:45px;
+  border:1px solid #ccc;
+  height: 100%;
+}
+.nodelistbox{
+  box-sizing: border-box;
+  position:absolute;
+  top:40px;
+  bottom:10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.inode{
+  /*margin:10px auto 5px auto;
+  width:100%;
+  display: block;
+  height:30px;
+  background: url(../images/icon_palette.png) no-repeat center;*/
+  margin:12px auto 0 auto;
+  width:32px;
+}
+.inode>button{
+  width:32px;
+  outline: none;
+  text-align: center;
+}
+.inode>button>i{
+  /*display: block;*/
+  font-size:14px;
+  line-height: 1;
+  padding:2px 0 4px 2px;
+  color:#515d6e;
+}
+.bordertop{
+  position:absolute;
+  top:5px;
+  left:0;
+}
+.borderbottom{
+  position:absolute;
+  bottom:5px;
+  left:0;
+}
+.border2dotted{
+  width:32px;
+  display: block;
+  margin:0 6px;
+  height: 1px;
+  border-top:1px dotted #aaa;
+  border-bottom:1px dotted #aaa;
+}
+.nodelist{
+  margin:0 7px 0 5px;
+  width:32px;
+  padding:5px 0;
+}
+.nodelist>li{
+  display: block;
+  height:28px;
+  margin:5px 0 0 0;
+  border:1px solid #f2f2f2;
+  cursor:move;
+}
+.nodelist>li:hover{
+  border:1px solid #bbb;
+  border-radius: 3px;
+}
+.nodelist>li.press{
+  border:1px solid #777;
+  border-radius: 3px;
+}
+.nodelist>li.ijob{
+  background: url(../images/nodeicon.png) center top;
+}
+.nodelist>li.idata{
+  background: url(../images/nodeicon.png) center -26px;
+}
+.nodelist>li.itask{
+  background: url(../images/nodeicon.png) center -52px;
+}
+.Stop1{
+	width:15px;height:60px;cursor: pointer;position: absolute;top: 36%;left: 248px;
+}
+
+/*右键菜单*/
+.rmenu{
+  list-style: none;
+  margin:0;
+  position:absolute;top:-9999px;left:-9999px;border:1px solid #979797;background:#f1f1f1;
+  /*position:absolute;top:9px;left:99px;border:1px solid #979797;background:#f1f1f1;*/
+  padding:2px;box-shadow:2px 2px 2px rgba(0,0,0,.6);
+}
+.rmenu>li{
+  height:24px;cursor:pointer;line-height:24px;white-space:nowrap;padding:0 15px;position: relative;
+}
+.rmenu>li.sub{
+  background-repeat:no-repeat;background-position:right 9px;background-image:url(../images/arrow_win7.png);
+}
+.rmenu>li:hover{
+  background-color:#f1f3f6;border-radius:3px;border:1px solid #aecff7;height:22px;line-height:22px;background-position:right -8px;padding:0 14px;
+}
+.rmenu .rmenu{
+  display: none;
+  position: absolute;
+}
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1500864754965'); /* IE9*/
+  src: url('iconfont.eot?t=1500864754965#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1500864754965') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1500864754965') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1500864754965#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shanchu:before { content: "\e600"; }
+
+.icon-fangda:before { content: "\e626"; }
+
+.icon-suoxiao:before { content: "\e63b"; }
+
+.icon-iconfontniantie:before { content: "\e616"; }
+
+.icon-fenxiang:before { content: "\e631"; }
+
+.icon-fuzhi:before { content: "\e601"; }
+
+.icon-save:before { content: "\e60b"; }
+
+.icon-shangduiqi:before { content: "\e657"; }
+
+.icon-duiqi:before { content: "\e76f"; }
+
+.icon-icon16:before { content: "\e61e"; }
+
+.icon-duixiangkaoxiaduiqi:before { content: "\e652"; }
+
+.icon-daoru:before { content: "\e607"; }
+
+.icon-alignright:before { content: "\e614"; }
+
+.icon-lingcunwei:before { content: "\e60f"; }
+
+.icon-shubiao:before { content: "\e669"; }
+
+.icon-jianqie:before { content: "\e637"; }
+
+.icon-shuipingjianjuxiangtong:before { content: "\e6c0"; }
+
+.icon-chuizhijianjuxiangtong:before { content: "\e6c3"; }
+

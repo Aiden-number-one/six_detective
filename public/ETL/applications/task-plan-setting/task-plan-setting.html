@@ -1,0 +1,1129 @@
+<style>
+    .line {
+        /* padding-top:5px; */
+        padding-bottom: 6px
+    }
+
+    .line label {
+        line-height: 27px;
+        vertical-align: middle;
+    }
+
+    .width150 {
+        width: 115px;
+    }
+
+    .imp {
+        padding-left: 25px;
+    }
+
+    #crons_set_table tr td {
+        padding: 0;
+        border: 0 !important
+    }
+
+    #crons_set_table tr td input {
+        width: 69px !important;
+    }
+
+    .line_checkbox {
+        height: 18px;
+        line-height: 18px
+    }
+
+    .checkbox-div {
+        display: inline;
+    }
+
+    .modal-body {
+        padding-bottom: 60px;
+    }
+
+    .modal-body .modal-footer {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    #J_form_basc input::-webkit-outer-spin-button,
+    #J_form_basc input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    #J_form_basc input[type="number"]{
+        -moz-appearance: textfield;
+    }
+</style>
+</style>
+<div class="row mt20">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption font-dark">
+                    <i class="icon-refresh"></i>
+                    <span class="caption-subject bold uppercase">调度计划信息</span>
+                </div>
+                <div class="actions">
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form id="J_tps_search_form" name="J_tps_search_form" action="javascript:;">
+                    <div class="col-md-100 query collapse" id="J_tps_search_form_block">
+                        <label>
+                            <select class="form-control input-small" id="J_task_plan_options">
+                                <option data-lang="Schedule-Name" value="scheduleName">计划名称</option>
+                                <option data-lang="Job-Name" value="jobName">作业名称</option>
+                                <option data-lang="Job-No" value="jobNo">作业编号</option>
+                            </select>
+                            <input class="form-control input-small" name="scheduleName" />
+                        </label>
+                        <label><span data-lang="Last-Execution-Status">最后一次执行状态：</span>
+                            <select class="form-control input-small" name="lastExecState">
+                            </select>
+                        </label>
+                        <label class="control-label"><span data-lang="Last-Execution-Time">上次执行时间：</span>
+                            <input name="startTime" class="form-control input-inline  date-time-picker" data-date-format="yyyy-mm-dd hh:ii:ss" style="width:195px"
+                                autocomplete="off">&nbsp;&nbsp;至&nbsp;&nbsp;
+                            <input name="endTime" class="form-control input-inline  date-time-picker" data-date-format="yyyy-mm-dd hh:ii:ss" style="width:195px"
+                                autocomplete="off">
+                        </label>
+                        <button type="submit" class="btn green" >
+                                <span data-lang="SEARCH">查询</span>
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <button class="btn grey" type="reset">
+                            <span data-lang="RESET">重置</span>
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </form>
+                <!-- END FORM-->
+                <div class="tourist-wide">
+                    <div class="btn-group">
+                        <div class="btn-group">
+                            <a id="J_add_plan_btn" class="btn-operate">
+                                <i class="widget-thumb-icon bg-blue fa fa-plus"></i><span data-lang="ADD">新增</span></a>
+                        </div>
+                        <div class="btn-group">
+                            <a id="J_edit_plan_btn" class="btn-operate">
+                                <i class="widget-thumb-icon bg-blue fa fa-pencil"></i><span data-lang="EDIT">编辑</span></a>
+                        </div>
+                        <div class="btn-group">
+                            <a id="J_delete_btn" class="btn-operate">
+                                <i class="widget-thumb-icon bg-blue icon-trash"></i><span data-lang="DELETE">删除</span></a>
+                        </div>
+                    </div>
+                    <div class="collapse-control fr" data-toggle="collapse" href="#J_tps_search_form_block">
+                        <i class="fa fa-sort-desc"></i>
+                        <span style="color:#10416c;" data-lang="Search-More">高级搜索</span>
+                    </div>
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-hover order-column" id="task_set_table">
+                        <thead>
+                            <tr>
+                                <th style="width:40px">
+                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /> </th>
+                                <th data-lang="No"> 序号 </th>
+                                <th data-lang="Schedule-Name"> 计划名称 </th>
+                                <th data-lang="Job-No"> 作业编号 </th>
+                                <th data-lang="File-Name"> 文件名 </th>
+                                <th data-lang="Job-Name"> 作业名称 </th>
+                                <th data-lang="Last-Execution-Time"> 上次执行时间 </th>
+                                <th data-lang="Last-Execution-Status"> 最后一次执行状态 </th>
+                                <th data-lang="Next-Execution-Time"> 下次执行时间 </th>
+                                <th data-lang=""> 执行结果 </th>
+                                <th data-lang="Action"> 操作 </th>
+                            </tr>
+                        </thead>
+                        <tbody id="taskSetList" class="row">
+                            <tr>
+                                <td colspan="11" class="t-c">正在加载数据...</td>
+                                <tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="task_set_pages" class="row"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--弹出-->
+<div id="J_add_plan_modal" class="modal fade">
+    <div class="modal-dialog modal-md" style="width:700px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title title-color-blue">调度计划</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabbable-line">
+                    <div class="t-c">
+                        <ul class="nav nav-tabs ">
+                            <li class="active">
+                                <a href="#J_tps_1_1" data-toggle="tab" aria-expanded="true"> 基本信息</a>
+                            </li>
+                            <li class="">
+                                <a href="#J_tps_1_2" data-toggle="tab" aria-expanded="false"> 计划设置 </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <form class="form-horizontal mt30" id="J_form_basc" name="J_form_basc" role="form" novalidate="novalidate">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="J_tps_1_1">
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">
+                                                <span class="required" aria-required="true"> * </span>计划名称：
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="scheduleName" maxlength="64" placeholder="请输入最长64位字符（中文占两个字符）" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">
+                                                <span class="required" aria-required="true"> * </span>调度作业：
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input type="hidden" name="jobId" class="form-control">
+                                                <input name="jobName" class="form-control dropdown-toggle" data-toggle="dropdown" aria-expanded="true" autocomplete="off"
+                                                    readonly="" />
+                                                <i class="fa fa-angle-down dropdown-arrowdown"></i>
+                                                <div class="J_tree_work dropdown-menu" type="treeselectchild" role="menu" style="margin-left: 15px;padding: 10px">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">
+                                                <span class="required" aria-required="true"> * </span>计划有效时间：
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input name="validStartDate" class="form-control input-small input-inline  date-time-picker" data-date-format="yyyy-mm-dd hh:ii:ss" style="width:228px" autocomplete="off">至
+                                                <input name="validEndDate" class="form-control input-small input-inline  date-time-picker" data-date-format="yyyy-mm-dd hh:ii:ss" style="width:228px" autocomplete="off">
+                                                <label>
+                                                    <input type="checkbox" fakename="forever"> 永久有效</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">计划描述：
+                                            </label>
+                                            <div class="col-md-8">
+                                                <textarea name="scheduleDesc" class="form-control" maxlength="1024" placeholder="请输入最长1024位字符（中文占两个字符）" ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="J_tps_1_2">
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">
+                                                <span class="required" aria-required="true"> * </span>计划开始执行时间：
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input type="text" value='' class="form-control date-time-picker" data-date-format="yyyy-mm-dd hh:ii:ss" name="executeTime" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">
+                                                <span class="required" aria-required="true"></span>执行频度：
+                                            </label>
+                                            <div class="col-md-4 no-pr">
+                                                <input type="number" class="form-control" name="scheduleInterval" maxlength="32" placeholder="请输入最长32位字符" >
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select name="frequency" aria-controls="sample_1" class="form-control" id="J_task_set">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">
+                                                <span class="required" aria-required="true"></span>
+                                                <button type="button" class="btn btn-danger btn-sm" id="J_cron_btn">cron表达式</button>
+                                            </label>
+                                            <div class="col-md-8">
+                                                <textarea placeholder="计划执行频率可使用执行频率输入框输入，也可以自定义CRON表达式。两种方式二选一，根据需要使用。" name="cronExpression" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" style="line-height: 2;">
+                                                调度规律：
+                                            </label>
+                                            <div class="col-md-8">
+                                                <div class="radio-list">
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="scheduleLaw" value="1" checked> 按交易日 </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="scheduleLaw" value="2"> 按自然日 </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">
+                                                成功邮件：
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" maxlength="256" name="succeedMailId"  placeholder="请输入最长256位字符（中文占两个字符）">
+                                                <a class="query-datafield set-variable" title="选择变量"><i class="fa fa-plus"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">
+                                                出错邮件：
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="faultMailId" placeholder="请输入最长256位字符（中文占两个字符）" maxlength="256">
+                                                <a class="query-datafield set-variable" title="选择变量"><i class="fa fa-plus"></i></a>
+                                            </div>
+                                        </div>
+
+                                        <div id="J_plan_setting_time">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">上次执行时间：
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <span style="border-color: transparent" class="prev_time form-control"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">下次执行时间：
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <span style="border-color: transparent" class="next_time form-control"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+                                    <button type="button" class="btn green J_form_basc_submit">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--弹出cron表达式-->
+<div id="J_crons_modal" class="modal fade">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title title-color-blue">调度计划</h4>
+            </div>
+            <div class="modal-body" style="padding: 9px">
+                <div class="tabbable-line">
+                    <ul class="nav nav-tabs ">
+                        <li class="active">
+                            <a href="#tab_s" data-toggle="tab" aria-expanded="true">秒</a>
+                        </li>
+                        <li class="">
+                            <a href="#tab_m" data-toggle="tab" aria-expanded="false"> 分钟 </a>
+                        </li>
+                        <li class="">
+                            <a href="#tab_h" data-toggle="tab" aria-expanded="false"> 小时 </a>
+                        </li>
+                        <li class="">
+                            <a href="#tab_d" data-toggle="tab" aria-expanded="false"> 日 </a>
+                        </li>
+                        <li class="">
+                            <a href="#tab_o" data-toggle="tab" aria-expanded="false"> 月 </a>
+                        </li>
+                        <li class="">
+                            <a href="#tab_w" data-toggle="tab" aria-expanded="false"> 周 </a>
+                        </li>
+                        <li class="">
+                            <a href="#tab_y" data-toggle="tab" aria-expanded="false"> 年 </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_s">
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="s-radio"> 每秒 允许的通配符[, - * /] </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="s-radio"> 周期从 </label>
+                                <label class="width150" style="width:130px">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> - </label>
+                                <label class="width150" style="width:130px">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 秒 </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="s-radio"> 从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 秒开始,每</label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label>秒执行一次</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="s-radio"> 指定 </label>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="0">00</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="1">01</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="2">02</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="3">03</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="4">04</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="5">05</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="6">06</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="7">07</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="8">08</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="9">09</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="10">10</div>
+                                <div class="checkbox-div" style="margin-right: 1px">
+                                    <input type="checkbox" value="11">11</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="12">12</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="13">13</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="14">14</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="15">15</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="16">16</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="17">17</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="18">18</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="19">19</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="20">20</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="21">21</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="22">22</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="23">23</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="24">24</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="25">25</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="26">26</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="27">27</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="28">28</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="29">29</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="30">30</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="31">31</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="32">32</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="33">33</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="34">34</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="35">35</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="36">36</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="37">37</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="38">38</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="39">39</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="40">40</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="41">41</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="42">42</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="43">43</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="44">44</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="45">45</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="46">46</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="47">47</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="48">48</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="49">49</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="50">50</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="51">51</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="52">52</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="53">53</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="54">54</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="55">55</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="56">56</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="57">57</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="58">58</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="59">59</div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_m">
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="N" name="m-radio">每分钟 允许的通配符[, - * /]</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="m-radio"> 周期从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> - </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 分 </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="m-radio"> 从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 分开始,每</label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label>分执行一次</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="m-radio"> 指定
+                                </label>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="0">00</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="1">01</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="2">02</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="3">03</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="4">04</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="5">05</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="6">06</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="7">07</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="8">08</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="9">09</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="10">10</div>
+                                <div class="checkbox-div" style="margin-right: 1px">
+                                    <input type="checkbox" value="11">11</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="12">12</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="13">13</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="14">14</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="15">15</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="16">16</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="17">17</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="18">18</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="19">19</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="20">20</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="21">21</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="22">22</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="23">23</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="24">24</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="25">25</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="26">26</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="27">27</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="28">28</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="29">29</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="30">30</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="31">31</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="32">32</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="33">33</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="34">34</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="35">35</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="36">36</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="37">37</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="38">38</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="39">39</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="40">40</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="41">41</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="42">42</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="43">43</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="44">44</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="45">45</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="46">46</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="47">47</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="48">48</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="49">49</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="50">50</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="51">51</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="52">52</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="53">53</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="54">54</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="55">55</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="56">56</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="57">57</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="58">58</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="59">59</div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_h">
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="N" name="h-radio">每小时 允许的通配符[, - * /]</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="h-radio"> 周期从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> - </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 小时 </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="h-radio"> 从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 小时开始,每 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 小时执行一次 </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="h-radio">指定</label>
+                            </div>
+                            <div class=" line_checkbox">
+                                AM:
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="0">00</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="1">01</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="2">02</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="3">03</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="4">04</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="5">05</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="6">06</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="7">07</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="8">08</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="9">09</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="10">10</div>
+                                <div class="checkbox-div" style="margin-right: 1px">
+                                    <input type="checkbox" value="11">11</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                PM:
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="12">12</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="13">13</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="14">14</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="15">15</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="16">16</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="17">17</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="18">18</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="19">19</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="20">20</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="21">21</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="22">22</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="23">23</div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_d">
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="N" name="d-radio">每日 允许的通配符[, - * /]</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="d-radio"> 周期从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> - </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 日 </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="d-radio"> 从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 日开始,每 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 日执行一次 </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="d-radio"> 每月 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 号最近的那个工作日 </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="d-radio"> 最后一日
+                                </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="d-radio"> 不指定
+                                </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="d-radio"> 指定
+                                </label>
+                            </div>
+                            <div class=" line_checkbox">
+                                <!-- <div class="checkbox-div">
+                                    <input type="checkbox" value="0">00</div> -->
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="1">01</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="2">02</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="3">03</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="4">04</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="5">05</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="6">06</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="7">07</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="8">08</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="9">09</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="10">10</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div" style="margin-right: 1px">
+                                    <input type="checkbox" value="11">11</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="12">12</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="13">13</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="14">14</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="15">15</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="16">16</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="17">17</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="18">18</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="19">19</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="20">20</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="21">21</div>
+                            </div>
+                            <div class=" line_checkbox">
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="22">22</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="23">23</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="24">24</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="25">25</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="26">26</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="27">27</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="28">28</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="29">29</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="30">30</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="31">31</div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_o">
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="N" name="o-radio">月 允许的通配符[, - * /]</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="o-radio"> 周期从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> - </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 月 </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="o-radio"> 从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 日 开始,每 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 月执行一次 </label>
+                            </div>
+                            <!-- <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="o-radio">不指定</label>
+                            </div> -->
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="o-radio">指定 </label>
+                                    <!-- （1表示星期天，2表示星期一， 依次类推） -->
+                            </div>
+                            <div class=" line_checkbox">
+                                <!-- <div class="checkbox-div">
+                                    <input type="checkbox" value="0">00</div> -->
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="1">01</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="2">02</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="3">03</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="4">04</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="5">05</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="6">06</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="7">07</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="8">08</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="09">09</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="10">10</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="11">11</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="12">12</div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_w">
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="N" name="w-radio">周 允许的通配符[, - * /]</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="w-radio"> 周期从 星期</label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> - </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> (1表示星期天，2表示星期一， 依次类推) </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="w-radio"> 第</label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> 周 的星期 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> (1表示星期天，2表示星期一， 依次类推) </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="w-radio">本月最后一个星期</label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> （1表示星期天，2表示星期一， 依次类推） </label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="w-radio">不指定</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="w-radio">指定 （1表示星期天，2表示星期一， 依次类推）</label>
+                            </div>
+                            <div class=" line_checkbox">
+                                <!-- <div class="checkbox-div">
+                                    <input type="checkbox" value="0">00</div> -->
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="1">01</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="2">02</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="3">03</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="4">04</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="5">05</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="6">06</div>
+                                <div class="checkbox-div">
+                                    <input type="checkbox" value="7">07</div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_y">
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="N" name="y-radio">不指定 允许的通配符[, - * /]</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="y-radio">每年</label>
+                            </div>
+                            <div class="line">
+                                <label>
+                                    <input type="radio" value="" name="y-radio"> 周期 从 </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                                <label> - </label>
+                                <label class="width150">
+                                    <input class="touchspin_3" type="text" value="" name="demo_vertical">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="line">
+                            <div class="table-scrollable mg-t">
+                                <table class="table table-striped table-bordered table-hover order-column" id="crons_set_table" class="crons_set_table" style="border:none">
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td> 秒 </td>
+                                            <td> 分钟</td>
+                                            <td> 小时 </td>
+                                            <td> 日 </td>
+                                            <td> 月 </td>
+                                            <td> 星期 </td>
+                                            <td> 年 </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                表达式字段:
+                                            </td>
+                                            <td>
+                                                <input type="text" name="v_second" value="" readonly="readonly">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="v_min" class="col" value="" readonly="readonly">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="v_hour" class="col" value="" readonly="readonly">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="v_day" class="col" value="" readonly="readonly">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="v_mouth" class="col" value="" readonly="readonly">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="v_week" class="col" value="" readonly="readonly">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="v_year" class="col" readonly="readonly">
+                                            </td>
+                                        </tr>
+                                        <tr style="border-top: 10px solid #fff;">
+                                            <td>Cron 表达式:</td>
+                                            <td colspan="6">
+                                                <input id="tps-cron-input" type="text" name="cron" style="width: 350px !important; " value="* * * * * ?">
+                                            </td>
+                                            <td>
+                                                <!-- <button id="btnFan" class="btn btn-danger" style="margin-left:-35px">反解析到UI</button> -->
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+                <button type="button" class="btn green J_form_corn_btn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /*默认语言*/
+    var LANGUAGE_CODE = "en";
+    function loadProperties(type) {
+        jQuery.i18n.properties({
+        name: "i18n", // 资源文件名称
+        path: "/assets/i18n/", // 资源文件所在目录路径
+        mode: "map", // 模式：变量或 Map
+        language: type, // 对应的语言
+        cache: false,
+        encoding: "UTF-8",
+        callback: function() {
+            // 回调方法
+            for (var i in $.i18n.map) {
+            $(`[data-lang=${i}]`).text($.i18n.map[i]);
+            }
+            // $('[data-job-1]').text($.i18n.prop('job-1'));
+        }
+        });
+    }
+    
+    $(document).ready(function(type) {
+        loadProperties(LANGUAGE_CODE);
+    });
+</script>

@@ -1,0 +1,13 @@
+  {{#each this}}
+    <tr>
+        <td class="width40 t-c"> {{ROWNUM_}}</td>
+        <td class="t-c"> {{nodeName}} </td>
+        <td class="t-c"> {{memberTypeName}} </td>
+        <td class="t-r"> {{errorNum}} </td>
+        <td class="t-r"> {{successNum}} </td>
+        <td class="t-c"> <span style="color: {{executeFlagFormatIframe executeFlag}}">●</span> {{executeFlagNameFormatIframe executeFlag}} </td>
+        <td class="t-c"> {{dateTimeFormatHelper startTime}} </td>
+		<td class="t-r"> {{formatDuration zxsj}} </td>
+        <td class="t-c"> <a name="checkDetail" title="{{businessMsg}}">查看</a> </td>
+    </tr>
+  {{/each}}

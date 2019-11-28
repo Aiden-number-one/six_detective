@@ -1,0 +1,9 @@
+ {{#if flag}} {{else}} {{#each this}}
+<div class="todo-project-list on border-bottom  " monitorId={{monitorId}} batchNo={{batchNo}}>
+    <div class="perform-fl-box bg-color-blue"><i class="fa fa-check"></i></div>
+    <div class="perform-fr">
+        <p class="perform-fr-text">{{jobNo}}</p>
+        <p class="jobName">{{jobName}}</p>
+    </div>
+</div>
+{{/each}} {{/if}}

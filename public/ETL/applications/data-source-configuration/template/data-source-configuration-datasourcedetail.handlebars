@@ -1,0 +1,24 @@
+{{#if flag}}
+<tr>
+  <td colspan="20" class="t-c">暂无数据</td>
+</tr>
+{{else}} {{#each this}}
+<tr>
+    <td class="t-c" data-tableId={{tableId}}>
+        <input type="checkbox" class="">
+    </td>
+    <td class="width40 t-c"> {{ROWNUM_}}</td>
+    <td>{{tableName}}</td>
+    <td class="t-c">{{mdType}}</td>
+    <td class="t-c">{{tableCat}}</td>
+    <td class="t-c">{{schemName}}</td>
+    <td class="t-r">{{permilFormatHelper recordCount}}</td>
+    <td>{{ tableDesc}}</td>
+    <td class="t-c" data-tableId='{{tableId}}' data-tableName='{{tableName}}' data-mdType='{{mdType}}' data-tableCat='{{tableCat}}' data-schemName='{{schemName}}'
+        data-tableDesc='{{tableDesc}}'>
+        <a id="dsc-modal-check" href="javascript:;">查看</a>
+        <a id="dsc-modal-delete" href="javascript:;">删除</a>
+    </td>
+
+</tr>
+{{/each}} {{/if}}

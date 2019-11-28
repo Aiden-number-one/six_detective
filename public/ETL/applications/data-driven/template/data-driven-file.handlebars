@@ -1,0 +1,16 @@
+{{#if flag}}
+<tr>
+  <td colspan="4" class="t-c">暂无</td>
+</tr>
+{{else}} {{#each this}}
+<tr>
+  <td class="t-c">{{index}}</td>
+
+  <td class="t-c">
+    {{address}}
+  </td>
+  <td data-index='{{index}}' class="t-c">
+    <a class="delete-jar">删除</a>
+  </td>
+</tr>
+{{/each}} {{/if}}

@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: iron
- * @LastEditTime: 2019-11-22 19:45:18
+ * @LastEditors: lan
+ * @LastEditTime: 2019-11-28 11:01:08
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
@@ -35,6 +35,7 @@ export default {
   'menu.report': 'REPORT',
   'menu.report.highSlaReports': 'High SLA Reports',
   'menu.report.visualizationDashboard': 'Visualization Dashboard',
+  'menu.report.datasetmanagement': 'Dataset Management',
   'menu.analysis': 'ANALYSIS',
   'menu.analysis.investorSegmentAnalysis': 'Investor Segment Analysis',
   'menu.systemManagement': 'SYSTEM MANAGEMENT',
