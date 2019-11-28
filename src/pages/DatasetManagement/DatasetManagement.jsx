@@ -21,6 +21,10 @@ export default class DatasetManagement extends PureComponent {
     });
   }
 
+  onSelect = value => {
+    console.log('value=', value);
+  };
+
   render() {
     const { classifyTreeData } = this.props;
     return (
@@ -29,10 +33,10 @@ export default class DatasetManagement extends PureComponent {
           <ClassifyTree
             treeData={classifyTreeData}
             treeKey={{
-              currentKey: 'departmentId',
-              currentName: 'departmentName',
-              parentKey: 'parentDepartmentId',
+              currentKey: 'classId',
+              currentName: 'className',
             }}
+            onSelect={this.onSelect}
           />
         </div>
       </PageHeaderWrapper>

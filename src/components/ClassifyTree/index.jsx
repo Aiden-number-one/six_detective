@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-20 17:08:09
+ * @LastEditTime: 2019-11-28 15:38:10
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -188,7 +188,11 @@ class ClassifyTree extends Component {
 
   static getDerivedStateFromProps(props) {
     let items = props.treeData;
-    items = items && formatTree(items, props.treeKey.currentKey, props.treeKey.parentKey);
+    const child = items.some(element => {
+      element.hasOwnProperty('children');
+      return false;
+    });
+    items = items && !child && formatTree(items, props.treeKey.currentKey, props.treeKey.parentKey);
     return {
       initData: items,
       menuList: items,
