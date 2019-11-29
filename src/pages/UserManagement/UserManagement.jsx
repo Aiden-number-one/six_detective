@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-29 10:35:18
+ * @LastEditTime: 2019-11-29 16:39:00
  */
 
 import React, { Component } from 'react';
@@ -51,13 +51,13 @@ class UserManagement extends Component {
     columns: [
       {
         title: formatMessage({ id: 'app.common.userId' }),
-        dataIndex: 'roleId',
-        key: 'roleId',
+        dataIndex: 'userId',
+        key: 'userId',
       },
       {
         title: formatMessage({ id: 'app.common.username' }),
-        dataIndex: 'roleName',
-        key: 'roleName',
+        dataIndex: 'userName',
+        key: 'userName',
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
@@ -118,6 +118,7 @@ class UserManagement extends Component {
   resetPasswordFormRef = React.createRef();
 
   componentDidMount() {
+    console.log('props=', this.props);
     this.queryUserList();
     this.queryDepartments();
   }
@@ -175,6 +176,19 @@ class UserManagement extends Component {
     this.newDepartmentId = departmentId;
   };
 
+  /**
+   * @description: This is for reset form function.
+   * @param {type} null
+   * @return: undefined
+   */
+  newUser = () => {
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: '/system-management/user-maintenance/new-user',
+      }),
+    );
+  };
+
   addConfrim = () => {
     const { dispatch } = this.props;
     this.formRef.current.validateFields((err, values) => {
@@ -211,6 +225,8 @@ class UserManagement extends Component {
    * @return: undefined
    */
   updateUser = (res, obj) => {
+    console.log('res=======', res);
+    console.log('obj============', obj);
     const userInfo = {
       login: '',
       name: '',
@@ -223,11 +239,21 @@ class UserManagement extends Component {
     userInfo.departmentName = obj.departmentName;
     userInfo.departmentId = obj.departmentId;
     userInfo.email = obj.email;
-    this.setState({
-      updateVisible: true,
-      userInfo,
-      customerno: obj.customerno,
-    });
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: '/system-management/user-maintenance/modify-user',
+        query: {
+          userId: obj.userId,
+          userName: obj.userName,
+          userState: obj.userState,
+        },
+      }),
+    );
+    // this.setState({
+    //   updateVisible: true,
+    //   userInfo,
+    //   customerno: obj.customerno,
+    // });
   };
 
   updateConfirm = () => {
@@ -422,19 +448,6 @@ class UserManagement extends Component {
       };
       this.queryUserList(params);
     });
-  };
-
-  /**
-   * @description: This is for reset form function.
-   * @param {type} null
-   * @return: undefined
-   */
-  newUser = () => {
-    this.props.dispatch(
-      routerRedux.push({
-        pathname: '/system-management/user-maintenance/new-user',
-      }),
-    );
   };
 
   /**

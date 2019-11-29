@@ -51,20 +51,6 @@ class FormUser extends Component {
               ],
             })(<Input />)}
           </Form.Item>
-          <Form.Item
-            label={formatMessage({ id: 'app.common.password' })}
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 6 }}
-          >
-            {getFieldDecorator('password', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input your password',
-                },
-              ],
-            })(<Input.Password />)}
-          </Form.Item>
           <Form.Item wrapperCol={{ span: 6, offset: 4 }}>
             {getFieldDecorator('locked', {
               rules: [
@@ -113,12 +99,16 @@ class FormUser extends Component {
 
 const NewFormUser = Form.create()(FormUser);
 
-export default class NewUser extends Component {
+export default class ModifyUser extends Component {
   newUserRef = React.createRef();
 
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    console.log('modify,props=', this.props);
   }
 
   onSave = () => {
