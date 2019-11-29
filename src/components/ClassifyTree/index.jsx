@@ -2,13 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
-<<<<<<< HEAD
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-29 11:25:41
-=======
  * @LastEditors: lan
- * @LastEditTime: 2019-11-29 11:14:41
->>>>>>> 34b86de45d665b393c9bfb31577889c221092976
+ * @LastEditTime: 2019-11-29 16:51:22
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -216,6 +211,8 @@ class ClassifyTree extends Component {
       this.props.onSelect(treeData[0] && treeData[0][this.props.treeKey.currentKey]);
     }, 200);
   }
+
+  componentDidUpdate() {}
 
   onExpand = expandedKeys => {
     this.setState({

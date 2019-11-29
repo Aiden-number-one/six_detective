@@ -6583,10 +6583,10 @@
     var tplShortcutTable = function (lang, options) {
       var colClass = 'class="note-shortcut note-shortcut-col col-sm-6 col-xs-12"';
       var template = [
-        '<div ' + colClass + '>' + tplShortcutAction(lang, options) + '</div>' +
-        '<div ' + colClass + '>' + tplShortcutText(lang, options) + '</div>',
-        '<div ' + colClass + '>' + tplShortcutStyle(lang, options) + '</div>' +
-        '<div ' + colClass + '>' + tplShortcutPara(lang, options) + '</div>'
+        '<div ' + colClass + '>' + tplShortcutAction(lang) + '</div>' +
+        '<div ' + colClass + '>' + tplShortcutText(lang) + '</div>',
+        '<div ' + colClass + '>' + tplShortcutStyle(lang) + '</div>' +
+        '<div ' + colClass + '>' + tplShortcutPara(lang) + '</div>'
       ];
 
       if (options.extraKeys) {

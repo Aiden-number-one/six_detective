@@ -2896,7 +2896,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                else if (overwrite || !(key in target)) {
 	                    // 否则只处理overwrite为true，或者在目标对象中没有此属性的情况
 	                    // NOTE，在 target[key] 不存在的时候也是直接覆盖
-	                    target[key] = clone(source[key], true);
+	                    target[key] = clone(source[key]);
 	                }
 	            }
 	        }
@@ -36300,14 +36300,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var thisNodeColor;
 	        if (borderColorSaturation != null) {
 	            // For performance, do not always execute 'calculateColor'.
-	            thisNodeColor = calculateColor(visuals, node);
+	            thisNodeColor = calculateColor(visuals);
 	            borderColor = calculateBorderColor(borderColorSaturation, thisNodeColor);
 	        }
 	        node.setVisual('borderColor', borderColor);
 
 	        var viewChildren = node.viewChildren;
 	        if (!viewChildren || !viewChildren.length) {
-	            thisNodeColor = calculateColor(visuals, node);
+	            thisNodeColor = calculateColor(visuals);
 	            // Apply visual to this node.
 	            node.setVisual('color', thisNodeColor);
 	        }

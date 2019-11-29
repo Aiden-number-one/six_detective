@@ -2727,7 +2727,7 @@ body, html {
 }
 
 .switchbtn:before {
-	font-family: "iconfont" !important;
+	font-family: "iconfont", sans-serif !important;
 	content: "\e6c3";
 	font-size: 20px;
 	color: #95B8E7;
@@ -2742,7 +2742,7 @@ body, html {
 }
 
 .gotopbtn:before {
-	font-family: "iconfont" !important;
+	font-family: "iconfont", sans-serif !important;
 	content: "\e608";
 	font-size: 22px;
 	color: #95B8E7;
@@ -2774,7 +2774,7 @@ body, html {
 }
 
 .godownbtn:before {
-	font-family: "iconfont" !important;
+	font-family: "iconfont", sans-serif !important;
 	content: "\e604";
 	font-size: 20px;
 	color: #95B8E7;
@@ -3027,7 +3027,6 @@ body, html {
 	border-radius: 5px;
 	background: url(../images/edit.png) no-repeat;
 	background-size: contain;
-	cursor: pointer;
 	position: absolute;
 }
 

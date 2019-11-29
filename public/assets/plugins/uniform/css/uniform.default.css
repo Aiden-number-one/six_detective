@@ -62,7 +62,6 @@ div.selector {
   overflow: hidden; }
   div.selector span {
     text-overflow: ellipsis;
-    display: block;
     overflow: hidden;
     white-space: nowrap;
     background-position: right 0;
