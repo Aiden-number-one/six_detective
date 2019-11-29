@@ -364,7 +364,7 @@
 }
 .jstree-default-dark .jstree-wholerow-clicked {
   background: #5fa2db;
-  background: -webkit-linear-gradient(to top, #5fa2db 0%, #5fa2db 100%);
+  /* background: -webkit-linear-gradient(to top, #5fa2db 0%, #5fa2db 100%); */
   background: linear-gradient(to bottom, #5fa2db 0%, #5fa2db 100%);
 }
 .jstree-default-dark .jstree-node {

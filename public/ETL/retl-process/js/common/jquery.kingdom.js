@@ -254,7 +254,7 @@ if (typeof jQuery === "undefined") {
                             data = eval("(" + data + ")")
                         }
                         if (cbfunc) {
-                            if (data.bcjson) {
+                            if (data && data.bcjson) {
                                 var flag = data.bcjson.flag;
                             } else {
                                 return false;
@@ -382,7 +382,7 @@ if (typeof jQuery === "undefined") {
                             data = eval("(" + data + ")")
                         }
                         if (cbfunc) {
-                            if (data.bcjson) {
+                            if (data && data.bcjson) {
                                 var flag = data.bcjson.flag;
                             } else {
                                 return false;
@@ -708,7 +708,7 @@ if (typeof jQuery === "undefined") {
                             data = eval("(" + data + ")")
                         }
                         if (cbfunc) {
-                            if (data.bcjson) {
+                            if (data && data.bcjson) {
                                 var flag = data.bcjson.flag;
                             } else {
                                 return false;
@@ -912,7 +912,7 @@ if (typeof jQuery === "undefined") {
                 return null;
             },
             setParameter: function(key, value) {
-                value = value;
+                // value = value;
                 window.sessionStorage.setItem(key, value);
                 return;
             },

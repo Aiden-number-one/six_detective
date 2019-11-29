@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: lan
+ * @Date: 2019-11-20 14:28:17
+ * @LastEditTime: 2019-11-29 14:54:21
+ * @LastEditors: lan
+ */
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -56,7 +63,7 @@ CodeMirror.defineMode('troff', function() {
         stream.skipToEnd();
         return 'quote';
       }
-      if ((stream.match(/[A-Z]/) && stream.match(/[A-Z]/)) || (stream.match(/[a-z]/) && stream.match(/[a-z]/))) {
+      if (stream.match(/[A-Z]/) || stream.match(/[a-z]/)) {
         return 'attribute';
       }
     }
