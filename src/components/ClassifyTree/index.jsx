@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors: lan
- * @LastEditTime: 2019-11-28 15:56:49
+ * @LastEditTime: 2019-11-29 11:14:41
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -183,6 +183,7 @@ class ClassifyTree extends Component {
     menuList: [],
     initData: [],
     expandedKeys: [],
+    defaultCheckedKeys: [],
     autoExpandParent: true,
   };
 
@@ -193,10 +194,22 @@ class ClassifyTree extends Component {
       return false;
     });
     items = items && !child && formatTree(items, props.treeKey.currentKey, props.treeKey.parentKey);
+    const defaultCheckedKeys = [];
+    if (items.length > 0) {
+      defaultCheckedKeys.push(items[0][props.treeKey.currentKey]);
+    }
     return {
       initData: items,
       menuList: items,
+      defaultCheckedKeys: items.length > 0 ? defaultCheckedKeys : [],
     };
+  }
+
+  componentDidMount() {}
+
+  componentDidUpdate() {
+    const { treeData } = this.props;
+    this.props.onSelect(treeData[0] && treeData[0][this.props.treeKey.currentKey]);
   }
 
   onExpand = expandedKeys => {
@@ -247,11 +260,12 @@ class ClassifyTree extends Component {
 
   onSelect = selectedKeys => {
     const key = selectedKeys[0];
+
     this.props.onSelect(key);
   };
 
   render() {
-    const { expandedKeys, autoExpandParent, menuList } = this.state;
+    const { expandedKeys, autoExpandParent, menuList, defaultCheckedKeys } = this.state;
     const { handleAddTree, handleModifyTree, handleDeleteTree, treeKey, showSearch } = this.props;
     if (menuList) {
       this.generateList(menuList, treeKey);
@@ -270,6 +284,7 @@ class ClassifyTree extends Component {
           onExpand={this.onExpand}
           onSelect={this.onSelect}
           expandedKeys={expandedKeys}
+          defaultSelectedKeys={defaultCheckedKeys}
           autoExpandParent={autoExpandParent}
         >
           {loop(menuList, treeKey, handleAddTree, handleModifyTree, handleDeleteTree)}
