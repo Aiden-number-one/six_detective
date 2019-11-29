@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-28 14:23:51
+ * @LastEditTime: 2019-11-29 10:35:18
  */
 
 import React, { Component } from 'react';
@@ -11,7 +11,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import TableHeader from '@/components/TableHeader';
+import { routerRedux } from 'dva/router';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 
@@ -173,15 +173,6 @@ class UserManagement extends Component {
    */
   getDepartmentId = departmentId => {
     this.newDepartmentId = departmentId;
-  };
-
-  /**
-   * @description: This is for add user function.
-   * @param {type} null
-   * @return: undefined
-   */
-  addUser = () => {
-    this.setState({ visible: true });
   };
 
   addConfrim = () => {
@@ -438,8 +429,12 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  operatorReset = () => {
-    this.searchForm.current.resetFields();
+  newUser = () => {
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: '/system-management/user-maintenance/new-user',
+      }),
+    );
   };
 
   /**
@@ -473,7 +468,7 @@ class UserManagement extends Component {
           <div>
             <NewSearchForm
               search={this.queryLog}
-              reset={this.operatorReset}
+              newUser={this.newUser}
               ref={this.searchForm}
             ></NewSearchForm>
           </div>
@@ -554,7 +549,6 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div>
-            <TableHeader showEdit addTableData={this.addUser}></TableHeader>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
