@@ -213,6 +213,12 @@ export default [
             component: './UserManagement/UserManagement',
           },
           {
+            path: '/system-management/user-maintenance/new-user',
+            name: 'newUser',
+            component: './NewUser/NewUser',
+            hideInMenu: true,
+          },
+          {
             path: '/system-management/mail-content-template',
             name: 'mailContentTemplate',
             component: './TemplateSet/TemplateSet',
