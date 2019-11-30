@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: iron
- * @LastEditTime: 2019-11-26 13:57:20
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2019-11-26 16:08:23
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -97,7 +97,7 @@ request.interceptors.request.use((url, opts) => {
 
   const options = {
     ...opts,
-    params: isProOrDev() ? opts.data : {},
+    params: !isProOrDev() ? opts.data : {},
     data: {
       bcp: cryptoParams,
       s: timestamp,

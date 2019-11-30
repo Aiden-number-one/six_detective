@@ -139,18 +139,6 @@ const cellType = [
     key: 'checkbox',
     value: 'checkbox',
   },
-  // {
-  //   key: '下拉框',
-  //   value: undefined,
-  // },
-  // {
-  //   key: '图片',
-  //   value: undefined,
-  // },
-  // {
-  //   key: '文件',
-  //   value: undefined,
-  // },
 ];
 
 const cellTypeMap = {

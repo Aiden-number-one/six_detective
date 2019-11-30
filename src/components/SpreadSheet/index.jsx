@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import createSpreadSheet from './createSpreadSheet';
+import CreateSpreadSheet from './CreateSpreadSheet';
 
 export default class SpreadsheetComponent extends Component {
   static createSpreadSheet(wrapperComponent) {
-    return createSpreadSheet(wrapperComponent);
+    return CreateSpreadSheet(wrapperComponent);
   }
 
   render() {
