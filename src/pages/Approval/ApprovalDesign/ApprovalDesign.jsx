@@ -10,6 +10,48 @@ import styles from './ApprovalDesign.less';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
+
+// eslint-disable-next-line react/require-render-return
+// class ApprovalFrom extends Component {
+//   render() {
+//     const { getFieldDecorator } = this.props.form;
+//     const formItemLayout = {
+//       labelCol: {
+//         xs: { span: 24 },
+//         sm: { span: 8 },
+//       },
+//       wrapperCol: {
+//         xs: { span: 24 },
+//         sm: { span: 16 },
+//       },
+//     };
+//     const formTailLayout = {
+//       labelCol: { span: 8 },
+//       wrapperCol: { span: 12, offset: 12 },
+//     };
+//     // eslint-disable-next-line no-unused-expressions
+//     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+//       <Form.Item label="名称">
+//         {getFieldDecorator('name', {
+//           rules: [{ required: true, message: 'Please input your name!' }],
+//         })(<Input placeholder="至少2个字符,最多16个字符" />)}
+//       </Form.Item>
+//       <Form.Item label="描述:">
+//         {getFieldDecorator('description', {
+//           rules: [{ required: true, message: 'Please input your description!' }],
+//         })(<TextArea rows={4} />)}
+//       </Form.Item>
+
+//       <Form.Item {...formTailLayout}>
+//         <Button onClick={this.handleCancel}>取消</Button>
+//         <Button type="primary" htmlType="submit">
+//           确定
+//         </Button>
+//       </Form.Item>
+//     </Form>;
+//   }
+// }
+
 @connect(({ approvalDesign }) => ({
   modelList: approvalDesign.data,
   chooseModelId: approvalDesign.chooseModelId,
@@ -117,16 +159,16 @@ class ApprovalDesign extends PureComponent {
     }
   };
 
-  // 下载文件
-  downloadFile = filePath => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'approvalDesign/downloadFile',
-      payload: {
-        filePath,
-      },
-    });
-  };
+  // // 下载文件
+  // downloadFile = filePath => {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'approvalDesign/downloadFile',
+  //     payload: {
+  //       filePath,
+  //     },
+  //   });
+  // };
 
   // 导出模型
   exportModel = () => {
@@ -160,6 +202,7 @@ class ApprovalDesign extends PureComponent {
 
   // 选择tab的选项,获取选中的模型id
   chooseTab = chooseModelId => {
+    console.log('chooseModelId---->', chooseModelId);
     const { dispatch } = this.props;
     dispatch({
       type: 'approvalDesign/changeModelId',
@@ -196,6 +239,7 @@ class ApprovalDesign extends PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { modelList, modelImage } = this.props;
+    // console.log('modelList--------->', modelList);
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -250,7 +294,6 @@ class ApprovalDesign extends PureComponent {
                 </div>
                 <Tabs
                   onChange={this.chooseTab}
-                  defaultActiveKey="1"
                   tabPosition="left"
                   style={{ height: 600, marginTop: '20px' }}
                   tabBarStyle={{ width: 200 }}
@@ -261,7 +304,7 @@ class ApprovalDesign extends PureComponent {
                       {item.name}
                     </TabPane>
                   ))}
-                  {modelImage ? <img src={modelImage} alt="" /> : null}
+                  <div>{modelImage ? <img src={modelImage} alt="" /> : null}</div>
                 </Tabs>
               </div>
             </div>

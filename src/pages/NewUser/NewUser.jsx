@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Row, Col, Button, Form, Input, Checkbox } from 'antd';
+import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 // import { routerRedux } from 'dva/router';
 
@@ -121,9 +121,16 @@ export default class NewUser extends Component {
     this.state = {};
   }
 
+  onCancel = () => {
+    this.props.history.push({
+      pathname: '/system-management/user-maintenance',
+    });
+  };
+
   onSave = () => {
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
+      message.success('save success');
       this.props.history.push({
         pathname: '/system-management/user-maintenance',
         params: values,
@@ -137,7 +144,7 @@ export default class NewUser extends Component {
         <Fragment>
           <Row type="flex" justify="end">
             <Col>
-              <Button>CANCEL</Button>
+              <Button onClick={this.onCancel}>CANCEL</Button>
               <Button type="primary" onClick={this.onSave}>
                 SAVE
               </Button>

@@ -18,6 +18,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 var KISBPM = KISBPM || {};
 
 KISBPM.URL = {
@@ -66,6 +67,7 @@ KISBPM.URL = {
     };
   },
   getHeader: function(NVPS) {
+    const rid = `RID${uuidv1().replace(/-/g, '')}`;
     return {
       'X-Bc-S': (() => {
         const randowNVPS = this.getRandowNVPS();
@@ -74,12 +76,13 @@ KISBPM.URL = {
         randowNVPS.forEach(value => {
           signText += value + NVPS[value];
         });
+        signText += `I${rid}`;
         return signMode + MD5(signText).toUpperCase();
       })(),
       'X-Bc-T': (() => {
-        const uuid = new UUID().value.toLowerCase();
-        return 'BCT' + uuid;
+        return  `BCT${localStorage.getItem('BCTID')}`;
       })(),
+      'X-Bc-I': rid,
     };
   },
   //     getParams: function(a, v, p) {
@@ -99,6 +102,7 @@ KISBPM.URL = {
   //         test_param.href = document.location.href;
   //         return test_param;
   //     },
+ 
   get16: function(a, v, p) {
     var pp = {};
     var _t = new Date().getTime() + '';
