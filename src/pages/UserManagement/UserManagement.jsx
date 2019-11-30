@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-28 14:23:51
+ * @LastEditTime: 2019-11-30 17:06:57
  */
 
 import React, { Component } from 'react';
@@ -11,7 +11,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import TableHeader from '@/components/TableHeader';
+import { routerRedux } from 'dva/router';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 
@@ -36,7 +36,7 @@ class UserManagement extends Component {
   state = {
     visible: false,
     updateVisible: false,
-    lockVisible: false,
+    deleteVisible: false,
     closingVisible: false,
     updatePasswordVisible: false,
     resetPasswordVisible: false,
@@ -51,13 +51,13 @@ class UserManagement extends Component {
     columns: [
       {
         title: formatMessage({ id: 'app.common.userId' }),
-        dataIndex: 'roleId',
-        key: 'roleId',
+        dataIndex: 'userId',
+        key: 'userId',
       },
       {
         title: formatMessage({ id: 'app.common.username' }),
-        dataIndex: 'roleName',
-        key: 'roleName',
+        dataIndex: 'userName',
+        key: 'userName',
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
@@ -83,17 +83,8 @@ class UserManagement extends Component {
             <a href="#" onClick={() => this.updateUser(res, obj)}>
               {formatMessage({ id: 'app.common.modify' })}
             </a>
-            <a href="#" onClick={() => this.lockUser()}>
-              锁定
-            </a>
-            <a href="#" onClick={() => this.closingUser()}>
-              销户
-            </a>
-            <a href="#" onClick={() => this.updatePassword()}>
-              密码修改
-            </a>
-            <a href="#" onClick={() => this.resetPassword()}>
-              密码重置
+            <a href="#" onClick={() => this.deleteUser()}>
+              {formatMessage({ id: 'app.common.delete' })}
             </a>
           </span>
         ),
@@ -176,12 +167,16 @@ class UserManagement extends Component {
   };
 
   /**
-   * @description: This is for add user function.
+   * @description: This is for reset form function.
    * @param {type} null
    * @return: undefined
    */
-  addUser = () => {
-    this.setState({ visible: true });
+  newUser = () => {
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: '/system-management/user-maintenance/new-user',
+      }),
+    );
   };
 
   addConfrim = () => {
@@ -220,6 +215,8 @@ class UserManagement extends Component {
    * @return: undefined
    */
   updateUser = (res, obj) => {
+    console.log('res=======', res);
+    console.log('obj============', obj);
     const userInfo = {
       login: '',
       name: '',
@@ -232,11 +229,21 @@ class UserManagement extends Component {
     userInfo.departmentName = obj.departmentName;
     userInfo.departmentId = obj.departmentId;
     userInfo.email = obj.email;
-    this.setState({
-      updateVisible: true,
-      userInfo,
-      customerno: obj.customerno,
-    });
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: '/system-management/user-maintenance/modify-user',
+        query: {
+          userId: obj.userId,
+          userName: obj.userName,
+          userState: obj.userState,
+        },
+      }),
+    );
+    // this.setState({
+    //   updateVisible: true,
+    //   userInfo,
+    //   customerno: obj.customerno,
+    // });
   };
 
   updateConfirm = () => {
@@ -274,13 +281,13 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  lockUser = () => {
+  deleteUser = () => {
     this.setState({
-      lockVisible: true,
+      deleteVisible: true,
     });
   };
 
-  lockConfirm = () => {
+  deleteConfirm = () => {
     const { dispatch } = this.props;
     const param = {
       operationType: '1',
@@ -293,13 +300,13 @@ class UserManagement extends Component {
       },
     });
     this.setState({
-      lockVisible: false,
+      deleteVisible: false,
     });
   };
 
-  lockCancel = () => {
+  deleteCancel = () => {
     this.setState({
-      lockVisible: false,
+      deleteVisible: false,
     });
   };
 
@@ -434,15 +441,6 @@ class UserManagement extends Component {
   };
 
   /**
-   * @description: This is for reset form function.
-   * @param {type} null
-   * @return: undefined
-   */
-  operatorReset = () => {
-    this.searchForm.current.resetFields();
-  };
-
-  /**
    * @description: This is for paging function.
    * @param {type} null
    * @return: undefined
@@ -473,7 +471,7 @@ class UserManagement extends Component {
           <div>
             <NewSearchForm
               search={this.queryLog}
-              reset={this.operatorReset}
+              newUser={this.newUser}
               ref={this.searchForm}
             ></NewSearchForm>
           </div>
@@ -510,14 +508,14 @@ class UserManagement extends Component {
             </Modal>
             {/* 锁定 */}
             <Modal
-              title="提示"
-              visible={this.state.lockVisible}
-              onOk={this.lockConfirm}
-              onCancel={this.lockCancel}
+              title="CONFIRM"
+              visible={this.state.deleteVisible}
+              onOk={this.deleteConfirm}
+              onCancel={this.deleteCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
               okText={formatMessage({ id: 'app.common.save' })}
             >
-              <span>是否锁定？</span>
+              <span>Are you sure you want to delete this form?</span>
             </Modal>
             {/* 销户 */}
             <Modal
@@ -554,7 +552,6 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div>
-            <TableHeader showEdit addTableData={this.addUser}></TableHeader>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}

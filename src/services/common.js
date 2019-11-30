@@ -2,8 +2,8 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-11-27 16:53:01
- * @LastEditors: dailinbo
+ * @LastEditTime: 2019-11-28 15:17:16
+ * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
 const prefix = '';
@@ -16,6 +16,7 @@ export default {
   getDataSourceList: 'kingdom.retl.getDataSourceList',
   getLogin: 'get_website_login', // 登录
   getLoginStatus: 'get_user_operate_info', // 判断登录状态
+  logout: 'set_sys_logout', // 登出接口
   getDict: 'get_all_dict_data_list', // 获取字典
   getApproval: `${prefix}get_audit_history_list_page`,
   getConfig: `${prefix}get_audit_config_list_page`,

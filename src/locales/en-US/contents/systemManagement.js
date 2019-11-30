@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-28 14:21:45
+ * @LastEditTime: 2019-11-29 18:37:45
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -11,6 +11,8 @@ export default {
   'systemManagement.userMaintenance.lockedStatus': 'Locked',
   'systemManagement.userMaintenance.LastUpdateTime': 'Last Update Time',
   'systemManagement.userMaintenance.LastUpdateUser': 'Last Update User',
+  'systemManagement.userMaintenance.menuUserGroup': 'Menu User Group',
+  'systemManagement.userMaintenance.alertUserGroup': 'Alert User Group',
   'systemManagement.emailParameter.severIP': 'Sever IP',
   'systemManagement.emailParameter.port': 'Port',
   'systemManagement.emailParameter.senderEmailAddress': 'Sender email address',

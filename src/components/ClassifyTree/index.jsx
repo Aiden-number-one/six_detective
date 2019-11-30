@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-28 17:11:50
+ * @LastEditTime: 2019-11-30 14:59:40
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -205,12 +205,14 @@ class ClassifyTree extends Component {
     };
   }
 
-  componentDidMount() {}
-
-  componentDidUpdate() {
-    const { treeData } = this.props;
-    this.props.onSelect(treeData[0] && treeData[0][this.props.treeKey.currentKey]);
+  componentDidMount() {
+    setTimeout(() => {
+      const { treeData } = this.props;
+      this.props.onSelect(treeData[0] && treeData[0][this.props.treeKey.currentKey]);
+    }, 200);
   }
+
+  componentDidUpdate() {}
 
   onExpand = expandedKeys => {
     this.setState({
@@ -266,19 +268,22 @@ class ClassifyTree extends Component {
 
   render() {
     const { expandedKeys, autoExpandParent, menuList, defaultCheckedKeys } = this.state;
-    const { handleAddTree, handleModifyTree, handleDeleteTree, treeKey } = this.props;
+    const { handleAddTree, handleModifyTree, handleDeleteTree, treeKey, showSearch } = this.props;
     if (menuList) {
       this.generateList(menuList, treeKey);
     }
     return (
-      <div>
-        <Search
-          style={{ marginBottom: 8 }}
-          placeholder="Search"
-          onSearch={value => this.onSearch(value, treeKey)}
-        />
+      <div className={styles.classifyTree}>
+        {showSearch && (
+          <Search
+            style={{ marginBottom: 8 }}
+            placeholder="Search"
+            onSearch={value => this.onSearch(value, treeKey)}
+          />
+        )}
         <Tree
-          showLine
+          // showLine
+          checkable
           onExpand={this.onExpand}
           onSelect={this.onSelect}
           expandedKeys={expandedKeys}

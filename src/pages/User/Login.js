@@ -2,7 +2,7 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-11-14 13:33:42
+ * @LastEditTime: 2019-11-28 15:19:05
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -59,8 +59,7 @@ class Login extends Component {
             return;
           }
           const item = response.bcjson.items[0];
-          localStorage.setItem('loginName', item.loginName);
-          localStorage.setItem('loginTime', item.loginTime);
+          localStorage.setItem('loginName', item.nickName);
           router.push('/');
         },
       });

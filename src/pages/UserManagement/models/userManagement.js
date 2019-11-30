@@ -26,8 +26,8 @@ export const userManagement = {
             return {
               custStatus: newCustStatus,
               custCustomerno: element.custCustomerno,
-              roleId: element.roleId,
-              roleName: element.roleName,
+              userId: element.userId,
+              userName: element.userName,
               customerno: element.customerno,
               departmentId: element.departmentId,
               updateTime: element.updateTime,
@@ -35,6 +35,7 @@ export const userManagement = {
               email: element.email,
               lastupdatetime: element.lastupdatetime,
               loginName: element.loginName,
+              userState: element.userState,
             };
           }));
         bcjson.items = userData;

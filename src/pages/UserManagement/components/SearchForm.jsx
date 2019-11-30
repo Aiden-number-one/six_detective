@@ -8,7 +8,7 @@ export default class SearchForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { search, reset } = this.props;
+    const { search, newUser } = this.props;
     return (
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
@@ -59,9 +59,7 @@ export default class SearchForm extends Component {
           */}
         </Row>
         <div className="btnArea">
-          <Button icon="close" onClick={reset}>
-            Reset
-          </Button>
+          <Button onClick={newUser}>+ New User</Button>
           <Button type="primary" onClick={search}>
             {formatMessage({ id: 'app.common.search' })}
           </Button>
