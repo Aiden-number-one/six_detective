@@ -37,6 +37,7 @@ export default {
   setConfigStatus: `${prefix}set_audit_config_status_update`,
   getRoleGroup: `${prefix}get_role_group_query`,
   getAuditorlist: `${prefix}get_auditor_list`,
+  getQueryMenu: `${prefix}get_query_menu_alert`,
   getSchedule: `${prefix}get_schedule_list_page`,
   scheduleDelete: `${prefix}set_schedule_delete_batch`,
   scheduleModify: `${prefix}set_schedule_modify`,

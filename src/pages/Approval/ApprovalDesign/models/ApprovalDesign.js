@@ -9,7 +9,6 @@ const {
   importModel,
   exportModel,
   deployModel,
-  downloadFile,
 } = Service;
 export default {
   namespace: 'approvalDesign',
@@ -86,12 +85,12 @@ export default {
         message.success('部署成功');
       }
     },
-    *downloadFile({ payload }, { call }) {
-      const response = yield call(downloadFile, { param: payload, method: 'GET' });
-      if (response.bcjson.flag === '1') {
-        //   message.success('部署成功');
-      }
-    },
+    // *downloadFile({ payload }, { call }) {
+    //   const response = yield call(downloadFile, { param: payload, method: 'GET' });
+    //   if (response.bcjson.flag === '1') {
+    //     //   message.success('部署成功');
+    //   }
+    // },
   },
 
   reducers: {
