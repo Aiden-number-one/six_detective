@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-11-26 16:08:23
+ * @LastEditors: mus
+ * @LastEditTime: 2019-11-30 10:17:34
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -18,7 +18,9 @@ import { getRandowNVPS, isProOrDev } from './utils';
 
 const API_PREFFIX = '/api';
 const VERSION = 'v2.0';
+// const VERSION = 'v4.0';
 const BUSINESS_PREFFIX = 'bayconnect.superlop';
+// const BUSINESS_PREFFIX = 'kingdom.retl';
 const DEFAULT_PARAM = { bcLangType: 'ZHCN' };
 
 export const codeMessage = {
@@ -97,7 +99,7 @@ request.interceptors.request.use((url, opts) => {
 
   const options = {
     ...opts,
-    params: !isProOrDev() ? opts.data : {},
+    params: isProOrDev() ? opts.data : {},
     data: {
       bcp: cryptoParams,
       s: timestamp,

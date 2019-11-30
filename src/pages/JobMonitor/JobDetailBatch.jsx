@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { Row, Col, Icon } from 'antd';
+import { Row, Col, Icon, Message } from 'antd';
 import TaskConfigModal from './JobConfigModal';
 
 export default function({ batch, taskPoints }) {
   const [cfgVisible, setCfgVisible] = useState(false);
   function handleTaskConfig() {
-    setCfgVisible(true);
+    if (batch.jobId) {
+      setCfgVisible(true);
+    } else {
+      Message.warn('please select one job first !!!');
+    }
   }
 
   return (
-    <Row type="flex" align="middle">
+    <>
       <TaskConfigModal
         visible={cfgVisible}
         taskPoints={taskPoints}
@@ -18,7 +22,9 @@ export default function({ batch, taskPoints }) {
       />
       <Col span={8}>
         <Row type="flex" align="middle">
-          <Col span={12}>{batch.executeMsg}</Col>
+          <Col span={12} align="center">
+            {batch.executeMsg}
+          </Col>
           <Col span={12}>
             <Row>{batch.memberNo}</Row>
             <Row>{batch.nodeName}</Row>
@@ -35,7 +41,7 @@ export default function({ batch, taskPoints }) {
                 fontSize: 28,
                 cursor: 'pointer',
               }}
-              onClick={() => handleTaskConfig()}
+              onClick={handleTaskConfig}
             />
           </Col>
           <Col span={12}>时长：{batch.zxsjFormat}</Col>
@@ -45,6 +51,6 @@ export default function({ batch, taskPoints }) {
         <Row>开始时间：{batch.startTimeFormat}</Row>
         <Row>结束时间：{batch.endTimeFormat}</Row>
       </Col>
-    </Row>
+    </>
   );
 }

@@ -1,0 +1,14 @@
+
+    /* 提高modal里的下拉框层级 */
+    .modal-open .select2-drop {
+        z-index: 10050 !important;
+    }
+    .modal-open .select2-container {
+      z-index: 10050 !important;
+    }
+    .modal-open .select2-drop-mask {
+        z-index: 10050 !important;
+    }
+    .modal-open .select2-drop-active {
+        z-index: 10050 !important;
+    }

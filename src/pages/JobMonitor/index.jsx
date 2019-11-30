@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
-import { Row, Col } from 'antd';
+import { Row, Col, Spin, Empty } from 'antd';
 import AllJob from './AllJob';
 import JobDetail from './JobDetail';
 import styles from './index.less';
@@ -38,30 +38,28 @@ function JobMonitor({ dispatch, loading, jobs, tasks, taskPoints, eachBatches })
     });
   }
 
-  if (loading['tm/queryJobs']) {
-    return <p>loading</p>;
-  }
-
-  if (jobs.length === 0) {
-    return <p>暂无数据</p>;
-  }
-
   return (
     <div className={styles.container}>
-      <Row>
-        <Col span={4}>
-          <AllJob jobs={jobs} getJob={handleBatch} />
-        </Col>
-        <Col span={18} offset={1}>
-          <JobDetail
-            loading={loading}
-            tasks={tasks}
-            taskPoints={taskPoints}
-            eachBatches={eachBatches}
-            getTasks={getTasks}
-          />
-        </Col>
-      </Row>
+      <Spin spinning={loading['tm/queryJobs']}>
+        {loading['tm/queryJobs'] === false && jobs.length === 0 ? (
+          <Empty />
+        ) : (
+          <Row>
+            <Col span={5}>
+              <AllJob jobs={jobs} getJob={handleBatch} />
+            </Col>
+            <Col span={18} offset={1}>
+              <JobDetail
+                loading={loading}
+                tasks={tasks}
+                taskPoints={taskPoints}
+                eachBatches={eachBatches}
+                getTasks={getTasks}
+              />
+            </Col>
+          </Row>
+        )}
+      </Spin>
     </div>
   );
 }

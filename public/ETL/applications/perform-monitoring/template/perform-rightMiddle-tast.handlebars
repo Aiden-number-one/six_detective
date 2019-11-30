@@ -1,0 +1,6 @@
+ {{#if flag}} {{else}} {{#each this}}
+<div class="tourist-wide-a"  style="padding-left:15px">
+    作业批次：<div class="text-overflow batchNostyle" title="{{batchNo}}" >{{batchNo}}</div>&nbsp;&nbsp;&nbsp;&nbsp; 开始：{{dateTimeFormatHelper startTime}} &nbsp;&nbsp;&nbsp;&nbsp;结束：{{dateTimeFormatHelper endTime}}
+    &nbsp;&nbsp;&nbsp;&nbsp;错误数：{{errorNum}}&nbsp;&nbsp;&nbsp;&nbsp;执行类型：{{executeTypeName}}
+</div>
+{{/each}} {{/if}}

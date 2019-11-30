@@ -4,7 +4,7 @@ import { routerRedux } from 'dva/router';
 import uuidv1 from 'uuid/v1';
 import Service from '@/utils/Service';
 
-const { getLogin, getLoginStatus } = Service;
+const { getLogin, getLoginStatus, logout } = Service;
 
 export function getPageQuery() {
   return parse(window.location.href.split('?')[1]);
@@ -41,9 +41,9 @@ const Model = {
       // }
       if (callback) callback(response);
     },
-    *logout(_, { put }) {
+    *logout(_, { call, put }) {
       // const { redirect } = getPageQuery();
-
+      yield call(logout, { param: {} });
       if (window.location.pathname !== '/login') {
         yield put(
           routerRedux.replace({

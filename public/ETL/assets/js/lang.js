@@ -1,0 +1,1 @@
+var LANGUAGE_CODE="en";function loadProperties(a){jQuery.i18n.properties({name:"i18n",path:"/assets/i18n/",mode:"map",language:a,cache:!1,encoding:"UTF-8",callback:function(){for(var a in $.i18n.map)$("[data-lang="+a+"]").text($.i18n.map[a])}})}$(document).ready(function(a){loadProperties(LANGUAGE_CODE)});

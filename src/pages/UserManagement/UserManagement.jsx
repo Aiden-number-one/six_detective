@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-22 13:57:10
+ * @LastEditTime: 2019-11-29 16:39:00
  */
 
 import React, { Component } from 'react';
@@ -11,7 +11,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import TableHeader from '@/components/TableHeader';
+import { routerRedux } from 'dva/router';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 
@@ -50,29 +50,29 @@ class UserManagement extends Component {
     },
     columns: [
       {
-        title: '登陆名',
-        dataIndex: 'loginName',
-        key: 'loginName',
+        title: formatMessage({ id: 'app.common.userId' }),
+        dataIndex: 'userId',
+        key: 'userId',
       },
       {
-        title: `${formatMessage({ id: 'app.common.username' })}`,
-        dataIndex: 'customerName',
-        key: 'customerName',
+        title: formatMessage({ id: 'app.common.username' }),
+        dataIndex: 'userName',
+        key: 'userName',
       },
       {
-        title: '邮箱',
-        dataIndex: 'email',
-        key: 'email',
+        title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
+        dataIndex: 'userState',
+        key: 'userState',
       },
       {
-        title: '公司部门',
-        dataIndex: 'departmentName',
-        key: 'departmentName',
+        title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
+        dataIndex: 'updateTime',
+        key: 'updateTime',
       },
       {
-        title: `${formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' })}`,
-        dataIndex: 'custStatus',
-        key: 'custStatus',
+        title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
+        dataIndex: 'updateTime',
+        key: 'updateTime',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -118,6 +118,7 @@ class UserManagement extends Component {
   resetPasswordFormRef = React.createRef();
 
   componentDidMount() {
+    console.log('props=', this.props);
     this.queryUserList();
     this.queryDepartments();
   }
@@ -176,12 +177,16 @@ class UserManagement extends Component {
   };
 
   /**
-   * @description: This is for add user function.
+   * @description: This is for reset form function.
    * @param {type} null
    * @return: undefined
    */
-  addUser = () => {
-    this.setState({ visible: true });
+  newUser = () => {
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: '/system-management/user-maintenance/new-user',
+      }),
+    );
   };
 
   addConfrim = () => {
@@ -220,6 +225,8 @@ class UserManagement extends Component {
    * @return: undefined
    */
   updateUser = (res, obj) => {
+    console.log('res=======', res);
+    console.log('obj============', obj);
     const userInfo = {
       login: '',
       name: '',
@@ -232,11 +239,21 @@ class UserManagement extends Component {
     userInfo.departmentName = obj.departmentName;
     userInfo.departmentId = obj.departmentId;
     userInfo.email = obj.email;
-    this.setState({
-      updateVisible: true,
-      userInfo,
-      customerno: obj.customerno,
-    });
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: '/system-management/user-maintenance/modify-user',
+        query: {
+          userId: obj.userId,
+          userName: obj.userName,
+          userState: obj.userState,
+        },
+      }),
+    );
+    // this.setState({
+    //   updateVisible: true,
+    //   userInfo,
+    //   customerno: obj.customerno,
+    // });
   };
 
   updateConfirm = () => {
@@ -434,15 +451,6 @@ class UserManagement extends Component {
   };
 
   /**
-   * @description: This is for reset form function.
-   * @param {type} null
-   * @return: undefined
-   */
-  operatorReset = () => {
-    this.searchForm.current.resetFields();
-  };
-
-  /**
    * @description: This is for paging function.
    * @param {type} null
    * @return: undefined
@@ -466,14 +474,14 @@ class UserManagement extends Component {
   render() {
     const { loading, orgs, userManagementData } = this.props;
     const { userInfo, page } = this.state;
-
+    console.log('userManagementData.items=', userManagementData.items);
     return (
       <PageHeaderWrapper>
         <div>
           <div>
             <NewSearchForm
               search={this.queryLog}
-              reset={this.operatorReset}
+              newUser={this.newUser}
               ref={this.searchForm}
             ></NewSearchForm>
           </div>
@@ -554,7 +562,6 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div>
-            <TableHeader showEdit addTableData={this.addUser}></TableHeader>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}

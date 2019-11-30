@@ -1,0 +1,23 @@
+{{#if flag}}
+<tr>
+  <td colspan="20" class="t-c">暂无数据</td>
+</tr>
+{{else}} {{#each this}}
+<tr>
+    <td class="t-c" data-tableId={{tableId}}>
+        <input type="checkbox" class="">
+    </td>
+    <td>{{calcIndex @index}}</td>
+    <td>{{fileName}}</td>
+    <td>{{fileType}}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="t-c" fileUrl='{{fileUrl}}' fileType='{{fileType}}' fileName='{{fileName}}' connectionId='{{connectionId}}'>
+        <a id="dsc-modal-check-file" href="javascript:;">查看</a>
+        <a id="dsc-modal-delete-file" href="javascript:;">删除</a>
+    </td>
+
+</tr>
+{{/each}} {{/if}}
