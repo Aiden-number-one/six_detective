@@ -29,6 +29,7 @@ class ApprovalConifg extends PureComponent {
     });
     this.deployedModelList({ pageNumber: '1', pageSize: '10' });
     this.fetchRoleGroupDatas();
+    this.getQueryMenu();
     // this.createData();
   }
 
@@ -47,6 +48,15 @@ class ApprovalConifg extends PureComponent {
     dispatch({
       type: 'approvalSet/getRoleGroupDatas',
       payload: param,
+    });
+  };
+
+  // 获取角色树
+  getQueryMenu = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalSet/getQueryMenuDatas',
+      payload: {},
     });
   };
 
