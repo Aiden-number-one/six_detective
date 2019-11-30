@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-30 17:06:57
+ * @LastEditTime: 2019-11-30 17:48:57
  */
 
 import React, { Component } from 'react';
@@ -465,6 +465,11 @@ class UserManagement extends Component {
     const { loading, orgs, userManagementData } = this.props;
     const { userInfo, page } = this.state;
     console.log('userManagementData.items=', userManagementData.items);
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+    };
     return (
       <PageHeaderWrapper>
         <div>
@@ -551,10 +556,11 @@ class UserManagement extends Component {
               <NewResetPasswordForm ref={this.resetPasswordFormRef}></NewResetPasswordForm>
             </Modal>
           </div>
-          <div>
+          <div className={styles.content}>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
+              rowSelection={rowSelection}
               onChange={this.pageChange}
               dataSource={userManagementData.items}
               columns={this.state.columns}

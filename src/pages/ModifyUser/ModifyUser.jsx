@@ -25,7 +25,6 @@ class FormUser extends Component {
     const { getFieldDecorator } = this.props.form;
     const { userInfo } = this.props;
     const { menuUserGroups, alertUserGroups } = this.state;
-    console.log('userInfo=', userInfo);
     return (
       <Fragment>
         <Form>
@@ -114,8 +113,6 @@ export default class ModifyUser extends Component {
 
   static getDerivedStateFromProps(props) {
     const { query } = props.location;
-    console.log('props====', props);
-    console.log('query====', query);
     return {
       userInfo: query,
     };
@@ -145,7 +142,6 @@ export default class ModifyUser extends Component {
   render() {
     // const { query } = this.props.location
     const { userInfo } = this.state;
-    console.log('userInfo=', userInfo);
     return (
       <PageHeaderWrapper>
         <Fragment>

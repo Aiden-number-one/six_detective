@@ -40,13 +40,9 @@ const footerRender = () => (
 );
 
 const BasicLayout = props => {
-  const {
-    dispatch,
-    children,
-    settings,
-    collapsed,
-    // menuData
-  } = props;
+  const { dispatch, children, settings, collapsed, menuData } = props;
+
+  console.log('props=========', props);
   /**
    * constructor
    */
@@ -60,6 +56,9 @@ const BasicLayout = props => {
     // setLocale('zh-CN');
     // window.addEventListener('beforeunload', listenClose, false);
     if (dispatch) {
+      dispatch({
+        type: 'menu/getMenuData',
+      });
       dispatch({
         type: 'login/getLoginStatus',
         payload: {
@@ -220,8 +219,8 @@ const BasicLayout = props => {
         );
       }}
       footerRender={footerRender}
-      // menuDataRender={() => menuDataRender(menuData)}
-      menuDataRender={menuDataRender}
+      menuDataRender={() => menuDataRender(menuData)}
+      // menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       // menuRender={(a, b) => {
