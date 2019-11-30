@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Row, Col, Button, Form, Input, Checkbox } from 'antd';
+import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 // import { routerRedux } from 'dva/router';
 
@@ -23,7 +23,9 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { userInfo } = this.props;
     const { menuUserGroups, alertUserGroups } = this.state;
+    console.log('userInfo=', userInfo);
     return (
       <Fragment>
         <Form>
@@ -35,7 +37,8 @@ class FormUser extends Component {
                   message: 'Please input your UserId',
                 },
               ],
-            })(<Input />)}
+              initialValue: `${userInfo && userInfo.userId}`,
+            })(<Input disabled />)}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'app.common.username' })}
@@ -104,16 +107,34 @@ export default class ModifyUser extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      userInfo: {},
+    };
+  }
+
+  static getDerivedStateFromProps(props) {
+    const { query } = props.location;
+    console.log('props====', props);
+    console.log('query====', query);
+    return {
+      userInfo: query,
+    };
   }
 
   componentDidMount() {
-    console.log('modify,props=', this.props);
+    console.log('modify,props=', this.props.location.query);
   }
+
+  onCancel = () => {
+    this.props.history.push({
+      pathname: '/system-management/user-maintenance',
+    });
+  };
 
   onSave = () => {
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
+      message.success('save success');
       this.props.history.push({
         pathname: '/system-management/user-maintenance',
         params: values,
@@ -122,18 +143,21 @@ export default class ModifyUser extends Component {
   };
 
   render() {
+    // const { query } = this.props.location
+    const { userInfo } = this.state;
+    console.log('userInfo=', userInfo);
     return (
       <PageHeaderWrapper>
         <Fragment>
           <Row type="flex" justify="end">
             <Col>
-              <Button>CANCEL</Button>
+              <Button onClick={this.onCancel}>CANCEL</Button>
               <Button type="primary" onClick={this.onSave}>
                 SAVE
               </Button>
             </Col>
           </Row>
-          <NewFormUser ref={this.newUserRef} />
+          <NewFormUser ref={this.newUserRef} userInfo={userInfo} />
         </Fragment>
       </PageHeaderWrapper>
     );

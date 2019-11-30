@@ -2,8 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
- * @LastEditors: lan
- * @LastEditTime: 2019-11-29 16:51:22
+ * @LastEditors: dailinbo
+ * @LastEditTime: 2019-11-30 14:59:40
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -273,7 +273,7 @@ class ClassifyTree extends Component {
       this.generateList(menuList, treeKey);
     }
     return (
-      <div>
+      <div className={styles.classifyTree}>
         {showSearch && (
           <Search
             style={{ marginBottom: 8 }}
@@ -283,6 +283,7 @@ class ClassifyTree extends Component {
         )}
         <Tree
           // showLine
+          checkable
           onExpand={this.onExpand}
           onSelect={this.onSelect}
           expandedKeys={expandedKeys}

@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-29 16:39:00
+ * @LastEditTime: 2019-11-30 17:06:57
  */
 
 import React, { Component } from 'react';
@@ -36,7 +36,7 @@ class UserManagement extends Component {
   state = {
     visible: false,
     updateVisible: false,
-    lockVisible: false,
+    deleteVisible: false,
     closingVisible: false,
     updatePasswordVisible: false,
     resetPasswordVisible: false,
@@ -83,17 +83,8 @@ class UserManagement extends Component {
             <a href="#" onClick={() => this.updateUser(res, obj)}>
               {formatMessage({ id: 'app.common.modify' })}
             </a>
-            <a href="#" onClick={() => this.lockUser()}>
-              锁定
-            </a>
-            <a href="#" onClick={() => this.closingUser()}>
-              销户
-            </a>
-            <a href="#" onClick={() => this.updatePassword()}>
-              密码修改
-            </a>
-            <a href="#" onClick={() => this.resetPassword()}>
-              密码重置
+            <a href="#" onClick={() => this.deleteUser()}>
+              {formatMessage({ id: 'app.common.delete' })}
             </a>
           </span>
         ),
@@ -118,7 +109,6 @@ class UserManagement extends Component {
   resetPasswordFormRef = React.createRef();
 
   componentDidMount() {
-    console.log('props=', this.props);
     this.queryUserList();
     this.queryDepartments();
   }
@@ -291,13 +281,13 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  lockUser = () => {
+  deleteUser = () => {
     this.setState({
-      lockVisible: true,
+      deleteVisible: true,
     });
   };
 
-  lockConfirm = () => {
+  deleteConfirm = () => {
     const { dispatch } = this.props;
     const param = {
       operationType: '1',
@@ -310,13 +300,13 @@ class UserManagement extends Component {
       },
     });
     this.setState({
-      lockVisible: false,
+      deleteVisible: false,
     });
   };
 
-  lockCancel = () => {
+  deleteCancel = () => {
     this.setState({
-      lockVisible: false,
+      deleteVisible: false,
     });
   };
 
@@ -518,14 +508,14 @@ class UserManagement extends Component {
             </Modal>
             {/* 锁定 */}
             <Modal
-              title="提示"
-              visible={this.state.lockVisible}
-              onOk={this.lockConfirm}
-              onCancel={this.lockCancel}
+              title="CONFIRM"
+              visible={this.state.deleteVisible}
+              onOk={this.deleteConfirm}
+              onCancel={this.deleteCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
               okText={formatMessage({ id: 'app.common.save' })}
             >
-              <span>是否锁定？</span>
+              <span>Are you sure you want to delete this form?</span>
             </Modal>
             {/* 销户 */}
             <Modal
