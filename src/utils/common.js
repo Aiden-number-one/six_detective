@@ -88,14 +88,36 @@ const colors = [
   'lime',
 ];
 
-const components = {
-  '/login': './User/Login',
-  '/': './DataSource/DataSource',
-  '/datapanel': './DataPanel/DataPanel',
-  '/sheet': './Sheet/Sheet',
+// iframe 映射
+const iframe = {
+  // 数据连接
+  '/data-management/data-maintenance': 'index.html#data-source-configuration',
+  // 驱动管理
+  '/data-management/drive-management': 'index.html#data-driven',
+  // 规则管理
+  '/data-management/task-config-setting': 'index.html#task-config-setting',
+  // 质量问题分析
+  '/data-management/report-table-info-manage': 'index.html#report-table-info-manage',
+  // 任务管理
+  '/data-management/task-plan-setting': 'index.html#task-plan-setting',
+  // 作业管理
+  '/data-management/perform-monitoring': 'index.html#perform-monitoring',
+  // 执行日志
+  '/data-management/log-query': 'index.html#log-query',
 };
 
-const menuIcons = {};
+// const components = {
+// };
+
+const menuIcons = {
+  'Etl Center': 'icon-zhuxian',
+  'Account Management': 'icon-user',
+  Surveillance: 'icon-shipin',
+  Report: 'icon-text',
+  Analysis: 'icon-chartpie',
+  'System Management': 'icon-diannao',
+  'Alert Management': 'icon-jinggao',
+};
 
 // 数据类型
 const typeMap = {
@@ -114,7 +136,8 @@ export {
   publishStatusMap,
   colors,
   status,
-  components,
+  iframe,
+  // components,
   typeMap,
   menuIcons,
 };

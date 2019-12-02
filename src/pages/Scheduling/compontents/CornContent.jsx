@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Tabs, Radio, InputNumber, Checkbox, Row, Col } from 'antd';
 
 const { TabPane } = Tabs;
-const { Group } = Radio;
+// const { Group } = Radio;
 
 export default class CornContent extends PureComponent {
   componentDidMount() {

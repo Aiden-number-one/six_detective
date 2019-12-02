@@ -1,11 +1,10 @@
 /*
- * @Des: unified error message for model (dva)
+ * @Des: runtime config
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-07 17:09:07
  * @LastEditors: iron
- * @LastEditTime: 2019-11-14 19:06:56
- * @Description: 运行时的配置文件
+ * @LastEditTime: 2019-12-02 14:45:24
  */
 
 import { notification } from 'antd';

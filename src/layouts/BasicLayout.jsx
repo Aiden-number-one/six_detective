@@ -4,10 +4,7 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout from '@ant-design/pro-layout';
-import React, {
-  useEffect,
-  // useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon, Badge, Popover } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
@@ -22,12 +19,15 @@ import styles from './BasicLayout.less';
 import '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
 import { isProOrDev } from '@/utils/utils';
+
 /**
  * use Authorized check all menu item
  */
 const menuDataRender = menuList =>
   menuList.map(item => {
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
+    // console.log(localItem);
+
     return Authorized.check(item.authority, localItem, null);
   });
 
@@ -42,11 +42,11 @@ const footerRender = () => (
 const BasicLayout = props => {
   const { dispatch, children, settings, collapsed, menuData } = props;
 
-  console.log('props=========', props);
+  // console.log('props=========', props);
   /**
    * constructor
    */
-  // const [openKeys, setOpenKeys] = useState([]);
+  const [openKeys, setOpenKeys] = useState([]);
 
   // const listenClose = () => {
   //   window.localStorage.clear();
@@ -183,7 +183,7 @@ const BasicLayout = props => {
         if (menuItemProps.isUrl || menuItemProps.children) {
           return defaultDom;
         }
-        if (menuItemProps.isIframe) {
+        if (menuItemProps.iframeUrl) {
           return (
             <Link
               to={{
@@ -230,12 +230,12 @@ const BasicLayout = props => {
       {...props}
       {...settings}
       // 展开一个，其他默认收起
-      // menuProps={{
-      //   openKeys,
-      //   onOpenChange: openKeysNew => {
-      //     setOpenKeys(openKeysNew);
-      //   },
-      // }}
+      menuProps={{
+        openKeys,
+        onOpenChange: openKeysNew => {
+          setOpenKeys(openKeysNew);
+        },
+      }}
     >
       {children}
     </ProLayout>

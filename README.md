@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-10-31 16:15:52
  * @LastEditors: iron
- * @LastEditTime: 2019-11-27 14:27:19
+ * @LastEditTime: 2019-11-28 17:59:29
  -->
 
 # Super LOP Web
@@ -129,3 +129,11 @@ dispatch({
   // receive err message
 })
 ```
+
+## abbreviation list
+- LOP: Large Open Positions
+- BI: Beneficial Identity
+- TO: Transaction Originator
+- ECP: Electronic Communication Platform
+- EP: Exchange Participant
+- CA: Capital
