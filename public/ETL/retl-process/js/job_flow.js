@@ -172,7 +172,7 @@ function saveFlowInfo(){
 	} else {
 		params.operType = "UPD";
 	}
-	$.kingdom.doKoauthAdminAPI("kingdom.retl.set_job_info", "v4.0" , params, function(data) {
+	$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_job_info", "v4.0" , params, function(data) {
 		if(data.bcjson.flag === "1") {
 			// alert("新增成功");
 			// $("#J_job_info_modal").modal("hide");

@@ -27,7 +27,7 @@ const IframePage = props => {
         <iframe
           title="11111"
           className={styles.iframe}
-          src={`${iframeUrl}?BCTID=${localStorage.getItem('BCTID')}`}
+          src={iframeUrl}
           ref={ref}
           height={iFrameHeight}
         />

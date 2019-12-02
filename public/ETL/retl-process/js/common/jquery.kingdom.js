@@ -137,7 +137,7 @@ if (typeof jQuery === "undefined") {
                     var $this = this;
 
 
-                    var param = $.kingdom.getAjaxParams(api_name, api_version, api_params);
+                    var param = $.kingdom.getAjaxParams(api_name, 'v2.0', api_params);
                     $.post("/api", param.param, function(data) {
                         if (cbfunc) {
 
@@ -162,7 +162,7 @@ if (typeof jQuery === "undefined") {
                     // $.kingdom.log(api_params);
 
                     var $this = this;
-                    var param = $.kingdom.getAjaxParams(api_name, api_version, api_params);
+                    var param = $.kingdom.getAjaxParams(api_name, 'v2.0', api_params);
 
                     var dataLen = JSON.stringify(param);
                     // $.post("/admin_api", param, function(data) {
@@ -180,7 +180,7 @@ if (typeof jQuery === "undefined") {
                     // }, "json");
 
                     var url = "/admin_api";
-                    url = "/superlop/restv2/admin/" + $.trim(api_version) + "/" + $.trim(api_name) + ".json";
+                    url = "/superlop/restv2/admin/v2.0/" + $.trim(api_name) + ".json";
                     var type = "post";
 
 
@@ -212,7 +212,7 @@ if (typeof jQuery === "undefined") {
                             signText += `I${rid}`;
                             const XBCS = signMode + $.md5(signText, 32).toUpperCase();
                             request.setRequestHeader('X-Bc-S', XBCS);
-                            request.setRequestHeader('X-Bc-T', `BCT${$.kingdom.GetQueryString('BCTID')}`);
+                            request.setRequestHeader('X-Bc-T', `BCT${localStorage.getItem('BCTID')}`);
                             request.setRequestHeader('X-Bc-I', rid);
 
 						    
@@ -309,10 +309,10 @@ if (typeof jQuery === "undefined") {
                     // $.kingdom.log(api_params);
 
                     var $this = this;
-                    var param = $.kingdom.getAjaxParams(api_name, api_version, api_params);
+                    var param = $.kingdom.getAjaxParams(api_name, 'v2.0', api_params);
 
                     var url = "/admin_api";
-                    url = "/superlop/restv2/admin/" + $.trim(api_version) + "/" + $.trim(api_name) + ".json";
+                    url = "/superlop/restv2/admin/v2.0/" + $.trim(api_name) + ".json";
                     var type = "post";
 
                     // var type = method ? method : "get";
@@ -342,7 +342,7 @@ if (typeof jQuery === "undefined") {
                             signText += `I${rid}`;
                             const XBCS = signMode + $.md5(signText, 32).toUpperCase();
                             request.setRequestHeader('X-Bc-S', XBCS);
-                            request.setRequestHeader('X-Bc-T', `BCT${$.kingdom.GetQueryString('BCTID')}`);
+                            request.setRequestHeader('X-Bc-T', `BCT${localStorage.getItem('BCTID')}`);
                             request.setRequestHeader('X-Bc-I', rid);
 
                             //  var x_trace_user_id = $.kingdom.getValue("x-trace-user-id");
@@ -439,7 +439,7 @@ if (typeof jQuery === "undefined") {
                 }, "json");
             },
             doKoauthAPISync: function(api_name, api_version, api_params, cbfunc) {
-                    var param = $.kingdom.getAjaxParams(api_name, api_version, api_params);
+                    var param = $.kingdom.getAjaxParams(api_name, 'v2.0', api_params);
                     $.ajax({
                         type: "post",
                         url: "/api",
@@ -484,7 +484,7 @@ if (typeof jQuery === "undefined") {
             //     } //doKoauthAPI
             //     ,
             doCloudKoauthAPI: function(api_name, api_version, api_params, cbfunc) {
-                    var param = $.kingdom.getAjaxParams(api_name, api_version, api_params);
+                    var param = $.kingdom.getAjaxParams(api_name, 'v2.0', api_params);
                     $.post("/api_cloud", param.param, function(data) {
                         if (cbfunc) {
                             cbfunc(data);
@@ -493,7 +493,7 @@ if (typeof jQuery === "undefined") {
                 } //doCloudKoauthAPI(用于调用接入的各金融机构的接口)
                 ,
             doCloudKoauthAPISync: function(api_name, api_version, api_params, cbfunc) {
-                    var param = $.kingdom.getAjaxParams(api_name, api_version, api_params);
+                    var param = $.kingdom.getAjaxParams(api_name, 'v2.0', api_params);
                     $.ajax({
                         type: "post",
                         url: "/api_cloud",
@@ -571,11 +571,11 @@ if (typeof jQuery === "undefined") {
                 return newArray;
             },
             getLoginName: function(cbfunc) {
-                const params = $.kingdom.getAjaxParams('kingdom.retl.get_login_name', 'v4.0', {})
+                const params = $.kingdom.getAjaxParams('bayconnect.superlop.get_login_name', 'v4.0', {})
                 const rid = `RID${$.kingdom.uuid().replace(/-/g, '')}`;
                 $.ajax({
                     // url: "/krcs/login_name",
-                    url: "/superlop/restv2/admin/v4.0/kingdom.retl.get_login_name.json",
+                    url: "/superlop/restv2/admin/v4.0/bayconnect.superlop.get_login_name.json",
                     data: params.param,
                     type: "post",
                     dataType: "json",
@@ -589,7 +589,7 @@ if (typeof jQuery === "undefined") {
                         signText += `I${rid}`;
                         const XBCS = signMode + $.md5(signText, 32).toUpperCase();
                         request.setRequestHeader('X-Bc-S', XBCS);
-                        request.setRequestHeader('X-Bc-T', `BCT${$.kingdom.GetQueryString('BCTID')}`);
+                        request.setRequestHeader('X-Bc-T', `BCT${localStorage.getItem('BCTID')}`);
                         request.setRequestHeader('X-Bc-I', rid);
 
                             // var x_trace_user_id = $.kingdom.getValue("x-trace-user-id");
@@ -653,8 +653,8 @@ if (typeof jQuery === "undefined") {
                     //         cbfunc(data);
                     //     }
                     // }, "json");
-                    api_name = "kingdom.ktrade.kingdom.retl.set_sys_logout";
-                    api_version = "v4.0";
+                    api_name = "kingdom.ktrade.bayconnect.superlop.set_sys_logout";
+                    api_version = "v2.0";
                     api_params = {
                         "loginName": sessionStorage.getItem("loginName")
                     };
@@ -662,9 +662,9 @@ if (typeof jQuery === "undefined") {
                     $.kingdom.log("======api params:" + JSON.stringify(api_params || {}));
                     // $.kingdom.log(api_params);
                     var $this = this;
-                    var param = $.kingdom.getAjaxParams(api_name, api_version, api_params);
+                    var param = $.kingdom.getAjaxParams(api_name, 'v2.0', api_params);
                     var url = "/admin_api";
-                    url = "/retl/rest/admin/" + $.trim(api_version) + "/" + $.trim(api_name) + ".json";
+                    url = "/retl/rest/admin/v2.0/" + $.trim(api_name) + ".json";
                     $.ajax({
                         type: "get",
                         url: url,
@@ -1425,7 +1425,7 @@ if (typeof jQuery === "undefined") {
                     }
                     return;
                 }
-                $.kingdom.doKoauthAdminAPI("kingdom.retl.get_all_dict_data_list", "v4.0", {}, data => {
+                $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_all_dict_data_list", "v4.0", {}, data => {
                     if (data.bcjson.flag == "1") {
                         let items = data.bcjson.items;
                         // 缓存所有数据

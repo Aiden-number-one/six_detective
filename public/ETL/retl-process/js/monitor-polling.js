@@ -1,7 +1,7 @@
 var jobId = decodeURIComponent(GetQueryString("jobId"));
 var batchNo = decodeURIComponent(GetQueryString("batchNo"));
 function init_graph(index) {
-	$.kingdom.doKoauthAdminAPI("kingdom.retl.get_job_run_xml_info", "v4.0", {
+	$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_job_run_xml_info", "v4.0", {
 		jobId: jobId,
 		batchNo: batchNo
 	}, function (data) {
@@ -33,7 +33,7 @@ function init_graph(index) {
 }
 
 function pollingSvg() {
-	$.kingdom.doKoauthAdminAPI("kingdom.retl.get_job_run_xml_info", "v4.0", {
+	$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_job_run_xml_info", "v4.0", {
 		batchNo: batchNo,
 		jobId: jobId
 	}, function (data) {
