@@ -1,3 +1,5 @@
+// roadhog 提供修改 webpack 的扩展配置
+
 // Change theme plugin
 // eslint-disable-next-line eslint-comments/abdeils - enable - pair;
 
