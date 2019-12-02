@@ -20,30 +20,6 @@ import '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
 import { isProOrDev } from '@/utils/utils';
 
-const menus = [
-  {
-    path: '/data-management',
-    name: 'dataManagement',
-    locale: 'menu.dataManagement',
-    children: [
-      {
-        path: '/data-management/data-import',
-        name: 'dataImport',
-        children: [
-          {
-            path: '/data-management/data-import/lop-data-import',
-            name: 'lopDataImport',
-          },
-          {
-            path: '/data-management/data-import/market-data-import',
-            name: 'marketDataImport',
-          },
-        ],
-      },
-    ],
-  },
-];
-
 /**
  * use Authorized check all menu item
  */
@@ -266,8 +242,8 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings }) => ({
+export default connect(({ global, settings, menu }) => ({
   collapsed: global.collapsed,
   settings,
-  menuData: menus,
+  menuData: menu.menuData,
 }))(BasicLayout);
