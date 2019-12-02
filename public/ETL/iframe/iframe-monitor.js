@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         _params = Object.assign(_params, params);
         $("#J_iframe_node_name").text(_params.nodeName);
         $("#J_iframe_job_id").text(_params.jobId);
-        kweb.kingdom.doKoauthAdminAPI("kingdom.retl.get_job_detail_flow_for_out_way", "v4.0", _params, data => {
+        kweb.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_job_detail_flow_for_out_way", "v4.0", _params, data => {
             if (data.bcjson.flag == "1"&&data.bcjson.items.length) {
                 let items = data.bcjson.items;
                 // mysql数据库不会返回ROWNUM_；需要前端计算

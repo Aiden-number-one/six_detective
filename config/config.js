@@ -4,6 +4,7 @@
  * @Date: 2019-08-28 10:01:58
  * @LastEditTime: 2019-11-27 17:30:28
  * @LastEditors: lan
+ * @Description: umi 配置文件
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 

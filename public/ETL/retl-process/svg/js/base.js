@@ -22,7 +22,7 @@ $(document).ready(function() {
 	var jobId = GetQueryString("jobId"); // 编辑作业时传递----通过url获取jobId的值
 	var logShow = false;
     var logout = function(cbfunc) {
-        var api_name = "kingdom.retl.set_sys_logout";
+        var api_name = "bayconnect.superlop.set_sys_logout";
         var api_version = "v4.0";
         var api_params = {
             "loginName": sessionStorage.getItem("loginName")
@@ -154,7 +154,7 @@ $(document).ready(function() {
 	};
 	// 查询作业菜单
     (function getWorkTree() {
-    	$.kingdom.doKoauthAdminAPI("kingdom.retl.get_folder_menu", "v4.0", {
+    	$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_folder_menu", "v4.0", {
             fileType: "1", 
         }, function(data) {
             if (data.bcjson.flag == "1") {
@@ -168,7 +168,7 @@ $(document).ready(function() {
     
 	// 新增/编辑作业时传递
 	if(jobId){
-	    $.kingdom.doKoauthAdminAPI("kingdom.retl.get_job_info", "v4.0" , { 
+	    $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_job_info", "v4.0" , { 
 			job_id: jobId
 		}, function(data) {
 		
@@ -350,7 +350,7 @@ $('#cancelInfo').click(function(){
 
 //加载任务树信息
 function showTree() {
-        $.kingdom.doKoauthAdminAPI("kingdom.retl.get_folder_menu", "v4.0", {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_folder_menu", "v4.0", {
             fileType: "2", // 1 作业, 2 任务
         }, data => {
             if (data.bcjson.flag == "1") {
@@ -376,7 +376,7 @@ function showTree() {
 }
 
 function getTask(params) {
-	$.kingdom.doKoauthAdminAPI("kingdom.retl.get_task_info", "v4.0", params, data => {
+	$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_task_info", "v4.0", params, data => {
         if (data.bcjson.flag == "1") {
         	var items = data.bcjson.items;
         	var selected = $('#tt>ul').tree('getSelected');

@@ -90,7 +90,7 @@ var saveJobInfo = function(params) {
     params.valid_flag = "";
     params.creator = "admin";
     params.operType = "ADD";
-    $.kingdom.doKoauthAdminAPI("kingdom.retl.set_job_info", "v4.0", params, function(data) {
+    $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_job_info", "v4.0", params, function(data) {
         if (data.bcjson.flag === "1") {
             alert("新增成功");
             $("#J_job_info_modal").modal("hide");
@@ -3206,7 +3206,7 @@ Graphic.prototype.nodeDblclick = function(d) {
         var nodeItemIdDom = $('#i_nodeItem_id' + d.type);
         // 查询任务菜单
         var getTree_ = function() {
-            $.kingdom.doKoauthAdminAPI("kingdom.retl.get_folder_menu", "v4.0", {
+            $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_folder_menu", "v4.0", {
                 fileType: "2",
             }, function(data) {
                 if (data.bcjson.flag == "1") {
@@ -3221,7 +3221,7 @@ Graphic.prototype.nodeDblclick = function(d) {
         };
         // 查询任务下拉框信息
         var getTask = function(taskType) {
-            $.kingdom.doKoauthAdminAPI("kingdom.retl.get_task_info", "v4.0", {
+            $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_task_info", "v4.0", {
                 taskType: taskType
             }, function(data) {
                 if (data.bcjson.flag === "1") {
@@ -3243,7 +3243,7 @@ Graphic.prototype.nodeDblclick = function(d) {
 
         // 查询作业下拉框信息
         var getWork = function() {
-            $.kingdom.doKoauthAdminAPI("kingdom.retl.get_jobs_list", "v4.0", {}, function(data) {
+            $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_jobs_list", "v4.0", {}, function(data) {
                 if (data.bcjson.flag === "1") {
                     var items = data.bcjson.items;
                     var arr = [];
@@ -3263,7 +3263,7 @@ Graphic.prototype.nodeDblclick = function(d) {
 
         // 查询tasktype
         let getTaskType = function() {
-            $.kingdom.doKoauthAdminAPI("kingdom.retl.get_all_dict_data_list", "v4.0", {}, function(data) {
+            $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_all_dict_data_list", "v4.0", {}, function(data) {
                 if (data.bcjson.flag == "1") {
                     var items = data.bcjson.items[0];
                     for (var i in items.TASK_TYPE) {
@@ -3594,7 +3594,7 @@ function Tree_Menu(existence, thisGraph, existId) {
     // var data = [];
 
     // 获取左侧操作模块
-    $.kingdom.doKoauthAdminAPI("kingdom.retl.get_job_module_info_list", "v4.0", {
+    $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_job_module_info_list", "v4.0", {
         module_type: 1
     }, function(data) {
         if (data.bcjson.flag === "1") {
