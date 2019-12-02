@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  // useEffect,
+} from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './IframePage.less';
 
@@ -7,13 +10,13 @@ const ref = React.createRef();
 const IframePage = props => {
   const [iFrameHeight] = useState(800);
 
-  useEffect(() => {
-    const frame = ref.current;
-    window.addEventListener('message', e => {
-      frame.style.height = `${e.data.height}px`;
-      frame.style.width = `${e.data.width}px`;
-    });
-  });
+  // useEffect(() => {
+  //   const frame = ref.current;
+  //   window.addEventListener('message', e => {
+  //     frame.style.height = `${e.data.height}px`;
+  //     frame.style.width = `${e.data.width}px`;
+  //   });
+  // });
 
   const {
     location: {

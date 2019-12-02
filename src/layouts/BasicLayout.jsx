@@ -4,10 +4,7 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout from '@ant-design/pro-layout';
-import React, {
-  useEffect,
-  // useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon, Badge, Popover } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
@@ -46,7 +43,7 @@ const BasicLayout = props => {
   /**
    * constructor
    */
-  // const [openKeys, setOpenKeys] = useState([]);
+  const [openKeys, setOpenKeys] = useState([]);
 
   // const listenClose = () => {
   //   window.localStorage.clear();
@@ -183,7 +180,7 @@ const BasicLayout = props => {
         if (menuItemProps.isUrl || menuItemProps.children) {
           return defaultDom;
         }
-        if (menuItemProps.isIframe) {
+        if (menuItemProps.iframeUrl) {
           return (
             <Link
               to={{
@@ -230,12 +227,12 @@ const BasicLayout = props => {
       {...props}
       {...settings}
       // 展开一个，其他默认收起
-      // menuProps={{
-      //   openKeys,
-      //   onOpenChange: openKeysNew => {
-      //     setOpenKeys(openKeysNew);
-      //   },
-      // }}
+      menuProps={{
+        openKeys,
+        onOpenChange: openKeysNew => {
+          setOpenKeys(openKeysNew);
+        },
+      }}
     >
       {children}
     </ProLayout>
