@@ -50,11 +50,11 @@ const borderMenu = [
     icon: 'rightBorder',
     params: 'right',
   },
-  // {
-  //   name: '双底框线(B)',
-  //   icon: 'doubleBottomBorder',
-  //   params: '{"border":"3px double black","border-type":"out-bottom"}',
-  // },
+  {
+    name: '双底框线(B)',
+    icon: 'doubleBottomBorder',
+    params: 'dBottom',
+  },
   // {
   //   name: '粗底框线(H)',
   //   icon: 'boldBottomBorder',

@@ -11,6 +11,7 @@ const {
   deployedModelList,
   getProcessResource,
   getRoleGroup,
+  getQueryMenu,
 } = Service;
 const approvalSetModel = {
   namespace: 'approvalSet',
@@ -23,6 +24,7 @@ const approvalSetModel = {
     processImage: '',
     roleGroupDatas: [],
     auditorData: [],
+    GroupList: [],
   },
   effects: {
     *approvalConfigDatas({ payload }, { call, put }) {
@@ -84,6 +86,17 @@ const approvalSetModel = {
         if (response.bcjson.items) {
           yield put({
             type: 'roleGroupData',
+            payload: response.bcjson.items,
+          });
+        }
+      }
+    },
+    *getQueryMenuDatas({ payload }, { call, put }) {
+      const response = yield call(getQueryMenu, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'setMenuDatas',
             payload: response.bcjson.items,
           });
         }
@@ -162,6 +175,13 @@ const approvalSetModel = {
       return {
         ...state,
         roleGroupDatas: action.payload,
+      };
+    },
+    setMenuDatas(state, action) {
+      const menuData = action.payload[0].MENU;
+      return {
+        ...state,
+        GroupList: menuData,
       };
     },
     auditorlist(state, action) {

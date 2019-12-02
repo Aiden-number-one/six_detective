@@ -219,6 +219,12 @@ export default [
             hideInMenu: true,
           },
           {
+            path: '/system-management/user-maintenance/modify-user',
+            name: 'modifyUser',
+            component: './ModifyUser/ModifyUser',
+            hideInMenu: true,
+          },
+          {
             path: '/system-management/mail-content-template',
             name: 'mailContentTemplate',
             component: './TemplateSet/TemplateSet',

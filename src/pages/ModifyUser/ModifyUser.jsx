@@ -23,6 +23,7 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { userInfo } = this.props;
     const { menuUserGroups, alertUserGroups } = this.state;
     return (
       <Fragment>
@@ -35,7 +36,8 @@ class FormUser extends Component {
                   message: 'Please input your UserId',
                 },
               ],
-            })(<Input />)}
+              initialValue: `${userInfo && userInfo.userId}`,
+            })(<Input disabled />)}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'app.common.username' })}
@@ -50,20 +52,6 @@ class FormUser extends Component {
                 },
               ],
             })(<Input />)}
-          </Form.Item>
-          <Form.Item
-            label={formatMessage({ id: 'app.common.password' })}
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 6 }}
-          >
-            {getFieldDecorator('password', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input your password',
-                },
-              ],
-            })(<Input.Password />)}
           </Form.Item>
           <Form.Item wrapperCol={{ span: 6, offset: 4 }}>
             {getFieldDecorator('locked', {
@@ -113,12 +101,25 @@ class FormUser extends Component {
 
 const NewFormUser = Form.create()(FormUser);
 
-export default class NewUser extends Component {
+export default class ModifyUser extends Component {
   newUserRef = React.createRef();
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      userInfo: {},
+    };
+  }
+
+  static getDerivedStateFromProps(props) {
+    const { query } = props.location;
+    return {
+      userInfo: query,
+    };
+  }
+
+  componentDidMount() {
+    console.log('modify,props=', this.props.location.query);
   }
 
   onCancel = () => {
@@ -139,6 +140,8 @@ export default class NewUser extends Component {
   };
 
   render() {
+    // const { query } = this.props.location
+    const { userInfo } = this.state;
     return (
       <PageHeaderWrapper>
         <Fragment>
@@ -150,7 +153,7 @@ export default class NewUser extends Component {
               </Button>
             </Col>
           </Row>
-          <NewFormUser ref={this.newUserRef} />
+          <NewFormUser ref={this.newUserRef} userInfo={userInfo} />
         </Fragment>
       </PageHeaderWrapper>
     );

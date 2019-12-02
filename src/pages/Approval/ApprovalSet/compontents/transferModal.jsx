@@ -85,6 +85,7 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
   deployedModelDatas: approvalSet.deployedModelDatas,
   processDefinitionId: approvalSet.processDefinitionId,
   roleGroupTree: approvalSet.roleGroupDatas,
+  GroupList: approvalSet.GroupList,
 }))
 class TransferModal extends PureComponent {
   state = {
@@ -99,13 +100,14 @@ class TransferModal extends PureComponent {
     const {
       visible,
       closeTransferModal,
-      roleGroupTree,
+      // roleGroupTree,
       handleTransferOk,
       onTransferChange,
       targetKeys,
+      GroupList,
     } = this.props;
     // const { targetKeys } = this.state;
-    // console.log('roleGroupTree-----',roleGroupTree,targetKeys)
+    // console.log('roleGroupTree-----', GroupList);
     return (
       <div>
         <Modal
@@ -118,7 +120,7 @@ class TransferModal extends PureComponent {
           onOk={handleTransferOk}
         >
           <TreeTransfer
-            dataSource={roleGroupTree}
+            dataSource={GroupList}
             targetKeys={targetKeys}
             onChange={onTransferChange}
           />

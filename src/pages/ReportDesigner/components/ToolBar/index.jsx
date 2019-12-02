@@ -1,27 +1,8 @@
 import React, { Component } from 'react';
 import { SketchPicker } from 'react-color';
 import classNames from 'classnames';
-import {
-  Tabs,
-  Button,
-  Select,
-  Menu,
-  Icon,
-  Dropdown,
-  Popover,
-  // Modal,
-  // Input,
-  // Radio,
-  Upload,
-} from 'antd';
-import {
-  previewMenu,
-  borderMenu,
-  // drawingBorderMenu,
-  // clearMenu,
-  rowsAndColsMenu,
-  // freezeMenu,
-} from './menu';
+import { Tabs, Button, Select, Menu, Icon, Dropdown, Popover, Upload } from 'antd';
+import { previewMenu, borderMenu, rowsAndColsMenu } from './menu';
 import { fontSizeSelect, fontFamilySelect } from './select';
 import CustomizeIcon from '../CustomizeIcon';
 import styles from './index.less';
@@ -54,6 +35,7 @@ export default class ToolBar extends Component {
     backgroundColor: '#fff',
     // 默认黑色字体
     fontColor: '#000',
+    // 默认样式
     btnActiveStatus: {
       autoLineBreak: false, // 是否自动换行
       textAlign: 'left', // 水平方向对齐
@@ -67,6 +49,104 @@ export default class ToolBar extends Component {
       isMerge: false, // 单元格是否合并
       freeze: false, // 单元格是否冻结
     },
+    // 单元格的数据类型
+    cellType: {},
+  };
+
+  cellType = [
+    {
+      label: '日期(yyyy-MM-dd)',
+      key: 'dateyyyy-MM-dd',
+      value: 'dateyyyy-MM-dd',
+    },
+    {
+      label: '日期时间',
+      key: 'datetimeyyyy-MM-dd hh:mm:ss',
+      value: 'datetimeyyyy-MM-dd hh:mm:ss',
+    },
+    {
+      label: '时间',
+      key: 'timehh:mm:ss',
+      value: 'timehh:mm:ss',
+    },
+    {
+      label: '文本',
+      key: 'text',
+      value: 'text',
+    },
+    {
+      label: '货币($)',
+      key: 'currency$',
+      value: 'currency$',
+    },
+    {
+      label: '货币(￥)',
+      key: 'currency￥',
+      value: 'currency￥',
+    },
+    {
+      label: '千分比',
+      key: 'permillage',
+      value: 'permillage',
+    },
+    {
+      label: '百分比',
+      key: 'percentage',
+      value: 'percentage',
+    },
+    {
+      label: '勾选框',
+      key: 'checkbox',
+      value: 'checkbox',
+    },
+  ];
+
+  cellTypeMap = {
+    'dateyyyy-MM-dd': {
+      cellType: 'date',
+      format: 'yyyy-MM-dd',
+      type: 'date',
+    },
+    'datetimeyyyy-MM-dd hh:mm:ss': {
+      cellType: 'datetime',
+      format: 'yyyy-MM-dd hh:mm:ss',
+      type: 'datetime',
+    },
+    'timehh:mm:ss': {
+      cellType: 'time',
+      format: 'hh:mm:ss',
+      type: 'time',
+    },
+    text: {
+      cellType: 'text',
+    },
+    currency$: {
+      cellType: 'numeric',
+      format: '$0,0.00',
+      scale: '2',
+      type: 'currency',
+    },
+    'currency￥': {
+      cellType: 'numeric',
+      format: '￥0,0.00',
+      scale: '2',
+      type: 'currency',
+    },
+    permillage: {
+      cellType: 'numeric',
+      format: '0.00%',
+      scale: '2',
+      type: 'permillage',
+    },
+    percentage: {
+      cellType: 'numeric',
+      format: '0.00%',
+      scale: '2',
+      type: 'percentage',
+    },
+    checkbox: {
+      cellType: 'checkbox',
+    },
   };
 
   componentDidMount() {
@@ -75,6 +155,7 @@ export default class ToolBar extends Component {
     setCellCallback(data => {
       const cellStyle = data.getSelectedCellStyle();
       const cell = data.getSelectedCell();
+      const cellType = cell ? cell.cellProps || {} : {};
       let isMerge = false;
       let freeze = false;
       if (cell && cell.merge) {
@@ -92,6 +173,7 @@ export default class ToolBar extends Component {
         backgroundColor: cellStyle.bgcolor,
         fontColor: cellStyle.color,
         btnActiveStatus: {
+          // 回显按钮样式
           ...btnActiveStatus,
           autoLineBreak: cellStyle.textwrap,
           textAlign: cellStyle.align,
@@ -104,6 +186,7 @@ export default class ToolBar extends Component {
           isMerge,
           freeze,
         },
+        cellType,
       });
     });
   }
@@ -184,8 +267,8 @@ export default class ToolBar extends Component {
   };
 
   render() {
-    const { setCellStyle } = this.props;
-    const { btnActiveStatus, backgroundColor, fontColor } = this.state;
+    const { setCellStyle, setCellType } = this.props;
+    const { btnActiveStatus, backgroundColor, fontColor, cellType } = this.state;
     const popoverProps = {
       placement: 'bottom',
       mouseEnterDelay: 0.2,
@@ -219,7 +302,7 @@ export default class ToolBar extends Component {
                   <ItemGroup
                     title={
                       <span>
-                        最近使用{' '}
+                        最近使用
                         <IconFont type="icon-shuaxin" title="清空" style={{ cursor: 'pointer' }} />
                       </span>
                     }
@@ -296,15 +379,19 @@ export default class ToolBar extends Component {
                   </ButtonGroup>
                 </div>
               </Popover>
-              <Popover content="条件" {...popoverProps}>
+              <Popover content="保存" {...popoverProps}>
                 <Button
                   className="btn btn-lg mr6"
                   onClick={() => {
-                    this.props.changeConditionHeight(180);
+                    // 保存contentJson
+                    const { dispatch } = this.props;
+                    dispatch({
+                      type: 'reportDesigner/saveTaskGridContent',
+                    });
                   }}
                 >
                   <Icon component={() => <CustomizeIcon type="condition" size="lg" />} />
-                  <p>条件</p>
+                  <p>保存</p>
                 </Button>
               </Popover>
               <div className="mr6" style={{ display: 'inline-block', verticalAlign: 'top' }}>
@@ -846,24 +933,22 @@ export default class ToolBar extends Component {
                     className="select"
                     style={{ width: '139px' }}
                     defaultValue="1"
-                    value={btnActiveStatus.numericFormat}
+                    value={cellType.format ? cellType.format : undefined}
                     size="small"
-                    onChange={e => {
-                      this.handleNumeric(e);
+                    onChange={value => {
+                      this.setState({
+                        cellType: {
+                          format: value,
+                        },
+                      });
+                      setCellType('cellType', this.cellTypeMap[value]);
                     }}
                   >
-                    <Option value="1">常规</Option>
-                    <Option value="2">数值</Option>
-                    <Option value="3">货币</Option>
-                    <Option value="4">会计专用</Option>
-                    <Option value="5">日期</Option>
-                    <Option value="6">时间</Option>
-                    <Option value="7">日期时间</Option>
-                    <Option value="8">百分比</Option>
-                    <Option value="9">千分比</Option>
-                    <Option value="10">分数</Option>
-                    <Option value="11">科学计数</Option>
-                    <Option value="12">文本</Option>
+                    {this.cellType.map(item => (
+                      <Option key={item.key} value={item.value}>
+                        {item.label}
+                      </Option>
+                    ))}
                   </Select>
                 </Popover>
               </div>

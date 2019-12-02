@@ -12,8 +12,8 @@ import { Icon, Badge, Popover } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { setLocale } from 'umi/locale';
 import CustomizeSelectLang from '@/components/CustomizeSelectLang';
-// import { setLocale } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
@@ -40,13 +40,9 @@ const footerRender = () => (
 );
 
 const BasicLayout = props => {
-  const {
-    dispatch,
-    children,
-    settings,
-    collapsed,
-    // menuData
-  } = props;
+  const { dispatch, children, settings, collapsed, menuData } = props;
+
+  console.log('props=========', props);
   /**
    * constructor
    */
@@ -57,9 +53,12 @@ const BasicLayout = props => {
   // }
 
   useEffect(() => {
-    // setLocale('zh-CN');
+    setLocale('en-US');
     // window.addEventListener('beforeunload', listenClose, false);
     if (dispatch) {
+      dispatch({
+        type: 'menu/getMenuData',
+      });
       dispatch({
         type: 'login/getLoginStatus',
         payload: {
@@ -220,8 +219,8 @@ const BasicLayout = props => {
         );
       }}
       footerRender={footerRender}
-      // menuDataRender={() => menuDataRender(menuData)}
-      menuDataRender={menuDataRender}
+      menuDataRender={() => menuDataRender(menuData)}
+      // menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       // menuRender={(a, b) => {

@@ -1,7 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
+import { connect } from 'dva';
 import { Layout } from 'antd';
 import ToolBar from './components/ToolBar/index';
 import SpreadSheet from '@/components/SpreadSheet';
+import CustomSearchArea from './components/CustomSearchArea/index';
 // import EditBox from '../../components/editBox';
 // import LeftTree from '../../components/leftTree';
 // import Table from '../../components/table';
@@ -9,6 +11,7 @@ import SpreadSheet from '@/components/SpreadSheet';
 // import Condition from '../../components/condition';
 
 const { Sider, Content } = Layout;
+@connect(({ reportDesigner }) => ({}))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
   componentDidMount() {
@@ -21,6 +24,7 @@ export default class ReportDesigner extends PureComponent {
     });
   }
 
+  // 设置单元格样式
   setCellStyle = (property, value) => {
     const { setCellStyle, getCellStyle } = this.props;
     const result = getCellStyle(property);
@@ -28,7 +32,6 @@ export default class ReportDesigner extends PureComponent {
       setCellStyle(property, false);
     } else {
       setCellStyle(property, value);
-      // const arr = [[0, 1], [2, 3], [4, 5]];
     }
   };
 
@@ -38,15 +41,20 @@ export default class ReportDesigner extends PureComponent {
   };
 
   render() {
-    const { setCellCallback } = this.props;
+    const { setCellCallback, dispatch, setCellType } = this.props;
+    // ToolBar的相关Props
+    const toolBarProps = {
+      setCellStyle: this.setCellStyle, // 设置单元格样式
+      editRowColumn: this.editRowColumn, // 编辑行与列
+      setCellType, // 设置单元格的数据类型
+      setCellCallback,
+      dispatch,
+    };
     return (
       <Fragment>
-        <ToolBar
-          setCellStyle={this.setCellStyle}
-          editRowColumn={this.editRowColumn}
-          setCellCallback={setCellCallback}
-        />
+        <ToolBar {...toolBarProps} />
         <Layout>
+          {/* 数据集部分 */}
           <Sider width={200} />
           <Content
             style={{
@@ -54,8 +62,11 @@ export default class ReportDesigner extends PureComponent {
               height: window.innerHeight - 100,
             }}
           >
+            {/* 自定义查询条件区域 */}
+            <CustomSearchArea />
             <SpreadSheet />
           </Content>
+          {/* 单元格属性部分 */}
           <Sider width={200} />
         </Layout>
         {/* <EditBox />

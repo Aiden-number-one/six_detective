@@ -2,8 +2,8 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-11-14 18:53:45
- * @LastEditors: lan
+ * @LastEditTime: 2019-11-26 15:36:34
+ * @LastEditors: Please set LastEditors
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -212,7 +212,13 @@ export default WrapperComponent =>
         .spreadsheet('#x-spreadsheet', xsOptions)
         .loadData(data)
         .change(changeData => {
-          // generateJson(changeData);
+          generateJson(changeData, contentDetail => {
+            const { dispatch } = this.props;
+            dispatch({
+              type: 'reportDesigner/saveContentDetail',
+              payload: contentDetail,
+            });
+          });
         });
     };
 
