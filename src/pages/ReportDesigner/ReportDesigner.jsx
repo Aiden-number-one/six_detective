@@ -11,7 +11,7 @@ import CustomSearchArea from './components/CustomSearchArea/index';
 // import Condition from '../../components/condition';
 
 const { Sider, Content } = Layout;
-@connect(({ reportDesigner }) => ({}))
+@connect(({ reportDesigner }) => ({ reportDesigner }))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
   componentDidMount() {

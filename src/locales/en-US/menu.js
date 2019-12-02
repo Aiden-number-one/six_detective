@@ -3,16 +3,16 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: lan
- * @LastEditTime: 2019-11-28 11:01:08
+ * @LastEditors: iron
+ * @LastEditTime: 2019-11-30 19:21:27
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
+  'menu.dataImport': 'Data Import',
+  'menu.dataImport.lop': 'Lop Data Import',
+  'menu.dataImport.market': 'Market Data Import',
   'menu.dataManagement': 'DATA MANAGEMENT',
   'menu.dataManagement.dashboard': 'Dashboard',
-  'menu.dataManagement.dataImport': 'Data Import',
-  'menu.dataManagement.dataImport.lopDataImport': 'Lop Data Import',
-  'menu.dataManagement.dataImport.marketDataImport': 'Market Data Import',
   'menu.dataManagement.dataProcessing': 'Data Processing',
   'menu.dataManagement.dataEnquiry': 'Data Enquiry',
   'menu.dataManagement.dataMaintenance': 'Data Maintenance',

@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-12-02 15:02:34
+ * @LastEditTime: 2019-12-02 15:23:50
  * @LastEditors: lan
  */
 
@@ -25,7 +25,7 @@ const geneMenuData = data => {
     menuname: item.menuname,
     path: item.page || '',
     icon: menuIcons[item.menuname],
-    name: item.menuname,
+    name: item.parentmenuid === '-1' ? item.menuname.toUpperCase() : item.menuname,
     hideInMenu: item.menutype === '1',
     target: item.linecss,
     // component: components[item.page],

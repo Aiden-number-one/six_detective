@@ -3,7 +3,7 @@ import { connect } from 'dva';
 // import { Responsive as ResponsiveGridLayout } from 'react-grid-layout';
 import styles from './index.less';
 
-@connect(({ reportDesigner }) => ({}))
+@connect(({ reportDesigner }) => ({ reportDesigner }))
 export default class CustomSearchArea extends PureComponent {
   state = {};
 

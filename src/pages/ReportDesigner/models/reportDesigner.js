@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2019-11-26 11:16:28
- * @LastEditTime: 2019-11-29 17:42:06
- * @LastEditors: your name
+ * @LastEditTime: 2019-12-02 15:03:44
+ * @LastEditors: iron
  * @Description: In User Settings Edit
  * @FilePath: \superlop-web-project\src\pages\ReportDesigner\models\reportDesigner.js
  */
@@ -15,7 +15,7 @@ export default {
     customSearchData: [], // 查询控件的数据
   },
   effects: {
-    *saveTaskGridContent(_, { call, put, select }) {
+    *saveTaskGridContent(_, { call, select }) {
       const contentDetail = yield select(({ reportDesigner }) => reportDesigner.contentDetail);
       const params = {
         addSheetFormula: '',
@@ -26,6 +26,7 @@ export default {
         isAllSave: '1',
       };
       const { items } = yield call(fetch('set_task_grid_content_save'), params);
+      console.log(items);
     },
   },
   reducers: {

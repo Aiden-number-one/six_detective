@@ -107,6 +107,8 @@ const generateJson = (spreedSheetData, saveCallback) => {
             Object.entries(cellContent.style[singleStyle]).forEach(
               ([borderStyle, borderStyleValue]) => {
                 const [color, thickness] = borderStyleValue;
+                console.log(thickness);
+
                 if (borderStyle === 'bottom') {
                   // 下边框
                   currentCellProps.style.bb = `${'1px solid'}${color}`;
