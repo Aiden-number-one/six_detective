@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-30 17:48:57
+ * @LastEditTime: 2019-12-02 14:55:03
  */
 
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Modal, Table } from 'antd';
+import { Form, Modal, Table, Button } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -557,6 +557,7 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div className={styles.content}>
+            <Button onClick={this.newUser}>+ New User</Button>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
