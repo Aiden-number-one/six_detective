@@ -520,7 +520,7 @@ body {
   pointer-events: auto;
 }
 .x-spreadsheet-selectors .x-spreadsheet-image-switch-btn li {
-  background-image: url(d6ae8c4e5d2a92c50bf10583aad2d141.svg);
+  background-image: url(58eaeb4e52248a5c75936c6f4c33a370.svg);
   position: relative;
   width: 15px;
   height: 15px;
@@ -603,7 +603,7 @@ body {
   display: flex;
 }
 .x-spreadsheet-selector .x-spreadsheet-placeholder .left-items {
-  background-image: url(c856642f9960241df7825e7ccd7e7cfd.svg);
+  background-image: url(3a3a47d9cdecc9317d2003895bae2485.svg);
   width: 32px;
   height: 32px;
   opacity: 0.8;
@@ -633,6 +633,8 @@ body {
 }
 .x-spreadsheet-editor {
   z-index: 20;
+  opacity: 0;
+  width: 0;
 }
 .x-spreadsheet-editor .x-spreadsheet-editor-area {
   position: absolute;
@@ -702,14 +704,14 @@ body {
   display: inline-block;
   width: 15px;
   height: 15px;
-  background-image: url(c856642f9960241df7825e7ccd7e7cfd.svg);
+  background-image: url(3a3a47d9cdecc9317d2003895bae2485.svg);
   background-position: 0 -4214px;
 }
 .x-spreadsheet-item.state .state-desc-image {
   display: inline-block;
   width: 15px;
   height: 15px;
-  background-image: url(c856642f9960241df7825e7ccd7e7cfd.svg);
+  background-image: url(3a3a47d9cdecc9317d2003895bae2485.svg);
   background-position: -20px -4214px;
 }
 .x-spreadsheet-item.state .state-asc-text {
@@ -1155,7 +1157,7 @@ body {
   display: inline-block;
 }
 .x-spreadsheet-icon .x-spreadsheet-icon-img {
-  background-image: url(d6ae8c4e5d2a92c50bf10583aad2d141.svg);
+  background-image: url(58eaeb4e52248a5c75936c6f4c33a370.svg);
   position: absolute;
   width: 262px;
   height: 444px;

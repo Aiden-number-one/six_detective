@@ -1,0 +1,39 @@
+{{#if flag}}
+	<tr><td colspan="10" class="text-center">暂无数据</td></tr>
+{{else}}
+{{#each this}}
+    {{!-- <tr>
+        <td>
+        <input type="checkbox" name="check" data-obj='{{obj2StrHelper this}}'/> </td>
+        <td> {{rownumber }}</td>
+        <td> {{userName}} </td>
+        <td> {{nickName}} </td>
+        <td> {{dateTimeFormatHelper createTime}} </td>
+        <td> {{dateTimeFormatHelper updateTime}} </td>
+        <td> {{dateTimeFormatHelper loginTime}} </td>
+        <td class="t-c"> {{loginCount}} </td>
+        <td> {{userStateName}}  </td>
+        <td> {{roleName}}</td>
+    </tr> --}}
+                                   <tr>
+                                      <td class="t-c">{{ROWNUM_}}</td>
+                                        <td class="t-l"> {{executorId}} </td>
+                                        <td class="t-c"> {{monitorLevel}}</td>
+                                        <td class="t-l"> {{nodeName}} </td>
+                                        <td class="t-l"> {{memberTypeName}} </td>
+                                        <td class="t-c"> {{orderNo}} </td>
+                                        <td class="t-c"> {{memberNo}} </td>
+                                        <td class="t-c"> {{jobName}}</td>
+                                        <td class="t-c"> {{batchNo}}</td>
+                                        <td class="t-c"> {{scheduleName}}</td>
+                                        <td class="t-c"> {{executeTypeName}} </td>
+                                        <td class="t-c"> {{dateTimeFormatHelper startTime}} </td>
+                                        <td class="t-c"> {{dateTimeFormatHelper endTime}} </td>
+                                        <td class="t-c"> {{formatDuration duration}}</td>
+                                        <td class="t-c"> {{successNum}} </td>
+                                        <td class="t-c"> {{errorNum}} </td>
+                                        <td class="t-c"> <span style="color: {{executeFlagFormat executeFlag}}">●</span> {{executeFlagName}} </td>
+                                       <td class="t-l" style="width:160px;"> <div style="width: 160px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;cursor:pointer; color: #29b2e6" class="executeMsg">{{executeMsg}}</div> </td>
+                                    </tr> 
+{{/each}}
+{{/if}}

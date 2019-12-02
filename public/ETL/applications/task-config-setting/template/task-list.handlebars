@@ -1,0 +1,19 @@
+{{#if flag}}
+	<tr><td colspan="8" class="text-center">暂无数据</td></tr>
+{{else}}
+{{#each this}}
+    <tr>
+        <td class="width40">
+            <input type="checkbox" name="check" data-taskId="{{taskId}}" data-taskType="{{taskType}}" data-taskId="{{taskId}}" data-folderId="{{folderId}}"> </td>
+        <td class="width40 t-c"> {{ROWNUM_}}</td>
+        <td class="t-c"> {{folderName}} </td>
+        <td> <div class="ellipsis" style="max-width: 160px;" title="{{taskName}}">{{taskName}}</div> </td>
+        <td class="t-c"> {{taskTypeName}} </td>
+        <td style="max-width: 300px;" class="ellipsis" title="{{src}}"> {{src}} </td>
+        <td> {{tar}} </td>
+        <td> {{targetTable}} </td>
+        <td class="t-c"> {{dateTimeFormatHelper modifiedTime}} </td>
+        <td class="t-c"> {{modifieder}} </td>
+    </tr>
+{{/each}}
+{{/if}}

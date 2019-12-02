@@ -4,25 +4,25 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-11-26 11:27:11
- * @LastEditors: iron
+ * @LastEditTime: 2019-12-02 14:13:24
+ * @LastEditors: dailinbo
  */
 
 import { components } from '@/utils/common';
 
 const geneMenuData = data => {
-  if (!data || !data.length || !data[0] || !data[0].menuList) return [];
-  const id = 'menuId';
-  const pid = 'parentMenuId';
+  if (!data || !data.length || !data[0] || !data[0].menu) return [];
+  const id = 'menuid';
+  const pid = 'parentmenuid';
   // 删除 所有 routes,以防止多次调用
-  const newData = data[0].menuList.map(item => ({
+  const newData = data[0].menu.map(item => ({
     ...item,
-    menuid: item.menuId,
-    menuname: item.menuName,
+    menuid: item.menuid,
+    menuname: item.menuname,
     path: item.page || '',
     icon: item.icon,
     // icon: null,
-    name: item.menuName,
+    name: item.parentmenuid === '-1' ? item.menuname.toUpperCase() : item.menuname,
     hideInMenu: item.menutype === '1',
     target: item.linecss,
     component: components[item.page],

@@ -2,12 +2,12 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-11-14 18:53:45
- * @LastEditors: lan
+ * @LastEditTime: 2019-12-02 15:07:42
+ * @LastEditors: iron
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
-import _ from 'lodash';
+// import _ from 'lodash';
 import { generateJson } from './spreadSheetUtil';
 
 const styleKeyMap = {
@@ -118,7 +118,7 @@ export default WrapperComponent =>
            * @Author: linjian
            * @Date: 2019-08-05 10:50:29
            */
-          beforeContextMenuShow(contextMenu) {
+          beforeContextMenuShow(/* contextMenu */) {
             console.log('show contextMenu before');
           },
           /**
@@ -202,7 +202,7 @@ export default WrapperComponent =>
             }
             afterGetConditionItemsCallback(content);
           },
-          requestData({ startRow, endRow, conditions }, callback) {},
+          requestData(/* { startRow, endRow, conditions }, callback */) {},
         },
         ...options,
         // hideCol: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -212,12 +212,18 @@ export default WrapperComponent =>
         .spreadsheet('#x-spreadsheet', xsOptions)
         .loadData(data)
         .change(changeData => {
-          // generateJson(changeData);
+          generateJson(changeData, contentDetail => {
+            const { dispatch } = this.props;
+            dispatch({
+              type: 'reportDesigner/saveContentDetail',
+              payload: contentDetail,
+            });
+          });
         });
     };
 
     // 点击单元格
-    clickCell = (sri, sci) => {
+    clickCell = (/* sri, sci */) => {
       if (!this.spreadSheet) {
         return;
       }

@@ -1,0 +1,50 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+
+<svg>
+<metadata>
+Created by webfont
+</metadata>
+<defs>
+
+<font id="Noto Sans S Chinese Thin" horiz-adv-x="1000" vert-adv-y="1000" >
+  <font-face
+    
+    font-family="Noto Sans S Chinese Thin"
+    
+    font-weight="100"
+    
+    font-stretch="normal"
+    
+    units-per-em="1000"
+    
+    panose-1="0 0 0 0 0 0 0 0 0 0"
+    
+    ascent="880"
+    
+    descent="-120"
+    
+    x-height="527"
+    
+    cap-height="726"
+    
+    bbox="-991 -1050 2930 1810"
+    
+    underline-thickness="50"
+    
+    underline-position="-100"
+    
+    unicode-range="U+0001-2CE93"
+    
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="cid822" unicode="&#x2211;" d="M261 31h536v-31h-594v25l327 332l-308 337v25h531v-30h-476v-4l299 -329l-315 -322v-3z"     />
+
+    
+    <glyph glyph-name="cid89" unicode="&#x78;" d="M196 275l-165 252h40l89 -140q14 -22 28.5 -43t29.5 -44h4q14 23 28 43.5t28 43.5l87 140h38l-165 -254l181 -273h-41l-98 151q-16 24 -31 49t-32 48h-5q-17 -23 -32 -47.5t-31 -49.5l-95 -151h-39z"  horiz-adv-x="434"   />
+
+    
+
+  </font>
+</defs></svg>

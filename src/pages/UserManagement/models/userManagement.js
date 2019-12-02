@@ -26,15 +26,16 @@ export const userManagement = {
             return {
               custStatus: newCustStatus,
               custCustomerno: element.custCustomerno,
-              custStatusName: element.custStatusName,
-              customerName: element.customerName,
+              userId: element.userId,
+              userName: element.userName,
               customerno: element.customerno,
               departmentId: element.departmentId,
-              departmentName: element.departmentName,
+              updateTime: element.updateTime,
               displaypath: element.displaypath,
               email: element.email,
               lastupdatetime: element.lastupdatetime,
               loginName: element.loginName,
+              userState: element.userState,
             };
           }));
         bcjson.items = userData;

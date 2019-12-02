@@ -1,0 +1,10 @@
+{{#each this}}
+	{{#equal @index "0"}}
+		{{#if dictTypeName}}
+			<option value="">- {{dictTypeName}} -</option>
+		{{else}}
+			<option value="">- 请选择 -</option>
+		{{/if}}
+	{{/equal}}
+    <option value="{{id}}">{{text}}</option>
+{{/each}}

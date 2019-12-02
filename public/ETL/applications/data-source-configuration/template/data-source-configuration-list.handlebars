@@ -1,0 +1,11 @@
+{{#if flag}}
+<li class="t-c">暂无数据</li>
+{{else}}
+  {{#each this}}
+        <li class="list-group-item"  title = "{{connectionName}}"
+          connection_id = "{{connectionId}}">
+         <img class="driver-logo mg-5" src="/assets/img/db/{{driverLogo}}"/>
+          <strong class="connect_name">{{connectionName}}</strong> 
+          <span class="c-r c-logo"><a href="javascript:;" data-params = '{"connection_name":"{{connectionName}}","connection_desc":"{{connectionDesc}}","db_port":"{{dbPort}}","db_database":"{{dbDatabase}}","connection_type":"{{connectionType}}","jdbc_string":"{{jdbcString}}","db_user":"{{dbUser}}","db_password":"{{dbPassword}}","server":"{{server}}","max_connect_count":"{{maxConnectCount}}","driverInfo":"{{driverInfo}}","connect_id":"{{connectionId}}"}'><i class="fa fa-edit editBtn" title="修改数据连接" style="color:#10416c"></i></a><i class="fa fa-trash-o delBtn" title="删除数据连接" connection_id="{{connectionId}}" style="padding-right:3px;color:#10416c;"></i></span>         
+  {{/each}}
+{{/if}}

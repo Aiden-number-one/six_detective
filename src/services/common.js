@@ -2,20 +2,21 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-11-19 17:04:57
- * @LastEditors: lan
+ * @LastEditTime: 2019-11-30 18:05:38
+ * @LastEditors: dailinbo
  * @Email: mus@szkingdom.com
  */
 const prefix = '';
 
 export default {
-  // getMenu: 'bayconnect.superlop.get_acl_menu', // 获取数据门户主题列表
-  getMenu: 'mock/run/7765f3a2-a030-4578-a016-cc13c4156136', // Mock
+  getMenu: 'get_acl_menu', // 获取数据门户主题列表
+  // getMenu: 'mock/run/7765f3a2-a030-4578-a016-cc13c4156136', // Mock
   getDatas: 'kingdom.retl.getDatas',
   delDatas: 'kingdom.retl.delDatas',
   getDataSourceList: 'kingdom.retl.getDataSourceList',
   getLogin: 'get_website_login', // 登录
   getLoginStatus: 'get_user_operate_info', // 判断登录状态
+  logout: 'set_sys_logout', // 登出接口
   getDict: 'get_all_dict_data_list', // 获取字典
   getApproval: `${prefix}get_audit_history_list_page`,
   getConfig: `${prefix}get_audit_config_list_page`,
@@ -37,12 +38,14 @@ export default {
   setConfigStatus: `${prefix}set_audit_config_status_update`,
   getRoleGroup: `${prefix}get_role_group_query`,
   getAuditorlist: `${prefix}get_auditor_list`,
+  getQueryMenu: `${prefix}get_query_menu_alert`,
   getSchedule: `${prefix}get_schedule_list_page`,
   scheduleDelete: `${prefix}set_schedule_delete_batch`,
   scheduleModify: `${prefix}set_schedule_modify`,
   scheduleAdd: `${prefix}set_schedule_add`,
   downloadFile: `${prefix}file_download_quick`,
-  getUserList: `${prefix}get_user_list_impl`,
+  // getUserList: `${prefix}get_user_list_impl`,
+  getUserList: `${prefix}get_sysuser_list`,
   addUser: `${prefix}set_add_customer`,
   updateUser: `${prefix}set_user_edit`,
   operationUser: `${prefix}set_user_service_impl`,

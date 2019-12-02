@@ -3,13 +3,14 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:26:09
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-25 10:23:00
+ * @LastEditTime: 2019-11-28 14:55:55
  */
 export default {
   'systemManagement.userMaintenance.userId': '用户 ID',
   'systemManagement.userMaintenance.userName': '用户姓名',
   'systemManagement.userMaintenance.lockedStatus': '状态',
   'systemManagement.userMaintenance.LastUpdateTime': '更新时间',
+  'systemManagement.userMaintenance.LastUpdateUser': 'Last Update User',
   'systemManagement.emailParameter.severIP': '服务器IP',
   'systemManagement.emailParameter.port': '端口',
   'systemManagement.emailParameter.senderEmailAddress': '发件人邮箱',

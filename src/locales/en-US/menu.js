@@ -35,6 +35,7 @@ export default {
   'menu.report': 'REPORT',
   'menu.report.highSlaReports': 'High SLA Reports',
   'menu.report.visualizationDashboard': 'Visualization Dashboard',
+  'menu.report.datasetmanagement': 'Dataset Management',
   'menu.analysis': 'ANALYSIS',
   'menu.analysis.investorSegmentAnalysis': 'Investor Segment Analysis',
   'menu.systemManagement': 'SYSTEM MANAGEMENT',

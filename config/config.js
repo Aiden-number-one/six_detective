@@ -2,8 +2,9 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-11-21 10:15:55
- * @LastEditors: iron
+ * @LastEditTime: 2019-11-27 17:30:28
+ * @LastEditors: lan
+ * @Description: umi 配置文件
  */
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
@@ -141,6 +142,14 @@ export default {
       // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
+      timeout: 15000,
+    },
+    '/superlop': {
+      // target: 'http://10.60.62.60:7567/superlop/restv2/admin/', // 季旋
+      target: 'http://10.201.62.184:7567/superlop/', // 线上
+      // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
+      changeOrigin: true,
+      pathRewrite: { '^/superlop': '' },
       timeout: 15000,
     },
     '/upload': {

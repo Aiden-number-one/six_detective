@@ -1,0 +1,18 @@
+{{#if flag}}
+<tr>
+  <td colspan="4" class="t-c" data-lang="">暂无</td>
+</tr>
+{{else}} {{#each this}}
+<tr>
+  <td class="t-c">{{index}}</td>
+
+  <td class="t-c">
+    {{address}}
+  </td>
+  <td data-index='{{index}}' class="t-c">
+    <a class="delete-jar" data-lang="DELETE">删除</a>
+  </td>
+</tr>
+{{/each}} {{/if}}
+
+<script src="/assets/js/lang.js"></script>
