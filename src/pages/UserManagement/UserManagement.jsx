@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-02 14:55:03
+ * @LastEditTime: 2019-12-02 15:22:43
  */
 
 import React, { Component } from 'react';
@@ -429,6 +429,11 @@ class UserManagement extends Component {
    * @return: undefined
    */
   queryLog = () => {
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: '/system-management/menu-user-group',
+      }),
+    );
     this.searchForm.current.validateFields((err, values) => {
       const params = {
         searchParam: values.searchParam,

@@ -213,6 +213,11 @@ export default [
             component: './UserManagement/UserManagement',
           },
           {
+            path: '/system-management/menu-user-group',
+            name: 'menuUserGroup',
+            component: './MenuUserGroup/MenuUserGroup',
+          },
+          {
             path: '/system-management/user-maintenance/new-user',
             name: 'newUser',
             component: './NewUser/NewUser',
