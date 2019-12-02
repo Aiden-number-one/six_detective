@@ -1,28 +1,11 @@
 import React from 'react';
-import { formatMessage } from 'umi/locale';
-import { Form, Row, DatePicker, Select, Radio, Col, Input } from 'antd';
+import { FormattedMessage } from 'umi/locale';
+import { Form, Row, Button, DatePicker, Select, Radio, Col, Input } from 'antd';
+
+import { PROCESSING_STATUS, SUBMISSION_REPORT } from './CONSTANTS';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-
-const PROCESSING_STATUS = [
-  'wait for validation',
-  'failed validation',
-  'validated',
-  'processing',
-  'failed processing',
-  'processed',
-  'processed',
-  'canceled',
-];
-
-const SUBMISSION_REPORT = [
-  'LOPBI',
-  'LOPTO',
-  'SOLBI',
-  'SOLTO',
-  'EXCESS POSITION LIMIT FOR ETF MARKET MAKERS REPORTING',
-];
 
 const formItemLayout = {
   labelCol: {
@@ -36,12 +19,20 @@ const formItemLayout = {
 };
 
 function LopLogFilterForm({ form }) {
-  const { getFieldDecorator } = form;
+  const { getFieldDecorator, validateFields } = form;
+
+  function handleSearch() {
+    validateFields((err, values) => {
+      console.log(values);
+      console.log(values.tradeDate.format('YYYY-MM-DD'));
+    });
+  }
+
   return (
-    <Form {...formItemLayout}>
+    <Form {...formItemLayout} onSubmit={handleSearch}>
       <Row>
         <Col span={10}>
-          <Form.Item label={formatMessage({ id: 'data-import.lop.trade-date' })}>
+          <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
             {getFieldDecorator('tradeDate', {
               rules: [
                 {
@@ -51,7 +42,7 @@ function LopLogFilterForm({ form }) {
               ],
             })(<DatePicker />)}
           </Form.Item>
-          <Form.Item label={formatMessage({ id: 'data-import.lop.submitter-code' })}>
+          <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
             {getFieldDecorator('submitterCode', {
               initialValue: '',
               rules: [
@@ -62,7 +53,7 @@ function LopLogFilterForm({ form }) {
               ],
             })(<Input placeholder="please input submitter code" />)}
           </Form.Item>
-          <Form.Item label={formatMessage({ id: 'data-import.lop.submission-report' })}>
+          <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
             {getFieldDecorator('submissionReport', {
               initialValue: SUBMISSION_REPORT[0],
               rules: [
@@ -72,14 +63,14 @@ function LopLogFilterForm({ form }) {
                 },
               ],
             })(
-              <Select placeholder="please select submitter report">
+              <Select placeholder="please select submission report">
                 {SUBMISSION_REPORT.map(report => (
                   <Option key={report}>{report}</Option>
                 ))}
               </Select>,
             )}
           </Form.Item>
-          <Form.Item label={formatMessage({ id: 'data-import.lop.late-submission' })}>
+          <Form.Item label={<FormattedMessage id="data-import.lop.late-submission" />}>
             {getFieldDecorator('lateSubmission', {
               initialValue: 'y',
             })(
@@ -90,8 +81,8 @@ function LopLogFilterForm({ form }) {
             )}
           </Form.Item>
         </Col>
-        <Col span={10}>
-          <Form.Item label={formatMessage({ id: 'data-import.lop.submission-date' })}>
+        <Col span={10} offset={1}>
+          <Form.Item label={<FormattedMessage id="data-import.lop.submission-date" />}>
             {getFieldDecorator('submissionDate', {
               rules: [
                 {
@@ -101,7 +92,7 @@ function LopLogFilterForm({ form }) {
               ],
             })(<RangePicker />)}
           </Form.Item>
-          <Form.Item label={formatMessage({ id: 'data-import.lop.submitter-name' })}>
+          <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
             {getFieldDecorator('submitterName', {
               initialValue: '',
               rules: [
@@ -112,8 +103,8 @@ function LopLogFilterForm({ form }) {
               ],
             })(<Input placeholder="please input submmitter name" />)}
           </Form.Item>
-          <Form.Item label={formatMessage({ id: 'data-import.lop.processing-status' })}>
-            {getFieldDecorator('processingName', {
+          <Form.Item label={<FormattedMessage id="data-import.lop.processing-status" />}>
+            {getFieldDecorator('processingStatus', {
               initialValue: PROCESSING_STATUS[0],
               rules: [
                 {
@@ -129,7 +120,7 @@ function LopLogFilterForm({ form }) {
               </Select>,
             )}
           </Form.Item>
-          <Form.Item label={formatMessage({ id: 'data-import.lop.submission-channel' })}>
+          <Form.Item label={<FormattedMessage id="data-import.lop.submission-channel" />}>
             {getFieldDecorator('submissionChannel', {
               initialValue: 'ecp',
               rules: [
@@ -146,6 +137,11 @@ function LopLogFilterForm({ form }) {
             )}
           </Form.Item>
         </Col>
+      </Row>
+      <Row type="flex" justify="end">
+        <Button type="primary" onClick={handleSearch}>
+          <FormattedMessage id="data-import.lop.search" />
+        </Button>
       </Row>
     </Form>
   );

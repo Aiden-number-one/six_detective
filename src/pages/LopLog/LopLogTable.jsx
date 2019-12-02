@@ -18,18 +18,18 @@ export default function({ dataSource }) {
       />
       <Column
         dataIndex="submissionReport"
-        title={<FormattedMessage id="data-import.lop.submitter-report" />}
+        title={<FormattedMessage id="data-import.lop.submission-report" />}
       />
       <Column
         dataIndex="submissionChannel"
-        title={<FormattedMessage id="data-import.lop.submitter-channel" />}
+        title={<FormattedMessage id="data-import.lop.submission-channel" />}
       />
       <Column
-        dataIndex="submitterDate"
-        title={<FormattedMessage id="data-import.lop.submitter-date" />}
+        dataIndex="submissionDate"
+        title={<FormattedMessage id="data-import.lop.submission-date" />}
       />
       <Column
-        dataIndex="submissionStatusF"
+        dataIndex="submissionStatus"
         title={<FormattedMessage id="data-import.lop.submission-status" />}
       />
       <Column
@@ -48,10 +48,7 @@ export default function({ dataSource }) {
         dataIndex="processingStatus"
         title={<FormattedMessage id="data-import.lop.processing-status" />}
       />
-      <Column
-        dataIndex="download"
-        title={<FormattedMessage id="data-import.lop.processing-download" />}
-      />
+      <Column dataIndex="download" title={<FormattedMessage id="data-import.lop.download" />} />
     </Table>
   );
 }

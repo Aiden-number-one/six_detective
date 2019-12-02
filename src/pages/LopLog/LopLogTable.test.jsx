@@ -6,7 +6,7 @@ import LopLogTable from './LopLogTable';
 const { Column } = Table;
 
 describe('test lop data log table', () => {
-  const wrapper = shallow(<LopLogTable />);
+  const wrapper = shallow(<LopLogTable dataSource={[]} />);
 
   it('should render table', () => {
     expect(wrapper.find(Table).length).toBe(1);
@@ -15,7 +15,7 @@ describe('test lop data log table', () => {
       wrapper
         .find(Column)
         .first()
-        .props().title,
-    ).toBe('Trade Date');
+        .props().dataIndex,
+    ).toBe('tradeDate');
   });
 });
