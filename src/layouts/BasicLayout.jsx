@@ -12,8 +12,8 @@ import { Icon, Badge, Popover } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
-import CustomizeSelectLang from '@/components/CustomizeSelectLang';
 // import { setLocale } from 'umi/locale';
+import CustomizeSelectLang from '@/components/CustomizeSelectLang';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
@@ -22,12 +22,39 @@ import styles from './BasicLayout.less';
 import '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
 import { isProOrDev } from '@/utils/utils';
+
+const menus = [
+  {
+    path: '/data-management',
+    name: 'dataManagement',
+    locale: 'menu.dataManagement',
+    children: [
+      {
+        path: '/data-management/data-import',
+        name: 'dataImport',
+        children: [
+          {
+            path: '/data-management/data-import/lop-data-import',
+            name: 'lopDataImport',
+          },
+          {
+            path: '/data-management/data-import/market-data-import',
+            name: 'marketDataImport',
+          },
+        ],
+      },
+    ],
+  },
+];
+
 /**
  * use Authorized check all menu item
  */
 const menuDataRender = menuList =>
   menuList.map(item => {
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
+    // console.log(localItem);
+
     return Authorized.check(item.authority, localItem, null);
   });
 
@@ -40,13 +67,7 @@ const footerRender = () => (
 );
 
 const BasicLayout = props => {
-  const {
-    dispatch,
-    children,
-    settings,
-    collapsed,
-    // menuData
-  } = props;
+  const { dispatch, children, settings, collapsed /* menuData */ } = props;
   /**
    * constructor
    */
@@ -57,7 +78,9 @@ const BasicLayout = props => {
   // }
 
   useEffect(() => {
-    // setLocale('zh-CN');
+    // console.log(menuData);
+
+    // setLocale('en-US');
     // window.addEventListener('beforeunload', listenClose, false);
     if (dispatch) {
       dispatch({
@@ -243,8 +266,8 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings, menu }) => ({
+export default connect(({ global, settings }) => ({
   collapsed: global.collapsed,
   settings,
-  menuData: menu.menuData,
+  menuData: menus,
 }))(BasicLayout);
