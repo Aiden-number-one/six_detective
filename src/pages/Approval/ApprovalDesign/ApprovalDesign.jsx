@@ -2,13 +2,12 @@
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Input, Button, Tabs, Modal, Upload, message } from 'antd';
+import { Form, Input, Button, Modal, Upload, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 // import classNames from 'classnames';
 import styles from './ApprovalDesign.less';
 
-const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 // eslint-disable-next-line react/require-render-return
@@ -61,6 +60,7 @@ class ApprovalDesign extends PureComponent {
   state = {
     // dataSource: [],
     visible: false,
+    deleteVisible: false,
   };
 
   componentDidMount() {
@@ -141,11 +141,28 @@ class ApprovalDesign extends PureComponent {
     });
   };
 
-  // 绑定的点击事件,删除模型
-  delete = () => {
+  // 绑定的点击事件,删除模型对话框
+  deleteOpenModel = () => {
+    this.setState({
+      deleteVisible: true,
+    });
+  };
+
+  // 弹出的对话框确定删除
+  handleDeleteOk = () => {
     const { chooseModelId } = this.props;
     const param = { modelId: chooseModelId };
     this.deleteModel(param);
+    this.setState({
+      deleteVisible: false,
+    });
+  };
+
+  // 弹出的对话框取消删除
+  handleCloseModelCancel = () => {
+    this.setState({
+      deleteVisible: false,
+    });
   };
 
   // 上传文件
@@ -158,17 +175,6 @@ class ApprovalDesign extends PureComponent {
       message.error(`${info.file.name} file upload failed.`);
     }
   };
-
-  // // 下载文件
-  // downloadFile = filePath => {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'approvalDesign/downloadFile',
-  //     payload: {
-  //       filePath,
-  //     },
-  //   });
-  // };
 
   // 导出模型
   exportModel = () => {
@@ -202,7 +208,9 @@ class ApprovalDesign extends PureComponent {
 
   // 选择tab的选项,获取选中的模型id
   chooseTab = chooseModelId => {
-    console.log('chooseModelId---->', chooseModelId);
+    if (chooseModelId === this.props.chooseModelId) {
+      return;
+    }
     const { dispatch } = this.props;
     dispatch({
       type: 'approvalDesign/changeModelId',
@@ -238,8 +246,8 @@ class ApprovalDesign extends PureComponent {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { modelList, modelImage } = this.props;
-    // console.log('modelList--------->', modelList);
+    const { modelList, chooseModelId, modelImage } = this.props;
+    const { deleteVisible } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -259,53 +267,74 @@ class ApprovalDesign extends PureComponent {
         <PageHeaderWrapper>
           <div className={styles.approvalDesign}>
             <div className={styles.contentBox}>
-              <div className={styles.buttonBox}>
-                <Button onClick={this.deployModel} type="primary" icon="deployment-unit">
-                  {formatMessage({ id: 'systemManagement.flowDesign.flowRelease' })}
-                </Button>
-                <Button onClick={this.goProcessPage} type="primary" icon="edit">
-                  {formatMessage({ id: 'systemManagement.flowDesign.flowModify' })}
-                </Button>
-                <Button type="primary" icon="delete" onClick={this.delete}>
-                  {formatMessage({ id: 'systemManagement.flowDesign.flowDelete' })}
-                </Button>
-                <Button onClick={this.exportModel} type="primary" icon="export">
-                  {formatMessage({ id: 'systemManagement.flowDesign.flowExport' })}
-                </Button>
-                <Upload onChange={info => this.importFileStatus(info)} action="/upload">
-                  <Button type="primary" icon="import">
-                    {formatMessage({ id: 'systemManagement.flowDesign.flowImport' })}
-                  </Button>
-                </Upload>
-              </div>
-              <div className={styles.tabsBox}>
-                <div className={styles.modelTitleBox}>
-                  <span style={{ color: '#ff4638', fontSize: '18px', fontWeight: 'bold' }}>
-                    模型列表
-                  </span>
-                  <Button
-                    type="primary"
-                    icon="file-add"
-                    onClick={this.showModal}
-                    style={{ marginRight: '0', float: 'right' }}
-                  >
-                    {formatMessage({ id: 'systemManagement.flowDesign.newFlowChart' })}
-                  </Button>
-                </div>
-                <Tabs
-                  onChange={this.chooseTab}
-                  tabPosition="left"
-                  style={{ height: 600, marginTop: '20px' }}
-                  tabBarStyle={{ width: 200 }}
-                  type="card editable-card"
+              <div className={styles.leftBox}>
+                <Button
+                  type="primary"
+                  className="button_two"
+                  icon="file-add"
+                  onClick={this.showModal}
+                  style={{ marginRight: '0', float: 'right' }}
                 >
-                  {modelList.map(item => (
-                    <TabPane tab={item.name} key={item.id}>
-                      {item.name}
-                    </TabPane>
-                  ))}
-                  <div>{modelImage ? <img src={modelImage} alt="" /> : null}</div>
-                </Tabs>
+                  {formatMessage({ id: 'systemManagement.flowDesign.newFlowChart' })}
+                </Button>
+                <div className="">
+                  <h2>模型列表</h2>
+                  <ul>
+                    {modelList.map(item => (
+                      <li
+                        key={item.id}
+                        onClick={() => {
+                          this.chooseTab(item.id);
+                        }}
+                        className={chooseModelId === item.id ? styles.liActive : null}
+                      >
+                        {item.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className={styles.rightBox}>
+                <div>
+                  <Button
+                    className="button_two"
+                    onClick={this.deployModel}
+                    type="primary"
+                    icon="deployment-unit"
+                  >
+                    {formatMessage({ id: 'systemManagement.flowDesign.flowRelease' })}
+                  </Button>
+                  <Button
+                    className="button_two"
+                    onClick={this.goProcessPage}
+                    type="primary"
+                    icon="edit"
+                  >
+                    {formatMessage({ id: 'systemManagement.flowDesign.flowModify' })}
+                  </Button>
+                  <Button
+                    className="button_two"
+                    type="primary"
+                    icon="delete"
+                    onClick={this.deleteOpenModel}
+                  >
+                    {formatMessage({ id: 'systemManagement.flowDesign.flowDelete' })}
+                  </Button>
+                  <Button
+                    className="button_two"
+                    onClick={this.exportModel}
+                    type="primary"
+                    icon="export"
+                  >
+                    {formatMessage({ id: 'systemManagement.flowDesign.flowExport' })}
+                  </Button>
+                  <Upload onChange={info => this.importFileStatus(info)} action="/upload">
+                    <Button className="button_two" type="primary" icon="import">
+                      {formatMessage({ id: 'systemManagement.flowDesign.flowImport' })}
+                    </Button>
+                  </Upload>
+                </div>
+                <div>{modelImage ? <img src={modelImage} alt="" /> : null}</div>
               </div>
             </div>
             <Modal title="新模型" visible={this.state.visible} footer={false} closable={false}>
@@ -328,6 +357,14 @@ class ApprovalDesign extends PureComponent {
                   </Button>
                 </Form.Item>
               </Form>
+            </Modal>
+            <Modal
+              title="delete"
+              visible={deleteVisible}
+              onOk={this.handleDeleteOk}
+              onCancel={this.handleCloseModelCancel}
+            >
+              <p>Are you sure delete this model?</p>
             </Modal>
           </div>
         </PageHeaderWrapper>
