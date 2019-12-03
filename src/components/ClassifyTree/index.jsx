@@ -2,8 +2,13 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
+<<<<<<< HEAD
  * @LastEditors: dailinbo
  * @LastEditTime: 2019-12-03 19:22:19
+=======
+ * @LastEditors: lan
+ * @LastEditTime: 2019-12-03 17:33:38
+>>>>>>> d96177fb2a26b60dfc6d431b2c7fedfd439f6657
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
