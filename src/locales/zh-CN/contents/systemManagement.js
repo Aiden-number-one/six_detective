@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:26:09
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-28 14:55:55
+ * @LastEditTime: 2019-12-02 19:56:52
  */
 export default {
   'systemManagement.userMaintenance.userId': '用户 ID',
@@ -37,4 +37,5 @@ export default {
   'systemManagement.template.templateTitle': '标题',
   'systemManagement.template.templateContent': '模板内容',
   'systemManagement.template.keyword': '关键字',
+  'systemManagement.userGroup.remark': '备注',
 };

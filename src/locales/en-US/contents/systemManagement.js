@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-29 18:37:45
+ * @LastEditTime: 2019-12-02 19:57:10
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -39,4 +39,5 @@ export default {
   'systemManagement.template.templateTitle': 'Title',
   'systemManagement.template.templateContent': 'Content',
   'systemManagement.template.keyword': 'KeyWord',
+  'systemManagement.userGroup.remark': 'Remark',
 };
