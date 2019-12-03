@@ -1,4 +1,5 @@
 import authRoutes from './router.config.auth';
+
 export default [
   {
     path: '/login',
@@ -30,8 +31,13 @@ export default [
         name: 'dataImport',
         routes: [
           { path: 'lop', name: 'lop', component: './LopLog' },
-          // { path: 'market', component: './MarketLog' },
+          { path: 'market', name: 'market', component: './MarketLog' },
         ],
+      },
+      {
+        path: '/alert-center',
+        name: 'alertCenter',
+        component: './AlertCenter',
       },
       {
         path: '/data-management',
@@ -55,49 +61,49 @@ export default [
           },
           {
             isIframe: true,
-            iframeUrl: `http://localhost:8000/ETL/index.html#data-source-configuration`,
+            iframeUrl: 'http://localhost:8000/ETL/index.html#data-source-configuration',
             path: '/data-management/data-maintenance',
             name: 'dataMaintenance',
             component: './IframePage/IframePage',
           },
           {
             isIframe: true,
-            iframeUrl: `http://localhost:8000/ETL/index.html#data-driven`,
+            iframeUrl: 'http://localhost:8000/ETL/index.html#data-driven',
             path: '/data-management/drive-management',
             name: 'driveManagement',
             component: './IframePage/IframePage',
           },
           {
             isIframe: true,
-            iframeUrl: `http://localhost:8000/ETL/index.html#task-config-setting`,
+            iframeUrl: 'http://localhost:8000/ETL/index.html#task-config-setting',
             path: '/data-management/task-config-setting',
             name: 'taskConfigSetting',
             component: './IframePage/IframePage',
           },
           {
             isIframe: true,
-            iframeUrl: `http://localhost:8000/ETL/index.html#report-table-info-manage`,
+            iframeUrl: 'http://localhost:8000/ETL/index.html#report-table-info-manage',
             path: '/data-management/report-table-info-manage',
             name: 'jobManage',
             component: './IframePage/IframePage',
           },
           {
             isIframe: true,
-            iframeUrl: `http://localhost:8000/ETL/index.html#task-plan-setting`,
+            iframeUrl: 'http://localhost:8000/ETL/index.html#task-plan-setting',
             path: '/data-management/task-plan-setting',
             name: 'taskPlanSetting',
             component: './IframePage/IframePage',
           },
           {
             isIframe: true,
-            iframeUrl: `http://localhost:8000/ETL/index.html#perform-monitoring`,
+            iframeUrl: 'http://localhost:8000/ETL/index.html#perform-monitoring',
             path: '/data-management/perform-monitoring',
             name: 'performMonitoring',
             component: './IframePage/IframePage',
           },
           {
             isIframe: true,
-            iframeUrl: `http://localhost:8000/ETL/index.html#log-query`,
+            iframeUrl: 'http://localhost:8000/ETL/index.html#log-query',
             path: '/data-management/log-query',
             name: 'logQuery',
             component: './IframePage/IframePage',

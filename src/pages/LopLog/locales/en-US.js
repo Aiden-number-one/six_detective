@@ -1,12 +1,3 @@
-/*
- * @Des: en lang
- * @Author: iron
- * @Email: chenggang@szkingdom.com.cn
- * @Date: 2019-11-30 10:54:40
- * @LastEditors: iron
- * @LastEditTime: 2019-12-02 19:21:12
- */
-
 export default {
   'data-import.lop.trade-date': 'Trade Date',
   'data-import.lop.submission-date': 'Submission Date',
