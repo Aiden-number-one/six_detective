@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-02 15:22:43
+ * @LastEditTime: 2019-12-03 19:59:06
  */
 
 import React, { Component } from 'react';
@@ -61,8 +61,8 @@ class UserManagement extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
-        dataIndex: 'userState',
-        key: 'userState',
+        dataIndex: 'accountLock',
+        key: 'accountLock',
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),

@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-12-03 17:13:18
+ * @LastEditTime: 2019-12-03 20:02:44
  * @LastEditors: dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -45,9 +45,9 @@ export default {
   scheduleAdd: `${prefix}set_schedule_add`,
   downloadFile: `${prefix}file_download_quick`,
   // getUserList: `${prefix}get_user_list_impl`,
-  getUserList: `${prefix}get_sysuser_list`,
-  addUser: `${prefix}set_add_customer`,
-  updateUser: `${prefix}set_user_edit`,
+  getUserList: `${prefix}get_user_list_information`,
+  addUser: `${prefix}set_sysuser_info_add`,
+  updateUser: `${prefix}set_user_update`,
   operationUser: `${prefix}set_user_service_impl`,
   emailList: `${prefix}get_mail_config_list`,
   addEmail: `${prefix}set_mail_config_save`,

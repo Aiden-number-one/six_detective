@@ -2,7 +2,7 @@
  * @Description: menu modal
  * @Author: mus
  * @Date: 2019-09-19 17:03:33
- * @LastEditTime: 2019-12-03 18:47:44
+ * @LastEditTime: 2019-12-03 20:09:31
  * @LastEditors: dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -14,6 +14,7 @@ export default {
   namespace: 'modifyUserGroup',
   state: {
     saveUser: {},
+    data: [],
   },
   effects: {
     *modifyUserGroup({ payload, callback }, { call, put }) {
