@@ -73,6 +73,10 @@ class FormUser extends Component {
             })(
               <ClassifyTree
                 all
+                checkable
+                add
+                modify
+                move
                 onCheck={this.onCheck}
                 treeData={menuData}
                 treeKey={{

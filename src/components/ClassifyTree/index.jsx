@@ -3,12 +3,17 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-03 10:27:57
+ * @LastEditTime: 2019-12-03 13:27:06
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
  *  treeKey                 包含当前节点id、名称和父节点id,          Object{currentKey:string,
  *                          用于处理数据                            currentName:string,parentKey:string}
+ *  all                     添加全选                               Boolean                        false
+ *  checkable               节点前添加 Checkbox 复选框              Boolean                        false
+ *  add                     是否展示单个节点下添加图标               Boolean                        false
+ *  modify                  是否展示单个节点下编辑图标               Boolean                        false
+ *  move                    是否展示单个节点下编辑图标               Boolean                        false
  * @Events:
  *  事件名                  说明                  参数
  *  handleAddTree           添加tree节点          function(nodeTree) nodeTree的当前节点及子节点数据
@@ -63,13 +68,12 @@ class HoverText extends Component {
 
   render() {
     const { nodeKeys, operate } = this.props;
-    console.log('operate=', operate);
     return (
       <Fragment>
         <span className={styles.hoverText}>
-          <Icon type="plus-circle" onClick={e => this.addTree(e, nodeKeys)} />
-          <Icon type="edit" onClick={e => this.modifyTree(e, nodeKeys)} />
-          <Icon type="minus-circle" onClick={e => this.deleteTree(e, nodeKeys)} />
+          {operate.add && <Icon type="plus-circle" onClick={e => this.addTree(e, nodeKeys)} />}
+          {operate.modify && <Icon type="edit" onClick={e => this.modifyTree(e, nodeKeys)} />}
+          {operate.move && <Icon type="minus-circle" onClick={e => this.deleteTree(e, nodeKeys)} />}
         </span>
       </Fragment>
     );
@@ -153,7 +157,6 @@ function loop(orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTr
         return (
           <TreeNode
             key={currentKey}
-            checkable
             title={
               <TitleMessage
                 title={showTitle}
@@ -284,7 +287,6 @@ class ClassifyTree extends Component {
   };
 
   onCheck = (selectedKeys, info) => {
-    // console.log('selectedKeys, info111=', selectedKeys, info);
     this.props.onCheck(selectedKeys, info);
     this.setState({
       checkedKeys: selectedKeys,
@@ -292,7 +294,6 @@ class ClassifyTree extends Component {
   };
 
   onChange = e => {
-    console.log('e===', e);
     if (e.target.checked) {
       this.setState({
         // checkedKeys: ['001', '002'],
@@ -309,6 +310,7 @@ class ClassifyTree extends Component {
       checkedKeys,
     } = this.state;
     const {
+      checkable,
       handleAddTree,
       handleModifyTree,
       handleDeleteTree,
@@ -334,8 +336,7 @@ class ClassifyTree extends Component {
         {all && <Checkbox onChange={this.onChange}>all</Checkbox>}
         <Tree
           // showLine
-          checkable
-          selectable
+          checkable={checkable}
           onExpand={this.onExpand}
           onSelect={this.onSelect}
           onCheck={this.onCheck}
