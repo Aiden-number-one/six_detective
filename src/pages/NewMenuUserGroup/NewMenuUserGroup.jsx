@@ -4,6 +4,7 @@ import { Row, Col, Button, Form, Input, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
+import styles from './NewMenuUserGroup.less';
 
 import ClassifyTree from '@/components/ClassifyTree';
 
@@ -22,7 +23,7 @@ class FormUser extends Component {
           <Form.Item
             label={formatMessage({ id: 'app.common.username' })}
             labelCol={{ span: 4 }}
-            wrapperCol={{ span: 6 }}
+            wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('roleName', {
               rules: [
@@ -36,7 +37,7 @@ class FormUser extends Component {
           <Form.Item
             label={formatMessage({ id: 'systemManagement.userGroup.remark' })}
             labelCol={{ span: 4 }}
-            wrapperCol={{ span: 6 }}
+            wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('roleDesc', {
               rules: [
@@ -123,6 +124,28 @@ class NewUser extends Component {
     return (
       <PageHeaderWrapper>
         <Fragment>
+          <NewFormUser ref={this.newUserRef} />
+          <Row type="flex">
+            <Col>
+              <span className={styles.title}>
+                {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
+              </span>
+            </Col>
+            <Col>
+              <ClassifyTree
+                all
+                checkable
+                onCheck={this.onCheck}
+                treeData={menuData}
+                treeKey={{
+                  currentKey: 'menuid',
+                  currentName: 'menuname',
+                  parentKey: 'parentmenuid',
+                }}
+                onSelect={this.onSelect}
+              ></ClassifyTree>
+            </Col>
+          </Row>
           <Row type="flex" justify="end">
             <Col>
               <Button onClick={this.onCancel}>CANCEL</Button>
@@ -131,21 +154,6 @@ class NewUser extends Component {
               </Button>
             </Col>
           </Row>
-          <NewFormUser ref={this.newUserRef} />
-          <div>{formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}</div>
-          <ClassifyTree
-            all
-            checkable
-            onCheck={this.onCheck}
-            treeData={menuData}
-            treeKey={{
-              currentKey: 'menuid',
-              currentName: 'menuname',
-              parentKey: 'parentmenuid',
-            }}
-            onSelect={this.onSelect}
-          ></ClassifyTree>
-          ,
         </Fragment>
       </PageHeaderWrapper>
     );

@@ -4,7 +4,7 @@
  * @Date: 2019-11-11 13:20:11
 <<<<<<< HEAD
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-03 19:22:19
+ * @LastEditTime: 2019-12-03 21:02:13
 =======
  * @LastEditors: lan
  * @LastEditTime: 2019-12-03 17:33:38
@@ -362,7 +362,11 @@ class ClassifyTree extends Component {
             onSearch={value => this.onSearch(value, treeKey)}
           />
         )}
-        {all && <Checkbox onChange={this.onChange}>all</Checkbox>}
+        {all && (
+          <Checkbox onChange={this.onChange} style={{ marginLeft: '26px' }}>
+            All
+          </Checkbox>
+        )}
         <Tree
           // showLine
           checkable={checkable}
