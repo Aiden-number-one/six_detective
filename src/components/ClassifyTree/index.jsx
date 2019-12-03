@@ -2,8 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-30 14:59:40
+ * @LastEditors: lan
+ * @LastEditTime: 2019-12-02 19:23:51
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -268,7 +268,14 @@ class ClassifyTree extends Component {
 
   render() {
     const { expandedKeys, autoExpandParent, menuList, defaultCheckedKeys } = this.state;
-    const { handleAddTree, handleModifyTree, handleDeleteTree, treeKey, showSearch } = this.props;
+    const {
+      handleAddTree,
+      handleModifyTree,
+      handleDeleteTree,
+      treeKey,
+      showSearch,
+      checkable,
+    } = this.props;
     if (menuList) {
       this.generateList(menuList, treeKey);
     }
@@ -283,7 +290,7 @@ class ClassifyTree extends Component {
         )}
         <Tree
           // showLine
-          checkable
+          checkable={checkable}
           onExpand={this.onExpand}
           onSelect={this.onSelect}
           expandedKeys={expandedKeys}
