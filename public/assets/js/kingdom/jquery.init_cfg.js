@@ -1,1 +1,0 @@
-$.extend({init_cfg:{current_url:"/",kfsp_url:"/",kasp_url:"/kasp/",file_server:"/fileserver/",supportchannel:"AL",checkCode:!1,themeid:"ronghuitong"}});

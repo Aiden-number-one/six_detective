@@ -1,1 +1,10 @@
-!function($){var e={};$.fn.handlebars=function(n,a){n instanceof jQuery&&(n=$(n).html()),e[n]=Handlebars.compile(n),this.html(e[n](a))}}(jQuery);
+(function($) {
+    var compiled = {};
+    $.fn.handlebars = function(template, data) {
+        if (template instanceof jQuery) {
+            template = $(template).html();
+        }
+    compiled[template] = Handlebars.compile(template);
+    this.html(compiled[template](data));
+    };
+})(jQuery);
