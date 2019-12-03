@@ -55,11 +55,11 @@ class FormUser extends Component {
 
 const NewFormUser = Form.create()(FormUser);
 
-// @connect(({ userGroup, loading }) => ({
-//   loading: loading.effects,
-//   userGroup: userGroup.saveUser,
-// }))
-class NewUser extends Component {
+@connect(({ modifyUserGroup, loading }) => ({
+  loading: loading.effects,
+  modifyUserGroup: modifyUserGroup.saveUser,
+}))
+class ModifyUser extends Component {
   newUserRef = React.createRef();
 
   constructor(props) {
@@ -68,6 +68,35 @@ class NewUser extends Component {
       selectedKeys: [],
     };
   }
+
+  componentDidMount() {
+    console.log('this.props=====', this.props);
+    const { roleId } = this.props.location.query;
+    this.setState(
+      {
+        roleId,
+      },
+      () => {
+        this.queryInit();
+      },
+    );
+  }
+
+  queryInit = () => {
+    const { dispatch } = this.props;
+    const { roleId } = this.state;
+    const param = {
+      roleId,
+      operType: 'queryById',
+    };
+    dispatch({
+      type: 'modifyUserGroup/modifyUserGroup',
+      payload: param,
+      callback: () => {
+        console.log(1111111);
+      },
+    });
+  };
 
   onCancel = () => {
     this.props.history.push({
@@ -80,12 +109,12 @@ class NewUser extends Component {
     const { dispatch } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
       const param = {
-        roleName: values.roleName,
-        roleDesc: values.roleDesc,
-        menuIds: selectedKeys,
+        roleId: this.state.roleId,
+        operType: 'modifyById',
+        menuIds: selectedKeys.join(','),
       };
       dispatch({
-        type: 'userGroup/newUserGroup',
+        type: 'modifyUserGroup/modifyUserGroup',
         payload: param,
         callback: () => {
           message.success('success');
@@ -111,15 +140,17 @@ class NewUser extends Component {
   };
 
   onCheck = selectedKeyss => {
-    const newSelectedKeys = selectedKeyss.join(',');
+    // const newSelectedKeys = selectedKeyss.join(',');
     this.setState({
-      selectedKeys: newSelectedKeys,
+      selectedKeys: selectedKeyss,
     });
   };
 
   render() {
-    const { menuData } = this.props;
-    console.log('menuData=', menuData);
+    const { menuData, modifyUserGroup } = this.props;
+    console.log('modifyUserGroup===', modifyUserGroup);
+    const checkedKeys =
+      modifyUserGroup.length > 0 && modifyUserGroup.map(element => element.menuId);
     return (
       <PageHeaderWrapper>
         <Fragment>
@@ -138,6 +169,7 @@ class NewUser extends Component {
             checkable
             onCheck={this.onCheck}
             treeData={menuData}
+            checkedKeys={checkedKeys}
             treeKey={{
               currentKey: 'menuid',
               currentName: 'menuname',
@@ -156,4 +188,4 @@ const menuProps = ({ menu }) => ({
   menuData: menu.menuData,
 });
 
-export default connect(menuProps)(NewUser);
+export default connect(menuProps)(ModifyUser);

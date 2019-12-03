@@ -64,6 +64,16 @@ class MenuUserGroup extends Component {
     );
   };
 
+  updateUser = (res, obj) => {
+    console.log('res, obj=', res, obj);
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: '/system-management/user-maintenance/modify-menu-user',
+        query: { roleId: obj.roleId },
+      }),
+    );
+  };
+
   queryLog = () => {
     const { dispatch } = this.props;
     const params = {};
