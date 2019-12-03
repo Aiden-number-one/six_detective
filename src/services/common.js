@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-12-02 19:49:20
+ * @LastEditTime: 2019-12-03 16:16:12
  * @LastEditors: dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -64,4 +64,5 @@ export default {
   addCode: `${prefix}add_task_spm_dict_index`,
   getFolderMenu: `${prefix}get_folder_menu`,
   getMenuUserGroup: `${prefix}get_user_group_menu`,
+  getNewUserGroup: `${prefix}set_user_group_menu`,
 };

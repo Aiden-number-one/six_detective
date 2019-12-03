@@ -53,12 +53,7 @@ class MenuUserGroup extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    const params = {};
-    dispatch({
-      type: 'menuUserGroup/getMenuUserGroup',
-      payload: params,
-    });
+    this.queryLog();
   }
 
   newUser = () => {
@@ -67,6 +62,15 @@ class MenuUserGroup extends Component {
         pathname: '/system-management/user-maintenance/new-menu-user',
       }),
     );
+  };
+
+  queryLog = () => {
+    const { dispatch } = this.props;
+    const params = {};
+    dispatch({
+      type: 'menuUserGroup/getMenuUserGroup',
+      payload: params,
+    });
   };
 
   render() {

@@ -14,6 +14,91 @@ class FormUser extends Component {
     this.state = {};
   }
 
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Fragment>
+        <Form>
+          <Form.Item
+            label={formatMessage({ id: 'app.common.username' })}
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 6 }}
+          >
+            {getFieldDecorator('roleName', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please input your roleName',
+                },
+              ],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item
+            label={formatMessage({ id: 'systemManagement.userGroup.remark' })}
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 6 }}
+          >
+            {getFieldDecorator('roleDesc', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please input your remark',
+                },
+              ],
+            })(<TextArea rows={4} />)}
+          </Form.Item>
+        </Form>
+      </Fragment>
+    );
+  }
+}
+
+const NewFormUser = Form.create()(FormUser);
+
+// @connect(({ userGroup, loading }) => ({
+//   loading: loading.effects,
+//   userGroup: userGroup.saveUser,
+// }))
+class NewUser extends Component {
+  newUserRef = React.createRef();
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedKeys: [],
+    };
+  }
+
+  onCancel = () => {
+    this.props.history.push({
+      pathname: '/system-management/menu-user-group',
+    });
+  };
+
+  onSave = () => {
+    const { selectedKeys } = this.state;
+    console.log('selectedKeys=', selectedKeys);
+    const { dispatch } = this.props;
+    this.newUserRef.current.validateFields((err, values) => {
+      const param = {
+        roleName: values.roleName,
+        roleDesc: values.roleDesc,
+        menuIds: selectedKeys,
+      };
+      dispatch({
+        type: 'userGroup/newUserGroup',
+        payload: param,
+        callback: () => {
+          message.success('success');
+          this.props.history.push({
+            pathname: '/system-management/menu-user-group',
+            params: values,
+          });
+        },
+      });
+    });
+  };
+
   onChangeMenuUserGroup = checkedValues => {
     console.log('checkedValues=', checkedValues);
   };
@@ -26,98 +111,10 @@ class FormUser extends Component {
     console.log('value===', value);
   };
 
-  onCheck = (selectedKeys, info) => {
-    console.log('selected', selectedKeys, info);
-  };
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { menuData } = this.props;
-    return (
-      <Fragment>
-        <Form>
-          <Form.Item
-            label={formatMessage({ id: 'app.common.username' })}
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 6 }}
-          >
-            {getFieldDecorator('username', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input your username',
-                },
-              ],
-            })(<Input />)}
-          </Form.Item>
-          <Form.Item
-            label={formatMessage({ id: 'systemManagement.userGroup.remark' })}
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 6 }}
-          >
-            {getFieldDecorator('remark', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input your remark',
-                },
-              ],
-            })(<TextArea rows={4} />)}
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{ offset: 1 }}
-            label={formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
-          >
-            {getFieldDecorator('menuUserGroup', {
-              initialValue: ['Operator'],
-            })(
-              <ClassifyTree
-                all
-                checkable
-                add
-                modify
-                move
-                onCheck={this.onCheck}
-                treeData={menuData}
-                treeKey={{
-                  currentKey: 'menuid',
-                  currentName: 'menuname',
-                  parentKey: 'parentmenuid',
-                }}
-                onSelect={this.onSelect}
-              ></ClassifyTree>,
-            )}
-          </Form.Item>
-        </Form>
-      </Fragment>
-    );
-  }
-}
-
-const NewFormUser = Form.create()(FormUser);
-
-class NewUser extends Component {
-  newUserRef = React.createRef();
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  onCancel = () => {
-    this.props.history.push({
-      pathname: '/system-management/menu-user-group',
-    });
-  };
-
-  onSave = () => {
-    this.newUserRef.current.validateFields((err, values) => {
-      console.log('values==', values);
-      message.success('save success');
-      this.props.history.push({
-        pathname: '/system-management/menu-user-group',
-        params: values,
-      });
+  onCheck = selectedKeyss => {
+    const newSelectedKeys = selectedKeyss.join(',');
+    this.setState({
+      selectedKeys: newSelectedKeys,
     });
   };
 
@@ -135,7 +132,21 @@ class NewUser extends Component {
               </Button>
             </Col>
           </Row>
-          <NewFormUser ref={this.newUserRef} menuData={menuData} />
+          <NewFormUser ref={this.newUserRef} />
+          <div>{formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}</div>
+          <ClassifyTree
+            all
+            checkable
+            onCheck={this.onCheck}
+            treeData={menuData}
+            treeKey={{
+              currentKey: 'menuid',
+              currentName: 'menuname',
+              parentKey: 'parentmenuid',
+            }}
+            onSelect={this.onSelect}
+          ></ClassifyTree>
+          ,
         </Fragment>
       </PageHeaderWrapper>
     );
