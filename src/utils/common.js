@@ -110,7 +110,7 @@ const iframe = {
 // };
 
 const menuIcons = {
-  'Etl Center': 'icon-zhuxian',
+  'ETL Center': 'icon-zhuxian',
   'Account Management': 'icon-user',
   Surveillance: 'icon-shipin',
   Report: 'icon-text',

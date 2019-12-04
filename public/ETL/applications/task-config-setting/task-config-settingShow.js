@@ -1,5 +1,5 @@
 /*
- * @Author: limin01 
+ * @Author: limin01
  * @Date: 2018-08-10
  * @Last Modified by: lanjianyan
  * @Last Modified time: 2019-04-19 14:47:38
@@ -465,6 +465,12 @@ define((require, exports, module) => {
                     placeholder: '- 请选择 -',
                 });
 
+                // 格式转换 数据源
+                $("#J_select2_single_tab_13_1").select2({
+                    data: arr,
+                    placeholder: '- 请选择 -',
+                });
+
                 // 数据剖析 -> 数据连接 源
                 // $("#J_select2_single_tab_11_1").select2({
                 //     data: arr,
@@ -893,6 +899,43 @@ define((require, exports, module) => {
         });
     };
 
+    // 文件格式转换->转换设置->获取字段
+    showContent.getDataField_3 = (params, selector, cb) => {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_column_info", "v4.0", params, data => {
+            if (data.bcjson.flag == "1") {
+                let items = data.bcjson.items;
+                if (items.length === 0) {
+                    return;
+                }
+                let arr = items.map((item, index) => {
+                    return {
+                        id: index,
+                        text: item.columnName,
+                    };
+                });
+                
+                // for (let i in parseDictData[dictType]) {
+                //     let obj = {
+                //         id: i,
+                //         text: parseDictData[dictType][i],
+                //     }
+                //     arr.push(obj);
+                // }
+                // 渲染数据
+                if (selector) {
+                    template = "common-template/dict-option.handlebars";
+                    let array = selector.split(",");
+                    array.forEach(item => {
+                        require.async($.kingdom.kconfig().root + template, compiled => {
+                            $(item).html(compiled(arr));       
+                        });
+                    });
+                    // 不渲染 则返回查询结果
+                }
+            }
+        });
+    };
+
     // 导入文本->字段映射-> 插入的字段 操作处理
     showContent.haddleDataField_2 = {
         // 初始化
@@ -1299,7 +1342,21 @@ define((require, exports, module) => {
                     required: true,
                     startImportLineCheck: true,
                 },
-
+                sftpIp: {
+                    required: true,
+                },
+                sftpPort: {
+                    required: true,
+                },
+                sftpUsername: {
+                    required: true,
+                },
+                sftpSecretword: {
+                    required: true,
+                },
+                sftpPath: {
+                    required: true,
+                }
             },
             invalidHandler: function(event, validator) { //display error alert on form submit
                 // $('.alert-danger', $('.login-form')).show();
@@ -1377,6 +1434,48 @@ define((require, exports, module) => {
                     required: true,
                 },
                 ruleids: {
+                    required: true,
+                },
+            },
+            invalidHandler: function(event, validator) { //display error alert on form submit
+                // $('.alert-danger', $('.login-form')).show();
+            },
+            highlight: function(element) { // hightlight error inputs
+                $(element).closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            success: function(label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function(error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {}
+        });
+
+        // 文件格式转换
+        $('#J_form_TFDP').validate({
+            debug: true,
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                taskName: {
+                    required: true,
+                },
+                folderName: {
+                    required: true,
+                },
+                connectionId: {
+                    required: true,
+                },
+                dbTable: {
+                    required: true,
+                },
+                columnFileName: {
+                    required: true,
+                },
+                columnFileData: {
                     required: true,
                 },
             },
