@@ -1,10 +1,11 @@
 import React from 'react';
-import { Tabs, Descriptions, Row, Col, Switch } from 'antd';
+import { Tabs, Descriptions, Row, Col, Switch, Input, Button } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 import styles from './index.less';
 
 const { TabPane } = Tabs;
+const { TextArea } = Input;
 
 export function AlertDes({
   alert: {
@@ -99,10 +100,27 @@ export default function({ alert }) {
           </TabPane>
         </Tabs>
       </Col>
-      <Col span={9} offset={1} style={{ backgroundColor: '#fff' }}>
+      <Col span={9} offset={1}>
         <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
           <TabPane tab={<FormattedMessage id="alert-center.comment-history" />} key="1">
-            {alert.comments && alert.comments.length && <AlertComments comments={alert.comments} />}
+            {alert.comments && <AlertComments comments={alert.comments} />}
+            <div className={styles['comment-box']}>
+              <TextArea placeholder="COMMENT" className={styles.txt} />
+              <Row
+                className={styles['comment-commit']}
+                type="flex"
+                align="middle"
+                justify="space-between"
+              >
+                <Col span={11} offset={1}>
+                  <Button type="primary">Phase</Button>
+                </Col>
+                <Col span={6}>attachments</Col>
+                <Col span={6}>
+                  <Button type="primary">Submit</Button>
+                </Col>
+              </Row>
+            </div>
           </TabPane>
           <TabPane
             className={styles['tab-content']}

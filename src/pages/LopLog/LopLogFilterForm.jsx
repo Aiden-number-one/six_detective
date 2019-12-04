@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Form, Row, Button, DatePicker, Select, Radio, Col, Input } from 'antd';
 
-import { PROCESSING_STATUS, SUBMISSION_REPORT } from './CONSTANTS';
+import { PROCESSING_STATUS, SUBMISSION_REPORT } from './constants';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -11,20 +11,22 @@ const formItemLayout = {
   layout: 'vertical',
 };
 
-function LopLogFilterForm({ form }) {
+function LopLogFilterForm({ form, handleSearch }) {
   const { getFieldDecorator, validateFields } = form;
 
-  function handleSearch() {
+  function handleCommit() {
     validateFields((err, values) => {
-      console.log(values);
-      console.log(values.tradeDate.format('YYYY-MM-DD'));
+      if (!err) {
+        const tradeDate = values.tradeDate.format('MM/DD/YYYY');
+        handleSearch({ ...values, tradeDate });
+      }
     });
   }
 
   return (
-    <Form {...formItemLayout} onSubmit={handleSearch}>
+    <Form {...formItemLayout}>
       <Row>
-        <Col span={7}>
+        <Col span={8}>
           <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
             {getFieldDecorator('tradeDate', {
               rules: [
@@ -45,16 +47,38 @@ function LopLogFilterForm({ form }) {
               ],
             })(<RangePicker />)}
           </Form.Item>
-          <Form.Item label={<FormattedMessage id="data-import.lop.late-submission" />}>
-            {getFieldDecorator('lateSubmission', {
-              initialValue: 'y',
-            })(
-              <Radio.Group>
-                <Radio value="y">Y</Radio>
-                <Radio value="n">N</Radio>
-              </Radio.Group>,
-            )}
-          </Form.Item>
+          <Row type="flex" justify="space-between">
+            <Col span={8}>
+              <Form.Item label={<FormattedMessage id="data-import.lop.late-submission" />}>
+                {getFieldDecorator('lateSubmission', {
+                  initialValue: 'y',
+                })(
+                  <Radio.Group>
+                    <Radio value="y">Y</Radio>
+                    <Radio value="n">N</Radio>
+                  </Radio.Group>,
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label={<FormattedMessage id="data-import.lop.submission-channel" />}>
+                {getFieldDecorator('submissionChannel', {
+                  initialValue: 'ecp',
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please select submission channel!',
+                    },
+                  ],
+                })(
+                  <Radio.Group>
+                    <Radio value="ecp">ECP</Radio>
+                    <Radio value="user">User</Radio>
+                  </Radio.Group>,
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
         </Col>
         <Col span={7} offset={1}>
           <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
@@ -78,22 +102,6 @@ function LopLogFilterForm({ form }) {
                 },
               ],
             })(<Input placeholder="please input submmitter name" />)}
-          </Form.Item>
-          <Form.Item label={<FormattedMessage id="data-import.lop.submission-channel" />}>
-            {getFieldDecorator('submissionChannel', {
-              initialValue: 'ecp',
-              rules: [
-                {
-                  required: true,
-                  message: 'Please select submission channel!',
-                },
-              ],
-            })(
-              <Radio.Group>
-                <Radio value="ecp">ECP</Radio>
-                <Radio value="user">User</Radio>
-              </Radio.Group>,
-            )}
           </Form.Item>
         </Col>
         <Col span={7} offset={1}>
@@ -134,7 +142,7 @@ function LopLogFilterForm({ form }) {
         </Col>
       </Row>
       <Row type="flex" justify="end">
-        <Button type="primary" onClick={handleSearch}>
+        <Button type="primary" icon="search" onClick={handleCommit}>
           <FormattedMessage id="data-import.lop.search" />
         </Button>
       </Row>

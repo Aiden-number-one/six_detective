@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'umi/locale';
+import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import { Table, Row, Button } from 'antd';
 import IconFont from '@/components/IconFont';
 import styles from './index.less';
@@ -14,7 +14,8 @@ export default function({ dataSource, getAlert }) {
           <IconFont type="iconqizhi" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button icon="close-circle">
+        <Button>
+          <IconFont type="iconic_circle_close" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.close" />
         </Button>
         <Button>
@@ -81,7 +82,25 @@ export default function({ dataSource, getAlert }) {
         <Column
           dataIndex="action"
           title={<FormattedMessage id="alert-center.action" />}
-          render={() => <span>claim</span>}
+          render={() => (
+            <Row className={styles.btns}>
+              <IconFont
+                type="iconqizhi"
+                className={styles.icon}
+                title={formatMessage({ id: 'alert-center.claim' })}
+              />
+              <IconFont
+                type="iconic_circle_close"
+                className={styles.icon}
+                title={formatMessage({ id: 'alert-center.close' })}
+              />
+              <IconFont
+                type="iconbatch-export"
+                className={styles.icon}
+                title={formatMessage({ id: 'alert-center.export' })}
+              />
+            </Row>
+          )}
         />
       </Table>
     </div>

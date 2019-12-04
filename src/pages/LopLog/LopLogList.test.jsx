@@ -1,12 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Table } from 'antd';
-import LopLogTable from './LopLogTable';
+import LopLogList from './LopLogList';
 
 const { Column } = Table;
 
 describe('test lop data log table', () => {
-  const wrapper = shallow(<LopLogTable dataSource={[]} />);
+  const wrapper = shallow(<LopLogList dataSource={[]} />);
 
   it('should render table', () => {
     expect(wrapper.find(Table).length).toBe(1);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
-import { Breadcrumb } from 'antd';
-import NavLink from 'umi/navlink';
+import PageNav from './PageNav';
 import AlertDetail from './AlertDetail';
 import AlertList from './AlertList';
 import styles from './index.less';
@@ -24,14 +23,7 @@ function Alert({ dispatch, alerts }) {
 
   return (
     <>
-      <Breadcrumb className={styles.nav}>
-        <Breadcrumb.Item>
-          <NavLink to="/">Home</NavLink>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <NavLink to="/alert-center">Alert Center</NavLink>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+      <PageNav routes={{ name: 'Alert Center', link: '/alert-center' }} />
       <div className={styles['list-container']}>
         <AlertList dataSource={alerts} getAlert={item => setAlert(item)} />
         <AlertDetail alert={alert} />

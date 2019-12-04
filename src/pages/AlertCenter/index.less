@@ -16,14 +16,6 @@
   }
 }
 
-.nav {
-  height: 30px;
-  padding-left: 10px;
-  color: #10416c;
-  line-height: 30px;
-  background-color: #ddefff;
-}
-
 .list-container {
   padding: 0 4px;
   .alerts {
@@ -37,6 +29,15 @@
     .btn-icon {
       font-size: 18px;
       vertical-align: middle;
+    }
+    .icon {
+      font-size: 20px;
+      vertical-align: middle;
+      cursor: pointer;
+      &:nth-child(2) {
+        margin: 0 8px;
+        font-size: 19px;
+      }
     }
   }
 }
@@ -56,14 +57,24 @@
   }
   .detail-comment {
     background-color: #fff;
-    box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
     .comment-ul {
       max-height: 300px;
-      margin: 0;
+      margin: 0 0 18px;
       padding: 0 18px;
       overflow-y: auto;
       > li {
         margin-bottom: 10px;
+      }
+    }
+    .comment-box {
+      padding-top: 8px;
+      background-color: #f6f9fa;
+      > .txt {
+        height: 100px;
+      }
+      .comment-commit {
+        height: 46px;
+        background-color: #fff;
       }
     }
   }

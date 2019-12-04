@@ -1,37 +1,30 @@
 import React from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Modal, Form, DatePicker, Input, Select, Upload, Icon, Button } from 'antd';
-import { SUBMISSION_REPORT } from './CONSTANTS';
+import { Drawer, Form, DatePicker, Input, Select, Upload, Icon, Button } from 'antd';
+import { SUBMISSION_REPORT } from './constants';
 
 const { Option } = Select;
 
-function LopLogManualModal({ visible, handleCancel, form }) {
+function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
   const { getFieldDecorator, validateFields } = form;
-  const formItemLayout = {
-    labelCol: {
-      sm: { span: 8 },
-    },
-    wrapperCol: {
-      sm: { span: 14 },
-    },
-  };
 
-  function handleUpload() {
+  function handleCommit() {
     validateFields((err, values) => {
       if (!err) {
-        console.log(values);
+        const tradeDate = values.tradeDate.format('MM/DD/YYYY');
+        handleUpload({ ...values, tradeDate });
       }
     });
   }
 
   return (
-    <Modal
+    <Drawer
       title={<FormattedMessage id="data-import.lop.manual-import-lop-report" />}
+      width={320}
       visible={visible}
-      onOk={handleUpload}
-      onCancel={handleCancel}
+      onClose={handleCancel}
     >
-      <Form {...formItemLayout}>
+      <Form>
         <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
           {getFieldDecorator('tradeDate', {
             rules: [
@@ -89,8 +82,14 @@ function LopLogManualModal({ visible, handleCancel, form }) {
             </Button>
           </Upload>
         </Form.Item>
+        <Form.Item>
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button type="primary" onClick={handleCommit}>
+            Upload
+          </Button>
+        </Form.Item>
       </Form>
-    </Modal>
+    </Drawer>
   );
 }
 

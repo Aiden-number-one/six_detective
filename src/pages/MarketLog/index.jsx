@@ -1,12 +1,12 @@
 import React from 'react';
 import MarketLogFilterForm from './MarketLogFilterForm';
-import MarketLogTable from './MarketLogTable';
+import MarketLogList from './MarketLogList';
 
 export default function() {
   return (
     <div>
       <MarketLogFilterForm />
-      <MarketLogTable />
+      <MarketLogList />
     </div>
   );
 }
