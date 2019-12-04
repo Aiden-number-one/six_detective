@@ -4,8 +4,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-12-02 15:23:50
- * @LastEditors: lan
+ * @LastEditTime: 2019-12-04 19:23:47
+ * @LastEditors: dailinbo
  */
 
 import {
@@ -204,7 +204,7 @@ export function formatTimeString(time) {
   t = len > 14 ? t.slice(0, 14) : t;
   t = len < 14 ? `${t}${Array(14 - len + 1).join('0')}` : t;
 
-  return t.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/g, '$1-$2-$3 $4:$5:$6');
+  return t.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/g, '$1/$2/$3 $4:$5:$6');
 }
 
 export function msFormat(ms) {
