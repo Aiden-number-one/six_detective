@@ -3,14 +3,16 @@ import fetch from '@/utils/request.default';
 import { formatTree } from '@/utils/utils';
 import { userStatus } from '@/utils/filter';
 
-const { getUserList, addUser, updateUser, operationUser } = Service;
+const { getUserList, addUser, updateUser, operationUser, getMenuUserGroup } = Service;
 export const userManagement = {
   namespace: 'userManagement',
   state: {
     data: [],
     orgs: [],
+    menuData: [],
     datas: {},
     operationDatas: {},
+    saveUser: {},
     updateDatas: {},
   },
   effects: {
@@ -43,6 +45,27 @@ export const userManagement = {
           yield put({
             type: 'setDatas',
             payload: bcjson,
+          });
+        }
+      }
+    },
+    *newUser({ payload, callback }, { call, put }) {
+      const response = yield call(addUser, { param: payload });
+      if (response.bcjson.flag === '1' || !response.bcjson.flag) {
+        yield put({
+          type: 'save',
+          payload: response.bcjson.items,
+        });
+        callback();
+      }
+    },
+    *getMenuUserGroup({ payload }, { call, put }) {
+      const response = yield call(getMenuUserGroup, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'getDatas',
+            payload: response.bcjson,
           });
         }
       }
@@ -92,6 +115,18 @@ export const userManagement = {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    save(state, action) {
+      return {
+        ...state,
+        saveUser: action.payload,
+      };
+    },
+    getDatas(state, action) {
+      return {
+        ...state,
+        menuData: action.payload,
       };
     },
     addDatas(state, action) {
