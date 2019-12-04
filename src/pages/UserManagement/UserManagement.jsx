@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-04 19:02:02
+ * @LastEditTime: 2019-12-04 20:40:04
  */
 
 import React, { Component } from 'react';
@@ -11,7 +11,6 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table, Button, Drawer } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 import { timeFormat } from '@/utils/filter';
@@ -124,19 +123,15 @@ class UserManagement extends Component {
    */
   queryUserList = (
     param = {
-      searchParam: undefined,
-      displaypath: undefined,
-      email: undefined,
-      custStatus: undefined,
+      userId: undefined,
+      userName: undefined,
     },
   ) => {
     const { dispatch } = this.props;
-    const { searchParam, displaypath, email, custStatus } = param;
+    const { userId, userName } = param;
     const params = {
-      searchParam,
-      displaypath,
-      email,
-      custStatus,
+      userId,
+      userName,
       pageNumber: this.state.page.pageNumber,
       pageSize: this.state.page.pageSize,
     };
@@ -439,17 +434,11 @@ class UserManagement extends Component {
    * @return: undefined
    */
   queryLog = () => {
-    this.props.dispatch(
-      routerRedux.push({
-        pathname: '/system-management/menu-user-group',
-      }),
-    );
     this.searchForm.current.validateFields((err, values) => {
+      console.log('values===', values);
       const params = {
-        searchParam: values.searchParam,
-        displaypath: values.displaypath,
-        email: values.email,
-        custStatus: values.custStatus,
+        userId: values.userId,
+        userName: values.userName,
       };
       this.queryUserList(params);
     });
@@ -582,7 +571,7 @@ class UserManagement extends Component {
           </div>
           <div className={styles.content}>
             <div className={styles.tableTop}>
-              <Button onClick={this.newUser} type="primary" className="button_two">
+              <Button onClick={this.newUser} type="primary" className="btn_usual">
                 + New User
               </Button>
             </div>
