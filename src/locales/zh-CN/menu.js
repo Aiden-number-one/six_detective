@@ -52,6 +52,7 @@ export default {
   'menu.systemManagement.systemParameters': 'System Parameters',
   'menu.systemManagement.workflowConfig': 'Workflow Config',
   'menu.systemManagement.workflowDesign': 'Workflow Design',
+  'menu.systemManagement.ApprovalAuditor': 'Workflow Auditor',
   'menu.systemManagement.codeMaintenance': 'Code Maintenance',
   'menu.systemManagement.auditTrailLogging': 'Audit Trail Logging',
   'menu.systemManagement.scheduling': 'Scheduling Plan',
