@@ -4,7 +4,7 @@
  * @Date: 2019-11-11 13:20:11
 <<<<<<< HEAD
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-03 21:02:13
+ * @LastEditTime: 2019-12-04 10:30:16
 =======
  * @LastEditors: lan
  * @LastEditTime: 2019-12-03 17:33:38
@@ -210,6 +210,7 @@ class ClassifyTree extends Component {
     defaultCheckedKeys: [],
     checkedKeys: [],
     autoExpandParent: true,
+    allChecked: false,
   };
 
   static getDerivedStateFromProps(props) {
@@ -295,10 +296,28 @@ class ClassifyTree extends Component {
   };
 
   onCheck = (selectedKeys, info) => {
+    const { menuList } = this.state;
+    const checkedKeys = this.setGridDataFromTree([], menuList);
+    const newCheckedKeys = checkedKeys.map(element => element.menuid);
     this.props.onCheck(selectedKeys, info);
     this.setState({
       checkedKeys: selectedKeys,
     });
+    if (this.arrayEquals(newCheckedKeys, selectedKeys)) {
+      this.setState({
+        allChecked: true,
+      });
+    } else {
+      this.setState({
+        allChecked: false,
+      });
+    }
+  };
+
+  arrayEquals = (a1, a2) => {
+    const array1 = Object.assign([], a1);
+    const array2 = Object.assign([], a2);
+    return array1.length === array2.length && array1.every(v => array2.includes(v));
   };
 
   setGridDataFromTree = (list = [], dataSource) => {
@@ -322,10 +341,12 @@ class ClassifyTree extends Component {
     if (e.target.checked) {
       this.setState({
         checkedKeys: newCheckedKeys,
+        allChecked: e.target.checked,
       });
     } else {
       this.setState({
         checkedKeys: [],
+        allChecked: e.target.checked,
       });
     }
   };
@@ -337,6 +358,7 @@ class ClassifyTree extends Component {
       menuList,
       defaultCheckedKeys,
       checkedKeys,
+      allChecked,
     } = this.state;
     const {
       checkable,
@@ -363,7 +385,7 @@ class ClassifyTree extends Component {
           />
         )}
         {all && (
-          <Checkbox onChange={this.onChange} style={{ marginLeft: '26px' }}>
+          <Checkbox onChange={this.onChange} style={{ marginLeft: '26px' }} checked={allChecked}>
             All
           </Checkbox>
         )}
