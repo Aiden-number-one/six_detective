@@ -3,18 +3,13 @@ import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
+import styles from '../UserManagement.less';
 
 class FormUser extends Component {
   constructor() {
     super();
     this.state = {
       //   menuUserGroups: ['Administrator', 'Operator', 'Supervisor', 'Enquriy'],
-      alertUserGroups: [
-        { label: 'Future Maker', value: '1' },
-        { label: 'Future Checker', value: '2' },
-        { label: 'Option Maker', value: '3' },
-        { label: 'Option Checker', value: '4' },
-      ],
     };
   }
 
@@ -28,8 +23,8 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { alertUserGroups } = this.state;
-    const { menuUserGroups } = this.props;
+    // const { alertUserGroups } = this.state;
+    // const { menuUserGroups } = this.props;
     return (
       <Fragment>
         <Form>
@@ -71,7 +66,7 @@ class FormUser extends Component {
               ],
             })(<Input.Password />)}
           </Form.Item>
-          <Form.Item wrapperCol={{ span: 6, offset: 4 }}>
+          {/* <Form.Item wrapperCol={{ span: 6, offset: 4 }}>
             {getFieldDecorator('locked', {
               rules: [
                 {
@@ -82,8 +77,8 @@ class FormUser extends Component {
               valuePropName: 'checked',
               initialValue: true,
             })(<Checkbox>User Account Locked</Checkbox>)}
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             wrapperCol={{ offset: 1 }}
             label={formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
           >
@@ -96,8 +91,8 @@ class FormUser extends Component {
                 onChange={this.onChangeMenuUserGroup}
               ></Checkbox.Group>,
             )}
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             wrapperCol={{ offset: 1 }}
             label={formatMessage({ id: 'systemManagement.userMaintenance.alertUserGroup' })}
           >
@@ -110,7 +105,7 @@ class FormUser extends Component {
                 onChange={this.onChangeAlertUserGroup}
               ></Checkbox.Group>,
             )}
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       </Fragment>
     );
@@ -129,7 +124,14 @@ export default class NewUser extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      alertUserGroups: [
+        { label: 'Future Maker', value: '1' },
+        { label: 'Future Checker', value: '2' },
+        { label: 'Option Maker', value: '3' },
+        { label: 'Option Checker', value: '4' },
+      ],
+    };
   }
 
   componentDidMount() {
@@ -181,10 +183,40 @@ export default class NewUser extends Component {
 
   render() {
     const { menuUserGroup } = this.props;
+    const { alertUserGroups } = this.state;
     console.log('menuUserGroup=', menuUserGroup);
     return (
       <Fragment>
-        <NewFormUser ref={this.newUserRef} menuUserGroups={menuUserGroup} />
+        <NewFormUser ref={this.newUserRef} />
+        <Row>
+          <Col offset={4}>
+            <Checkbox>User Account Locked</Checkbox>
+          </Col>
+        </Row>
+        <ul className={styles.userGroup}>
+          <li>
+            <h3 className={styles.groupTitle}>
+              {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
+            </h3>
+            <Checkbox.Group
+              options={menuUserGroup}
+              defaultValue={['Operator']}
+              onChange={this.onChangeMenuUserGroup}
+            ></Checkbox.Group>
+          </li>
+        </ul>
+        <ul className={styles.userGroup}>
+          <li>
+            <h3 className={styles.groupTitle}>
+              {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
+            </h3>
+            <Checkbox.Group
+              options={alertUserGroups}
+              defaultValue={['Future Maker', 'Future Checker']}
+              onChange={this.onChangeAlertUserGroup}
+            ></Checkbox.Group>
+          </li>
+        </ul>
         <Row
           type="flex"
           justify="end"
@@ -193,7 +225,6 @@ export default class NewUser extends Component {
             right: 0,
             bottom: 0,
             width: '100%',
-            borderTop: '1px solid #e9e9e9',
             padding: '10px 16px',
             background: '#fff',
             textAlign: 'right',
