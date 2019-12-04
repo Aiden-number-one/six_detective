@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-04 14:30:57
+ * @LastEditTime: 2019-12-04 19:02:02
  */
 
 import React, { Component } from 'react';
@@ -14,6 +14,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
+import { timeFormat } from '@/utils/filter';
 
 import SearchForm from './components/SearchForm';
 import NewUser from './components/NewUser';
@@ -69,11 +70,13 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
         dataIndex: 'updateTime',
         key: 'updateTime',
+        render: (res, obj) => <span>{timeFormat(obj.updateTime)}</span>,
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
         dataIndex: 'updateTime',
         key: 'updateTime',
+        render: (res, obj) => <span>{timeFormat(obj.updateTime)}</span>,
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -507,7 +510,13 @@ class UserManagement extends Component {
                 getDepartmentId={this.getDepartmentId}
               ></NewUserForm>
             </Modal>
-            <Drawer width={700} onClose={this.addCancel} visible={this.state.visible}>
+            <Drawer
+              closable={false}
+              title="New User"
+              width={700}
+              onClose={this.addCancel}
+              visible={this.state.visible}
+            >
               <NewUser onCancel={this.addCancel} onSave={this.addConfrim}></NewUser>
             </Drawer>
             {/* 修改用户 */}
@@ -572,9 +581,11 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div className={styles.content}>
-            <Button onClick={this.newUser} type="primary" className="button_two">
-              + New User
-            </Button>
+            <div className={styles.tableTop}>
+              <Button onClick={this.newUser} type="primary" className="button_two">
+                + New User
+              </Button>
+            </div>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
