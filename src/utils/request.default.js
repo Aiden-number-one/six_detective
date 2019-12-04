@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-02 16:04:07
+ * @LastEditors: mus
+ * @LastEditTime: 2019-12-04 17:52:48
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -125,8 +125,10 @@ request.interceptors.response.use(async (response, opts) => {
 
   // login invalid
   if (flag === '001') {
-    // eslint-disable-next-line no-underscore-dangle
-    window.g_app._store.dispatch({ type: 'login/logout' });
+    if (msg.indexOf('set_sys_logout') < 0) {
+      // eslint-disable-next-line no-underscore-dangle
+      window.g_app._store.dispatch({ type: 'login/logout' });
+    }
   }
   // return complete response
   if (opts.all) {

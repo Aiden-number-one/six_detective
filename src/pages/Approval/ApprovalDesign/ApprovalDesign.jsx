@@ -1,8 +1,8 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-plusplus */
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Input, Button, Modal, Upload, message } from 'antd';
+import { Form, Input, Button, Modal, Upload, message, Drawer } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 // import classNames from 'classnames';
@@ -10,46 +10,37 @@ import styles from './ApprovalDesign.less';
 
 const { TextArea } = Input;
 
-// eslint-disable-next-line react/require-render-return
-// class ApprovalFrom extends Component {
-//   render() {
-//     const { getFieldDecorator } = this.props.form;
-//     const formItemLayout = {
-//       labelCol: {
-//         xs: { span: 24 },
-//         sm: { span: 8 },
-//       },
-//       wrapperCol: {
-//         xs: { span: 24 },
-//         sm: { span: 16 },
-//       },
-//     };
-//     const formTailLayout = {
-//       labelCol: { span: 8 },
-//       wrapperCol: { span: 12, offset: 12 },
-//     };
-//     // eslint-disable-next-line no-unused-expressions
-//     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-//       <Form.Item label="名称">
-//         {getFieldDecorator('name', {
-//           rules: [{ required: true, message: 'Please input your name!' }],
-//         })(<Input placeholder="至少2个字符,最多16个字符" />)}
-//       </Form.Item>
-//       <Form.Item label="描述:">
-//         {getFieldDecorator('description', {
-//           rules: [{ required: true, message: 'Please input your description!' }],
-//         })(<TextArea rows={4} />)}
-//       </Form.Item>
-
-//       <Form.Item {...formTailLayout}>
-//         <Button onClick={this.handleCancel}>取消</Button>
-//         <Button type="primary" htmlType="submit">
-//           确定
-//         </Button>
-//       </Form.Item>
-//     </Form>;
-//   }
-// }
+class ModelForm extends Component {
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    // const { search, reset } = this.props;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    return (
+      <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+        <Form.Item label="名称">
+          {getFieldDecorator('name', {
+            rules: [{ required: true, message: 'Please input your name!' }],
+          })(<Input placeholder="至少2个字符,最多16个字符" />)}
+        </Form.Item>
+        <Form.Item label="描述:">
+          {getFieldDecorator('description', {
+            rules: [{ required: true, message: 'Please input your description!' }],
+          })(<TextArea rows={4} />)}
+        </Form.Item>
+      </Form>
+    );
+  }
+}
+const AddFlowChartForm = Form.create({})(ModelForm);
 
 @connect(({ approvalDesign }) => ({
   modelList: approvalDesign.data,
@@ -62,6 +53,8 @@ class ApprovalDesign extends PureComponent {
     visible: false,
     deleteVisible: false,
   };
+
+  newFlowChartForm = React.createRef();
 
   componentDidMount() {
     // this.createData();
@@ -219,9 +212,8 @@ class ApprovalDesign extends PureComponent {
     this.getModelImage(chooseModelId);
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+  AddNewFlowChart = () => {
+    this.newFlowChartForm.current.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
         this.createModel(values);
@@ -232,7 +224,7 @@ class ApprovalDesign extends PureComponent {
     });
   };
 
-  showModal = () => {
+  showDrawer = () => {
     this.setState({
       visible: true,
     });
@@ -245,23 +237,8 @@ class ApprovalDesign extends PureComponent {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
     const { modelList, chooseModelId, modelImage } = this.props;
     const { deleteVisible } = this.state;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    const formTailLayout = {
-      labelCol: { span: 8 },
-      wrapperCol: { span: 12, offset: 12 },
-    };
     return (
       <Fragment>
         <PageHeaderWrapper>
@@ -270,9 +247,9 @@ class ApprovalDesign extends PureComponent {
               <div className={styles.leftBox}>
                 <Button
                   type="primary"
-                  className="button_two"
+                  className="btn_usual"
                   icon="file-add"
-                  onClick={this.showModal}
+                  onClick={this.showDrawer}
                   style={{ marginRight: '0', float: 'right' }}
                 >
                   {formatMessage({ id: 'systemManagement.flowDesign.newFlowChart' })}
@@ -297,7 +274,7 @@ class ApprovalDesign extends PureComponent {
               <div className={styles.rightBox}>
                 <div>
                   <Button
-                    className="button_two"
+                    className="btn_usual"
                     onClick={this.deployModel}
                     type="primary"
                     icon="deployment-unit"
@@ -305,7 +282,7 @@ class ApprovalDesign extends PureComponent {
                     {formatMessage({ id: 'systemManagement.flowDesign.flowRelease' })}
                   </Button>
                   <Button
-                    className="button_two"
+                    className="btn_usual"
                     onClick={this.goProcessPage}
                     type="primary"
                     icon="edit"
@@ -313,7 +290,7 @@ class ApprovalDesign extends PureComponent {
                     {formatMessage({ id: 'systemManagement.flowDesign.flowModify' })}
                   </Button>
                   <Button
-                    className="button_two"
+                    className="btn_usual"
                     type="primary"
                     icon="delete"
                     onClick={this.deleteOpenModel}
@@ -321,7 +298,7 @@ class ApprovalDesign extends PureComponent {
                     {formatMessage({ id: 'systemManagement.flowDesign.flowDelete' })}
                   </Button>
                   <Button
-                    className="button_two"
+                    className="btn_usual"
                     onClick={this.exportModel}
                     type="primary"
                     icon="export"
@@ -329,7 +306,7 @@ class ApprovalDesign extends PureComponent {
                     {formatMessage({ id: 'systemManagement.flowDesign.flowExport' })}
                   </Button>
                   <Upload onChange={info => this.importFileStatus(info)} action="/upload">
-                    <Button className="button_two" type="primary" icon="import">
+                    <Button className="btn_usual" type="primary" icon="import">
                       {formatMessage({ id: 'systemManagement.flowDesign.flowImport' })}
                     </Button>
                   </Upload>
@@ -337,27 +314,34 @@ class ApprovalDesign extends PureComponent {
                 <div>{modelImage ? <img src={modelImage} alt="" /> : null}</div>
               </div>
             </div>
-            <Modal title="新模型" visible={this.state.visible} footer={false} closable={false}>
-              <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                <Form.Item label="名称">
-                  {getFieldDecorator('name', {
-                    rules: [{ required: true, message: 'Please input your name!' }],
-                  })(<Input placeholder="至少2个字符,最多16个字符" />)}
-                </Form.Item>
-                <Form.Item label="描述:">
-                  {getFieldDecorator('description', {
-                    rules: [{ required: true, message: 'Please input your description!' }],
-                  })(<TextArea rows={4} />)}
-                </Form.Item>
-
-                <Form.Item {...formTailLayout}>
-                  <Button onClick={this.handleCancel}>取消</Button>
-                  <Button type="primary" htmlType="submit">
-                    确定
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Modal>
+            <Drawer
+              title="New Flow Chart"
+              width={500}
+              onClose={this.handleCancel}
+              visible={this.state.visible}
+              bodyStyle={{ paddingBottom: 80 }}
+            >
+              <AddFlowChartForm ref={this.newFlowChartForm} />
+              <div
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  bottom: 0,
+                  width: '100%',
+                  borderTop: '1px solid #e9e9e9',
+                  padding: '10px 16px',
+                  background: '#fff',
+                  textAlign: 'right',
+                }}
+              >
+                <Button onClick={this.handleCancel} style={{ marginRight: 8 }}>
+                  Cancel
+                </Button>
+                <Button onClick={this.AddNewFlowChart} type="primary">
+                  Save
+                </Button>
+              </div>
+            </Drawer>
             <Modal
               title="delete"
               visible={deleteVisible}
@@ -373,4 +357,4 @@ class ApprovalDesign extends PureComponent {
   }
 }
 
-export default Form.create()(ApprovalDesign);
+export default ApprovalDesign;

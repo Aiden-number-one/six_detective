@@ -1,5 +1,5 @@
 /*
- * @Author: limin01 
+ * @Author: limin01
  * @Date: 2018-08-10
  * @Last Modified by: lanjianyan
  * @Last Modified time: 2019-04-19 14:47:38
@@ -32,6 +32,9 @@ define((require, exports, module) => {
     
     let showContent = {};
     // 全局变量都在此声明
+    showContent.dbTable = null;
+    showContent.columnFileName = null;
+    showContent.columnFileData = null;
     showContent.sourceTables = null; // 缓存源表数据 方便赋值
     showContent.targetTable = null; // 缓存目标表数据 方便赋值
     showContent.procedureName = null; // 缓存存储过程名字 方便赋值
@@ -135,6 +138,13 @@ define((require, exports, module) => {
                 showContent.sftpSecretword = items.sftpSecretword;
                 App.setFormData(formName, items);
 
+                // 文件格式转换任务
+                if (modalSelector === '#J_modal_TFP') {
+                    showContent.dbTable = items.dbTable;
+                    showContent.columnFileName = items.columnFileName;
+                    showContent.columnFileData = items.columnFileData;
+                    $("#J_select2_single_tab_13_1").change(); // 来源数据链接
+                }
                 // 抽取任务
                 if (modalSelector === "#J_modal_TE") {
                     // if (items.targetTableFlag == "1") {
@@ -459,8 +469,20 @@ define((require, exports, module) => {
                     placeholder: '- 请选择 -',
                 });
 
+                // 文件格式转换 数据源
+                $("#J_select2_single_tab_13_1").select2({
+                    data: arr,
+                    placeholder: '- 请选择 -',
+                });
+
                 // 导出文本 数据源
                 $("#J_select2_single_tab_6_2").select2({
+                    data: arr,
+                    placeholder: '- 请选择 -',
+                });
+
+                // 格式转换 数据源
+                $("#J_select2_single_tab_13_1").select2({
                     data: arr,
                     placeholder: '- 请选择 -',
                 });
@@ -893,6 +915,44 @@ define((require, exports, module) => {
         });
     };
 
+    // 文件格式转换->转换设置->获取字段
+    showContent.getDataField_3 = (params, selector, cb) => {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_column_info", "v4.0", params, data => {
+            if (data.bcjson.flag == "1") {
+                let items = data.bcjson.items;
+                if (items.length === 0) {
+                    return;
+                }
+                let arr = items.map(item => {
+                    return {
+                        id: item.columnName,
+                        text: item.columnName,
+                    };
+                });
+                
+                // for (let i in parseDictData[dictType]) {
+                //     let obj = {
+                //         id: i,
+                //         text: parseDictData[dictType][i],
+                //     }
+                //     arr.push(obj);
+                // }
+                // 渲染数据
+                if (selector) {
+                    template = "common-template/dict-option.handlebars";
+                    let array = selector.split(",");
+                    array.forEach(item => {
+                        require.async($.kingdom.kconfig().root + template, compiled => {
+                            $(item).html(compiled(arr));       
+                        });
+                    });
+                    // 不渲染 则返回查询结果
+                }
+                if (cb) cb();
+            }
+        });
+    };
+
     // 导入文本->字段映射-> 插入的字段 操作处理
     showContent.haddleDataField_2 = {
         // 初始化
@@ -1299,7 +1359,21 @@ define((require, exports, module) => {
                     required: true,
                     startImportLineCheck: true,
                 },
-
+                sftpIp: {
+                    required: true,
+                },
+                sftpPort: {
+                    required: true,
+                },
+                sftpUsername: {
+                    required: true,
+                },
+                sftpSecretword: {
+                    required: true,
+                },
+                sftpPath: {
+                    required: true,
+                }
             },
             invalidHandler: function(event, validator) { //display error alert on form submit
                 // $('.alert-danger', $('.login-form')).show();
@@ -1377,6 +1451,48 @@ define((require, exports, module) => {
                     required: true,
                 },
                 ruleids: {
+                    required: true,
+                },
+            },
+            invalidHandler: function(event, validator) { //display error alert on form submit
+                // $('.alert-danger', $('.login-form')).show();
+            },
+            highlight: function(element) { // hightlight error inputs
+                $(element).closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            success: function(label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function(error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {}
+        });
+
+        // 文件格式转换
+        $('#J_form_TFDP').validate({
+            debug: true,
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                taskName: {
+                    required: true,
+                },
+                folderName: {
+                    required: true,
+                },
+                connectionId: {
+                    required: true,
+                },
+                dbTable: {
+                    required: true,
+                },
+                columnFileName: {
+                    required: true,
+                },
+                columnFileData: {
                     required: true,
                 },
             },

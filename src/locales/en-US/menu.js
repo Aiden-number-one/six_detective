@@ -46,6 +46,7 @@ export default {
   'menu.systemManagement.workflowHistory': 'Workflow History',
   'menu.systemManagement.emailParameter': 'Email Parameter',
   'menu.systemManagement.systemParameters': 'System Parameters',
+  'menu.systemManagement.ApprovalAuditor': 'Workflow Auditor',
   'menu.systemManagement.workflowConfig': 'Workflow Config',
   'menu.systemManagement.workflowDesign': 'Workflow Design',
   'menu.systemManagement.codeMaintenance': 'Code Maintenance',
