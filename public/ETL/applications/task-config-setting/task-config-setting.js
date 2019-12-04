@@ -207,6 +207,8 @@ define((require, exports, module) => {
                     if(formParams.sourceUrl&&formParams.sourceUrl==="0"){
                         formParams.sourceUrl = $("[name=a1006FilesPath]").val();
                     }
+                } else if(modalId === "J_modal_TFP") {
+                    formParams.dbTable = $("#J_select2_multi_tab_13_1").select2('data')[0].text.replace(/\(.+\)/g, "");
                 }
                 App.blockUI({
                     boxed: true,
@@ -881,6 +883,40 @@ define((require, exports, module) => {
             });
         });
 
+        // 文件格式转换 -> 目标数据源
+        $("body").on("change", "#J_select2_single_tab_13_1", function(e) {
+            showContent.getTableList({
+                connection_id: e.currentTarget.value,
+            }, "#J_select2_multi_tab_13_1", false, () => {
+                if (showContent.dbTable) {
+                    // 取对应ID ,因为接口存的表名
+                    let origin = $("#J_select2_multi_tab_13_1").data("origin");
+                    for (let { id, text } of origin) {
+                        if (text === showContent.dbTable) {
+                            $("#J_select2_multi_tab_13_1").val(id).change();
+                            // showContent.getSQL({ tableId: id }); // 生成源表查询语句
+                            // showContent.getBuildTableSQL({
+                            //     soureTableId: id,
+                            //     targetTableName: showContent.targetTable
+                            // }); // 生成建表语句
+                        }
+                    }
+                }
+                showContent.dbTable = "";
+                $('[name=columnFileName],[name=columnFileData]').empty().clearInputs();
+            });
+        });
+
+        $("body").on("change", "#J_select2_multi_tab_13_1", function(e) {
+            $('[name=columnFileName],[name=columnFileData]').empty().clearInputs();
+            showContent.getDataField_3({
+                table_id: e.currentTarget.value,
+            },"[name=columnFileName],[name=columnFileData]",()=>{
+                $('[name=columnFileName]').val(showContent.columnFileName);
+                $('[name=columnFileData]').val(showContent.columnFileData);
+            })
+        });
+
         // 数据剖析 -> 文件夹改变
         $("body").on("change", "#J_select2_single_tab_11_1", function(e) {
             showContent.getRuleList({
@@ -907,7 +943,7 @@ define((require, exports, module) => {
         // });
 
         // placeholder
-        $("body").on('select2:open', '#J_select2_single_tab_1_1, #J_select2_multi_tab_1_1, #J_select2_multi_tab_11_1, #J_select2_single_tab_1_3, #J_select2_multi_tab_1_3, #J_select2_single_tab_1_9, #J_select2_multi_tab_1_9, #J_stored_procedure_select2, #J_data_source_select2', (element) => {
+        $("body").on('select2:open', '#J_select2_single_tab_1_1, #J_select2_multi_tab_1_1, #J_select2_multi_tab_11_1, #J_select2_single_tab_1_3, #J_select2_multi_tab_1_3, #J_select2_single_tab_1_9, #J_select2_multi_tab_1_9, #J_select2_single_tab_13_1, #J_select2_multi_tab_13_1, #J_stored_procedure_select2, #J_data_source_select2', (element) => {
             const text = element.currentTarget.dataset.searchplaceholder;
             $('.select2-search__field').attr('placeholder', text);
         });
