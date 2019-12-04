@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2019-11-26 11:16:28
- * @LastEditTime: 2019-12-02 15:03:44
- * @LastEditors: iron
+ * @LastEditTime: 2019-12-03 20:31:47
+ * @LastEditors: mus
  * @Description: In User Settings Edit
  * @FilePath: \superlop-web-project\src\pages\ReportDesigner\models\reportDesigner.js
  */
@@ -12,7 +12,15 @@ export default {
   namespace: 'reportDesigner',
   state: {
     contentDetail: '', // 报表设计器的JSON
-    customSearchData: [], // 查询控件的数据
+    customSearchData: [
+      {
+        x: 0,
+        y: 0,
+        w: 1,
+        h: 1,
+        i: '0',
+      },
+    ], // 查询控件的数据
   },
   effects: {
     *saveTaskGridContent(_, { call, select }) {

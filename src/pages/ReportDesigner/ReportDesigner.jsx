@@ -1,9 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Layout } from 'antd';
+import classNames from 'classnames';
 import ToolBar from './components/ToolBar/index';
 import SpreadSheet from '@/components/SpreadSheet';
 import CustomSearchArea from './components/CustomSearchArea/index';
+import styles from './ReportDesigner.less';
 // import EditBox from '../../components/editBox';
 // import LeftTree from '../../components/leftTree';
 // import Table from '../../components/table';
@@ -14,13 +16,22 @@ const { Sider, Content } = Layout;
 @connect(({ reportDesigner }) => ({ reportDesigner }))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
+  state = {
+    display: false,
+  };
+
   componentDidMount() {
     const { initSheet } = this.props;
     initSheet({
       view: {
-        height: () => window.innerHeight - 100,
-        width: () => window.innerWidth - 400,
+        height: () => window.innerHeight,
+        width: () => window.innerWidth - 378,
       },
+    });
+    setTimeout(() => {
+      this.setState({
+        display: true,
+      });
     });
   }
 
@@ -41,6 +52,7 @@ export default class ReportDesigner extends PureComponent {
   };
 
   render() {
+    const { display } = this.state;
     const { setCellCallback, dispatch, setCellType } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
@@ -53,47 +65,16 @@ export default class ReportDesigner extends PureComponent {
     return (
       <Fragment>
         <ToolBar {...toolBarProps} />
-        <Layout>
-          {/* 数据集部分 */}
-          <Sider width={200} />
-          <Content
-            style={{
-              overflow: 'auto',
-              height: window.innerHeight - 100,
-            }}
-          >
-            {/* 自定义查询条件区域 */}
-            <CustomSearchArea />
-            <SpreadSheet />
-          </Content>
-          {/* 单元格属性部分 */}
-          <Sider width={200} />
-        </Layout>
-        {/* <EditBox />
-        <Layout>
-          <Sider
-            width={200}
-            style={{
-              backgroundColor: '#f1f1f1',
-              borderRight: '1px solid #cbcbcb',
-              paddingRight: '24px',
-              overflow: 'hidden',
-            }}
-          >
-            <LeftTree />
-          </Sider>
-          <Content
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              marginLeft: '-1px',
-              marginTop: '-1px',
-            }}
-          >
-            <Condition />
-            <Table />
-          </Content>
-        </Layout> */}
+        <div className={styles.container}>
+          <div className={classNames(styles.main, styles.col)}>
+            {display && <CustomSearchArea />}
+            <div>
+              <SpreadSheet />
+            </div>
+          </div>
+          <div className={classNames(styles.left, styles.col)}></div>
+          <div className={classNames(styles.right, styles.col)}></div>
+        </div>
       </Fragment>
     );
   }
