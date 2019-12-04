@@ -86,7 +86,7 @@ define(function (require, exports, module) {
                 pageNumber: '1'
             },
             function (data) {
-                if (data.bcjson.flag == "1" && data.bcjson.len && data.bcjson.len > 0) {
+                if (data.bcjson.flag == "1" && data.bcjson.totalCount && data.bcjson.totalCount > 0) {
                     var items = data.bcjson.items;
                     var rootArray = [];
                     for (var single of items) {
