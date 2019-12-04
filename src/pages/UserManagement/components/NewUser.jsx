@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
@@ -9,7 +8,7 @@ class FormUser extends Component {
   constructor() {
     super();
     this.state = {
-      menuUserGroups: ['Administrator', 'Operator', 'Supervisor', 'Enquriy'],
+      //   menuUserGroups: ['Administrator', 'Operator', 'Supervisor', 'Enquriy'],
       alertUserGroups: ['Future Maker', 'Future Checker', 'Option Maker', 'Option Checker'],
     };
   }
@@ -24,7 +23,8 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { menuUserGroups, alertUserGroups } = this.state;
+    const { alertUserGroups } = this.state;
+    const { menuUserGroups } = this.props;
     return (
       <Fragment>
         <Form>
@@ -114,10 +114,10 @@ class FormUser extends Component {
 
 const NewFormUser = Form.create()(FormUser);
 
-@connect(({ newUser, loading }) => ({
+@connect(({ userManagement, loading }) => ({
   loading: loading.effects,
-  newUserData: newUser.saveUser,
-  menuUserGroup: newUser.data,
+  newUserData: userManagement.saveUser,
+  menuUserGroup: userManagement.menuData,
 }))
 export default class NewUser extends Component {
   newUserRef = React.createRef();
@@ -135,15 +135,16 @@ export default class NewUser extends Component {
     const { dispatch } = this.props;
     const params = {};
     dispatch({
-      type: 'newUser/getMenuUserGroup',
+      type: 'userManagement/getMenuUserGroup',
       payload: params,
     });
   };
 
   onCancel = () => {
-    this.props.history.push({
-      pathname: '/system-management/user-maintenance',
-    });
+    // this.props.history.push({
+    //   pathname: '/system-management/user-maintenance',
+    // });
+    this.props.onCancel();
   };
 
   onSave = () => {
@@ -159,34 +160,48 @@ export default class NewUser extends Component {
         accountLock: values.accountLock,
       };
       dispatch({
-        type: 'newUser/newUser',
+        type: 'userManagement/newUser',
         payload: params,
         callback: () => {
           message.success('save success');
-          this.props.history.push({
-            pathname: '/system-management/user-maintenance',
-            params: values,
-          });
+          this.props.onSave();
+          //   this.props.history.push({
+          //     pathname: '/system-management/user-maintenance',
+          //     params: values,
+          //   });
         },
       });
     });
   };
 
   render() {
+    const { menuUserGroup } = this.props;
+    console.log('menuUserGroup=', menuUserGroup);
     return (
-      <PageHeaderWrapper>
-        <Fragment>
-          <NewFormUser ref={this.newUserRef} />
-          <Row type="flex" justify="end">
-            <Col>
-              <Button onClick={this.onCancel}>CANCEL</Button>
-              <Button type="primary" onClick={this.onSave}>
-                SAVE
-              </Button>
-            </Col>
-          </Row>
-        </Fragment>
-      </PageHeaderWrapper>
+      <Fragment>
+        <NewFormUser ref={this.newUserRef} menuUserGroups={menuUserGroup} />
+        <Row
+          type="flex"
+          justify="end"
+          style={{
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e9e9e9',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}
+        >
+          <Col>
+            <Button onClick={this.onCancel}>CANCEL</Button>
+            <Button type="primary" onClick={this.onSave}>
+              SAVE
+            </Button>
+          </Col>
+        </Row>
+      </Fragment>
     );
   }
 }

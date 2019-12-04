@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-02 15:22:43
+ * @LastEditTime: 2019-12-04 13:39:29
  */
 
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Modal, Table, Button } from 'antd';
+import { Form, Modal, Table, Button, Drawer } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -16,6 +16,7 @@ import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 
 import SearchForm from './components/SearchForm';
+import NewUser from './components/NewUser';
 import AddForm from './components/AddForm';
 import ModifyForm from './components/ModifyForm';
 import PasswordForm from './components/PasswordForm';
@@ -61,8 +62,8 @@ class UserManagement extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
-        dataIndex: 'userState',
-        key: 'userState',
+        dataIndex: 'accountLock',
+        key: 'accountLock',
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
@@ -172,11 +173,14 @@ class UserManagement extends Component {
    * @return: undefined
    */
   newUser = () => {
-    this.props.dispatch(
-      routerRedux.push({
-        pathname: '/system-management/user-maintenance/new-user',
-      }),
-    );
+    this.setState({
+      visible: true,
+    });
+    // this.props.dispatch(
+    //   routerRedux.push({
+    //     pathname: '/system-management/user-maintenance/new-user',
+    //   }),
+    // );
   };
 
   addConfrim = () => {
@@ -488,7 +492,7 @@ class UserManagement extends Component {
           <div>
             <Modal
               title="新增用户"
-              visible={this.state.visible}
+              visible={false}
               onOk={this.addConfrim}
               onCancel={this.addCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
@@ -500,6 +504,9 @@ class UserManagement extends Component {
                 getDepartmentId={this.getDepartmentId}
               ></NewUserForm>
             </Modal>
+            <Drawer width={700} onClose={this.addCancel} visible={this.state.visible}>
+              <NewUser onCancel={this.addCancel} onSave={this.addConfrim}></NewUser>
+            </Drawer>
             {/* 修改用户 */}
             <Modal
               title="修改用户"
@@ -562,7 +569,9 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div className={styles.content}>
-            <Button onClick={this.newUser}>+ New User</Button>
+            <Button onClick={this.newUser} type="primary" className="button_two">
+              + New User
+            </Button>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}

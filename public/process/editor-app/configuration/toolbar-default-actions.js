@@ -376,7 +376,6 @@ var SaveModelCtrl = [
       const modelId = EDITOR.UTIL.getParameterByName('modelId');
       const V = 'v2.0'; // 版本号
       const N = 'bayconnect.superlop.set_workflow_model_save'; // 接口名
-    //   console.log(window.btoa(basejson));
       const P = {
         jsonXml: basejson,
         svgXml: basesvgDOM,

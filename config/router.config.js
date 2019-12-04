@@ -222,6 +222,12 @@ export default [
             hideInMenu: true,
           },
           {
+            path: '/system-management/user-maintenance/modify-menu-user',
+            name: 'modifyMenuUserGroup',
+            component: './ModifyMenuUserGroup/ModifyMenuUserGroup',
+            hideInMenu: true,
+          },
+          {
             path: '/system-management/user-maintenance/modify-user',
             name: 'modifyUser',
             component: './ModifyUser/ModifyUser',

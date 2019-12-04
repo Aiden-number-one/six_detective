@@ -54,6 +54,28 @@
     background-color: #4d80ad;
     border-color: #4d80ad;
   }
+  // 第二套样式 主按钮  确定按钮
+  .button_two.ant-btn-primary {
+    width: unset;
+    height: 30px;
+    margin-right: 15px;
+    padding: 0 10px;
+    color: #464c51;
+    font-weight: 500;
+    font-size: 12px;
+    font-family: 'Avenir', sans-serif;
+    background-color: #fff;
+    border-color: #979aa8;
+    border-radius: 2px;
+    span {
+      margin-left: 5px;
+    }
+  }
+  .button_two.ant-btn-primary:hover,
+  .button_two.ant-btn-primary:focus {
+    background-color: #0d87d4;
+    border-color: #979aa8;
+  }
   // danger
   .ant-btn-danger {
     color: #fff;
@@ -259,6 +281,9 @@
   }
   .ant-form-item-required::before {
     content: '';
+  }
+  .ant-form-item {
+    margin-bottom: 18px;
   }
   .ant-form-item-required::after,
   .ant-form-item-label > label::after {

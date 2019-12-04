@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Row, Col, Button, Form, Input, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
-import styles from './NewMenuUserGroup.less';
+import styles from '../MenuUserGroup.less';
 
 import ClassifyTree from '@/components/ClassifyTree';
 
@@ -71,9 +70,10 @@ class NewUser extends Component {
   }
 
   onCancel = () => {
-    this.props.history.push({
-      pathname: '/system-management/menu-user-group',
-    });
+    // this.props.history.push({
+    //   pathname: '/system-management/menu-user-group',
+    // });
+    this.props.onCancel();
   };
 
   onSave = () => {
@@ -90,10 +90,11 @@ class NewUser extends Component {
         payload: param,
         callback: () => {
           message.success('success');
-          this.props.history.push({
-            pathname: '/system-management/menu-user-group',
-            params: values,
-          });
+          //   this.props.history.push({
+          //     pathname: '/system-management/menu-user-group',
+          //     params: values,
+          //   });
+          this.props.onSave();
         },
       });
     });
@@ -122,40 +123,38 @@ class NewUser extends Component {
     const { menuData } = this.props;
     console.log('menuData=', menuData);
     return (
-      <PageHeaderWrapper>
-        <Fragment>
-          <NewFormUser ref={this.newUserRef} />
-          <Row type="flex">
-            <Col>
-              <span className={styles.title}>
-                {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
-              </span>
-            </Col>
-            <Col>
-              <ClassifyTree
-                all
-                checkable
-                onCheck={this.onCheck}
-                treeData={menuData}
-                treeKey={{
-                  currentKey: 'menuid',
-                  currentName: 'menuname',
-                  parentKey: 'parentmenuid',
-                }}
-                onSelect={this.onSelect}
-              ></ClassifyTree>
-            </Col>
-          </Row>
-          <Row type="flex" justify="end">
-            <Col>
-              <Button onClick={this.onCancel}>CANCEL</Button>
-              <Button type="primary" onClick={this.onSave}>
-                SAVE
-              </Button>
-            </Col>
-          </Row>
-        </Fragment>
-      </PageHeaderWrapper>
+      <Fragment>
+        <NewFormUser ref={this.newUserRef} />
+        <Row type="flex">
+          <Col>
+            <span className={styles.title}>
+              {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
+            </span>
+          </Col>
+          <Col>
+            <ClassifyTree
+              all
+              checkable
+              onCheck={this.onCheck}
+              treeData={menuData}
+              treeKey={{
+                currentKey: 'menuid',
+                currentName: 'menuname',
+                parentKey: 'parentmenuid',
+              }}
+              onSelect={this.onSelect}
+            ></ClassifyTree>
+          </Col>
+        </Row>
+        <Row type="flex" justify="end">
+          <Col>
+            <Button onClick={this.onCancel}>CANCEL</Button>
+            <Button type="primary" onClick={this.onSave}>
+              SAVE
+            </Button>
+          </Col>
+        </Row>
+      </Fragment>
     );
   }
 }

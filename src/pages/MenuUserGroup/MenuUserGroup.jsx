@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Table, Button } from 'antd';
+import { Form, Table, Button, Drawer } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
@@ -7,6 +7,7 @@ import { routerRedux } from 'dva/router';
 
 import styles from './MenuUserGroup.less';
 import SearchForm from './components/SearchForm';
+import NewUserGroup from './components/NewUserGroup';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
@@ -18,6 +19,7 @@ class MenuUserGroup extends Component {
   constructor() {
     super();
     this.state = {
+      newVisible: false,
       columns: [
         {
           title: formatMessage({ id: 'app.common.username' }),
@@ -57,9 +59,34 @@ class MenuUserGroup extends Component {
   }
 
   newUser = () => {
+    // this.props.dispatch(
+    //   routerRedux.push({
+    //     pathname: '/system-management/user-maintenance/new-menu-user',
+    //   }),
+    // );
+    this.setState({
+      newVisible: true,
+    });
+  };
+
+  onClose = () => {
+    this.setState({
+      newVisible: false,
+    });
+  };
+
+  onSave = () => {
+    this.setState({
+      newVisible: false,
+    });
+  };
+
+  updateUser = (res, obj) => {
+    console.log('res, obj=', res, obj);
     this.props.dispatch(
       routerRedux.push({
-        pathname: '/system-management/user-maintenance/new-menu-user',
+        pathname: '/system-management/user-maintenance/modify-menu-user',
+        query: { roleId: obj.roleId },
       }),
     );
   };
@@ -76,7 +103,7 @@ class MenuUserGroup extends Component {
   render() {
     const { loading, menuUserGroup } = this.props;
     console.log('menuUserGroup=', menuUserGroup);
-    const { columns, page } = this.state;
+    const { columns, page, newVisible } = this.state;
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -85,6 +112,9 @@ class MenuUserGroup extends Component {
     return (
       <PageHeaderWrapper>
         <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
+        <Drawer width={700} onClose={this.onClose} visible={newVisible}>
+          <NewUserGroup onCancel={this.onClose} onSave={this.onSave}></NewUserGroup>
+        </Drawer>
         <div className={styles.content}>
           <Button onClick={this.newUser}>+ New User</Button>
           <Table
