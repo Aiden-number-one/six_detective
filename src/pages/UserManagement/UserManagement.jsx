@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-04 13:39:29
+ * @LastEditTime: 2019-12-04 14:30:57
  */
 
 import React, { Component } from 'react';
@@ -233,16 +233,19 @@ class UserManagement extends Component {
     userInfo.departmentName = obj.departmentName;
     userInfo.departmentId = obj.departmentId;
     userInfo.email = obj.email;
-    this.props.dispatch(
-      routerRedux.push({
-        pathname: '/system-management/user-maintenance/modify-user',
-        query: {
-          userId: obj.userId,
-          userName: obj.userName,
-          userState: obj.userState,
-        },
-      }),
-    );
+    this.setState({
+      visible: true,
+    });
+    // this.props.dispatch(
+    //   routerRedux.push({
+    //     pathname: '/system-management/user-maintenance/modify-user',
+    //     query: {
+    //       userId: obj.userId,
+    //       userName: obj.userName,
+    //       userState: obj.userState,
+    //     },
+    //   }),
+    // );
     // this.setState({
     //   updateVisible: true,
     //   userInfo,

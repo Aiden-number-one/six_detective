@@ -9,7 +9,12 @@ class FormUser extends Component {
     super();
     this.state = {
       //   menuUserGroups: ['Administrator', 'Operator', 'Supervisor', 'Enquriy'],
-      alertUserGroups: ['Future Maker', 'Future Checker', 'Option Maker', 'Option Checker'],
+      alertUserGroups: [
+        { label: 'Future Maker', value: '1' },
+        { label: 'Future Checker', value: '2' },
+        { label: 'Option Maker', value: '3' },
+        { label: 'Option Checker', value: '4' },
+      ],
     };
   }
 
