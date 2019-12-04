@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-04 11:22:33
+ * @LastEditTime: 2019-12-04 13:39:29
  */
 
 import React, { Component } from 'react';
@@ -569,7 +569,9 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div className={styles.content}>
-            <Button onClick={this.newUser}>+ New User</Button>
+            <Button onClick={this.newUser} type="primary" className="button_two">
+              + New User
+            </Button>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}

@@ -8,7 +8,7 @@ class FormUser extends Component {
   constructor() {
     super();
     this.state = {
-      menuUserGroups: ['Administrator', 'Operator', 'Supervisor', 'Enquriy'],
+      //   menuUserGroups: ['Administrator', 'Operator', 'Supervisor', 'Enquriy'],
       alertUserGroups: ['Future Maker', 'Future Checker', 'Option Maker', 'Option Checker'],
     };
   }
@@ -23,7 +23,8 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { menuUserGroups, alertUserGroups } = this.state;
+    const { alertUserGroups } = this.state;
+    const { menuUserGroups } = this.props;
     return (
       <Fragment>
         <Form>
@@ -174,10 +175,25 @@ export default class NewUser extends Component {
   };
 
   render() {
+    const { menuUserGroup } = this.props;
+    console.log('menuUserGroup=', menuUserGroup);
     return (
       <Fragment>
-        <NewFormUser ref={this.newUserRef} />
-        <Row type="flex" justify="end">
+        <NewFormUser ref={this.newUserRef} menuUserGroups={menuUserGroup} />
+        <Row
+          type="flex"
+          justify="end"
+          style={{
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e9e9e9',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}
+        >
           <Col>
             <Button onClick={this.onCancel}>CANCEL</Button>
             <Button type="primary" onClick={this.onSave}>
