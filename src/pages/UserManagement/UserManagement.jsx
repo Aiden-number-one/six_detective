@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 10:30:08
+ * @LastEditTime: 2019-12-05 13:41:58
  */
 
 import React, { Component } from 'react';
@@ -37,7 +37,7 @@ class UserManagement extends Component {
   state = {
     visible: false,
     userTitle: 'New User',
-    NewFlag: false,
+    NewFlag: true,
     updateVisible: false,
     deleteVisible: false,
     closingVisible: false,
@@ -124,7 +124,7 @@ class UserManagement extends Component {
 
   componentDidMount() {
     this.queryUserList();
-    this.queryDepartments();
+    // this.queryDepartments();
   }
 
   /**
@@ -196,29 +196,10 @@ class UserManagement extends Component {
   };
 
   addConfrim = () => {
-    const { dispatch } = this.props;
-    this.formRef.current.validateFields((err, values) => {
-      const passwordStrength = passWordStrength(values.password);
-      const param = {
-        loginName: values.login,
-        customerName: values.name,
-        departmentId: this.newDepartmentId,
-        password: window.kddes.getDes(values.password),
-        passwordStrength,
-        mobile: values.phone,
-        email: values.email,
-      };
-      dispatch({
-        type: 'userManagement/addUserModelDatas',
-        payload: param,
-        callback: () => {
-          this.setState({
-            visible: false,
-          });
-          this.queryUserList();
-        },
-      });
+    this.setState({
+      visible: false,
     });
+    this.queryUserList();
   };
 
   addCancel = () => {
@@ -516,12 +497,14 @@ class UserManagement extends Component {
               onClose={this.addCancel}
               visible={this.state.visible}
             >
-              <NewUser
-                onCancel={this.addCancel}
-                onSave={this.addConfrim}
-                NewFlag={NewFlag}
-                userInfo={userInfo}
-              ></NewUser>
+              {this.state.visible && (
+                <NewUser
+                  onCancel={this.addCancel}
+                  onSave={this.addConfrim}
+                  NewFlag={NewFlag}
+                  userInfo={userInfo}
+                ></NewUser>
+              )}
             </Drawer>
             {/* 修改用户 */}
             <Modal

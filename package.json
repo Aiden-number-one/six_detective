@@ -27,6 +27,7 @@
     "test": "umi test",
     "test:all": "node ./tests/run-tests.js",
     "test:component": "umi test ./src/components",
+    "test:log": "umi test ./src/pages/LopLog -w",
     "lint-eslint": "eslint ./src/**/*.{js,jsx} -f node_modules/eslint-html-reporter/reporter-lite.js -o report.html"
   },
   "husky": {

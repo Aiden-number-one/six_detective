@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Row, Col, Button, Form, Input, Checkbox, Radio, message } from 'antd';
+import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
@@ -116,7 +116,7 @@ const NewFormUser = Form.create()(FormUser);
   loading: loading.effects,
   newUserData: userManagement.saveUser,
   menuUserGroup: userManagement.menuData,
-  modifyUserData: userManagement.updateDatas,
+  modifyUserData: userManagement.updateData,
 }))
 export default class NewUser extends Component {
   newUserRef = React.createRef();
@@ -126,8 +126,8 @@ export default class NewUser extends Component {
     this.state = {
       accountLock: 'N',
       locedChecked: false,
-      roleIds: '',
-      alertIds: '',
+      roleIds: [],
+      alertIds: [],
       alertUserGroups: [
         { label: 'Future Maker', value: '1' },
         { label: 'Future Checker', value: '2' },
@@ -147,6 +147,10 @@ export default class NewUser extends Component {
     this.setState({
       locedChecked,
     });
+    console.log('userInfo.userId==', userInfo.userId);
+    if (userInfo.userId) {
+      this.getRoalId(userInfo.userId);
+    }
   }
 
   queryLog = () => {
@@ -155,6 +159,46 @@ export default class NewUser extends Component {
     dispatch({
       type: 'userManagement/getMenuUserGroup',
       payload: params,
+    });
+  };
+
+  getRoalId = userId => {
+    const { dispatch } = this.props;
+    const params = {
+      operType: 'queryById',
+      userId,
+    };
+    // const _self = this
+    dispatch({
+      type: 'userManagement/updateUserModelDatas',
+      payload: params,
+      callback: () => {
+        console.log('modifyUserData2==========', this.props.modifyUserData);
+        console.log('modifyUserData[0].roleId=', this.props.modifyUserData[0].roleId);
+        const roleIds = this.props.modifyUserData.map(element => {
+          // element.userGroupType === 'menu' ? element.roleId : '',
+          let roleId = '';
+          if (element.userGroupType === 'menu') {
+            // eslint-disable-next-line prefer-destructuring
+            roleId = element.roleId;
+          }
+          return roleId;
+        });
+        console.log('roleIds=', roleIds);
+        // roleIds.push(this.props.modifyUserData[0].roleId);
+        this.setState({
+          roleIds,
+        });
+      },
+    });
+  };
+
+  setRoleIds = modifyUserData => {
+    if (modifyUserData.length <= 0) return;
+    const roleIds = [];
+    roleIds.push(modifyUserData[0].roleId);
+    this.setState({
+      roleIds,
     });
   };
 
@@ -179,22 +223,23 @@ export default class NewUser extends Component {
     }
   };
 
-  onChangeMenuUserGroup = e => {
-    console.log('e.target.value=', e.target.value);
+  onChangeMenuUserGroup = checkedValue => {
+    console.log('checkedValue', checkedValue);
     this.setState({
-      roleIds: e.target.value,
+      roleIds: checkedValue,
     });
   };
 
-  onChangeAlertUserGroup = e => {
-    console.log('e.target.value=', e.target.value);
+  onChangeAlertUserGroup = checkedValue => {
+    console.log('checkedValue=', checkedValue);
     this.setState({
-      alertIds: e.target.value,
+      alertIds: checkedValue,
     });
   };
 
   onSave = () => {
-    const { accountLock, roleIds, alertIds, NewFlag } = this.state;
+    const { accountLock, roleIds, alertIds } = this.state;
+    const { NewFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
       const passwordStrength = passWordStrength(values.userPwd);
@@ -204,9 +249,9 @@ export default class NewUser extends Component {
         const params = {
           userName: values.userName,
           userPwd: window.kddes.getDes(values.userPwd),
-          roleIds,
+          roleIds: roleIds.join(','),
           userId: values.userId,
-          alertIds,
+          alertIds: alertIds.join(','),
           accountLock,
         };
         dispatch({
@@ -223,10 +268,11 @@ export default class NewUser extends Component {
         });
       } else {
         const params = {
+          operType: 'updateUserById',
           userName: values.userName,
-          roleIds,
+          roleIds: roleIds.join(','),
           userId: values.userId,
-          alertIds,
+          alertIds: alertIds.join(','),
           accountLock,
         };
         dispatch({
@@ -246,10 +292,13 @@ export default class NewUser extends Component {
   };
 
   render() {
-    const { menuUserGroup, NewFlag, userInfo } = this.props;
-    const { alertUserGroups, locedChecked } = this.state;
-    console.log('menuUserGroup=', menuUserGroup);
-    console.log('userInfo1=', userInfo);
+    const { menuUserGroup, NewFlag, userInfo, modifyUserData } = this.props;
+    console.log('modifyUserData1=', modifyUserData);
+    // this.setRoleIds(modifyUserData)
+    const { alertUserGroups, locedChecked, roleIds, alertIds } = this.state;
+    // console.log('menuUserGroup=', menuUserGroup);
+    // console.log('userInfo1=', userInfo);
+    console.log('roleIds=', roleIds);
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} NewFlag={NewFlag} userInfo={userInfo} />
@@ -265,23 +314,25 @@ export default class NewUser extends Component {
             <h3 className={styles.groupTitle}>
               {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
             </h3>
-            <Radio.Group
+            <Checkbox.Group
               options={menuUserGroup}
               defaultValue={['Operator']}
               onChange={this.onChangeMenuUserGroup}
-            ></Radio.Group>
+              value={roleIds}
+            ></Checkbox.Group>
           </li>
         </ul>
         <ul className={styles.userGroup}>
           <li>
             <h3 className={styles.groupTitle}>
-              {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
+              {formatMessage({ id: 'systemManagement.userMaintenance.alertUserGroup' })}
             </h3>
-            <Radio.Group
+            <Checkbox.Group
               options={alertUserGroups}
               defaultValue={['Future Maker', 'Future Checker']}
               onChange={this.onChangeAlertUserGroup}
-            ></Radio.Group>
+              value={alertIds}
+            ></Checkbox.Group>
           </li>
         </ul>
         <Row

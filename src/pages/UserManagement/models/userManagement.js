@@ -12,7 +12,7 @@ export const userManagement = {
     datas: {},
     operationDatas: {},
     saveUser: {},
-    updateDatas: {},
+    updateData: [],
   },
   effects: {
     *userManagemetDatas({ payload }, { call, put }) {
@@ -120,7 +120,7 @@ export const userManagement = {
     updateDatas(state, action) {
       return {
         ...state,
-        datas: action.payload,
+        updateData: action.payload,
       };
     },
     operationDatas(state, action) {
