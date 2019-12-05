@@ -116,6 +116,7 @@ const NewFormUser = Form.create()(FormUser);
   loading: loading.effects,
   newUserData: userManagement.saveUser,
   menuUserGroup: userManagement.menuData,
+  modifyUserData: userManagement.updateDatas,
 }))
 export default class NewUser extends Component {
   newUserRef = React.createRef();
@@ -193,32 +194,54 @@ export default class NewUser extends Component {
   };
 
   onSave = () => {
-    const { accountLock, roleIds, alertIds } = this.state;
+    const { accountLock, roleIds, alertIds, NewFlag } = this.state;
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
       const passwordStrength = passWordStrength(values.userPwd);
       console.log('passwordStrength=', passwordStrength);
       const { dispatch } = this.props;
-      const params = {
-        userName: values.userName,
-        userPwd: window.kddes.getDes(values.userPwd),
-        roleIds,
-        userId: values.userId,
-        alertIds,
-        accountLock,
-      };
-      dispatch({
-        type: 'userManagement/newUser',
-        payload: params,
-        callback: () => {
-          message.success('save success');
-          this.props.onSave();
-          //   this.props.history.push({
-          //     pathname: '/system-management/user-maintenance',
-          //     params: values,
-          //   });
-        },
-      });
+      if (NewFlag) {
+        const params = {
+          userName: values.userName,
+          userPwd: window.kddes.getDes(values.userPwd),
+          roleIds,
+          userId: values.userId,
+          alertIds,
+          accountLock,
+        };
+        dispatch({
+          type: 'userManagement/newUser',
+          payload: params,
+          callback: () => {
+            message.success('save success');
+            this.props.onSave();
+            //   this.props.history.push({
+            //     pathname: '/system-management/user-maintenance',
+            //     params: values,
+            //   });
+          },
+        });
+      } else {
+        const params = {
+          userName: values.userName,
+          roleIds,
+          userId: values.userId,
+          alertIds,
+          accountLock,
+        };
+        dispatch({
+          type: 'userManagement/updateUserModelDatas',
+          payload: params,
+          callback: () => {
+            message.success('save success');
+            this.props.onSave();
+            //   this.props.history.push({
+            //     pathname: '/system-management/user-maintenance',
+            //     params: values,
+            //   });
+          },
+        });
+      }
     });
   };
 
