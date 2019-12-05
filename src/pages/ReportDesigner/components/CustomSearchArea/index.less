@@ -1,16 +1,35 @@
 .customSearchArea {
   position: relative;
   height: 111px;
-  background-color: #ffa;
+  background-color: #fff;
 }
 
 .bulk {
   background-color: red;
 }
 
-.editArea {
+.widgetArea {
   position: absolute;
   right: 0;
   bottom: 0;
   width: 456px;
+  height: 29px;
+  background-color: #59636c;
+  border: 1px solid #59636c;
+  .editArea {
+    float: left;
+    width: 412px;
+    height: 100%;
+    background-color: #fff;
+  }
+  .closeArea {
+    float: left;
+    height: 100%;
+    padding-right: 6px;
+    padding-left: 7px;
+    color: #fff;
+    font-size: 11px;
+    line-height: 26px;
+    background-color: #59636c;
+  }
 }

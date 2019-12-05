@@ -1,11 +1,12 @@
 /*
- * @Author: your name
- * @Date: 2019-11-26 11:16:28
- * @LastEditTime: 2019-12-03 20:31:47
+ * @Des: 报表设计器的Model
+ * @Author: mus
+ * @Email: mus@szkingdom.com
+ * @Date: 2019-12-02 16:36:09
  * @LastEditors: mus
- * @Description: In User Settings Edit
- * @FilePath: \superlop-web-project\src\pages\ReportDesigner\models\reportDesigner.js
+ * @LastEditTime: 2019-12-05 09:45:26
  */
+
 import fetch from '@/utils/request.default';
 
 export default {
@@ -34,7 +35,6 @@ export default {
         isAllSave: '1',
       };
       const { items } = yield call(fetch('set_task_grid_content_save'), params);
-      console.log(items);
     },
   },
   reducers: {
