@@ -249,6 +249,11 @@ export default [
             component: './Approval/ApprovalAuditor/ApprovalAuditor',
           },
           {
+            path: '/system-management/workflow-configuration',
+            name: 'ApprovalConfiguration',
+            component: './Approval/ApprovalConfiguration/ApprovalConfiguration',
+          },
+          {
             path: '/system-management/workflow-config',
             name: 'workflowConfig',
             component: './Approval/ApprovalSet/ApprovalSet',
