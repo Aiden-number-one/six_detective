@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 09:06:14
+ * @LastEditTime: 2019-12-05 10:30:08
  */
 
 import React, { Component } from 'react';
@@ -36,6 +36,8 @@ const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
 class UserManagement extends Component {
   state = {
     visible: false,
+    userTitle: 'New User',
+    NewFlag: false,
     updateVisible: false,
     deleteVisible: false,
     closingVisible: false,
@@ -43,11 +45,8 @@ class UserManagement extends Component {
     resetPasswordVisible: false,
     customerno: null,
     userInfo: {
-      login: '',
-      name: '',
-      departmentName: '',
-      departmentId: '',
-      email: '',
+      userId: '',
+      userName: '',
     },
     columns: [
       {
@@ -185,6 +184,9 @@ class UserManagement extends Component {
   newUser = () => {
     this.setState({
       visible: true,
+      userTitle: 'New User',
+      NewFlag: true,
+      userInfo: {},
     });
     // this.props.dispatch(
     //   routerRedux.push({
@@ -232,19 +234,15 @@ class UserManagement extends Component {
     console.log('res=======', res);
     console.log('obj============', obj);
     const userInfo = {
-      login: '',
-      name: '',
-      departmentName: '',
-      departmentId: '',
-      email: '',
+      userName: obj.userName,
+      userId: obj.userId,
+      accountLock: obj.accountLock,
     };
-    userInfo.login = obj.loginName;
-    userInfo.name = obj.customerName;
-    userInfo.departmentName = obj.departmentName;
-    userInfo.departmentId = obj.departmentId;
-    userInfo.email = obj.email;
     this.setState({
       visible: true,
+      userTitle: 'Modify User',
+      NewFlag: false,
+      userInfo,
     });
     // this.props.dispatch(
     //   routerRedux.push({
@@ -479,7 +477,7 @@ class UserManagement extends Component {
 
   render() {
     const { loading, orgs, userManagementData } = this.props;
-    const { userInfo, page } = this.state;
+    const { userInfo, page, userTitle, NewFlag } = this.state;
     console.log('userManagementData.items=', userManagementData.items);
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
@@ -513,12 +511,17 @@ class UserManagement extends Component {
             </Modal>
             <Drawer
               closable={false}
-              title="New User"
+              title={userTitle}
               width={700}
               onClose={this.addCancel}
               visible={this.state.visible}
             >
-              <NewUser onCancel={this.addCancel} onSave={this.addConfrim}></NewUser>
+              <NewUser
+                onCancel={this.addCancel}
+                onSave={this.addConfrim}
+                NewFlag={NewFlag}
+                userInfo={userInfo}
+              ></NewUser>
             </Drawer>
             {/* 修改用户 */}
             <Modal

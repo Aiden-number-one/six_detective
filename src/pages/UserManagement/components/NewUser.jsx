@@ -17,7 +17,8 @@ class FormUser extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     // const { alertUserGroups } = this.state;
-    // const { menuUserGroups } = this.props;
+    const { NewFlag, userInfo } = this.props;
+    console.log('userInfo==========', userInfo);
     return (
       <Fragment>
         <Form>
@@ -29,6 +30,7 @@ class FormUser extends Component {
                   message: 'Please input your UserId',
                 },
               ],
+              initialValue: userInfo && userInfo.userId,
             })(<Input />)}
           </Form.Item>
           <Form.Item
@@ -43,22 +45,25 @@ class FormUser extends Component {
                   message: 'Please input your username',
                 },
               ],
+              initialValue: userInfo && userInfo.userName,
             })(<Input />)}
           </Form.Item>
-          <Form.Item
-            label={formatMessage({ id: 'app.common.password' })}
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 6 }}
-          >
-            {getFieldDecorator('userPwd', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input your password',
-                },
-              ],
-            })(<Input.Password />)}
-          </Form.Item>
+          {NewFlag && (
+            <Form.Item
+              label={formatMessage({ id: 'app.common.password' })}
+              labelCol={{ span: 4 }}
+              wrapperCol={{ span: 6 }}
+            >
+              {getFieldDecorator('userPwd', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input your password',
+                  },
+                ],
+              })(<Input.Password />)}
+            </Form.Item>
+          )}
           {/* <Form.Item wrapperCol={{ span: 6, offset: 4 }}>
             {getFieldDecorator('locked', {
               rules: [
@@ -119,6 +124,7 @@ export default class NewUser extends Component {
     super(props);
     this.state = {
       accountLock: 'N',
+      locedChecked: false,
       roleIds: '',
       alertIds: '',
       alertUserGroups: [
@@ -131,7 +137,15 @@ export default class NewUser extends Component {
   }
 
   componentDidMount() {
+    const { userInfo } = this.props;
+    let locedChecked = false;
+    if (userInfo.accountLock && userInfo.accountLock !== 'N') {
+      locedChecked = true;
+    }
     this.queryLog();
+    this.setState({
+      locedChecked,
+    });
   }
 
   queryLog = () => {
@@ -154,10 +168,12 @@ export default class NewUser extends Component {
     if (e.target.checked) {
       this.setState({
         accountLock: 'Y',
+        locedChecked: true,
       });
     } else {
       this.setState({
         accountLock: 'N',
+        locedChecked: false,
       });
     }
   };
@@ -207,15 +223,18 @@ export default class NewUser extends Component {
   };
 
   render() {
-    const { menuUserGroup } = this.props;
-    const { alertUserGroups } = this.state;
+    const { menuUserGroup, NewFlag, userInfo } = this.props;
+    const { alertUserGroups, locedChecked } = this.state;
     console.log('menuUserGroup=', menuUserGroup);
+    console.log('userInfo1=', userInfo);
     return (
       <Fragment>
-        <NewFormUser ref={this.newUserRef} />
+        <NewFormUser ref={this.newUserRef} NewFlag={NewFlag} userInfo={userInfo} />
         <Row>
           <Col offset={4}>
-            <Checkbox onChange={this.onChangeLocked}>User Account Locked</Checkbox>
+            <Checkbox onChange={this.onChangeLocked} checked={locedChecked}>
+              User Account Locked
+            </Checkbox>
           </Col>
         </Row>
         <ul className={styles.userGroup}>
