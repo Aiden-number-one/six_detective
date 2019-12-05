@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 13:41:58
+ * @LastEditTime: 2019-12-05 14:18:59
  */
 
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Modal, Table, Button, Drawer } from 'antd';
+import { Form, Modal, Table, Button, Drawer, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './UserManagement.less';
@@ -32,6 +32,7 @@ const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
   loading: loading.effects,
   userManagementData: userManagement.data,
   orgs: userManagement.orgs,
+  modifyUserData: userManagement.updateData,
 }))
 class UserManagement extends Component {
   state = {
@@ -97,7 +98,7 @@ class UserManagement extends Component {
             <a href="#" onClick={() => this.updateUser(res, obj)}>
               {formatMessage({ id: 'app.common.modify' })}
             </a>
-            <a href="#" onClick={() => this.deleteUser()}>
+            <a href="#" onClick={() => this.deleteUser(res, obj)}>
               {formatMessage({ id: 'app.common.delete' })}
             </a>
           </span>
@@ -277,26 +278,39 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  deleteUser = () => {
+  deleteUser = (res, obj) => {
+    console.log('delete=', res, obj);
+    const userInfo = {
+      userName: obj.userName,
+      userId: obj.userId,
+      accountLock: obj.accountLock,
+    };
     this.setState({
       deleteVisible: true,
+      userInfo,
     });
   };
 
   deleteConfirm = () => {
     const { dispatch } = this.props;
-    const param = {
-      operationType: '1',
+    const params = {
+      operType: 'deleteUserById',
+      userId: this.state.userInfo.userId,
     };
     dispatch({
-      type: 'userManagement/operationUserModelDatas',
-      payload: param,
+      type: 'userManagement/updateUserModelDatas',
+      payload: params,
       callback: () => {
+        message.success('save success');
         this.queryUserList();
+        this.setState({
+          deleteVisible: false,
+        });
+        //   this.props.history.push({
+        //     pathname: '/system-management/user-maintenance',
+        //     params: values,
+        //   });
       },
-    });
-    this.setState({
-      deleteVisible: false,
     });
   };
 
@@ -522,7 +536,7 @@ class UserManagement extends Component {
                 getDepartmentId={this.getDepartmentId}
               ></NewUpdateForm>
             </Modal>
-            {/* 锁定 */}
+            {/* delete */}
             <Modal
               title="CONFIRM"
               visible={this.state.deleteVisible}
