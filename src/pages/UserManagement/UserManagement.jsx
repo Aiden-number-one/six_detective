@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 14:29:06
+ * @LastEditTime: 2019-12-05 16:19:31
  */
 
 import React, { Component } from 'react';
@@ -301,7 +301,7 @@ class UserManagement extends Component {
       type: 'userManagement/updateUserModelDatas',
       payload: params,
       callback: () => {
-        message.success('save success');
+        message.success('delete success');
         this.queryUserList();
         this.setState({
           deleteVisible: false,
