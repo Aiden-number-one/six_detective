@@ -55,7 +55,6 @@ define((require, exports, module) => {
 
         // 点击弹框保存 通用
         $("body").on("click", `${PAGE} .J_save`, function() {
-            debugger;
             let oparatetype = $(this).data("type"); // 判断新增或修改
             let taskType = $(this).data("tasktype"); 
             let formId = $(this).data("formid");
@@ -208,8 +207,8 @@ define((require, exports, module) => {
                     if(formParams.sourceUrl&&formParams.sourceUrl==="0"){
                         formParams.sourceUrl = $("[name=a1006FilesPath]").val();
                     }
-                } else if(modalId === "J_modal_TFDP") {
-                    formParams.taskType = "TFP";
+                } else if(modalId === "J_modal_TFP") {
+                    formParams.dbTable = $("#J_select2_multi_tab_13_1").select2('data')[0].text.replace(/\(.+\)/g, "");
                 }
                 App.blockUI({
                     boxed: true,
@@ -889,11 +888,11 @@ define((require, exports, module) => {
             showContent.getTableList({
                 connection_id: e.currentTarget.value,
             }, "#J_select2_multi_tab_13_1", false, () => {
-                if (showContent.sourceTables) {
+                if (showContent.dbTable) {
                     // 取对应ID ,因为接口存的表名
                     let origin = $("#J_select2_multi_tab_13_1").data("origin");
                     for (let { id, text } of origin) {
-                        if (text === showContent.sourceTables) {
+                        if (text === showContent.dbTable) {
                             $("#J_select2_multi_tab_13_1").val(id).change();
                             // showContent.getSQL({ tableId: id }); // 生成源表查询语句
                             // showContent.getBuildTableSQL({
@@ -903,7 +902,7 @@ define((require, exports, module) => {
                         }
                     }
                 }
-                showContent.sourceTables = "";
+                showContent.dbTable = "";
                 $('[name=columnFileName],[name=columnFileData]').empty().clearInputs();
             });
         });
@@ -912,7 +911,10 @@ define((require, exports, module) => {
             $('[name=columnFileName],[name=columnFileData]').empty().clearInputs();
             showContent.getDataField_3({
                 table_id: e.currentTarget.value,
-            },"[name=columnFileName],[name=columnFileData]",()=>{})
+            },"[name=columnFileName],[name=columnFileData]",()=>{
+                $('[name=columnFileName]').val(showContent.columnFileName);
+                $('[name=columnFileData]').val(showContent.columnFileData);
+            })
         });
 
         // 数据剖析 -> 文件夹改变

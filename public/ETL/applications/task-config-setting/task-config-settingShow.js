@@ -32,6 +32,9 @@ define((require, exports, module) => {
     
     let showContent = {};
     // 全局变量都在此声明
+    showContent.dbTable = null;
+    showContent.columnFileName = null;
+    showContent.columnFileData = null;
     showContent.sourceTables = null; // 缓存源表数据 方便赋值
     showContent.targetTable = null; // 缓存目标表数据 方便赋值
     showContent.procedureName = null; // 缓存存储过程名字 方便赋值
@@ -135,6 +138,13 @@ define((require, exports, module) => {
                 showContent.sftpSecretword = items.sftpSecretword;
                 App.setFormData(formName, items);
 
+                // 文件格式转换任务
+                if (modalSelector === '#J_modal_TFP') {
+                    showContent.dbTable = items.dbTable;
+                    showContent.columnFileName = items.columnFileName;
+                    showContent.columnFileData = items.columnFileData;
+                    $("#J_select2_single_tab_13_1").change(); // 来源数据链接
+                }
                 // 抽取任务
                 if (modalSelector === "#J_modal_TE") {
                     // if (items.targetTableFlag == "1") {
@@ -455,6 +465,12 @@ define((require, exports, module) => {
 
                 // 导入文本 目标数据源
                 $("#J_select2_single_tab_1_9").select2({
+                    data: arr,
+                    placeholder: '- 请选择 -',
+                });
+
+                // 文件格式转换 数据源
+                $("#J_select2_single_tab_13_1").select2({
                     data: arr,
                     placeholder: '- 请选择 -',
                 });
@@ -907,9 +923,9 @@ define((require, exports, module) => {
                 if (items.length === 0) {
                     return;
                 }
-                let arr = items.map((item, index) => {
+                let arr = items.map(item => {
                     return {
-                        id: index,
+                        id: item.columnName,
                         text: item.columnName,
                     };
                 });
@@ -932,6 +948,7 @@ define((require, exports, module) => {
                     });
                     // 不渲染 则返回查询结果
                 }
+                if (cb) cb();
             }
         });
     };

@@ -3266,7 +3266,6 @@ Graphic.prototype.nodeDblclick = function(d) {
             $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_all_dict_data_list", "v4.0", {}, function(data) {
                 if (data.bcjson.flag == "1") {
                     var items = data.bcjson.items[0];
-                    debugger
                     for (var i in items.TASK_TYPE) {
                         if (items.TASK_TYPE[i] === d.title) {
                             getTask(i);

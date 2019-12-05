@@ -16,6 +16,8 @@ const NewSearchForm = Form.create({})(SearchForm);
   menuUserGroup: menuUserGroup.data,
 }))
 class MenuUserGroup extends Component {
+  searchForm = React.createRef();
+
   constructor() {
     super();
     this.state = {
@@ -48,14 +50,14 @@ class MenuUserGroup extends Component {
         },
       ],
       page: {
-        pageNum: '1',
+        pageNumber: '1',
         pageSize: '10',
       },
     };
   }
 
   componentDidMount() {
-    this.queryLog();
+    this.queryUserList();
   }
 
   newUser = () => {
@@ -92,8 +94,62 @@ class MenuUserGroup extends Component {
   };
 
   queryLog = () => {
+    // const { dispatch } = this.props;
+    // const params = {};
+    // dispatch({
+    //   type: 'menuUserGroup/getMenuUserGroup',
+    //   payload: params,
+    // });
+    this.searchForm.current.validateFields((err, values) => {
+      console.log('values===', values);
+      const params = {
+        remark: values.remark,
+        userName: values.userName,
+      };
+      this.queryUserList(params);
+    });
+  };
+
+  /**
+   * @description: This is for paging function.
+   * @param {type} null
+   * @return: undefined
+   */
+  pageChange = pagination => {
+    const page = {
+      pageNumber: pagination.current.toString(),
+      pageSize: pagination.pageSize.toString(),
+    };
+
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
+  };
+
+  /**
+   * @description: This is for query user list function.
+   * @param {type} null
+   * @return: undefined
+   */
+  queryUserList = (
+    param = {
+      remark: undefined,
+      userName: undefined,
+    },
+  ) => {
     const { dispatch } = this.props;
-    const params = {};
+    const { remark, userName } = param;
+    const params = {
+      remark,
+      userName,
+      pageNumber: this.state.page.pageNumber,
+      pageSize: this.state.page.pageSize,
+    };
     dispatch({
       type: 'menuUserGroup/getMenuUserGroup',
       payload: params,
@@ -116,7 +172,11 @@ class MenuUserGroup extends Component {
           <NewUserGroup onCancel={this.onClose} onSave={this.onSave}></NewUserGroup>
         </Drawer>
         <div className={styles.content}>
-          <Button onClick={this.newUser}>+ New User</Button>
+          <div className={styles.tableTop}>
+            <Button onClick={this.newUser} type="primary" className="btn_usual">
+              + New User
+            </Button>
+          </div>
           <Table
             loading={loading['menuUserGroup/getMenuUserGroup']}
             pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}

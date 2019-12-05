@@ -1,30 +1,23 @@
 import React, { Component, Fragment } from 'react';
-import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
+import { Row, Col, Button, Form, Input, Checkbox, Radio, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
+import styles from '../UserManagement.less';
+import { passWordStrength } from '@/utils/utils';
 
 class FormUser extends Component {
   constructor() {
     super();
     this.state = {
       //   menuUserGroups: ['Administrator', 'Operator', 'Supervisor', 'Enquriy'],
-      alertUserGroups: ['Future Maker', 'Future Checker', 'Option Maker', 'Option Checker'],
     };
   }
 
-  onChangeMenuUserGroup = checkedValues => {
-    console.log('checkedValues=', checkedValues);
-  };
-
-  onChangeAlertUserGroup = checkedValues => {
-    console.log('checkedValues=', checkedValues);
-  };
-
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { alertUserGroups } = this.state;
-    const { menuUserGroups } = this.props;
+    // const { alertUserGroups } = this.state;
+    // const { menuUserGroups } = this.props;
     return (
       <Fragment>
         <Form>
@@ -43,7 +36,7 @@ class FormUser extends Component {
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 6 }}
           >
-            {getFieldDecorator('name', {
+            {getFieldDecorator('userName', {
               rules: [
                 {
                   required: true,
@@ -57,7 +50,7 @@ class FormUser extends Component {
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 6 }}
           >
-            {getFieldDecorator('password', {
+            {getFieldDecorator('userPwd', {
               rules: [
                 {
                   required: true,
@@ -66,7 +59,7 @@ class FormUser extends Component {
               ],
             })(<Input.Password />)}
           </Form.Item>
-          <Form.Item wrapperCol={{ span: 6, offset: 4 }}>
+          {/* <Form.Item wrapperCol={{ span: 6, offset: 4 }}>
             {getFieldDecorator('locked', {
               rules: [
                 {
@@ -77,8 +70,8 @@ class FormUser extends Component {
               valuePropName: 'checked',
               initialValue: true,
             })(<Checkbox>User Account Locked</Checkbox>)}
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             wrapperCol={{ offset: 1 }}
             label={formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
           >
@@ -91,8 +84,8 @@ class FormUser extends Component {
                 onChange={this.onChangeMenuUserGroup}
               ></Checkbox.Group>,
             )}
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             wrapperCol={{ offset: 1 }}
             label={formatMessage({ id: 'systemManagement.userMaintenance.alertUserGroup' })}
           >
@@ -105,7 +98,7 @@ class FormUser extends Component {
                 onChange={this.onChangeAlertUserGroup}
               ></Checkbox.Group>,
             )}
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       </Fragment>
     );
@@ -124,7 +117,17 @@ export default class NewUser extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      accountLock: 'N',
+      roleIds: '',
+      alertIds: '',
+      alertUserGroups: [
+        { label: 'Future Maker', value: '1' },
+        { label: 'Future Checker', value: '2' },
+        { label: 'Option Maker', value: '3' },
+        { label: 'Option Checker', value: '4' },
+      ],
+    };
   }
 
   componentDidMount() {
@@ -147,17 +150,46 @@ export default class NewUser extends Component {
     this.props.onCancel();
   };
 
+  onChangeLocked = e => {
+    if (e.target.checked) {
+      this.setState({
+        accountLock: 'Y',
+      });
+    } else {
+      this.setState({
+        accountLock: 'N',
+      });
+    }
+  };
+
+  onChangeMenuUserGroup = e => {
+    console.log('e.target.value=', e.target.value);
+    this.setState({
+      roleIds: e.target.value,
+    });
+  };
+
+  onChangeAlertUserGroup = e => {
+    console.log('e.target.value=', e.target.value);
+    this.setState({
+      alertIds: e.target.value,
+    });
+  };
+
   onSave = () => {
+    const { accountLock, roleIds, alertIds } = this.state;
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
+      const passwordStrength = passWordStrength(values.userPwd);
+      console.log('passwordStrength=', passwordStrength);
       const { dispatch } = this.props;
       const params = {
         userName: values.userName,
-        userPwd: values.userPwd,
-        roleId: values.roleId,
+        userPwd: window.kddes.getDes(values.userPwd),
+        roleIds,
         userId: values.userId,
-        alertId: values.alertId,
-        accountLock: values.accountLock,
+        alertIds,
+        accountLock,
       };
       dispatch({
         type: 'userManagement/newUser',
@@ -176,10 +208,40 @@ export default class NewUser extends Component {
 
   render() {
     const { menuUserGroup } = this.props;
+    const { alertUserGroups } = this.state;
     console.log('menuUserGroup=', menuUserGroup);
     return (
       <Fragment>
-        <NewFormUser ref={this.newUserRef} menuUserGroups={menuUserGroup} />
+        <NewFormUser ref={this.newUserRef} />
+        <Row>
+          <Col offset={4}>
+            <Checkbox onChange={this.onChangeLocked}>User Account Locked</Checkbox>
+          </Col>
+        </Row>
+        <ul className={styles.userGroup}>
+          <li>
+            <h3 className={styles.groupTitle}>
+              {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
+            </h3>
+            <Radio.Group
+              options={menuUserGroup}
+              defaultValue={['Operator']}
+              onChange={this.onChangeMenuUserGroup}
+            ></Radio.Group>
+          </li>
+        </ul>
+        <ul className={styles.userGroup}>
+          <li>
+            <h3 className={styles.groupTitle}>
+              {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
+            </h3>
+            <Radio.Group
+              options={alertUserGroups}
+              defaultValue={['Future Maker', 'Future Checker']}
+              onChange={this.onChangeAlertUserGroup}
+            ></Radio.Group>
+          </li>
+        </ul>
         <Row
           type="flex"
           justify="end"
@@ -188,7 +250,6 @@ export default class NewUser extends Component {
             right: 0,
             bottom: 0,
             width: '100%',
-            borderTop: '1px solid #e9e9e9',
             padding: '10px 16px',
             background: '#fff',
             textAlign: 'right',
