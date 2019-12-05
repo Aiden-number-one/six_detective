@@ -16,11 +16,12 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { groupMenuInfo } = this.props;
     return (
       <Fragment>
         <Form>
           <Form.Item
-            label={formatMessage({ id: 'app.common.username' })}
+            label={formatMessage({ id: 'systemManagement.userMaintenance.name' })}
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 8 }}
           >
@@ -31,6 +32,7 @@ class FormUser extends Component {
                   message: 'Please input Name of Menu User Group',
                 },
               ],
+              initialValue: groupMenuInfo && groupMenuInfo.roleName,
             })(<Input placeholder="Please input" />)}
           </Form.Item>
           <Form.Item
@@ -45,6 +47,7 @@ class FormUser extends Component {
                   message: 'Please input Remark of Menu User Group',
                 },
               ],
+              initialValue: groupMenuInfo && groupMenuInfo.roleDesc,
             })(<TextArea rows={4} placeholder="Please input" />)}
           </Form.Item>
         </Form>
@@ -58,6 +61,7 @@ const NewFormUser = Form.create()(FormUser);
 @connect(({ menuUserGroup, loading }) => ({
   loading: loading.effects,
   userGroup: menuUserGroup.saveUser,
+  updateGroup: menuUserGroup.updateData,
 }))
 class NewUser extends Component {
   newUserRef = React.createRef();
@@ -66,7 +70,15 @@ class NewUser extends Component {
     super(props);
     this.state = {
       selectedKeys: [],
+      defaultCheckedKeys: [],
     };
+  }
+
+  componentDidMount() {
+    const { updateFlag } = this.props;
+    if (updateFlag) {
+      this.getMenuGrops();
+    }
   }
 
   onCancel = () => {
@@ -78,29 +90,67 @@ class NewUser extends Component {
 
   onSave = () => {
     const { selectedKeys } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
       if (selectedKeys <= 0) {
         message.warning('Please checked Authorizing operate to alerts');
         return;
       }
-      const param = {
-        roleName: values.roleName,
-        roleDesc: values.roleDesc,
-        menuIds: selectedKeys,
-      };
-      dispatch({
-        type: 'menuUserGroup/newUserGroup',
-        payload: param,
-        callback: () => {
-          message.success('success');
-          //   this.props.history.push({
-          //     pathname: '/system-management/menu-user-group',
-          //     params: values,
-          //   });
-          this.props.onSave();
-        },
-      });
+      console.log('updateFlag===', updateFlag);
+      if (!updateFlag) {
+        const param = {
+          roleName: values.roleName,
+          roleDesc: values.roleDesc,
+          menuIds: selectedKeys,
+        };
+        dispatch({
+          type: 'menuUserGroup/newUserGroup',
+          payload: param,
+          callback: () => {
+            message.success('success');
+            //   this.props.history.push({
+            //     pathname: '/system-management/menu-user-group',
+            //     params: values,
+            //   });
+            this.props.onSave();
+          },
+        });
+      } else {
+        const { groupMenuInfo } = this.props;
+        const params = {
+          operType: 'modifyById',
+          roleId: groupMenuInfo.roleId,
+          roleName: values.roleName,
+          roleDesc: values.roleDesc,
+          menuIds: selectedKeys,
+        };
+        dispatch({
+          type: 'menuUserGroup/updateUserGroup',
+          payload: params,
+          callback: () => {
+            this.props.onSave();
+          },
+        });
+      }
+    });
+  };
+
+  getMenuGrops = () => {
+    const { dispatch, groupMenuInfo } = this.props;
+    const that = this;
+    const params = {
+      operType: 'queryById',
+      roleId: groupMenuInfo.roleId,
+    };
+    dispatch({
+      type: 'menuUserGroup/updateUserGroup',
+      payload: params,
+      callback: () => {
+        const defaultCheckedKeys = this.props.updateGroup.map(element => element.menuId);
+        that.setState({
+          defaultCheckedKeys,
+        });
+      },
     });
   };
 
@@ -124,11 +174,13 @@ class NewUser extends Component {
   };
 
   render() {
-    const { menuData } = this.props;
+    const { menuData, groupMenuInfo } = this.props;
+    const { defaultCheckedKeys } = this.state;
+    console.log('defaultCheckedKeys111111====', defaultCheckedKeys);
     console.log('menuData=', menuData);
     return (
       <Fragment>
-        <NewFormUser ref={this.newUserRef} />
+        <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
         <Row type="flex">
           <Col>
             <span className={styles.title}>Authorizing access to menus</span>
@@ -139,6 +191,7 @@ class NewUser extends Component {
               checkable
               onCheck={this.onCheck}
               treeData={menuData}
+              checkedKeys={defaultCheckedKeys}
               treeKey={{
                 currentKey: 'menuid',
                 currentName: 'menuname',

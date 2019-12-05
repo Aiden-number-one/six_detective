@@ -13,18 +13,20 @@ export default class SearchForm extends Component {
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label={formatMessage({ id: 'app.common.username' })}>
-              {getFieldDecorator('userName', {})(
+            <Form.Item label={formatMessage({ id: 'systemManagement.userMaintenance.name' })}>
+              {getFieldDecorator('roleName', {})(
                 <Input
                   className={styles.inputvalue}
-                  placeholder={`Please Input ${formatMessage({ id: 'app.common.username' })}`}
+                  placeholder={`Please Input ${formatMessage({
+                    id: 'systemManagement.userMaintenance.name',
+                  })}`}
                 />,
               )}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'systemManagement.userGroup.remark' })}>
-              {getFieldDecorator('remark', {})(
+              {getFieldDecorator('roleDesc', {})(
                 <Input
                   className={styles.inputvalue}
                   placeholder={`Please Input ${formatMessage({
