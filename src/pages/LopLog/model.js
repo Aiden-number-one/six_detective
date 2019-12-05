@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors: iron
- * @LastEditTime: 2019-12-05 11:09:17
+ * @LastEditTime: 2019-12-05 14:27:33
  */
 
 import { request } from '@/utils/request.default';
@@ -45,11 +45,15 @@ export default {
   },
   effects: {
     *fetch({ params: { page = 1 } = {} }, { call, put }) {
-      const { items } = yield call(getLogs, { page });
-      yield put({
-        type: 'save',
-        payload: items,
-      });
+      const { items, msg } = yield call(getLogs, { page });
+      if (!msg) {
+        yield put({
+          type: 'save',
+          payload: items,
+        });
+      } else {
+        throw new Error(msg);
+      }
     },
     *importByManual({ params }, { call, put }) {
       yield call(postManual, params);
