@@ -62,7 +62,7 @@ class BasicAddForm extends Component {
               },
             ],
             initialValue: '',
-          })(<Input placeholder="请输入最长64位字符（中文占两个字符）" />)}
+          })(<Input placeholder="64 characters maximum" />)}
         </Form.Item>
         <Form.Item label="调度作业:">
           {getFieldDecorator('folderId', {
@@ -86,9 +86,10 @@ class BasicAddForm extends Component {
         <Form.Item label="计划有效时间:">
           <Row gutter={8}>
             <Col span={16}>
-              {getFieldDecorator('validDate', rangeConfig)(
-                <RangePicker showTime style={{ width: '100%' }} />,
-              )}
+              {getFieldDecorator(
+                'validDate',
+                rangeConfig,
+              )(<RangePicker showTime style={{ width: '100%' }} />)}
             </Col>
             <Col span={8}>{getFieldDecorator('Checkbox')(<Checkbox>永久有效</Checkbox>)}</Col>
           </Row>
@@ -102,7 +103,7 @@ class BasicAddForm extends Component {
               },
             ],
             initialValue: '',
-          })(<TextArea rows={2} placeholder="请输入最长1024位字符（中文占两个字符）" />)}
+          })(<TextArea rows={2} placeholder="1024 characters maximum" />)}
         </Form.Item>
       </Form>
     );

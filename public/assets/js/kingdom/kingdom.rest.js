@@ -298,7 +298,7 @@ $.extend({
         recommendBrowser: function(){
             var browser = this.getBrowser(true);
             if(browser.indexOf('ie/')>-1 || browser.indexOf('edge/')>-1){//表明是ie浏览器
-                toastr.info('推荐使用谷歌浏览器^_^',{positionClass:'toast-top-right'});
+                toastr.info('Google browser recommended^_^',{positionClass:'toast-top-right'});
             }
         },
         uuid: function() {

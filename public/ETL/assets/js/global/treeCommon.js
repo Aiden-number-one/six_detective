@@ -95,7 +95,7 @@ define((require, exports, module) => {
             };
             // 新增需要传入父级folderID; 修改需要传入当前folderID
             if (!folderName) {
-                toastr.info("文件夹名称不能为空");
+                toastr.info("File Name is missing");
                 self.getTask("", true, false, params.parentFolderId);
                 return;
             }
@@ -128,7 +128,7 @@ define((require, exports, module) => {
             };
             // 新增需要传入父级folderID; 修改需要传入当前folderID
             if (!folderName) {
-                toastr.info("文件夹名称不能为空");
+                toastr.info("File Name is missing");
                 self.getTask("", true, false, params.folderId);
                 return;
             }

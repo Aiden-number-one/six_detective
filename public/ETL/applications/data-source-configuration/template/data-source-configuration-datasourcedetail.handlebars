@@ -1,6 +1,6 @@
 {{#if flag}}
 <tr>
-  <td colspan="20" class="t-c">暂无数据</td>
+  <td colspan="20" class="t-c" data-lang="No-Data">No Data</td>
 </tr>
 {{else}} {{#each this}}
 <tr>
@@ -16,8 +16,8 @@
     <td>{{ tableDesc}}</td>
     <td class="t-c" data-tableId='{{tableId}}' data-tableName='{{tableName}}' data-mdType='{{mdType}}' data-tableCat='{{tableCat}}' data-schemName='{{schemName}}'
         data-tableDesc='{{tableDesc}}'>
-        <a id="dsc-modal-check" href="javascript:;" data-lang="Preview">查看</a>
-        <a id="dsc-modal-delete" href="javascript:;" data-lang="DELETE">删除</a>
+        <a id="dsc-modal-check" href="javascript:;" data-lang="PREVIEW">PREVIEW</a>
+        <a id="dsc-modal-delete" href="javascript:;" data-lang="DELETE">DELETE</a>
     </td>
 
 </tr>

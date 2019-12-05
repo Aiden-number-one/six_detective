@@ -2,7 +2,7 @@
  * @Author: limin01
  * @Date: 2019-08-09 13:47:16
  * @LastEditors: lan
- * @LastEditTime: 2019-12-04 15:53:44
+ * @LastEditTime: 2019-12-05 16:10:09
  * @Description: 
  -->
 <style type="text/css">
@@ -83,7 +83,7 @@
                     <span class="caption-subject bold uppercase" data-lang="Task-Management">转换任务</span>
                 </div>
                 <div class="actions">
-                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" title="缩放">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" title="Scale">
                 </a>
                 </div>
             </div>
@@ -263,7 +263,7 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <input type="hidden" class="form-control" name="taskId">
-                                                    <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                    <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -282,7 +282,7 @@
                                                 <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                                 </label>
                                                 <div class="col-md-6">
-                                                    <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                    <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -295,7 +295,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Data-Source">源数据连接：</span>
                                             </label>
                                             <div class="form-group col-md-6">
-                                                <select class="form-control" id="J_select2_single_tab_1_1" name="sourceConnection" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" id="J_select2_single_tab_1_1" name="sourceConnection" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -304,7 +304,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Source-Object">源对象：</span>
                                             </label>
                                             <div class="col-md-6">
-                                                <select class="form-control" id="J_select2_multi_tab_1_1" name="sourceTables" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" id="J_select2_multi_tab_1_1" name="sourceTables" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -336,7 +336,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Target-Data-Source">目标数据连接：</span>
                                             </label>
                                             <div class="col-md-6">
-                                                <select class="form-control" name="targetConnection" id="J_select2_single_tab_1_3" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" name="targetConnection" id="J_select2_single_tab_1_3" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -505,7 +505,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Task-Name">任务名称：</span>
                                             </label>
                                             <div class="col-md-8"><input type="hidden" class="form-control" name="taskId">
-                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -537,7 +537,7 @@
                                             <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -549,7 +549,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Data-Source">数据连接：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <select id="J_select2_single_tab_2_2" class="form-control" name="connectionId" data-searchplaceholder="关键字查询">
+                                                <select id="J_select2_single_tab_2_2" class="form-control" name="connectionId" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -613,7 +613,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Task-Name">任务名称：</span>
                                             </label>
                                             <div class="col-md-8"><input type="hidden" class="form-control" name="taskId">
-                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -645,7 +645,7 @@
                                             <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -657,7 +657,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Variable-Name">变量名称：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control" name="variableName" placeholder="输入数字字母下划线，设置变量名为VAR1时，使用${VAR1}引用变量">
+                                                <input type="text" class="form-control" name="variableName" placeholder="Please input numbers, letters and underscores. When setting the variable name as VAR1, use ${VAR1} to reference the variable.">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -665,7 +665,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Data-Source">数据连接：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <select id="J_select2_single_tab_3_2" class="form-control" name="dbConnection" data-searchplaceholder="关键字查询">
+                                                <select id="J_select2_single_tab_3_2" class="form-control" name="dbConnection" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -733,7 +733,7 @@
                                             </label>
                                             <div class="col-md-8">
                                                 <input type="hidden" class="form-control" name="taskId">
-                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -765,7 +765,7 @@
                                             <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -776,7 +776,7 @@
                                             <span class="required" aria-required="true"> * </span><span data-lang="Data-Source">数据连接：</span>
                                         </label>
                                         <div class="col-md-8">
-                                            <select class="form-control" name="dbConnection" id="J_data_source_select2" data-searchplaceholder="关键字查询">
+                                            <select class="form-control" name="dbConnection" id="J_data_source_select2" data-searchplaceholder="Please input keywords">
                                             </select>
                                         </div>
                                     </div>
@@ -785,7 +785,7 @@
                                             <span class="required" aria-required="true"> * </span><span data-lang="Stored-Procedure">存储过程：</span>
                                         </label>
                                         <div class="col-md-8">
-                                            <select class="form-control" name="procedureName" id="J_stored_procedure_select2" data-searchplaceholder="关键字查询">
+                                            <select class="form-control" name="procedureName" id="J_stored_procedure_select2" data-searchplaceholder="Please input keywords">
                                             </select>
                                         </div>
                                     </div>
@@ -914,7 +914,7 @@
                                             </label>
                                             <div class="col-md-8">
                                                 <input type="hidden" class="form-control" name="taskId">
-                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -946,7 +946,7 @@
                                             <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1087,7 +1087,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Task-Name">任务名称：</span>
                                             </label>
                                             <div class="col-md-8"><input type="hidden" class="form-control" name="taskId">
-                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -1119,7 +1119,7 @@
                                             <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1169,7 +1169,7 @@
                                                 <span class="required" aria-required="true"> * </span>邮件主题：
                                             </label>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control" name="mailTopic" maxlength="64" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" name="mailTopic" maxlength="64" placeholder="64 characters maximum">
                                                 <a class="query-datafield set-variable" title="选择变量"><i class="fa fa-plus"></i></a>
                                             </div>
                                         </div>
@@ -1177,7 +1177,7 @@
                                             <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>邮件正文：
                                             </label>
                                             <div class="col-md-8">
-                                                <textarea class="form-control" name="mailNote" maxlength="1024" placeholder="请输入最长1024位字符（中文占两个字符）">
+                                                <textarea class="form-control" name="mailNote" maxlength="1024" placeholder="1024 characters maximum">
                                             </textarea>
                                             <a class="query-datafield set-variable" title="选择变量"><i class="fa fa-plus"></i></a>
                                             </div>
@@ -1228,7 +1228,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Task-Name">任务名称：</span>
                                             </label>
                                             <div class="col-md-8"><input type="hidden" class="form-control" name="taskId">
-                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -1260,7 +1260,7 @@
                                             <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1285,7 +1285,7 @@
                                             <div class="col-md-8" style="padding-top: 5px;">
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                     <span class="btn green btn-file">
-                                                    <span class="fileinput-new"> 选择文件 </span>
+                                                    <span class="fileinput-new"> Select FILE </span>
                                                     <span class="fileinput-exists"> 更换 </span>
                                                     <input type="file" name="file" data-accept="DBF,CSV,TXT,XLS,XLSX,DAT"  data-url="bayconnect.superlop.file_upload.json">
                                                     <input type="hidden" name="fileName">
@@ -1325,7 +1325,7 @@
                                                     <span class="required" aria-required="true"> * </span>文件名称：
                                                 </label>
                                                 <div class="col-md-8">
-                                                    <input type="hidden" class="form-control" name="fileName"  placeholder="请输入最长64位字符（中文占两个字符）,不输入文件后缀名">
+                                                    <input type="hidden" class="form-control" name="fileName"  placeholder="64 characters maximum,不输入文件后缀名">
                                                 </div>
                                             </div>
                                         </div>
@@ -1414,7 +1414,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Target-Data-Source">目标数据连接：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <select class="form-control" name="targetConnectionId" id="J_select2_single_tab_1_9" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" name="targetConnectionId" id="J_select2_single_tab_1_9" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -1423,7 +1423,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Target-Object">目标对象：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <select class="form-control" id="J_select2_multi_tab_1_9" name="targetTable" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" id="J_select2_multi_tab_1_9" name="targetTable" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -1554,7 +1554,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Task-Name">任务名称：</span>
                                             </label>
                                             <div class="col-md-8"><input type="hidden" class="form-control" name="taskId">
-                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -1573,7 +1573,7 @@
                                             <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1671,7 +1671,7 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <input type="hidden" class="form-control" name="taskId">
-                                                    <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                    <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -1690,7 +1690,7 @@
                                                 <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                                 </label>
                                                 <div class="col-md-6">
-                                                    <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                    <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -1703,11 +1703,11 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Folder">所属目录：</span>
                                             </label>
                                             <div class="col-md-4">
-                                                <select class="form-control" id="J_select2_single_tab_11_1" name="ruleFolderId" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" id="J_select2_single_tab_11_1" name="ruleFolderId" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                             <div class="col-md-4">
-                                                <select class="form-control" id="J_select2_multi_tab_11_1" name="ruleids" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" id="J_select2_multi_tab_11_1" name="ruleids" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -1716,7 +1716,7 @@
                                                 <span class="required" aria-required="true"> * </span>源数据连接：
                                             </label>
                                             <div class="form-group col-md-6">
-                                                <select class="form-control" id="J_select2_single_tab_11_1" name="dbConnection" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" id="J_select2_single_tab_11_1" name="dbConnection" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -1725,7 +1725,7 @@
                                                 <span class="required" aria-required="true"> * </span>源对象：
                                             </label>
                                             <div class="col-md-6">
-                                                <select class="form-control" id="J_select2_multi_tab_11_1" name="sourceTables" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" id="J_select2_multi_tab_11_1" name="sourceTables" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div> -->
@@ -1919,7 +1919,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Task-Name">任务名称：</span>
                                             </label>
                                             <div class="col-md-8"><input type="hidden" class="form-control" name="taskId">
-                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -1938,7 +1938,7 @@
                                             <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -2118,7 +2118,7 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <input type="hidden" class="form-control" name="taskId">
-                                                    <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="请输入最长64位字符（中文占两个字符）">
+                                                    <input type="text" class="form-control" maxlength="64" name="taskName" placeholder="64 characters maximum">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -2137,7 +2137,7 @@
                                                 <label class="control-label col-md-3"><span data-lang="Task-Description">任务描述：</span>
                                                 </label>
                                                 <div class="col-md-6">
-                                                    <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="请输入最长1024位字符（中文占两个字符）"></textarea>
+                                                    <textarea name="taskDesc" maxlength="1024" class="form-control" placeholder="1024 characters maximum"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -2150,7 +2150,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Data-Source">源数据连接：</span>
                                             </label>
                                             <div class="form-group col-md-6">
-                                                <select class="form-control" id="J_select2_single_tab_13_1" name="connectionId" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" id="J_select2_single_tab_13_1" name="connectionId" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>
@@ -2159,7 +2159,7 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="Source-Object">源对象：</span>
                                             </label>
                                             <div class="col-md-6">
-                                                <select class="form-control" id="J_select2_multi_tab_13_1" name="dbTable" data-searchplaceholder="关键字查询">
+                                                <select class="form-control" id="J_select2_multi_tab_13_1" name="dbTable" data-searchplaceholder="Please input keywords">
                                                 </select>
                                             </div>
                                         </div>

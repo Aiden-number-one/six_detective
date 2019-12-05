@@ -85,7 +85,7 @@
             this.upload(e.target.form, url, function(data) {
                 App.unblockUI();
                 if (data.bcjson.flag == "0") {
-                  toastr.error("上传失败");
+                  toastr.error("Fail");
                   return;
                 } else {
                   toastr.success("上传成功");
@@ -182,7 +182,7 @@
 
         Fileinput.prototype.upload = function(formDom, url, cbfunc) { //上传
             var options = {
-                url: "/retl/rest/admin/v4.0/" + url,
+                url: "/superlop/rest/admin/v2.0/" + url,
                 type: "POST",
                 dataType: "json",
                 success: function(data) {

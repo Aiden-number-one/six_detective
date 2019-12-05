@@ -95,7 +95,7 @@ define((require, exports, module) => {
             };
             // 新增需要传入父级folderID; 修改需要传入当前folderID
             if (!folderName) {
-                toastr.info("文件夹名称不能为空");
+                toastr.info("File Name is missing");
                 self.getTask("", true, false, params.parentFolderId);
                 return;
             }
@@ -128,7 +128,7 @@ define((require, exports, module) => {
             };
             // 新增需要传入父级folderID; 修改需要传入当前folderID
             if (!folderName) {
-                toastr.info("文件夹名称不能为空");
+                toastr.info("File Name is missing");
                 self.getTask("", true, false, params.folderId);
                 return;
             }
@@ -194,14 +194,14 @@ define((require, exports, module) => {
                 return;
             }
             if (level === "1") {
-                $(this).append(`<div class="jstree-operate"><a name="add" title="新增"><i class="glyphicon glyphicon-plus" style="color:#10416c;"></i></a><a name="edit" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#10416c;"></i></a></div>`);
+                $(this).append(`<div class="jstree-operate"><a name="add" title="ADD"><i class="glyphicon glyphicon-plus" style="color:#10416c;"></i></a><a name="edit" title="EDIT"><i class="glyphicon glyphicon-pencil" style="color:#10416c;"></i></a></div>`);
             } else if (level === "2") {
-                $(this).append(`<div class="jstree-operate"><a name="add" title="新增"><i class="glyphicon glyphicon-plus" style="color:#10416c;"></i></a><a name="edit" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#10416c;"></i></a><a name="del" title="删除"><i class="glyphicon glyphicon-trash" style="color:#10416c;"></i></a></div>`);
+                $(this).append(`<div class="jstree-operate"><a name="add" title="ADD"><i class="glyphicon glyphicon-plus" style="color:#10416c;"></i></a><a name="edit" title="EDIT"><i class="glyphicon glyphicon-pencil" style="color:#10416c;"></i></a><a name="del" title="DELETE"><i class="glyphicon glyphicon-trash" style="color:#10416c;"></i></a></div>`);
             }
              else if (level === "3") {
-                    $(this).append(`<div class="jstree-operate"><a name="add" title="新增"><i class="glyphicon glyphicon-plus" style="color:#10416c;"></i></a><a name="edit" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#10416c;"></i></a><a name="del" title="删除"><i class="glyphicon glyphicon-trash" style="color:#10416c;"></i></a></div>`);
+                    $(this).append(`<div class="jstree-operate"><a name="add" title="ADD"><i class="glyphicon glyphicon-plus" style="color:#10416c;"></i></a><a name="edit" title="EDIT"><i class="glyphicon glyphicon-pencil" style="color:#10416c;"></i></a><a name="del" title="DELETE"><i class="glyphicon glyphicon-trash" style="color:#10416c;"></i></a></div>`);
             } else {
-                $(this).append(`<div class="jstree-operate"><a name="edit" title="编辑"><i class="glyphicon glyphicon-pencil" style="color:#10416c;"></i></a><a name="del" title="删除"><i class="glyphicon glyphicon-trash" style="color:#10416c;"></i></a></div></div>`);
+                $(this).append(`<div class="jstree-operate"><a name="edit" title="EDIT"><i class="glyphicon glyphicon-pencil" style="color:#10416c;"></i></a><a name="del" title="DELTTE"><i class="glyphicon glyphicon-trash" style="color:#10416c;"></i></a></div></div>`);
             }
         });
 

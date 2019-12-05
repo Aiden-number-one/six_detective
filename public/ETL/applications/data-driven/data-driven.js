@@ -32,6 +32,22 @@ define(function(require, exports, module) {
       App.clearForm("driven-datatable-view");
     });
 
+    $("body").on("click", "#filebutton", function(){
+      $("#dd-inputfile").click();
+    })
+
+    $("body").on("click", "#filebutton-add", function(){
+      $("#dd-inputfile-add").click();
+    })
+
+    $("body").on("change", "#dd-inputfile-add", function(e) {
+      $("#filename-add").text(e.target.value.match(/[^\\]+(?!.*\\)/) || "Please select a file")
+    })
+
+    $("body").on("change", "#dd-inputfile", function(e) {
+      $("#filename").text(e.target.value.match(/[^\\]+(?!.*\\)/) || "Please select a file")
+    })
+
     // 点击新增驱动按钮
     $("body").on("click", "#dd-driven-add-modal", function() {
       //清空上一个新增驱动弹出框中的filename、currentAddress和filetype、清空文件上传表单的form
@@ -40,8 +56,13 @@ define(function(require, exports, module) {
       showContent.currentAddressAdd = "";
       var inputFileParent = $("#dd-inputfile-add").parent("div");
       $("#dd-inputfile-add").remove();
+      $("#filebutton-add").remove();
+      $("#filename-add").remove();
       inputFileParent.append(
-        '<input id="dd-inputfile-add" type="file" name="file">'
+        '<input id="dd-inputfile-add" type="file" name="file" style="display: none;">'
+        + '<input type="button" id="filebutton-add" value="Select JAR">'
+        + '<span id="filename-add">Please select a file</span>'
+        
       );
       showContent.setAddressList(showContent.currentAddressAdd, "addtrue");
 
@@ -57,8 +78,12 @@ define(function(require, exports, module) {
       showContent.driverId = "";
       var inputFileParent = $("#dd-inputfile").parent("div");
       $("#dd-inputfile").remove();
+      $("#filebutton").remove();
+      $("#filename").remove();
       inputFileParent.append(
-        '<input id="dd-inputfile" type="file" name="file">'
+        '<input id="dd-inputfile" type="file" name="file" style="display: none;">'
+        + '<input type="button" id="filebutton" value="Select JAR">'
+        + '<span id="filename">Please select a file</span>'
       );
 
       var _this = $(this);
@@ -101,7 +126,7 @@ define(function(require, exports, module) {
           .form()
       ) {
         if (!showContent.currentAddressAdd) {
-          toastr.info("请添加jar包");
+          toastr.info("Please upload a Jar file！");
           return;
         }
         $("#data-driven-add").modal("hide");
@@ -120,11 +145,11 @@ define(function(require, exports, module) {
       var params = {};
       params.opType = "del";
       params.driver_id = $(this).attr("driver_id");
-      bootbox.confirm("确定删除吗?", function(result) {
+      bootbox.confirm("Please confirm to delete.", function(result) {
         if (result) {
           App.blockUI({
             boxed: true,
-            message: "删除中..."
+            message: "deleting..."
           });
           showContent.deleteDriven(params);
         }
@@ -150,16 +175,19 @@ define(function(require, exports, module) {
     //点击上传按钮
     $("body").on("click", "#dd-upfilejar-btn-add", function() {
       if (!showContent.typeAdd) {
-        toastr.info("上传jar包不能为空!");
+        toastr.info("Please upload a Jar file！");
         return false;
       }
       if (showContent.typeAdd !== "jar") {
-        toastr.info("文件类型不正确,请上传jar包类型!");
+        toastr.info("File type is incorrect, please upload a Jar file.");
+        showContent.typeAdd = "";
+        $("#filename-add").text("Please select a file");
+        $("#dd-inputfile-add").val("");
         return false;
       }
       App.blockUI({
         boxed: true,
-        message: "上传中..."
+        message: "Uploading..."
       });
       showContent.upLoad(showContent.fileNameAdd, "addtrue");
     });
@@ -167,7 +195,7 @@ define(function(require, exports, module) {
     //删除jar包
     $("body").on("click", "#data_Table02_Detail .delete-jar", function() {
       var deletecIndex = $(this);
-      bootbox.confirm("确定删除吗？", function(result) {
+      bootbox.confirm("Please confirm to delete.", function(result) {
         if (result) {
           var index = deletecIndex
             .parent("td")
@@ -189,6 +217,7 @@ define(function(require, exports, module) {
 
     //获取上传jar包的文件名及文件类型
     $("body").on("change", "#dd-inputfile", function(data) {
+      debugger;
       showContent.fileName = data.currentTarget.files[0].name;
       showContent.type = showContent.fileName.substring(
         showContent.fileName.length - 3,
@@ -198,17 +227,21 @@ define(function(require, exports, module) {
 
     //点击上传按钮
     $("body").on("click", "#dd-upfilejar-btn", function() {
+      debugger;
       if (!showContent.type) {
-        toastr.info("上传jar包不能为空!");
+        toastr.info("Please upload a Jar file！");
         return false;
       }
       if (showContent.type !== "jar") {
-        toastr.info("文件类型不正确,请上传jar包类型!");
+        toastr.info("File type is incorrect, please upload a Jar file.");
+        showContent.type = "";
+        $("#filename").text("Please select a file");
+        $("#dd-inputfile").val("");
         return false;
       }
       App.blockUI({
         boxed: true,
-        message: "上传中..."
+        message: "Uploading..."
       });
       showContent.upLoad(showContent.fileName);
     });
@@ -216,7 +249,7 @@ define(function(require, exports, module) {
     //删除jar包
     $("body").on("click", "#driven_Data_View_Detail .delete-jar", function() {
       var deletecIndex = $(this);
-      bootbox.confirm("确定删除吗？", function(result) {
+      bootbox.confirm("Please confirm to delete.", function(result) {
         if (result) {
           var index = deletecIndex
             .closest("td")

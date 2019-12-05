@@ -1364,7 +1364,7 @@ var App = function() {
             now = Date.now();
             if (!isNaN(start) && start > now) {
                 if (selector.find(".date-time-picker").length === 0) {
-                    toastr.info(lable + "开始日期不能大于当前日期");
+                    toastr.info(lable + "Start time should be earlier than end time");
                 } else {
                     toastr.info(lable + "开始时间不能大于当前时间");
                 }

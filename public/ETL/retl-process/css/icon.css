@@ -193,6 +193,12 @@
     height: 20px;
     background-size: contain;
 }
+.icon_type18{
+  background: url('../svg/images/icon_type_15.png') no-repeat;
+  width: 20px;
+    height: 20px;
+    background-size: contain;
+}
 .icon_type16{
   background: url('../svg/images/icon_type_16.png') no-repeat;
   width: 20px;
