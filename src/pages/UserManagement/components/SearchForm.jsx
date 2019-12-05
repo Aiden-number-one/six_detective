@@ -8,18 +8,28 @@ export default class SearchForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { search, newUser } = this.props;
+    const { search } = this.props;
     return (
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'app.common.userId' })}>
-              {getFieldDecorator('userId', {})(<Input className={styles.inputvalue} />)}
+              {getFieldDecorator('userId', {})(
+                <Input
+                  className={styles.inputvalue}
+                  placeholder={`Please Input ${formatMessage({ id: 'app.common.userId' })}`}
+                />,
+              )}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'app.common.username' })}>
-              {getFieldDecorator('username', {})(<Input className={styles.inputvalue} />)}
+              {getFieldDecorator('userName', {})(
+                <Input
+                  className={styles.inputvalue}
+                  placeholder={`Please Input ${formatMessage({ id: 'app.common.username' })}`}
+                />,
+              )}
             </Form.Item>
           </Col>
           {/*
@@ -59,7 +69,6 @@ export default class SearchForm extends Component {
           */}
         </Row>
         <div className="btnArea">
-          <Button onClick={newUser}>+ New User</Button>
           <Button type="primary" onClick={search}>
             {formatMessage({ id: 'app.common.search' })}
           </Button>

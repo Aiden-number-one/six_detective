@@ -26,11 +26,11 @@ export default class DatasetManagement extends PureComponent {
   // 数据源列表标题
   Title = () => (
     <span className={styles.titleBox}>
-      <span>Data Connected</span>
+      <span>DataSet Classify</span>
       <Icon
         type="plus"
         onClick={() => {
-          this.toggleModal('dataSourceType', 'ADD');
+          // this.toggleModal('dataSourceType', 'ADD');
         }}
       />
     </span>
@@ -123,6 +123,7 @@ export default class DatasetManagement extends PureComponent {
           <div style={{ flex: '0 0 220px', background: '#fff' }}>
             {this.Title()}
             <ClassifyTree
+              checkable={false}
               treeData={classifyTreeData}
               treeKey={{
                 currentKey: 'classId',

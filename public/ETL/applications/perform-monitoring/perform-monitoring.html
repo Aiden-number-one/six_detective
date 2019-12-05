@@ -1,1 +1,486 @@
-<style type="text/css">.tabbable-line .nav-tabs>li{border-bottom:2px solid #f5f5f5}.tabbable-line .nav-tabs>li.active>a:hover{color:#17a2d7}.form-horizontal .radio{padding-top:2px}.table-detail-process th{width:180px}.table-content-process span{width:186px;display:inline-block}#table-detail tr{background-color:#fff}#J_tableList.jstree-default .jstree-node{margin-left:0!important;padding-left:12px}.pdleft10{padding-left:10px}.pdright10{padding-right:10px}#J_tableList div{height:30px;line-height:30px;padding-left:10px}#J_tableList div span{height:30px;line-height:30px;text-align:center}#J_tableList.jstree-default .jstree-anchor{line-height:30px;height:30px}#J_tableList li{margin:1px 0}#J_tableList.jstree-default .jstree-hovered{background:initial;border-radius:initial;box-shadow:initial}.action{position:absolute;right:32px;top:-32px;padding:3px 6px 1px;border:1px solid #ddd;border-radius:5px}.action:hover{background:#f0f0f0}.action i{color:#666}#table-detail .jstree-clicked{background:0 0!important;box-shadow:none!important}.rightTopStyle p{margin:0 0 4px}.icon-control-pause,.icon-control-play{color:#00c7be;font-size:14px}#perform-monitoring .jstree-operate a i{font-size:16px}#J_pm_jobname_my_tree .jstree-anchor,#J_pm_jobname_tree .jstree-anchor{white-space:nowrap;text-overflow:ellipsis;text-align:left;padding:0 4px 0 1px}#J_pm_jobname_my_tree .jstree-operate,#J_pm_jobname_tree .jstree-operate{right:-55px;z-index:9999}#J_change_view_table .table-tree .ellipsis span i{font-size:16px;color:#d84c15;position:absolute;top:9px;right:0}.tab-content .jstree-default .jstree-node{background-position:-320px -4px}.todo-sidebar .tabbable-line .nav-tabs li{width:110px}.todo-sidebar .tabbable-line .nav-tabs li a{text-align:center}.todo-sidebar .tabbable-line .tab-content{text-align:left}</style><div class="row mt20"><div class="col-md-12"><div class="wrap clearfix"><div class="todo-sidebar left-side left-side-monitoring"><div class="portlet light portlet-height-left"><div class="portlet-title search-title" style="margin-bottom:0"><form class="search-form search-form-expanded" action="javascript:;" method="POST"><div class="input-search search hide"><input type="text" name="query" class="form-control" id="J_pm_jobname_tree_search" placeholder="请输入作业名"> <span class="input-group-btn input-search-btn" id="J_pm_jobname_tree_search_btn"><a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a></span></div><div class="input-search my_search"><input type="text" name="query" class="form-control" id="J_pm_jobname_my_tree_search" placeholder="请输入作业名"> <span class="input-group-btn input-search-btn" id="J_pm_jobname_my_tree_search_btn"><a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a></span></div></form></div><div class="tabbable-line"><div class="t-c"><ul class="nav nav-tabs"><li class="active"><a href="#J_tps_1_4" aria-expanded="true" data-toggle="tab">我的</a></li><li><a href="#J_tps_1_5" aria-expanded="false" data-toggle="tab">全部</a></li></ul><div class="tab-content"><div class="tab-pane active" id="J_tps_1_4"><div class="left-tree J_tree" id="J_pm_jobname_my_tree"><img src="/assets/plugins/jstree/dist/themes/default/throbber.gif" style="margin:25px auto;display:block"></div></div><div class="tab-pane" id="J_tps_1_5"><div class="left-tree J_tree" id="J_pm_jobname_tree"><img src="/assets/plugins/jstree/dist/themes/default/throbber.gif" style="margin:25px auto;display:block"></div></div></div></div></div></div></div><div class="drag_bar" id="J_drag_bar8"></div><div class="slide-toggle1"><i class="slide-icon fa fa-angle-left"></i></div><div class="todo-content right-content right-content-monitoring" id="right-content-show" style="height:700px"><div id="right-content-top"><div class="rightTopStyle" style="position:relative"><div style="width:32%;display:inline-block;height:58px;border-right:1px solid #eee;padding-left:10px;padding-top:5px"><div style="width:20%;float:left"><div class="bg-color-success-border">--<br>--</div></div><div style="float:right;width:80%;padding-left:6px"><p class="perform-fr-text" id="J_pm_top_jobno" style="color:#148ddf">--</p><p class="jobName" title="{{jobName}}">--</p></div></div><div style="width:35%;display:inline-block;height:58px;border-right:1px solid #eee;padding-left:20px;padding-top:5px"><a href="javascript:;"><div class="perform-play" id="J_start_task"><img src="/assets/img/perform-start.png" class="img-circles static"></div></a><h4 class="fl" data-lang="Duration" style="display:inline-block;margin-right:40px">时长：--</h4></div><div style="width:32%;display:inline-block;height:58px;padding-left:20px;padding-top:5px"><div class="perform-time"><div data-lang="Start-Time">开始时间：--</div><div data-lang="End-Time">结束时间：--</div></div></div></div></div><div style="position:relative;overflow:hidden"><div id="right-content-middle-round" style="background:#fff;white-space:nowrap;overflow-x:hidden;overflow-y:hidden"></div><div class="img-absolute-block" title="上一页"><div class="img-absolute"><img src="/assets/img/left-triangle.png"></div></div><div class="img-absolute-block" style="right:0"><div class="img-absolute" title="下一页"><img src="/assets/img/right-triangle.png"></div></div></div><div id="right-content-table" style="background:#fff"><div class="portlet light" style="padding:0 15px 0 15px"><div class="portlet-title seach-portlet-title" style="border-top:1px solid #e7ecf1"><div id="right-content-middle-tast" style="background:#fff;display:inline-block"></div><div class="actions"><a class="btn btn-circle btn-icon-only btn-default" title="切换视图" id="J_change_view"><i class="icon-loop"></i> </a><a href="javascript:;" class="btn btn-circle btn-icon-only btn-default fullscreen" title="缩放"></a></div></div><div class="table-scrollable" id="J_change_view_table" style="height:360px;overflow:auto"><table class="table table-tree" id="perform-monitoring-table-tree"><thead><tr></tr></thead><tbody id="table-detail"><tr><td class="t-c" colspan="9" style="padding-left:0"><div class="table-content-process" id="J_tableList" style="overflow:auto;height:340px">没有相关记录，请先选择状态类型！</div></td></tr></tbody></table></div><div id="J_change_view_job" style="display:none"><iframe src="/retl-process/monitor.html" style="width:100%;height:360px"></iframe></div></div></div></div></div></div></div><div class="modal fade" id="pm-add"><div class="modal-dialog modal-md"><div class="modal-content"><div class="modal-header"><button class="close" type="button" data-dismiss="modal" aria-hidden="true"></button><h4 class="modal-title title-color-blue">作业执行配置信息</h4></div><div class="modal-body" style="padding-bottom:60px"><div class="tabbable-line"><div class="t-c"><ul class="nav nav-tabs"><li class="active"><a href="#pm-tab_1_1" aria-expanded="true" data-toggle="tab">作业批次</a></li><li><a href="#pm-tab_1_2" aria-expanded="false" data-toggle="tab">选择任务</a></li><li><a href="#pm-tab_1_3" aria-expanded="false" data-toggle="tab">变量设置</a></li></ul></div><div class="tab-content no-border"><div class="tab-pane active" id="pm-tab_1_1"><form class="form-horizontal" id="J_form_1_1" novalidate name="" role="form"><div class="form-body"><div class="row"><div class="form-group"><label class="control-label col-md-3">作业流程</label><div class="col-md-8"><input type="text" name="task-Process" class="form-control" disabled></div></div><div class="form-group"><label class="control-label col-md-3" style="line-height:2">是否强制执行</label><div class="col-md-8"><div class="radio-list"><label class="radio-inline"><input type="radio" name="isConfirm" value="1"> 是</label> <label class="radio-inline"><input type="radio" name="isConfirm" value="0" checked> 否</label></div></div></div></div></div></form></div><div class="tab-pane" id="pm-tab_1_2"><form class="form-horizontal" id="J_form_1_2" novalidate name="" role="form" style="padding:0 30px"><div class="form-body"><div class="row"><div class="form-group"><label><input type="radio" name="optionsRadios" value="option1" checked> 从某点开始</label> <label><input type="radio" name="optionsRadios" value="option2"> 执行部分任务</label></div><div class="form-group"><select class="form-control input-sm" id="J_pm_tab3_select"></select><div class="table-scrollable" id="J_pm_tab3_table" style="display:none"><table class="table table-striped table-bordered table-hover" id="J_pm_tab3_table"><thead><tr><th><input type="checkbox" class="group-checkable"></th><th>节点名称</th><th>任务名称</th><th>任务类型</th><th>变量名称</th></tr></thead><tbody id="J_pm_tab3_body"></tbody></table></div></div></div></div></form></div><div class="tab-pane" id="pm-tab_1_3"><form class="form-horizontal" id="J_pm_form_1_3" style="padding:0 30px"><div class="form-body"><div class="tourist-wide"><div class="btn-group"><a class="btn-operate" data-type="add" name="oparate" type="button"><i class="widget-thumb-icon fa fa-plus bg-blue"></i> 新增</a></div><div class="btn-group"><a class="btn-operate" data-type="delAll" name="oparate" type="button"><i class="widget-thumb-icon icon-trash bg-red"></i> 删除全部</a></div></div><div class="table-scrollable mb20"><table class="table table-striped table-bordered table-hover order-column"><thead><tr><th>序号</th><th>名称</th><th>变量值</th><th>操作</th></tr></thead><tbody id="J_pm_perfrom_modal_var_set"><tr data-clone-sample hidden><td><span fakename="no"></span></td><td class="t-c"><select class="form-control input-sm" fakename="varName"><option value="">- 请选择 -</option></select></td><td class="t-c"><input type="text" class="form-control input-sm" fakename="varValue"></td><td class="t-c"><a data-type="del" name="oparate" title="删除"><i class="fa fa-trash-o"></i></a></td></tr></tbody></table></div><div class="modal-footer" style="position:absolute;bottom:0;right:0"><button class="btn btn-default" type="button" data-dismiss="modal">取消</button> <button class="btn green" type="button" id="J_perform_task">执行</button></div></div></form></div></div></div></div></div></div></div><div class="modal fade" id="delete" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button class="close" type="button" data-dismiss="modal" aria-hidden="true"></button><h4 class="modal-title title-color-blue">删除</h4></div><form class="form-horizontal" id="submit_form" novalidate action="#" method="POST"><div class="modal-body"><div class="row"><div class="tab-content"><div class="tab-pane active" id="tab_5_1"><div class="form-group"><label class="control-label ml30">是否删除该记录？</label></div></div></div></div></div></form><div class="modal-footer"><button class="btn btn-default" type="button" data-dismiss="modal">取消</button> <button class="btn green" type="button">保存</button></div></div></div></div><div class="modal fade" id="pg-perform-detail-modal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button class="close" type="button" data-dismiss="modal" aria-hidden="true"></button><h4 class="modal-title title-color-blue">查看日志</h4></div><div class="modal-body"><div class="col-md-100 query1" id="pg-perform-detail-modal-msg" style="max-height:400px;overflow-y:auto;padding:4px;word-break:break-all;padding-bottom:17px"></div></div><div class="modal-footer"><button class="btn btn-default" type="button" data-dismiss="modal">关闭</button></div></div></div></div><script src="/assets/js/lang.js"></script><script>$("#J_pm_jobname_tree_search,#J_pm_jobname_my_tree_search").attr("placeholder",$.i18n.map["placeholder-Job-Name"])</script>
+<style type="text/css">
+  .tabbable-line  .nav-tabs > li {
+    border-bottom: 2px solid #f5f5f5;
+  }
+  .tabbable-line .nav-tabs > li.active > a:hover {
+          color: #17a2d7; }
+    .form-horizontal .radio {
+        padding-top: 2px;
+    }
+    
+    .table-detail-process th {
+        width: 180px
+    }
+    
+    .table-content-process span {
+        width: 186px;
+        display: inline-block
+    }
+    
+    #table-detail tr {
+        background-color: #fff;
+    }
+    
+    #J_tableList.jstree-default .jstree-node {
+        margin-left: 0px !important;
+        padding-left: 12px;
+    }
+    
+    .pdleft10 {
+        padding-left: 10px;
+    }
+    
+    .pdright10 {
+        padding-right: 10px;
+    }
+    
+    #J_tableList div {
+        height: 30px;
+        line-height: 30px;
+        padding-left: 10px;
+        /* border-bottom: 1px solid #ddd; */
+    }
+    
+    #J_tableList div span {
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        /*padding-left: 10px;*/
+        /* border-right: 1px solid #ddd; */
+    }
+    
+    #J_tableList.jstree-default .jstree-anchor {
+        line-height: 30px;
+        height: 30px;
+    }
+    
+    #J_tableList li {
+        margin: 1px 0;
+    }
+    
+    #J_tableList.jstree-default .jstree-hovered {
+        background: initial;
+        border-radius: initial;
+        box-shadow: initial;
+    }
+    
+    .action {
+        position: absolute;
+        right: 32px;
+        top: -32px;
+        padding: 3px 6px 1px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    
+    .action:hover {
+        background: #f0f0f0;
+    }
+    
+    .action i {
+        color: #666;
+    }
+    
+    #table-detail .jstree-clicked {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+    
+    .rightTopStyle p {
+        margin: 0 0 4px;
+    }
+    
+    .icon-control-pause,
+    .icon-control-play {
+        color: #00c7be;
+        font-size: 14px;
+    }
+    
+    #perform-monitoring .jstree-operate a i {
+        font-size: 16px
+    }
+    
+    #J_pm_jobname_tree .jstree-anchor,
+    #J_pm_jobname_my_tree .jstree-anchor {
+        white-space: nowrap;
+        /* overflow: hidden; */
+        text-overflow: ellipsis;
+        /* width: 120px; */
+        text-align: left;
+        padding: 0 4px 0 1px;
+    }
+    
+    #J_pm_jobname_tree .jstree-operate,
+    #J_pm_jobname_my_tree .jstree-operate {
+        right: -55px;
+        z-index: 9999
+    }
+    
+    #J_change_view_table .table-tree .ellipsis span i {
+        font-size: 16px;
+        color: #d84c15;
+        position: absolute;
+        top: 9px;
+        right: 0;
+    }
+    
+    .tab-content .jstree-default .jstree-node {
+        background-position: -320px -4px;
+    }
+
+    .todo-sidebar .tabbable-line .nav-tabs li {
+        width: 110px;
+    }
+
+    .todo-sidebar .tabbable-line .nav-tabs li a {
+        text-align: center;
+    }
+
+    .todo-sidebar .tabbable-line .tab-content {
+        text-align: left;
+    }
+</style>
+<div class="row mt20">
+    <div class="col-md-12">
+        <!-- BEGIN TODO SIDEBAR -->
+        <div class="wrap clearfix">
+            <div class="todo-sidebar left-side left-side-monitoring">
+                <div class="portlet light portlet-height-left">
+                    <div class="portlet-title search-title" style="margin-bottom: 0px;">
+                        <form class="search-form search-form-expanded" action="javascript:;" method="POST">
+                            <div class="input-search search hide">
+                                <input id="J_pm_jobname_tree_search" type="text" class="form-control" placeholder="请输入作业名" name="query">
+                                <span class="input-group-btn input-search-btn" id="J_pm_jobname_tree_search_btn">
+                                    <a href="javascript:;" class="btn submit">
+                                        <i class="icon-magnifier"></i>
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="input-search my_search">
+                                <input id="J_pm_jobname_my_tree_search" type="text" class="form-control" placeholder="请输入作业名" name="query">
+                                <span class="input-group-btn input-search-btn" id="J_pm_jobname_my_tree_search_btn">
+                                    <a href="javascript:;" class="btn submit">
+                                        <i class="icon-magnifier"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- <div class="portlet-body todo-project-list-content" id="left-list-show" style="height: auto;overflow: hidden;">
+                    </div> -->
+                    <div class="tabbable-line">
+                        <div class="t-c">
+                            <ul class="nav nav-tabs ">
+                                <li class="active">
+                                    <a href="#J_tps_1_4" data-toggle="tab" aria-expanded="true"> 我的</a>
+                                </li>
+                                <li class="">
+                                    <a href="#J_tps_1_5" data-toggle="tab" aria-expanded="false"> 全部 </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="J_tps_1_4">
+                                    <div class="left-tree J_tree" id="J_pm_jobname_my_tree">
+                                        <img src="/assets/plugins/jstree/dist/themes/default/throbber.gif" style="margin: 25px auto;display: block;" />
+                                    </div>
+                                </div>
+                                <div class="tab-pane " id="J_tps_1_5">
+                                    <div class="left-tree J_tree" id="J_pm_jobname_tree">
+                                        <img src="/assets/plugins/jstree/dist/themes/default/throbber.gif" style="margin: 25px auto;display: block;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="drag_bar" id="J_drag_bar8">
+            </div>
+            <div class="slide-toggle1">
+                <i class="slide-icon fa fa-angle-left"></i>
+            </div>
+            <!-- END TODO SIDEBAR -->
+            <!-- BEGIN TODO CONTENT -->
+            <div class="todo-content right-content right-content-monitoring" id="right-content-show" style="height: 700px;">
+                <!-- 显示出右边框的数据 -->
+                <div id="right-content-top">
+                    <div class="rightTopStyle" style="position: relative;">
+                        <div style="width:32%;display:inline-block;height:58px;border-right: 1px solid #eeeeee;padding-left:10px;padding-top:5px">
+                            <div style="width:20%;float:left">
+                                <div class="bg-color-success-border">--<br>--</div>
+                            </div>
+                            <div style="float:right;width:80%;padding-left: 6px;">
+                                <p id="J_pm_top_jobno" style="color:#148ddf" class="perform-fr-text">--</p>
+                                <p class="jobName" title={{jobName}}>--</p>
+                            </div>
+                        </div>
+                        <div style="width:35%;display:inline-block;height:58px;border-right: 1px solid #eeeeee;padding-left:20px;padding-top:5px">
+                            <a href="javascript:;">
+                                <div class="perform-play" id="J_start_task">
+                                    <img class="img-circles static" src="/assets/img/perform-start.png">
+                                </div>
+                            </a>
+                            <h4 class="fl" style="display: inline-block;margin-right: 40px;" data-lang="Duration">时长：--</h4>
+                        </div>
+                        <div style="width:32%;display:inline-block;height:58px;padding-left:20px;padding-top:5px">
+                            <div class="perform-time">
+                                <div data-lang="Start-Time">开始时间：--</div>
+                                <div data-lang="End-Time">结束时间：--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="position: relative; overflow: hidden;">
+                    <div id="right-content-middle-round" style="background: white;white-space: nowrap;overflow-x: hidden;overflow-y: hidden;">
+                    </div>
+                    <div class="img-absolute-block" title="上一页">
+                        <div class="img-absolute">
+                            <img src="/assets/img/left-triangle.png">
+                        </div>
+                    </div>
+                    <div class="img-absolute-block" style="right: 0">
+                        <div class="img-absolute" title="下一页">
+                            <img src="/assets/img/right-triangle.png">
+                        </div>
+                    </div>
+                </div>
+                <div id="right-content-table" style="background: white;">
+                    <div class="portlet light" style="padding: 0px 15px 0px 15px;">
+                        <div class="portlet-title seach-portlet-title" style="border-top: 1px solid #e7ecf1;">
+                            <div id="right-content-middle-tast" style="background: white; display: inline-block;"></div>
+                            <div class="actions">
+                                <a id="J_change_view" class="btn btn-circle btn-icon-only btn-default" title="切换视图">
+                                    <i class="icon-loop"></i>
+                                </a>
+                                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" title="缩放">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table-scrollable" id="J_change_view_table" style="height:360px;overflow: auto;">
+                            <table class="table table-tree" id="perform-monitoring-table-tree">
+                                <thead>
+                                    <tr>
+                                        <!-- <th style="width:10px"> 序号 </th>
+                                                    <th style="width: 230px;"> 节点 </th>
+                                                    <th style="width: 190px;"> 任务名称 </th>
+                                                    <th style="width: 95px;"> 任务类型 </th>
+                                                    <th style="width: 40px;"> 删除 </th>
+                                                    <th style="width: 40px;"> 插入 </th>
+                                                    <th style="width: 150px;"> 开始时间 </th>
+                                                    <th style="width: 90px;"> 执行时长 </th>
+                                                    <th style="width: 120px;"> 执行状态 </th>
+                                                    <th> 执行信息(点击显示全部信息) </th> -->
+                                    </tr>
+                                </thead>
+                                <tbody id="table-detail">
+                                    <tr>
+                                        <td colspan="9" style="padding-left:0" class="t-c">
+                                            <div id="J_tableList" class="table-content-process" style="overflow: auto;height: 340px;">没有相关记录，请先选择状态类型！</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="J_change_view_job" style="display: none;">
+                            <iframe src="/retl-process/monitor.html" style="width: 100%;height: 360px;"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <iframe id="J_iframe" style="width: 100%;height: 350px;"></iframe> -->
+            <!-- END TODO CONTENT -->
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>
+<!--弹出-->
+<div id="pm-add" class="modal fade">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title title-color-blue">作业执行配置信息</h4>
+            </div>
+            <div class="modal-body" style="padding-bottom: 60px;">
+                <div class="tabbable-line">
+                    <div class="t-c">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#pm-tab_1_1" data-toggle="tab" aria-expanded="true"> 作业批次 </a>
+                            </li>
+                            <li class="">
+                                <a href="#pm-tab_1_2" data-toggle="tab" aria-expanded="false"> 选择任务 </a>
+                            </li>
+                            <li class="">
+                                <a href="#pm-tab_1_3" data-toggle="tab" aria-expanded="false"> 变量设置 </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content no-border">
+                        <div class="tab-pane active" id="pm-tab_1_1">
+                            <form class="form-horizontal" id="J_form_1_1" name="" role="form" novalidate="novalidate">
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">作业流程
+                                                        </label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="task-Process" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" style="line-height: 2">是否强制执行
+                                                        </label>
+                                            <div class="col-md-8">
+                                                <div class="radio-list">
+                                                    <label class="radio-inline">
+                                                                    <input type="radio" name="isConfirm" value="1"> 是 </label>
+                                                    <label class="radio-inline">
+                                                                    <input type="radio" name="isConfirm" value="0" checked> 否 </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="pm-tab_1_2">
+                            <form class="form-horizontal" id="J_form_1_2" name="" role="form" novalidate="novalidate" style="padding: 0px 30px;">
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label>
+                                                            <input type="radio" name="optionsRadios" value="option1" checked> 从某点开始 </label>
+                                            <label>
+                                                            <input type="radio" name="optionsRadios" value="option2"> 执行部分任务 </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <select id="J_pm_tab3_select" class="form-control input-sm"></select>
+                                            <div id="J_pm_tab3_table" class="table-scrollable" style="display: none;">
+                                                <table class="table table-striped table-bordered table-hover" id="J_pm_tab3_table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                <input type="checkbox" class="group-checkable" />
+                                                            </th>
+                                                            <th> 节点名称 </th>
+                                                            <th> 任务名称 </th>
+                                                            <th> 任务类型 </th>
+                                                            <th> 变量名称 </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="J_pm_tab3_body"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="pm-tab_1_3">
+                            <form class="form-horizontal" id="J_pm_form_1_3" style="padding: 0px 30px;">
+                                <div class="form-body">
+                                    <div class="tourist-wide">
+                                        <div class="btn-group">
+                                            <a class="btn-operate" type="button" data-type="add" name="oparate">
+                                                <i class="widget-thumb-icon fa fa-plus bg-blue"></i> 新增</a>
+                                        </div>
+                                        <div class="btn-group">
+                                            <a class="btn-operate" data-type="delAll" name="oparate" type="button">
+                                                <i class="widget-thumb-icon icon-trash bg-red"></i> 删除全部</a>
+                                        </div>
+                                    </div>
+                                    <div class="table-scrollable mb20">
+                                        <table class="table table-striped table-bordered table-hover order-column">
+                                            <thead>
+                                                <tr>
+                                                    <th> 序号 </th>
+                                                    <th> 名称 </th>
+                                                    <th> 变量值 </th>
+                                                    <th> 操作 </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="J_pm_perfrom_modal_var_set">
+                                                <tr data-clone-sample hidden>
+                                                    <td>
+                                                        <span fakename="no"></span>
+                                                    </td>
+                                                    <td class="t-c">
+                                                        <select fakename="varName" class="form-control input-sm">
+                                                                        <option value="">- 请选择 -</option>
+                                                                    </select>
+                                                    </td>
+                                                    <td class="t-c">
+                                                        <input type="text" fakename="varValue" class="form-control input-sm"> </td>
+                                                    <td class="t-c">
+                                                        <a data-type="del" name="oparate" title="删除">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer" style="position: absolute; bottom: 0; right: 0;">
+                                        <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+                                        <button type="button" id="J_perform_task" class="btn green">执行</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="delete" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title title-color-blue">删除</h4>
+            </div>
+            <form action="#" class="form-horizontal" id="submit_form" method="POST" novalidate="novalidate">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_5_1">
+                                <div class="form-group">
+                                    <label class="control-label ml30">是否删除该记录？
+                                                </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn green">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pg-perform-detail-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title title-color-blue">查看日志</h4>
+            </div>
+            <div class="modal-body">
+                <div id="pg-perform-detail-modal-msg" class="col-md-100 query1" style="max-height: 400px;overflow-y: auto;padding: 4px;word-break: break-all;padding-bottom: 17px;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/lang.js"></script>
+<script>
+	$('#J_pm_jobname_tree_search,#J_pm_jobname_my_tree_search').attr('placeholder',$.i18n.map['placeholder-Job-Name'])
+</script>

@@ -4,11 +4,15 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-12-03 16:24:56
+ * @LastEditTime: 2019-12-05 11:20:20
  * @LastEditors: iron
  */
 
-import { components } from '@/utils/common';
+import {
+  // components,
+  menuIcons,
+  iframe,
+} from '@/utils/common';
 
 const geneMenuData = data => {
   if (!data || !data.length || !data[0] || !data[0].menu) return [];
@@ -20,13 +24,12 @@ const geneMenuData = data => {
     menuid: item.menuid,
     menuname: item.menuname,
     path: item.page || '',
-    icon: item.icon,
-    // icon: null,
+    icon: menuIcons[item.menuname],
     name: item.parentmenuid === '-1' ? item.menuname.toUpperCase() : item.menuname,
     hideInMenu: item.menutype === '1',
     target: item.linecss,
-    component: components[item.page],
-    // iframeUrl: getIframe(item.page),
+    // component: components[item.page],
+    iframeUrl: getIframe(iframe[item.page]),
   }));
 
   // 将数据存储为 以 id 为 KEY 的 map 索引数据列
@@ -48,6 +51,14 @@ const geneMenuData = data => {
   });
   return val;
 };
+
+export function getIframe(page) {
+  if (page && page.includes('#')) {
+    const url = `/ETL/${page}`;
+    return url;
+  }
+  return '';
+}
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -193,7 +204,7 @@ export function formatTimeString(time) {
   t = len > 14 ? t.slice(0, 14) : t;
   t = len < 14 ? `${t}${Array(14 - len + 1).join('0')}` : t;
 
-  return t.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/g, '$1-$2-$3 $4:$5:$6');
+  return t.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/g, '$1/$2/$3 $4:$5:$6');
 }
 
 export function msFormat(ms) {

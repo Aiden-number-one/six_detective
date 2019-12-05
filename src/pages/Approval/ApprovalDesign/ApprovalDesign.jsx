@@ -1,56 +1,35 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-plusplus */
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Input, Button, Tabs, Modal, Upload, message } from 'antd';
+import { Form, Input, Button, Modal, Upload, message, Drawer, Icon } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 // import classNames from 'classnames';
 import styles from './ApprovalDesign.less';
 
-const { TabPane } = Tabs;
 const { TextArea } = Input;
 
-// eslint-disable-next-line react/require-render-return
-// class ApprovalFrom extends Component {
-//   render() {
-//     const { getFieldDecorator } = this.props.form;
-//     const formItemLayout = {
-//       labelCol: {
-//         xs: { span: 24 },
-//         sm: { span: 8 },
-//       },
-//       wrapperCol: {
-//         xs: { span: 24 },
-//         sm: { span: 16 },
-//       },
-//     };
-//     const formTailLayout = {
-//       labelCol: { span: 8 },
-//       wrapperCol: { span: 12, offset: 12 },
-//     };
-//     // eslint-disable-next-line no-unused-expressions
-//     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-//       <Form.Item label="名称">
-//         {getFieldDecorator('name', {
-//           rules: [{ required: true, message: 'Please input your name!' }],
-//         })(<Input placeholder="至少2个字符,最多16个字符" />)}
-//       </Form.Item>
-//       <Form.Item label="描述:">
-//         {getFieldDecorator('description', {
-//           rules: [{ required: true, message: 'Please input your description!' }],
-//         })(<TextArea rows={4} />)}
-//       </Form.Item>
-
-//       <Form.Item {...formTailLayout}>
-//         <Button onClick={this.handleCancel}>取消</Button>
-//         <Button type="primary" htmlType="submit">
-//           确定
-//         </Button>
-//       </Form.Item>
-//     </Form>;
-//   }
-// }
+class ModelForm extends Component {
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Form onSubmit={this.handleSubmit}>
+        <Form.Item label="name" labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
+          {getFieldDecorator('name', {
+            rules: [{ required: true, message: 'Please input your name!' }],
+          })(<Input placeholder="至少2个字符,最多16个字符" />)}
+        </Form.Item>
+        <Form.Item label="description:" labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
+          {getFieldDecorator('description', {
+            rules: [{ required: true, message: 'Please input your description!' }],
+          })(<TextArea rows={4} />)}
+        </Form.Item>
+      </Form>
+    );
+  }
+}
+const AddFlowChartForm = Form.create({})(ModelForm);
 
 @connect(({ approvalDesign }) => ({
   modelList: approvalDesign.data,
@@ -61,7 +40,10 @@ class ApprovalDesign extends PureComponent {
   state = {
     // dataSource: [],
     visible: false,
+    deleteVisible: false,
   };
+
+  newFlowChartForm = React.createRef();
 
   componentDidMount() {
     // this.createData();
@@ -141,11 +123,28 @@ class ApprovalDesign extends PureComponent {
     });
   };
 
-  // 绑定的点击事件,删除模型
-  delete = () => {
+  // 绑定的点击事件,删除模型对话框
+  deleteOpenModel = () => {
+    this.setState({
+      deleteVisible: true,
+    });
+  };
+
+  // 弹出的对话框确定删除
+  handleDeleteOk = () => {
     const { chooseModelId } = this.props;
     const param = { modelId: chooseModelId };
     this.deleteModel(param);
+    this.setState({
+      deleteVisible: false,
+    });
+  };
+
+  // 弹出的对话框取消删除
+  handleCloseModelCancel = () => {
+    this.setState({
+      deleteVisible: false,
+    });
   };
 
   // 上传文件
@@ -158,17 +157,6 @@ class ApprovalDesign extends PureComponent {
       message.error(`${info.file.name} file upload failed.`);
     }
   };
-
-  // // 下载文件
-  // downloadFile = filePath => {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'approvalDesign/downloadFile',
-  //     payload: {
-  //       filePath,
-  //     },
-  //   });
-  // };
 
   // 导出模型
   exportModel = () => {
@@ -202,7 +190,9 @@ class ApprovalDesign extends PureComponent {
 
   // 选择tab的选项,获取选中的模型id
   chooseTab = chooseModelId => {
-    console.log('chooseModelId---->', chooseModelId);
+    if (chooseModelId === this.props.chooseModelId) {
+      return;
+    }
     const { dispatch } = this.props;
     dispatch({
       type: 'approvalDesign/changeModelId',
@@ -211,9 +201,8 @@ class ApprovalDesign extends PureComponent {
     this.getModelImage(chooseModelId);
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+  AddNewFlowChart = () => {
+    this.newFlowChartForm.current.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
         this.createModel(values);
@@ -224,7 +213,7 @@ class ApprovalDesign extends PureComponent {
     });
   };
 
-  showModal = () => {
+  showDrawer = () => {
     this.setState({
       visible: true,
     });
@@ -237,97 +226,116 @@ class ApprovalDesign extends PureComponent {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { modelList, modelImage } = this.props;
-    // console.log('modelList--------->', modelList);
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    const formTailLayout = {
-      labelCol: { span: 8 },
-      wrapperCol: { span: 12, offset: 12 },
-    };
+    const { modelList, chooseModelId, modelImage } = this.props;
+    const { deleteVisible } = this.state;
     return (
       <Fragment>
         <PageHeaderWrapper>
           <div className={styles.approvalDesign}>
             <div className={styles.contentBox}>
-              <div className={styles.buttonBox}>
-                <Button onClick={this.deployModel} type="primary" icon="deployment-unit">
-                  {formatMessage({ id: 'systemManagement.flowDesign.flowRelease' })}
-                </Button>
-                <Button onClick={this.goProcessPage} type="primary" icon="edit">
-                  {formatMessage({ id: 'systemManagement.flowDesign.flowModify' })}
-                </Button>
-                <Button type="primary" icon="delete" onClick={this.delete}>
-                  {formatMessage({ id: 'systemManagement.flowDesign.flowDelete' })}
-                </Button>
-                <Button onClick={this.exportModel} type="primary" icon="export">
-                  {formatMessage({ id: 'systemManagement.flowDesign.flowExport' })}
-                </Button>
-                <Upload onChange={info => this.importFileStatus(info)} action="/upload">
-                  <Button type="primary" icon="import">
-                    {formatMessage({ id: 'systemManagement.flowDesign.flowImport' })}
-                  </Button>
-                </Upload>
-              </div>
-              <div className={styles.tabsBox}>
-                <div className={styles.modelTitleBox}>
-                  <span style={{ color: '#ff4638', fontSize: '18px', fontWeight: 'bold' }}>
-                    模型列表
-                  </span>
-                  <Button
-                    type="primary"
-                    icon="file-add"
-                    onClick={this.showModal}
-                    style={{ marginRight: '0', float: 'right' }}
-                  >
-                    {formatMessage({ id: 'systemManagement.flowDesign.newFlowChart' })}
-                  </Button>
+              <div className={styles.leftBox}>
+                <Icon
+                  type="file-add"
+                  onClick={this.showDrawer}
+                  style={{ marginRight: '15px', marginTop: '8px', float: 'right' }}
+                />
+                <div className="">
+                  <h2>模型列表</h2>
+                  <ul>
+                    {modelList.map(item => (
+                      <li
+                        key={item.id}
+                        icon="copy"
+                        onClick={() => {
+                          this.chooseTab(item.id);
+                        }}
+                        className={chooseModelId === item.id ? styles.liActive : null}
+                      >
+                        <Icon type="copy" style={{ color: '#FFB81C', marginRight: '4px' }} />
+                        {item.name}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <Tabs
-                  onChange={this.chooseTab}
-                  tabPosition="left"
-                  style={{ height: 600, marginTop: '20px' }}
-                  tabBarStyle={{ width: 200 }}
-                  type="card editable-card"
-                >
-                  {modelList.map(item => (
-                    <TabPane tab={item.name} key={item.id}>
-                      {item.name}
-                    </TabPane>
-                  ))}
-                  <div>{modelImage ? <img src={modelImage} alt="" /> : null}</div>
-                </Tabs>
+              </div>
+              <div className={styles.rightBox}>
+                <div>
+                  <Button
+                    className="btn_usual"
+                    onClick={this.deployModel}
+                    type="primary"
+                    icon="deployment-unit"
+                  >
+                    {formatMessage({ id: 'systemManagement.flowDesign.flowRelease' })}
+                  </Button>
+                  <Button
+                    className="btn_usual"
+                    onClick={this.goProcessPage}
+                    type="primary"
+                    icon="edit"
+                  >
+                    {formatMessage({ id: 'systemManagement.flowDesign.flowModify' })}
+                  </Button>
+                  <Button
+                    className="btn_usual"
+                    type="primary"
+                    icon="delete"
+                    onClick={this.deleteOpenModel}
+                  >
+                    {formatMessage({ id: 'systemManagement.flowDesign.flowDelete' })}
+                  </Button>
+                  <Button
+                    className="btn_usual"
+                    onClick={this.exportModel}
+                    type="primary"
+                    icon="export"
+                  >
+                    {formatMessage({ id: 'systemManagement.flowDesign.flowExport' })}
+                  </Button>
+                  <Upload onChange={info => this.importFileStatus(info)} action="/upload">
+                    <Button className="btn_usual" type="primary" icon="import">
+                      {formatMessage({ id: 'systemManagement.flowDesign.flowImport' })}
+                    </Button>
+                  </Upload>
+                </div>
+                <div>{modelImage ? <img src={modelImage} alt="" /> : null}</div>
               </div>
             </div>
-            <Modal title="新模型" visible={this.state.visible} footer={false} closable={false}>
-              <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                <Form.Item label="名称">
-                  {getFieldDecorator('name', {
-                    rules: [{ required: true, message: 'Please input your name!' }],
-                  })(<Input placeholder="至少2个字符,最多16个字符" />)}
-                </Form.Item>
-                <Form.Item label="描述:">
-                  {getFieldDecorator('description', {
-                    rules: [{ required: true, message: 'Please input your description!' }],
-                  })(<TextArea rows={4} />)}
-                </Form.Item>
-
-                <Form.Item {...formTailLayout}>
-                  <Button onClick={this.handleCancel}>取消</Button>
-                  <Button type="primary" htmlType="submit">
-                    确定
-                  </Button>
-                </Form.Item>
-              </Form>
+            <Drawer
+              title="New Flow Chart"
+              width={500}
+              onClose={this.handleCancel}
+              visible={this.state.visible}
+              bodyStyle={{ paddingBottom: 80 }}
+            >
+              <AddFlowChartForm ref={this.newFlowChartForm} />
+              <div
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  bottom: 0,
+                  width: '100%',
+                  borderTop: '1px solid #e9e9e9',
+                  padding: '10px 16px',
+                  background: '#fff',
+                  textAlign: 'right',
+                }}
+              >
+                <Button onClick={this.handleCancel} style={{ marginRight: 8 }}>
+                  Cancel
+                </Button>
+                <Button onClick={this.AddNewFlowChart} type="primary">
+                  Save
+                </Button>
+              </div>
+            </Drawer>
+            <Modal
+              title="delete"
+              visible={deleteVisible}
+              onOk={this.handleDeleteOk}
+              onCancel={this.handleCloseModelCancel}
+            >
+              <p>Are you sure delete this model?</p>
             </Modal>
           </div>
         </PageHeaderWrapper>
@@ -336,4 +344,4 @@ class ApprovalDesign extends PureComponent {
   }
 }
 
-export default Form.create()(ApprovalDesign);
+export default ApprovalDesign;

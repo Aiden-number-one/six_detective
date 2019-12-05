@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
 import { formatMessage } from 'umi/locale';
+import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
 
 class FormUser extends Component {
@@ -113,6 +114,11 @@ class FormUser extends Component {
 
 const NewFormUser = Form.create()(FormUser);
 
+@connect(({ newUser, loading }) => ({
+  loading: loading.effects,
+  newUserData: newUser.saveUser,
+  menuUserGroup: newUser.data,
+}))
 export default class NewUser extends Component {
   newUserRef = React.createRef();
 
@@ -120,6 +126,19 @@ export default class NewUser extends Component {
     super(props);
     this.state = {};
   }
+
+  componentDidMount() {
+    this.queryLog();
+  }
+
+  queryLog = () => {
+    const { dispatch } = this.props;
+    const params = {};
+    dispatch({
+      type: 'newUser/getMenuUserGroup',
+      payload: params,
+    });
+  };
 
   onCancel = () => {
     this.props.history.push({
@@ -130,10 +149,25 @@ export default class NewUser extends Component {
   onSave = () => {
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
-      message.success('save success');
-      this.props.history.push({
-        pathname: '/system-management/user-maintenance',
-        params: values,
+      const { dispatch } = this.props;
+      const params = {
+        userName: values.userName,
+        userPwd: values.userPwd,
+        roleId: values.roleId,
+        userId: values.userId,
+        alertId: values.alertId,
+        accountLock: values.accountLock,
+      };
+      dispatch({
+        type: 'newUser/newUser',
+        payload: params,
+        callback: () => {
+          message.success('save success');
+          this.props.history.push({
+            pathname: '/system-management/user-maintenance',
+            params: values,
+          });
+        },
       });
     });
   };
@@ -142,6 +176,7 @@ export default class NewUser extends Component {
     return (
       <PageHeaderWrapper>
         <Fragment>
+          <NewFormUser ref={this.newUserRef} />
           <Row type="flex" justify="end">
             <Col>
               <Button onClick={this.onCancel}>CANCEL</Button>
@@ -150,7 +185,6 @@ export default class NewUser extends Component {
               </Button>
             </Col>
           </Row>
-          <NewFormUser ref={this.newUserRef} />
         </Fragment>
       </PageHeaderWrapper>
     );

@@ -338,7 +338,9 @@ var SaveModelCtrl = [
       };
       modelMetaData.name = $scope.saveDialog.name;
       modelMetaData.description = $scope.saveDialog.description;
-      modelMetaData.model.properties.name = $scope.saveDialog.name;
+      if(modelMetaData.model.properties){
+        modelMetaData.model.properties.name = $scope.saveDialog.name;
+      }
       var json = $scope.editor.getJSON();
       json = judgeJson(json);
       json.properties.name = $scope.saveDialog.name;
@@ -374,7 +376,6 @@ var SaveModelCtrl = [
       const modelId = EDITOR.UTIL.getParameterByName('modelId');
       const V = 'v2.0'; // 版本号
       const N = 'bayconnect.superlop.set_workflow_model_save'; // 接口名
-    //   console.log(window.btoa(basejson));
       const P = {
         jsonXml: basejson,
         svgXml: basesvgDOM,

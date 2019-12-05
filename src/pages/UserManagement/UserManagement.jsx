@@ -3,19 +3,20 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-02 14:55:03
+ * @LastEditTime: 2019-12-05 10:30:08
  */
 
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Modal, Table, Button } from 'antd';
+import { Form, Modal, Table, Button, Drawer } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
+import { timeFormat } from '@/utils/filter';
 
 import SearchForm from './components/SearchForm';
+import NewUser from './components/NewUser';
 import AddForm from './components/AddForm';
 import ModifyForm from './components/ModifyForm';
 import PasswordForm from './components/PasswordForm';
@@ -35,6 +36,8 @@ const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
 class UserManagement extends Component {
   state = {
     visible: false,
+    userTitle: 'New User',
+    NewFlag: false,
     updateVisible: false,
     deleteVisible: false,
     closingVisible: false,
@@ -42,11 +45,8 @@ class UserManagement extends Component {
     resetPasswordVisible: false,
     customerno: null,
     userInfo: {
-      login: '',
-      name: '',
-      departmentName: '',
-      departmentId: '',
-      email: '',
+      userId: '',
+      userName: '',
     },
     columns: [
       {
@@ -61,18 +61,32 @@ class UserManagement extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
-        dataIndex: 'userState',
-        key: 'userState',
+        dataIndex: 'accountLock',
+        key: 'accountLock',
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
         dataIndex: 'updateTime',
         key: 'updateTime',
+        render: (res, obj) => (
+          <div>
+            <span>{timeFormat(obj.updateTime).t1}</span>
+            <br />
+            <span>{timeFormat(obj.updateTime).t2}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
         dataIndex: 'updateTime',
         key: 'updateTime',
+        render: (res, obj) => (
+          <div>
+            <span>{timeFormat(obj.updateTime).t1}</span>
+            <br />
+            <span>{timeFormat(obj.updateTime).t2}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -120,19 +134,15 @@ class UserManagement extends Component {
    */
   queryUserList = (
     param = {
-      searchParam: undefined,
-      displaypath: undefined,
-      email: undefined,
-      custStatus: undefined,
+      userId: undefined,
+      userName: undefined,
     },
   ) => {
     const { dispatch } = this.props;
-    const { searchParam, displaypath, email, custStatus } = param;
+    const { userId, userName } = param;
     const params = {
-      searchParam,
-      displaypath,
-      email,
-      custStatus,
+      userId,
+      userName,
       pageNumber: this.state.page.pageNumber,
       pageSize: this.state.page.pageSize,
     };
@@ -172,11 +182,17 @@ class UserManagement extends Component {
    * @return: undefined
    */
   newUser = () => {
-    this.props.dispatch(
-      routerRedux.push({
-        pathname: '/system-management/user-maintenance/new-user',
-      }),
-    );
+    this.setState({
+      visible: true,
+      userTitle: 'New User',
+      NewFlag: true,
+      userInfo: {},
+    });
+    // this.props.dispatch(
+    //   routerRedux.push({
+    //     pathname: '/system-management/user-maintenance/new-user',
+    //   }),
+    // );
   };
 
   addConfrim = () => {
@@ -218,27 +234,26 @@ class UserManagement extends Component {
     console.log('res=======', res);
     console.log('obj============', obj);
     const userInfo = {
-      login: '',
-      name: '',
-      departmentName: '',
-      departmentId: '',
-      email: '',
+      userName: obj.userName,
+      userId: obj.userId,
+      accountLock: obj.accountLock,
     };
-    userInfo.login = obj.loginName;
-    userInfo.name = obj.customerName;
-    userInfo.departmentName = obj.departmentName;
-    userInfo.departmentId = obj.departmentId;
-    userInfo.email = obj.email;
-    this.props.dispatch(
-      routerRedux.push({
-        pathname: '/system-management/user-maintenance/modify-user',
-        query: {
-          userId: obj.userId,
-          userName: obj.userName,
-          userState: obj.userState,
-        },
-      }),
-    );
+    this.setState({
+      visible: true,
+      userTitle: 'Modify User',
+      NewFlag: false,
+      userInfo,
+    });
+    // this.props.dispatch(
+    //   routerRedux.push({
+    //     pathname: '/system-management/user-maintenance/modify-user',
+    //     query: {
+    //       userId: obj.userId,
+    //       userName: obj.userName,
+    //       userState: obj.userState,
+    //     },
+    //   }),
+    // );
     // this.setState({
     //   updateVisible: true,
     //   userInfo,
@@ -430,11 +445,10 @@ class UserManagement extends Component {
    */
   queryLog = () => {
     this.searchForm.current.validateFields((err, values) => {
+      console.log('values===', values);
       const params = {
-        searchParam: values.searchParam,
-        displaypath: values.displaypath,
-        email: values.email,
-        custStatus: values.custStatus,
+        userId: values.userId,
+        userName: values.userName,
       };
       this.queryUserList(params);
     });
@@ -463,7 +477,7 @@ class UserManagement extends Component {
 
   render() {
     const { loading, orgs, userManagementData } = this.props;
-    const { userInfo, page } = this.state;
+    const { userInfo, page, userTitle, NewFlag } = this.state;
     console.log('userManagementData.items=', userManagementData.items);
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
@@ -483,7 +497,7 @@ class UserManagement extends Component {
           <div>
             <Modal
               title="新增用户"
-              visible={this.state.visible}
+              visible={false}
               onOk={this.addConfrim}
               onCancel={this.addCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
@@ -495,6 +509,20 @@ class UserManagement extends Component {
                 getDepartmentId={this.getDepartmentId}
               ></NewUserForm>
             </Modal>
+            <Drawer
+              closable={false}
+              title={userTitle}
+              width={700}
+              onClose={this.addCancel}
+              visible={this.state.visible}
+            >
+              <NewUser
+                onCancel={this.addCancel}
+                onSave={this.addConfrim}
+                NewFlag={NewFlag}
+                userInfo={userInfo}
+              ></NewUser>
+            </Drawer>
             {/* 修改用户 */}
             <Modal
               title="修改用户"
@@ -557,7 +585,11 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div className={styles.content}>
-            <Button onClick={this.newUser}>+ New User</Button>
+            <div className={styles.tableTop}>
+              <Button onClick={this.newUser} type="primary" className="btn_usual">
+                + New User
+              </Button>
+            </div>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}

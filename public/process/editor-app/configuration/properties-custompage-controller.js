@@ -1,3 +1,4 @@
+/* eslint-disable*/
 var KisBpmPagePropertyCtrl = ['$scope', '$modal', function($scope, $modal) {
     // Config for the modal window
     var opts = {
@@ -33,22 +34,34 @@ var KisBpmPageCtrlPopupCtrl = ['$scope', '$modal', function($scope, $modal) {
     $scope.sites = [];
     var getPageList = function() {
         //查询自定义页面列表
-        var url = '/admin_api';
-        var data = KISBPM.URL.getParams('kingdom.kbpm.get_kifp_user_defined_page', 'v1.0', {
+        const V = 'v2.0'; // 版本号
+        const N = 'bayconnect.superlop.get_user_defined_page'; // 接口名
+        const P = {
             pageNumber: pageNumber,
             pageSize: "6"
-        });
+        }; // 参数
+        const S = new Date().getTime(); // 时间戳
+        var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S },false);
+      //   debugger;
+      const params = dataAndHeader.param;
+      const header = dataAndHeader.header;
+        // var url = '/admin_api';
+        // var data = KISBPM.URL.getParams('kingdom.kbpm.get_kifp_user_defined_page', 'v1.0', {
+        //     pageNumber: pageNumber,
+        //     pageSize: "6"
+        // });
         jQuery.ajax({
             type: "post",
-            url: url,
+            url: '/api/' + V + '/' + N + '.json',
             dataType: 'json',
-            data: data,
+            data: params,
+            headers:header,
             async: false
         }).done(function(data) {
-            if (data.kdjson.items) {
-                $scope.sites = data.kdjson.items
+            if (data.bcjson.items) {
+                $scope.sites = data.bcjson.items
             }
-            var totalRecords = data.kdjson.lengths;
+            var totalRecords = data.bcjson.lengths;
             var totalPage = Math.ceil(parseInt(totalRecords) / parseInt('6'));
             if (pageNumber == '1') {
                 $scope.previous = false;
@@ -166,22 +179,34 @@ var KisBpmeventauditPropertyCtrl = ['$scope', '$modal', function($scope, $modal)
     $scope.sites = [];
     var getEventList = function() {
         //查询自定审核列表
-        var url = '/admin_api';
-        var data = KISBPM.URL.getParams('kingdom.kbpm.get_sel_spm_flow_event', 'v1.0', {
+        const V = 'v2.0'; // 版本号
+        const N = 'bayconnect.superlop.get_flow_event_page'; // 接口名
+        const P = {
             pageNumber: pageNumber,
             pageSize: "6"
-        });
+        }; // 参数
+        const S = new Date().getTime(); // 时间戳
+        var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S },false);
+      //   debugger;
+      const params = dataAndHeader.param;
+      const header = dataAndHeader.header;
+        // var url = '/admin_api';
+        // var data = KISBPM.URL.getParams('kingdom.kbpm.get_sel_spm_flow_event', 'v1.0', {
+        //     pageNumber: pageNumber,
+        //     pageSize: "6"
+        // });
         jQuery.ajax({
             type: "post",
-            url: url,
+            url: '/api/' + V + '/' + N + '.json',
             dataType: 'json',
-            data: data,
+            data: params,
+            headers:header,
             async: false
         }).done(function(data) {
-            if (data.kdjson.items) {
-                $scope.sites = data.kdjson.items
+            if (data.bcjson.items) {
+                $scope.sites = data.bcjson.items
             }
-            var totalRecords = data.kdjson.lengths;
+            var totalRecords = data.bcjson.lengths;
             var totalPage = Math.ceil(parseInt(totalRecords) / parseInt('6'));
             if (pageNumber == '1') {
                 $scope.previous = false;

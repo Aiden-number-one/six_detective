@@ -211,9 +211,26 @@ export default [
             component: './UserManagement/UserManagement',
           },
           {
+            path: '/system-management/menu-user-group',
+            name: 'menuUserGroup',
+            component: './MenuUserGroup/MenuUserGroup',
+          },
+          {
             path: '/system-management/user-maintenance/new-user',
             name: 'newUser',
             component: './NewUser/NewUser',
+            hideInMenu: true,
+          },
+          {
+            path: '/system-management/user-maintenance/new-menu-user',
+            name: 'newMenuUserGroup',
+            component: './NewMenuUserGroup/NewMenuUserGroup',
+            hideInMenu: true,
+          },
+          {
+            path: '/system-management/user-maintenance/modify-menu-user',
+            name: 'modifyMenuUserGroup',
+            component: './ModifyMenuUserGroup/ModifyMenuUserGroup',
             hideInMenu: true,
           },
           {
@@ -231,6 +248,11 @@ export default [
             path: '/system-management/workflow-design',
             name: 'workflowDesign',
             component: './Approval/ApprovalDesign/ApprovalDesign',
+          },
+          {
+            path: '/system-management/workflow-auditor',
+            name: 'ApprovalAuditor',
+            component: './Approval/ApprovalAuditor/ApprovalAuditor',
           },
           {
             path: '/system-management/workflow-config',
