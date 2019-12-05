@@ -295,7 +295,7 @@ export default class NewUser extends Component {
     const { menuUserGroup, NewFlag, userInfo, modifyUserData } = this.props;
     console.log('modifyUserData1=', modifyUserData);
     // this.setRoleIds(modifyUserData)
-    const { alertUserGroups, locedChecked, roleIds } = this.state;
+    const { alertUserGroups, locedChecked, roleIds, alertIds } = this.state;
     // console.log('menuUserGroup=', menuUserGroup);
     // console.log('userInfo1=', userInfo);
     console.log('roleIds=', roleIds);
@@ -325,12 +325,13 @@ export default class NewUser extends Component {
         <ul className={styles.userGroup}>
           <li>
             <h3 className={styles.groupTitle}>
-              {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
+              {formatMessage({ id: 'systemManagement.userMaintenance.alertUserGroup' })}
             </h3>
             <Checkbox.Group
               options={alertUserGroups}
               defaultValue={['Future Maker', 'Future Checker']}
               onChange={this.onChangeAlertUserGroup}
+              value={alertIds}
             ></Checkbox.Group>
           </li>
         </ul>
