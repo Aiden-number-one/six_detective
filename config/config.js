@@ -1,19 +1,20 @@
 /*
- * @Description: lan
+ * @Description: app global config
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-11-27 17:30:28
- * @LastEditors: lan
+ * @LastEditTime: 2019-12-05 13:28:43
+ * @LastEditors: iron
  * @Description: umi 配置文件
  */
-import defaultSettings from './defaultSettings'; // https://umijs.org/config/
-
+// eslint-disable-next-line import/no-extraneous-dependencies
 import slash from 'slash2';
+import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 import router from './router.config';
 import webpackPlugin from './plugin.config';
-const { pwa, primaryColor } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
-// preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 
+const { pwa, primaryColor } = defaultSettings;
+// preview.pro.ant.design only do not use in your production ;
+// preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
 const isAntDesignProPreview = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site';
 const plugins = [
@@ -131,10 +132,10 @@ export default {
     basePath: '/',
   },
   chainWebpack: webpackPlugin,
-  externals: {
-    react: 'window.React',
-    'react-dom': 'window.ReactDOM',
-  },
+  // externals: {
+  //   react: 'window.React',
+  //   'react-dom': 'window.ReactDOM',
+  // },
   proxy: {
     '/api': {
       // target: 'http://10.60.62.60:7567/superlop/restv2/admin/', // 季旋
