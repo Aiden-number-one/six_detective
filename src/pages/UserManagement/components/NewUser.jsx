@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
+import { Row, Col, Button, Form, Input, Checkbox, Radio, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
@@ -12,14 +12,6 @@ class FormUser extends Component {
       //   menuUserGroups: ['Administrator', 'Operator', 'Supervisor', 'Enquriy'],
     };
   }
-
-  onChangeMenuUserGroup = checkedValues => {
-    console.log('checkedValues=', checkedValues);
-  };
-
-  onChangeAlertUserGroup = checkedValues => {
-    console.log('checkedValues=', checkedValues);
-  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -43,7 +35,7 @@ class FormUser extends Component {
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 6 }}
           >
-            {getFieldDecorator('name', {
+            {getFieldDecorator('userName', {
               rules: [
                 {
                   required: true,
@@ -57,7 +49,7 @@ class FormUser extends Component {
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 6 }}
           >
-            {getFieldDecorator('password', {
+            {getFieldDecorator('userPwd', {
               rules: [
                 {
                   required: true,
@@ -125,6 +117,9 @@ export default class NewUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      accountLock: 'N',
+      roleIds: '',
+      alertIds: '',
       alertUserGroups: [
         { label: 'Future Maker', value: '1' },
         { label: 'Future Checker', value: '2' },
@@ -154,17 +149,44 @@ export default class NewUser extends Component {
     this.props.onCancel();
   };
 
+  onChangeLocked = e => {
+    if (e.target.checked) {
+      this.setState({
+        accountLock: 'Y',
+      });
+    } else {
+      this.setState({
+        accountLock: 'N',
+      });
+    }
+  };
+
+  onChangeMenuUserGroup = e => {
+    console.log('e.target.value=', e.target.value);
+    this.setState({
+      roleIds: e.target.value,
+    });
+  };
+
+  onChangeAlertUserGroup = e => {
+    console.log('e.target.value=', e.target.value);
+    this.setState({
+      alertIds: e.target.value,
+    });
+  };
+
   onSave = () => {
+    const { accountLock, roleIds, alertIds } = this.state;
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
       const { dispatch } = this.props;
       const params = {
         userName: values.userName,
         userPwd: values.userPwd,
-        roleId: values.roleId,
+        roleIds,
         userId: values.userId,
-        alertId: values.alertId,
-        accountLock: values.accountLock,
+        alertIds,
+        accountLock,
       };
       dispatch({
         type: 'userManagement/newUser',
@@ -190,7 +212,7 @@ export default class NewUser extends Component {
         <NewFormUser ref={this.newUserRef} />
         <Row>
           <Col offset={4}>
-            <Checkbox>User Account Locked</Checkbox>
+            <Checkbox onChange={this.onChangeLocked}>User Account Locked</Checkbox>
           </Col>
         </Row>
         <ul className={styles.userGroup}>
@@ -198,11 +220,11 @@ export default class NewUser extends Component {
             <h3 className={styles.groupTitle}>
               {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
             </h3>
-            <Checkbox.Group
+            <Radio.Group
               options={menuUserGroup}
               defaultValue={['Operator']}
               onChange={this.onChangeMenuUserGroup}
-            ></Checkbox.Group>
+            ></Radio.Group>
           </li>
         </ul>
         <ul className={styles.userGroup}>
@@ -210,11 +232,11 @@ export default class NewUser extends Component {
             <h3 className={styles.groupTitle}>
               {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
             </h3>
-            <Checkbox.Group
+            <Radio.Group
               options={alertUserGroups}
               defaultValue={['Future Maker', 'Future Checker']}
               onChange={this.onChangeAlertUserGroup}
-            ></Checkbox.Group>
+            ></Radio.Group>
           </li>
         </ul>
         <Row

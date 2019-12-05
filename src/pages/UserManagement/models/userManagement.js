@@ -40,7 +40,7 @@ export const userManagement = {
       const response = yield call(getMenuUserGroup, { param: payload });
       const userMenu = response.bcjson.items.map(element => ({
         label: element.roleName,
-        value: element.roleName,
+        value: element.roleId,
       }));
 
       if (response.bcjson.flag === '1') {
