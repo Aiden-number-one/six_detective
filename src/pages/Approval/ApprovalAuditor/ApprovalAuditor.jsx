@@ -5,12 +5,15 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Drawer, Checkbox } from 'antd';
 import { connect } from 'dva';
 // import { formatMessage } from 'umi/locale';
+import List from '@/components/List';
 // import classNames from 'classnames';
 import styles from './ApprovalAuditor.less';
 
 @connect(({ ApprovalAuditor }) => ({
   deployedModelDatas: ApprovalAuditor.deployedModelDatas,
   processDefinitionId: ApprovalAuditor.processDefinitionId,
+  groupList: ApprovalAuditor.GroupList,
+  checkboxData: ApprovalAuditor.checkboxData,
 }))
 class ApprovalAuditor extends PureComponent {
   state = {
@@ -20,6 +23,7 @@ class ApprovalAuditor extends PureComponent {
 
   componentDidMount() {
     this.deployedModelList({ pageNumber: '1', pageSize: '10' });
+    this.getQueryMenu();
     window.showAudit = (processDefinitionIds, taskIds) => {
       this.showDrawer(taskIds);
     };
@@ -44,11 +48,20 @@ class ApprovalAuditor extends PureComponent {
     // }
   };
 
+  // 获取角色
+  getQueryMenu = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'ApprovalAuditor/getQueryMenuDatas',
+      payload: {},
+    });
+  };
+
   // 查询审核人列表
   getAuditorData = async (configId, stepId) => {
     const { dispatch } = this.props;
     await dispatch({
-      type: 'approvalSet/getAuditorlistDatas',
+      type: 'ApprovalAuditor/getAuditorlistDatas',
       payload: {
         configId,
         stepId,
@@ -106,8 +119,9 @@ class ApprovalAuditor extends PureComponent {
   };
 
   render() {
-    const plainOptions = ['Apple', 'Pear', 'Orange'];
-    const { deployedModelDatas, processDefinitionId } = this.props;
+    // const plainOptions = ['Apple', 'Pear', 'Orange'];
+    const { deployedModelDatas, processDefinitionId, checkboxData } = this.props;
+    console.log('checkboxData---', checkboxData);
     const diagramUrl = `/process/diagram-viewer/index.html?isClick=1&processDefinitionId=${processDefinitionId}`;
     return (
       <Fragment>
@@ -115,33 +129,16 @@ class ApprovalAuditor extends PureComponent {
           <div className={styles.approvalAuditor}>
             <div className={styles.contentBox}>
               <div className={styles.leftBox}>
-                <div className="">
-                  <h2>模型列表</h2>
-                  <ul>
-                    {deployedModelDatas.map(item => (
-                      <li
-                        key={item.processDefinitionId}
-                        onClick={() => {
-                          this.chooseTab(item.processDefinitionId);
-                        }}
-                        className={
-                          processDefinitionId === item.processDefinitionId ? styles.liActive : null
-                        }
-                      >
-                        {item.name}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <List
+                  listData={deployedModelDatas}
+                  chooseId={processDefinitionId}
+                  currentId="processDefinitionId"
+                  chooseTab={this.chooseTab}
+                  title="已部署模型列表"
+                />
               </div>
               <div className={styles.rightBox}>
-                <iframe
-                  title="diagram"
-                  width="100%"
-                  height="300px"
-                  border="unset"
-                  src={diagramUrl}
-                ></iframe>
+                <iframe title="diagram" width="100%" height="300px" src={diagramUrl}></iframe>
               </div>
               <Drawer
                 title="Auditor"
@@ -150,7 +147,7 @@ class ApprovalAuditor extends PureComponent {
                 visible={this.state.visible}
                 bodyStyle={{ paddingBottom: 80 }}
               >
-                <Checkbox.Group options={plainOptions} onChange={this.selectAuditor} />
+                <Checkbox.Group options={checkboxData} onChange={this.selectAuditor} />
                 <div
                   style={{
                     position: 'absolute',
