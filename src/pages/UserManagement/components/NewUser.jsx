@@ -4,6 +4,7 @@ import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
 import styles from '../UserManagement.less';
+import { passWordStrength } from '@/utils/utils';
 
 class FormUser extends Component {
   constructor() {
@@ -179,10 +180,12 @@ export default class NewUser extends Component {
     const { accountLock, roleIds, alertIds } = this.state;
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
+      const passwordStrength = passWordStrength(values.userPwd);
+      console.log('passwordStrength=', passwordStrength);
       const { dispatch } = this.props;
       const params = {
         userName: values.userName,
-        userPwd: values.userPwd,
+        userPwd: window.kddes.getDes(values.userPwd),
         roleIds,
         userId: values.userId,
         alertIds,
