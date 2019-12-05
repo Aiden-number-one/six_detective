@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { Button, Row } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormattedMessage } from 'umi/locale';
-import PageNav from '@/pages/AlertCenter/PageNav';
 import LopLogFilterForm from './LopLogFilterForm';
 import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
@@ -28,8 +28,7 @@ export function LopLog({ dispatch, logs, loading }) {
     dispatch({ type: 'lop/importByAuto' });
   }
   return (
-    <>
-      <PageNav routes={{ name: 'import lop data', link: '/data-import/lop' }} />
+    <PageHeaderWrapper>
       <div className={styles.container}>
         <LopLogFilterForm handleSearch={handleSearch} />
         <LopLogManualModal
@@ -47,7 +46,7 @@ export function LopLog({ dispatch, logs, loading }) {
         </Row>
         <LopLogList dataSource={logs} loading={loading['lop/fetch']} />
       </div>
-    </>
+    </PageHeaderWrapper>
   );
 }
 

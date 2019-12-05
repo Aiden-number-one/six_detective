@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
-import PageNav from './PageNav';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import AlertDetail from './AlertDetail';
 import AlertList from './AlertList';
 import styles from './index.less';
@@ -22,13 +22,12 @@ function Alert({ dispatch, alerts }) {
   }, [alerts]);
 
   return (
-    <>
-      <PageNav routes={{ name: 'Alert Center', link: '/alert-center' }} />
+    <PageHeaderWrapper>
       <div className={styles['list-container']}>
         <AlertList dataSource={alerts} getAlert={item => setAlert(item)} />
         <AlertDetail alert={alert} />
       </div>
-    </>
+    </PageHeaderWrapper>
   );
 }
 

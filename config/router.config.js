@@ -27,14 +27,6 @@ export default [
         hideInMenu: true,
       },
       {
-        path: '/data-import',
-        name: 'dataImport',
-        routes: [
-          { path: 'lop', name: 'lop', component: './LopLog' },
-          { path: 'market', name: 'market', component: './MarketLog' },
-        ],
-      },
-      {
         path: '/alert-center',
         name: 'alertCenter',
         component: './AlertCenter',
@@ -44,6 +36,14 @@ export default [
         name: 'dataManagement',
         icon: 'icon-zhuxian',
         routes: [
+          {
+            path: 'data-import',
+            name: 'dataImport',
+            routes: [
+              { path: 'lop-data-import', name: 'lop', component: './LopLog' },
+              { path: 'market-data-import', name: 'market', component: './MarketLog' },
+            ],
+          },
           {
             path: '/data-management/dashboard',
             name: 'dashboard',
