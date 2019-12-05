@@ -67,7 +67,7 @@ define(function (require, exports, module) {
                 var items = data.bcjson.items || data.bcjson;
                 if (data.bcjson.flag == "1" && items) {
                     require.async("./template/data-source-configuration-option.handlebars", function(compiled) {
-                        $("#J_dsc_list_detail #schemName").html("<option value=''>请选择</option>"+compiled(items));
+                        $("#J_dsc_list_detail #schemName").html("<option value=''>- Please select a type -</option>"+compiled(items));
                     })
                 }
             })
@@ -403,7 +403,7 @@ define(function (require, exports, module) {
 
         App.blockUI({
             boxed: true,
-            message: "正在保存"
+            message: "Saving..."
         });
         //保证blockUI在modal的上层
         $(".blockPage").css("z-index", "9999999999999");
@@ -415,7 +415,7 @@ define(function (require, exports, module) {
             function (data) {
                 App.unblockUI();
                 if (data.bcjson.flag === "1") {
-                    toastr.success("保存成功");
+                    toastr.success("Saved Successfully");
 
                     //modal弹出框消失
                     $(".modal-header button.close").click();
@@ -536,7 +536,7 @@ define(function (require, exports, module) {
             function (data) {
                 App.unblockUI();
                 if (data.bcjson.flag === "1") {
-                    toastr.success("更新成功");
+                    toastr.success("Succeed");
 
                     //查询删除后的新的列表
                     var paramsSend = {};
@@ -812,7 +812,7 @@ define(function (require, exports, module) {
 
             },
             error: function (e) {
-                toastr.info("上传失败");
+                toastr.info("Fail");
                 App.unblockUI();
             }
         };
@@ -1090,7 +1090,7 @@ define(function (require, exports, module) {
                 // 导入文本 目标数据源
                 $("#J_select2_dcs_target_data_connect").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
 
                 typeof cb === "function" && cb();
@@ -1124,7 +1124,7 @@ define(function (require, exports, module) {
                 $(selector).empty().clearInputs();
                 $(selector).select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                     tags: isTags // 是否允许手动输入
                 });
                 // 把原始值放到data属性上 为了比较是否手动输入
@@ -1166,7 +1166,7 @@ define(function (require, exports, module) {
         // 初始化
         init: (items) => {
             let html_t = `<select class="form-control input-sm">`;
-            html_t += `<option value="">--请选择--</option>`
+            html_t += `<option value="">--Please select a type--</option>`
             for (let item of items) {
                 html_t += `<option value="${item.columnName}">${item.columnName}</option>`;
             }
@@ -1182,7 +1182,7 @@ define(function (require, exports, module) {
         // 编辑赋值
         edit: (items) => {
             let html_t = `<select class="form-control input-sm">`;
-            html_t += `<option value="">--请选择--</option>`
+            html_t += `<option value="">--Please select a type--</option>`
             for (let item of items) {
                 html_t += `<option value="${item.columnName}">${item.columnName}</option>`;
             }

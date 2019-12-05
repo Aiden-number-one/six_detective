@@ -1,6 +1,6 @@
 {{#if flag}}
 {{else}}
-<option value="">--请选择--</option>
+<option value="">--Please select a type--</option>
 {{#each this}}
 	{{#if jdbcString}}
 		<option value="{{driverId}}" urlInfo="{{jdbcString}}" className="{{className}}" driverId="{{driverId}}" driverName="{{driverName}}">{{driverName}}</option>

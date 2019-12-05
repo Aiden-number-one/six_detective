@@ -104,7 +104,7 @@ if (typeof jQuery === "undefined") {
             recommendBrowser: function() {
                 var browser = this.getBrowser(true);
                 if (browser.indexOf('ie/') > -1 || browser.indexOf('edge/') > -1) { //表明是ie浏览器
-                    toastr.info('推荐使用谷歌浏览器^_^', {
+                    toastr.info('Google browser recommended^_^', {
                         positionClass: 'toast-top-right'
                     });
                 }
@@ -1390,7 +1390,7 @@ if (typeof jQuery === "undefined") {
                         });
                         // 没有数据
                     } else {
-                        $(`#${tableId} tbody`).html(`<tr><td class="t-c" colspan="11">暂无数据<td></tr>`);
+                        $(`#${tableId} tbody`).html(`<tr><td class="t-c" colspan="11">No Data<td></tr>`);
                         App.initCheckableTable($(`#${tableId}`));
                     }
                 });

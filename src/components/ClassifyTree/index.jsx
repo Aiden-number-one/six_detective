@@ -4,7 +4,7 @@
  * @Date: 2019-11-11 13:20:11
 <<<<<<< HEAD
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-04 10:30:16
+ * @LastEditTime: 2019-12-05 20:35:02
 =======
  * @LastEditors: lan
  * @LastEditTime: 2019-12-03 17:33:38
@@ -238,7 +238,7 @@ class ClassifyTree extends Component {
         checkedKeys,
       });
       this.props.onSelect(treeData[0] && treeData[0][this.props.treeKey.currentKey]);
-    }, 200);
+    }, 600);
   }
 
   componentDidUpdate() {}
