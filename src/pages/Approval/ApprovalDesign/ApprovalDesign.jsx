@@ -2,7 +2,7 @@
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Input, Button, Modal, Upload, message, Drawer } from 'antd';
+import { Form, Input, Button, Modal, Upload, message, Drawer, Icon } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 // import classNames from 'classnames';
@@ -13,25 +13,14 @@ const { TextArea } = Input;
 class ModelForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    // const { search, reset } = this.props;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
     return (
-      <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-        <Form.Item label="名称">
+      <Form onSubmit={this.handleSubmit}>
+        <Form.Item label="name" labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('name', {
             rules: [{ required: true, message: 'Please input your name!' }],
           })(<Input placeholder="至少2个字符,最多16个字符" />)}
         </Form.Item>
-        <Form.Item label="描述:">
+        <Form.Item label="description:" labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('description', {
             rules: [{ required: true, message: 'Please input your description!' }],
           })(<TextArea rows={4} />)}
@@ -245,26 +234,24 @@ class ApprovalDesign extends PureComponent {
           <div className={styles.approvalDesign}>
             <div className={styles.contentBox}>
               <div className={styles.leftBox}>
-                <Button
-                  type="primary"
-                  className="btn_usual"
-                  icon="file-add"
+                <Icon
+                  type="file-add"
                   onClick={this.showDrawer}
-                  style={{ marginRight: '0', float: 'right' }}
-                >
-                  {formatMessage({ id: 'systemManagement.flowDesign.newFlowChart' })}
-                </Button>
+                  style={{ marginRight: '15px', marginTop: '8px', float: 'right' }}
+                />
                 <div className="">
                   <h2>模型列表</h2>
                   <ul>
                     {modelList.map(item => (
                       <li
                         key={item.id}
+                        icon="copy"
                         onClick={() => {
                           this.chooseTab(item.id);
                         }}
                         className={chooseModelId === item.id ? styles.liActive : null}
                       >
+                        <Icon type="copy" style={{ color: '#FFB81C', marginRight: '4px' }} />
                         {item.name}
                       </li>
                     ))}

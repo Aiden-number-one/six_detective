@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Layout } from 'antd';
+// import { Layout } from 'antd';
 import classNames from 'classnames';
 import ToolBar from './components/ToolBar/index';
 import SpreadSheet from '@/components/SpreadSheet';
@@ -12,7 +12,7 @@ import styles from './ReportDesigner.less';
 // import RightMenu from '../../components/rightMenu';
 // import Condition from '../../components/condition';
 
-const { Sider, Content } = Layout;
+// const { Sider, Content } = Layout;
 @connect(({ reportDesigner }) => ({ reportDesigner }))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
