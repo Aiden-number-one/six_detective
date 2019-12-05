@@ -1,26 +1,50 @@
 .approvalDesign {
-  margin: 0 16px;
   .contentBox {
     position: relative;
     display: flex;
     .leftBox {
-      width: 300px;
+      width: 221px;
+      min-height: calc(100vh - 220px);
+      background: #f6f8fb;
+      border-right: 1px solid #e0e0e0;
+
+      h2 {
+        height: 30px;
+        margin-bottom: 0;
+        color: #464c51;
+        font-weight: 500;
+        font-size: 14px;
+        font-family: 'PingFang TC', sans-serif;
+        line-height: 30px;
+        // border-top:1px solid #E0E0E0;
+        border-bottom: 1px solid #e0e0e0;
+      }
       ul {
         padding: 0;
+
         li {
-          height: 40px;
-          margin-top: 2px;
-          padding-left: 8px;
-          line-height: 40px;
-          border: 1px solid #777;
+          width: 221px;
+          height: 30px;
+          overflow: hidden;
+          color: rgba(70, 76, 81, 1);
+          font-weight: 500;
+          font-size: 12px;
+          font-family: 'Avenir', sans-serif;
+          line-height: 30px;
+          text-overflow: ellipsis;
+          cursor: pointer;
         }
         .liActive {
-          background-color: #f2f2f2;
+          background: rgba(227, 233, 243, 1);
+          border: 1px solid rgba(171, 198, 223, 1);
         }
       }
     }
     .rightBox {
-      margin-left: 30px;
+      width: 100%;
+      height: calc(100vh - 220px);
+      padding: 10px;
+      background-color: #fff;
       img {
         width: 100%;
       }
