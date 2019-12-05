@@ -37,11 +37,11 @@ define(function (require, exports, module) {
         $("body").on("click", `${PAGE} #J_process_edit`, function() {
             let checked = $("#J_work_table tbody input[type=checkbox]:checked");
             if (checked.length !== 1) {
-                toastr.info("请选择一条作业");
+                toastr.info("Please select a job");
                 return;
             }
             if (checked.length > 1) {
-                toastr.info("编辑只能请择一条作业");
+                toastr.info("Please select one job only");
                 return;
             }
             let jobId = checked.attr("jobId");
@@ -54,7 +54,7 @@ define(function (require, exports, module) {
         $("body").on("click", `${PAGE} #copy_work`, function() {
             let checked = $("#J_work_table tbody input[type=checkbox]:checked");
             if (checked.length !== 1) {
-                toastr.info("请选择一条作业");
+                toastr.info("Please select a job");
                 return;
             }
             // if (checked.length > 1) {
@@ -70,7 +70,7 @@ define(function (require, exports, module) {
             let dom = $("#J_work_table tbody input:checked");
             let arr = [];
             if (dom.length ===0) {
-                toastr.info("请至少选择一条数据");
+                toastr.info("Please select one job at least");
                 return;
             }
             $.each(dom, function() {
@@ -89,7 +89,7 @@ define(function (require, exports, module) {
         $("body").on("click", `${PAGE} #J_work_move_modal [data-type=confirm]`, function() {
             let folderId = $("#J_work_move_modal [name=folderId]").val();
             if (!folderId) {
-                toastr.info("请选择要移动到的目录");
+                toastr.info("Please select the target file");
                 return;
             }
             // let soureFolderId = $(this).data("folderId");

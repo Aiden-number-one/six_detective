@@ -53,6 +53,11 @@ function resetdanaly() {
 function resetFTP() {
 	$('#nodeformbox14').window('close');
 }
+
+//文件格式转换
+function resetFTP() {
+	$('#nodeformbox18').window('close');
+}
 // ------------------------节点取消操作 end---------------
 var _id, _text = '';
 // ------------------------导出文本 start---------------

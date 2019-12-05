@@ -73,7 +73,7 @@ define(function(require, exports, module) {
         App.unblockUI();
         var items = data.bcjson;
         if (items.flag == "1") {
-          toastr.success("更新成功");
+          toastr.success("Succeed");
         } else {
           toastr.error(items.msg);
         }
@@ -109,7 +109,7 @@ define(function(require, exports, module) {
         function(data) {
             var items = data.bcjson.items || data.bcjson;
             items = items[0].DATABASETYPE;
-            var html = "<option value=''>--请选择--</option>";
+            var html = "<option value=''>--Please select a type--</option>";
             if (data.bcjson.flag == "1" && items) {
               for(var i in items){
               html+="<option value="+i+">"+items[i]+"</option>"
@@ -129,7 +129,7 @@ define(function(require, exports, module) {
         function(data) {
             var items = data.bcjson.items || data.bcjson;
             items = items[0].CATEGORY;
-            var html = "<option value=''>--请选择--</option>";
+            var html = "<option value=''>--Please select a type--</option>";
             if (data.bcjson.flag == "1" && items) {
               for(var i in items){
               html+="<option value="+i+">"+items[i]+"</option>"
@@ -168,7 +168,7 @@ define(function(require, exports, module) {
       },
       error: function(e) {
         App.unblockUI();
-        toastr.info("上传失败");
+        toastr.info("Fail");
       }
     };
     if (addtrue === "addtrue") {
@@ -176,6 +176,13 @@ define(function(require, exports, module) {
     } else {
       $("#dd-uploadFileForm_params").ajaxSubmit(options);
     }
+    
+    showContent.type = "";
+    showContent.typeAdd = "";
+    $("#filename").text("Please select a file");
+    $("#filename-add").text("Please select a file");
+    $("#dd-inputfile").val("");
+    $("#dd-inputfile-add").val("");
   };
 
   showContent.setAddressList = function(data, addtrue) {

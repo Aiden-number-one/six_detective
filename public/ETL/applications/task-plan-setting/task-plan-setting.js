@@ -44,9 +44,9 @@ define(function (require, exports, module) {
             var obj = $("#taskSetList .checker input:checked ").data("obj");
             var length = $("#taskSetList .checker input:checked ").length;
             if (!length) {
-                toastr.info("请先勾选！");
+                toastr.info("Please select records");
             } else if (length > 1) {
-                toastr.info("请选择一条进行编辑！");
+                toastr.info("Please select a record");
             } else {
                 $("#J_add_plan_modal .modal-header h4").text("修改调度计划");
                 $(".J_form_basc_submit").attr("id", "J_form_basc_submit_edit");
@@ -94,7 +94,7 @@ define(function (require, exports, module) {
             var params = {};
             params.scheduleId = checkArray.join(",");
             if (checkArray.length === 0) {
-                toastr.info("请先勾选！");
+                toastr.info("Please select records");
             } else {
                 bootbox.confirm("确定删除吗？", function (result) {
                     if (result) {
@@ -120,7 +120,7 @@ define(function (require, exports, module) {
                     paramsMap.validEndDate = "20991231235959";
                 }
                 if (parseInt(paramsMap.validStartDate) > parseInt(paramsMap.validEndDate)) {
-                    toastr.info("计划有效时间开始时间不能大于结束时间");
+                    toastr.info("Start time should be earlier than end time");
                     return;
                 }
                 if ($("#uniform-inlineCheckbox2 span").hasClass("checked")) {
@@ -140,7 +140,7 @@ define(function (require, exports, module) {
                 });
                 showContent.editPlanSet(paramsMap);
             } else {
-                toastr.info("请检查所有字段是否填写正确");
+                toastr.info("Please check the invalid fields");
             }
         });
 
@@ -154,7 +154,7 @@ define(function (require, exports, module) {
                 var frequency = paramsMap.frequency.replace(/ /g, "");
                 if (!cronExpression) {
                     if (!scheduleInterval || !frequency) {
-                        toastr.info("请输入执行频率或CORN表达式");
+                        toastr.info("Please input the Schedule Frequency or CRON statement");
                         return false;
                     }
                 }
@@ -173,7 +173,7 @@ define(function (require, exports, module) {
                     paramsMap.validEndDate = "20991231235959";
                 }
                 if (parseInt(paramsMap.validStartDate) > parseInt(paramsMap.validEndDate)) {
-                    toastr.info("计划有效时间开始时间不能大于结束时间");
+                    toastr.info("Start time should be earlier than end time");
                     return;
                 }
                 //开启状态 默认开启
@@ -184,7 +184,7 @@ define(function (require, exports, module) {
                 });
                 showContent.addPlanSet(paramsMap);
             } else {
-                toastr.info("请检查所有字段是否填写正确");
+                toastr.info("Please check the invalid fields");
             }
         });
 

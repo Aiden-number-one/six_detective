@@ -31,7 +31,7 @@ define(function(require, exports, module) {
     //   点立即授权
         $(`body`).on("click", "#J_authorization_sys_platform_save", function () {
             if ($("#J_authorization_platform_date [name=file]").val() === "") {
-                toastr.info("请选择文件");
+                toastr.info("Please select a file");
                 return;
             }
           var desPassword = $.des.getDes($("#J_authorization_platform_date input[name='passWord']").val());

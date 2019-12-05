@@ -64,7 +64,7 @@
           <a
             class="btn btn-circle btn-icon-only btn-default fullscreen"
             href="javascript:;"
-            title="缩放"
+            title="Scale"
           >
           </a>
         </div>
@@ -203,10 +203,10 @@
       </div>
       <div class="modal-footer">
         <button data-lang="CANCEL" type="button" data-dismiss="modal" class="btn btn-default">
-          取消
+          CANCEL
         </button>
         <button data-lang="CONFIRM" type="button" class="btn green" data-type="confirm">
-          确认
+          CONFIRM
         </button>
       </div>
     </div>
@@ -283,4 +283,7 @@
   $(document).ready(function(type) {
     loadProperties(LANGUAGE_CODE);
   });
+</script>
+<script>
+	$('#J_jobname_query').attr('placeholder',$.i18n.map['Please-input-keywords'])
 </script>

@@ -50,7 +50,7 @@ class PlanAddForm extends Component {
                     },
                   ],
                   initialValue: '',
-                })(<Input placeholder="请输入最长32位字符" />)}
+                })(<Input placeholder="32 characters maximum" />)}
               </Col>
               <Col span={8}>
                 {getFieldDecorator('frequency', {

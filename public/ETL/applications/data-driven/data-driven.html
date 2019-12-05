@@ -123,7 +123,7 @@
 					<span class="caption-subject bold uppercase" data-lang="Driver-Management">驱动管理</span>
 				</div>
 				<div class="actions">
-		<div class="btn-operate dropdown-toggle" id="dd-driven-add-modal" title="新增" style="padding-right: 0px;">
+		<div class="btn-operate dropdown-toggle" id="dd-driven-add-modal" title="ADD" style="padding-right: 0px;">
 			<i class="widget-thumb-icon bg-blue fa fa-plus"></i>
 		</div>
 				</div>
@@ -159,7 +159,7 @@
 					<h5 class="r-container-header-text"></h5>
 				</div>
 				<div class="actions">
-					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" title="缩放">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" title="Scale">
 					</a>
 				</div>
 			</div>
@@ -188,7 +188,7 @@
 									<span class="required"> * </span><span data-lang="Driver-Name">驱动名称：</span>
 								</label>
 								<div class="col-md-6">
-									<input maxlength="64" type="text" class="form-control" name="driver_name" placeholder="最多64位字符（中文占两个字符）(汉字占两个字符)" />
+									<input maxlength="64" type="text" class="form-control" name="driver_name" placeholder="64 characters maximum" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -196,7 +196,7 @@
 									<span class="required"> * </span><span data-lang="Driver-Class-Name">驱动类名：</span>
 								</label>
 								<div class="col-md-6">
-									<input maxlength="100" type="text" class="form-control" name="class_name" placeholder="最多100位字符（中文占两个字符）" />
+									<input maxlength="100" type="text" class="form-control" name="class_name" placeholder="100 characters maximum" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -204,7 +204,7 @@
 									<span class="required"> * </span><span data-lang="URL-Template">url模板：</span>
 								</label>
 								<div class="col-md-6">
-									<input maxlength="100" type="text" class="form-control" name="url_info" placeholder="最多100位字符（中文占两个字符）" />
+									<input maxlength="100" type="text" class="form-control" name="url_info" placeholder="100 characters maximum" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -212,7 +212,7 @@
 									<span class="required"> * </span><span data-lang="Default-Port">默认端口：</span>
 								</label>
 								<div class="col-md-6">
-									<input maxlength="32" type="text" class="form-control" name="db_port" placeholder="最多32位正整数">
+									<input maxlength="32" type="text" class="form-control" name="db_port" placeholder="32 positive integers maximum">
 								</div>
 							</div>
 							<div class="form-group">
@@ -220,7 +220,7 @@
 									<span class="required"> * </span><span data-lang="Connection-Timeout">连接超时(秒)：</span>
 								</label>
 								<div class="col-md-6">
-									<input maxlength="32" type="text" class="form-control" name="maxtime" placeholder="最多32位正整数">
+									<input maxlength="32" type="text" class="form-control" name="maxtime" placeholder="32 positive integers maximum">
 								</div>
 							</div>
 						</div>
@@ -280,7 +280,9 @@
 									<label class="control-label col-md-4">
 										<span class="required" aria-required="true"> * </span><span data-lang="Select-JAR">选择jar文件：</span></label>
 									<div class="col-md-6" style="padding-top: 5px;">
-										<input id="dd-inputfile" type="file" name="file">
+										<input id="dd-inputfile" type="file" name="file" style="display: none;">
+										<input type="button" id="filebutton" value="Select JAR">
+										<span id="filename">Please select a file</span>
 									</div>
 								</div>
 							</div>
@@ -313,7 +315,9 @@
 									<label class="control-label col-md-4">
 										<span class="required" aria-required="true"> * </span><span data-lang="Select-JAR">选择jar文件：</span></label>
 									<div class="col-md-6" style="padding-top: 5px;">
-										<input id="dd-inputfile-add" type="file" name="file">
+										<input id="dd-inputfile-add" type="file" name="file" style="display: none;">
+										<input type="button" id="filebutton-add" value="Select JAR">
+										<span id="filename-add">Please select a file</span>
 									</div>
 								</div>
 							</div>
@@ -334,7 +338,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-				<h4 class="modal-title title-color-blue">新增驱动</h4>
+				<h4 class="modal-title title-color-blue">Create Driver</h4>
 			</div>
 			<form action="javascript:;" name="driven-Add-Form" class="form-horizontal" id="driven-Add-Form" method="POST" novalidate="novalidate">
 				<input type="reset" class="form-control hidden reset" name="" />
@@ -361,7 +365,7 @@
 							<span class="required"> * </span><span data-lang="Driver-Name">驱动名称：</span>
 						</label>
 						<div class="col-md-6">
-							<input maxlength="64" type="text" class="form-control" name="driver_name" placeholder="最多64位字符（中文占两个字符）(汉字占两个字符)" />
+							<input maxlength="64" type="text" class="form-control" name="driver_name" placeholder="64 characters maximum" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -369,7 +373,7 @@
 							<span class="required"> * </span><span data-lang="Driver-Class-Name">驱动类名：</span>
 						</label>
 						<div class="col-md-6">
-							<input maxlength="100" type="text" class="form-control" name="class_name" placeholder="最多100位字符（中文占两个字符）" />
+							<input maxlength="100" type="text" class="form-control" name="class_name" placeholder="100 characters maximum" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -377,7 +381,7 @@
 							<span class="required"> * </span><span data-lang="URL-Template">url模板：</span>
 						</label>
 						<div class="col-md-6">
-							<input maxlength="100" type="text" class="form-control" name="url_info" placeholder="最多100位字符（中文占两个字符）" />
+							<input maxlength="100" type="text" class="form-control" name="url_info" placeholder="100 characters maximum" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -385,7 +389,7 @@
 							<span class="required"> * </span><span data-lang="Default-Port">默认端口：</span>
 						</label>
 						<div class="col-md-6">
-							<input maxlength="32" type="text" class="form-control" name="db_port" placeholder="最多32位正整数">
+							<input maxlength="32" type="text" class="form-control" name="db_port" placeholder="32 positive integers maximum">
 						</div>
 					</div>
 					<div class="form-group">
@@ -393,7 +397,7 @@
 							<span class="required"> * </span><span data-lang="Connection-Timeout">连接超时(秒)：</span>
 						</label>
 						<div class="col-md-6">
-							<input maxlength="32" type="text" class="form-control" name="maxtime" placeholder="最多32位正整数">
+							<input maxlength="32" type="text" class="form-control" name="maxtime" placeholder="32 positive integers maximum">
 						</div>
 					</div>
 

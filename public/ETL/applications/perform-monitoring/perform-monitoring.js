@@ -256,7 +256,7 @@ define(function(require, exports, module) {
                 $("#J_change_view_job iframe").attr("src", "/retl-process/monitor.html?jobId=" + jobId + "&batchNo=" + batchNo);
             } else {
                 $("#perform-monitoring-table-tree").empty();
-                $("#perform-monitoring-table-tree").html('<div id="J_tableList" style="text-align:center;padding:8px 0;">暂无数据</div>');
+                $("#perform-monitoring-table-tree").html('<div id="J_tableList" style="text-align:center;padding:8px 0;">No Data</div>');
             }
 
             //为R的话，则不会获取RightTopBlock中的内容。所以需要主动获取。
