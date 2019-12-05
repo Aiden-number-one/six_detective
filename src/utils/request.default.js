@@ -121,7 +121,7 @@ request.interceptors.response.use(async (response, opts) => {
   const result = await response.clone().json();
 
   const { bcjson } = result || {};
-  const { flag, items, msg } = bcjson;
+  const { flag, items, msg, ...others } = bcjson;
 
   // login invalid
   if (flag === '001') {
@@ -135,7 +135,7 @@ request.interceptors.response.use(async (response, opts) => {
     return result;
   }
 
-  return +flag === 1 ? { items } : { msg: msg || 'response data error' };
+  return +flag === 1 ? { items, others } : { msg: msg || 'response data error' };
 });
 
 export default url => async (params = {}) => request(url, { data: params });
