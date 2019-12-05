@@ -656,6 +656,45 @@ function Graphic(svg, xmlDoc) {
             thisGraph.commands();
         }
     });
+    $('#node_edit18').submit(function(e) { // 文件格式转换
+        e.preventDefault();
+        if ($("#node_edit18").form('validate')) {
+            var nodeName = '';
+            var item_id = '';
+            var nodeId = '';
+
+            var formText = $("#node_edit18").serializeArray();
+            $.each(formText, function(i, ele) {
+                var name = ele.name;
+                var value = ele.value;
+                switch (name) {
+                    case 'i_nodeId':
+                        nodeId = value;
+                        break;
+                    case 'i_nodeName':
+                        nodeName = value;
+                        break;
+                    case 'i_nodeItem_id':
+                        item_id = value;
+                        break;
+                }
+            });
+            var item_name = $("#i_nodeItem_id18").combobox('getText');
+            for (var i = 0; i < thisGraph.nodes.length; i++) {
+                var node = thisGraph.nodes[i];
+                if (node.id == nodeId) {
+                    node.name = nodeName;
+                    node.item_id = item_id;
+                    node.item_name = item_name;
+                    break;
+                }
+            }
+            thisGraph.update();
+            $(thisGraph.formbox + '18').window('close');
+
+            thisGraph.commands();
+        }
+    });
     $('#node_edit5').submit(function(e) { // 存储过程任务
         e.preventDefault();
         if ($("#node_edit5").form('validate')) {
@@ -1411,11 +1450,11 @@ Graphic.prototype.update = function() {
                             $("#title_type").html(" ");
                         };
                         if (d.type == 4) {
-                            $("#yw_number").html("作业");
-                            $("#yw_task").html("作业");
+                            $("#yw_number").html("Job");
+                            $("#yw_task").html("Job");
                         } else {
-                            $("#yw_number").html("任务");
-                            $("#yw_task").html("任务");
+                            $("#yw_number").html("Task");
+                            $("#yw_task").html("Task");
                         }
 
                         $("#title_number").html(d.item_id || "");
@@ -3689,19 +3728,19 @@ function Tree_Menu(existence, thisGraph, existId) {
                 animate: true,
                 data: [{
                     "id": 0,
-                    "text": "作业组件",
+                    "text": "Work Component",
                     "children": [{
                         "id": 1,
-                        "text": "全部",
+                        "text": "All",
                         "children": temp
                     }, {
                         "id": 2,
-                        "text": "任务",
+                        "text": "Task",
                         "state": "closed",
                         "children": temp_task
                     }, {
                         "id": 3,
-                        "text": "控制",
+                        "text": "Condition",
                         "state": "closed",
                         "children": temp_condition
                     }]

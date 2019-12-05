@@ -1,6 +1,6 @@
 {{#if flag}}
 <tr>
-  <td colspan="20" class="t-c">暂无数据</td>
+  <td colspan="20" class="t-c">No Data</td>
 </tr>
 {{else}} {{#each this}}
 <tr>
@@ -15,9 +15,10 @@
     <td></td>
     <td></td>
     <td class="t-c" fileUrl='{{fileUrl}}' fileType='{{fileType}}' fileName='{{fileName}}' connectionId='{{connectionId}}'>
-        <a id="dsc-modal-check-file" href="javascript:;">查看</a>
-        <a id="dsc-modal-delete-file" href="javascript:;">删除</a>
+        <a id="dsc-modal-check-file" href="javascript:;" data-lang="PREVIEW">PREVIEW</a>
+        <a id="dsc-modal-delete-file" href="javascript:;" data-lang="DELETE">DELETE</a>
     </td>
 
 </tr>
 {{/each}} {{/if}}
+<script src="/assets/js/lang.js"></script>

@@ -81,7 +81,7 @@ define(function (require, exports, module) {
                 showContent.getConnectType($(this).find("a .txt").text());
                 showContent.hideShowBlock("#J_dsc_commonType_add");
             }
-            $("#J_dsc_list_detail_title_type span").html("新增连接<span> / " + $(this).find("a .txt").text() + "</span>");
+            $("#J_dsc_list_detail_title_type span").html("Create Data Source<span> / " + $(this).find("a .txt").text() + "</span>");
 
             //关闭当前modal
             $("#data-connect-add-type button").click();
@@ -145,7 +145,7 @@ define(function (require, exports, module) {
             );
             App.blockUI({
                 boxed: true,
-                message: "测试中..."
+                message: "Testing..."
             });
             showContent.testDataConnectList(params);
         });
@@ -185,7 +185,7 @@ define(function (require, exports, module) {
             );
             App.blockUI({
                 boxed: true,
-                message: "新增中..."
+                message: "Creating..."
             });
             showContent.addDataConnectList(params);
         });
@@ -289,7 +289,7 @@ define(function (require, exports, module) {
             }
             App.blockUI({
                 boxed: true,
-                message: "修改中..."
+                message: "modifying..."
             });
             showContent.editDataConnectList(params);
         });
@@ -302,11 +302,11 @@ define(function (require, exports, module) {
                 params.connection_id = $(this).attr("connection_id");
                 params.opType = "del";
                 params.driver_id = $(this).attr("driver_id");
-                bootbox.confirm("确定删除吗?", function (result) {
+                bootbox.confirm("Please confirm to delete", function (result) {
                     if (result) {
                         App.blockUI({
                             boxed: true,
-                            message: "删除中..."
+                            message: "Deleting..."
                         });
                         showContent.deleteDataConnect(params);
                     }
@@ -355,7 +355,7 @@ define(function (require, exports, module) {
             }
             App.blockUI({
                 boxed: true,
-                message: "测试中..."
+                message: "Testing..."
             });
             showContent.testDataConnectList(params);
         });
@@ -372,7 +372,7 @@ define(function (require, exports, module) {
             //交互
             App.blockUI({
                 boxed: true,
-                message: "正在查询"
+                message: "Search..."
             });
             showContent.getImportDataSource(connection_id);
         });
@@ -410,7 +410,7 @@ define(function (require, exports, module) {
                 jdbc_string_ = jdbc_string_.replace("{port}", port);
             }                    
             $("#data-connect-add-form input[name=jdbc_string]").val(jdbc_string_);
-            $("#J_dsc_list_detail_title_type span").html("新增连接<span> / " + $(this).find("option:selected").html() + "</span>");
+            $("#J_dsc_list_detail_title_type span").html("Create Data Source<span> / " + $(this).find("option:selected").html() + "</span>");
 
             //每次更换type，需要对url模板输入框进行修改
             $("#J_dsc_commonType_add input[name=jdbc_string]").attr("disabled", "disabled");
@@ -539,14 +539,14 @@ define(function (require, exports, module) {
         //点击删除按钮
         $("body").on("click", "#data-source-configuration #dsc-delete-table", function () {
             if ($("#J_data_connect_table .checked").length === 0) {
-                toastr.info("请勾选需要操作的对象");
+                toastr.info("Please select the object");
                 return false
             }
-            bootbox.confirm("确定删除吗?", function (result) {
+            bootbox.confirm("Please confirm to delete", function (result) {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "删除中..."
+                        message: "Deleting..."
                     });
                     showContent.deleteTableList();
                 }
@@ -556,14 +556,14 @@ define(function (require, exports, module) {
         //点击同步表结构按钮
         $("body").on("click", "#data-source-configuration #dsc-tables-upd", function () {
             if ($("#J_data_connect_table .checked").length === 0) {
-                toastr.info("请勾选需要操作的对象");
+                toastr.info("Please select the object");
                 return false
             }
-            bootbox.confirm("确定同步吗?", function (result) {
+            bootbox.confirm("Please confirm to update field.", function (result) {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "同步中..."
+                        message: "updating..."
                     });
                     showContent.metadataTablesUpd();
                 }
@@ -573,14 +573,14 @@ define(function (require, exports, module) {
         //点击更新表记录行数按钮
         $("body").on("click", "#data-source-configuration #dsc-table_recordcount_upd", function () {
             if ($("#J_data_connect_table .checked").length === 0) {
-                toastr.info("请勾选需要操作的对象");
+                toastr.info("Please select the object");
                 return false
             }
-            bootbox.confirm("确定更新吗?", function (result) {
+            bootbox.confirm("Please confirm to update row number.", function (result) {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "更新中..."
+                        message: "updating..."
                     });
                     showContent.tableRecordcountUpd();
                 }
@@ -589,11 +589,11 @@ define(function (require, exports, module) {
 
         //点击批量同步表结构按钮
         $("body").on("click", "#data-source-configuration #dsc-tables-upd-batch", function () {
-            bootbox.confirm("确定批量同步吗?", function (result) {
+            bootbox.confirm("Please confirm to batch update field.", function (result) {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "同步中..."
+                        message: "updating..."
                     });
                     var connection_id = $(
                         ".data-source-configuration-list .click-add-background"
@@ -608,11 +608,11 @@ define(function (require, exports, module) {
 
         //点击批量更新表记录行数按钮
         $("body").on("click", "#data-source-configuration #dsc-table_recordcount_upd_batch", function () {
-            bootbox.confirm("确定批量更新吗?", function (result) {
+            bootbox.confirm("Please confirm to batch update row number.", function (result) {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "更新中..."
+                        message: "updating..."
                     });
                     var connection_id = $(
                         ".data-source-configuration-list .click-add-background"
@@ -700,11 +700,11 @@ define(function (require, exports, module) {
         //列表单个删除
         $("body").on("click", "#data-source-configuration #dsc-modal-delete", function () {
             var tableid = $(this).closest("td").data("tableid")
-            bootbox.confirm("确定删除吗?", function (result) {
+            bootbox.confirm("Please confirm to delete", function (result) {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "删除中..."
+                        message: "Deleting..."
                     });
                     showContent.deleteTableList(true, tableid);
                 }
@@ -763,11 +763,11 @@ define(function (require, exports, module) {
             if (fileType === "xls" || fileType === "xlsx") {
                 App.blockUI({
                     boxed: true,
-                    message: "上传中..."
+                    message: "Uploading..."
                 });
                 showContent.upLoad(data.currentTarget.files[0].name, fileType);
             } else {
-                toastr.info("暂只支持xls或xlsw文件类型");
+                toastr.info("XLS file or XLSW file only");
             }
         });
 
@@ -951,11 +951,11 @@ define(function (require, exports, module) {
             if (index === 0) {
                 //表单校验
                 if (!connectionName) {
-                    toastr.info("连接名称不能为空");
+                    toastr.info("Source Name is missing!");
                     return false;
                 }
                 if ($("#data-source-configuration #J_excel_add_tab1 .excel-choose-block-inside li").length === 0) {
-                    toastr.info("请上传文件");
+                    toastr.info("Please upload a file");
                     return false;
                 }
 
@@ -1020,7 +1020,7 @@ define(function (require, exports, module) {
                         $(item).html("<input type='text' style='width:" + width + "px'/>")
                         $(item).find("input").val(val);
                     } else {
-                        $(item).html("<a href='javascript:;'>保存</a>");
+                        $(item).html("<a href='javascript:;'>SAVE</a>");
                     }
                 });
             } else {
@@ -1041,7 +1041,7 @@ define(function (require, exports, module) {
                 //交互
                 App.blockUI({
                     boxed: true,
-                    message: "保存中..."
+                    message: "Saving..."
                 });
                 //调用接口，保存数据
                 var preParams = JSON.parse($(this).closest("table").find("thead tr").attr("currentpreparams"));

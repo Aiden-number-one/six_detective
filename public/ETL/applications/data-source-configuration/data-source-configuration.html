@@ -210,7 +210,7 @@
                     </span>
                 </div>
                 <div class="actions">
-                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" title="缩放"></a>
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" title="Scale"></a>
                     <a id="J_dsc_back_to_list" href="javascript:;" class="btn btn-circle btn-default ml10"><i class="fa fa-history hide"></i>返回</a>
                 </div>
             </div>
@@ -235,7 +235,7 @@
                 <div class="tourist-wide" style="padding-top: 0px">
                         <div class="btn-group">
                             <a id="data_connect_import_btn" class="btn-operate">
-                                <i class="widget-thumb-icon bg-blue fa fa-sign-in"></i> <span data-lang="Import-Metadata">导入元数据</span></a>
+                                <i class="widget-thumb-icon bg-blue fa fa-sign-in"></i> <span data-lang="Import-Metadata">Import Metadata</span></a>
                         </div>
                         <div class="btn-group">
                             <a id="dsc-delete-table" class="btn-operate">
@@ -259,7 +259,7 @@
                         </div>
                         <div class="btn-group">
                             <a class="btn-operate" id="J_list_export">
-                                <i class="widget-thumb-icon bg-blue fa fa-arrow-down"></i> <span data-lang="">导出全部列表</span> </a>
+                                <i class="widget-thumb-icon bg-blue fa fa-arrow-down"></i> <span data-lang="Export-All-Records">导出全部列表</span> </a>
                         </div>
                 </div>
                 <div class="table-scrollable">
@@ -281,7 +281,7 @@
                         </thead>
                         <tbody id="J_data_connect_table">
                             <tr>
-                                <td class="t-c" colspan="20">暂无数据</td>
+                                <td class="t-c" colspan="20">No Data</td>
                             </tr>
                         </tbody>
                     </table>
@@ -321,7 +321,7 @@
                         </thead>
                         <tbody id="J_file_data_result_body">
                             <tr>
-                                <td colspan="20" class="t-c">暂无数据</td>
+                                <td colspan="20" class="t-c">No Data</td>
                             </tr>
                         </tbody>
                     </table>
@@ -371,7 +371,7 @@
 							<span class="required"> * </span><span data-lang="Host">主机：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="64" type="text" class="form-control" name="server" placeholder="最多64位字符（中文占两个字符）" maxlength="64">
+                            <input maxlength="64" type="text" class="form-control" name="server" id="server" placeholder="最多64位字符（中文占两个字符）" maxlength="64">
                         </div>
                     </div>
 
@@ -380,7 +380,7 @@
 							<span class="required"> * </span><span data-lang="Port-No">端口号：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="32" type="text" class="form-control" name="db_port" placeholder="最多32位字符（中文占两个字符）">
+                            <input maxlength="32" type="text" class="form-control" name="db_port" id="db_port" placeholder="最多32位字符（中文占两个字符）">
                         </div>
                     </div>
 
@@ -389,7 +389,7 @@
 							<span class="required"> * </span><span data-lang="DB-SID">数据库/sid：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="64" type="text" class="form-control" name="db_database" placeholder="最多64位字符（中文占两个字符）" />
+                            <input maxlength="64" type="text" class="form-control" name="db_database" id="db_database" placeholder="最多64位字符（中文占两个字符）" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -405,7 +405,7 @@
 							<span class="required"> * </span><span data-lang="User-Name">用户名：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="64" type="text" class="form-control" name="db_user" placeholder="最多64位字符（中文占两个字符）(汉字占两个字符)" />
+                            <input maxlength="64" type="text" class="form-control" name="db_user" id="db_user" placeholder="64 characters maximum" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -413,7 +413,7 @@
 							<span class="required"> * </span><span data-lang="Password">密码：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="200" type="password" class="form-control" name="db_password" placeholder="最多200位字符（中文占两个字符）" />
+                            <input maxlength="200" type="password" class="form-control" name="db_password" id="db_password" placeholder="最多200位字符（中文占两个字符）" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -421,7 +421,7 @@
 							<span class="required"> </span><span data-lang="Max-Connections">最大连接数：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="32" type="text" class="form-control" name="max_connect_count" placeholder="最多32位字符（中文占两个字符）" />
+                            <input maxlength="32" type="text" class="form-control" name="max_connect_count" id="max_connect_count" placeholder="最多32位字符（中文占两个字符）" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -528,7 +528,7 @@
                                 <label class="control-label col-md-3">
 									<span class="required" aria-required="true"> * </span>目标数据连接：</label>
                                 <div class="col-md-6">
-                                    <select class="form-control" name="targetConnectionId" id="J_select2_dcs_target_data_connect" data-searchplaceholder="关键字查询">
+                                    <select class="form-control" name="targetConnectionId" id="J_select2_dcs_target_data_connect" data-searchplaceholder="Please input keywords">
 									</select>
                                 </div>
                             </div>
@@ -536,7 +536,7 @@
                                 <label class="control-label col-md-3">
 									<span class="required" aria-required="true"> * </span>目标对象：</label>
                                 <div class="col-md-6">
-                                    <select class="form-control" name="targetTable" id="J_select2_des_target_object" data-searchplaceholder="关键字查询">
+                                    <select class="form-control" name="targetTable" id="J_select2_des_target_object" data-searchplaceholder="Please input keywords">
 									</select>
                                 </div>
                             </div>
@@ -647,7 +647,7 @@
 							<span class="required"> * </span><span data-lang="Host">主机：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="64" type="text" class="form-control" name="server" placeholder="最多64位字符（中文占两个字符）" />
+                            <input maxlength="64" type="text" class="form-control" name="server" id="server_edit" placeholder="最多64位字符（中文占两个字符）" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -655,7 +655,7 @@
 							<span class="required"> * </span><span data-lang="Port-No">端口号：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="32" type="text" class="form-control" name="db_port" placeholder="最多32位字符（中文占两个字符）" />
+                            <input maxlength="32" type="text" class="form-control" name="db_port" id="db_port_edit" placeholder="最多32位字符（中文占两个字符）" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -663,7 +663,7 @@
 							<span class="required"> * </span><span data-lang="DB-SID">数据库/sid：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="64" type="text" class="form-control" name="db_database" placeholder="最多64位字符（中文占两个字符）" />
+                            <input maxlength="64" type="text" class="form-control" name="db_database" id="db_database_edit" placeholder="最多64位字符（中文占两个字符）" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -671,7 +671,7 @@
 							<span class="required"> * </span><span data-lang="User-Name">用户名：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="64" type="text" class="form-control" name="db_user" placeholder="最多64位字符（中文占两个字符）(汉字占两个字符)" />
+                            <input maxlength="64" type="text" class="form-control" name="db_user" id="db_user_edit" placeholder="64 characters maximum" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -679,7 +679,7 @@
 							<span class="required"> * </span><span data-lang="Password">密码：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="200" type="password" class="form-control" name="db_password" maxlength="" placeholder="最多200位字符（中文占两个字符）" />
+                            <input maxlength="200" type="password" class="form-control" name="db_password" id="db_password_edit" maxlength="" placeholder="最多200位字符（中文占两个字符）" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -687,7 +687,7 @@
 							<span class="required"> </span><span data-lang="Max-Connections">最大连接数：</span>
 						</label>
                         <div class="col-md-6">
-                            <input maxlength="32" type="text" class="form-control" name="max_connect_count" placeholder="最多32位字符（中文占两个字符）" />
+                            <input maxlength="32" type="text" class="form-control" name="max_connect_count" id="max_connect_count_edit" placeholder="最多32位字符（中文占两个字符）" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -717,20 +717,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title title-color-blue">查看对象结构</h4>
+                <h4 class="modal-title title-color-blue">Object Structure</h4>
             </div>
             <div class="modal-body">
                 <div class="tabbable-line">
                     <div class="t-c">
                         <ul class="nav nav-tabs ">
                             <li class="active">
-                                <a href="#des-showtable-info-1" data-toggle="tab" aria-expanded="true"> 信息 </a>
+                                <a href="#des-showtable-info-1" data-toggle="tab" aria-expanded="true"> Basic Info </a>
                             </li>
                             <li class="">
-                                <a href="#des-showtable-info-2" data-toggle="tab" aria-expanded="false"> 列 </a>
+                                <a href="#des-showtable-info-2" data-toggle="tab" aria-expanded="false"> Column </a>
                             </li>
                             <li class="">
-                                <a href="#des-showtable-info-3" data-toggle="tab" aria-expanded="false"> 数据预览 </a>
+                                <a href="#des-showtable-info-3" data-toggle="tab" aria-expanded="false"> Preview </a>
                             </li>
                         </ul>
                     </div>
@@ -738,7 +738,7 @@
                         <div class="tab-pane active" id="des-showtable-info-1">
                             <form class="form-horizontal" id="des-showtable-info-1-form" name="des-showtable-info-1-form" role="form" novalidate="novalidate" style="padding-top: 20px;">
                                 <div class="form-group">
-                                    <label class="control-label col-md-3">表名
+                                    <label class="control-label col-md-3">Object Name
 										<span class="required" aria-required="true"> * </span>
 									</label>
                                     <div class="col-md-8">
@@ -746,7 +746,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-3">对象类型
+                                    <label class="control-label col-md-3">Object Type
 										<span class="required" aria-required="true"> * </span>
 									</label>
                                     <div class="col-md-8">
@@ -754,7 +754,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-3">数据库/sid
+                                    <label class="control-label col-md-3">DB/SID
 										<span class="required" aria-required="true"> * </span>
 									</label>
                                     <div class="col-md-8">
@@ -762,7 +762,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-3">所属用户
+                                    <label class="control-label col-md-3">User
 										<span class="required" aria-required="true"> * </span>
 									</label>
                                     <div class="col-md-8">
@@ -776,16 +776,16 @@
                                 <table class="table table-striped table-bordered table-hover" id="des-showtable-info-2-table">
                                     <thead>
                                         <tr>
-                                            <th> 列名</th>
-                                            <th> 类型</th>
-                                            <th> 长度</th>
-                                            <th> 精度</th>
-                                            <th> 为空</th>
-                                            <th> 自增</th>
-                                            <th> 主键</th>
-                                            <th> 外键</th>
-                                            <th> 默认值</th>
-                                            <th> 描述</th>
+                                            <th> Column Name</th>
+                                            <th> Data Type</th>
+                                            <th> Data Length</th>
+                                            <th> Data Precision</th>
+                                            <th> Null</th>
+                                            <th> Auto-increment</th>
+                                            <th> Primary Key</th>
+                                            <th> Foreign key</th>
+                                            <th> Default Value</th>
+                                            <th> Description</th>
                                         </tr>
                                     </thead>
                                     <tbody id="des-showtable-info-2-table-body">
@@ -800,7 +800,7 @@
 								padding: 10px;
 								padding-top:  0px;
 								color: #7f96ac;
-						">仅显示前20条数据用于查看</span>
+						">Display the first 20 records only for previewing</span>
                             <button type="button" class="btn red hide" id="des-showtable-info-3-button" style="margin-bottom:20px">预览</button>
                             <div style="overflow-x: auto; overflow-y: auto; width:100%;max-height: 300px">
                                 <table class="table table-striped table-bordered table-hover" id="des-showtable-info-3-table">
@@ -825,11 +825,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title title-color-blue">导入元数据</h4>
+                <h4 class="modal-title title-color-blue">Import Metadata</h4>
             </div>
             <div class="modal-body">
                 <div class="input-search" style="position:relative;">
-                    <input id="dsc-seach-metadata-input" type="text" class="form-control" placeholder="搜索..." name="query" style="border: 1px solid #e7e5e5;margin-bottom:10px;margin-left:20px;width:70%">
+                    <input id="dsc-seach-metadata-input" type="text" class="form-control" placeholder="Search..." name="query" style="border: 1px solid #e7e5e5;margin-bottom:10px;margin-left:20px;width:70%">
                     <span id="dsc-seach-metadata" class="input-group-btn" style="position:absolute;z-index:99;top:2px;left:384px;">
 						<a href="javascript:;" class="btn submit">
 							<i class="icon-magnifier"></i>
@@ -841,8 +841,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
-                <button type="button" class="btn green J_datatable2_add1" id="import_submit">保存</button>
+                <button type="button" data-dismiss="modal" class="btn btn-default">CANCEL</button>
+                <button type="button" class="btn green J_datatable2_add1" id="import_submit">SAVE</button>
             </div>
         </div>
     </div>
@@ -890,7 +890,7 @@
                     <li>
                         <a href="javascript:;">
                             <div class="u-dtcon-inceptor"></div>
-                            <div class="txt">星环INCEPTOR</div>
+                            <div class="txt">Transwarp-INCEPTOR</div>
                         </a>
                     </li>
                     <li>
@@ -920,5 +920,20 @@
 
 <script src="/assets/js/lang.js"></script>
 <script>
-	$('#J_dsc_list_search').attr('placeholder',$.i18n.map['placeholder-data-source'])
+    $('#J_dsc_list_search').attr('placeholder',$.i18n.map['placeholder-data-source'])
+    $('#tableName').attr('placeholder', $.i18n.map['Please-input'])
+    $('#connection_name').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#connection_name_edit').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#server').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#server_edit').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_port').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#db_port_edit').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#db_database').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_database_edit').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_user').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_user_edit').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_password').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#db_password_edit').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#max_connect_count').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#max_connect_count_edit').attr('placeholder',$.i18n.map['Char-Max32'])
 </script>

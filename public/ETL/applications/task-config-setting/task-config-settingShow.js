@@ -341,7 +341,7 @@ define((require, exports, module) => {
                         $("#J_relate_job_list").html(compiled(data.bcjson.items));
                     });
                 } else {
-                    $("#J_relate_job_list").html(`<tr><td colspan="2" class="text-center">暂无数据</td></tr>`);
+                    $("#J_relate_job_list").html(`<tr><td colspan="2" class="text-center">No Data</td></tr>`);
                 }
             } else {
                 toastr.error(data.bcjson.msg);
@@ -438,59 +438,59 @@ define((require, exports, module) => {
                 // 数据抽取 -> 数据连接 源
                 $("#J_select2_single_tab_1_1").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
 
                 // 数据抽取 -> 数据连接 目标
                 $("#J_select2_single_tab_1_3").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
                 // 执行SQL
                 $("#J_select2_single_tab_2_2").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
 
                 // 变量
                 $("#J_select2_single_tab_3_2").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
                 // 存储任务
                 $("#J_data_source_select2").select2({
                     data: arr,
-                    placeholder: "- 请选择 -"
+                    placeholder: "- Please select a type -"
                 });
 
                 // 导入文本 目标数据源
                 $("#J_select2_single_tab_1_9").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
 
                 // 文件格式转换 数据源
                 $("#J_select2_single_tab_13_1").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
 
                 // 导出文本 数据源
                 $("#J_select2_single_tab_6_2").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
 
                 // 格式转换 数据源
                 $("#J_select2_single_tab_13_1").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
 
                 // 数据剖析 -> 数据连接 源
                 // $("#J_select2_single_tab_11_1").select2({
                 //     data: arr,
-                //     placeholder: '- 请选择 -',
+                //     placeholder: '- Please select a type -',
                 // });
 
                 typeof cb === "function" && cb();
@@ -523,7 +523,7 @@ define((require, exports, module) => {
                 $(selector).empty().clearInputs();
                 $(selector).select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                     tags: isTags // 是否允许手动输入
                 });
                 // 把原始值放到data属性上 为了比较是否手动输入
@@ -557,7 +557,7 @@ define((require, exports, module) => {
                 // 数据剖析 -> 规则文件夹
                 $("#J_select2_single_tab_11_1").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                 });
 
                 typeof cb === "function" && cb();
@@ -583,7 +583,7 @@ define((require, exports, module) => {
                 // 数据抽取 -> 数据连接 源
                 $("#J_select2_multi_tab_11_1").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                     multiple: true,
                 }).data("obj", items);
                 typeof cb === "function" && cb();
@@ -718,9 +718,9 @@ define((require, exports, module) => {
     showContent.haddleDataField = {
         // 初始化
         init: (items) => {
-            let html_t = `<select class="form-control input-sm"><option value="">- 请选择 -</option>`;
+            let html_t = `<select class="form-control input-sm"><option value="">- Please select a type -</option>`;
             let html_input_t=  `<input class="form-control" type="text">`;
-            let html_s = `<select class="form-control input-sm"><option value="">- 请选择 -</option>`;
+            let html_s = `<select class="form-control input-sm"><option value="">- Please select a type -</option>`;
             for (let item of items) {
                 if (item.targetColumn) {
                     html_t += `<option value="${item.targetColumn}">${item.targetColumn}</option>`;
@@ -863,7 +863,7 @@ define((require, exports, module) => {
                 $("#J_stored_procedure_select2").empty().clearInputs();
                 $("#J_stored_procedure_select2").select2({
                     data: arr,
-                    placeholder: '- 请选择 -',
+                    placeholder: '- Please select a type -',
                     // tags: true
                 })
                 // 把原始值放到data属性上 为了比较是否手动输入
@@ -957,7 +957,7 @@ define((require, exports, module) => {
     showContent.haddleDataField_2 = {
         // 初始化
         init: (items) => {
-            let html_t = `<select class="form-control input-sm"><option value="">- 请选择 -</option>`;
+            let html_t = `<select class="form-control input-sm"><option value="">- Please select a type -</option>`;
             for (let item of items) {
                 html_t += `<option value="${item.columnName}">${item.columnName}</option>`;
             }

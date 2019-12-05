@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-12-04 19:23:47
+ * @LastEditTime: 2019-12-05 14:38:00
  * @LastEditors: dailinbo
  */
 
@@ -22,6 +22,7 @@ const geneMenuData = data => {
   const newData = data[0].menu.map(item => ({
     ...item,
     menuid: item.menuid,
+    key: item.menuid,
     menuname: item.menuname,
     path: item.page || '',
     icon: menuIcons[item.menuname],
