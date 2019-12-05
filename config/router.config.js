@@ -32,6 +32,12 @@ export default [
         component: './AlertCenter',
       },
       {
+        path: '/data-source',
+        name: 'dataSource',
+        component: './DataSource/DataSource',
+        hideInMenu: true,
+      },
+      {
         path: '/data-management',
         name: 'dataManagement',
         icon: 'icon-zhuxian',
