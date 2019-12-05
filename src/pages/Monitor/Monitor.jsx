@@ -40,10 +40,12 @@ export default class Monitor extends PureComponent {
 
   componentDidUpdate() {
     setTimeout(() => {
-      const scale = document.getElementById('pageWidth').offsetWidth / 1920;
-      document.getElementById('scaleDiv').style.transform = `scale(${scale})`;
-      const height = document.getElementById('scaleDiv').offsetHeight * scale;
-      document.getElementById('pageWidth').style.height = `${height}px`;
+      if (document.getElementById('pageWidth')) {
+        const scale = document.getElementById('pageWidth').offsetWidth / 1920;
+        document.getElementById('scaleDiv').style.transform = `scale(${scale})`;
+        const height = document.getElementById('scaleDiv').offsetHeight * scale;
+        document.getElementById('pageWidth').style.height = `${height}px`;
+      }
     }, 300);
   }
 

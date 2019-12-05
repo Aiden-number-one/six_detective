@@ -1,7 +1,6 @@
 import Service from '@/utils/Service';
 import fetch from '@/utils/request.default';
 import { formatTree } from '@/utils/utils';
-import { userStatus } from '@/utils/filter';
 
 const { getUserList, addUser, updateUser, operationUser, getMenuUserGroup } = Service;
 export const userManagement = {
@@ -13,38 +12,16 @@ export const userManagement = {
     datas: {},
     operationDatas: {},
     saveUser: {},
-    updateDatas: {},
+    updateData: [],
   },
   effects: {
     *userManagemetDatas({ payload }, { call, put }) {
       const response = yield call(getUserList, { param: payload });
       if (response.bcjson.flag === '1' || !response.bcjson.flag) {
-        const bcjson = Object.assign([], response.bcjson);
-        let userData = Object.assign([], response.bcjson.items);
-        yield (userData =
-          userData.length > 0 &&
-          userData.map(element => {
-            const newCustStatus = userStatus(element.custStatus);
-            return {
-              custStatus: newCustStatus,
-              custCustomerno: element.custCustomerno,
-              userId: element.userId,
-              userName: element.userName,
-              customerno: element.customerno,
-              departmentId: element.departmentId,
-              updateTime: element.updateTime,
-              displaypath: element.displaypath,
-              email: element.email,
-              lastupdatetime: element.lastupdatetime,
-              loginName: element.loginName,
-              userState: element.userState,
-            };
-          }));
-        bcjson.items = userData;
         if (response.bcjson.items) {
           yield put({
             type: 'setDatas',
-            payload: bcjson,
+            payload: response.bcjson,
           });
         }
       }
@@ -63,7 +40,7 @@ export const userManagement = {
       const response = yield call(getMenuUserGroup, { param: payload });
       const userMenu = response.bcjson.items.map(element => ({
         label: element.roleName,
-        value: element.roleName,
+        value: element.roleId,
       }));
 
       if (response.bcjson.flag === '1') {
@@ -143,7 +120,7 @@ export const userManagement = {
     updateDatas(state, action) {
       return {
         ...state,
-        datas: action.payload,
+        updateData: action.payload,
       };
     },
     operationDatas(state, action) {

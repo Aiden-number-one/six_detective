@@ -55,10 +55,10 @@ class FormUser extends Component {
 
 const NewFormUser = Form.create()(FormUser);
 
-// @connect(({ userGroup, loading }) => ({
-//   loading: loading.effects,
-//   userGroup: userGroup.saveUser,
-// }))
+@connect(({ menuUserGroup, loading }) => ({
+  loading: loading.effects,
+  userGroup: menuUserGroup.saveUser,
+}))
 class NewUser extends Component {
   newUserRef = React.createRef();
 
@@ -86,7 +86,7 @@ class NewUser extends Component {
         menuIds: selectedKeys,
       };
       dispatch({
-        type: 'userGroup/newUserGroup',
+        type: 'menuUserGroup/newUserGroup',
         payload: param,
         callback: () => {
           message.success('success');

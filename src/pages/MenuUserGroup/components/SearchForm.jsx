@@ -14,12 +14,24 @@ export default class SearchForm extends Component {
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'app.common.username' })}>
-              {getFieldDecorator('username', {})(<Input className={styles.inputvalue} />)}
+              {getFieldDecorator('userName', {})(
+                <Input
+                  className={styles.inputvalue}
+                  placeholder={`Please Input ${formatMessage({ id: 'app.common.username' })}`}
+                />,
+              )}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'systemManagement.userGroup.remark' })}>
-              {getFieldDecorator('remark', {})(<Input className={styles.inputvalue} />)}
+              {getFieldDecorator('remark', {})(
+                <Input
+                  className={styles.inputvalue}
+                  placeholder={`Please Input ${formatMessage({
+                    id: 'systemManagement.userGroup.remark',
+                  })}`}
+                />,
+              )}
             </Form.Item>
           </Col>
         </Row>

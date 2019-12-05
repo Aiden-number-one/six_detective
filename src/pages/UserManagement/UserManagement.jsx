@@ -3,17 +3,17 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-04 13:39:29
+ * @LastEditTime: 2019-12-05 14:29:06
  */
 
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Modal, Table, Button, Drawer } from 'antd';
+import { Form, Modal, Table, Button, Drawer, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
+import { timeFormat } from '@/utils/filter';
 
 import SearchForm from './components/SearchForm';
 import NewUser from './components/NewUser';
@@ -32,10 +32,13 @@ const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
   loading: loading.effects,
   userManagementData: userManagement.data,
   orgs: userManagement.orgs,
+  modifyUserData: userManagement.updateData,
 }))
 class UserManagement extends Component {
   state = {
     visible: false,
+    userTitle: 'New User',
+    NewFlag: true,
     updateVisible: false,
     deleteVisible: false,
     closingVisible: false,
@@ -43,11 +46,8 @@ class UserManagement extends Component {
     resetPasswordVisible: false,
     customerno: null,
     userInfo: {
-      login: '',
-      name: '',
-      departmentName: '',
-      departmentId: '',
-      email: '',
+      userId: '',
+      userName: '',
     },
     columns: [
       {
@@ -69,11 +69,25 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
         dataIndex: 'updateTime',
         key: 'updateTime',
+        render: (res, obj) => (
+          <div>
+            <span>{timeFormat(obj.updateTime).t1}</span>
+            <br />
+            <span>{timeFormat(obj.updateTime).t2}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
         dataIndex: 'updateTime',
         key: 'updateTime',
+        render: (res, obj) => (
+          <div>
+            <span>{timeFormat(obj.updateTime).t1}</span>
+            <br />
+            <span>{timeFormat(obj.updateTime).t2}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -84,7 +98,7 @@ class UserManagement extends Component {
             <a href="#" onClick={() => this.updateUser(res, obj)}>
               {formatMessage({ id: 'app.common.modify' })}
             </a>
-            <a href="#" onClick={() => this.deleteUser()}>
+            <a href="#" onClick={() => this.deleteUser(res, obj)}>
               {formatMessage({ id: 'app.common.delete' })}
             </a>
           </span>
@@ -111,7 +125,7 @@ class UserManagement extends Component {
 
   componentDidMount() {
     this.queryUserList();
-    this.queryDepartments();
+    // this.queryDepartments();
   }
 
   /**
@@ -121,19 +135,15 @@ class UserManagement extends Component {
    */
   queryUserList = (
     param = {
-      searchParam: undefined,
-      displaypath: undefined,
-      email: undefined,
-      custStatus: undefined,
+      userId: undefined,
+      userName: undefined,
     },
   ) => {
     const { dispatch } = this.props;
-    const { searchParam, displaypath, email, custStatus } = param;
+    const { userId, userName } = param;
     const params = {
-      searchParam,
-      displaypath,
-      email,
-      custStatus,
+      userId,
+      userName,
       pageNumber: this.state.page.pageNumber,
       pageSize: this.state.page.pageSize,
     };
@@ -175,6 +185,9 @@ class UserManagement extends Component {
   newUser = () => {
     this.setState({
       visible: true,
+      userTitle: 'New User',
+      NewFlag: true,
+      userInfo: {},
     });
     // this.props.dispatch(
     //   routerRedux.push({
@@ -184,29 +197,10 @@ class UserManagement extends Component {
   };
 
   addConfrim = () => {
-    const { dispatch } = this.props;
-    this.formRef.current.validateFields((err, values) => {
-      const passwordStrength = passWordStrength(values.password);
-      const param = {
-        loginName: values.login,
-        customerName: values.name,
-        departmentId: this.newDepartmentId,
-        password: window.kddes.getDes(values.password),
-        passwordStrength,
-        mobile: values.phone,
-        email: values.email,
-      };
-      dispatch({
-        type: 'userManagement/addUserModelDatas',
-        payload: param,
-        callback: () => {
-          this.setState({
-            visible: false,
-          });
-          this.queryUserList();
-        },
-      });
+    this.setState({
+      visible: false,
     });
+    this.queryUserList();
   };
 
   addCancel = () => {
@@ -222,27 +216,26 @@ class UserManagement extends Component {
     console.log('res=======', res);
     console.log('obj============', obj);
     const userInfo = {
-      login: '',
-      name: '',
-      departmentName: '',
-      departmentId: '',
-      email: '',
+      userName: obj.userName,
+      userId: obj.userId,
+      accountLock: obj.accountLock,
     };
-    userInfo.login = obj.loginName;
-    userInfo.name = obj.customerName;
-    userInfo.departmentName = obj.departmentName;
-    userInfo.departmentId = obj.departmentId;
-    userInfo.email = obj.email;
-    this.props.dispatch(
-      routerRedux.push({
-        pathname: '/system-management/user-maintenance/modify-user',
-        query: {
-          userId: obj.userId,
-          userName: obj.userName,
-          userState: obj.userState,
-        },
-      }),
-    );
+    this.setState({
+      visible: true,
+      userTitle: 'Modify User',
+      NewFlag: false,
+      userInfo,
+    });
+    // this.props.dispatch(
+    //   routerRedux.push({
+    //     pathname: '/system-management/user-maintenance/modify-user',
+    //     query: {
+    //       userId: obj.userId,
+    //       userName: obj.userName,
+    //       userState: obj.userState,
+    //     },
+    //   }),
+    // );
     // this.setState({
     //   updateVisible: true,
     //   userInfo,
@@ -285,26 +278,39 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  deleteUser = () => {
+  deleteUser = (res, obj) => {
+    console.log('delete=', res, obj);
+    const userInfo = {
+      userName: obj.userName,
+      userId: obj.userId,
+      accountLock: obj.accountLock,
+    };
     this.setState({
       deleteVisible: true,
+      userInfo,
     });
   };
 
   deleteConfirm = () => {
     const { dispatch } = this.props;
-    const param = {
-      operationType: '1',
+    const params = {
+      operType: 'deleteUserById',
+      userId: this.state.userInfo.userId,
     };
     dispatch({
-      type: 'userManagement/operationUserModelDatas',
-      payload: param,
+      type: 'userManagement/updateUserModelDatas',
+      payload: params,
       callback: () => {
+        message.success('save success');
         this.queryUserList();
+        this.setState({
+          deleteVisible: false,
+        });
+        //   this.props.history.push({
+        //     pathname: '/system-management/user-maintenance',
+        //     params: values,
+        //   });
       },
-    });
-    this.setState({
-      deleteVisible: false,
     });
   };
 
@@ -433,17 +439,11 @@ class UserManagement extends Component {
    * @return: undefined
    */
   queryLog = () => {
-    this.props.dispatch(
-      routerRedux.push({
-        pathname: '/system-management/menu-user-group',
-      }),
-    );
     this.searchForm.current.validateFields((err, values) => {
+      console.log('values===', values);
       const params = {
-        searchParam: values.searchParam,
-        displaypath: values.displaypath,
-        email: values.email,
-        custStatus: values.custStatus,
+        userId: values.userId,
+        userName: values.userName,
       };
       this.queryUserList(params);
     });
@@ -472,13 +472,13 @@ class UserManagement extends Component {
 
   render() {
     const { loading, orgs, userManagementData } = this.props;
-    const { userInfo, page } = this.state;
+    const { userInfo, page, userTitle, NewFlag } = this.state;
     console.log('userManagementData.items=', userManagementData.items);
-    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      },
-    };
+    // const rowSelection = {
+    //   onChange: (selectedRowKeys, selectedRows) => {
+    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    //   },
+    // };
     return (
       <PageHeaderWrapper>
         <div>
@@ -504,8 +504,21 @@ class UserManagement extends Component {
                 getDepartmentId={this.getDepartmentId}
               ></NewUserForm>
             </Modal>
-            <Drawer width={700} onClose={this.addCancel} visible={this.state.visible}>
-              <NewUser onCancel={this.addCancel} onSave={this.addConfrim}></NewUser>
+            <Drawer
+              closable={false}
+              title={userTitle}
+              width={700}
+              onClose={this.addCancel}
+              visible={this.state.visible}
+            >
+              {this.state.visible && (
+                <NewUser
+                  onCancel={this.addCancel}
+                  onSave={this.addConfrim}
+                  NewFlag={NewFlag}
+                  userInfo={userInfo}
+                ></NewUser>
+              )}
             </Drawer>
             {/* 修改用户 */}
             <Modal
@@ -523,7 +536,7 @@ class UserManagement extends Component {
                 getDepartmentId={this.getDepartmentId}
               ></NewUpdateForm>
             </Modal>
-            {/* 锁定 */}
+            {/* delete */}
             <Modal
               title="CONFIRM"
               visible={this.state.deleteVisible}
@@ -569,13 +582,15 @@ class UserManagement extends Component {
             </Modal>
           </div>
           <div className={styles.content}>
-            <Button onClick={this.newUser} type="primary" className="button_two">
-              + New User
-            </Button>
+            <div className={styles.tableTop}>
+              <Button onClick={this.newUser} type="primary" className="btn_usual">
+                + New User
+              </Button>
+            </div>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
               pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
-              rowSelection={rowSelection}
+              // rowSelection={rowSelection}
               onChange={this.pageChange}
               dataSource={userManagementData.items}
               columns={this.state.columns}

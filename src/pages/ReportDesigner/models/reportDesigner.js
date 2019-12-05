@@ -1,18 +1,27 @@
 /*
- * @Author: your name
- * @Date: 2019-11-26 11:16:28
- * @LastEditTime: 2019-12-02 15:03:44
- * @LastEditors: iron
- * @Description: In User Settings Edit
- * @FilePath: \superlop-web-project\src\pages\ReportDesigner\models\reportDesigner.js
+ * @Des: 报表设计器的Model
+ * @Author: mus
+ * @Email: mus@szkingdom.com
+ * @Date: 2019-12-02 16:36:09
+ * @LastEditors: mus
+ * @LastEditTime: 2019-12-05 09:45:26
  */
+
 import fetch from '@/utils/request.default';
 
 export default {
   namespace: 'reportDesigner',
   state: {
     contentDetail: '', // 报表设计器的JSON
-    customSearchData: [], // 查询控件的数据
+    customSearchData: [
+      {
+        x: 0,
+        y: 0,
+        w: 1,
+        h: 1,
+        i: '0',
+      },
+    ], // 查询控件的数据
   },
   effects: {
     *saveTaskGridContent(_, { call, select }) {
@@ -26,7 +35,6 @@ export default {
         isAllSave: '1',
       };
       const { items } = yield call(fetch('set_task_grid_content_save'), params);
-      console.log(items);
     },
   },
   reducers: {
