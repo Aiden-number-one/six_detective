@@ -1,7 +1,8 @@
 import React from 'react';
-import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Button } from 'antd';
 import IconFont from '@/components/IconFont';
+import ColumnTitle from './ColumnTitle';
 import styles from './index.less';
 
 const { Column } = Table;
@@ -24,6 +25,7 @@ export default function({ dataSource, getAlert }) {
         </Button>
       </Row>
       <Table
+        border
         dataSource={dataSource}
         rowKey="alertId"
         rowSelection={{
@@ -38,48 +40,56 @@ export default function({ dataSource, getAlert }) {
         })}
       >
         <Column
-          dataIndex="alertId"
-          width={200}
           ellipsis
-          title={<FormattedMessage id="alert-center.alert-id" />}
-          filters={[{ text: 'a', value: 'b' }]}
+          width={150}
+          dataIndex="alertId"
+          title={
+            <ColumnTitle>
+              <FormattedMessage id="alert-center.alert-id" />
+            </ColumnTitle>
+          }
         />
         <Column
+          align="center"
           dataIndex="alertType"
-          width={80}
-          title={<FormattedMessage id="alert-center.alert-type" />}
+          title={
+            <ColumnTitle>
+              <FormattedMessage id="alert-center.alert-type" />
+            </ColumnTitle>
+          }
         />
         <Column
+          align="center"
           dataIndex="tradeDate"
-          width={100}
           title={<FormattedMessage id="alert-center.trade-date" />}
         />
         <Column
-          dataIndex="alertTimestamp"
           width={120}
+          align="center"
+          dataIndex="alertTimestamp"
           title={<FormattedMessage id="alert-center.alert-timestamp" />}
         />
         <Column
+          align="center"
+          width={70}
           dataIndex="itemsTotal"
-          width={100}
           title={<FormattedMessage id="alert-center.items-total" />}
         />
+        <Column dataIndex="owner" title={<FormattedMessage id="alert-center.owner" />} />
         <Column
-          dataIndex="owner"
-          width={130}
-          title={<FormattedMessage id="alert-center.owner" />}
-        />
-        <Column
-          dataIndex="status"
+          align="center"
           width={80}
+          dataIndex="status"
           title={<FormattedMessage id="alert-center.status" />}
         />
         <Column
-          dataIndex="handleToday"
+          align="center"
           width={80}
+          dataIndex="handleToday"
           title={<FormattedMessage id="alert-center.handle-today" />}
         />
         <Column
+          align="center"
           dataIndex="action"
           title={<FormattedMessage id="alert-center.action" />}
           render={() => (

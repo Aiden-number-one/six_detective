@@ -4,10 +4,13 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-04 13:24:40
  * @LastEditors: iron
- * @LastEditTime: 2019-12-04 16:56:21
+ * @LastEditTime: 2019-12-05 10:34:28
  */
 import { effects } from 'dva/saga';
-import alertCenter, { requestAlerts } from './model';
+import alertCenter, { getAlerts } from './model';
+
+const { reducers, effects: sagas } = alertCenter;
+const { call, put } = effects;
 
 describe('alertCenter Model', () => {
   it('loads', () => {
@@ -15,16 +18,15 @@ describe('alertCenter Model', () => {
   });
 
   describe('reducers', () => {
-    it('saveAlerts should work', () => {
-      const { reducers } = alertCenter;
-      const reducer = reducers.saveAlerts;
+    it('save alerts should work', () => {
+      const reducer = reducers.save;
 
       const state = {
         alerts: [],
       };
 
       const action = {
-        type: 'saveAlerts',
+        type: 'save',
         payload: [],
       };
 
@@ -35,21 +37,17 @@ describe('alertCenter Model', () => {
   });
 
   describe('effects', () => {
-    it('fetchAlerts should work', () => {
-      const { call, put } = effects;
-      const sagas = alertCenter.effects;
-      const saga = sagas.fetchAlerts;
-      const generator = saga({ type: 'fetchAlerts' }, { call, put });
+    it('fetch alerts should work', () => {
+      const saga = sagas.fetch;
+      const generator = saga({ type: 'fetch' }, { call, put });
 
       let next = generator.next();
-
-      expect(next.value).toMatchObject(call(requestAlerts, undefined));
+      expect(next.value).toEqual(call(getAlerts, undefined));
 
       next = generator.next({ items: [] });
-
-      expect(next.value).toMatchObject(
+      expect(next.value).toEqual(
         put({
-          type: 'saveAlerts',
+          type: 'save',
           payload: [],
         }),
       );

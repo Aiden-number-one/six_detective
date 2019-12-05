@@ -7,7 +7,12 @@ const { Column } = Table;
 
 export default function({ dataSource, loading }) {
   return (
-    <Table dataSource={dataSource} rowKey="tradeDate-submitterCode" loading={loading}>
+    <Table
+      dataSource={dataSource}
+      rowKey="tradeDate-submitterCode"
+      loading={loading}
+      pagination={{ showSizeChanger: true, showQuickJumper: true }}
+    >
       <Column
         align="center"
         dataIndex="tradeDate"

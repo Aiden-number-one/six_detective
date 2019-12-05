@@ -4,10 +4,22 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors: iron
- * @LastEditTime: 2019-12-04 18:02:02
+ * @LastEditTime: 2019-12-05 11:09:17
  */
 
-import fetch from '@/utils/request.default';
+import { request } from '@/utils/request.default';
+
+export async function getLogs(params) {
+  return request('loplogs', { data: params });
+}
+
+export async function postManual(params) {
+  return request('manual-import', { data: params });
+}
+
+export async function postAuto(params) {
+  return request('auto-import', { data: params });
+}
 
 export const pageSelector = ({ lop }) => lop.page;
 
@@ -19,7 +31,12 @@ export default {
     page: null,
   },
   reducers: {
-    save(state, { payload: logs }) {
+    save(
+      state,
+      {
+        payload: { logs },
+      },
+    ) {
       return {
         ...state,
         logs,
@@ -27,19 +44,19 @@ export default {
     },
   },
   effects: {
-    *fetch({ params }, { call, put }) {
-      const { items } = yield call(fetch('loplogs'), params);
+    *fetch({ params: { page = 1 } = {} }, { call, put }) {
+      const { items } = yield call(getLogs, { page });
       yield put({
         type: 'save',
         payload: items,
       });
     },
     *importByManual({ params }, { call, put }) {
-      yield call(fetch('manual-import'), params);
+      yield call(postManual, params);
       yield put({ type: 'reload' });
     },
     *importByAuto({ params }, { call, put }) {
-      yield call(fetch('auto-import'), params);
+      yield call(postAuto, params);
       yield put({ type: 'reload' });
     },
     *reload(action, { put, select }) {

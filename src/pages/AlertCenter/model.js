@@ -4,13 +4,13 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-04 16:59:38
+ * @LastEditTime: 2019-12-05 10:16:50
  */
 import { request } from '@/utils/request.default';
 
 // just for unit test
 // `fetch` high order function return anonymous func
-export async function requestAlerts(params = {}) {
+export async function getAlerts(params) {
   return request('alerts', { data: params });
 }
 
@@ -20,7 +20,7 @@ export default {
     alerts: [],
   },
   reducers: {
-    saveAlerts(state, { payload: alerts }) {
+    save(state, { payload: alerts }) {
       return {
         ...state,
         alerts,
@@ -28,10 +28,10 @@ export default {
     },
   },
   effects: {
-    *fetchAlerts({ params }, { call, put }) {
-      const { items } = yield call(requestAlerts, params);
+    *fetch({ params }, { call, put }) {
+      const { items } = yield call(getAlerts, params);
       yield put({
-        type: 'saveAlerts',
+        type: 'save',
         payload: items,
       });
     },

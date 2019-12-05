@@ -9,7 +9,7 @@ function Alert({ dispatch, alerts }) {
   const [alert, setAlert] = useState({});
   useEffect(() => {
     dispatch({
-      type: 'alertCenter/fetchAlerts',
+      type: 'alertCenter/fetch',
     });
   }, []);
 
