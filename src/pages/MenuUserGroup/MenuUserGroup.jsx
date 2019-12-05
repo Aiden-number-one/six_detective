@@ -68,6 +68,7 @@ class MenuUserGroup extends Component {
     // );
     this.setState({
       newVisible: true,
+      groupTitle: 'New User Group',
     });
   };
 
@@ -158,6 +159,7 @@ class MenuUserGroup extends Component {
 
   render() {
     const { loading, menuUserGroup } = this.props;
+    const { groupTitle } = this.state;
     console.log('menuUserGroup=', menuUserGroup);
     const { columns, page, newVisible } = this.state;
     const rowSelection = {
@@ -168,13 +170,19 @@ class MenuUserGroup extends Component {
     return (
       <PageHeaderWrapper>
         <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
-        <Drawer width={700} onClose={this.onClose} visible={newVisible}>
+        <Drawer
+          closable={false}
+          title={groupTitle}
+          width={700}
+          onClose={this.onClose}
+          visible={newVisible}
+        >
           <NewUserGroup onCancel={this.onClose} onSave={this.onSave}></NewUserGroup>
         </Drawer>
         <div className={styles.content}>
           <div className={styles.tableTop}>
             <Button onClick={this.newUser} type="primary" className="btn_usual">
-              + New User
+              + New User Group
             </Button>
           </div>
           <Table

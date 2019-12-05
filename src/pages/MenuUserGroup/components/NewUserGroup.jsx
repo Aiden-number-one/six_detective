@@ -28,10 +28,10 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your roleName',
+                  message: 'Please input Name of Menu User Group',
                 },
               ],
-            })(<Input />)}
+            })(<Input placeholder="Please input" />)}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.userGroup.remark' })}
@@ -42,10 +42,10 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your remark',
+                  message: 'Please input Remark of Menu User Group',
                 },
               ],
-            })(<TextArea rows={4} />)}
+            })(<TextArea rows={4} placeholder="Please input" />)}
           </Form.Item>
         </Form>
       </Fragment>
@@ -80,6 +80,10 @@ class NewUser extends Component {
     const { selectedKeys } = this.state;
     const { dispatch } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
+      if (selectedKeys <= 0) {
+        message.warning('Please checked Authorizing operate to alerts');
+        return;
+      }
       const param = {
         roleName: values.roleName,
         roleDesc: values.roleDesc,
@@ -127,9 +131,7 @@ class NewUser extends Component {
         <NewFormUser ref={this.newUserRef} />
         <Row type="flex">
           <Col>
-            <span className={styles.title}>
-              {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
-            </span>
+            <span className={styles.title}>Authorizing access to menus</span>
           </Col>
           <Col>
             <ClassifyTree
@@ -146,7 +148,19 @@ class NewUser extends Component {
             ></ClassifyTree>
           </Col>
         </Row>
-        <Row type="flex" justify="end">
+        <Row
+          type="flex"
+          justify="end"
+          style={{
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}
+        >
           <Col>
             <Button onClick={this.onCancel}>CANCEL</Button>
             <Button type="primary" onClick={this.onSave}>
