@@ -215,11 +215,11 @@ class MenuUserGroup extends Component {
     const { groupTitle, deleteVisible, groupMenuInfo, updateFlag } = this.state;
     console.log('menuUserGroup=', menuUserGroup);
     const { columns, page, modifyVisible } = this.state;
-    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      },
-    };
+    // const rowSelection = {
+    //   onChange: (selectedRowKeys, selectedRows) => {
+    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    //   },
+    // };
     return (
       <PageHeaderWrapper>
         <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
@@ -259,7 +259,7 @@ class MenuUserGroup extends Component {
           <Table
             loading={loading['menuUserGroup/getMenuUserGroup']}
             pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
-            rowSelection={rowSelection}
+            // rowSelection={rowSelection}
             onChange={this.pageChange}
             dataSource={menuUserGroup.items}
             columns={columns}

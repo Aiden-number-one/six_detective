@@ -181,26 +181,26 @@ class NewUser extends Component {
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
-        <Row type="flex">
-          <Col>
-            <span className={styles.title}>Authorizing access to menus</span>
-          </Col>
-          <Col>
-            <ClassifyTree
-              all
-              checkable
-              onCheck={this.onCheck}
-              treeData={menuData}
-              checkedKeys={defaultCheckedKeys}
-              treeKey={{
-                currentKey: 'menuid',
-                currentName: 'menuname',
-                parentKey: 'parentmenuid',
-              }}
-              onSelect={this.onSelect}
-            ></ClassifyTree>
-          </Col>
-        </Row>
+        <ul type="flex" className={styles.userGroup}>
+          <li>
+            <h3 className={styles.groupTitle}>Authorizing access to menus</h3>
+            <div className={styles.treeWraper}>
+              <ClassifyTree
+                all
+                checkable
+                onCheck={this.onCheck}
+                treeData={menuData}
+                checkedKeys={defaultCheckedKeys}
+                treeKey={{
+                  currentKey: 'menuid',
+                  currentName: 'menuname',
+                  parentKey: 'parentmenuid',
+                }}
+                onSelect={this.onSelect}
+              ></ClassifyTree>
+            </div>
+          </li>
+        </ul>
         <Row
           type="flex"
           justify="end"
