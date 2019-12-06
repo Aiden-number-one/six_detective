@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-06 17:04:13
+ * @LastEditTime: 2019-12-06 17:10:42
  */
 
 import React, { Component } from 'react';
@@ -79,15 +79,8 @@ class UserManagement extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
-        dataIndex: 'updateTime',
-        key: 'updateTime',
-        render: (res, obj) => (
-          <div>
-            <span>{timeFormat(obj.updateTime).t1}</span>
-            <br />
-            <span>{timeFormat(obj.updateTime).t2}</span>
-          </div>
-        ),
+        dataIndex: 'updateBy',
+        key: 'updateBy',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
