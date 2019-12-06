@@ -4,21 +4,18 @@ import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
 import styles from '../UserManagement.less';
-import { passWordStrength } from '@/utils/utils';
+// import { passWordStrength } from '@/utils/utils';
 
 class FormUser extends Component {
   constructor() {
     super();
-    this.state = {
-      //   menuUserGroups: ['Administrator', 'Operator', 'Supervisor', 'Enquriy'],
-    };
+    this.state = {};
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
     // const { alertUserGroups } = this.state;
     const { NewFlag, userInfo } = this.props;
-    console.log('userInfo==========', userInfo);
     return (
       <Fragment>
         <Form>
@@ -129,6 +126,7 @@ const NewFormUser = Form.create()(FormUser);
   loading: loading.effects,
   newUserData: userManagement.saveUser,
   menuUserGroup: userManagement.menuData,
+  alertUserGroups: userManagement.alertData,
   modifyUserData: userManagement.updateData,
 }))
 export default class NewUser extends Component {
@@ -141,12 +139,6 @@ export default class NewUser extends Component {
       locedChecked: false,
       roleIds: [],
       alertIds: [],
-      alertUserGroups: [
-        { label: 'Future Maker', value: '1' },
-        { label: 'Future Checker', value: '2' },
-        { label: 'Option Maker', value: '3' },
-        { label: 'Option Checker', value: '4' },
-      ],
     };
   }
 
@@ -157,10 +149,10 @@ export default class NewUser extends Component {
       locedChecked = true;
     }
     this.queryLog();
+    this.getAlertUserGroup();
     this.setState({
       locedChecked,
     });
-    console.log('userInfo.userId==', userInfo.userId);
     if (userInfo.userId) {
       this.getRoalId(userInfo.userId);
     }
@@ -171,6 +163,15 @@ export default class NewUser extends Component {
     const params = {};
     dispatch({
       type: 'userManagement/getMenuUserGroup',
+      payload: params,
+    });
+  };
+
+  getAlertUserGroup = () => {
+    const { dispatch } = this.props;
+    const params = {};
+    dispatch({
+      type: 'userManagement/getAlertUserGroup',
       payload: params,
     });
   };
@@ -186,10 +187,7 @@ export default class NewUser extends Component {
       type: 'userManagement/updateUserModelDatas',
       payload: params,
       callback: () => {
-        console.log('modifyUserData2==========', this.props.modifyUserData);
-        console.log('modifyUserData[0].roleId=', this.props.modifyUserData[0].roleId);
         const roleIds = this.props.modifyUserData.map(element => {
-          // element.userGroupType === 'menu' ? element.roleId : '',
           let roleId = '';
           if (element.userGroupType === 'menu') {
             // eslint-disable-next-line prefer-destructuring
@@ -197,10 +195,17 @@ export default class NewUser extends Component {
           }
           return roleId;
         });
-        console.log('roleIds=', roleIds);
-        // roleIds.push(this.props.modifyUserData[0].roleId);
+        const alertIds = this.props.modifyUserData.map(element => {
+          let roleId = '';
+          if (element.userGroupType === 'alert') {
+            // eslint-disable-next-line prefer-destructuring
+            roleId = element.roleId;
+          }
+          return roleId;
+        });
         this.setState({
           roleIds,
+          alertIds,
         });
       },
     });
@@ -237,14 +242,12 @@ export default class NewUser extends Component {
   };
 
   onChangeMenuUserGroup = checkedValue => {
-    console.log('checkedValue', checkedValue);
     this.setState({
       roleIds: checkedValue,
     });
   };
 
   onChangeAlertUserGroup = checkedValue => {
-    console.log('checkedValue=', checkedValue);
     this.setState({
       alertIds: checkedValue,
     });
@@ -252,7 +255,6 @@ export default class NewUser extends Component {
 
   onSave = () => {
     const { accountLock, roleIds, alertIds } = this.state;
-    console.log('roleIds=', roleIds);
     const { NewFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
       if (err) {
@@ -266,8 +268,7 @@ export default class NewUser extends Component {
         message.warning('Please checked Alert User Group');
         return;
       }
-      const passwordStrength = passWordStrength(values.userPwd);
-      console.log('passwordStrength=', passwordStrength);
+      // const passwordStrength = passWordStrength(values.userPwd);
       const { dispatch } = this.props;
       if (NewFlag) {
         const params = {
@@ -316,13 +317,8 @@ export default class NewUser extends Component {
   };
 
   render() {
-    const { menuUserGroup, NewFlag, userInfo, modifyUserData } = this.props;
-    console.log('modifyUserData1=', modifyUserData);
-    // this.setRoleIds(modifyUserData)
-    const { alertUserGroups, locedChecked, roleIds, alertIds } = this.state;
-    // console.log('menuUserGroup=', menuUserGroup);
-    // console.log('userInfo1=', userInfo);
-    console.log('roleIds=', roleIds);
+    const { menuUserGroup, NewFlag, userInfo, alertUserGroups } = this.props;
+    const { locedChecked, roleIds, alertIds } = this.state;
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} NewFlag={NewFlag} userInfo={userInfo} />
