@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-06 15:37:10
+ * @LastEditTime: 2019-12-06 17:10:42
  */
 
 import React, { Component } from 'react';
@@ -79,15 +79,8 @@ class UserManagement extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
-        dataIndex: 'updateTime',
-        key: 'updateTime',
-        render: (res, obj) => (
-          <div>
-            <span>{timeFormat(obj.updateTime).t1}</span>
-            <br />
-            <span>{timeFormat(obj.updateTime).t2}</span>
-          </div>
-        ),
+        dataIndex: 'updateBy',
+        key: 'updateBy',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -545,7 +538,7 @@ class UserManagement extends Component {
               cancelText={formatMessage({ id: 'app.common.cancel' })}
               okText={formatMessage({ id: 'app.common.save' })}
             >
-              <span>Please confirm that you want to delete this record.?</span>
+              <span>Please confirm that you want to delete this record?</span>
             </Modal>
             {/* 销户 */}
             <Modal
