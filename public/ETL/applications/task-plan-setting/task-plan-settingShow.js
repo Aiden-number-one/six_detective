@@ -196,7 +196,7 @@ define(function (require, exports, module) {
                     var item = items[index];
                     App.blockUI({
                         boxed: true,
-                        message: state ? "开启中" : "关闭中"
+                        message: state ? "Opening" : "Closing"
                     });
                     showContent.setSwitchAction(state, item);
                 }

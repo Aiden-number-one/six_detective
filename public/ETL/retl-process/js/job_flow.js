@@ -126,7 +126,7 @@ $("#jf_btn_saveSubmit").click(function() {
 	if ($("#form_newJob").form('validate')) {// 启用校验
 		saveFlowInfo();
 	}else {
-		$.messager.alert('提示', "有非空字段需要填写，请检查.", 'waring');
+		$.messager.alert('Tips', "Param is Missing，Please Check.", 'waring');
 	}
 });
 function saveFlowInfo(){
@@ -141,7 +141,7 @@ function saveFlowInfo(){
 	var flag = true;
 	for (var i = 0; i < nary.length - 1; i++) {
 		if (nary[i] == nary[i + 1]) {
-			Peony.alert('提示', '存在重复节点编号 "' + nary[i] + '"，请修改后再提交！',
+			Peony.alert('Tips', '"' + nary[i] + '"is repeated，Please Check',
 			'error');
 			flag = false;
 			break;
@@ -185,9 +185,9 @@ function saveFlowInfo(){
 	// 	success : function(data) {
 			Peony.closeProgress();
 			if ($("#_saveJobType").val() === '2') {
-				$.messager.alert('提示', "另存为作业信息成功！", 'info');
+				$.messager.alert('Tips', "Successful", 'info');
 			} else {
-				$.messager.alert('提示', data.bcjson.msg, 'info', function() {
+				$.messager.alert('Tips', data.bcjson.msg, 'info', function() {
 					setTimeout(function() {
 						window.opener.location.href = "/ETL/index.html?folderId=" + params.folder_id + "#report-table-info-manage";
 						setTimeout(function(){window.opener.location.reload();
@@ -221,7 +221,7 @@ function saveFlowInfo(){
 }
 //画布中保存信息是【关闭】按钮操作
 $("#btn-jobFlow-close").unbind('click').click(function() {
-	$.messager.confirm('确认', '您确定要关闭窗口？', function(r) {
+	$.messager.confirm('Confirm', 'Please Confirm to colse window', function(r) {
 		if (r) {
 			$('#jf_win_newJob').window('close');
 		}
@@ -311,14 +311,14 @@ function btnAddCondition() {
 		var tab = document.getElementById("tbC");
 		var rows = tab.rows.length;
 		if (rows > 1) {// 表头信息
-			$.messager.confirm('确认', '您确定要删除记录？', function(r) {
+			$.messager.confirm('Confirm', 'Please confirm that you want to delete this record.', function(r) {
 				if (r) {
 					rowCount = 0;
 					delAllLine(true);
 				}
 			});
 		} else {
-			$.messager.alert('提示', "无待删除信息！", 'info');
+			$.messager.alert('Tips', "No Data", 'info');
 		}
 	});
 }
@@ -340,8 +340,8 @@ function addLineCondition(i, data) {
 	html += '    </select></td>';
 	html += '  <td><select name="i_success_condition" class="form-control" id="i_success_condition'
 			+ i + '" style="width: 100%; height: 34px;">';
-	html += '      <option value="1">等于</option>';
-	html += '      <option value="2">不等于</option>';
+	html += '      <option value="1">=</option>';
+	html += '      <option value="2">≠</option>';
 	// html += '      <option value="3">为空</option>';
 	// html += '      <option value="4">不为空</option>';
 	// html += '      <option value="5">包含</option>';
@@ -364,12 +364,12 @@ function addLineCondition(i, data) {
 	html += '      <option value="1">AND</option>';
 	html += '      <option value="2">OR</option>';
 	html += '    </select></td>';
-	html += '  <td width="10%"><a id="J_process_del" class="btn-operate remove-btn"><i class="widget-thumb-icon bg-red fa icon-trash"></i>删除</a></td>';
+	html += '  <td width="10%"><a id="J_process_del" class="btn-operate remove-btn"><i class="widget-thumb-icon bg-red fa icon-trash"></i>DELETE</a></td>';
 	html += '</tr>';
 	var line = $(html);
 	// 版定删除按钮事件
 	$(".remove-btn", line).click(function() {
-		$.messager.confirm('确认', '您确定要删除记录？', function(r) {
+		$.messager.confirm('Confirm', 'Please confirm that you want to delete this record.', function(r) {
 			if (r) {
 				rowCount--;
 				delLine(line);
