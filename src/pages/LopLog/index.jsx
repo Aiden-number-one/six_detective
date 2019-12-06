@@ -27,6 +27,7 @@ export function LopLog({ dispatch, logs, loading }) {
   function handleAuto() {
     dispatch({ type: 'lop/importByAuto' });
   }
+
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>

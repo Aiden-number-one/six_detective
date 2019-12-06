@@ -22,46 +22,59 @@ class FormUser extends Component {
     return (
       <Fragment>
         <Form>
-          <Form.Item label="User Id：" labelCol={{ span: 4 }} wrapperCol={{ span: 6 }}>
+          <Form.Item label="User Id：" labelCol={{ span: 4 }} wrapperCol={{ span: 7 }}>
             {getFieldDecorator('userId', {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your UserId',
+                  message: `${formatMessage({ id: 'app.common.userId' })} should not be empty`,
                 },
               ],
               initialValue: userInfo && userInfo.userId,
-            })(<Input />)}
+            })(
+              <Input
+                disabled={!!userInfo.userId}
+                placeholder={`Please input ${formatMessage({ id: 'app.common.userId' })}`}
+              />,
+            )}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'app.common.username' })}
             labelCol={{ span: 4 }}
-            wrapperCol={{ span: 6 }}
+            wrapperCol={{ span: 7 }}
           >
             {getFieldDecorator('userName', {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your username',
+                  message: `${formatMessage({ id: 'app.common.username' })} should not be empty`,
                 },
               ],
               initialValue: userInfo && userInfo.userName,
-            })(<Input />)}
+            })(
+              <Input
+                placeholder={`Please Input ${formatMessage({ id: 'app.common.username' })}`}
+              />,
+            )}
           </Form.Item>
           {NewFlag && (
             <Form.Item
               label={formatMessage({ id: 'app.common.password' })}
               labelCol={{ span: 4 }}
-              wrapperCol={{ span: 6 }}
+              wrapperCol={{ span: 7 }}
             >
               {getFieldDecorator('userPwd', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input your password',
+                    message: 'Please input password',
                   },
                 ],
-              })(<Input.Password />)}
+              })(
+                <Input.Password
+                  placeholder={`Please Input ${formatMessage({ id: 'app.common.password' })}`}
+                />,
+              )}
             </Form.Item>
           )}
           {/* <Form.Item wrapperCol={{ span: 6, offset: 4 }}>
@@ -239,7 +252,16 @@ export default class NewUser extends Component {
 
   onSave = () => {
     const { accountLock, roleIds, alertIds } = this.state;
+    console.log('roleIds=', roleIds);
     const { NewFlag } = this.props;
+    if (roleIds.length <= 0) {
+      message.warning('Please checked Menu User Group');
+      return;
+    }
+    if (alertIds.length <= 0) {
+      message.warning('Please checked Alert User Group');
+      return;
+    }
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
       const passwordStrength = passWordStrength(values.userPwd);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { formatMessage } from 'umi/locale';
-import styles from '../MenuUserGroup.less';
+import styles from '../AlertUserGroup.less';
 
 export default class SearchForm extends Component {
   state = {};
@@ -13,20 +13,18 @@ export default class SearchForm extends Component {
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label={formatMessage({ id: 'systemManagement.userMaintenance.name' })}>
-              {getFieldDecorator('roleName', {})(
+            <Form.Item label={formatMessage({ id: 'app.common.username' })}>
+              {getFieldDecorator('userName', {})(
                 <Input
                   className={styles.inputvalue}
-                  placeholder={`Please Input ${formatMessage({
-                    id: 'systemManagement.userMaintenance.name',
-                  })}`}
+                  placeholder={`Please Input ${formatMessage({ id: 'app.common.username' })}`}
                 />,
               )}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'systemManagement.userGroup.remark' })}>
-              {getFieldDecorator('roleDesc', {})(
+              {getFieldDecorator('remark', {})(
                 <Input
                   className={styles.inputvalue}
                   placeholder={`Please Input ${formatMessage({

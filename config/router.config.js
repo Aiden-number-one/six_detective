@@ -221,6 +221,11 @@ export default [
             name: 'menuUserGroup',
             component: './MenuUserGroup/MenuUserGroup',
           },
+          // {
+          //   path: '/system-management/alert-user-group',
+          //   name: 'menuUserGroup',
+          //   component: './AlertUserGroup/AlertUserGroup',
+          // },
           {
             path: '/system-management/user-maintenance/new-user',
             name: 'newUser',
@@ -259,6 +264,11 @@ export default [
             path: '/system-management/workflow-auditor',
             name: 'ApprovalAuditor',
             component: './Approval/ApprovalAuditor/ApprovalAuditor',
+          },
+          {
+            path: '/system-management/workflow-configuration',
+            name: 'ApprovalConfiguration',
+            component: './Approval/ApprovalConfiguration/ApprovalConfiguration',
           },
           {
             path: '/system-management/workflow-config',
