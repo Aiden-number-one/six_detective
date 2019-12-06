@@ -72,7 +72,7 @@ class MenuUserGroup extends Component {
     // );
     this.setState({
       modifyVisible: true,
-      groupTitle: 'New User Group',
+      groupTitle: 'New Alert User Group',
       updateFlag: false,
     });
   };
@@ -106,7 +106,7 @@ class MenuUserGroup extends Component {
     this.setState({
       modifyVisible: true,
       updateFlag: true,
-      groupTitle: 'Modify User Group',
+      groupTitle: 'Modify Alert User Group',
       groupMenuInfo,
     });
   };

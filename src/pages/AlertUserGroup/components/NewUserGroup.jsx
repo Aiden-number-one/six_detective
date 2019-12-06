@@ -97,7 +97,7 @@ class NewUser extends Component {
         return;
       }
       if (selectedKeys <= 0) {
-        message.warning('Please checked Authorizing access to menus');
+        message.warning('Please checked Authorizing operate to alerts');
         return;
       }
       if (!updateFlag) {
@@ -184,7 +184,7 @@ class NewUser extends Component {
         <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
         <ul type="flex" className={styles.userGroup}>
           <li>
-            <h3 className={styles.groupTitle}>Authorizing access to menus</h3>
+            <h3 className={styles.groupTitle}>Authorizing operate to alerts</h3>
             <div className={styles.treeWraper}>
               <ClassifyTree
                 all
