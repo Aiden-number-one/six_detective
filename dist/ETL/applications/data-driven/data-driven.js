@@ -149,7 +149,7 @@ define(function(require, exports, module) {
         if (result) {
           App.blockUI({
             boxed: true,
-            message: "deleting..."
+            message: "Processing..."
           });
           showContent.deleteDriven(params);
         }

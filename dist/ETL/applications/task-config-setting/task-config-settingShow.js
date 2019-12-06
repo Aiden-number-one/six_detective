@@ -291,7 +291,7 @@ define((require, exports, module) => {
     showContent.moveTaskInfo = params => {
         App.blockUI({
             boxed: true,
-            message: "处理中..."
+            message: "Processing..."
         });
         $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_task_folder_trans", "v4.0", params, data => {
             if (data.bcjson.flag == "1") {
@@ -353,7 +353,7 @@ define((require, exports, module) => {
     showContent.setTaskInfo = (params, oparatetype, cb) => {
         App.blockUI({
             boxed: true,
-            message: "处理中..."
+            message: "Processing..."
         });
         let api = oparatetype === "add" ? "bayconnect.superlop.set_task_info" : "bayconnect.superlop.set_task_info_modify";
         $.kingdom.doKoauthAdminAPI(api, "v4.0", params, data => {
@@ -611,10 +611,10 @@ define((require, exports, module) => {
             if (data.bcjson.flag == "1") {
                 let items = data.bcjson.items;
                 if (!items || items.length === 0) {
-                    toastr.info("没有查询到数据");
+                    toastr.info("No Data");
                     return;
                 }
-                let thead = `<thead><tr><th style="width: 40px"> 序号 </th>`,
+                let thead = `<thead><tr><th style="width: 40px"> No </th>`,
                     tbody = `<tbody>`,
                     len = items.length;
                 for (let i = 0; i < len; i++) {
@@ -658,7 +658,7 @@ define((require, exports, module) => {
             if (data.bcjson.flag == "1") {
                 let items = data.bcjson.items;
                 if (items.length === 0) {
-                    toastr.info("没有查询到映射字段");
+                    toastr.info("Mapping field is missing.");
                     return;
                 }
                 // 判断表名是否手输
@@ -672,7 +672,7 @@ define((require, exports, module) => {
                 if (isInput) {
                     let sql = $("#J_cm_TE_2").val().replace(/[\n]/g, " ").replace(/[\t]/g, " ");
                     if (!sql) {
-                        toastr.info("生成对象语句不能为空");
+                        toastr.info("Object SQL is missing.");
                         return;
                     }
                     let sqlDatafield = filterSqlField(sql);
@@ -801,7 +801,7 @@ define((require, exports, module) => {
         // 删除选中行
         delCheckedRow: () => {
             if ($("#J_data_field_tbody input[type=checkbox]:checked").length === 0) {
-                toastr.info("请勾选要删除的行");
+                toastr.info("Please select the Row");
             }
             $.each($("#J_data_field_tbody input[type=checkbox]:checked"), function(i) {
                 $(this).closest("tr").remove();
@@ -903,7 +903,7 @@ define((require, exports, module) => {
             if (data.bcjson.flag == "1") {
                 let items = data.bcjson.items;
                 if (items.length === 0) {
-                    toastr.info("没有查询到映射字段");
+                    toastr.info("Mapping field is missing.");
                     return;
                 }
                 require.async("./template/data-field-list-2.handlebars", compiled => {
@@ -983,7 +983,7 @@ define((require, exports, module) => {
         // 删除选中行
         delCheckedRow: () => {
             if ($("#J_data_field_tbody_2 input[type=checkbox]:checked").length === 0) {
-                toastr.info("请勾选要删除的行");
+                toastr.info("Please select the Row");
             }
             $.each($("#J_data_field_tbody_2 input[type=checkbox]:checked"), function(i) {
                 $(this).closest("tr").remove();
@@ -1567,7 +1567,7 @@ define((require, exports, module) => {
             //     return false;
             // }
             return /^([1-9]\d+|[2-9])$/.test(value);
-        }, "请输入大于1的整数");
+        }, "Please input an integer > 1");
     };
 
     function createCodeMirror(prop, dbDom, textareaId, refreshTrigger) {

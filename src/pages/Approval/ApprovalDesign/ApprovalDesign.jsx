@@ -19,7 +19,7 @@ class ModelForm extends Component {
         <Form.Item label="Name" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('name', {
             rules: [{ required: true, message: 'Please input your name!' }],
-          })(<Input placeholder="至少2个字符,最多16个字符" />)}
+          })(<Input placeholder="" />)}
         </Form.Item>
         <Form.Item label="Description:" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('description', {
@@ -245,7 +245,7 @@ class ApprovalDesign extends PureComponent {
                   chooseId={chooseModelId}
                   currentId="id"
                   chooseTab={this.chooseTab}
-                  title="流程列表"
+                  title="Flow Chart List"
                 />
               </div>
               <div className={styles.rightBox}>
