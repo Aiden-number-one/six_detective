@@ -19,51 +19,69 @@ class ApprovalAuditor extends PureComponent {
   state = {
     // dataSource: [],
     visible: false,
+    stepId: '',
+    checkedValues: [],
   };
 
   componentDidMount() {
     this.deployedModelList({ pageNumber: '1', pageSize: '10' });
     this.getQueryMenu();
     window.showAudit = (processDefinitionIds, taskIds) => {
-      this.showDrawer(taskIds);
+      this.showDrawer(processDefinitionIds, taskIds);
     };
   }
 
   // 打开审核人设置弹窗
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  showDrawer = async taskId => {
+  showDrawer = async (processDefinitionIds, taskId) => {
+    await this.getAuditorData(processDefinitionIds, taskId);
     this.setState({
       visible: true,
+      stepId: taskId,
     });
-    // const { formValue } = this.props;
-    // await this.getAuditorData(formValue.configId, taskId);
-    // const { allChooseObj, taskIds } = this.state;
-    // let targetKeysCurrent = [];
-    // if (taskIds !== taskId && this.props.auditorData.length) {
-    //   for (let i = 0; i < this.props.auditorData.length; i += 1) {
-    //     targetKeysCurrent.push(this.props.auditorData[i].relateNo);
-    //   }
-    // } else if (allChooseObj.hasOwnProperty(taskIds)) {
-    //   targetKeysCurrent = allChooseObj[taskIds];
-    // }
+  };
+
+  // 添加审核角色
+  saveConfig = param => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'ApprovalAuditor/saveConfigDatas',
+      payload: param,
+    });
+  };
+
+  // 保存角色
+  onSave = () => {
+    const { checkedValues, stepId } = this.state;
+    const nodeAuditInfo = [];
+    nodeAuditInfo.push({
+      stepId,
+      auditIds: checkedValues.join(),
+      auditType: '0',
+    });
+    const param = {
+      processUuid: this.props.processDefinitionId,
+      auditInfo: JSON.stringify(nodeAuditInfo),
+    };
+    console.log('param--->', param);
+    this.saveConfig(param);
   };
 
   // 获取角色
-  getQueryMenu = () => {
+  getQueryMenu = async () => {
     const { dispatch } = this.props;
-    dispatch({
+    await dispatch({
       type: 'ApprovalAuditor/getQueryMenuDatas',
       payload: {},
     });
   };
 
   // 查询审核人列表
-  getAuditorData = async (configId, stepId) => {
+  getAuditorData = (processUuid, stepId) => {
     const { dispatch } = this.props;
-    await dispatch({
+    dispatch({
       type: 'ApprovalAuditor/getAuditorlistDatas',
       payload: {
-        configId,
+        processUuid,
         stepId,
       },
     });
@@ -75,19 +93,6 @@ class ApprovalAuditor extends PureComponent {
     dispatch({
       type: 'ApprovalAuditor/deployedModelListDatas',
       payload: param,
-      callback: processDefinitionId => this.getProcessResource(processDefinitionId),
-    });
-  };
-
-  // 查询流程定义的资源图
-  getProcessResource = processDefinitionId => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'ApprovalAuditor/getProcessResourceDatas',
-      payload: {
-        processDefinitionId,
-        type: 'image',
-      },
     });
   };
 
@@ -116,6 +121,9 @@ class ApprovalAuditor extends PureComponent {
 
   selectAuditor = checkedValues => {
     console.log('checkedValues---->', checkedValues);
+    this.setState({
+      checkedValues,
+    });
   };
 
   render() {
@@ -163,7 +171,7 @@ class ApprovalAuditor extends PureComponent {
                   <Button onClick={this.onClose} style={{ marginRight: 8 }}>
                     Cancel
                   </Button>
-                  <Button onClick={this.onClose} type="primary">
+                  <Button onClick={this.onSave} type="primary">
                     Save
                   </Button>
                 </div>
