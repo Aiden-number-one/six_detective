@@ -111,7 +111,7 @@ define(function (require, exports, module) {
         $("body").on("click", `${PAGE} #J_process_del`, function() {
             let dom = $("#J_work_table tbody input:checked");
             if (dom.length === 0) {
-                toastr.info("请选择至少一条数据");
+                toastr.info("Please select one job at least");
                 return;
             }
             let arr = [];
@@ -119,7 +119,7 @@ define(function (require, exports, module) {
                 let jobId = $(this).attr("jobid");
                 arr.push(jobId);
             })
-            bootbox.confirm("确定删除勾选的作业吗？", function(result) {
+            bootbox.confirm("Please confirm that you want to delete this task.", function(result) {
                 if (result) {
                     showContent.delyWorkList({
                         job_id: arr.join(","),

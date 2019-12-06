@@ -67,11 +67,11 @@ define((require, exports, module) => {
                 // 抽取任务
                 if (modalId === "J_modal_TE") {
                     if (!$("#J_select2_multi_tab_1_1").val()) {
-                        toastr.info("请选择源表");
+                        toastr.info("Please select source table.");
                         return false;
                     }
                     if (!$("#J_select2_multi_tab_1_3").val()) {
-                        toastr.info("请选择目标表");
+                        toastr.info("Please select target table.");
                         return false;
                     }
                     // let res = /^[^\u4e00-\u9fa5]{0,}$/;
@@ -97,7 +97,7 @@ define((require, exports, module) => {
                     
                     // 如果没有映射关系， 且不是目标表名不是手动输入
                     if (JSON.parse(formParams.mappingInfo).mappingColumn.length === 0 && include) {
-                        toastr.info("没有获取到映射字段");
+                        toastr.info("Mapping field is missing.");
                         return false;
                     }
 
@@ -106,7 +106,7 @@ define((require, exports, module) => {
                     let flag = true;
                     haddleParams.getData(parameters => {
                         if (!parameters) {
-                           toastr.info("请填写完整必填参数");
+                           toastr.info("params is missing.");
                            flag = false;
                         }
                         let successcondition = App.getFormParamsFakeName("#J_success_condition");
@@ -132,7 +132,7 @@ define((require, exports, module) => {
                 // 导入文本
                 } else if (modalId === "J_modal_TI") {
                     if ( $(`#${modalId} [name=importType]:checked`).val() === "0" && $(`#${modalId} .fileinput [name=fileUrl]`).val() == "") {
-                        toastr.info("请上传导入文件");
+                        toastr.info("Please upload a file.");
                         return;
                     }
                     formParams.fileUrl = $(`[data-importtype=${formParams.importType}] [name=fileUrl]`).val();
@@ -212,7 +212,7 @@ define((require, exports, module) => {
                 }
                 App.blockUI({
                     boxed: true,
-                    message: "处理中..."
+                    message: "Processing..."
                 });
                 showContent.setTaskInfo(formParams, oparatetype, (data) => {
                     // 触发查询列表
@@ -250,7 +250,7 @@ define((require, exports, module) => {
                 taskType = dom.data("tasktype"),
                 taskId = dom.data("taskid");
             if (dom.length !== 1) {
-                toastr.info("请选择一条数据");
+                toastr.info("Please select one job only");
                 return;
             }
             // 请空数据
@@ -333,11 +333,11 @@ define((require, exports, module) => {
                     taskType
                 });
             })
-            bootbox.confirm("确定删除这条任务吗？", function(result) {
+            bootbox.confirm("Please confirm that you want to delete this task.", function(result) {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "Deleting..."
+                        message: "Processing..."
                     });
                     showContent.delTaskInfo({
                         taskList: JSON.stringify(arr),
@@ -350,12 +350,12 @@ define((require, exports, module) => {
         $("body").on("click", `${PAGE} #J_copy_task`, function() {
             let dom = $("#J_task_table tbody input:checked");
             if (dom.length !== 1) {
-                toastr.info("请选择一条数据");
+                toastr.info("Please select one job only");
                 return;
             }
             App.blockUI({
                 boxed: true,
-                message: "处理中..."
+                message: "Processing..."
             });
             let taskId = dom.data("taskid");
             let taskType = dom.data("tasktype");
@@ -369,7 +369,7 @@ define((require, exports, module) => {
         $("body").on("click", `${PAGE} #J_check_relate_job`, function() {
             let dom = $("#J_task_table tbody input:checked");
             if (dom.length !== 1) {
-                toastr.info("请选择一条数据");
+                toastr.info("Please select one job only");
                 return;
             }
             let taskId = dom.data("taskid");
@@ -386,7 +386,7 @@ define((require, exports, module) => {
         // 数据抽取任务->源->生成查询语句
         $("body").on("click", `${PAGE} #J_get_sql`, function() {
             if (!$("#J_select2_multi_tab_1_1").val()) {
-                toastr.info("源对象不能为空");
+                toastr.info("Source object is missing.");
                 return;
             }
             let tableId = $("#J_select2_multi_tab_1_1").val();
@@ -398,11 +398,11 @@ define((require, exports, module) => {
             let connectionId = $("#J_select2_single_tab_1_1").val();
             let previewStatement = $("#J_cm_TE").val().replace(/[\n]/g, " ").replace(/[\t]/g, " "); // 去掉回车换
             if (!connectionId) {
-                toastr.info("请选择源数据");
+                toastr.info("Please select source data.");
                 return;
             }
             if (!previewStatement) {
-                toastr.info("源表查询语句不能为空");
+                toastr.info("Source SQL is missing.");
                 return;
             }
             // let res = /^[^\u4e00-\u9fa5]{0,}$/;
@@ -420,19 +420,19 @@ define((require, exports, module) => {
         // 数据抽取任务->目标->生成建表语句
         $("body").on("click", `${PAGE} #J_crate_build_table_sql`, function() {
             if (!$("#J_select2_single_tab_1_1").val()) {
-                toastr.info("请选择源数据连接");
+                toastr.info("Please select source data source.");
                 return;
             }
             if (!$("#J_select2_single_tab_1_3").val()) {
-                toastr.info("请选择目标数据连接");
+                toastr.info("Please selecct target data source.");
                 return;
             }
             if (!$("#J_select2_multi_tab_1_1").val()) {
-                toastr.info("请选择源表");
+                toastr.info("Please select source table.");
                 return;
             }
             if (!$("#J_select2_multi_tab_1_3").val()) {
-                toastr.info("请选择目标表");
+                toastr.info("Please select target table.");
                 return;
             }
             let sourceConnectionId = $("#J_select2_single_tab_1_1").val(),
@@ -447,7 +447,7 @@ define((require, exports, module) => {
                 }
             }
             if (!isInput) {
-                toastr.info("自定义目标对象时才允许生成");
+                toastr.info("Generation only allowed when target object is customized");
                 return;
             }
             // $("#J_cm_TE_2").attr("contenteditable", "true");
@@ -462,11 +462,11 @@ define((require, exports, module) => {
         // 数据抽取任务->字段映射->获取字段 等操作
         $("body").on("click", `${PAGE} #J_get_data_btns [data-type]`, function() {
             if (!$("#J_select2_multi_tab_1_1").val()) {
-                toastr.info("请选择源表");
+                toastr.info("Please select source table.");
                 return;
             }
             if (!$("#J_select2_multi_tab_1_3").val()) {
-                toastr.info("请选择目标表");
+                toastr.info("Please select target table.");
                 return;
             }
             let type = $(this).data("type");
@@ -664,7 +664,7 @@ define((require, exports, module) => {
                 $("#J_modify_filename").html(compiled(datas));
             })
          }else{
-            toastr.error("修改文件与原文件数量不一致");
+            toastr.error("The number of modified files is inconsistent with the number of original files.");
             $("#J_modify_filename").html('');
          }
         });
@@ -771,20 +771,20 @@ define((require, exports, module) => {
             procedureName = $("#J_stored_procedure_select2").val(),
             parameters = App.getTableParamsFakeName("#J_store_params");
             if (!dbConnection) {
-                toastr.info("请选择数据连接");
+                toastr.info("Please select data source.");
                 return;
             }
             if (!procedureName) {
-                toastr.info("请选择存储过程");
+                toastr.info("Please select SP.");
                 return;
             }
             if (!parameters) {
-               toastr.info("请填写完整必填参数");
+               toastr.info("params is missing.");
                return;
             }
             App.blockUI({
                 boxed: true,
-                message: "处理中..."
+                message: "Processing..."
             });
             showContent.testStore({
                 dbConnection,
@@ -844,11 +844,11 @@ define((require, exports, module) => {
             let connectionId = $("#J_modal_TV [name=dbConnection]").val();
             let previewStatement = $("#J_modal_TV [name=variableScript]").val().replace(/[\n]/g, " ").replace(/[\t]/g, " "); // 去掉回车换
             if (!connectionId) {
-                toastr.info("请选择源数据");
+                toastr.info("Please select source data.");
                 return;
             }
             if (!previewStatement) {
-                toastr.info("源表查询语句不能为空");
+                toastr.info("Source SQL is missing.");
                 return;
             }
             // let res = /^[^\u4e00-\u9fa5]{0,}$/;
@@ -1009,7 +1009,7 @@ define((require, exports, module) => {
         // 导入文本任务->字段映射->获取字段 等操作
         $("body").on("click", `${PAGE} #J_get_data_btns_2 [data-type]`, function() {
             if (!$("#J_select2_multi_tab_1_9").val()) {
-                toastr.info("请选择目标表");
+                toastr.info("Please select target table.");
                 return;
             }
             let type = $(this).data("type");

@@ -136,7 +136,7 @@ define(function (require, exports, module) {
                 }
                 App.blockUI({
                     boxed: true,
-                    message: "处理中..."
+                    message: "Processing..."
                 });
                 showContent.editPlanSet(paramsMap);
             } else {
@@ -180,7 +180,7 @@ define(function (require, exports, module) {
                 paramsMap.startFlag = "2";
                 App.blockUI({
                     boxed: true,
-                    message: "处理中..."
+                    message: "Processing..."
                 });
                 showContent.addPlanSet(paramsMap);
             } else {

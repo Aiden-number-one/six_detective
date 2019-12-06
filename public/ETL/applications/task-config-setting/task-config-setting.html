@@ -2,7 +2,7 @@
  * @Author: limin01
  * @Date: 2019-08-09 13:47:16
  * @LastEditors: lan
- * @LastEditTime: 2019-12-05 16:10:09
+ * @LastEditTime: 2019-12-06 10:22:50
  * @Description: 
  -->
 <style type="text/css">
@@ -204,7 +204,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue">作业流程信息</h4>
+                    <h4 class="modal-title title-color-blue">Job Flow</h4>
                 </div>
                 <div class="modal-body">
                     <div class="table-scrollable">
@@ -212,7 +212,7 @@
                             <thead>
                                 <tr>
                                     <th class="width40" data-lang="No">序号</th>
-                                    <th>作业信息</th>
+                                    <th>Information</th>
                                 </tr>
                             </thead>
                             <tbody id="J_relate_job_list">
@@ -221,7 +221,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-default">CLOSE</button>
                 </div>
             </div>
         </div>
@@ -232,7 +232,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue" data-lang="Data-Extraction-Task">数据抽取任务</h4>
+                    <h4 class="modal-title title-color-blue"> Data Extract </h4>
                 </div>
                 <div class="modal-body" style="min-height: 450px;    overflow: auto;">
                     <div class="tabbable-line">
@@ -345,7 +345,7 @@
                                                 <span class="required" aria-required="true"> * </span> <span data-lang="Target-Object">目标对象：</span>
                                             </label>
                                             <div class="col-md-6">
-                                                <select class="form-control J_select2_multi" id="J_select2_multi_tab_1_3" name="targetTable" data-searchplaceholder="自定义表名,不超过32位">
+                                                <select class="form-control J_select2_multi" id="J_select2_multi_tab_1_3" name="targetTable" data-searchplaceholder="Please input custom table name (no more than 32 characters).">
                                                 </select>
                                             </div>
                                         </div>
@@ -376,7 +376,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group c-l row J_show_delete_sql" style="display: none;margin-left: -25px;">
-                                            <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span><span data-lang="">目标数据删除语句：</span>
+                                            <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span><span data-lang="">SQL for delete data：</span>
                                             </label>
                                             <div class="col-md-8" style="width: 59%">
                                                 <textarea id="J_cm_TE_3" name="deleteSql" maxlength="4000"></textarea>
@@ -482,7 +482,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue">执行SQL任务</h4>
+                    <h4 class="modal-title title-color-blue">SQL Execution</h4>
                 </div>
                 <div class="modal-body" style="min-height: 450px;">
                     <div class="tabbable-line">
@@ -590,7 +590,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue">变量设置任务</h4>
+                    <h4 class="modal-title title-color-blue">Variable Setting</h4>
                 </div>
                 <div class="modal-body" style="min-height: 450px;">
                     <div class="tabbable-line">
@@ -706,7 +706,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue">存储过程任务</h4>
+                    <h4 class="modal-title title-color-blue">Procedure Execution</h4>
                 </div>
                 <div class="modal-body" style="min-height: 450px; overflow: auto;">
                     <div class="tabbable-line">
@@ -807,7 +807,7 @@
                                                         <th data-lang="No"> 序号 </th>
                                                         <th data-lang="Parameter-Name"> 参数名称 </th>
                                                         <th data-lang="Direction"> 方向 </th>
-                                                        <th data-lang="Driver"> 类型 </th>
+                                                        <th> Data Type </th>
                                                         <th> <span class="colored-red"> * </span><span data-lang="Assignment">赋值(入参必填) </span></th>
                                                         <!-- <th> 操作 </th> -->
                                                     </tr>
@@ -825,7 +825,7 @@
                                                         </td>
                                                         <td class="t-c">
                                                             <input type="text" fakename="value" class="form-control input-sm" style="width: 80%">
-                                                            <a class="ml5 set-variable" title="选择变量"><i class="fa fa-plus"></i></a> 
+                                                            <a class="ml5 set-variable" title="set variable"><i class="fa fa-plus"></i></a> 
                                                         </td>
                                                         <!-- <td class="t-c"> <a data-type="del" name="oparate" title="删除"><i class="fa fa-trash-o"></i></a> </td> -->
                                                     </tr>
@@ -834,7 +834,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn green" id="J_test_store">存储过程功能测试</button>
+                                        <button type="button" class="btn green" id="J_test_store">Test SP</button>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tab_4_3">
@@ -890,7 +890,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue">导出文本任务</h4>
+                    <h4 class="modal-title title-color-blue">Text Export</h4>
                 </div>
                 <div class="modal-body" style="min-height: 450px; overflow: auto;">
                     <div class="tabbable-line">
@@ -964,7 +964,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
-                                                <span class="required" aria-required="true"> * </span><span data-lang="">查询语句：</span>
+                                                <span class="required" aria-required="true"> * </span><span data-lang="">SQL：</span>
                                             </label>
                                             <div class="col-md-8">
                                                 <textarea id="J_cm_TF" type="hidden" name="command"></textarea>
@@ -984,25 +984,25 @@
                                                 <span class="required" aria-required="true"> * </span><span data-lang="File-Path">文件路径：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control" name="exportPath"  placeholder="请输入绝对路径,最长128位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" name="exportPath"  placeholder="Please input the path with forward slashs (/) and 128 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
-                                                <span class="required" aria-required="true"> * </span><span data-lang="">文件名称：</span>
+                                                <span class="required" aria-required="true"> * </span><span data-lang="">File Name：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control" name="exportName"  placeholder="请输入最长128位字符（中文占两个字符）">
+                                                <input type="text" class="form-control" name="exportName"  placeholder="128 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
-                                                <span class="required" aria-required="true"> * </span><span data-lang="">是否生成temp文件：</span>
+                                                <span class="required" aria-required="true"> * </span><span data-lang="">confirm to create temp File：</span>
                                             </label>
                                             <div class="col-md-8">
                                                 <select class="form-control" name="transformTemp">
-                                                    <option value="1">是</option>
-                                                    <option value="0">否</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1012,8 +1012,8 @@
                                             </label>
                                             <div class="col-md-8">
                                                 <select class="form-control" name="headFlag">
-                                                    <option value="Y">是</option>
-                                                    <option value="N">否</option>
+                                                    <option value="Y">Yes</option>
+                                                    <option value="N">No</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1202,7 +1202,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue">导入文本任务</h4>
+                    <h4 class="modal-title title-color-blue">Importing Text File</h4>
                 </div>
                 <div class="modal-body" style="min-height: 450px;">
                     <div class="tabbable-line">
@@ -1275,7 +1275,7 @@
                                                     <label class="radio-inline">
                                                         <input type="radio" name="importType" value="1"> <span data-lang="Manual-Input">手动输入</span> </label>
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="importType" value="2"> <span data-lang="SFTP-Files-Import">SFTP文件导入</span> </label>
+                                                        <input type="radio" name="importType" value="2"> <span data-lang="SFTP-Files-Import">Import SFTP Files</span> </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -1286,7 +1286,7 @@
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                     <span class="btn green btn-file">
                                                     <span class="fileinput-new"> Select FILE </span>
-                                                    <span class="fileinput-exists"> 更换 </span>
+                                                    <span class="fileinput-exists"> Change </span>
                                                     <input type="file" name="file" data-accept="DBF,CSV,TXT,XLS,XLSX,DAT"  data-url="bayconnect.superlop.file_upload.json">
                                                     <input type="hidden" name="fileName">
                                                     <input type="hidden" name="fileType" data-filetype-index="0">
@@ -1301,7 +1301,7 @@
                                         <div data-importtype="1">
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>文件类型：
+                                                    <span class="required" aria-required="true"> * </span>File Type：
                                                 </label>
                                                 <div class="col-md-8">
                                                     <select data-filetype-index="1" class="form-control" name="fileType" type="hidden">
@@ -1313,16 +1313,16 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>导入路径：
+                                                    <span class="required" aria-required="true"> * </span>Import Path:
                                                 </label>
                                                 <div class="col-md-8">
-                                                    <input id="J_import_path" type="hidden" class="form-control" name="fileUrl"  placeholder="路径用正斜杠“/”且不包含文件名称
+                                                    <input id="J_import_path" type="hidden" class="form-control" name="fileUrl"  placeholder="Please input the path with forward slashs (/) and file name is not included in path.
                                                     ">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>文件名称：
+                                                    <span class="required" aria-required="true"> * </span>File Name：
                                                 </label>
                                                 <div class="col-md-8">
                                                     <input type="hidden" class="form-control" name="fileName"  placeholder="64 characters maximum,不输入文件后缀名">
@@ -1333,7 +1333,7 @@
                                         <div data-importtype="2">
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>服务器ip：
+                                                    <span class="required" aria-required="true"> * </span>IP:
                                                 </label>
                                                 <div class="col-md-8">
                                                     <input type="hidden" class="form-control" name="sftpIp">
@@ -1341,7 +1341,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>端口：
+                                                    <span class="required" aria-required="true"> * </span>Port：
                                                 </label>
                                                 <div class="col-md-8">
                                                     <input type="hidden" class="form-control" name="sftpPort">
@@ -1349,7 +1349,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>用户名：
+                                                    <span class="required" aria-required="true"> * </span>Username：
                                                 </label>
                                                 <div class="col-md-8">
                                                     <input type="hidden" class="form-control" name="sftpUsername">
@@ -1357,7 +1357,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>密码：
+                                                    <span class="required" aria-required="true"> * </span>Password：
                                                 </label>
                                                 <div class="col-md-8">
                                                     <input type="hidden" class="form-control" name="sftpSecretword">
@@ -1365,19 +1365,19 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>文件名：
+                                                    <span class="required" aria-required="true"> * </span>File Name：
                                                 </label>
                                                 <div class="col-md-8">
-                                                    <input id="J_import_path" type="hidden" class="form-control" name="fileName"  placeholder="输入以.CSV结尾
+                                                    <input id="J_import_path" type="hidden" class="form-control" name="fileName"  placeholder="Please input .CSV file.
                                                     ">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>导入路径：
+                                                    <span class="required" aria-required="true"> * </span>Import Path：
                                                 </label>
                                                 <div class="col-md-8">
-                                                    <input id="J_import_path" type="hidden" class="form-control" name="sftpPath"  placeholder="路径用正斜杠“/”且不包含文件名称
+                                                    <input id="J_import_path" type="hidden" class="form-control" name="sftpPath"  placeholder="Please input the path with forward slashs (/) and file name is not included in path.
                                                     ">
                                                 </div>
                                             </div>
@@ -1385,7 +1385,7 @@
                                         <div style="display: none;" id="J_import_task_separator">
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">
-                                                    <span class="required" aria-required="true"> * </span>分隔符：
+                                                    <span class="required" aria-required="true"> * </span>Separator：
                                                 </label>
                                                 <div class="col-md-8">
                                                     <select type="hidden" class="form-control" name="taskSeparator">
@@ -1615,7 +1615,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
-                                                <span class="required" aria-required="true"> * </span>文件名称：
+                                                <span class="required" aria-required="true"> * </span>File Name：
                                             </label>
                                             <div class="col-md-8">
                                                 <input type="text" class="form-control" name="fileName" maxlength="128" placeholder="请输入最长128位字符（中文占两个字符）"><a class="query-datafield set-variable" title="选择变量"><i class="fa fa-plus"></i></a>
@@ -1640,7 +1640,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue">数据剖析任务</h4>
+                    <h4 class="modal-title title-color-blue">Data Analysis</h4>
                 </div>
                 <div class="modal-body" style="min-height: 450px; overflow: auto;">
                     <div class="tabbable-line">
@@ -2093,7 +2093,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue" data-lang="File-Reformatting-Task">文件格式转换任务</h4>
+                    <h4 class="modal-title title-color-blue" data-lang="File-Reformatting-Task">Table File Parsing</h4>
                 </div>
                 <div class="modal-body" style="min-height: 300px;    overflow: auto;">
                     <div class="tabbable-line">

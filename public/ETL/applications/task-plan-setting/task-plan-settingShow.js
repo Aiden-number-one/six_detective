@@ -346,7 +346,7 @@ define(function (require, exports, module) {
             } else {
                 return true;
             }
-        }, "这是必填字段");
+        }, "param is missing");
         $.validator.addMethod("executeRequired", function (value, element) {
             // if ($("#J_form_basc textarea[name=cronExpression]").val().replace(/ /g, "") === "") {
             //     return false;
@@ -354,7 +354,7 @@ define(function (require, exports, module) {
             //     return true
             // }
             return $("#J_form_basc textarea[name=cronExpression]").val().replace(/ /g, "") !== "";
-        }, "这是必填字段");
+        }, "param is missing");
     }
 
     //对执行频度方面的处理
