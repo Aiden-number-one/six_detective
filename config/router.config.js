@@ -221,11 +221,11 @@ export default [
             name: 'menuUserGroup',
             component: './MenuUserGroup/MenuUserGroup',
           },
-          // {
-          //   path: '/system-management/alert-user-group',
-          //   name: 'menuUserGroup',
-          //   component: './AlertUserGroup/AlertUserGroup',
-          // },
+          {
+            path: '/system-management/alert-user-group',
+            name: 'menuUserGroup',
+            component: './AlertUserGroup/AlertUserGroup',
+          },
           {
             path: '/system-management/user-maintenance/new-user',
             name: 'newUser',

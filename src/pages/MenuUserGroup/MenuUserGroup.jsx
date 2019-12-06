@@ -260,7 +260,7 @@ class MenuUserGroup extends Component {
           cancelText={formatMessage({ id: 'app.common.cancel' })}
           okText={formatMessage({ id: 'app.common.save' })}
         >
-          <span>Please confirm that you want to delete this record.?</span>
+          <span>Please confirm that you want to delete this record?</span>
         </Modal>
         <div className={styles.content}>
           <div className={styles.tableTop}>
