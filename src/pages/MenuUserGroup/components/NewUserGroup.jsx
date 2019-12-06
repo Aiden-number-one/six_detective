@@ -90,14 +90,16 @@ class NewUser extends Component {
 
   onSave = () => {
     const { selectedKeys } = this.state;
-    console.log('selectedKeys============', selectedKeys);
     const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
+      console.log('err=======', err);
+      if (err) {
+        return;
+      }
       if (selectedKeys <= 0) {
         message.warning('Please checked Authorizing access to menus');
         return;
       }
-      console.log('updateFlag===', updateFlag);
       if (!updateFlag) {
         const param = {
           roleName: values.roleName,
@@ -168,7 +170,6 @@ class NewUser extends Component {
   };
 
   onCheck = selectedKeyss => {
-    console.log('selectedKeyss==selectedKeyssselectedKeyssselectedKeyss=', selectedKeyss);
     const newSelectedKeys = selectedKeyss;
     this.setState({
       selectedKeys: newSelectedKeys,
@@ -178,8 +179,6 @@ class NewUser extends Component {
   render() {
     const { menuData, groupMenuInfo } = this.props;
     const { selectedKeys } = this.state;
-    console.log('defaultCheckedKeys111111====', selectedKeys);
-    console.log('menuData=', menuData);
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />

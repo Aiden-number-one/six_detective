@@ -254,16 +254,18 @@ export default class NewUser extends Component {
     const { accountLock, roleIds, alertIds } = this.state;
     console.log('roleIds=', roleIds);
     const { NewFlag } = this.props;
-    if (roleIds.length <= 0) {
-      message.warning('Please checked Menu User Group');
-      return;
-    }
-    if (alertIds.length <= 0) {
-      message.warning('Please checked Alert User Group');
-      return;
-    }
     this.newUserRef.current.validateFields((err, values) => {
-      console.log('values==', values);
+      if (err) {
+        return;
+      }
+      if (roleIds.length <= 0) {
+        message.warning('Please checked Menu User Group');
+        return;
+      }
+      if (alertIds.length <= 0) {
+        message.warning('Please checked Alert User Group');
+        return;
+      }
       const passwordStrength = passWordStrength(values.userPwd);
       console.log('passwordStrength=', passwordStrength);
       const { dispatch } = this.props;
