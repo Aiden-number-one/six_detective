@@ -1,0 +1,11 @@
+
+  {{#each this}}
+    <tr>
+        <td class="width40">
+            <input type="checkbox" name="check" data-variablename='{{variableName}}'/> </td>
+        <td class="width40"> {{ROWNUM_}}</td>
+        <td> {{variableName}} </td>
+        <td> <div class="ellipsis" style="width: 120px" title="{{variableScript}}">{{variableScript}}</div> </td>
+        <td> <div class="ellipsis" style="width: 120px" title="{{taskName}}">{{taskName}}</div> </td>
+    </tr>
+  {{/each}}

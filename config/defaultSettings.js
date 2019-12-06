@@ -2,8 +2,8 @@
  * @Description: Theme
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-11-07 10:34:16
- * @LastEditors: lan
+ * @LastEditTime: 2019-12-06 10:48:34
+ * @LastEditors: mus
  */
 export default {
   navTheme: 'dark',
@@ -17,6 +17,6 @@ export default {
   menu: {
     locale: true,
   },
-  title: '香港交易所',
+  title: 'HKEX',
   pwa: false,
 };

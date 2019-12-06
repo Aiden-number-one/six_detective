@@ -1,0 +1,18 @@
+{{#if flag}}
+ <tr><td colspan="6" class="t-c">No Data</td><tr>
+{{else}}
+{{#each this}}
+	<tr>
+		<td class="t-c">
+		<input type="checkbox" class="checkboxes J_fieldcheckbox" reportid={{reportId}} reportCode={{reportCode}}>
+		</td>
+		<td class="width40"> {{ROWNUM_}}</td>
+		<td class="t-l" title="{{reportId}}">{{reportName}}</td>
+		<td class="t-c" title="{{nodeCode}}">{{nodeName}}</td>
+		<td class="t-c">{{{reportStatusName}}}</td>
+		<td class="t-c">{{isAutoName}}</td>
+		<td class="t-c">{{taskTotal}}(<em style="font-size: 14px; font-style: normal; color:#080808 ;">{{taskRunning}}</em>/<em style="font-size: 14px; font-style: normal; color: #f31244;">{{taskFail}}</em>/<em style="font-size: 14px; font-style: normal; color: #1282f3;">{{taskFinish}}</em>)</td>
+		<td class="t-c"><a class="J_editReport" name="Detail_name" data-id="{{reportId}}" data-code="{{nodeCode}}" data-reportName="{{reportName}}" data-nodeName="{{nodeName}}">任务详情</a></td>
+	</tr>
+{{/each}}
+{{/if}}
