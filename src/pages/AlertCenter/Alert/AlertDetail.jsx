@@ -15,7 +15,7 @@ import {
 import { FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import IconFont from '@/components/IconFont';
-import styles from './index.less';
+import styles from '../index.less';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;

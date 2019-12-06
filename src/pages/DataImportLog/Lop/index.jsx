@@ -6,7 +6,7 @@ import { FormattedMessage } from 'umi/locale';
 import LopLogFilterForm from './LopLogFilterForm';
 import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
-import styles from './index.less';
+import styles from '../index.less';
 
 export function LopLog({ dispatch, logs, loading }) {
   const [visible, setVisible] = useState(false);
@@ -41,7 +41,7 @@ export function LopLog({ dispatch, logs, loading }) {
           <Button type="primary" onClick={handleAuto} loading={loading['lop/importByAuto']}>
             <FormattedMessage id="data-import.lop.auto-import" />
           </Button>
-          <Button type="primary" onClick={() => setVisible(true)}>
+          <Button type="primary" className={styles['no-margin']} onClick={() => setVisible(true)}>
             <FormattedMessage id="data-import.lop.manual-import" />
           </Button>
         </Row>

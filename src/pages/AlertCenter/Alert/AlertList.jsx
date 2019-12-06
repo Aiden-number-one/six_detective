@@ -4,7 +4,7 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Button, Modal } from 'antd';
 import IconFont from '@/components/IconFont';
 import ColumnTitle from '../ColumnTitle';
-import styles from './index.less';
+import styles from '../index.less';
 
 const { Column } = Table;
 
@@ -12,7 +12,7 @@ export default function({ dataSource, loading, getAlert }) {
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   return (
-    <div className={styles.alerts}>
+    <div className={styles.list}>
       <Row className={styles.btns}>
         <Col span={18}>
           <Button type="primary" disabled={!selectedKeys.length}>

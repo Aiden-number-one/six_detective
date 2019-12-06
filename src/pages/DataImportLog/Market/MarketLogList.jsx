@@ -1,12 +1,13 @@
 import React from 'react';
 import { Table } from 'antd';
 import { FormattedMessage } from 'umi/locale';
+import styles from '../index.less';
 
 const { Column } = Table;
 
 export default function({ dataSource }) {
   return (
-    <Table dataSource={dataSource}>
+    <Table dataSource={dataSource} className={styles['list-container']}>
       <Column
         dataIndex="tradeDate"
         title={<FormattedMessage id="data-import.market.trade-date" />}

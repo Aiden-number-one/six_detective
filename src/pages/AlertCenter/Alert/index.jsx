@@ -3,7 +3,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import AlertDetail from './AlertDetail';
 import AlertList from './AlertList';
-import styles from './index.less';
+import styles from '../index.less';
 
 function Alert({ dispatch, loading, alerts = [] }) {
   const [alert, setAlert] = useState(null);

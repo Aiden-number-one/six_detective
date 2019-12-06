@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Link from 'umi/link';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Col, Button, Modal } from 'antd';
+import { FormattedMessage } from 'umi/locale';
+import { Table, Row, Col, Button } from 'antd';
 import IconFont from '@/components/IconFont';
 import ColumnTitle from '@/pages/AlertCenter/ColumnTitle';
-import styles from './index.less';
+import styles from '../index.less';
 
 const { Column } = Table;
 
@@ -12,7 +12,7 @@ export default function({ dataSource, loading, getInfomation }) {
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   return (
-    <div className={styles.alerts}>
+    <div className={styles.list}>
       <Row className={styles.btns}>
         <Col span={18}>
           <Button disabled={!selectedKeys.length}>
@@ -29,7 +29,7 @@ export default function({ dataSource, loading, getInfomation }) {
       <Table
         border
         dataSource={dataSource}
-        rowKey="alertId"
+        rowKey="informationNo"
         loading={loading}
         rowSelection={{
           onChange: selectedRowKeys => {
@@ -45,86 +45,41 @@ export default function({ dataSource, loading, getInfomation }) {
         <Column
           ellipsis
           width={150}
-          dataIndex="alertId"
+          dataIndex="informationNo"
           title={
             <ColumnTitle>
-              <FormattedMessage id="alert-center.alert-id" />
+              <FormattedMessage id="alert-center.information-no" />
             </ColumnTitle>
           }
         />
         <Column
           align="center"
-          dataIndex="alertType"
+          dataIndex="informationType"
           title={
             <ColumnTitle>
-              <FormattedMessage id="alert-center.alert-type" />
+              <FormattedMessage id="alert-center.information-type" />
             </ColumnTitle>
           }
         />
         <Column
           align="center"
-          dataIndex="tradeDate"
-          title={<FormattedMessage id="alert-center.trade-date" />}
-        />
-        <Column
-          width={120}
-          align="center"
-          dataIndex="alertTimestamp"
-          title={<FormattedMessage id="alert-center.alert-timestamp" />}
+          dataIndex="timestamp"
+          title={<FormattedMessage id="alert-center.information-timestamp" />}
         />
         <Column
           align="center"
-          width={70}
-          dataIndex="itemsTotal"
-          title={<FormattedMessage id="alert-center.items-total" />}
-        />
-        <Column dataIndex="owner" title={<FormattedMessage id="alert-center.owner" />} />
-        <Column
-          align="center"
-          width={80}
-          dataIndex="status"
-          title={<FormattedMessage id="alert-center.status" />}
+          dataIndex="market"
+          title={<FormattedMessage id="alert-center.market" />}
         />
         <Column
           align="center"
-          width={80}
-          dataIndex="handleToday"
-          title={<FormattedMessage id="alert-center.handle-today" />}
+          dataIndex="submitterCode"
+          title={<FormattedMessage id="data-import.lop.submitter-code" />}
         />
         <Column
           align="center"
-          dataIndex="action"
-          title={<FormattedMessage id="alert-center.action" />}
-          render={() => (
-            <Row className={styles.btns}>
-              <IconFont
-                type="iconqizhi"
-                className={styles.icon}
-                title={formatMessage({ id: 'alert-center.claim' })}
-                onClick={() =>
-                  Modal.confirm({
-                    title: 'Confirm',
-                    content: 'Are you sure claim this alert?',
-                    okText: 'Sure',
-                    cancelText: 'Cancel',
-                    onOk() {
-                      console.log(123);
-                    },
-                  })
-                }
-              />
-              <IconFont
-                type="iconic_circle_close"
-                className={styles.icon}
-                title={formatMessage({ id: 'alert-center.close' })}
-              />
-              <IconFont
-                type="iconbatch-export"
-                className={styles.icon}
-                title={formatMessage({ id: 'alert-center.export' })}
-              />
-            </Row>
-          )}
+          dataIndex="submitterName"
+          title={<FormattedMessage id="data-import.lop.submitter-name" />}
         />
       </Table>
     </div>

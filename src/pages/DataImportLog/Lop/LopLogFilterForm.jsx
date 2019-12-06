@@ -3,6 +3,7 @@ import { FormattedMessage } from 'umi/locale';
 import { Form, Row, Button, DatePicker, Select, Radio, Col, Input } from 'antd';
 
 import { PROCESSING_STATUS, SUBMISSION_REPORT } from './constants';
+import styles from '../index.less';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -141,7 +142,7 @@ function LopLogFilterForm({ form, handleSearch }) {
         </Col>
       </Row>
       <Row type="flex" justify="end">
-        <Button type="primary" icon="search" onClick={handleCommit}>
+        <Button type="primary" icon="search" className={styles['no-margin']} onClick={handleCommit}>
           <FormattedMessage id="data-import.lop.search" />
         </Button>
       </Row>
