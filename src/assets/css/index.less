@@ -668,7 +668,13 @@
   }
   // pagination
   .ant-pagination {
+    position: relative;
     display: flex;
     justify-content: flex-end;
+    &:first-child {
+      position: absolute;
+      left: 0;
+      text-align: left;
+    }
   }
 }
