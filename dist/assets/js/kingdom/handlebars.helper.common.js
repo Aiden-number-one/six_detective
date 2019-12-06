@@ -626,22 +626,22 @@ Handlebars.registerHelper("judgeDiffStatus",function(value){
     var html = "";
     switch (value) {
         case "S":
-            html = '<div class="perform-fl-box bg-color-success" title="成功完成"><i class="fa fa-check"></i></div>';
+            html = '<div class="perform-fl-box bg-color-success" title="Succeed"><i class="fa fa-check"></i></div>';
             break;
         case "R":
-            html = '<div class="perform-fl-box bg-color-blue" title="正在执行中"><i class="fa fa-clock-o"></i></div>';
+            html = '<div class="perform-fl-box bg-color-blue" title="Executing"><i class="fa fa-clock-o"></i></div>';
             break;
         case "N":
-            html = '<div class="perform-fl-box bg-color-blue" title="新建状态" ><i class="fa fa-check"></i></div>';
+            html = '<div class="perform-fl-box bg-color-blue" title="Creating" ><i class="fa fa-check"></i></div>';
             break;
         case "B":
-            html = '<div class="perform-fl-box bg-color-red" title="出错中断"><i class="fa fa-close"></i></div>';
+            html = '<div class="perform-fl-box bg-color-red" title="Error Interrupt"><i class="fa fa-close"></i></div>';
             break;
         case "F":
-            html = '<div class="perform-fl-box bg-color-yellow" title="出错完成"><i class="fa fa-check"></i></div>';
+            html = '<div class="perform-fl-box bg-color-yellow" title="Error completed"><i class="fa fa-check"></i></div>';
             break;                        
         default:
-            html = '<div class="perform-fl-box bg-color-blue" title="新建状态" ><i class="fa fa-check"></i></div>';
+            html = '<div class="perform-fl-box bg-color-blue" title="Creating" ><i class="fa fa-check"></i></div>';
             break;
     }
     return new Handlebars.SafeString(html);
@@ -702,22 +702,22 @@ Handlebars.registerHelper("judgeRightTopStatusName",function(value){
     var color = "";
     switch (value) {
         case "S":
-            color = "成功完成";
+            color = "Succ eed";
             break;
         case "R":
-            color = "正在执行";
+            color = "Exec uting";
             break;
         case "N":
-            color = "新建状态";
+            color = "Crea ting";
             break;
         case "F":
-            color = "出错完成";
+            color = "Error Interrupt";
             break;
         case "B":
-            color = "出错中断";
+            color = "Error completed";
             break;                        
         default:
-            color = "新建状态"
+            color = "Crea ting"
             break;
     }
     return color;

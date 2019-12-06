@@ -101,24 +101,24 @@ define(function(require, exports, module) {
                             id: item.monitorId,
                             pId: "-1",
                             columns: {
-                                "序号":item.orderNo,
-                                "节点":{
+                                "NO.":item.orderNo,
+                                "Node":{
                                     formatter: function() {
                                         return formart3(item.nodeName,item.executeFlag,item.executeMsg);
                                     }
                                 },
-                                "任务名称":item.jobname,
-                                "任务类型": item.memberTypeName,
-                                "删除": item.deleteNum,
-                                "插入": item.insertNum,
-                                "开始时间": $.kingdom.toDateTime(item.startTime),
-                                "执行时长": $.kingdom.formatMillisecond(item.zxsj),
-                                "执行状态": {
+                                "Task Name":item.jobname,
+                                "Task Type": item.memberTypeName,
+                                "Delete Conut": item.deleteNum,
+                                "Insert Conut": item.insertNum,
+                                "Start Time": $.kingdom.toDateTime(item.startTime),
+                                "Duration": $.kingdom.formatMillisecond(item.zxsj),
+                                "Execution Status": {
                                     formatter: function() {
                                         return formart1(item.executeFlagName, item.executeFlag);
                                     }
                                 },
-                                "执行信息(点击显示全部信息)": {
+                                "Execution Info.(Click to view all Info.)": {
                                     formatter: function() {
                                         return formart2(item.executeMsg);
                                     }
@@ -135,24 +135,24 @@ define(function(require, exports, module) {
                                         obj: JSON.stringify(item1),
                                     },
                                     columns: {
-                                        "序号":item1.orderNo,
-                                        "节点":{
+                                        "NO.":item1.orderNo,
+                                        "Node":{
                                             formatter: function() {
                                                 return formart3(item1.nodeName,item1.executeFlag, item1.executeMsg);
                                             }
                                         },
-                                        "任务名称": item1.jobname,
-                                        "任务类型": item1.memberTypeName,
-                                        "删除": item1.deleteNum,
-                                        "插入": item1.successNum,
-                                        "开始时间": $.kingdom.toDateTime(item1.startTime),
-                                        "执行时长": $.kingdom.formatMillisecond(item1.zxsj),
-                                        "执行状态": {
+                                        "Task Name": item1.jobname,
+                                        "Task Type": item1.memberTypeName,
+                                        "Delete Conut": item1.deleteNum,
+                                        "Insert Conut": item1.successNum,
+                                        "Start Time": $.kingdom.toDateTime(item1.startTime),
+                                        "Duration": $.kingdom.formatMillisecond(item1.zxsj),
+                                        "Execution Status": {
                                             formatter: function() {
                                                 return formart1(item1.executeFlagName, item1.executeFlag);
                                             }
                                         },
-                                        "执行信息(点击显示全部信息)": {
+                                        "Execution Info.(Click to view all Info.)": {
                                             formatter: function() {
                                                 return formart2(item1.executeMsg);
                                             }
@@ -174,24 +174,24 @@ define(function(require, exports, module) {
                                         obj: JSON.stringify(item2),
                                     },
                                     columns: {
-                                        "序号":item2.orderNo,
-                                        "节点":{
+                                        "NO.":item2.orderNo,
+                                        "Node":{
                                             formatter: function() {
                                                 return formart3(item2.nodeName,item2.executeFlag, item2.executeMsg);
                                             }
                                         },
-                                        "任务名称": item2.jobname,
-                                        "任务类型": item2.memberTypeName,
-                                        "删除": item2.deleteNum,
-                                        "插入": item2.successNum,
-                                        "开始时间": $.kingdom.toDateTime(item2.startTime),
-                                        "执行时长": $.kingdom.formatMillisecond(item2.zxsj),
-                                        "执行状态": {
+                                        "Task Name": item2.jobname,
+                                        "Task Type": item2.memberTypeName,
+                                        "Delete Conut": item2.deleteNum,
+                                        "Insert Conut": item2.successNum,
+                                        "Start Time": $.kingdom.toDateTime(item2.startTime),
+                                        "Duration": $.kingdom.formatMillisecond(item2.zxsj),
+                                        "Execution Status": {
                                             formatter: function() {
                                                 return formart1(item2.executeFlagName, item2.executeFlag);
                                             }
                                         },
-                                        "执行信息(点击显示全部信息)": {
+                                        "Execution Info.(Click to view all Info.)": {
                                             formatter: function() {
                                                 return formart2(item2.executeMsg);
                                             }
@@ -221,24 +221,24 @@ define(function(require, exports, module) {
                                                 obj: JSON.stringify(item3),
                                             },
                                             columns: {
-                                                "序号":item3.orderNo,
-                                                "节点":{
+                                                "NO.":item3.orderNo,
+                                                "Node":{
                                                     formatter: function() {
                                                         return formart3(item3.nodeName,item3.executeFlag, item3.executeMsg);
                                                     }
                                                 },
-                                                "任务名称": item3.jobname,
-                                                "任务类型": item3.memberTypeName,
-                                                "删除": item3.deleteNum,
-                                                "插入": item3.successNum,
-                                                "开始时间": $.kingdom.toDateTime(item3.startTime),
-                                                "执行时长": $.kingdom.formatMillisecond(item3.zxsj),
-                                                "执行状态": {
+                                                "Task Name": item3.jobname,
+                                                "Task Type": item3.memberTypeName,
+                                                "Delete Conut": item3.deleteNum,
+                                                "Insert Conut": item3.successNum,
+                                                "Start Time": $.kingdom.toDateTime(item3.startTime),
+                                                "Duration": $.kingdom.formatMillisecond(item3.zxsj),
+                                                "Execution Status": {
                                                     formatter: function() {
                                                         return formart1(item3.executeFlagName, item3.executeFlag);
                                                     }
                                                 },
-                                                "执行信息(点击显示全部信息)": {
+                                                "Execution Info.(Click to view all Info.)": {
                                                     formatter: function() {
                                                         return formart2(item3.executeMsg);
                                                     }
@@ -267,11 +267,11 @@ define(function(require, exports, module) {
                                 var selectJobId = $("#perform-monitoring  #J_pm_jobname_tree .jstree-children .jstree-children a.jstree-clicked").attr("jobid");
                                 $("#J_pm_jobname_tree").jstree("destroy");
                                 var treeData = [
-                                    { text: "出错中断", typeFlag: "B", icon: "fa fa-times-circle icon-state-danger", children: [] },
-                                    { text: "执行中", typeFlag: "R", icon: "fa fa-spinner icon-state-info", children: [], state: { opened: true } },
-                                    { text: "成功完成", typeFlag: "S", icon: "fa fa-check-circle icon-state-success", children: [] },
-                                    { text: "出错完成", typeFlag: "F", icon: "fa fa-times-circle icon-state-warning", children: [] },
-                                    { text: "新建", typeFlag: "N", icon: "fa fa-plus-circle icon-state-default", children: [] }
+                                    { text: "Error Interrupt", typeFlag: "B", icon: "fa fa-times-circle icon-state-danger", children: [] },
+                                    { text: "Executing", typeFlag: "R", icon: "fa fa-spinner icon-state-info", children: [], state: { opened: true } },
+                                    { text: "Succeed", typeFlag: "S", icon: "fa fa-check-circle icon-state-success", children: [] },
+                                    { text: "Error completed", typeFlag: "F", icon: "fa fa-times-circle icon-state-warning", children: [] },
+                                    { text: "Create", typeFlag: "N", icon: "fa fa-plus-circle icon-state-default", children: [] }
                                 ];
                                 $.each(items, function(index, value) {
                                     var obj = {};
@@ -379,11 +379,11 @@ define(function(require, exports, module) {
                             var selectJobId = $("#perform-monitoring  #J_pm_jobname_my_tree .jstree-children .jstree-children a.jstree-clicked").attr("jobid");
                             $("#J_pm_jobname_my_tree").jstree("destroy");
                             var treeData = [
-                                { text: "出错中断", typeFlag: "B", icon: "fa fa-times-circle icon-state-danger", children: [] },
-                                { text: "执行中", typeFlag: "R", icon: "fa fa-spinner icon-state-info", children: [], state: { opened: true } },
-                                { text: "成功完成", typeFlag: "S", icon: "fa fa-check-circle icon-state-success", children: [] },
-                                { text: "出错完成", typeFlag: "F", icon: "fa fa-times-circle icon-state-warning", children: [] },
-                                { text: "新建", typeFlag: "N", icon: "fa fa-plus-circle icon-state-default", children: [] }
+                                { text: "Error Interrupt", typeFlag: "B", icon: "fa fa-times-circle icon-state-danger", children: [] },
+                                { text: "Executing", typeFlag: "R", icon: "fa fa-spinner icon-state-info", children: [], state: { opened: true } },
+                                { text: "Succeed", typeFlag: "S", icon: "fa fa-check-circle icon-state-success", children: [] },
+                                { text: "Error completed", typeFlag: "F", icon: "fa fa-times-circle icon-state-warning", children: [] },
+                                { text: "Create", typeFlag: "N", icon: "fa fa-plus-circle icon-state-default", children: [] }
                             ];
                             $.each(items, function(index, value) {
                                 var obj = {};
@@ -580,13 +580,13 @@ define(function(require, exports, module) {
                                     var data;
                                     if (taskSum) {
                                         data = [
-                                            { value: initail, name: '未执行' },
-                                            { value: successNum, name: '执行成功' },
-                                            { value: errorNum, name: '执行失败' },
+                                            { value: initail, name: 'Unexecuted' },
+                                            { value: successNum, name: 'Success' },
+                                            { value: errorNum, name: 'Failure' },
                                         ];
                                     } else {
                                         data = [
-                                            { value: 0, name: '执行中' }
+                                            { value: 0, name: 'Executing' }
                                         ];
                                     }
                                     var params = {
@@ -620,7 +620,7 @@ define(function(require, exports, module) {
                     legend: {
                         orient: 'vertical',
                         x: 'top',
-                        data: ['未执行', '执行成功', '执行失败'],
+                        data: ['Unexecuted', 'Success', 'Failure'],
                         itemWidth: 16, //图形的宽度，即长条的宽度。
                         itemHeight: 10,
 
@@ -940,7 +940,7 @@ define(function(require, exports, module) {
 			var items = data.bcjson.items || data.bcjson;
 			if (data.bcjson.flag === "1") {
 				let html_t = ``;
-				html_t += `<option value="">- 请选择 -</option>`;
+				html_t += `<option value="">- Please select a type -</option>`;
 				let i = 0;
 				for (let item of items) {
 					item.no = ++i;
@@ -1052,7 +1052,7 @@ define(function(require, exports, module) {
 				var hours = fakeTimeObj.getHours() > 9 ? fakeTimeObj.getHours() : "0" + fakeTimeObj.getHours();
 				var minutes = fakeTimeObj.getMinutes() > 9 ? fakeTimeObj.getMinutes() : "0" + fakeTimeObj.getMinutes();
 				var seconds = fakeTimeObj.getSeconds() > 9 ? fakeTimeObj.getSeconds() : "0" + fakeTimeObj.getSeconds();
-				$("#right-content-top h4").html("时长：" + hours + ":" + minutes + ":" + seconds);
+				$("#right-content-top h4").html("Duration：" + hours + ":" + minutes + ":" + seconds);
 				clearInterval(showContent.timeInterval);
 				showContent.timeInterval = setInterval(function () {
 					fakeTime = fakeTime + 1000;
@@ -1060,7 +1060,7 @@ define(function(require, exports, module) {
 					var hours = fakeTimeObj.getHours() > 9 ? fakeTimeObj.getHours() : "0" + fakeTimeObj.getHours();
 					var minutes = fakeTimeObj.getMinutes() > 9 ? fakeTimeObj.getMinutes() : "0" + fakeTimeObj.getMinutes();
 					var seconds = fakeTimeObj.getSeconds() > 9 ? fakeTimeObj.getSeconds() : "0" + fakeTimeObj.getSeconds();
-					$("#right-content-top h4").html("时长：" + hours + ":" + minutes + ":" + seconds);
+					$("#right-content-top h4").html("Duration：" + hours + ":" + minutes + ":" + seconds);
 				}, 1000);
 
 			}

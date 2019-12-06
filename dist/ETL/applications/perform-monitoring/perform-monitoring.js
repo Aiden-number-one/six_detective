@@ -113,13 +113,13 @@ define(function(require, exports, module) {
             if (level === "1") {
                 // $(this).after(`<div class="jstree-operatemin"><a name="add" title="新增"><i class="glyphicon glyphicon-plus"></i></a><a name="edit" title="编辑"><i class="glyphicon glyphicon-pencil"></i></a></div>`);
             } else if (level === "2") {
-                $(this).append(`<div class="jstree-operate"><a name="add" title="添加到我的"><i class="fa fa-plus-circle" style="color: #3fc9d5"></i></a></div>`);
+                $(this).append(`<div class="jstree-operate"><a name="add" title="Add to my tasks"><i class="fa fa-plus-circle" style="color: #3fc9d5"></i></a></div>`);
                 // $(this).append(`<div class="jstree-operate"><a name="add" title="新增"><i class="fa fa-plus-circle" style="color: #3fc9d5"></i></a><a name="del" title="删除"><i class="fa fa-times-circle"></i></a></div>`);
             } else if (level === "3") {
-                $(this).append(`<div class="jstree-operate"><a name="add" title="添加到我的"><i class="glyphicon glyphicon-plus"></i></a><a name="edit" title="编辑"><i class="glyphicon glyphicon-pencil"></i></a></div>`);
+                $(this).append(`<div class="jstree-operate"><a name="add" title="Add to my tasks"><i class="glyphicon glyphicon-plus"></i></a><a name="edit" title="编辑"><i class="glyphicon glyphicon-pencil"></i></a></div>`);
                 // $(this).append(`<div class="jstree-operate"><a name="add" title="新增"><i class="glyphicon glyphicon-plus"></i></a><a name="edit" title="编辑"><i class="glyphicon glyphicon-pencil"></i></a><a name="del" title="删除"><i class="glyphicon glyphicon-trash"></i></a></div>`);
             } else {
-                $(this).append(`<div class="jstree-operate"><a name="add" title="添加到我的"><i class="glyphicon glyphicon-plus"></i></a></div>`);
+                $(this).append(`<div class="jstree-operate"><a name="add" title="Add to my tasks"><i class="glyphicon glyphicon-plus"></i></a></div>`);
                 // $(this).append(`<div class="jstree-operate"><a name="add" title="新增"><i class="glyphicon glyphicon-plus"></i></a><a name="del" title="删除"><i class="glyphicon glyphicon-trash"></i></a></div>`);
             }
         });
@@ -138,11 +138,11 @@ define(function(require, exports, module) {
             if (level === "1") {
                 // $(this).after(`<div class="jstree-operatemin"><a name="add" title="新增"><i class="glyphicon glyphicon-plus"></i></a><a name="edit" title="编辑"><i class="glyphicon glyphicon-pencil"></i></a></div>`);
             } else if (level === "2") {
-                $(this).append(`<div class="jstree-operate"><a name="del" title="删除"><i class="fa fa-times-circle"></i></a></div>`);
+                $(this).append(`<div class="jstree-operate"><a name="del" title="DELETE"><i class="fa fa-times-circle"></i></a></div>`);
             } else if (level === "3") {
-                $(this).append(`<div class="jstree-operate"><a name="del" title="删除"><i class="glyphicon glyphicon-trash"></i></a></div>`);
+                $(this).append(`<div class="jstree-operate"><a name="del" title="DELETE"><i class="glyphicon glyphicon-trash"></i></a></div>`);
             } else {
-                $(this).append(`<div class="jstree-operate"><a name="del" title="删除"><i class="glyphicon glyphicon-trash"></i></a></div>`);
+                $(this).append(`<div class="jstree-operate"><a name="del" title="DELETE"><i class="glyphicon glyphicon-trash"></i></a></div>`);
             }
         });
 
@@ -247,13 +247,13 @@ define(function(require, exports, module) {
             var job_detail = {};
             job_detail.jobId = jobId;
             job_detail.batchNo = batchNo;
-            $("#J_change_view_job iframe").attr("src", "/retl-process/monitor.html");//切换时清空iframe
+            $("#J_change_view_job iframe").attr("src", "/ETL/retl-process/monitor.html");//切换时清空iframe
             //获取table树之前，清空当前树
             $("#J_tableList").jstree('destroy');
 
             if (batchNo && batchNo !== "null") {
                 showContent.getTableData(job_detail, executeFlag);
-                $("#J_change_view_job iframe").attr("src", "/retl-process/monitor.html?jobId=" + jobId + "&batchNo=" + batchNo);
+                $("#J_change_view_job iframe").attr("src", "/ETL/retl-process/monitor.html?jobId=" + jobId + "&batchNo=" + batchNo);
             } else {
                 $("#perform-monitoring-table-tree").empty();
                 $("#perform-monitoring-table-tree").html('<div id="J_tableList" style="text-align:center;padding:8px 0;">No Data</div>');
@@ -317,11 +317,11 @@ define(function(require, exports, module) {
             var currentClass = $(this).find("img").hasClass("current-play");
             var static_ = $(this).find("img").hasClass("static");
             if (currentClass) {
-                bootbox.confirm("确定终止该任务吗?", function(result) {
+                bootbox.confirm("Confirm to stop", function(result) {
                     if (result) {
                         App.blockUI({
                             boxed: true,
-                            message: "终止中..."
+                            message: "processing..."
                         });
                         var currentJobId = showContent.jobId.jobId;
                         var batchNo = $("#circle0").siblings(".circleChart-text").find("div").text();
@@ -358,7 +358,7 @@ define(function(require, exports, module) {
             if ($("#J_change_view_table").is(":visible")) {
                 $("#J_change_view_table").hide();
                 $("#J_change_view_job").show();
-                $("#J_change_view_job iframe").attr("src", "/retl-process/monitor.html?jobId=" + jobId + "&batchNo=" + batchNo);
+                $("#J_change_view_job iframe").attr("src", "/ETL/retl-process/monitor.html?jobId=" + jobId + "&batchNo=" + batchNo);
 
             } else {
                 $("#J_change_view_table").show();
