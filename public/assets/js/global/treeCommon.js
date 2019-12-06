@@ -243,7 +243,7 @@ define((require, exports, module) => {
             inst = $.jstree.reference(reference),
             obj = inst.get_node(reference);
             obj.li_attr.folderid = $(`${_this.tree} li[id=${obj.id}]`).attr("folderid"); // 刚新增的数据修改时手动添加的attr会被清除掉，这里强行赋值
-            bootbox.confirm("确定删除 <span style='color:red'>" + obj.text + "</span> 吗？", result => {
+            bootbox.confirm("Please confirm to delete  <span style='color:red'>" + obj.text + "</span>", result => {
                 if (result) {
                     inst.delete_node(reference);
                     let folderId = obj.li_attr.folderid ;

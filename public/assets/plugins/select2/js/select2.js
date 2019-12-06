@@ -4612,10 +4612,10 @@ S2.define('select2/i18n/en',[],function () {
       return message;
     },
     noResults: function () {
-      return '没有查询到结果';
+      return 'No Data';
     },
     searching: function () {
-      return '查询中...';
+      return 'Search...';
     }
   };
 });

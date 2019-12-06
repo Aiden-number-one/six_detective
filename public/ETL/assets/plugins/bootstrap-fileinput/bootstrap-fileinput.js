@@ -74,7 +74,7 @@
             var url = $(e.target).data("url");
             var filetype = files[0].name.substring(files[0].name.lastIndexOf(".") + 1).toUpperCase();           
             if (acceptFileTpye.indexOf(filetype) === -1) {
-                toastr.info('请上传类型为' + acceptFileTpye + '的文件');
+                toastr.info('Please upload' + acceptFileTpye + 'file.');
                 return;
             }
             var _this = this;
