@@ -3,11 +3,12 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-02 19:57:10
+ * @LastEditTime: 2019-12-05 21:16:12
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
   'systemManagement.userMaintenance.userName': 'User Name',
+  'systemManagement.userMaintenance.name': 'Name',
   'systemManagement.userMaintenance.lockedStatus': 'Locked',
   'systemManagement.userMaintenance.LastUpdateTime': 'Last Update Time',
   'systemManagement.userMaintenance.LastUpdateUser': 'Last Update User',

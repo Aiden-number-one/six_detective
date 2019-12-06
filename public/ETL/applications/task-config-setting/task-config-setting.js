@@ -221,7 +221,7 @@ define((require, exports, module) => {
                 });
             }
              else {
-                toastr.info("请检查所有字段是否填写正确");
+                toastr.info("Please check the invalid fields");
             }
         });
 
@@ -280,7 +280,7 @@ define((require, exports, module) => {
                 folderId = dom.eq(0).data("folderid"),
                 arr = [];
             if (dom.length === 0) {
-                toastr.info("请至少选择一条数据");
+                toastr.info("Please select one job at least");
                 return;
             }
             $.each(dom, function() {
@@ -302,7 +302,7 @@ define((require, exports, module) => {
         $("body").on("click", `${PAGE} #J_task_move_modal [data-type=confirm]`, function() {
             let targetFolderId = $("#J_task_move_modal [name=folderId]").val();
             if (!targetFolderId) {
-                toastr.info("请选择要移动到的目录");
+                toastr.info("Please select the target file");
                 return;
             }
             let arr = $(this).data("arr"),
@@ -322,7 +322,7 @@ define((require, exports, module) => {
             let dom = $("#J_task_table tbody input:checked"),
                 arr = [];
             if (dom.length === 0) {
-                toastr.info("请至少选择一条数据");
+                toastr.info("Please select one job at least");
                 return;
             }
             $.each(dom, function() {
@@ -337,7 +337,7 @@ define((require, exports, module) => {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "删除中..."
+                        message: "Deleting..."
                     });
                     showContent.delTaskInfo({
                         taskList: JSON.stringify(arr),

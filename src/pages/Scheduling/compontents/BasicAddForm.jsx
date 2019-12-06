@@ -62,7 +62,7 @@ class BasicAddForm extends Component {
               },
             ],
             initialValue: '',
-          })(<Input placeholder="请输入最长64位字符（中文占两个字符）" />)}
+          })(<Input placeholder="64 characters maximum" />)}
         </Form.Item>
         <Form.Item label="调度作业:">
           {getFieldDecorator('folderId', {
@@ -102,7 +102,7 @@ class BasicAddForm extends Component {
               },
             ],
             initialValue: '',
-          })(<TextArea rows={2} placeholder="请输入最长1024位字符（中文占两个字符）" />)}
+          })(<TextArea rows={2} placeholder="1024 characters maximum" />)}
         </Form.Item>
       </Form>
     );

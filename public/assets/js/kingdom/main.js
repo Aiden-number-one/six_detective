@@ -764,17 +764,17 @@ define(function(require, exports, module) {
             $(this).parent().toggleClass("open");
         });
         // 搜索条件显示隐藏
-        $("body").on("click", "[data-toggle=collapse].collapse-control", function() {
-            if ($(this).find(".fa-sort-desc").length > 0) {
-                $(this).html(`<i class="fa fa-sort-asc"></i><span>收起</span>`);
-            } else {
-                $(this).html(`<i class="fa fa-sort-desc"></i><span>高级搜索</span>`);
-            }
-        });
-        $("body").on("click", "[data-toggle=collapse] span, [data-toggle=collapse] i", function(e) {
-            e.stopPropagation();
-            $(this).parent().click();
-        });
+        // $("body").on("click", "[data-toggle=collapse].collapse-control", function() {
+        //     if ($(this).find(".fa-sort-desc").length > 0) {
+        //         $(this).html(`<i class="fa fa-sort-asc"></i><span>收起</span>`);
+        //     } else {
+        //         $(this).html(`<i class="fa fa-sort-desc"></i><span>高级搜索</span>`);
+        //     }
+        // });
+        // $("body").on("click", "[data-toggle=collapse] span, [data-toggle=collapse] i", function(e) {
+        //     e.stopPropagation();
+        //     $(this).parent().click();
+        // });
 
 
         $("body").on('click', 'tbody tr .bootstrap-switch-label', function(e) {
@@ -1279,7 +1279,6 @@ define(function(require, exports, module) {
         //         jQuery.uniform.update();
         //     });
         // };
-        
 
        
     });

@@ -14,6 +14,7 @@ const ApprovalAuditorModel = {
     roleGroupDatas: [],
     auditorData: [],
     GroupList: [],
+    checkboxData: [],
   },
   effects: {
     *saveConfigDatas({ payload, callback }, { call }) {
@@ -91,9 +92,11 @@ const ApprovalAuditorModel = {
     },
     setMenuDatas(state, action) {
       const menuData = action.payload[0].MENU;
+      const checkboxList = menuData.map(item => ({ label: item.roleName, value: item.roleId }));
       return {
         ...state,
         GroupList: menuData,
+        checkboxData: checkboxList,
       };
     },
     auditorlist(state, action) {

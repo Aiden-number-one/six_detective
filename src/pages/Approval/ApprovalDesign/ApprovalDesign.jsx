@@ -5,6 +5,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Button, Modal, Upload, message, Drawer, Icon } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
+import List from '@/components/List';
 // import classNames from 'classnames';
 import styles from './ApprovalDesign.less';
 
@@ -15,12 +16,12 @@ class ModelForm extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSubmit}>
-        <Form.Item label="name" labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
+        <Form.Item label="Name" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('name', {
             rules: [{ required: true, message: 'Please input your name!' }],
           })(<Input placeholder="至少2个字符,最多16个字符" />)}
         </Form.Item>
-        <Form.Item label="description:" labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
+        <Form.Item label="Description:" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('description', {
             rules: [{ required: true, message: 'Please input your description!' }],
           })(<TextArea rows={4} />)}
@@ -239,24 +240,13 @@ class ApprovalDesign extends PureComponent {
                   onClick={this.showDrawer}
                   style={{ marginRight: '15px', marginTop: '8px', float: 'right' }}
                 />
-                <div className="">
-                  <h2>模型列表</h2>
-                  <ul>
-                    {modelList.map(item => (
-                      <li
-                        key={item.id}
-                        icon="copy"
-                        onClick={() => {
-                          this.chooseTab(item.id);
-                        }}
-                        className={chooseModelId === item.id ? styles.liActive : null}
-                      >
-                        <Icon type="copy" style={{ color: '#FFB81C', marginRight: '4px' }} />
-                        {item.name}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <List
+                  listData={modelList}
+                  chooseId={chooseModelId}
+                  currentId="id"
+                  chooseTab={this.chooseTab}
+                  title="流程列表"
+                />
               </div>
               <div className={styles.rightBox}>
                 <div>

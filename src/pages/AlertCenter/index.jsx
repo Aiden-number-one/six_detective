@@ -5,8 +5,8 @@ import AlertDetail from './AlertDetail';
 import AlertList from './AlertList';
 import styles from './index.less';
 
-function Alert({ dispatch, alerts }) {
-  const [alert, setAlert] = useState({});
+function Alert({ dispatch, loading, alerts }) {
+  const [alert, setAlert] = useState(null);
   useEffect(() => {
     dispatch({
       type: 'alertCenter/fetch',
@@ -24,11 +24,18 @@ function Alert({ dispatch, alerts }) {
   return (
     <PageHeaderWrapper>
       <div className={styles['list-container']}>
-        <AlertList dataSource={alerts} getAlert={item => setAlert(item)} />
-        <AlertDetail alert={alert} />
+        <AlertList
+          dataSource={alerts}
+          getAlert={item => setAlert(item)}
+          loading={loading['alertCenter/fetch']}
+        />
+        {alert && <AlertDetail alert={alert} />}
       </div>
     </PageHeaderWrapper>
   );
 }
 
-export default connect(({ alertCenter: { alerts } }) => ({ alerts }))(Alert);
+export default connect(({ loading, alertCenter: { alerts } }) => ({
+  alerts,
+  loading: loading.effects,
+}))(Alert);

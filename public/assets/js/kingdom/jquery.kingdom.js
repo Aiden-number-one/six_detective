@@ -104,7 +104,7 @@ define(function(require, exports, module) {
             recommendBrowser: function() {
                 var browser = this.getBrowser(true);
                 if (browser.indexOf('ie/') > -1 || browser.indexOf('edge/') > -1) { //表明是ie浏览器
-                    toastr.info('推荐使用谷歌浏览器^_^', {
+                    toastr.info('Google browser recommended^_^', {
                         positionClass: 'toast-top-right'
                     });
                 }
@@ -1645,7 +1645,7 @@ define(function(require, exports, module) {
                     // 接口错误
                     if (data.bcjson.flag == "0") {
                         toastr.error(data.bcjson.msg);
-                        $(`#${tableId} tbody`).html(`<tr><td class="t-c" colspan="20">暂无数据</td></tr>`);
+                        $(`#${tableId} tbody`).html(`<tr><td class="t-c" colspan="20">No Data</td></tr>`);
                         pageId && App.initPagination(0, 0, 0, pageId);
                         App.initCheckableTable($(`#${tableId}`));
                         return;
@@ -1672,7 +1672,7 @@ define(function(require, exports, module) {
                         pageId && App.initPagination(currentPage, totalPage, totalRecords, pageId, paramsMap.pageSize, cb, isChangeSize, isGoPage);
                         // 没有数据
                     } else {
-                        $(`#${tableId} tbody`).html(`<tr><td class="t-c" colspan="20">暂无数据</td></tr>`);
+                        $(`#${tableId} tbody`).html(`<tr><td class="t-c" colspan="20">No Data</td></tr>`);
                         pageId && App.initPagination(0, 0, 0, pageId);
                         App.initCheckableTable($(`#${tableId}`));
                     }

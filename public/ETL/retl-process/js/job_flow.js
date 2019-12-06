@@ -189,8 +189,7 @@ function saveFlowInfo(){
 			} else {
 				$.messager.alert('提示', data.bcjson.msg, 'info', function() {
 					setTimeout(function() {
-						debugger;
-						window.opener.location.href = "/index.html?folderId=" + params.folder_id + "#report-table-info-manage";
+						window.opener.location.href = "/ETL/index.html?folderId=" + params.folder_id + "#report-table-info-manage";
 						setTimeout(function(){window.opener.location.reload();
 							window.close();},200)
 					}, 200);
