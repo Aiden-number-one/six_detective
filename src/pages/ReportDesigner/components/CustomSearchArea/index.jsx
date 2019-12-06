@@ -4,11 +4,11 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors: mus
- * @LastEditTime: 2019-12-05 11:24:38
+ * @LastEditTime: 2019-12-05 16:32:49
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Icon } from 'antd';
+import { Icon, Input } from 'antd';
 import { WidthProvider, Responsive } from 'react-grid-layout';
 import styles from './index.less';
 
@@ -19,12 +19,16 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 }))
 export default class CustomSearchArea extends PureComponent {
   static defaultProps = {
-    rowHeight: 30,
+    rowHeight: 40,
   };
 
   generateDOM = () => {
     const { customSearchData } = this.props;
-    return customSearchData.map(el => <div key={el.i} className={styles.bulk}></div>);
+    return customSearchData.map(el => (
+      <div key={el.i} className={styles.bulk}>
+        <Input />
+      </div>
+    ));
   };
 
   /**
@@ -35,6 +39,7 @@ export default class CustomSearchArea extends PureComponent {
    * @Date: 2019-12-05 10:46:07
    */
   addWidgetArea = type => {
+    const { dispatch, customSearchData } = this.props;
     const value = {
       type, // 控件类型
       name: '', // 控件名称
@@ -50,8 +55,13 @@ export default class CustomSearchArea extends PureComponent {
       },
       displayState: 'normal', // 展示控件状态
       initialValue: undefined, // 初始值
+      // grid-layout相关
+      i: customSearchData.length.toString(),
+      x: 0,
+      y: 0,
+      w: 1,
+      h: 1,
     };
-    const { dispatch, customSearchData } = this.props;
     dispatch({
       type: 'formArea/changeCustomSearchData',
       payload: [...customSearchData, value],
@@ -59,22 +69,39 @@ export default class CustomSearchArea extends PureComponent {
   };
 
   render() {
+    const widgetAreaAction = {
+      addWidgetArea: this.addWidgetArea,
+    };
     return (
       <div className={styles.customSearchArea}>
-        <ResponsiveReactGridLayout onLayoutChange={this.onLayoutChange} {...this.props}>
+        <ResponsiveReactGridLayout
+          onDragStart={() => {
+            if (document.activeElement.className.indexOf('ant-input') > -1) {
+              return false;
+            }
+            return true;
+          }}
+          onLayoutChange={this.onLayoutChange}
+          {...this.props}
+        >
           {this.generateDOM()}
         </ResponsiveReactGridLayout>
-        <WidgetArea />
+        <WidgetArea {...widgetAreaAction} />
       </div>
     );
   }
 }
 
-function WidgetArea() {
+function WidgetArea({ addWidgetArea }) {
   return (
     <div className={styles.widgetArea}>
       <div className={styles.editArea}>
-        <Icon type="plus" onClick />
+        <Icon
+          type="plus"
+          onClick={() => {
+            addWidgetArea('input');
+          }}
+        />
       </div>
       <div className={styles.closeArea}>Close</div>
     </div>
