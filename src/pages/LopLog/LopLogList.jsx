@@ -1,15 +1,17 @@
 import React from 'react';
 import { Table } from 'antd';
-import { FormattedMessage } from 'umi/locale';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 
 const { Column } = Table;
+const submissionReport = formatMessage({ id: 'data-import.lop.submission-report' });
+const processingStatus = formatMessage({ id: 'data-import.lop.processing-status' });
 
 export default function({ dataSource, loading }) {
   return (
     <Table
       dataSource={dataSource}
-      rowKey="tradeDate-submitterCode"
+      rowKey="tradeDate"
       loading={loading}
       pagination={{ showSizeChanger: true, showQuickJumper: true }}
     >
@@ -33,7 +35,7 @@ export default function({ dataSource, loading }) {
       <Column
         ellipsis
         dataIndex="submissionReport"
-        title={<FormattedMessage id="data-import.lop.submission-report" />}
+        title={<span title={submissionReport}>{submissionReport}</span>}
       />
       <Column
         width={100}
@@ -73,7 +75,7 @@ export default function({ dataSource, loading }) {
         ellipsis
         align="center"
         dataIndex="processingStatus"
-        title={<FormattedMessage id="data-import.lop.processing-status" />}
+        title={<span title={processingStatus}>{processingStatus}</span>}
       />
       <Column
         width={90}
