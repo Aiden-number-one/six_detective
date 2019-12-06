@@ -266,7 +266,7 @@ $.extend({
         },
 
         showLoading: function($obj, txt) {
-            $obj.after('<span id="kd-ui-loading" class="kdValidform_loading">' + (txt ? txt : '正在处理中') + '<span style="min-width: 15px"></span></span>');
+            $obj.after('<span id="kd-ui-loading" class="kdValidform_loading">' + (txt ? txt : 'Processing...') + '<span style="min-width: 15px"></span></span>');
             $.kd.kdInterval = setInterval(function() {
                 if ($("#kd-ui-loading>span").text().length < 4) {
                     $("#kd-ui-loading>span").append(".")

@@ -508,7 +508,7 @@ define(function (require, exports, module) {
             function (data) {
                 App.unblockUI();
                 if (data.bcjson.flag === "1") {
-                    toastr.success("同步成功");
+                    toastr.success("Update successfully");
 
                     //查询同步后的新的列表
                     var paramsSend = {};
@@ -559,7 +559,7 @@ define(function (require, exports, module) {
             function (data) {
                 App.unblockUI();
                 if (data.bcjson.flag === "1") {
-                    toastr.success("批量同步成功");
+                    toastr.success("Batch update successfully");
                     showContent.qry_connect_data();
                     showContent.getUser({"connection_id":showContent.connect_id});
                 } else {
@@ -578,7 +578,7 @@ define(function (require, exports, module) {
             function (data) {
                 App.unblockUI();
                 if (data.bcjson.flag === "1") {
-                    toastr.success("批量同步成功");
+                    toastr.success("Batch update successfully");
                     showContent.qry_connect_data();
                     showContent.getUser({"connection_id":showContent.connect_id});
                 } else {

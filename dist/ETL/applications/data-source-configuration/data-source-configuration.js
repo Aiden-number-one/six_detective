@@ -306,7 +306,7 @@ define(function (require, exports, module) {
                     if (result) {
                         App.blockUI({
                             boxed: true,
-                            message: "Deleting..."
+                            message: "Processing..."
                         });
                         showContent.deleteDataConnect(params);
                     }
@@ -546,7 +546,7 @@ define(function (require, exports, module) {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "Deleting..."
+                        message: "Processing..."
                     });
                     showContent.deleteTableList();
                 }
@@ -704,7 +704,7 @@ define(function (require, exports, module) {
                 if (result) {
                     App.blockUI({
                         boxed: true,
-                        message: "Deleting..."
+                        message: "Processing..."
                     });
                     showContent.deleteTableList(true, tableid);
                 }

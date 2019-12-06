@@ -376,7 +376,7 @@ define(function(require, exports, module) {
                     $("#build .form-horizontal").append(html);
                 })
             } else {
-                toastr.error(data.kdjson.msg + "未查询到该条记录详情");
+                toastr.error(data.kdjson.msg + "No record has been found.");
             }
         })
     }
