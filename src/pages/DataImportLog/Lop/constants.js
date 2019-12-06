@@ -1,10 +1,10 @@
 /*
- * @Des: Please Modify First
+ * @Des: common constant
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 18:53:34
  * @LastEditors: iron
- * @LastEditTime: 2019-12-02 18:54:02
+ * @LastEditTime: 2019-12-06 09:50:12
  */
 export const PROCESSING_STATUS = [
   'wait for validation',
@@ -12,7 +12,6 @@ export const PROCESSING_STATUS = [
   'validated',
   'processing',
   'failed processing',
-  'processed',
   'processed',
   'canceled',
 ];

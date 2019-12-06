@@ -17,7 +17,10 @@ function LopLogFilterForm({ form, handleSearch }) {
   function handleCommit() {
     validateFields((err, values) => {
       if (!err) {
-        const tradeDate = values.tradeDate.format('MM/DD/YYYY');
+        let tradeDate = null;
+        if (values.tradeDate) {
+          tradeDate = values.tradeDate.format('MM/DD/YYYY');
+        }
         handleSearch({ ...values, tradeDate });
       }
     });
@@ -31,7 +34,7 @@ function LopLogFilterForm({ form, handleSearch }) {
             {getFieldDecorator('tradeDate', {
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select trade date!',
                 },
               ],
@@ -41,7 +44,7 @@ function LopLogFilterForm({ form, handleSearch }) {
             {getFieldDecorator('submissionDate', {
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select submission date!',
                 },
               ],
@@ -83,34 +86,31 @@ function LopLogFilterForm({ form, handleSearch }) {
         <Col span={7} offset={1}>
           <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
             {getFieldDecorator('submitterCode', {
-              initialValue: '',
               rules: [
                 {
-                  required: true,
-                  message: 'Please input trade date!',
+                  required: false,
+                  message: 'Please input submitter code!',
                 },
               ],
             })(<Input placeholder="please input submitter code" />)}
           </Form.Item>
           <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
             {getFieldDecorator('submitterName', {
-              initialValue: '',
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please input submitter name!',
                 },
               ],
-            })(<Input placeholder="please input submmitter name" />)}
+            })(<Input placeholder="please input submitter name" />)}
           </Form.Item>
         </Col>
         <Col span={7} offset={1}>
           <Form.Item label={<FormattedMessage id="data-import.lop.processing-status" />}>
             {getFieldDecorator('processingStatus', {
-              initialValue: PROCESSING_STATUS[0],
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select processing status!',
                 },
               ],
@@ -124,10 +124,9 @@ function LopLogFilterForm({ form, handleSearch }) {
           </Form.Item>
           <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
             {getFieldDecorator('submissionReport', {
-              initialValue: SUBMISSION_REPORT[0],
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select submission report!',
                 },
               ],

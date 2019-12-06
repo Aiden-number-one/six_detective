@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
+import Link from 'umi/link';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Button, Modal } from 'antd';
+import { Table, Row, Col, Button, Modal } from 'antd';
 import IconFont from '@/components/IconFont';
-import ColumnTitle from './ColumnTitle';
+import ColumnTitle from '@/pages/AlertCenter/ColumnTitle';
 import styles from './index.less';
 
 const { Column } = Table;
 
-export default function({ dataSource, loading, getAlert }) {
+export default function({ dataSource, loading, getInfomation }) {
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   return (
     <div className={styles.alerts}>
       <Row className={styles.btns}>
-        <Button type="primary" disabled={!selectedKeys.length}>
-          <IconFont type="iconqizhi" className={styles['btn-icon']} />
-          <FormattedMessage id="alert-center.claim" />
-        </Button>
-        <Button disabled={!selectedKeys.length}>
-          <IconFont type="iconic_circle_close" className={styles['btn-icon']} />
-          <FormattedMessage id="alert-center.close" />
-        </Button>
-        <Button disabled={!selectedKeys.length}>
-          <IconFont type="iconbatch-export" className={styles['btn-icon']} />
-          <FormattedMessage id="alert-center.export" />
-        </Button>
+        <Col span={18}>
+          <Button disabled={!selectedKeys.length}>
+            <IconFont type="iconbatch-export" className={styles['btn-icon']} />
+            <FormattedMessage id="alert-center.export" />
+          </Button>
+        </Col>
+        <Col span={6} align="right">
+          <Button type="link">
+            <Link to="/alert-center">Alert Center</Link>
+          </Button>
+        </Col>
       </Row>
       <Table
         border
@@ -38,7 +38,7 @@ export default function({ dataSource, loading, getAlert }) {
         }}
         onRow={record => ({
           onClick() {
-            getAlert(record);
+            getInfomation(record);
           },
         })}
       >

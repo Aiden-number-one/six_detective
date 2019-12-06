@@ -41,7 +41,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             rules: [
               {
                 required: true,
-                message: 'Please input trade date!',
+                message: 'Please input submitter code!',
               },
             ],
           })(<Input placeholder="please input submitter code" />)}
@@ -59,7 +59,6 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
           {getFieldDecorator('submissionReport', {
-            initialValue: SUBMISSION_REPORT[0],
             rules: [
               {
                 required: true,
@@ -67,7 +66,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
               },
             ],
           })(
-            <Select placeholder="please select submitter report">
+            <Select placeholder="please select submission report">
               {SUBMISSION_REPORT.map(report => (
                 <Option key={report}>{report}</Option>
               ))}
@@ -75,12 +74,23 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
-          <Upload>
-            <Button>
-              <Icon type="upload" />
-              <FormattedMessage id="data-import.lop.browse" />
-            </Button>
-          </Upload>
+          {getFieldDecorator('upload', {
+            valuePropName: 'fileList',
+            getValueFromEvent: e => {
+              console.log('Upload event:', e);
+              if (Array.isArray(e)) {
+                return e;
+              }
+              return e && e.fileList;
+            },
+          })(
+            <Upload>
+              <Button>
+                <Icon type="upload" />
+                <FormattedMessage id="data-import.lop.browse" />
+              </Button>
+            </Upload>,
+          )}
         </Form.Item>
         <Form.Item>
           <Button onClick={handleCancel}>Cancel</Button>

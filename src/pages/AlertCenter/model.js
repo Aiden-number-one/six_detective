@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-05 14:42:04
+ * @LastEditTime: 2019-12-06 12:24:25
  */
 import { request } from '@/utils/request.default';
 
@@ -17,6 +17,7 @@ export async function getAlerts(params) {
 export default {
   namespace: 'alertCenter',
   state: {
+    infomations: [],
     alerts: [],
   },
   reducers: {
