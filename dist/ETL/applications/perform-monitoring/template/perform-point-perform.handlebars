@@ -1,0 +1,5 @@
+ {{#if flag}} {{else}} {{#each this}}
+<option data-params='{"orderNo":"{{orderNo}}","nodeName":"{{nodeName}}","taskId":"{{taskId}}","taskName":"{{taskName}}","taskNo":"{{taskNo}}","taskType":"{{taskType}}"}'>
+  {{nodeName}}
+</option>
+{{/each}} {{/if}}

@@ -483,7 +483,7 @@ function showTableList(){
 			}
 		},{
 			field : 'folderName',
-			title : '所属文件夹',
+			title : 'Folder',
 			width : '25%',
 			sortable : true,
 			formatter:function(value, row, index) {
@@ -491,7 +491,7 @@ function showTableList(){
 			}
 		},{
 			field : 'taskName',
-			title : '任务名称',
+			title : 'Task Name',
 			width : '25%',
 			sortable : true,
 			formatter:function(value, row, index) {
@@ -499,7 +499,7 @@ function showTableList(){
 			}
 		},{
 			field : 'taskTypeName',
-			title : '任务类型',
+			title : 'Task Type',
 			width : '25%',
 			sortable : true,
 		}] ],

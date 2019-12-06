@@ -1,0 +1,10 @@
+{{#if flag}}
+	<tr><td colspan="2" class="text-center">No Data</td></tr>
+{{else}}
+{{#each this}}
+    <tr>
+        <td class="width40"> {{rownumber @index}} </td>
+        <td> <a class="link_relative" data-obj="{{obj2StrHelper this}}">{{jobName}}</a></td>
+    </tr>
+{{/each}}
+{{/if}}

@@ -31,7 +31,7 @@ define(function (require, exports, module) {
             App.clearForm("J_form_basc");
             $("#J_form_basc input[name='scheduleLaw']")[0].click();
             $("#J_add_plan_modal").modal("show");
-            $("#J_add_plan_modal .modal-header h4").text("新增调度计划");
+            $("#J_add_plan_modal .modal-header h4").text("Create Schedule Plan");
             $(".J_form_basc_submit").attr("id", "J_form_basc_submit_add");
             $("#task-plan-setting #J_plan_setting_time").css("display", "none");
         });
@@ -96,11 +96,11 @@ define(function (require, exports, module) {
             if (checkArray.length === 0) {
                 toastr.info("Please select records");
             } else {
-                bootbox.confirm("确定删除吗？", function (result) {
+                bootbox.confirm("Please confirm that you want to delete this Schedule.", function (result) {
                     if (result) {
                         App.blockUI({
                             boxed: true,
-                            message: "删除中..."
+                            message: "Processing..."
                         });
                         showContent.deletePlanSet(params);
                     }
@@ -136,7 +136,7 @@ define(function (require, exports, module) {
                 }
                 App.blockUI({
                     boxed: true,
-                    message: "处理中..."
+                    message: "Processing..."
                 });
                 showContent.editPlanSet(paramsMap);
             } else {
@@ -180,7 +180,7 @@ define(function (require, exports, module) {
                 paramsMap.startFlag = "2";
                 App.blockUI({
                     boxed: true,
-                    message: "处理中..."
+                    message: "Processing..."
                 });
                 showContent.addPlanSet(paramsMap);
             } else {

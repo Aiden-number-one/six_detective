@@ -1,6 +1,6 @@
 {
-  "name": "香港交易所",
-  "short_name": "香港交易所",
+  "name": "HKEX",
+  "short_name": "HKEX",
   "display": "standalone",
   "start_url": "./?utm_source=homescreen",
   "theme_color": "#002140",

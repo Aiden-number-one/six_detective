@@ -1,20 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Layout, Collapse, Icon } from 'antd';
 import classNames from 'classnames';
-import ToolBar from './components/ToolBar/index';
 import SpreadSheet from '@/components/SpreadSheet';
-import ClassifyTree from '@/components/ClassifyTree';
 import CustomSearchArea from './components/CustomSearchArea/index';
+import ToolBar from './components/ToolBar/index';
+import RigthSideBar from './components/RigthSideBar/index';
 import styles from './ReportDesigner.less';
-// import EditBox from '../../components/editBox';
-// import LeftTree from '../../components/leftTree';
-// import Table from '../../components/table';
-// import RightMenu from '../../components/rightMenu';
-// import Condition from '../../components/condition';
-
-const { Sider, Content } = Layout;
-const { Panel } = Collapse;
 
 @connect(({ reportDesigner }) => ({ reportDesigner }))
 @SpreadSheet.createSpreadSheet
@@ -77,42 +68,7 @@ export default class ReportDesigner extends PureComponent {
           </div>
           <div className={classNames(styles.left, styles.col)}></div>
           <div className={classNames(styles.right, styles.col, styles.rigthSideBar)}>
-            <Layout className={styles.layout}>
-              <div className={styles.header}>
-                <div className={styles.title}>单元格属性</div>
-                <div className={styles.icon}></div>
-              </div>
-              <Layout>
-                <Content className={styles.content}>
-                  <ClassifyTree
-                    treeData={[
-                      { menuname: 'parent', menuid: '-1' },
-                      { menuname: 'test', menuid: 'test1', parentmenuid: '-1' },
-                      { menuname: 'test2', menuid: 'test2', parentmenuid: '-1' },
-                    ]}
-                    treeKey={{
-                      currentKey: 'menuid',
-                      currentName: 'menuname',
-                      parentKey: 'parentmenuid',
-                    }}
-                    onSelect={() => {}}
-                  ></ClassifyTree>
-                  <Collapse
-                    bordered={false}
-                    defaultActiveKey={['1']}
-                    expandIconPosition="right"
-                    expandIcon={({ isActive }) => (
-                      <Icon type="caret-right" rotate={isActive ? 90 : 0} />
-                    )}
-                  >
-                    <Panel header="Basic" key="1">
-                      111222333
-                    </Panel>
-                  </Collapse>
-                </Content>
-                <Sider width={30} className={styles.sider} />
-              </Layout>
-            </Layout>
+            <RigthSideBar />
           </div>
         </div>
       </Fragment>
