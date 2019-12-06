@@ -16710,6 +16710,9 @@ Color library demo
   min-width: 40px;
   padding-top: 8px;
 }
+.bootstrap-touchspin-down,.bootstrap-touchspin-up {
+  min-width: 10px !important;
+}
 .btn-default {
   background-color: #dfd9e8;
   border: 1px solid #dfd9e8 !important;

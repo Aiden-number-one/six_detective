@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Table, Button, Drawer, Modal } from 'antd';
+import { Form, Table, Pagination, Button, Drawer, Modal } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
@@ -169,10 +169,10 @@ class MenuUserGroup extends Component {
    * @param {type} null
    * @return: undefined
    */
-  pageChange = pagination => {
+  pageChange = (pageNumber, pageSize) => {
     const page = {
-      pageNumber: pagination.current.toString(),
-      pageSize: pagination.pageSize.toString(),
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
     };
 
     this.setState(
@@ -207,6 +207,18 @@ class MenuUserGroup extends Component {
     dispatch({
       type: 'menuUserGroup/getMenuUserGroup',
       payload: params,
+    });
+  };
+
+  onShowSizeChange = (current, pageSize) => {
+    console.log(current, pageSize);
+    const { pageNumber } = this.state;
+    const page = {
+      pageNumber,
+      pageSize: pageSize.toString(),
+    };
+    this.setState({
+      page,
     });
   };
 
@@ -248,7 +260,7 @@ class MenuUserGroup extends Component {
           cancelText={formatMessage({ id: 'app.common.cancel' })}
           okText={formatMessage({ id: 'app.common.save' })}
         >
-          <span>Are you sure you want to delete this form?</span>
+          <span>Please confirm that you want to delete this record.?</span>
         </Modal>
         <div className={styles.content}>
           <div className={styles.tableTop}>
@@ -258,12 +270,21 @@ class MenuUserGroup extends Component {
           </div>
           <Table
             loading={loading['menuUserGroup/getMenuUserGroup']}
-            pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
+            // pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
             // rowSelection={rowSelection}
-            onChange={this.pageChange}
+            // onChange={this.pageChange}
             dataSource={menuUserGroup.items}
             columns={columns}
+            pagination={false}
           ></Table>
+          <Pagination
+            showSizeChanger
+            showTotal={(total, range) => `Page ${range[0]} of ${total}`}
+            onShowSizeChange={this.onShowSizeChange}
+            onChange={this.pageChange}
+            total={menuUserGroup.totalCount}
+            pageSize={page.pageSize}
+          />
         </div>
       </PageHeaderWrapper>
     );
