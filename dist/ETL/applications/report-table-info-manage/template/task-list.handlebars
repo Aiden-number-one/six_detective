@@ -1,0 +1,18 @@
+{{#if flag}}
+	<tr><td colspan="8" class="text-center">No Data</td></tr>
+{{else}}
+{{#each this}}
+    <tr>
+        <td class="width40"> {{plus @index "1"}}</td>
+        <td> {{folderName}} </td>
+        {{!-- <td> {{taskNo}} </td> --}}
+        <td> {{taskName}} </td>
+        <td> {{taskTypeName}} </td>
+        <td> {{src}} </td>
+        <td> {{tar}} </td>
+        <td> {{targetTable}} </td>
+        <td> {{dateTimeFormatHelper modifiedTime}} </td>
+        <td> {{modifieder}} </td>
+    </tr>
+{{/each}}
+{{/if}}

@@ -43,7 +43,7 @@ define(function(require, exports, module) {
     showContent.copyWorkList = params => {
         App.blockUI({
             boxed: true,
-            message: "处理中..."
+            message: "Processing..."
         });
         $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_job_info_copy", "v4.0", params, data => {
             if (data.bcjson.flag == "1") {
@@ -61,7 +61,7 @@ define(function(require, exports, module) {
     showContent.moveWorkInfo = params => {
         App.blockUI({
             boxed: true,
-            message: "处理中..."
+            message: "Processing..."
         });
         $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_job_info_change_folder", "v4.0", params, data => {
             if (data.bcjson.flag == "1") {

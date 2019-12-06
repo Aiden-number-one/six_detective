@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Button } from 'antd';
+import { Table, Row, Button, Modal } from 'antd';
 import IconFont from '@/components/IconFont';
 import ColumnTitle from './ColumnTitle';
 import styles from './index.less';
 
 const { Column } = Table;
 
-export default function({ dataSource, getAlert }) {
+export default function({ dataSource, loading, getAlert }) {
+  const [selectedKeys, setSelectedKeys] = useState([]);
+
   return (
     <div className={styles.alerts}>
       <Row className={styles.btns}>
-        <Button type="primary">
+        <Button type="primary" disabled={!selectedKeys.length}>
           <IconFont type="iconqizhi" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button>
+        <Button disabled={!selectedKeys.length}>
           <IconFont type="iconic_circle_close" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.close" />
         </Button>
-        <Button>
+        <Button disabled={!selectedKeys.length}>
           <IconFont type="iconbatch-export" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </Button>
@@ -28,9 +30,10 @@ export default function({ dataSource, getAlert }) {
         border
         dataSource={dataSource}
         rowKey="alertId"
+        loading={loading}
         rowSelection={{
           onChange: selectedRowKeys => {
-            console.log(selectedRowKeys);
+            setSelectedKeys(selectedRowKeys);
           },
         }}
         onRow={record => ({
@@ -98,6 +101,17 @@ export default function({ dataSource, getAlert }) {
                 type="iconqizhi"
                 className={styles.icon}
                 title={formatMessage({ id: 'alert-center.claim' })}
+                onClick={() =>
+                  Modal.confirm({
+                    title: 'Confirm',
+                    content: 'Are you sure claim this alert?',
+                    okText: 'Sure',
+                    cancelText: 'Cancel',
+                    onOk() {
+                      console.log(123);
+                    },
+                  })
+                }
               />
               <IconFont
                 type="iconic_circle_close"

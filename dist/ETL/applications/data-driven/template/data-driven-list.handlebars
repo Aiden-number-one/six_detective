@@ -1,0 +1,7 @@
+{{#if flag}}
+<li class="t-c" data-lang="">No Data</li>
+{{else}}
+  {{#each this}}
+       <li class="list-group-item"><img class="driver-logo" src="/assets/img/db/{{driverLogo}}" /><strong>{{driverName}}</strong> <span class="hidden1 c-r" driver_id="{{driverId}}" style="height:auto;padding:0;color:#10416c"><font style="font-size:15px"><i title="DELETE"  class="fa fa-trash-o"></i></font></span></li>
+  {{/each}}
+{{/if}}

@@ -3,17 +3,18 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 09:52:55
+ * @LastEditTime: 2019-12-05 20:12:29
  */
 import Service from '@/utils/Service';
 
-const { getMenuUserGroup, getNewUserGroup } = Service;
+const { getMenuUserGroup, getNewUserGroup, getModifyUserGroup } = Service;
 
 const menuUserGroup = {
   namespace: 'menuUserGroup',
   state: {
     data: [],
     saveUser: {},
+    updateData: {},
   },
   effects: {
     *getMenuUserGroup({ payload }, { call, put }) {
@@ -37,6 +38,16 @@ const menuUserGroup = {
         callback();
       }
     },
+    *updateUserGroup({ payload, callback }, { call, put }) {
+      const response = yield call(getModifyUserGroup, { param: payload });
+      if (response.bcjson.flag === '1' || !response.bcjson.flag) {
+        yield put({
+          type: 'update',
+          payload: response.bcjson.items,
+        });
+        callback();
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
@@ -49,6 +60,12 @@ const menuUserGroup = {
       return {
         ...state,
         saveUser: action.payload,
+      };
+    },
+    update(state, action) {
+      return {
+        ...state,
+        updateData: action.payload,
       };
     },
   },

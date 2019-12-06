@@ -252,6 +252,7 @@ export default class NewUser extends Component {
 
   onSave = () => {
     const { accountLock, roleIds, alertIds } = this.state;
+    console.log('roleIds=', roleIds);
     const { NewFlag } = this.props;
     if (roleIds.length <= 0) {
       message.warning('Please checked Menu User Group');

@@ -1,0 +1,939 @@
+<!-- BEGIN PAGE BASE CONTENT -->
+<style>
+    .u-dtcon,
+    .u-dtcon-excel,
+    .u-dtcon-mysql,
+    .u-dtcon-hive,
+    .u-dtcon-oracle,
+    .u-dtcon-kylin,
+    .u-dtcon-spark,
+    .u-dtcon-cheetah,
+    .u-dtcon-impala,
+    .u-dtcon-monetdb,
+    .u-dtcon-sqlserver,
+    .u-dtcon-db2,
+    .u-dtcon-hana,
+    .u-dtcon-greenplum,
+    .u-dtcon-transwarp,
+    .u-dtcon-text-csv,
+    .u-dtcon-teradata,
+    .u-dtcon-prestodb,
+    .u-dtcon-postgresql,
+    .u-dtcon-vertica,
+    .u-dtcon-mammut,
+    .u-dtcon-inceptor,
+    .u-dtcon-text-Spark,
+    .u-dtcon-cdh,
+    .u-dtcon-custom {
+        background: url(assets/img/drivensvg.svg) no-repeat -999px -999px;
+        width: 140px;
+        height: 100px;
+        vertical-align: middle;
+        display: inline-block;
+    }
+    
+    .u-dtcon-inceptor {
+        background-position: -1820px, 0;
+    }
+    
+    .u-dtcon-text-Spark {
+        background-position: -700px, 0;
+    }
+    
+    .u-dtcon-excel {
+        background-position: 0px, 0;
+    }
+    
+    .u-dtcon-text-csv {
+        background-position: -1960px, 0;
+    }
+    
+    .u-dtcon-mysql {
+        background-position: -140px, 0;
+    }
+    
+    .u-dtcon-oracle {
+        background-position: -420px, 0;
+    }
+    
+    .u-dtcon-sqlserver {
+        background-position: -1260px, 0;
+    }
+    .u-dtcon-cdh {
+        background-position: -280px, 0;
+    }
+    .u-dtcon-db2 {
+        background-position: -1400px, 0;
+    }
+    
+    input::-webkit-input-placeholder {
+        font-size: 13px;
+    }
+    
+    .c-l {
+        float: left;
+    }
+    
+    .c-r {
+        float: right;
+    }
+    
+    .data-source-r-header {
+        padding: 10px 15px;
+        border: 1px solid #eef1f5;
+    }
+    
+    .data-driven-header span {
+        font-size: 16px;
+        padding: 6px;
+    }
+    
+    .hidden1 {
+        visibility: hidden;
+    }
+    
+    .data-source-configuration li:hover span {
+        visibility: visible;
+    }
+    
+    .data-source-configuration-list li {
+        cursor: pointer;
+    }
+    /* .data-source-configuration-list li span a i:hover{
+		color: red;
+		font-weight: 600;
+	} */
+    
+    .editBtn:hover {
+        color: #4d80ad;
+        font-weight: 600;
+        font-size: 17px
+    }
+    
+    .delBtn:hover {
+        color: #4d80ad;
+        font-weight: 600;
+        font-size: 17px
+    }
+    
+    .portlet-brown {
+        font-size: 14px;
+        color: #66728c;
+        font-weight: 700;
+    }
+    
+    .portlet-brown span {
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+    
+    .excel-choose-block {
+        width: 600px;
+        height: 170px;
+        background-color: #f5f5f5;
+        margin-left: 75px;
+        border: 1px #ccc solid;
+        border-radius: 10px;
+        position: relative;
+    }
+    
+    .excel-choose-block-inside {
+        width: 550px;
+        height: 120px;
+        border: 1px #ccc dashed;
+        background-color: #fff;
+        margin: auto;
+        margin-top: 8px;
+    }
+    
+    .excel-choose-block-inside li {
+        background-color: #3495e9;
+        padding: 10px;
+        color: #fff;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .excel-bottom {
+        width: 550px;
+        margin: auto;
+        margin-top: 4px;
+    }
+    
+    .is-exit-table {
+        color: #ff4638!important;
+    }
+    #data-source-configuration #data_connect_import_modal .jstree .jstree-open > .jstree-hide{
+        display: none !important;
+    }
+</style>
+
+<div class="wrap clearfix mt20">
+    <div class="left-side left-side-source">
+        <div class="portlet light">
+            <div class="portlet-title seach-portlet-title" style="padding-bottom: 18px">
+                <div class="caption font-dark">
+                    <i class="icon-settings"></i>
+                    <span class="caption-subject bold uppercase" data-lang="Data-Source">数据连接</span>
+                </div>
+                <a data-target="#data-connect-add-type" data-toggle="modal" class="btn-operate" style="border: 0px;float: right;">
+                    <i class="widget-thumb-icon bg-blue fa fa-plus"></i>
+                </a>
+            </div>
+            <div class="portlet-title search-title">
+                <form class="search-form search-form-expanded" action="javascript:;">
+                    <div class="input-search">
+                        <input id="J_dsc_list_search" type="text" class="form-control" placeholder="请输入数据连接" name="query">
+                        <span id="dsc-search" class="input-group-btn input-search-btn">
+							<a href="javascript:;" class="btn submit">
+								<i class="icon-magnifier"></i>
+							</a>
+						</span>
+                    </div>
+                </form>
+            </div>
+            <ul class="list-group data-source-configuration-list" style="max-height:600px;overflow:auto">
+            </ul>
+        </div>
+    </div>
+    <div class="drag_bar" id="J_drag_bar7">
+    </div>
+    <div class="slide-toggle1" style="left: 245px;">
+        <i class="slide-icon fa fa-angle-left"></i>
+    </div>
+    <div class="right-content right-content-source" style="width: calc(100% - 310px);">
+        <div class="portlet light" style="max-height:600px;overflow-y: auto">
+            <div class="portlet-title no-border">
+                <div id="J_dsc_list_detail_title_type" class="caption font-dark">
+                    <span class="portlet-brown uppercase">
+						<span></span>
+                    </span>
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" title="Scale"></a>
+                    <a id="J_dsc_back_to_list" href="javascript:;" class="btn btn-circle btn-default ml10"><i class="fa fa-history hide"></i>返回</a>
+                </div>
+            </div>
+            <!-- 数据连接详情 -->
+            <div id="J_dsc_list_detail" class="portlet-body">
+                <form id="data-source-configuration-form" name="data-source-configuration-form" action="javascript:;">
+                    <div class="col-md-100 query">
+                        <label class="ml13">
+                                        <span data-lang="Object">对象名称：</span>
+										<input type="search" name="tableName" class="form-control input-small input-inline" placeholder="请输入" id="tableName">
+									</label>
+                        <label class="ml13"><span data-lang="User">所属用户：</span>
+										<select type="search" name="schemName" id ="schemName" class="form-control input-small input-inline" placeholder="请输入">
+										</select>
+									</label>
+                        <button type="button" class="btn btn-primary" id="data-source-configuration-query"> <span data-lang="SEARCH">查询</span>
+										<i class="fa fa-search"></i>
+									</button>
+                        <button type="button" class="btn grey" id="data-source-configuration-reset"> <span data-lang="RESET">重置</span><i class="fa fa-times"></i></button>
+                    </div>
+                </form>
+                <div class="tourist-wide" style="padding-top: 0px">
+                        <div class="btn-group">
+                            <a id="data_connect_import_btn" class="btn-operate">
+                                <i class="widget-thumb-icon bg-blue fa fa-sign-in"></i> <span data-lang="Import-Metadata">Import Metadata</span></a>
+                        </div>
+                        <div class="btn-group">
+                            <a id="dsc-delete-table" class="btn-operate">
+                                <i class="widget-thumb-icon bg-red fa fa-trash-o"></i> <span data-lang="Delete">删除</span></a>
+                        </div>
+                        <div class="btn-group">
+                            <a id="dsc-tables-upd" class="btn-operate">
+                                <i class="widget-thumb-icon bg-blue fa fa-refresh"></i><span data-lang="Update-Fields">更新字段</span></a>
+                        </div>
+                        <div class="btn-group">
+                            <a id="dsc-tables-upd-batch" class="btn-operate">
+                                <i class="widget-thumb-icon bg-blue fa fa-refresh"></i> <span data-lang="Batch-Update-Fields">批量更新字段</span></a>
+                        </div>
+                        <div class="btn-group">
+                            <a id="dsc-table_recordcount_upd" class="btn-operate">
+                                <i class="widget-thumb-icon bg-blue fa fa-refresh"></i> <span data-lang="Update-Row-Number">更新行数</span></a>
+                        </div>
+                        <div class="btn-group">
+                            <a id="dsc-table_recordcount_upd_batch" class="btn-operate">
+                                <i class="widget-thumb-icon bg-blue fa fa-refresh"></i> <span data-lang="Batch-Update-Row-Number">批量更新行数</span></a>
+                        </div>
+                        <div class="btn-group">
+                            <a class="btn-operate" id="J_list_export">
+                                <i class="widget-thumb-icon bg-blue fa fa-arrow-down"></i> <span data-lang="Export-All-Records">导出全部列表</span> </a>
+                        </div>
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-hover" id="connect-data-result">
+                        <thead>
+                            <tr>
+                                <th style="width:40px;">
+                                    <input style="margin-left: -2px" type="checkbox" class="group-checkable" />
+                                </th>
+                                <th data-lang="No"> 序号</th>
+                                <th data-lang="Object"> 对象名称</th>
+                                <th data-lang="Object-Type"> 对象类型</th>
+                                <th data-lang="DB-SID">数据库/sid</th>
+                                <th data-lang="User"> 所属用户</th>
+                                <th data-lang="Row-Number"> 行数</th>
+                                <th data-lang="Remark"> 备注</th>
+                                <th data-lang="Action"> 操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="J_data_connect_table">
+                            <tr>
+                                <td class="t-c" colspan="20">No Data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row" id="dsc-pages"></div>
+            </div>
+            <!-- 文件类数据连接详情 -->
+            <div id="J_dsc_file_list_detail" class="portlet-body hide">
+                <div class="tourist-wide" style="padding-top: 0px">
+                    <div class="btn-group">
+                        <div class="btn-group">
+                            <a class="btn-operate">
+                                <i class="widget-thumb-icon bg-red fa fa-trash-o"></i> 删除</a>
+                        </div>
+                        <div class="btn-group">
+                            <a class="btn-operate">
+                                <i class="widget-thumb-icon bg-blue fa fa-refresh"></i> 更新字段</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-hover" id="J_file_data_result">
+                        <thead>
+                            <tr>
+                                <th style="width:40px;">
+                                    <input style="margin-left: -2px" type="checkbox" class="group-checkable" />
+                                </th>
+                                <th data-lang="No"> 序号</th>
+                                <th data-lang="Object"> 对象</th>
+                                <th data-lang="Object-Type"> 对象类型</th>
+                                <th data-lang="DB-SID">数据库/sid</th>
+                                <th data-lang="User"> 所属用户</th>
+                                <th data-lang="Row-Number"> 行数</th>
+                                <th data-lang="Remark"> 备注</th>
+                                <th data-lang="Action"> 操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="J_file_data_result_body">
+                            <tr>
+                                <td colspan="20" class="t-c">No Data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row" id="J_file_data_result_page"></div>
+            </div>
+            <!-- 文件类单个表的详情问题 -->
+            <div id="J_dsc_file_list_single_detail" class="portlet-body hide">
+                <div class="tourist-wide" style="padding-top: 0px">
+                    <!-- <div class="btn-group">
+						<div class="btn-group">
+							<a id="dsc-delete-table" class="btn-operate">
+								<i class="widget-thumb-icon bg-blue fa fa-trash-o"></i> 删除</a>
+						</div>
+					</div> -->
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-hover" id="J_single_file_data_result">
+                        <thead id="J_single_file_data_result_head">
+                        </thead>
+                        <tbody id="J_single_file_data_result_body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- 正常类新增 -->
+            <div id="J_dsc_commonType_add" class="portlet-body hide">
+                <form action="#" name="data-connect-add-form" class="form-horizontal" id="data-connect-add-form" method="POST" novalidate="novalidate">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required" aria-required="true"> * </span><span data-lang="Driver-Name">驱动名称:</span></label>
+                        <div class="col-md-6">
+                            <select id="connection_type" name="connection_type" class="form-control" aria-invalid="false">
+							</select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="Source-Name">连接名称：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="32" type="text" class="form-control" id="connection_name" name="connection_name" placeholder="最多32位字符（中文占两个字符）(汉字占两个字符)" maxlength="32" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="Host">主机：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="64" type="text" class="form-control" name="server" id="server" placeholder="最多64位字符（中文占两个字符）" maxlength="64">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="Port-No">端口号：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="32" type="text" class="form-control" name="db_port" id="db_port" placeholder="最多32位字符（中文占两个字符）">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="DB-SID">数据库/sid：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="64" type="text" class="form-control" name="db_database" id="db_database" placeholder="最多64位字符（中文占两个字符）" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="">principal：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="principal" placeholder=""  class=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="User-Name">用户名：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="64" type="text" class="form-control" name="db_user" id="db_user" placeholder="64 characters maximum" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="Password">密码：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="200" type="password" class="form-control" name="db_password" id="db_password" placeholder="最多200位字符（中文占两个字符）" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> </span><span data-lang="Max-Connections">最大连接数：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="32" type="text" class="form-control" name="max_connect_count" id="max_connect_count" placeholder="最多32位字符（中文占两个字符）" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="">url：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input disabled type="text" class="form-control" name="jdbc_string" value="" />
+                        </div>
+                        <div class="col-md-3" style="padding-top: 7px;font-size: 12px">
+                            <input maxlength="1024" id="isUrlinfoDisable-add" type="checkbox" style="margin:0" name="isDefinedJdbc" placeholder=""/> <span data-lang="Custom-URL">自定义连接串</span>
+                        </div>
+                    </div>
+                    <div class="text-center" style="margin-top:20px;">
+                        <button type="button" class="btn green J_datatable2_edit" id="test-data-connect" data-lang="Test-Connecting">测试连接</button>
+                        <button type="button" class="btn btn-danger btn-sm" id="data-connect-add-submit" data-lang="SAVE">保存</button>
+                    </div>
+                </form>
+            </div>
+            <!-- 文件类新增 -->
+            <div id="J_dsc_fileType_add" class="portlet-body hide">
+                <div class="tabbable-line">
+                    <ul class="nav nav-tabs" style="margin-left: 200px">
+                        <li class="active">
+                            <a href="javascipt:;" aria-expanded="true"> 基本信息 </a>
+                        </li>
+                        <li class="">
+                            <a href="javascipt:;" aria-expanded="false"> 目标设置 </a>
+                        </li>
+                        <li class="">
+                            <a href="javascipt:;" aria-expanded="false"> 字段映射 </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="J_excel_add_tab1">
+                        <div class="form-horizontal" style="margin-top: 30px">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+									<span class="required" aria-required="true"> * </span>连接名称：
+								</label>
+                                <div class="col-md-6">
+                                    <input maxlength="100" type="text" class="form-control" name="connectionName" placeholder="最多64位字符（中文占两个字符）（汉字占两个字符）">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="excel-choose-block">
+                                    <div class="excel-choose-block-inside">
+                                        <ul>
+                                        </ul>
+                                    </div>
+                                    <div class="excel-bottom">
+                                        <span style="line-height: 2">已添加
+											<span style="color:#1881dc"> 0 </span>张EXCEL表格</span>
+                                        <div style="display: inline-block;float:right">
+                                            <button style="padding: 5px 10px;" type="button" class="btn green" id="J_dsc_add_file">添加</button>
+                                            <button style="padding: 5px 10px;background-color: #fff;color:#aaa" type="button" class="btn btn-default" id="J_dsc_clear_file">清空</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 存放模拟表单 -->
+                            <div id="J_mock_form_collection" style="display: none">
+                                <form id="J_mock_form_collection_form" action="javascript:;">
+                                    <input type="file" name="file" data-accept="DBF,CSV,TXT,XLS,XLSX">
+                                    <input type="hidden" name="fileName">
+                                    <input type="hidden" name="fileType">
+                                    <input type="hidden" name="fileUrl">
+                                    <input type="hidden" name="fileClass" value="TASK">
+                                </form>
+                            </div>
+                            <div class="form-group" style="margin-top: 30px">
+                                <label class="control-label col-md-3" style="line-height: 2">
+									<span class="required" aria-required="true"> * </span>表头设置：
+								</label>
+                                <div class="col-md-6">
+                                    <div class="radio-list">
+                                        <label class="radio-inline">
+											<input type="radio" name="headType" value="0" checked> 把第一行作为表头 </label>
+                                        <label class="radio-inline">
+											<input type="radio" name="headType" value="1"> 手动指定 </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-scrollable hide" style="max-height: 400px;overflow-y:auto">
+                                <table class="table table-striped table-bordered table-hover" id="J_dsc_produce_table">
+                                    <thead id="J_dsc_produce_head">
+                                    </thead>
+                                    <tbody id="J_dsc_produce_body">
+                                    </tbody>
+                                </table>
+                                <table class="table table-striped table-bordered table-hover hide" id="J_dsc_produce_table_option">
+                                    <thead id="J_dsc_produce_head_option">
+                                    </thead>
+                                    <tbody id="J_dsc_produce_body_option">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="J_excel_add_tab2">
+                        <form action="javascript:;" class="form-horizontal" name="J_excel_add_tab2_form" id="J_excel_add_tab2_form" style="margin-top: 30px">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+									<span class="required" aria-required="true"> * </span>目标数据连接：</label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="targetConnectionId" id="J_select2_dcs_target_data_connect" data-searchplaceholder="Please input keywords">
+									</select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+									<span class="required" aria-required="true"> * </span>目标对象：</label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="targetTable" id="J_select2_des_target_object" data-searchplaceholder="Please input keywords">
+									</select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+									<span class="required" aria-required="true"> * </span>每批提交行数：</label>
+                                <div class="col-md-6">
+                                    <input maxlength="32" type="text" class="form-control" name="submitNum" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+									<span class="required" aria-required="true"> * </span>提交方式：</label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="rollbackFlag"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+									<span class="required" aria-required="true"> * </span>目标写入前操作：</label>
+                                <div class="col-md-6">
+                                    <select name="beforeRule" class=" form-control">
+									</select>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group" style="margin-top: 30px">
+								<label class="control-label col-md-3">
+									<span class="required" aria-required="true"> * </span>数据时间：
+								</label>
+								<div class="col-md-4">
+									<div class="radio-list">
+										<label class="radio-inline">
+											<input type="radio" name="dataTimeType" value="2" checked> 按年 </label>
+										<label class="radio-inline">
+											<input type="radio" name="dataTimeType" value="1"> 按月 </label>
+										<label class="radio-inline">
+											<input type="radio" name="dataTimeType" value="0"> 按日 </label>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<input type="text" class="form-control date-picker" name="dataTime">
+								</div>
+							</div> -->
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="J_excel_add_tab3">
+                        <div class="btn-group" id="J_excel_add_tab3_btn" style="margin-top: -5px;margin-left: 75px">
+                            <div class="btn-group">
+                                <div class="btn-group">
+                                    <a class="btn-operate" data-type="refresh">
+                                        <i class="widget-thumb-icon bg-blue icon-refresh"></i>刷新字段</a>
+                                </div>
+                            </div>
+                            <div class="btn-group">
+                                <div class="btn-group">
+                                    <a class="btn-operate" data-type="del">
+                                        <i class="widget-thumb-icon bg-red icon-trash"></i>删除</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-scrollable" style="width: 80%!important;margin-left: 75px">
+                            <table class="table table-striped table-bordered table-hover" id="J_dsc_field_map_table">
+                                <thead>
+                                    <tr>
+                                        <th > 序号 </th>
+                                        <th style="width:80px;">
+                                            <input type="checkbox" class="group-checkable">
+                                        </th>
+                                        <th> 导入表头</th>
+                                        <th> 导入对象字段</th>
+                                        <th> 目标对象字段</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="J_dsc_field_map_body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-center" style="margin-top:50px;">
+                        <button type="button" id="J_dsc_pre_step" class="btn btn-default" style="padding: 7px 30px;background-color: #fff;color: #aaaaaa">上一步</button>
+                        <button type="button" id="J_dsc_next_step" class="btn green" style="padding: 7px 30px;">下一步</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 正常类编辑 -->
+            <div id="J_dsc_commonType_edit" class="portlet-body hide">
+                <form action="#" name="data-connect-edit-form" class="form-horizontal" id="data-connect-edit-form">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required" aria-required="true"> * </span><span data-lang="Driver-Name">驱动名称:</span></label>
+                        <div class="col-md-6">
+                            <select id="connection_type_edit" name="connection_type_edit" class="form-control">
+
+							</select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="Source-Name">连接名称：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="32" type="text" class="form-control" id="connection_name_edit" name="connection_name_edit" placeholder="最多32位字符（中文占两个字符）(汉字占两个字符)" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="Host">主机：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="64" type="text" class="form-control" name="server" id="server_edit" placeholder="最多64位字符（中文占两个字符）" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="Port-No">端口号：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="32" type="text" class="form-control" name="db_port" id="db_port_edit" placeholder="最多32位字符（中文占两个字符）" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="DB-SID">数据库/sid：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="64" type="text" class="form-control" name="db_database" id="db_database_edit" placeholder="最多64位字符（中文占两个字符）" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="User-Name">用户名：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="64" type="text" class="form-control" name="db_user" id="db_user_edit" placeholder="64 characters maximum" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="Password">密码：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="200" type="password" class="form-control" name="db_password" id="db_password_edit" maxlength="" placeholder="最多200位字符（中文占两个字符）" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> </span><span data-lang="Max-Connections">最大连接数：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input maxlength="32" type="text" class="form-control" name="max_connect_count" id="max_connect_count_edit" placeholder="最多32位字符（中文占两个字符）" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+							<span class="required"> * </span><span data-lang="">url：</span>
+						</label>
+                        <div class="col-md-6">
+                            <input disabled type="text" class="form-control" name="jdbc_string" value="" placeholder="最多1024位字符（中文占两个字符）" />
+                            <input type="text" class="form-control hide" name="jdbc_string" placeholder="" value="" />
+                        </div>
+                        <div class="col-md-3" style="padding-top: 7px;font-size: 12px">
+                            <input maxlength="1024" id="isUrlinfoDisable-edit" type="checkbox" style="margin:0" name="isDefinedJdbc" placeholder="" /> <span data-lang="Custom-URL">自定义连接串</span>
+                        </div>
+                    </div>
+                    <div class="text-center" style="margin-top:20px;">
+                        <button type="button" class="btn green J_datatable2_edit" id="J_edit_test_submit" data-lang="Test-Connecting">测试连接</button>
+                        <button type="button" class="btn btn-danger btn-sm" id="data-connect-edit-submit" data-lang="SAVE">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 查看表详情 -->
+<div id="des-table-info-modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title title-color-blue">Object Structure</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabbable-line">
+                    <div class="t-c">
+                        <ul class="nav nav-tabs ">
+                            <li class="active">
+                                <a href="#des-showtable-info-1" data-toggle="tab" aria-expanded="true"> Basic Info </a>
+                            </li>
+                            <li class="">
+                                <a href="#des-showtable-info-2" data-toggle="tab" aria-expanded="false"> Column </a>
+                            </li>
+                            <li class="">
+                                <a href="#des-showtable-info-3" data-toggle="tab" aria-expanded="false"> Preview </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="des-showtable-info-1">
+                            <form class="form-horizontal" id="des-showtable-info-1-form" name="des-showtable-info-1-form" role="form" novalidate="novalidate" style="padding-top: 20px;">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Object Name
+										<span class="required" aria-required="true"> * </span>
+									</label>
+                                    <div class="col-md-8">
+                                        <input disabled type="text" class="form-control" name="tableName">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Object Type
+										<span class="required" aria-required="true"> * </span>
+									</label>
+                                    <div class="col-md-8">
+                                        <input disabled type="text" class="form-control" name="mdType">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">DB/SID
+										<span class="required" aria-required="true"> * </span>
+									</label>
+                                    <div class="col-md-8">
+                                        <input disabled type="text" class="form-control" name="tableCat">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">User
+										<span class="required" aria-required="true"> * </span>
+									</label>
+                                    <div class="col-md-8">
+                                        <input disabled type="text" class="form-control" name="schemName">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="des-showtable-info-2">
+                            <div class="table-scrollable">
+                                <table class="table table-striped table-bordered table-hover" id="des-showtable-info-2-table">
+                                    <thead>
+                                        <tr>
+                                            <th> Column Name</th>
+                                            <th> Data Type</th>
+                                            <th> Data Length</th>
+                                            <th> Data Precision</th>
+                                            <th> Null</th>
+                                            <th> Auto-increment</th>
+                                            <th> Primary Key</th>
+                                            <th> Foreign key</th>
+                                            <th> Default Value</th>
+                                            <th> Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="des-showtable-info-2-table-body">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="des-showtable-info-3">
+                            <span style="
+								float: right;
+								font-size: 12px;
+								padding: 10px;
+								padding-top:  0px;
+								color: #7f96ac;
+						">Display the first 20 records only for previewing</span>
+                            <button type="button" class="btn red hide" id="des-showtable-info-3-button" style="margin-bottom:20px">预览</button>
+                            <div style="overflow-x: auto; overflow-y: auto; width:100%;max-height: 300px">
+                                <table class="table table-striped table-bordered table-hover" id="des-showtable-info-3-table">
+                                    <thead>
+                                        <tr id="des-showtable-info-3-thead-tr">
+                                        </tr>
+                                    </thead>
+                                    <tbody id="des-showtable-info-3-table-body">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 导入弹出框 -->
+<div id="data_connect_import_modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog" id="ses-edit-sms1">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title title-color-blue">Import Metadata</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-search" style="position:relative;">
+                    <input id="dsc-seach-metadata-input" type="text" class="form-control" placeholder="Search..." name="query" style="border: 1px solid #e7e5e5;margin-bottom:10px;margin-left:20px;width:70%">
+                    <span id="dsc-seach-metadata" class="input-group-btn" style="position:absolute;z-index:99;top:2px;left:384px;">
+						<a href="javascript:;" class="btn submit">
+							<i class="icon-magnifier"></i>
+						</a>
+					</span>
+                </div>
+                <div id="J_tree_import_block" style="overflow-x: auto; overflow-y: auto; height: 400px; width:100%;margin-left: 20px;position: relative;">
+                    <div id="J_tree_import"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">CANCEL</button>
+                <button type="button" class="btn green J_datatable2_add1" id="import_submit">SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 弹出新增数据类型 -->
+<div id="data-connect-add-type" class="modal fade" tabindex="-1">
+    <div class="modal-dialog" id="ses-edit-sms" style="width: 700px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title title-color-blue" data-lang="Add-Data-Source">添加数据连接</h4>
+            </div>
+            <div class="winbd">
+                <ul>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="u-dtcon-mysql"></div>
+                            <div class="txt">MySQL</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="u-dtcon-oracle"></div>
+                            <div class="txt">Oracle</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="u-dtcon-sqlserver"></div>
+                            <div class="txt">SQL Server</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <div class="u-dtcon-db2"></div>
+                            <div class="txt">DB2</div>
+                        </a>
+                    </li>
+                    <!-- <li>
+						<a href="javascript:;">
+							<div class="u-dtcon-excel"></div>
+							<div class="txt">Excel</div>
+						</a>
+					</li> -->
+                    <li>
+                        <a href="javascript:;">
+                            <div class="u-dtcon-inceptor"></div>
+                            <div class="txt">Transwarp-INCEPTOR</div>
+                        </a>
+                    </li>
+                    <li>
+                            <a href="javascript:;">
+                                <div class="u-dtcon-cdh"></div>
+                                <div class="txt">CDH</div>
+                            </a>
+                        </li>
+
+                    <!-- <li>
+						<a href="javascript:;">
+							<div class="u-dtcon-text-csv"></div>
+							<div class="txt">CSV</div>
+						</a>
+					</li>
+					<li>
+						<a href="javascript:;">
+							<div class="u-dtcon-text-Spark"></div>
+							<div class="txt">Spark</div>
+						</a>
+					</li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/lang.js"></script>
+<script>
+    $('#J_dsc_list_search').attr('placeholder',$.i18n.map['placeholder-data-source'])
+    $('#tableName').attr('placeholder', $.i18n.map['Please-input'])
+    $('#connection_name').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#connection_name_edit').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#server').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#server_edit').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_port').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#db_port_edit').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#db_database').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_database_edit').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_user').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_user_edit').attr('placeholder',$.i18n.map['Char-Max64'])
+    $('#db_password').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#db_password_edit').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#max_connect_count').attr('placeholder',$.i18n.map['Char-Max32'])
+    $('#max_connect_count_edit').attr('placeholder',$.i18n.map['Char-Max32'])
+</script>

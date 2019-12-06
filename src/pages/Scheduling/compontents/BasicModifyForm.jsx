@@ -88,10 +88,9 @@ class BasicModifyForm extends Component {
         <Form.Item label="计划有效时间:">
           <Row gutter={8}>
             <Col span={16}>
-              {getFieldDecorator(
-                'validDate',
-                rangeConfig,
-              )(<RangePicker showTime style={{ width: '100%' }} />)}
+              {getFieldDecorator('validDate', rangeConfig)(
+                <RangePicker showTime style={{ width: '100%' }} />,
+              )}
             </Col>
             <Col span={8}>{getFieldDecorator('Checkbox')(<Checkbox>永久有效</Checkbox>)}</Col>
           </Row>
