@@ -217,7 +217,12 @@ define(function (require, exports, module) {
             }
 
             showContent.hideShowBlock("#J_dsc_commonType_edit");
-
+            
+            if (data.connectionType === "JTDS SQL Server") {
+                $("#data-connect-edit-form #db_password").attr("disabled","disabled");
+            } else {
+                $("#data-connect-edit-form #db_password").removeAttr("disabled");
+            }
 
             showContent.getConnectType_edit(data.connection_type);
             console.log(showContent.list);
@@ -244,6 +249,10 @@ define(function (require, exports, module) {
             $("#data-connect-edit-form input[name='max_connect_count']").val(
                 data.max_connect_count
             );
+            
+            if(!data.db_password){
+                $("#data-connect-edit-form input[name='db_database']").val("111111"); 
+            } 
         });
         // 修改数据源
         $("body").on("click", "#data-source-configuration #data-connect-edit-submit", function () {
@@ -390,6 +399,15 @@ define(function (require, exports, module) {
             //     .find("option:selected")
             //     .attr("urlinfo");
             let driverid = $(this).find("option:selected").attr("driverid");
+            let drivername = $(this).find("option:selected").attr("drivername");
+            if (drivername === "JTDS SQL Server") {
+                $("#data-connect-add-form #db_password").attr("disabled","disabled");
+                if(!$("#data-connect-add-form input[name='db_database']").val()) {
+                    $("#data-connect-add-form input[name='db_database']").val("111111"); 
+                }
+            } else {
+                $("#data-connect-add-form #db_password").removeAttr("disabled");
+            }
             var jdbc_string
                 $.each(showContent.getConnectTypeData,function(i,item){
                     if(item.driverId===driverid){
@@ -427,6 +445,15 @@ define(function (require, exports, module) {
                 .find("option:selected")
                 .attr("urlinfo");
             let driverid = $(this).find("option:selected").attr("driverid");
+            let drivername = $(this).find("option:selected").attr("drivername");
+            if (drivername === "JTDS SQL Server") {
+                $("#data-connect-edit-form #db_password").attr("disabled","disabled");
+                if(!$("#data-connect-edit-form input[name='db_database']").val()) {
+                    $("#data-connect-edit-form input[name='db_database']").val("111111"); 
+                }
+            } else {
+                $("#data-connect-edit-form #db_password").removeAttr("disabled");
+            }
             $("#data-connect-edit-form input[name='jdbc_string']").val(urlInfo);
             $.each(showContent.getConnectTypeData,function(i,item){
                 if(item.driverId===driverid){
