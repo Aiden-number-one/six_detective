@@ -650,4 +650,20 @@
   .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected {
     background-color: #f1f5f6;
   }
+
+  // modal头部
+  .ant-modal-header {
+    position: relative;
+    background-color: #10416c;
+  }
+  .ant-modal-header::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 4px;
+    height: 100%;
+    background-color: #f8374c;
+    content: '';
+  }
 }
