@@ -130,7 +130,7 @@ class alertUserGroup extends Component {
       roleId: groupMenuInfo.roleId,
     };
     dispatch({
-      type: 'alertUserGroup/updateUserGroup',
+      type: 'alertUserGroup/updateUserAlert',
       payload: params,
       callback: () => {
         this.queryUserList();

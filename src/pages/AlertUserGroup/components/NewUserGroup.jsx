@@ -121,7 +121,7 @@ class NewUser extends Component {
           roleDesc: values.roleDesc,
         };
         dispatch({
-          type: 'alertUserGroup/updateUserGroup',
+          type: 'alertUserGroup/updateUserAlert',
           payload: params,
           callback: () => {
             this.props.onSave();

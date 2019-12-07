@@ -3,11 +3,11 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-07 15:33:11
+ * @LastEditTime: 2019-12-07 17:10:21
  */
 import Service from '@/utils/Service';
 
-const { getAlertUserGroup, newAlertUser, getModifyUserGroup } = Service;
+const { getAlertUserGroup, newAlertUser, updateAlertUser } = Service;
 
 const alertUserGroup = {
   namespace: 'alertUserGroup',
@@ -38,8 +38,8 @@ const alertUserGroup = {
         callback();
       }
     },
-    *updateUserGroup({ payload, callback }, { call, put }) {
-      const response = yield call(getModifyUserGroup, { param: payload });
+    *updateUserAlert({ payload, callback }, { call, put }) {
+      const response = yield call(updateAlertUser, { param: payload });
       if (response.bcjson.flag === '1' || !response.bcjson.flag) {
         yield put({
           type: 'update',
