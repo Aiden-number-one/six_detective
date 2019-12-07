@@ -4,30 +4,40 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 
 const { Column } = Table;
+
 const submissionReport = formatMessage({ id: 'data-import.lop.submission-report' });
 const processingStatus = formatMessage({ id: 'data-import.lop.processing-status' });
 
-export default function({ dataSource, loading }) {
+export default function({ dataSource, loading, total, handlePageChange, handlePageSizeChange }) {
   return (
     <Table
       dataSource={dataSource}
-      rowKey="tradeDate"
+      rowKey="lopImpId"
       loading={loading}
-      pagination={{ showSizeChanger: true, showQuickJumper: true }}
+      pagination={{
+        total,
+        pageSizeOptions: ['10', '20', '50', '100'],
+        showSizeChanger: true,
+        onChange(page, pageSize) {
+          handlePageChange(page, pageSize);
+        },
+        onShowSizeChange(page, pageSize) {
+          handlePageSizeChange(page, pageSize);
+        },
+      }}
     >
       <Column
+        width="10%"
         align="center"
         dataIndex="tradeDate"
         title={<FormattedMessage id="data-import.lop.trade-date" />}
       />
       <Column
-        width={90}
         align="center"
         dataIndex="submitterCode"
         title={<FormattedMessage id="data-import.lop.submitter-code" />}
       />
       <Column
-        width={100}
         align="center"
         dataIndex="submitterName"
         title={<FormattedMessage id="data-import.lop.submitter-name" />}
@@ -38,30 +48,25 @@ export default function({ dataSource, loading }) {
         title={<span title={submissionReport}>{submissionReport}</span>}
       />
       <Column
-        width={100}
         dataIndex="submissionChannel"
         title={<FormattedMessage id="data-import.lop.submission-channel" />}
       />
       <Column
-        width={100}
         align="center"
         dataIndex="submissionDate"
         title={<FormattedMessage id="data-import.lop.submission-date" />}
       />
       <Column
-        width={100}
         align="center"
         dataIndex="submissionStatus"
         title={<FormattedMessage id="data-import.lop.submission-status" />}
       />
       <Column
-        width={100}
         align="center"
         dataIndex="lateSubmission"
         title={<FormattedMessage id="data-import.lop.late-submission" />}
       />
       <Column
-        width={100}
         align="center"
         dataIndex="latestVersion"
         title={<FormattedMessage id="data-import.lop.latest-version" />}
@@ -78,7 +83,6 @@ export default function({ dataSource, loading }) {
         title={<span title={processingStatus}>{processingStatus}</span>}
       />
       <Column
-        width={90}
         align="center"
         dataIndex="download"
         title={<FormattedMessage id="data-import.lop.download" />}

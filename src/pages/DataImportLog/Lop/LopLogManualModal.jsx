@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Drawer, Form, DatePicker, Input, Select, Upload, Icon, Button } from 'antd';
-import { SUBMISSION_REPORT } from './constants';
+import { SUBMISSION_REPORT, yesterday, dateFormat } from './constants';
 
 const { Option } = Select;
 
@@ -11,7 +11,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
   function handleCommit() {
     validateFields((err, values) => {
       if (!err) {
-        const tradeDate = values.tradeDate.format('MM/DD/YYYY');
+        const tradeDate = values.tradeDate.format('YYYYMMDD');
         handleUpload({ ...values, tradeDate });
       }
     });
@@ -27,13 +27,14 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       <Form>
         <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
           {getFieldDecorator('tradeDate', {
+            initialValue: yesterday,
             rules: [
               {
                 required: true,
                 message: 'Please select trade date!',
               },
             ],
-          })(<DatePicker />)}
+          })(<DatePicker format={dateFormat} />)}
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
           {getFieldDecorator('submitterCode', {

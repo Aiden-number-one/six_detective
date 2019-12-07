@@ -1,16 +1,13 @@
 import React from 'react';
+
 import { FormattedMessage } from 'umi/locale';
 import { Form, Row, Button, DatePicker, Select, Radio, Col, Input } from 'antd';
 
-import { PROCESSING_STATUS, SUBMISSION_REPORT } from './constants';
+import { PROCESSING_STATUS, SUBMISSION_REPORT, yesterday, today, dateFormat } from './constants';
 import styles from '../index.less';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-
-const formItemLayout = {
-  layout: 'vertical',
-};
 
 function LopLogFilterForm({ form, handleSearch }) {
   const { getFieldDecorator, validateFields } = form;
@@ -18,38 +15,49 @@ function LopLogFilterForm({ form, handleSearch }) {
   function handleCommit() {
     validateFields((err, values) => {
       if (!err) {
-        let tradeDate = null;
-        if (values.tradeDate) {
-          tradeDate = values.tradeDate.format('MM/DD/YYYY');
+        const format = 'YYYYMMDD';
+
+        let startSubmissionDate = '';
+        let endSubmissionDate = '';
+
+        const { tradeDate: tdate, submissionDate, ...rest } = values;
+        const tradeDate = tdate && tdate.format(format);
+        if (submissionDate) {
+          const [start, end] = submissionDate;
+          startSubmissionDate = start && start.format(format);
+          endSubmissionDate = end && end.format(format);
         }
-        handleSearch({ ...values, tradeDate });
+
+        handleSearch({ ...rest, tradeDate, startSubmissionDate, endSubmissionDate });
       }
     });
   }
 
   return (
-    <Form {...formItemLayout}>
+    <Form layout="vertical">
       <Row>
         <Col span={8}>
           <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
             {getFieldDecorator('tradeDate', {
+              initialValue: yesterday,
               rules: [
                 {
                   required: false,
                   message: 'Please select trade date!',
                 },
               ],
-            })(<DatePicker />)}
+            })(<DatePicker format={dateFormat} />)}
           </Form.Item>
           <Form.Item label={<FormattedMessage id="data-import.lop.submission-date" />}>
             {getFieldDecorator('submissionDate', {
+              initialValue: [yesterday, today],
               rules: [
                 {
                   required: false,
                   message: 'Please select submission date!',
                 },
               ],
-            })(<RangePicker />)}
+            })(<RangePicker format={dateFormat} />)}
           </Form.Item>
           <Row type="flex" justify="space-between">
             <Col span={8}>

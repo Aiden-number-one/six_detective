@@ -8,8 +8,9 @@ import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
 import styles from '../index.less';
 
-export function LopLog({ dispatch, logs, loading }) {
+export function LopLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
+  const [searchParams, setSearchParams] = useState({});
   useEffect(() => {
     dispatch({
       type: 'lop/fetch',
@@ -17,15 +18,22 @@ export function LopLog({ dispatch, logs, loading }) {
   }, []);
 
   function handleSearch(params) {
-    dispatch({ type: 'lop/reload', params });
+    setSearchParams(params);
+    console.log(params);
+
+    dispatch({ type: 'lop/reload', payload: params });
   }
 
   function handleManual(params) {
-    dispatch({ type: 'lop/importByManual', params });
+    dispatch({ type: 'lop/importByManual', payload: params });
   }
 
   function handleAuto() {
     dispatch({ type: 'lop/importByAuto' });
+  }
+
+  function handlePageChange(page, pageSize) {
+    dispatch({ type: 'lop/reload', payload: { page, pageSize, ...searchParams } });
   }
 
   return (
@@ -45,12 +53,21 @@ export function LopLog({ dispatch, logs, loading }) {
             <FormattedMessage id="data-import.lop.manual-import" />
           </Button>
         </Row>
-        <LopLogList dataSource={logs} loading={loading['lop/fetch']} />
+        <LopLogList
+          total={total}
+          dataSource={logs}
+          loading={loading['lop/fetch']}
+          handlePageChange={handlePageChange}
+          handlePageSizeChange={handlePageChange}
+        />
       </div>
     </PageHeaderWrapper>
   );
 }
 
-export default connect(({ loading, lop: { logs } }) => ({ logs, loading: loading.effects }))(
-  LopLog,
-);
+export default connect(({ loading, lop: { logs, page, total } }) => ({
+  loading: loading.effects,
+  logs,
+  page,
+  total,
+}))(LopLog);

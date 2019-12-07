@@ -7,7 +7,6 @@ import {
   Col,
   Drawer,
   Typography,
-  Switch,
   Input,
   Button,
   Table,
@@ -26,14 +25,13 @@ export function AlertDes({
   alert: {
     alertId,
     alertType,
+    alertStatus,
+    alertTime,
+    alertDesc,
     tradeDate,
-    alertTimestamp,
     submissionTime,
     submitter,
-    status,
     owner,
-    description,
-    handleToday,
   },
 }) {
   return (
@@ -48,7 +46,7 @@ export function AlertDes({
         {tradeDate}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.alert-timestamp" />}>
-        {alertTimestamp}
+        {alertTime}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.submission-time" />}>
         {submissionTime}
@@ -57,16 +55,13 @@ export function AlertDes({
         {submitter}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.description" />}>
-        <Paragraph ellipsis={{ rows: 3, expandable: true }}>{description}</Paragraph>
+        <Paragraph ellipsis={{ rows: 3, expandable: true }}>{alertDesc}</Paragraph>
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.owner" />}>
         {owner}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.status" />}>
-        {status}
-      </Descriptions.Item>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.handle-today" />}>
-        <Switch checkedChildren="YES" unCheckedChildren="NO" defaultChecked={!!handleToday} />
+        {alertStatus}
       </Descriptions.Item>
     </Descriptions>
   );
@@ -202,8 +197,9 @@ export default function({ alert }) {
     <Row className={styles['detail-container']} gutter={16}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
         <Tabs
-          defaultActiveKey="1"
+          hideAdd
           className={styles['detail-des']}
+          defaultActiveKey="1"
           tabBarExtraContent={
             <IconFont
               type={isFullscreen ? 'iconfullscreen-exit' : 'iconfull-screen'}
@@ -214,6 +210,7 @@ export default function({ alert }) {
         >
           <TabPane
             className={styles['tab-content']}
+            closable={false}
             tab={<FormattedMessage id="alert-center.alert-detail" />}
             key="1"
           >
@@ -221,9 +218,11 @@ export default function({ alert }) {
           </TabPane>
           <TabPane
             className={styles['tab-content']}
+            closable={false}
             tab={<FormattedMessage id="alert-center.alert-item-list" />}
             key="2"
           >
+            111
             <AlertTask dataSource={alert.tasks} />
           </TabPane>
         </Tabs>
