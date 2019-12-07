@@ -91,7 +91,7 @@
                                 executeFlag: item.executeFlag,
                                 name: item.executeFlagName,
                                 type: 'bar',
-                                stack: "时间",
+                                stack: "Time",
                                 // barGap: 0,
                                 label: {},
                                 data: [],
@@ -122,7 +122,7 @@
                     showContent.createWorkGraph(paramsMap);
 
                 } else {
-                    $("#work_log_grapy").html("<img src='assets/img/nonedata.png' style='margin-left:410px'>");
+                    $("#work_log_grapy").html("<span style='margin-left:410px'>No Data</span>");
                 }
             }
         );
@@ -137,7 +137,7 @@
         // };
         var option = {
             title: {
-                text: '计划执行日志分析[点击柱状图查看详情]',
+                text: 'Schedule Log Analysis[Click the bar to view the detail]',
                 left: 10,
                 textStyle: {
                     fontSize: 14
@@ -250,7 +250,7 @@
                                 executeFlag: item.executeFlag,
                                 name: item.executeFlagName,
                                 type: 'bar',
-                                stack: '总量',
+                                stack: 'Count',
                                 // barGap: 0,
                                 label: {},
                                 data: [],
@@ -280,7 +280,7 @@
                     }
                     showContent.createWorkGraph2(paramsMap);
                 } else {
-                    $("#work_log_grapy").html("<img src='assets/img/nonedata.png' style='margin-left:410px'>");
+                    $("#work_log_grapy").html("<span style='margin-left:410px'>No Data</span>");
                 }
             }
         );
@@ -295,7 +295,7 @@
         // };
         var option = {
             title: {
-                text: '计划执行日志分析[点击柱状图返回]',
+                text: 'Schedule Log Analysis[Click the bar to back]',
                 left: 10,
                 textStyle: {
                     fontSize: 14
@@ -480,7 +480,7 @@
                                     optionData.push({
                                         start: value.scheduleDate,
                                         end: value.scheduleDate,
-                                        title: "成功完成(" + typeS + ")",
+                                        title: "Succeed(" + typeS + ")",
                                         currentAllData: arrayS,
                                         className: "success-complete"
                                     })
@@ -489,7 +489,7 @@
                                     optionData.push({
                                         start: value.scheduleDate,
                                         end: value.scheduleDate,
-                                        title: "出错完成(" + typeF + ")",
+                                        title: "Error completed(" + typeF + ")",
                                         currentAllData: arrayF,
                                         className: "error-complete"
                                     })
@@ -498,7 +498,7 @@
                                     optionData.push({
                                         start: value.scheduleDate,
                                         end: value.scheduleDate,
-                                        title: "出错中断(" + typeB + ")",
+                                        title: "Error Interrupt(" + typeB + ")",
                                         currentAllData: arrayB,
                                         className: "error-suspend"
 
@@ -603,24 +603,24 @@
                     id: item.monitorId,
                     pId: "-1",
                     columns: {
-                        "序号":item.orderNo,
-                        "节点":{
+                        "Task Sequence No.":item.orderNo,
+                        "Node":{
                             formatter: function() {
                                 return formart3(item.nodeName,item.executeFlag,item.executeMsg);
                             }
                         },
-                        "任务名称":item.jobname,
-                        "任务类型": item.memberTypeName,
-                        "删除": item.deleteNum,
-                        "插入": item.insertNum,
-                        "开始时间": $.kingdom.toDateTime(item.startTime),
-                        "执行时长": $.kingdom.formatMillisecond(item.zxsj),
-                        "执行状态": {
+                        "Task Name":item.jobname,
+                        "Task Type": item.memberTypeName,
+                        "Delete Count": item.deleteNum,
+                        "Insert Count": item.insertNum,
+                        "Start Time": $.kingdom.toDateTime(item.startTime),
+                        "Duration": $.kingdom.formatMillisecond(item.zxsj),
+                        "Execution Status": {
                             formatter: function() {
                                 return formart1(item.executeFlagName, item.executeFlag);
                             }
                         },
-                        "执行信息(点击显示全部信息)": {
+                        "Execution Info.(Click to view all Info.)": {
                             formatter: function() {
                                 return formart2(item.executeMsg);
                             }
@@ -637,24 +637,24 @@
                                 obj: JSON.stringify(item1),
                             },
                             columns: {
-                                "序号":item1.orderNo,
-                                "节点":{
+                                "Task Sequence No.":item1.orderNo,
+                                "Node":{
                                     formatter: function() {
                                         return formart3(item1.nodeName,item1.executeFlag, item1.executeMsg);
                                     }
                                 },
-                                "任务名称": item1.jobname,
-                                "任务类型": item1.memberTypeName,
-                                "删除": item1.deleteNum,
-                                "插入": item1.successNum,
-                                "开始时间": $.kingdom.toDateTime(item1.startTime),
-                                "执行时长": $.kingdom.formatMillisecond(item1.zxsj),
-                                "执行状态": {
+                                "Task Name": item1.jobname,
+                                "Task Type": item1.memberTypeName,
+                                "Delete Count": item1.deleteNum,
+                                "Insert Count": item1.successNum,
+                                "Start Time": $.kingdom.toDateTime(item1.startTime),
+                                "Duration": $.kingdom.formatMillisecond(item1.zxsj),
+                                "Execution Status": {
                                     formatter: function() {
                                         return formart1(item1.executeFlagName, item1.executeFlag);
                                     }
                                 },
-                                "执行信息(点击显示全部信息)": {
+                                "Execution Info.(Click to view all Info.)": {
                                     formatter: function() {
                                         return formart2(item1.executeMsg);
                                     }
@@ -676,24 +676,24 @@
                                 obj: JSON.stringify(item2),
                             },
                             columns: {
-                                "序号":item2.orderNo,
-                                "节点":{
+                                "Task Sequence No.":item2.orderNo,
+                                "Node":{
                                     formatter: function() {
                                         return formart3(item2.nodeName,item2.executeFlag, item2.executeMsg);
                                     }
                                 },
-                                "任务名称": item2.jobname,
-                                "任务类型": item2.memberTypeName,
-                                "删除": item2.deleteNum,
-                                "插入": item2.successNum,
-                                "开始时间": $.kingdom.toDateTime(item2.startTime),
-                                "执行时长": $.kingdom.formatMillisecond(item2.zxsj),
-                                "执行状态": {
+                                "Task Name": item2.jobname,
+                                "Task Type": item2.memberTypeName,
+                                "Delete Count": item2.deleteNum,
+                                "Insert Count": item2.successNum,
+                                "Start Time": $.kingdom.toDateTime(item2.startTime),
+                                "Duration": $.kingdom.formatMillisecond(item2.zxsj),
+                                "Execution Status": {
                                     formatter: function() {
                                         return formart1(item2.executeFlagName, item2.executeFlag);
                                     }
                                 },
-                                "执行信息(点击显示全部信息)": {
+                                "Execution Info.(Click to view all Info.)": {
                                     formatter: function() {
                                         return formart2(item2.executeMsg);
                                     }
@@ -723,24 +723,24 @@
                                         obj: JSON.stringify(item3),
                                     },
                                     columns: {
-                                        "序号":item3.orderNo,
-                                        "节点":{
+                                        "Task Sequence No.":item3.orderNo,
+                                        "Node":{
                                             formatter: function() {
                                                 return formart3(item3.nodeName,item3.executeFlag, item3.executeMsg);
                                             }
                                         },
-                                        "任务名称": item3.jobname,
-                                        "任务类型": item3.memberTypeName,
-                                        "删除": item3.deleteNum,
-                                        "插入": item3.successNum,
-                                        "开始时间": $.kingdom.toDateTime(item3.startTime),
-                                        "执行时长": $.kingdom.formatMillisecond(item3.zxsj),
-                                        "执行状态": {
+                                        "Task Name": item3.jobname,
+                                        "Task Type": item3.memberTypeName,
+                                        "Delete Count": item3.deleteNum,
+                                        "Insert Count": item3.successNum,
+                                        "Start Time": $.kingdom.toDateTime(item3.startTime),
+                                        "Duration": $.kingdom.formatMillisecond(item3.zxsj),
+                                        "Execution Status": {
                                             formatter: function() {
                                                 return formart1(item3.executeFlagName, item3.executeFlag);
                                             }
                                         },
-                                        "执行信息(点击显示全部信息)": {
+                                        "Execution Info.(Click to view all Info.)": {
                                             formatter: function() {
                                                 return formart2(item3.executeMsg);
                                             }

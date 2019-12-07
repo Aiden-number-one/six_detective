@@ -1007,16 +1007,16 @@ i{
                   <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id='i_nodeNameC' placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeIdC']">
                 </div>
               </div>
-              <div class="label-title">变量设置</div>
+              <div class="label-title">Variable Setting</div>
               <div class="form-group" style="padding: 0px;height:200px;">
                 <div style="box-sizing: border-box;">
                   <div class="tourist-wide" style="border:none">
                       <div class="btn-group">
                           <div class="btn-group">
-                       <a id="addLineC" class="btn-operate"><i class="widget-thumb-icon bg-red fa fa-plus"></i>新增</a>
+                       <a id="addLineC" class="btn-operate"><i class="widget-thumb-icon bg-red fa fa-plus"></i>ADD</a>
                           </div>
                           <div class="btn-group">
-                           <a id="delAllLineC" class="btn-operate"><i class="widget-thumb-icon bg-red fa icon-trash"></i>删除全部</a>
+                           <a id="delAllLineC" class="btn-operate"><i class="widget-thumb-icon bg-red fa icon-trash"></i>Delete All</a>
                           </div>
                       </div>
                     <!-- <a id='addLineC' class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
@@ -1027,13 +1027,13 @@ i{
                     <table id="tbC" style="width: 100%;">
                       <thead>
                         <tr>
-                          <th width="5%" class="control-label" style="text-align: center; padding-left: 0px;">序号</th>
-                          <th class="col-sm-2 control-label" style="text-align: center;">变量名</th>
-                          <th class="col-sm-2 control-label" style="text-align: center;">变量类型</th>
-                          <th class="col-sm-2 control-label" style="text-align: center;">操作符</th>
-                          <th class="col-sm-2 control-label" style="text-align: center;">值</th>
+                          <th width="5%" class="control-label" style="text-align: center; padding-left: 0px;">No.</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Variable Name</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Variable Type</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Operator type</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Value</th>
                           <th class="col-sm-2 control-label" style="text-align: center;">关系</th>
-                          <th width="10%" class="col-sm-2 control-label" style="text-align: center; padding: 0px;">操作</th>
+                          <th width="10%" class="col-sm-2 control-label" style="text-align: center; padding: 0px;">Operator</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1044,7 +1044,7 @@ i{
               </div>
               <div class="pull-right" style="padding: 0">
                 <input type="button" class="btn btn-default btn-small btn-cancel" value='CANCEL' onclick='$("#nodeformboxC").window("close");' />
-                <input type="submit" class="btn btn-primary btn-small btn-sure" value='确定' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='CONFIRM'' />
               </div>
             </form>
           </div>
@@ -1065,7 +1065,7 @@ i{
               </div>
 
               <div class="form-group">
-                <label class="col-sm-3 control-label">消息:</label>
+                <label class="col-sm-3 control-label">Message:</label>
                 <div class="col-sm-9">
                   <input type="text" class="form-control" id="i_return_message" name='i_return_message'>
                 </div>
@@ -1100,9 +1100,9 @@ i{
                 </div>
                 <div class="col-sm-4">
                   <select name='i_time_unit' class="form-control" id='i_time_unit'>
-                    <option value='S'>秒</option>
-                    <option value='I'>分钟</option>
-                    <option value='H'>小时</option>
+                    <option value='S'>Second</option>
+                    <option value='I'>Minute</option>
+                    <option value='H'>Hour</option>
                   </select>
                 </div>
               </div>
@@ -1122,7 +1122,7 @@ i{
           <div class="c-bg-b-w">
             <form id='node_editF' class="form-horizontal c-form clearfix" role="form">
               <div class="form-group">
-                <label for="dataBaseD" class="col-sm-3 control-label">作业项名称:</label>
+                <label for="dataBaseD" class="col-sm-3 control-label">Job Name:</label>
                 <div class="col-sm-9">
                   <input type='hidden' name='i_nodeId' id='i_nodeIdF' />
                   <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id='i_nodeNameF' placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeIdF']">
@@ -1130,7 +1130,7 @@ i{
               </div>
 
               <div class="form-group">
-                <label class="col-sm-3 control-label">文件名:</label>
+                <label class="col-sm-3 control-label">File Name:</label>
                 <div class="col-sm-9">
                   <input type="text" class="form-control" id="i_file_name" name='i_file_name' placeholder="填写绝对路径">
                 </div>
@@ -1151,7 +1151,7 @@ i{
           <div class="c-bg-b-w">
             <form id='node_editU' class="form-horizontal c-form clearfix" role="form">
               <div class="form-group">
-                <label for="dataBaseD" class="col-sm-3 control-label">作业项名称:</label>
+                <label for="dataBaseD" class="col-sm-3 control-label">Job Name:</label>
                 <div class="col-sm-9">
                   <input type='hidden' name='i_nodeId' id='i_nodeIdU' />
                   <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id='i_nodeNameU' placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeIdU']">
@@ -1167,7 +1167,7 @@ i{
       </div>
     </div>
     <!-- SAVE作业弹窗 -->
-    <div id="jf_win_newJob" class="easyui-window" title="SAVE作业" data-options="modal:true,closed:true" style="width: 600px; height: 320px;">
+    <div id="jf_win_newJob" class="easyui-window" title="SAVE Job" data-options="modal:true,closed:true" style="width: 600px; height: 320px;">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -1181,31 +1181,31 @@ i{
               <input type="hidden" id="_ifNew" />
               <input type="reset" id="fromResultJob" style="display: none;" />
               <div class="form-group">
-                <label for="jf_jobName_input" class="col-sm-3 control-label"><span class="required">* </span>作业编号:</label>
+                <label for="jf_jobName_input" class="col-sm-3 control-label"><span class="required">* </span>Job No.:</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control easyui-validatebox" id="jf_jobId_input" name="jobNo" data-options="required:true" maxlength="32" placeholder="请输入最长32位字符（中文占两个字符）"/>
+                  <input type="text" class="form-control easyui-validatebox" id="jf_jobId_input" name="jobNo" data-options="required:true" maxlength="32" placeholder="32 characters maximum"/>
                 </div>
               </div>
               <div class="form-group">
-                <label for="jf_jobName_input" class="col-sm-3 control-label"><span class="required">* </span>作业名称:</label>
+                <label for="jf_jobName_input" class="col-sm-3 control-label"><span class="required">* </span>Job Name:</label>
                 <div class="col-sm-9">
                   <input type="text" class="form-control easyui-validatebox" id="jf_jobName_input" name="jobName" data-options="required:true" maxlength="64" placeholder="64 characters maximum"/>
                 </div>
               </div>
               <div class="form-group">
-                <label for="dataBaseS" class="col-sm-3 control-label"><span class="required">* </span>所属文件夹</label>
+                <label for="dataBaseS" class="col-sm-3 control-label"><span class="required">* </span>Folder</label>
                 <div class="col-sm-9">
                   <input class="easyui-combotree form-control easyui-validatebox" name="folderId" id='folderId_input' style="width: 100%; height: 24px;" data-options="required:true" />
                 </div>
               </div>
               <div class="form-group">
-                <label for="dataBaseM" class="col-sm-3 control-label">作业描述:</label>
+                <label for="dataBaseM" class="col-sm-3 control-label">Job Description:</label>
                 <div class="col-sm-9">
                   <textarea id="jf_jobDe_input" class="form-control" rows="3" name="jobDesc" maxlength="1024" placeholder="1024 characters maximum"></textarea>
                 </div>
               </div>
               <div class="pull-right" style="padding: 5px 0">
-                <a type="button" href="javascript:void(0)" class="btn btn-default btn-sm c-btn-fb btn-cancel" id="btn-jobFlow-close">关闭</a>
+                <a type="button" href="javascript:void(0)" class="btn btn-default btn-sm c-btn-fb btn-cancel" id="btn-jobFlow-close">COLSE</a>
                 <a type="button" href="javascript:void(0)" id='jf_btn_saveSubmit' class="btn btn-default btn-sm c-btn-fb btn-sure">SAVE</a>
               </div>
             </form>
@@ -1347,7 +1347,7 @@ i{
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title title-color-blue">SAVE作业</h4>
+                <h4 class="modal-title title-color-blue">SAVE Job</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="J_form_1" name="J_form_1" role="form" novalidate="novalidate" style="padding-top: 20px;">
@@ -1355,7 +1355,7 @@ i{
                         <div class="form-body">
                             <div class="row">
                                 <div class="form-group">
-                                    <label class="control-label col-md-3">作业编号
+                                    <label class="control-label col-md-3">Job NO.
                                         <span class="required" aria-required="true"> * </span>
                                     </label>
                                     <div class="col-md-8">
@@ -1363,7 +1363,7 @@ i{
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-3">作业名称
+                                    <label class="control-label col-md-3">Job Name
                                         <span class="required" aria-required="true"> * </span>
                                     </label>
                                     <div class="col-md-8">
@@ -1371,7 +1371,7 @@ i{
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-3">所属目录
+                                    <label class="control-label col-md-3">Folder
                                         <span class="required" aria-required="true"> * </span>
                                     </label>
                                     <div class="col-md-8">
@@ -1381,7 +1381,7 @@ i{
                                         <div id="J_flow_tree" type="jstree"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-3">作业描述
+                                    <label class="control-label col-md-3">Job Description
                                     </label>
                                     <div class="col-md-8">
                                         <textarea name="job_desc" class="form-control"></textarea>

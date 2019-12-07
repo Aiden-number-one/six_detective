@@ -5,52 +5,62 @@
   flex-direction: column;
   height: 100vh;
   overflow: auto;
+  background: #f6f8fb;
+  :global {
+    .ant-form-explain {
+      position: absolute;
+    }
+  }
+}
+
+.bgdiv {
+  position: absolute;
+  left: -10%;
+  width: 60%;
+  height: 100%;
+  background-color: #ddecf8;
+  transform: skew(10deg);
 }
 
 .content {
   position: relative;
   height: 100%;
-  padding: 20px 0 0 0;
-}
-
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 0 10%;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #c0ccd9;
-}
-
-.logo {
-  width: 110px;
-  margin-right: 16px;
-  vertical-align: top;
-}
-
-.title {
-  margin-top: 10px;
-  color: #10416c;
-  font-weight: 600;
-  font-size: 16px;
-  font-family: FSElliotPro, FSElliot, Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
-.description {
-  margin: 10px 10% 0 10%;
-  font-size: 12px;
 }
 
 .loginContent {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 30px 10% 120px;
-  .loginBg {
-    width: 70%;
-    min-width: 280px;
-    min-height: 250px;
-  }
+  justify-content: center;
+  height: calc(100% - 80px);
+  min-height: 380px;
+}
+
+.logoDiv {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 100px;
+}
+
+.title {
+  margin-top: 20px;
+  color: #10416c;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: FSElliotPro, FSElliot, Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.loginDiv {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .footer {
@@ -58,14 +68,11 @@
   bottom: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
-  height: 95px;
+  height: 80px;
   padding: 0 10%;
   color: #9ab3ca;
   text-align: right;
   background-color: #10416c;
-  img {
-    height: 35px;
-  }
 }

@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-12-03 20:02:44
+ * @LastEditTime: 2019-12-07 16:57:30
  * @LastEditors: dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -66,4 +66,7 @@ export default {
   getMenuUserGroup: `${prefix}get_user_group_menu`,
   getNewUserGroup: `${prefix}set_user_group_menu`,
   getModifyUserGroup: `${prefix}set_user_group_menu_update`,
+  getAlertUserGroup: `${prefix}get_alert_group_list`,
+  newAlertUser: `${prefix}set_alert_group`,
+  updateAlertUser: `${prefix}set_alert_group_menu`,
 };

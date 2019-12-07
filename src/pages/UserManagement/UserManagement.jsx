@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 17:55:25
+ * @LastEditTime: 2019-12-07 13:24:53
  */
 
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Modal, Table, Button, Drawer, message } from 'antd';
+import { Form, Modal, Table, Button, Drawer, message, Pagination } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './UserManagement.less';
@@ -79,15 +79,8 @@ class UserManagement extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
-        dataIndex: 'updateTime',
-        key: 'updateTime',
-        render: (res, obj) => (
-          <div>
-            <span>{timeFormat(obj.updateTime).t1}</span>
-            <br />
-            <span>{timeFormat(obj.updateTime).t2}</span>
-          </div>
-        ),
+        dataIndex: 'updateBy',
+        key: 'updateBy',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -454,12 +447,27 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  pageChange = pagination => {
+  pageChange = (pageNumber, pageSize) => {
     const page = {
-      pageNumber: pagination.current.toString(),
-      pageSize: pagination.pageSize.toString(),
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
     };
 
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
+  };
+
+  onShowSizeChange = (current, pageSize) => {
+    const page = {
+      pageNumber: current.toString(),
+      pageSize: pageSize.toString(),
+    };
     this.setState(
       {
         page,
@@ -545,7 +553,7 @@ class UserManagement extends Component {
               cancelText={formatMessage({ id: 'app.common.cancel' })}
               okText={formatMessage({ id: 'app.common.save' })}
             >
-              <span>Are you sure you want to delete this form?</span>
+              <span>Please confirm that you want to delete this record?</span>
             </Modal>
             {/* 销户 */}
             <Modal
@@ -589,12 +597,25 @@ class UserManagement extends Component {
             </div>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
-              pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
+              // pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
               // rowSelection={rowSelection}
-              onChange={this.pageChange}
+              // onChange={this.pageChange}
               dataSource={userManagementData.items}
               columns={this.state.columns}
+              pagination={false}
             ></Table>
+            <Pagination
+              showSizeChanger
+              showTotal={() =>
+                `Page ${page.pageNumber} of ${Math.ceil(
+                  userManagementData.totalCount / page.pageSize,
+                )}`
+              }
+              onShowSizeChange={this.onShowSizeChange}
+              onChange={this.pageChange}
+              total={userManagementData.totalCount}
+              pageSize={page.pageSize}
+            />
           </div>
         </div>
       </PageHeaderWrapper>

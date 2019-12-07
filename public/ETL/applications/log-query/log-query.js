@@ -35,7 +35,7 @@ define(function (require, exports, module) {
 
 		//搜索功能
 		$("body").on("click", "#J_lq_tab1_query_form button[type='submit']", function () {
-			if(!App.checkDate($('#J_lq_tab1_query_form'), "执行时间")){
+			if(!App.checkDate($('#J_lq_tab1_query_form'), "Execution Time")){
 				return false;
 			}
 			var params = App.getFormParams("J_lq_tab1_query_form");
@@ -55,7 +55,7 @@ define(function (require, exports, module) {
 		$("body").on("click", "#J_lq_tab2_query_form button[type='submit']", function () {
 			// 由于tab3点击过来时查询需要清除sessionStorage
 			sessionStorage.removeItem("calendarJumpParams");
-			if(!App.checkDate($('#J_lq_tab2_query_form'), "操作时间")){
+			if(!App.checkDate($('#J_lq_tab2_query_form'), "Execution Time")){
 				return false;
 			}
 			var params = App.getFormParams("J_lq_tab2_query_form");
@@ -89,7 +89,7 @@ define(function (require, exports, module) {
             if ($("#J_change_view_log_table1").is(":visible")) {
                 $("#J_change_view_log_table1").hide();
                 $("#J_change_view_log_job").show();
-                $("#J_change_view_log_job iframe").attr("src", "/retl-process/monitor.html?jobId=" + jobId + "&batchNo=" + batchNo);
+                $("#J_change_view_log_job iframe").attr("src", "/ETl/retl-process/monitor.html?jobId=" + jobId + "&batchNo=" + batchNo);
 
             } else {
                 $("#J_change_view_log_table1").show();
