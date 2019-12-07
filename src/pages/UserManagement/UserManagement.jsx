@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-07 13:24:53
+ * @LastEditTime: 2019-12-07 20:07:58
  */
 
 import React, { Component } from 'react';
@@ -193,7 +193,19 @@ class UserManagement extends Component {
     this.setState({
       visible: false,
     });
-    this.queryUserList();
+    const { pageSize } = this.state.page;
+    const page = {
+      pageNumber: 1,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   addCancel = () => {
@@ -605,6 +617,7 @@ class UserManagement extends Component {
               pagination={false}
             ></Table>
             <Pagination
+              current={page.pageNumber}
               showSizeChanger
               showTotal={() =>
                 `Page ${page.pageNumber} of ${Math.ceil(
