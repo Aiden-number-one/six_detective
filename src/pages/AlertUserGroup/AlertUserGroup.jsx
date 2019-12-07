@@ -11,12 +11,12 @@ import NewUserGroup from './components/NewUserGroup';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
-@connect(({ menuUserGroup, loading }) => ({
+@connect(({ alertUserGroup, loading }) => ({
   loading: loading.effects,
-  menuUserGroup: menuUserGroup.data,
-  updateGroup: menuUserGroup.updateUserGroup,
+  menuUserGroup: alertUserGroup.data,
+  updateGroup: alertUserGroup.updateUserGroup,
 }))
-class MenuUserGroup extends Component {
+class alertUserGroup extends Component {
   searchForm = React.createRef();
 
   constructor() {
@@ -130,7 +130,7 @@ class MenuUserGroup extends Component {
       roleId: groupMenuInfo.roleId,
     };
     dispatch({
-      type: 'menuUserGroup/updateUserGroup',
+      type: 'alertUserGroup/updateUserGroup',
       payload: params,
       callback: () => {
         this.queryUserList();
@@ -151,7 +151,7 @@ class MenuUserGroup extends Component {
     // const { dispatch } = this.props;
     // const params = {};
     // dispatch({
-    //   type: 'menuUserGroup/getMenuUserGroup',
+    //   type: 'menuUserGroup/getAlertUserGroup',
     //   payload: params,
     // });
     this.searchForm.current.validateFields((err, values) => {
@@ -205,7 +205,7 @@ class MenuUserGroup extends Component {
       pageSize: this.state.page.pageSize,
     };
     dispatch({
-      type: 'menuUserGroup/getMenuUserGroup',
+      type: 'alertUserGroup/getAlertUserGroup',
       payload: params,
     });
   };
@@ -269,7 +269,7 @@ class MenuUserGroup extends Component {
             </Button>
           </div>
           <Table
-            loading={loading['menuUserGroup/getMenuUserGroup']}
+            loading={loading['menuUserGroup/getAlertUserGroup']}
             // pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
             // rowSelection={rowSelection}
             // onChange={this.pageChange}
@@ -279,7 +279,9 @@ class MenuUserGroup extends Component {
           ></Table>
           <Pagination
             showSizeChanger
-            showTotal={(total, range) => `Page ${range[0]} of ${total}`}
+            showTotal={() =>
+              `Page ${page.pageNumber} of ${Math.ceil(menuUserGroup.totalCount / page.pageSize)}`
+            }
             onShowSizeChange={this.onShowSizeChange}
             onChange={this.pageChange}
             total={menuUserGroup.totalCount}
@@ -291,4 +293,4 @@ class MenuUserGroup extends Component {
   }
 }
 
-export default MenuUserGroup;
+export default alertUserGroup;
