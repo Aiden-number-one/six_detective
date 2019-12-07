@@ -74,6 +74,7 @@ class MenuUserGroup extends Component {
       modifyVisible: true,
       groupTitle: 'New User Group',
       updateFlag: false,
+      groupMenuInfo: {},
     });
   };
 
@@ -212,14 +213,19 @@ class MenuUserGroup extends Component {
 
   onShowSizeChange = (current, pageSize) => {
     console.log(current, pageSize);
-    const { pageNumber } = this.state;
+    // const { pageNumber } = this.state;
     const page = {
-      pageNumber,
+      pageNumber: current.toString(),
       pageSize: pageSize.toString(),
     };
-    this.setState({
-      page,
-    });
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   render() {
@@ -279,7 +285,9 @@ class MenuUserGroup extends Component {
           ></Table>
           <Pagination
             showSizeChanger
-            showTotal={(total, range) => `Page ${range[0]} of ${total}`}
+            showTotal={() =>
+              `Page ${page.pageNumber} of ${Math.ceil(menuUserGroup.totalCount / page.pageSize)}`
+            }
             onShowSizeChange={this.onShowSizeChange}
             onChange={this.pageChange}
             total={menuUserGroup.totalCount}

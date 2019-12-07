@@ -175,6 +175,12 @@ class NewUser extends Component {
     });
   };
 
+  onAllChecked = newSelectedKeys => {
+    this.setState({
+      selectedKeys: newSelectedKeys,
+    });
+  };
+
   render() {
     const { menuData, groupMenuInfo } = this.props;
     const { selectedKeys } = this.state;
@@ -196,6 +202,7 @@ class NewUser extends Component {
                   currentName: 'menuname',
                   parentKey: 'parentmenuid',
                 }}
+                onAllChecked={this.onAllChecked}
                 onSelect={this.onSelect}
               ></ClassifyTree>
             </div>
