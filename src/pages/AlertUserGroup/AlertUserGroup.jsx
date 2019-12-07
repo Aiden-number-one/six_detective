@@ -241,6 +241,11 @@ class alertUserGroup extends Component {
       <PageHeaderWrapper>
         <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
         <Drawer
+          // drawerStyle={
+          //   {
+          //     height: '200px',
+          //   }
+          // }
           closable={false}
           title={groupTitle}
           width={700}
