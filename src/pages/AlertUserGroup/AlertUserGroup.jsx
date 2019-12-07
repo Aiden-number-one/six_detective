@@ -290,12 +290,14 @@ class alertUserGroup extends Component {
           <Pagination
             showSizeChanger
             showTotal={() =>
-              `Page ${page.pageNumber} of ${Math.ceil(menuUserGroup.totalCount / page.pageSize)}`
+              `Page ${page.pageNumber.toString()} of ${Math.ceil(
+                menuUserGroup.totalCount / page.pageSize,
+              ).toString()}`
             }
             onShowSizeChange={this.onShowSizeChange}
             onChange={this.pageChange}
-            total={menuUserGroup.totalCount}
-            pageSize={page.pageSize}
+            total={menuUserGroup.totalCount && menuUserGroup.totalCount.toString()}
+            pageSize={page.pageSize && page.pageSize.toString()}
           />
         </div>
       </PageHeaderWrapper>
