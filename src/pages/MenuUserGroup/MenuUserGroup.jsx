@@ -74,6 +74,7 @@ class MenuUserGroup extends Component {
       modifyVisible: true,
       groupTitle: 'New User Group',
       updateFlag: false,
+      groupMenuInfo: {},
     });
   };
 
@@ -217,9 +218,14 @@ class MenuUserGroup extends Component {
       pageNumber,
       pageSize: pageSize.toString(),
     };
-    this.setState({
-      page,
-    });
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   render() {
