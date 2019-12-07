@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-07 12:17:27
+ * @LastEditTime: 2019-12-07 13:30:20
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -228,12 +228,14 @@ class ClassifyTree extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      const { treeData, checkedKeys } = this.props;
+      const { treeData, checkedKeys, all } = this.props;
       this.setState({
         checkedKeys,
       });
       this.props.onSelect(treeData[0] && treeData[0][this.props.treeKey.currentKey]);
-      this.compareAllChecked();
+      if (all) {
+        this.compareAllChecked();
+      }
     }, 600);
   }
 
