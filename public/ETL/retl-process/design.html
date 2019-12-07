@@ -963,7 +963,7 @@ i{
       </div>
     </div>
 
-    <div id='nodeformboxL' class="easyui-window" title="阻塞" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformboxL' class="easyui-window" title="Block" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -979,11 +979,11 @@ i{
               <div class='' style='padding-left: 16px;' id='i_nodeItem_idL'>
                   <label>
                     <input type="radio" name="lockOption" value="1" id="input1">
-                    等待之前作业项中任意一个完成后触发，且仅触发一次
+                    Triggered after any of previous jobs completed, and only triggered once
                   </label>
                   <label>
                     <input type="radio" name="lockOption" value="2" id="input2">
-                    等待之前所有的作业项都完成才触发
+                    Triggered after all previous jobs completed
                   </label>
               </div>
               <div class="pull-right" style="padding: 5px 0">
@@ -995,7 +995,7 @@ i{
         </div>
       </div>
     </div>
-    <div id='nodeformboxC' class="easyui-window" title="条件组件" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width: 600px; height: 450px;">
+    <div id='nodeformboxC' class="easyui-window" title="Criteria Component" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width: 600px; height: 450px;">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w" style="height: 372px;">
@@ -1032,7 +1032,7 @@ i{
                           <th class="col-sm-2 control-label" style="text-align: center;">Variable Type</th>
                           <th class="col-sm-2 control-label" style="text-align: center;">Operator type</th>
                           <th class="col-sm-2 control-label" style="text-align: center;">Value</th>
-                          <th class="col-sm-2 control-label" style="text-align: center;">关系</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Logical Operator</th>
                           <th width="10%" class="col-sm-2 control-label" style="text-align: center; padding: 0px;">Operator</th>
                         </tr>
                       </thead>
@@ -1051,7 +1051,7 @@ i{
         </div>
       </div>
     </div>
-    <div id='nodeformboxI' class="easyui-window" title="中止组件" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformboxI' class="easyui-window" title="Stop Component" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -1080,7 +1080,7 @@ i{
       </div>
     </div>
     <!-- 等待时间组件 -->
-    <div id='nodeformboxG' class="easyui-window" title="等待" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformboxG' class="easyui-window" title="Wait" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -1094,7 +1094,7 @@ i{
               </div>
 
               <div class="form-group">
-                <label class="col-sm-3 control-label">等待时间:</label>
+                <label class="col-sm-3 control-label">Waiting Time:</label>
                 <div class="col-sm-5">
                   <input type="text" class="form-control easyui-validatebox " id="i_wait_time" name='i_wait_time' placeholder="" data-options="required:true,validType:'zeroOrInteger'">
                 </div>
@@ -1116,7 +1116,7 @@ i{
       </div>
     </div>
     <!-- 检查文本 -->
-    <div id='nodeformboxF' class="easyui-window" title="检查文件是否存在" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformboxF' class="easyui-window" title="Check if the file exists" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -1132,7 +1132,7 @@ i{
               <div class="form-group">
                 <label class="col-sm-3 control-label">File Name:</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" id="i_file_name" name='i_file_name' placeholder="填写绝对路径">
+                  <input type="text" class="form-control" id="i_file_name" name='i_file_name' placeholder="Please input the absolute path">
                 </div>
               </div>
               <div class="pull-right" style="padding: 5px 0">
@@ -1145,7 +1145,7 @@ i{
       </div>
     </div>
     <!-- 成功组件 -->
-    <div id='nodeformboxU' class="easyui-window" title="成功组件" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformboxU' class="easyui-window" title="Success Component" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -1215,14 +1215,14 @@ i{
     </div>
 
    
-    <div id="importTasks" class="easyui-window" title="批量导入任务" data-options="modal:true,closed:true,iconCls:''" style="width: 800px; height: 500px;">
+    <div id="importTasks" class="easyui-window" title="Batch Task Importing" data-options="modal:true,closed:true,iconCls:''" style="width: 800px; height: 500px;">
       <div class="c-container">
         <div style='position: absolute; top: 0px; left: 0px; width: 100%; padding: 0 10px;'>
           <div style='display: inline-block; vertical-align: middle; padding-top: 5px;' class='pull-right'>
-            节点连接状态:
+            Node Status:
             <input type="text" class="easyui-combobox" id="nodeType" name="nodeType"/>
             &nbsp; &nbsp; &nbsp;        
-            <a class="btn-operate" id="saveInfo" style="float:none"><i class="widget-thumb-icon bg-red fa fa-arrow-down" style="position: relative;left: 279px; top: 4px;"></i> 批量导入 </a>
+            <a class="btn-operate" id="saveInfo" style="float:none"><i class="widget-thumb-icon bg-red fa fa-arrow-down" style="position: relative;left: 279px; top: 4px;"></i> Batch Import </a>
             <!-- <button type="button" class="btn btn-default btn-small" id='saveInfo'>批量导入</button> -->
             <button type="button" class="btn btn-default btn-small" id='cancelInfo'>CANCEL</button>
           </div>
