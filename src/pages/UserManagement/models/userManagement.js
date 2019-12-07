@@ -2,7 +2,14 @@ import Service from '@/utils/Service';
 import fetch from '@/utils/request.default';
 import { formatTree } from '@/utils/utils';
 
-const { getUserList, addUser, updateUser, operationUser, getMenuUserGroup } = Service;
+const {
+  getUserList,
+  addUser,
+  updateUser,
+  operationUser,
+  getMenuUserGroup,
+  getAlertUserGroup,
+} = Service;
 export const userManagement = {
   namespace: 'userManagement',
   state: {
@@ -13,6 +20,7 @@ export const userManagement = {
     operationDatas: {},
     saveUser: {},
     updateData: [],
+    alertData: [],
   },
   effects: {
     *userManagemetDatas({ payload }, { call, put }) {
@@ -47,6 +55,21 @@ export const userManagement = {
         if (response.bcjson.items) {
           yield put({
             type: 'getDatas',
+            payload: userMenu,
+          });
+        }
+      }
+    },
+    *getAlertUserGroup({ payload }, { call, put }) {
+      const response = yield call(getAlertUserGroup, { param: payload });
+      const userMenu = response.bcjson.items.map(element => ({
+        label: element.roleName,
+        value: element.roleId,
+      }));
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'alertUserGroup',
             payload: userMenu,
           });
         }
@@ -109,6 +132,12 @@ export const userManagement = {
       return {
         ...state,
         menuData: action.payload,
+      };
+    },
+    alertUserGroup(state, action) {
+      return {
+        ...state,
+        alertData: action.payload,
       };
     },
     addDatas(state, action) {

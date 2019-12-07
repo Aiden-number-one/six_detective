@@ -92,7 +92,6 @@ class NewUser extends Component {
     const { selectedKeys } = this.state;
     const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
-      console.log('err=======', err);
       if (err) {
         return;
       }

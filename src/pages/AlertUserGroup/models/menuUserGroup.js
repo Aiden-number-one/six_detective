@@ -3,11 +3,11 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 20:12:29
+ * @LastEditTime: 2019-12-06 18:59:17
  */
 import Service from '@/utils/Service';
 
-const { getMenuUserGroup, getNewUserGroup, getModifyUserGroup } = Service;
+const { getAlertUserGroup, getNewUserGroup, getModifyUserGroup } = Service;
 
 const menuUserGroup = {
   namespace: 'menuUserGroup',
@@ -18,7 +18,7 @@ const menuUserGroup = {
   },
   effects: {
     *getMenuUserGroup({ payload }, { call, put }) {
-      const response = yield call(getMenuUserGroup, { param: payload });
+      const response = yield call(getAlertUserGroup, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
