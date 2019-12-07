@@ -212,14 +212,19 @@ class alertUserGroup extends Component {
 
   onShowSizeChange = (current, pageSize) => {
     console.log(current, pageSize);
-    const { pageNumber } = this.state;
+    // const { pageNumber } = this.state;
     const page = {
-      pageNumber,
+      pageNumber: current.toString(),
       pageSize: pageSize.toString(),
     };
-    this.setState({
-      page,
-    });
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   render() {
