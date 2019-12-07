@@ -91,7 +91,6 @@ class alertUserGroup extends Component {
   };
 
   updateUser = (res, obj) => {
-    console.log('res, obj=', res, obj);
     // this.props.dispatch(
     //   routerRedux.push({
     //     pathname: '/system-management/user-maintenance/modify-menu-user',
@@ -112,7 +111,6 @@ class alertUserGroup extends Component {
   };
 
   deleteUser = (res, obj) => {
-    console.log('delete====', obj);
     const groupMenuInfo = {
       roleId: obj.roleId,
     };
@@ -155,7 +153,9 @@ class alertUserGroup extends Component {
     //   payload: params,
     // });
     this.searchForm.current.validateFields((err, values) => {
-      console.log('values===', values);
+      if (err) {
+        return;
+      }
       const params = {
         roleName: values.roleName,
         roleDesc: values.roleDesc,
@@ -211,8 +211,6 @@ class alertUserGroup extends Component {
   };
 
   onShowSizeChange = (current, pageSize) => {
-    console.log(current, pageSize);
-    // const { pageNumber } = this.state;
     const page = {
       pageNumber: current.toString(),
       pageSize: pageSize.toString(),
@@ -230,13 +228,7 @@ class alertUserGroup extends Component {
   render() {
     const { loading, menuUserGroup } = this.props;
     const { groupTitle, deleteVisible, groupMenuInfo, updateFlag } = this.state;
-    console.log('menuUserGroup=', menuUserGroup);
     const { columns, page, modifyVisible } = this.state;
-    // const rowSelection = {
-    //   onChange: (selectedRowKeys, selectedRows) => {
-    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    //   },
-    // };
     return (
       <PageHeaderWrapper>
         <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
