@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-06 17:10:42
+ * @LastEditTime: 2019-12-07 13:24:53
  */
 
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Modal, Table, Button, Drawer, message } from 'antd';
+import { Form, Modal, Table, Button, Drawer, message, Pagination } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './UserManagement.less';
@@ -447,12 +447,27 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  pageChange = pagination => {
+  pageChange = (pageNumber, pageSize) => {
     const page = {
-      pageNumber: pagination.current.toString(),
-      pageSize: pagination.pageSize.toString(),
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
     };
 
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
+  };
+
+  onShowSizeChange = (current, pageSize) => {
+    const page = {
+      pageNumber: current.toString(),
+      pageSize: pageSize.toString(),
+    };
     this.setState(
       {
         page,
@@ -582,12 +597,25 @@ class UserManagement extends Component {
             </div>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
-              pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
+              // pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
               // rowSelection={rowSelection}
-              onChange={this.pageChange}
+              // onChange={this.pageChange}
               dataSource={userManagementData.items}
               columns={this.state.columns}
+              pagination={false}
             ></Table>
+            <Pagination
+              showSizeChanger
+              showTotal={() =>
+                `Page ${page.pageNumber} of ${Math.ceil(
+                  userManagementData.totalCount / page.pageSize,
+                )}`
+              }
+              onShowSizeChange={this.onShowSizeChange}
+              onChange={this.pageChange}
+              total={userManagementData.totalCount}
+              pageSize={page.pageSize}
+            />
           </div>
         </div>
       </PageHeaderWrapper>
