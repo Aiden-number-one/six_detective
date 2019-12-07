@@ -61,9 +61,11 @@ export default [
             component: './RulesEngine/RulesEngine',
           },
           {
+            isIframe: true,
+            iframeUrl: 'http://localhost:8000/ETL/index.html#datasource-change',
             path: '/data-management/data-enquiry',
-            name: 'dataEnquiry',
-            component: './Dragboard/Dragboard',
+            name: 'datasourceChange',
+            component: './IframePage/IframePage',
           },
           {
             isIframe: true,
