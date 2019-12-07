@@ -1,0 +1,6 @@
+
+<span ng-if="!property.noValue&&property.value.isCurrency==1">{{property.value.eventname|limitTo:20}}</span>
+<span ng-if="!property.noValue && property.value.isCurrency==1 && property.value.eventname.length > 20">...</span>
+<span ng-if="!property.noValue&&property.value.isCurrency==0">{{property.value.value}}</span>
+<span ng-if="!property.noValue && property.value.isCurrency==0 && property.value.value.length > 20">...</span>
+<span ng-if="property.noValue" translate>PROPERTY.EMPTY</span>

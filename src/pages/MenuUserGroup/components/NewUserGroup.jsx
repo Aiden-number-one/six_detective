@@ -70,7 +70,7 @@ class NewUser extends Component {
     super(props);
     this.state = {
       selectedKeys: [],
-      defaultCheckedKeys: [],
+      // defaultCheckedKeys: [],
     };
   }
 
@@ -92,16 +92,18 @@ class NewUser extends Component {
     const { selectedKeys } = this.state;
     const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
-      if (selectedKeys <= 0) {
-        message.warning('Please checked Authorizing operate to alerts');
+      if (err) {
         return;
       }
-      console.log('updateFlag===', updateFlag);
+      if (selectedKeys <= 0) {
+        message.warning('Please checked Authorizing access to menus');
+        return;
+      }
       if (!updateFlag) {
         const param = {
           roleName: values.roleName,
           roleDesc: values.roleDesc,
-          menuIds: selectedKeys,
+          menuIds: selectedKeys.join(','),
         };
         dispatch({
           type: 'menuUserGroup/newUserGroup',
@@ -122,7 +124,7 @@ class NewUser extends Component {
           roleId: groupMenuInfo.roleId,
           roleName: values.roleName,
           roleDesc: values.roleDesc,
-          menuIds: selectedKeys,
+          menuIds: selectedKeys.join(','),
         };
         dispatch({
           type: 'menuUserGroup/updateUserGroup',
@@ -146,9 +148,9 @@ class NewUser extends Component {
       type: 'menuUserGroup/updateUserGroup',
       payload: params,
       callback: () => {
-        const defaultCheckedKeys = this.props.updateGroup.map(element => element.menuId);
+        const selectedKeys = this.props.updateGroup.map(element => element.menuId);
         that.setState({
-          defaultCheckedKeys,
+          selectedKeys,
         });
       },
     });
@@ -167,7 +169,13 @@ class NewUser extends Component {
   };
 
   onCheck = selectedKeyss => {
-    const newSelectedKeys = selectedKeyss.join(',');
+    const newSelectedKeys = selectedKeyss;
+    this.setState({
+      selectedKeys: newSelectedKeys,
+    });
+  };
+
+  onAllChecked = newSelectedKeys => {
     this.setState({
       selectedKeys: newSelectedKeys,
     });
@@ -175,32 +183,31 @@ class NewUser extends Component {
 
   render() {
     const { menuData, groupMenuInfo } = this.props;
-    const { defaultCheckedKeys } = this.state;
-    console.log('defaultCheckedKeys111111====', defaultCheckedKeys);
-    console.log('menuData=', menuData);
+    const { selectedKeys } = this.state;
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
-        <Row type="flex">
-          <Col>
-            <span className={styles.title}>Authorizing access to menus</span>
-          </Col>
-          <Col>
-            <ClassifyTree
-              all
-              checkable
-              onCheck={this.onCheck}
-              treeData={menuData}
-              checkedKeys={defaultCheckedKeys}
-              treeKey={{
-                currentKey: 'menuid',
-                currentName: 'menuname',
-                parentKey: 'parentmenuid',
-              }}
-              onSelect={this.onSelect}
-            ></ClassifyTree>
-          </Col>
-        </Row>
+        <ul type="flex" className={styles.userGroup}>
+          <li>
+            <h3 className={styles.groupTitle}>Authorizing access to menus</h3>
+            <div className={styles.treeWraper}>
+              <ClassifyTree
+                all
+                checkable
+                onCheck={this.onCheck}
+                treeData={menuData}
+                checkedKeys={selectedKeys}
+                treeKey={{
+                  currentKey: 'menuid',
+                  currentName: 'menuname',
+                  parentKey: 'parentmenuid',
+                }}
+                onAllChecked={this.onAllChecked}
+                onSelect={this.onSelect}
+              ></ClassifyTree>
+            </div>
+          </li>
+        </ul>
         <Row
           type="flex"
           justify="end"

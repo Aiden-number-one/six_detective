@@ -60,7 +60,7 @@
             <div class="portlet-title">
                 <div class="caption font-dark">
                     <i class="icon-refresh"></i>
-                    <span class="caption-subject bold uppercase">调度计划信息</span>
+                    <span class="caption-subject bold uppercase">Schedule Management</span>
                 </div>
                 <div class="actions">
                 </div>
@@ -131,13 +131,13 @@
                                 <th data-lang="Last-Execution-Time"> 上次执行时间 </th>
                                 <th data-lang="Last-Execution-Status"> 最后一次执行状态 </th>
                                 <th data-lang="Next-Execution-Time"> 下次执行时间 </th>
-                                <th data-lang=""> 执行结果 </th>
+                                <th data-lang=""> Result </th>
                                 <th data-lang="Action"> 操作 </th>
                             </tr>
                         </thead>
                         <tbody id="taskSetList" class="row">
                             <tr>
-                                <td colspan="11" class="t-c">正在加载数据...</td>
+                                <td colspan="11" class="t-c">Loading...</td>
                                 <tr>
                         </tbody>
                     </table>
@@ -160,10 +160,10 @@
                     <div class="t-c">
                         <ul class="nav nav-tabs ">
                             <li class="active">
-                                <a href="#J_tps_1_1" data-toggle="tab" aria-expanded="true"> 基本信息</a>
+                                <a href="#J_tps_1_1" data-toggle="tab" aria-expanded="true"> Basic Info</a>
                             </li>
                             <li class="">
-                                <a href="#J_tps_1_2" data-toggle="tab" aria-expanded="false"> 计划设置 </a>
+                                <a href="#J_tps_1_2" data-toggle="tab" aria-expanded="false"> Schedule Settings </a>
                             </li>
                         </ul>
                     </div>
@@ -174,7 +174,7 @@
                                     <div class="row">
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
-                                                <span class="required" aria-required="true"> * </span>计划名称：
+                                                <span class="required" aria-required="true"> * </span>Schedule Name：
                                             </label>
                                             <div class="col-md-8">
                                                 <input type="text" class="form-control" name="scheduleName" maxlength="64" placeholder="64 characters maximum" >
@@ -182,7 +182,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
-                                                <span class="required" aria-required="true"> * </span>调度作业：
+                                                <span class="required" aria-required="true"> * </span>Job：
                                             </label>
                                             <div class="col-md-8">
                                                 <input type="hidden" name="jobId" class="form-control">
@@ -195,17 +195,17 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
-                                                <span class="required" aria-required="true"> * </span>计划有效时间：
+                                                <span class="required" aria-required="true"> * </span>Effective Time：
                                             </label>
                                             <div class="col-md-8">
-                                                <input name="validStartDate" class="form-control input-small input-inline  date-time-picker" data-date-format="yyyy-mm-dd hh:ii:ss" style="width:228px" autocomplete="off">至
+                                                <input name="validStartDate" class="form-control input-small input-inline  date-time-picker" data-date-format="yyyy-mm-dd hh:ii:ss" style="width:228px" autocomplete="off">-
                                                 <input name="validEndDate" class="form-control input-small input-inline  date-time-picker" data-date-format="yyyy-mm-dd hh:ii:ss" style="width:228px" autocomplete="off">
                                                 <label>
-                                                    <input type="checkbox" fakename="forever"> 永久有效</label>
+                                                    <input type="checkbox" fakename="forever"> Effective Permanently</label>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">计划描述：
+                                            <label class="control-label col-md-3">Plan Description：
                                             </label>
                                             <div class="col-md-8">
                                                 <textarea name="scheduleDesc" class="form-control" maxlength="1024" placeholder="1024 characters maximum" ></textarea>
@@ -219,7 +219,7 @@
                                     <div class="row">
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
-                                                <span class="required" aria-required="true"> * </span>计划开始执行时间：
+                                                <span class="required" aria-required="true"> * </span>Start Time：
                                             </label>
                                             <div class="col-md-8">
                                                 <input type="text" value='' class="form-control date-time-picker" data-date-format="yyyy-mm-dd hh:ii:ss" name="executeTime" autocomplete="off">
@@ -227,7 +227,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
-                                                <span class="required" aria-required="true"></span>执行频度：
+                                                <span class="required" aria-required="true"></span>Execution Frequency：
                                             </label>
                                             <div class="col-md-4 no-pr">
                                                 <input type="number" class="form-control" name="scheduleInterval" maxlength="32" placeholder="32 characters maximum" >
@@ -240,7 +240,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-3">
                                                 <span class="required" aria-required="true"></span>
-                                                <button type="button" class="btn btn-danger btn-sm" id="J_cron_btn">cron表达式</button>
+                                                <button type="button" class="btn btn-danger btn-sm" id="J_cron_btn">CRON Statement</button>
                                             </label>
                                             <div class="col-md-8">
                                                 <textarea placeholder="Execution Frequency can be entered by customized CRON statement also. Choose one of the two methods as needed." name="cronExpression" class="form-control"></textarea>
@@ -248,46 +248,28 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3" style="line-height: 2;">
-                                                调度规律：
+                                                Scheduled by：
                                             </label>
                                             <div class="col-md-8">
                                                 <div class="radio-list">
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="scheduleLaw" value="1" checked> 按交易日 </label>
+                                                        <input type="radio" name="scheduleLaw" value="1" checked> Business Day </label>
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="scheduleLaw" value="2"> 按自然日 </label>
+                                                        <input type="radio" name="scheduleLaw" value="2"> Natural Day </label>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">
-                                                成功邮件：
-                                            </label>
-                                            <div class="col-md-8">
-                                                <input type="text" class="form-control" maxlength="256" name="succeedMailId"  placeholder="256 characters maximum">
-                                                <a class="query-datafield set-variable" title="选择变量"><i class="fa fa-plus"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">
-                                                出错邮件：
-                                            </label>
-                                            <div class="col-md-8">
-                                                <input type="text" class="form-control" name="faultMailId" placeholder="256 characters maximum" maxlength="256">
-                                                <a class="query-datafield set-variable" title="选择变量"><i class="fa fa-plus"></i></a>
                                             </div>
                                         </div>
 
                                         <div id="J_plan_setting_time">
                                             <div class="form-group">
-                                                <label class="control-label col-md-3">上次执行时间：
+                                                <label class="control-label col-md-3">Last Execution Time：
                                                 </label>
                                                 <div class="col-md-8">
                                                     <span style="border-color: transparent" class="prev_time form-control"></span>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3">下次执行时间：
+                                                <label class="control-label col-md-3">Next Execution Time：
                                                 </label>
                                                 <div class="col-md-8">
                                                     <span style="border-color: transparent" class="next_time form-control"></span>
@@ -314,42 +296,42 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title title-color-blue">调度计划</h4>
+                <h4 class="modal-title title-color-blue">Schedule Plan</h4>
             </div>
             <div class="modal-body" style="padding: 9px">
                 <div class="tabbable-line">
                     <ul class="nav nav-tabs ">
                         <li class="active">
-                            <a href="#tab_s" data-toggle="tab" aria-expanded="true">秒</a>
+                            <a href="#tab_s" data-toggle="tab" aria-expanded="true">Second</a>
                         </li>
                         <li class="">
-                            <a href="#tab_m" data-toggle="tab" aria-expanded="false"> 分钟 </a>
+                            <a href="#tab_m" data-toggle="tab" aria-expanded="false"> Minute </a>
                         </li>
                         <li class="">
-                            <a href="#tab_h" data-toggle="tab" aria-expanded="false"> 小时 </a>
+                            <a href="#tab_h" data-toggle="tab" aria-expanded="false"> Hour </a>
                         </li>
                         <li class="">
-                            <a href="#tab_d" data-toggle="tab" aria-expanded="false"> 日 </a>
+                            <a href="#tab_d" data-toggle="tab" aria-expanded="false"> Day </a>
                         </li>
                         <li class="">
-                            <a href="#tab_o" data-toggle="tab" aria-expanded="false"> 月 </a>
+                            <a href="#tab_o" data-toggle="tab" aria-expanded="false"> Month </a>
                         </li>
                         <li class="">
-                            <a href="#tab_w" data-toggle="tab" aria-expanded="false"> 周 </a>
+                            <a href="#tab_w" data-toggle="tab" aria-expanded="false"> Week </a>
                         </li>
                         <li class="">
-                            <a href="#tab_y" data-toggle="tab" aria-expanded="false"> 年 </a>
+                            <a href="#tab_y" data-toggle="tab" aria-expanded="false"> Year </a>
                         </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_s">
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="s-radio"> 每秒 允许的通配符[, - * /] </label>
+                                    <input type="radio" value="" name="s-radio"> Per Sec. Wildcards allowed[, - * /] </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="s-radio"> 周期从 </label>
+                                    <input type="radio" value="" name="s-radio"> Cycle: From </label>
                                 <label class="width150" style="width:130px">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
@@ -357,23 +339,23 @@
                                 <label class="width150" style="width:130px">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 秒 </label>
+                                <label> Second </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="s-radio"> 从 </label>
+                                    <input type="radio" value="" name="s-radio"> begin </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 秒开始,每</label>
+                                <label> Second,Per</label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label>秒执行一次</label>
+                                <label>Second execute Once</label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="s-radio"> 指定 </label>
+                                    <input type="radio" value="" name="s-radio"> Assign </label>
                             </div>
                             <div class=" line_checkbox">
                                 <div class="checkbox-div">
@@ -511,11 +493,11 @@
                         <div class="tab-pane" id="tab_m">
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="N" name="m-radio">每分钟 允许的通配符[, - * /]</label>
+                                    <input type="radio" value="N" name="m-radio">Per Min. Wildcards allowed[, - * /]</label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="m-radio"> 周期从 </label>
+                                    <input type="radio" value="" name="m-radio"> Cycle: From </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
@@ -523,23 +505,23 @@
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 分 </label>
+                                <label> Minute </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="m-radio"> 从 </label>
+                                    <input type="radio" value="" name="m-radio"> begin </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 分开始,每</label>
+                                <label> Min.,Per</label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label>分执行一次</label>
+                                <label>Minute execute Once</label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="m-radio"> 指定
+                                    <input type="radio" value="" name="m-radio"> Assign
                                 </label>
                             </div>
                             <div class=" line_checkbox">
@@ -678,11 +660,11 @@
                         <div class="tab-pane" id="tab_h">
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="N" name="h-radio">每小时 允许的通配符[, - * /]</label>
+                                    <input type="radio" value="N" name="h-radio">Per hour Wildcards allowed[, - * /]</label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="h-radio"> 周期从 </label>
+                                    <input type="radio" value="" name="h-radio"> Cycle: From </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
@@ -690,23 +672,23 @@
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 小时 </label>
+                                <label> hour </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="h-radio"> 从 </label>
+                                    <input type="radio" value="" name="h-radio"> begin </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 小时开始,每 </label>
+                                <label> hour,pre </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 小时执行一次 </label>
+                                <label> hour execute once</label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="h-radio">指定</label>
+                                    <input type="radio" value="" name="h-radio">Assign</label>
                             </div>
                             <div class=" line_checkbox">
                                 AM:
@@ -766,11 +748,11 @@
                         <div class="tab-pane" id="tab_d">
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="N" name="d-radio">每日 允许的通配符[, - * /]</label>
+                                    <input type="radio" value="N" name="d-radio">Pre day Wildcards allowed[, - * /]</label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="d-radio"> 周期从 </label>
+                                    <input type="radio" value="" name="d-radio"> Cycle: From </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
@@ -778,41 +760,41 @@
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 日 </label>
+                                <label> day </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="d-radio"> 从 </label>
+                                    <input type="radio" value="" name="d-radio"> begin </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 日开始,每 </label>
+                                <label> day,Pre </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 日执行一次 </label>
+                                <label> day execute once </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="d-radio"> 每月 </label>
+                                    <input type="radio" value="" name="d-radio"> latest working day on </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 号最近的那个工作日 </label>
+                                <label> th of every month </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="d-radio"> 最后一日
+                                    <input type="radio" value="" name="d-radio"> latest day
                                 </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="d-radio"> 不指定
+                                    <input type="radio" value="" name="d-radio"> Unspecified
                                 </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="d-radio"> 指定
+                                    <input type="radio" value="" name="d-radio"> Assign
                                 </label>
                             </div>
                             <div class=" line_checkbox">
@@ -889,11 +871,11 @@
                         <div class="tab-pane" id="tab_o">
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="N" name="o-radio">月 允许的通配符[, - * /]</label>
+                                    <input type="radio" value="N" name="o-radio">Month Wildcards allowed[, - * /]</label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="o-radio"> 周期从 </label>
+                                    <input type="radio" value="" name="o-radio"> Cycle: From </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
@@ -901,19 +883,19 @@
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 月 </label>
+                                <label> month </label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="o-radio"> 从 </label>
+                                    <input type="radio" value="" name="o-radio"> begin </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 日 开始,每 </label>
+                                <label> day,Pre </label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
-                                <label> 月执行一次 </label>
+                                <label> month execute once </label>
                             </div>
                             <!-- <div class="line">
                                 <label>
@@ -921,7 +903,7 @@
                             </div> -->
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="o-radio">指定 </label>
+                                    <input type="radio" value="" name="o-radio">Assign </label>
                                     <!-- （1表示星期天，2表示星期一， 依次类推） -->
                             </div>
                             <div class=" line_checkbox">
@@ -956,11 +938,11 @@
                         <div class="tab-pane" id="tab_w">
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="N" name="w-radio">周 允许的通配符[, - * /]</label>
+                                    <input type="radio" value="N" name="w-radio">周 Wildcards allowed[, - * /]</label>
                             </div>
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="" name="w-radio"> 周期从 星期</label>
+                                    <input type="radio" value="" name="w-radio"> Cycle: From 星期</label>
                                 <label class="width150">
                                     <input class="touchspin_3" type="text" value="" name="demo_vertical">
                                 </label>
@@ -1020,7 +1002,7 @@
                         <div class="tab-pane" id="tab_y">
                             <div class="line">
                                 <label>
-                                    <input type="radio" value="N" name="y-radio">不指定 允许的通配符[, - * /]</label>
+                                    <input type="radio" value="N" name="y-radio">不指定 Wildcards allowed[, - * /]</label>
                             </div>
                             <div class="line">
                                 <label>

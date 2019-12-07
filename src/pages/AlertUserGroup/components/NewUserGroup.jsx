@@ -3,9 +3,9 @@ import { Row, Col, Button, Form, Input, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
-import styles from '../AlertUserGroup.less';
+// import styles from '../AlertUserGroup.less';
 
-import ClassifyTree from '@/components/ClassifyTree';
+// import ClassifyTree from '@/components/ClassifyTree';
 
 const { TextArea } = Input;
 class FormUser extends Component {
@@ -16,11 +16,12 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { groupMenuInfo } = this.props;
     return (
       <Fragment>
         <Form>
           <Form.Item
-            label={formatMessage({ id: 'app.common.username' })}
+            label={formatMessage({ id: 'systemManagement.userMaintenance.name' })}
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 8 }}
           >
@@ -28,10 +29,11 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your roleName',
+                  message: 'Please input Name of Menu User Group',
                 },
               ],
-            })(<Input />)}
+              initialValue: groupMenuInfo && groupMenuInfo.roleName,
+            })(<Input placeholder="Please input" />)}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.userGroup.remark' })}
@@ -42,10 +44,11 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your remark',
+                  message: 'Please input Remark of Menu User Group',
                 },
               ],
-            })(<TextArea rows={4} />)}
+              initialValue: groupMenuInfo && groupMenuInfo.roleDesc,
+            })(<TextArea rows={4} placeholder="Please input" />)}
           </Form.Item>
         </Form>
       </Fragment>
@@ -58,6 +61,7 @@ const NewFormUser = Form.create()(FormUser);
 @connect(({ alertUserGroup, loading }) => ({
   loading: loading.effects,
   userGroup: alertUserGroup.saveUser,
+  updateGroup: alertUserGroup.updateData,
 }))
 class NewUser extends Component {
   newUserRef = React.createRef();
@@ -65,8 +69,15 @@ class NewUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedKeys: [],
+      // defaultCheckedKeys: [],
     };
+  }
+
+  componentDidMount() {
+    // const { updateFlag } = this.props;
+    // if (updateFlag) {
+    //   this.getMenuGrops();
+    // }
   }
 
   onCancel = () => {
@@ -77,76 +88,86 @@ class NewUser extends Component {
   };
 
   onSave = () => {
-    const { selectedKeys } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
-      const param = {
-        roleName: values.roleName,
-        roleDesc: values.roleDesc,
-        menuIds: selectedKeys,
-      };
-      dispatch({
-        type: 'alertUserGroup/newUserGroup',
-        payload: param,
-        callback: () => {
-          message.success('success');
-          //   this.props.history.push({
-          //     pathname: '/system-management/menu-user-group',
-          //     params: values,
-          //   });
-          this.props.onSave();
-        },
-      });
+      console.log('err=======', err);
+      if (err) {
+        return;
+      }
+      if (!updateFlag) {
+        const param = {
+          alertName: values.roleName,
+          alertDesc: values.roleDesc,
+        };
+        // debugger
+        dispatch({
+          type: 'alertUserGroup/newAlertUser',
+          payload: param,
+          callback: () => {
+            message.success('success');
+            //   this.props.history.push({
+            //     pathname: '/system-management/menu-user-group',
+            //     params: values,
+            //   });
+            this.props.onSave();
+          },
+        });
+      } else {
+        const { groupMenuInfo } = this.props;
+        const params = {
+          operType: 'modifyById',
+          roleId: groupMenuInfo.roleId,
+          roleName: values.roleName,
+          roleDesc: values.roleDesc,
+        };
+        dispatch({
+          type: 'alertUserGroup/updateUserAlert',
+          payload: params,
+          callback: () => {
+            this.props.onSave();
+          },
+        });
+      }
     });
   };
 
-  onChangeMenuUserGroup = checkedValues => {
-    console.log('checkedValues=', checkedValues);
-  };
-
-  onChangeAlertUserGroup = checkedValues => {
-    console.log('checkedValues=', checkedValues);
-  };
-
-  onSelect = value => {
-    console.log('value===', value);
-  };
-
-  onCheck = selectedKeyss => {
-    const newSelectedKeys = selectedKeyss.join(',');
-    this.setState({
-      selectedKeys: newSelectedKeys,
+  getMenuGrops = () => {
+    const { dispatch, groupMenuInfo } = this.props;
+    const that = this;
+    const params = {
+      operType: 'queryById',
+      roleId: groupMenuInfo.roleId,
+    };
+    dispatch({
+      type: 'alertUserGroup/updateUserGroup',
+      payload: params,
+      callback: () => {
+        const selectedKeys = this.props.updateGroup.map(element => element.menuId);
+        that.setState({
+          selectedKeys,
+        });
+      },
     });
   };
 
   render() {
-    const { menuData } = this.props;
-    console.log('menuData=', menuData);
+    const { groupMenuInfo } = this.props;
     return (
       <Fragment>
-        <NewFormUser ref={this.newUserRef} />
-        <Row type="flex">
-          <Col>
-            <span className={styles.title}>
-              {formatMessage({ id: 'systemManagement.userMaintenance.menuUserGroup' })}
-            </span>
-          </Col>
-          <Col>
-            <ClassifyTree
-              all
-              checkable
-              onCheck={this.onCheck}
-              treeData={menuData}
-              treeKey={{
-                currentKey: 'menuid',
-                currentName: 'menuname',
-                parentKey: 'parentmenuid',
-              }}
-              onSelect={this.onSelect}
-            ></ClassifyTree>
-          </Col>
-        </Row>
-        <Row type="flex" justify="end">
+        <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
+        <Row
+          type="flex"
+          justify="end"
+          style={{
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}
+        >
           <Col>
             <Button onClick={this.onCancel}>CANCEL</Button>
             <Button type="primary" onClick={this.onSave}>
@@ -159,8 +180,4 @@ class NewUser extends Component {
   }
 }
 
-const menuProps = ({ menu }) => ({
-  menuData: menu.menuData,
-});
-
-export default connect(menuProps)(NewUser);
+export default NewUser;

@@ -69,9 +69,11 @@ export default [
             component: './RulesEngine/RulesEngine',
           },
           {
+            isIframe: true,
+            iframeUrl: 'http://localhost:8000/ETL/index.html#datasource-change',
             path: '/data-management/data-enquiry',
-            name: 'dataEnquiry',
-            component: './Dragboard/Dragboard',
+            name: 'datasourceChange',
+            component: './IframePage/IframePage',
           },
           {
             isIframe: true,
@@ -229,11 +231,11 @@ export default [
             name: 'menuUserGroup',
             component: './MenuUserGroup/MenuUserGroup',
           },
-          // {
-          //   path: '/system-management/alert-user-group',
-          //   name: 'menuUserGroup',
-          //   component: './AlertUserGroup/AlertUserGroup',
-          // },
+          {
+            path: '/system-management/alert-user-group',
+            name: 'menuUserGroup',
+            component: './AlertUserGroup/AlertUserGroup',
+          },
           {
             path: '/system-management/user-maintenance/new-user',
             name: 'newUser',

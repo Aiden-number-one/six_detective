@@ -1,0 +1,10 @@
+<span ng-controller="KisBpmConditionExpressionReadCtrl">
+<span ng-if="conditionExpression.type=='approve_percent'">
+    {{conditionExpression.approve_percent.percent}}%
+    {{conditionExpression.approve_percent.approve=='1'? "通过" : "不通过"}}
+</span>
+<span ng-if="conditionExpression.type=='condition'">
+    {{conditionExpression.condition}}
+</span>
+<span ng-if="conditionExpression.value[0]==''">无</span>
+</span>

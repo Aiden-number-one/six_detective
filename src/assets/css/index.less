@@ -99,6 +99,7 @@
 
   // Table查询表单
   .ant-advanced-search-form {
+    margin-bottom: 10px;
     padding-top: 20px;
     padding-bottom: 10px;
     background-color: #fff;
@@ -111,8 +112,6 @@
       line-height: 24px;
     }
     .btnArea {
-      // margin-top: 20px;
-      margin-top: 0;
       .clearfix();
       .ant-btn {
         float: right;
@@ -149,7 +148,7 @@
     background-color: #f6f9fa;
   }
   .ant-layout-content > div {
-    margin: -10px 0 0 0 !important;
+    margin: 0 0 0 0 !important;
   }
 
   // 面包屑
@@ -650,5 +649,30 @@
   }
   .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected {
     background-color: #f1f5f6;
+  }
+
+  // modal头部
+  .ant-modal-header {
+    position: relative;
+    background-color: #10416c;
+  }
+  .ant-modal-header::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 4px;
+    height: 100%;
+    background-color: #f8374c;
+    content: '';
+  }
+  // pagination
+  .ant-pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    & li:first-child {
+      flex: 1;
+    }
   }
 }

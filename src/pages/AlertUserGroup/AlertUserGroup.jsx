@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Form, Table, Button, Drawer } from 'antd';
+import { Form, Table, Pagination, Button, Drawer, Modal } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
+// import { routerRedux } from 'dva/router';
 
 import styles from './AlertUserGroup.less';
 import SearchForm from './components/SearchForm';
@@ -14,24 +14,28 @@ const NewSearchForm = Form.create({})(SearchForm);
 @connect(({ alertUserGroup, loading }) => ({
   loading: loading.effects,
   menuUserGroup: alertUserGroup.data,
+  updateGroup: alertUserGroup.updateUserGroup,
 }))
-class MenuUserGroup extends Component {
+class alertUserGroup extends Component {
   searchForm = React.createRef();
 
   constructor() {
     super();
     this.state = {
-      newVisible: false,
+      modifyVisible: false,
+      deleteVisible: false,
+      updateFlag: false,
+      groupMenuInfo: {},
       columns: [
         {
-          title: formatMessage({ id: 'app.common.username' }),
+          title: formatMessage({ id: 'systemManagement.userMaintenance.name' }),
           dataIndex: 'roleName',
           key: 'roleName',
         },
         {
           title: formatMessage({ id: 'systemManagement.userGroup.remark' }),
-          dataIndex: 'Remark',
-          key: 'Remark',
+          dataIndex: 'roleDesc',
+          key: 'roleDesc',
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),
@@ -42,7 +46,7 @@ class MenuUserGroup extends Component {
               <a href="#" onClick={() => this.updateUser(res, obj)}>
                 {formatMessage({ id: 'app.common.modify' })}
               </a>
-              <a href="#" onClick={() => this.deleteUser()}>
+              <a href="#" onClick={() => this.deleteUser(res, obj)}>
                 {formatMessage({ id: 'app.common.delete' })}
               </a>
             </span>
@@ -67,44 +71,94 @@ class MenuUserGroup extends Component {
     //   }),
     // );
     this.setState({
-      newVisible: true,
+      modifyVisible: true,
+      groupTitle: 'New Alert User Group',
+      updateFlag: false,
     });
   };
 
   onClose = () => {
     this.setState({
-      newVisible: false,
+      modifyVisible: false,
     });
   };
 
   onSave = () => {
+    this.queryUserList();
     this.setState({
-      newVisible: false,
+      modifyVisible: false,
     });
   };
 
   updateUser = (res, obj) => {
-    console.log('res, obj=', res, obj);
-    this.props.dispatch(
-      routerRedux.push({
-        pathname: '/system-management/user-maintenance/modify-menu-user',
-        query: { roleId: obj.roleId },
-      }),
-    );
+    // this.props.dispatch(
+    //   routerRedux.push({
+    //     pathname: '/system-management/user-maintenance/modify-menu-user',
+    //     query: { roleId: obj.roleId },
+    //   }),
+    // );
+    const groupMenuInfo = {
+      roleId: obj.roleId,
+      roleName: obj.roleName,
+      roleDesc: obj.roleDesc,
+    };
+    this.setState({
+      modifyVisible: true,
+      updateFlag: true,
+      groupTitle: 'Modify Alert User Group',
+      groupMenuInfo,
+    });
+  };
+
+  deleteUser = (res, obj) => {
+    const groupMenuInfo = {
+      roleId: obj.roleId,
+    };
+    this.setState({
+      deleteVisible: true,
+      groupMenuInfo,
+    });
+  };
+
+  deleteConfirm = () => {
+    const { dispatch } = this.props;
+    const { groupMenuInfo } = this.state;
+    const params = {
+      operType: 'deleteById',
+      roleId: groupMenuInfo.roleId,
+    };
+    dispatch({
+      type: 'alertUserGroup/updateUserAlert',
+      payload: params,
+      callback: () => {
+        this.queryUserList();
+        this.setState({
+          deleteVisible: false,
+        });
+      },
+    });
+  };
+
+  deleteCancel = () => {
+    this.setState({
+      deleteVisible: false,
+    });
   };
 
   queryLog = () => {
     // const { dispatch } = this.props;
     // const params = {};
     // dispatch({
-    //   type: 'menuUserGroup/getMenuUserGroup',
+    //   type: 'menuUserGroup/getAlertUserGroup',
     //   payload: params,
     // });
     this.searchForm.current.validateFields((err, values) => {
-      console.log('values===', values);
+      if (err) {
+        return;
+      }
       const params = {
-        remark: values.remark,
-        userName: values.userName,
+        roleName: values.roleName,
+        roleDesc: values.roleDesc,
       };
       this.queryUserList(params);
     });
@@ -115,10 +169,10 @@ class MenuUserGroup extends Component {
    * @param {type} null
    * @return: undefined
    */
-  pageChange = pagination => {
+  pageChange = (pageNumber, pageSize) => {
     const page = {
-      pageNumber: pagination.current.toString(),
-      pageSize: pagination.pageSize.toString(),
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
     };
 
     this.setState(
@@ -138,57 +192,109 @@ class MenuUserGroup extends Component {
    */
   queryUserList = (
     param = {
-      remark: undefined,
-      userName: undefined,
+      roleName: undefined,
+      roleDesc: undefined,
     },
   ) => {
     const { dispatch } = this.props;
-    const { remark, userName } = param;
+    const { roleName, roleDesc } = param;
     const params = {
-      remark,
-      userName,
+      roleName,
+      roleDesc,
       pageNumber: this.state.page.pageNumber,
       pageSize: this.state.page.pageSize,
     };
     dispatch({
-      type: 'alertUserGroup/getMenuUserGroup',
+      type: 'alertUserGroup/getAlertUserGroup',
       payload: params,
     });
   };
 
+  onShowSizeChange = (current, pageSize) => {
+    const page = {
+      pageNumber: current.toString(),
+      pageSize: pageSize.toString(),
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
+  };
+
   render() {
     const { loading, menuUserGroup } = this.props;
-    console.log('menuUserGroup=', menuUserGroup);
-    const { columns, page, newVisible } = this.state;
-    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      },
-    };
+    const { groupTitle, deleteVisible, groupMenuInfo, updateFlag } = this.state;
+    const { columns, page, modifyVisible } = this.state;
     return (
       <PageHeaderWrapper>
         <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
-        <Drawer width={700} onClose={this.onClose} visible={newVisible}>
-          <NewUserGroup onCancel={this.onClose} onSave={this.onSave}></NewUserGroup>
+        <Drawer
+          // drawerStyle={
+          //   {
+          //     height: '200px',
+          //   }
+          // }
+          closable={false}
+          title={groupTitle}
+          width={700}
+          onClose={this.onClose}
+          visible={modifyVisible}
+        >
+          {modifyVisible && (
+            <NewUserGroup
+              onCancel={this.onClose}
+              onSave={this.onSave}
+              groupMenuInfo={groupMenuInfo}
+              updateFlag={updateFlag}
+            ></NewUserGroup>
+          )}
         </Drawer>
+        {/* delete */}
+        <Modal
+          title="CONFIRM"
+          visible={deleteVisible}
+          onOk={this.deleteConfirm}
+          onCancel={this.deleteCancel}
+          cancelText={formatMessage({ id: 'app.common.cancel' })}
+          okText={formatMessage({ id: 'app.common.save' })}
+        >
+          <span>Please confirm that you want to delete this record?</span>
+        </Modal>
         <div className={styles.content}>
           <div className={styles.tableTop}>
             <Button onClick={this.newUser} type="primary" className="btn_usual">
-              + New User
+              + Alert User Group
             </Button>
           </div>
           <Table
-            loading={loading['alertUserGroup/getMenuUserGroup']}
-            pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
-            rowSelection={rowSelection}
-            onChange={this.pageChange}
+            loading={loading['menuUserGroup/getAlertUserGroup']}
+            // pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
+            // rowSelection={rowSelection}
+            // onChange={this.pageChange}
             dataSource={menuUserGroup.items}
             columns={columns}
+            pagination={false}
           ></Table>
+          <Pagination
+            showSizeChanger
+            showTotal={() =>
+              `Page ${page.pageNumber.toString()} of ${Math.ceil(
+                menuUserGroup.totalCount / page.pageSize,
+              ).toString()}`
+            }
+            onShowSizeChange={this.onShowSizeChange}
+            onChange={this.pageChange}
+            total={menuUserGroup.totalCount && menuUserGroup.totalCount.toString()}
+            pageSize={page.pageSize && page.pageSize.toString()}
+          />
         </div>
       </PageHeaderWrapper>
     );
   }
 }
 
-export default MenuUserGroup;
+export default alertUserGroup;

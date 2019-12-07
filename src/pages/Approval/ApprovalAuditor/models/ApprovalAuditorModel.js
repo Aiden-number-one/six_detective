@@ -17,14 +17,10 @@ const ApprovalAuditorModel = {
     checkboxData: [],
   },
   effects: {
-    *saveConfigDatas({ payload, callback }, { call }) {
+    *saveConfigDatas({ payload }, { call }) {
       const response = yield call(saveConfig, { param: payload });
       if (response.bcjson.flag === '1') {
         message.success('保存成功');
-        callback({
-          pageNumber: '1',
-          pageSize: '10',
-        });
       } else {
         message.success('保存失败');
       }
@@ -51,7 +47,7 @@ const ApprovalAuditorModel = {
         }
       }
     },
-    *deployedModelListDatas({ payload, callback }, { call, put }) {
+    *deployedModelListDatas({ payload }, { call, put }) {
       const response = yield call(deployedModelList, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -59,7 +55,6 @@ const ApprovalAuditorModel = {
             type: 'deployedModelDatas',
             payload: response.bcjson.items,
           });
-          callback(response.bcjson.items[0].processDefinitionId);
         }
       }
     },

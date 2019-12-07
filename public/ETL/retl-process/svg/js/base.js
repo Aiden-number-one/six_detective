@@ -251,13 +251,13 @@ $("#nodeType").combobox({
 	data: [{
         "id": "S",
         "selected":true,
-        "text":"结果为真执行下一步"
+        "text":"execute the next step when the result is true"
     },{
         "id": "F",
-        "text":"结果为假执行下一步"
+        "text":"execute the next step when the result is false"
     },{
         "id": "N",
-        "text":"无条件执行下一步",
+        "text":"execute the next step",
     }]
 });
 	
@@ -483,7 +483,7 @@ function showTableList(){
 			}
 		},{
 			field : 'folderName',
-			title : '所属文件夹',
+			title : 'Folder',
 			width : '25%',
 			sortable : true,
 			formatter:function(value, row, index) {
@@ -491,7 +491,7 @@ function showTableList(){
 			}
 		},{
 			field : 'taskName',
-			title : '任务名称',
+			title : 'Task Name',
 			width : '25%',
 			sortable : true,
 			formatter:function(value, row, index) {
@@ -499,7 +499,7 @@ function showTableList(){
 			}
 		},{
 			field : 'taskTypeName',
-			title : '任务类型',
+			title : 'Task Type',
 			width : '25%',
 			sortable : true,
 		}] ],

@@ -2,7 +2,7 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-11-28 15:19:05
+ * @LastEditTime: 2019-12-06 16:12:30
  * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
@@ -59,7 +59,7 @@ class Login extends Component {
             return;
           }
           const item = response.bcjson.items[0];
-          localStorage.setItem('loginName', item.nickName);
+          localStorage.setItem('loginName', item.name);
           router.push('/');
         },
       });
@@ -91,13 +91,13 @@ class Login extends Component {
             this.loginForm = form;
           }}
         >
-          <div style={{ marginTop: 30 }}>
+          <div>
             <div
               style={{
-                margin: '0 2px',
-                textAlign: 'right',
+                marginBottom: 34,
+                textAlign: 'center',
                 color: '#10416c',
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: 600,
               }}
             >

@@ -104,6 +104,8 @@ const iframe = {
   '/data-management/perform-monitoring': 'index.html#perform-monitoring',
   // 执行日志
   '/data-management/log-query': 'index.html#log-query',
+  // 数据源监控
+  '/data-management/data-enquiry': 'index.html#datasource-change',
 };
 
 // const components = {
