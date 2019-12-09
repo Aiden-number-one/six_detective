@@ -224,7 +224,7 @@ class MenuUserGroup extends Component {
   };
 
   onShowSizeChange = (current, pageSize) => {
-    console.log(current, pageSize);
+    console.log('current, pageSize===', current, pageSize);
     // const { pageNumber } = this.state;
     const page = {
       pageNumber: current.toString(),
