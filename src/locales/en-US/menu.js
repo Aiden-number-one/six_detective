@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
  * @LastEditors: iron
- * @LastEditTime: 2019-12-03 14:17:57
+ * @LastEditTime: 2019-12-09 17:16:19
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
@@ -12,6 +12,7 @@ export default {
   'menu.dataImport.lop': 'Lop Data Import',
   'menu.dataImport.market': 'Market Data Import',
   'menu.alertCenter': 'Alert Center',
+  'menu.alertCenter.informationCenter': 'Information Center',
   'menu.dataManagement': 'DATA MANAGEMENT',
   'menu.dataManagement.dashboard': 'Dashboard',
   'menu.dataManagement.dataProcessing': 'Data Processing',
@@ -56,6 +57,7 @@ export default {
   'menu.systemManagement.scheduling': 'Scheduling Plan',
   'menu.systemManagement.jobMonitor': 'Job Monitor',
   'menu.alertManagement': 'ALERT MANAGEMENT',
+  'menu.alertManagement.alertCenter': 'ALERT CENTER',
   'menu.alertManagement.formItem': 'FormItem Reference',
   'menu.alertManagement.Stylespecification': 'Alert Specification',
   'menu.welcome': 'Welcome',

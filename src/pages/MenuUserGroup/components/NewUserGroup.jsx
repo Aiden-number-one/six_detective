@@ -95,15 +95,19 @@ class NewUser extends Component {
       if (err) {
         return;
       }
-      if (selectedKeys <= 0) {
+      if (selectedKeys.length <= 0) {
         message.warning('Please checked Authorizing access to menus');
         return;
       }
+      const newSelectedKeys = selectedKeys.map(element => element.substring(0, 3));
+      let selectedKeysArray = Object.assign([], selectedKeys);
+      newSelectedKeys.forEach(element => selectedKeysArray.push(element));
+      selectedKeysArray = [...new Set(selectedKeysArray)];
       if (!updateFlag) {
         const param = {
           roleName: values.roleName,
           roleDesc: values.roleDesc,
-          menuIds: selectedKeys.join(','),
+          menuIds: selectedKeysArray.join(','),
         };
         dispatch({
           type: 'menuUserGroup/newUserGroup',
@@ -124,7 +128,7 @@ class NewUser extends Component {
           roleId: groupMenuInfo.roleId,
           roleName: values.roleName,
           roleDesc: values.roleDesc,
-          menuIds: selectedKeys.join(','),
+          menuIds: selectedKeysArray.join(','),
         };
         dispatch({
           type: 'menuUserGroup/updateUserGroup',

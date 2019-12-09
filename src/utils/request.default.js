@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
  * @LastEditors: iron
- * @LastEditTime: 2019-12-05 11:17:53
+ * @LastEditTime: 2019-12-07 10:19:04
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -18,24 +18,8 @@ import { getRandowNVPS, isProOrDev } from './utils';
 
 const API_PREFFIX = '/api';
 const VERSION = 'v2.0';
-// const VERSION = 'v4.0';
 const BUSINESS_PREFFIX = 'bayconnect.superlop';
-// const BUSINESS_PREFFIX = 'kingdom.retl';
-const DEFAULT_PARAM = { bcLangType: 'ZHCN' };
-
-export const codeMessage = {
-  400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
-  401: '用户没有权限（令牌、用户名、密码错误）。',
-  403: '用户得到授权，但是访问是被禁止的。',
-  404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
-  406: '请求的格式不可得。',
-  410: '请求的资源被永久删除，且不会再得到的。',
-  422: '当创建一个对象时，发生一个验证错误。',
-  500: '服务器发生错误，请检查服务器。',
-  502: '网关错误。',
-  503: '服务不可用，服务器暂时过载或维护。',
-  504: '网关超时。',
-};
+const DEFAULT_PARAM = { bcLangType: 'ENUS' };
 
 export function setReqHeaders(NVPS) {
   const rid = `RID${uuidv1().replace(/-/g, '')}`;
@@ -63,7 +47,7 @@ export function errorHandler(error) {
 
   if (response && response.status) {
     const { status, statusText, url } = response;
-    const errorText = codeMessage[status] || statusText;
+    const errorText = statusText;
     notification.error({
       message: errorText,
       description: `request error ${status}: ${/[^/]*\.json/.exec(url)}`,
@@ -135,7 +119,7 @@ request.interceptors.response.use(async (response, opts) => {
     return result;
   }
 
-  return +flag === 1 ? { items, others } : { msg: msg || 'response data error' };
+  return +flag === 1 ? { items, ...others } : { err: msg || 'response data error' };
 });
 
 export default url => async (params = {}) => request(url, { data: params });
