@@ -15,6 +15,10 @@ export default [
     component: './Sheet/Sheet',
   },
   {
+    path: '/add-dataset',
+    component: './AddDataSet/AddDataSet',
+  },
+  {
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],

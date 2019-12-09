@@ -11,12 +11,12 @@ import NewUserGroup from './components/NewUserGroup';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
-@connect(({ menuUserGroup, loading }) => ({
+@connect(({ alertUserGroup, loading }) => ({
   loading: loading.effects,
-  menuUserGroup: menuUserGroup.data,
-  updateGroup: menuUserGroup.updateUserGroup,
+  menuUserGroup: alertUserGroup.data,
+  updateGroup: alertUserGroup.updateUserGroup,
 }))
-class MenuUserGroup extends Component {
+class alertUserGroup extends Component {
   searchForm = React.createRef();
 
   constructor() {
@@ -84,14 +84,25 @@ class MenuUserGroup extends Component {
   };
 
   onSave = () => {
-    this.queryUserList();
     this.setState({
       modifyVisible: false,
     });
+    const { pageSize } = this.state.page;
+    const page = {
+      pageNumber: 1,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   updateUser = (res, obj) => {
-    console.log('res, obj=', res, obj);
     // this.props.dispatch(
     //   routerRedux.push({
     //     pathname: '/system-management/user-maintenance/modify-menu-user',
@@ -112,7 +123,6 @@ class MenuUserGroup extends Component {
   };
 
   deleteUser = (res, obj) => {
-    console.log('delete====', obj);
     const groupMenuInfo = {
       roleId: obj.roleId,
     };
@@ -130,7 +140,7 @@ class MenuUserGroup extends Component {
       roleId: groupMenuInfo.roleId,
     };
     dispatch({
-      type: 'menuUserGroup/updateUserGroup',
+      type: 'alertUserGroup/updateUserAlert',
       payload: params,
       callback: () => {
         this.queryUserList();
@@ -151,11 +161,13 @@ class MenuUserGroup extends Component {
     // const { dispatch } = this.props;
     // const params = {};
     // dispatch({
-    //   type: 'menuUserGroup/getMenuUserGroup',
+    //   type: 'menuUserGroup/getAlertUserGroup',
     //   payload: params,
     // });
     this.searchForm.current.validateFields((err, values) => {
-      console.log('values===', values);
+      if (err) {
+        return;
+      }
       const params = {
         roleName: values.roleName,
         roleDesc: values.roleDesc,
@@ -205,37 +217,39 @@ class MenuUserGroup extends Component {
       pageSize: this.state.page.pageSize,
     };
     dispatch({
-      type: 'menuUserGroup/getMenuUserGroup',
+      type: 'alertUserGroup/getAlertUserGroup',
       payload: params,
     });
   };
 
   onShowSizeChange = (current, pageSize) => {
-    console.log(current, pageSize);
-    const { pageNumber } = this.state;
     const page = {
-      pageNumber,
+      pageNumber: current.toString(),
       pageSize: pageSize.toString(),
     };
-    this.setState({
-      page,
-    });
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   render() {
     const { loading, menuUserGroup } = this.props;
     const { groupTitle, deleteVisible, groupMenuInfo, updateFlag } = this.state;
-    console.log('menuUserGroup=', menuUserGroup);
     const { columns, page, modifyVisible } = this.state;
-    // const rowSelection = {
-    //   onChange: (selectedRowKeys, selectedRows) => {
-    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    //   },
-    // };
     return (
       <PageHeaderWrapper>
         <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
         <Drawer
+          // drawerStyle={
+          //   {
+          //     height: '200px',
+          //   }
+          // }
           closable={false}
           title={groupTitle}
           width={700}
@@ -258,7 +272,7 @@ class MenuUserGroup extends Component {
           onOk={this.deleteConfirm}
           onCancel={this.deleteCancel}
           cancelText={formatMessage({ id: 'app.common.cancel' })}
-          okText={formatMessage({ id: 'app.common.save' })}
+          okText={formatMessage({ id: 'app.common.confirm' })}
         >
           <span>Please confirm that you want to delete this record?</span>
         </Modal>
@@ -269,7 +283,7 @@ class MenuUserGroup extends Component {
             </Button>
           </div>
           <Table
-            loading={loading['menuUserGroup/getMenuUserGroup']}
+            loading={loading['menuUserGroup/getAlertUserGroup']}
             // pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
             // rowSelection={rowSelection}
             // onChange={this.pageChange}
@@ -279,11 +293,16 @@ class MenuUserGroup extends Component {
           ></Table>
           <Pagination
             showSizeChanger
-            showTotal={(total, range) => `Page ${range[0]} of ${total}`}
+            current={page.pageNumber}
+            showTotal={() =>
+              `Page ${page.pageNumber.toString()} of ${Math.ceil(
+                menuUserGroup.totalCount / page.pageSize,
+              ).toString()}`
+            }
             onShowSizeChange={this.onShowSizeChange}
             onChange={this.pageChange}
-            total={menuUserGroup.totalCount}
-            pageSize={page.pageSize}
+            total={menuUserGroup.totalCount && menuUserGroup.totalCount.toString()}
+            pageSize={page.pageSize && page.pageSize.toString()}
           />
         </div>
       </PageHeaderWrapper>
@@ -291,4 +310,4 @@ class MenuUserGroup extends Component {
   }
 }
 
-export default MenuUserGroup;
+export default alertUserGroup;

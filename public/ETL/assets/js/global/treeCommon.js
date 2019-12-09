@@ -134,10 +134,10 @@ define((require, exports, module) => {
             }
             $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_folder_menu_modify", "v4.0", params, data => {
                 if (data.bcjson.flag == "1") {
-                    let items = data.bcjson.items;
-                    let folderId = items[0].folderId;
-                    $(`${this.tree} li[id=${obj.id}]`).attr("folderId", folderId);
-                    self.getTask("", true, true, folderId);
+                    // let items = data.bcjson.items;
+                    // let folderId = items[0].folderId;
+                    $(`${this.tree} li[id=${obj.id}]`).attr("folderId", params.folderId);
+                    self.getTask("", true, true, params.folderId);
                     App.treeEllipsis(`${this.tree}`);
                     toastr.success(data.bcjson.msg);
                 } else {
@@ -160,8 +160,8 @@ define((require, exports, module) => {
 
             $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_folder_menu_modify", "v4.0", params, data => {
                 if (data.bcjson.flag == "1") {
-                    let items = data.bcjson.items;
-                    let folderId = items[0].folderId;
+                    // let items = data.bcjson.items;
+                    // let folderId = items[0].folderId;
                     $(`${this.tree} li[id=${obj.parent}]>a`).click(); // 触发父级菜单查询
                     self.getTask("", false, true);
                     App.treeEllipsis(`${this.tree}`);

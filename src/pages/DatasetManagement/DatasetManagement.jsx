@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import { Icon, Button, Table, Input } from 'antd';
+import router from 'umi/router';
 import ClassifyTree from '@/components/ClassifyTree';
 import styles from './DatasetManagement.less';
 
@@ -147,7 +148,12 @@ export default class DatasetManagement extends PureComponent {
                   style={{ width: 120 }}
                   type="primary"
                   onClick={() => {
-                    this.updMetadataOrColumn('some', 'updMetadata');
+                    router.push({
+                      pathname: '/add-dataset',
+                      query: {
+                        // connectionId: connectionId,
+                      },
+                    });
                   }}
                 >
                   Creat DataSet
