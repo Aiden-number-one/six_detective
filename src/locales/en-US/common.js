@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 17:50:23
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 17:07:39
+ * @LastEditTime: 2019-12-09 13:38:14
  */
 export default {
   'app.common.userId': 'User ID',
@@ -15,8 +15,9 @@ export default {
   'app.common.newUser': 'New User',
   'app.common.modify': 'Modify',
   'app.common.delete': 'Delete',
-  'app.common.cancel': 'Cancel',
-  'app.common.save': 'Conform',
+  'app.common.cancel': 'CANCEL',
+  'app.common.save': 'SAVE',
+  'app.common.confirm': 'CONFIRM',
   'app.common.dateFrom': 'Date from',
   'app.common.dateTo': 'Date to',
   'app.common.number': 'No.',

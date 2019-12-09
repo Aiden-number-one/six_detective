@@ -29,7 +29,7 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input Name of Menu User Group',
+                  message: 'Please input Name of Alert User Group',
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.roleName,
@@ -44,7 +44,7 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input Remark of Menu User Group',
+                  message: 'Please input Remark of Alert User Group',
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.roleDesc,

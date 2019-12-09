@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-07 13:24:53
+ * @LastEditTime: 2019-12-09 15:59:24
  */
 
 import React, { Component } from 'react';
@@ -99,8 +99,8 @@ class UserManagement extends Component {
       },
     ],
     page: {
-      pageNumber: '1',
-      pageSize: '10',
+      pageNumber: 1,
+      pageSize: 10,
     },
   };
 
@@ -137,8 +137,9 @@ class UserManagement extends Component {
     const params = {
       userId,
       userName,
-      pageNumber: this.state.page.pageNumber,
-      pageSize: this.state.page.pageSize,
+      operType: 'queryAllList',
+      pageNumber: this.state.page.pageNumber.toString(),
+      pageSize: this.state.page.pageSize.toString(),
     };
     dispatch({
       type: 'userManagement/userManagemetDatas',
@@ -193,7 +194,19 @@ class UserManagement extends Component {
     this.setState({
       visible: false,
     });
-    this.queryUserList();
+    const { pageSize } = this.state.page;
+    const page = {
+      pageNumber: 1,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   addCancel = () => {
@@ -449,8 +462,8 @@ class UserManagement extends Component {
    */
   pageChange = (pageNumber, pageSize) => {
     const page = {
-      pageNumber: pageNumber.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber,
+      pageSize,
     };
 
     this.setState(
@@ -465,8 +478,8 @@ class UserManagement extends Component {
 
   onShowSizeChange = (current, pageSize) => {
     const page = {
-      pageNumber: current.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber: current,
+      pageSize,
     };
     this.setState(
       {
@@ -551,7 +564,7 @@ class UserManagement extends Component {
               onOk={this.deleteConfirm}
               onCancel={this.deleteCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
+              okText={formatMessage({ id: 'app.common.confirm' })}
             >
               <span>Please confirm that you want to delete this record?</span>
             </Modal>
@@ -562,7 +575,7 @@ class UserManagement extends Component {
               onOk={this.closingConfirm}
               onCancel={this.closingCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
+              okText={formatMessage({ id: 'app.common.confirm' })}
             >
               <span>是否销户？</span>
             </Modal>
@@ -573,7 +586,7 @@ class UserManagement extends Component {
               onOk={this.updatePasswordConfirm}
               onCancel={this.updatePasswordCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
+              okText={formatMessage({ id: 'app.common.confirm' })}
             >
               <NewPasswordForm ref={this.passwordFormRef}></NewPasswordForm>
             </Modal>
@@ -605,6 +618,7 @@ class UserManagement extends Component {
               pagination={false}
             ></Table>
             <Pagination
+              current={page.pageNumber}
               showSizeChanger
               showTotal={() =>
                 `Page ${page.pageNumber} of ${Math.ceil(
