@@ -95,7 +95,7 @@ class NewUser extends Component {
       if (err) {
         return;
       }
-      if (selectedKeys <= 0) {
+      if (selectedKeys.length <= 0) {
         message.warning('Please checked Authorizing access to menus');
         return;
       }

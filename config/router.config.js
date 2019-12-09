@@ -14,10 +14,10 @@ export default [
     path: '/sheet',
     component: './Sheet/Sheet',
   },
-  {
-    path: '/add-dataset',
-    component: './AddDataSet/AddDataSet',
-  },
+  // {
+  //   path: '/add-dataset',
+  //   component: './AddDataSet/AddDataSet',
+  // },
   {
     path: '/',
     component: '../layouts/BasicLayout',
