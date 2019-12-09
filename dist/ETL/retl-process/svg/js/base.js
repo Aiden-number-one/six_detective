@@ -251,13 +251,13 @@ $("#nodeType").combobox({
 	data: [{
         "id": "S",
         "selected":true,
-        "text":"结果为真执行下一步"
+        "text":"execute the next step when the result is true"
     },{
         "id": "F",
-        "text":"结果为假执行下一步"
+        "text":"execute the next step when the result is false"
     },{
         "id": "N",
-        "text":"无条件执行下一步",
+        "text":"execute the next step",
     }]
 });
 	

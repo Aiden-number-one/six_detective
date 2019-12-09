@@ -64,7 +64,7 @@ class FormUser extends Component {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input password',
+                    message: `Please input ${formatMessage({ id: 'app.common.password' })}`,
                   },
                 ],
               })(

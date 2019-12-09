@@ -15,20 +15,14 @@ export default class SearchForm extends Component {
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'app.common.userId' })}>
               {getFieldDecorator('userId', {})(
-                <Input
-                  className={styles.inputvalue}
-                  placeholder={`Please Input ${formatMessage({ id: 'app.common.userId' })}`}
-                />,
+                <Input className={styles.inputvalue} placeholder="Please input" />,
               )}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'app.common.username' })}>
               {getFieldDecorator('userName', {})(
-                <Input
-                  className={styles.inputvalue}
-                  placeholder={`Please Input ${formatMessage({ id: 'app.common.username' })}`}
-                />,
+                <Input className={styles.inputvalue} placeholder="Please input" />,
               )}
             </Form.Item>
           </Col>

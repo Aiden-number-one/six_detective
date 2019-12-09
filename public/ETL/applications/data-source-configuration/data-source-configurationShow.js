@@ -300,11 +300,11 @@ define(function (require, exports, module) {
     };
       // 下载文件
       showContent.listImport3 = (params, i) => {
-        let url = "/retl/rest/admin/v4.0/bayconnect.superlop.file_download.json?p=" + encodeURI(JSON.stringify(params));
+        let url = "/superlop/restv2/admin/v2.0/bayconnect.superlop.file_download.json?p=" + encodeURI(JSON.stringify(params));
         try {
             let a = document.createElement("a");
             a.href = url;
-            a.download = url;
+            a.download = true;
             a.click();
             App.unblockUI();
         } catch (e) {

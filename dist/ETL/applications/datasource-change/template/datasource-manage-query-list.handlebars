@@ -1,0 +1,17 @@
+ {{#if flag}}
+<tr>
+    <td colspan="7" class="text-center">No Data</td>
+</tr>
+{{else}} {{#each this}}
+<tr>
+    <td class="t-c">{{ROWNUM_}}</td>
+    {{!-- <td class="t-c"> {{monitorId}} </td> --}}
+    <td class="t-c"> {{dateTimeFormatHelper createTime}} </td>
+    <td class="t-c"><span style="color: {{statusColorFormat checkFlag}}">●</span> {{#equal checkFlag "1"}}Success{{else}}Failed{{/equal}}</td>
+    <td class="t-l ellipsis" style="max-width: 200px;">
+        <a href="/index.html#common-page" data-toggle="link" data-linkto="single-database-change-info" title="{{checkMsg}}" data-params='{"monitorId":"{{monitorId}}","createTime":"{{createTime}}"}'
+            data-type="none">{{checkMsg}}</a>
+    </td>
+</tr>
+
+{{/each}} {{/if}}
