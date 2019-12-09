@@ -1,10 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
+import { setLocale } from 'umi/locale';
 import SpreadSheet from '@/components/SpreadSheet';
 import CustomSearchArea from './components/CustomSearchArea/index';
 import ToolBar from './components/ToolBar/index';
-import RigthSideBar from './components/RigthSideBar/index';
+import RigthSideBar from './components/SideBar/RigthSideBar';
+import LeftSideBar from './components/SideBar/LeftSideBar';
 import styles from './ReportDesigner.less';
 
 @connect(({ reportDesigner }) => ({ reportDesigner }))
@@ -13,6 +15,10 @@ export default class ReportDesigner extends PureComponent {
   state = {
     display: false,
   };
+
+  componentWillMount() {
+    setLocale('en-US');
+  }
 
   componentDidMount() {
     const { initSheet } = this.props;
@@ -66,7 +72,9 @@ export default class ReportDesigner extends PureComponent {
               <SpreadSheet />
             </div>
           </div>
-          <div className={classNames(styles.left, styles.col)}></div>
+          <div className={classNames(styles.left, styles.col)}>
+            <LeftSideBar />
+          </div>
           <div className={classNames(styles.right, styles.col, styles.rigthSideBar)}>
             <RigthSideBar />
           </div>

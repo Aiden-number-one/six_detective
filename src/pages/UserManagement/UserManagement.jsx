@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-07 13:24:53
+ * @LastEditTime: 2019-12-09 13:39:04
  */
 
 import React, { Component } from 'react';
@@ -137,6 +137,7 @@ class UserManagement extends Component {
     const params = {
       userId,
       userName,
+      operType: 'queryAllList',
       pageNumber: this.state.page.pageNumber,
       pageSize: this.state.page.pageSize,
     };
@@ -193,7 +194,19 @@ class UserManagement extends Component {
     this.setState({
       visible: false,
     });
-    this.queryUserList();
+    const { pageSize } = this.state.page;
+    const page = {
+      pageNumber: 1,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   addCancel = () => {
@@ -573,7 +586,7 @@ class UserManagement extends Component {
               onOk={this.updatePasswordConfirm}
               onCancel={this.updatePasswordCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
+              okText={formatMessage({ id: 'app.common.confirm' })}
             >
               <NewPasswordForm ref={this.passwordFormRef}></NewPasswordForm>
             </Modal>
@@ -605,6 +618,7 @@ class UserManagement extends Component {
               pagination={false}
             ></Table>
             <Pagination
+              current={page.pageNumber}
               showSizeChanger
               showTotal={() =>
                 `Page ${page.pageNumber} of ${Math.ceil(

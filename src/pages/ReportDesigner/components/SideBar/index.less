@@ -1,0 +1,100 @@
+.sideBar {
+  &.layout {
+    height: 100%;
+  }
+  .header {
+    height: 35px;
+    background-color: #f6f8fb;
+    border-bottom: 1px #d6e2ec solid;
+    .title {
+      float: left;
+      width: 270px;
+      height: 100%;
+      padding-left: 8px;
+      color: #10416c;
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 35px;
+    }
+    .icon {
+      float: left;
+      width: 30px;
+      height: 100%;
+      border-left: 1px #d6e2ec solid;
+    }
+  }
+  .content {
+    background-color: #f6f8fb;
+    :global {
+      .ant-collapse-header {
+        height: 30px;
+        padding: 0 0 0 6px;
+        font-size: 12px !important;
+        line-height: 30px;
+        background-color: #e7edf2;
+        .ant-collapse-arrow {
+          right: 6px;
+        }
+      }
+      .ant-collapse-content-box {
+        padding: 0 6px 0 6px;
+        background-color: #f6f8fb;
+      }
+      .ant-form {
+        label {
+          font-size: 12px;
+        }
+        .ant-form-item {
+          margin-bottom: 4px;
+        }
+        .ant-form-item-control {
+          line-height: 30px;
+        }
+        .ant-form-item-label {
+          line-height: 30px;
+        }
+        .ant-input {
+          height: 25px;
+          border-radius: 0;
+        }
+        .ant-select-selection {
+          height: 25px;
+          border-radius: 0;
+        }
+        .ant-select-selection__rendered {
+          line-height: 25px;
+        }
+        .ant-checkbox + span {
+          padding-right: 0;
+          padding-left: 4px;
+        }
+        .ant-radio-group.ant-radio-group-outline {
+          width: 100%;
+        }
+        .ant-radio-button-wrapper {
+          width: 33.333333%;
+          padding: 0;
+          text-align: center;
+          border-radius: 0;
+        }
+      }
+    }
+  }
+  .sider {
+    background-color: #f6f8fb !important;
+    border-left: 1px #d6e2ec solid;
+  }
+  &.left {
+    background-color: #f6f8fb;
+    .datasetSelect {
+      .select {
+        float: left;
+        width: 278px;
+      }
+      .icon {
+        float: left;
+        width: 22px;
+      }
+    }
+  }
+}

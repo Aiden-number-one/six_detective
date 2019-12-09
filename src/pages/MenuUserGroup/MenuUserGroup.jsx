@@ -85,10 +85,22 @@ class MenuUserGroup extends Component {
   };
 
   onSave = () => {
-    this.queryUserList();
     this.setState({
       modifyVisible: false,
     });
+    const { pageSize } = this.state.page;
+    const page = {
+      pageNumber: 1,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   updateUser = (res, obj) => {
@@ -212,7 +224,7 @@ class MenuUserGroup extends Component {
   };
 
   onShowSizeChange = (current, pageSize) => {
-    console.log(current, pageSize);
+    console.log('current, pageSize===', current, pageSize);
     // const { pageNumber } = this.state;
     const page = {
       pageNumber: current.toString(),
@@ -264,7 +276,7 @@ class MenuUserGroup extends Component {
           onOk={this.deleteConfirm}
           onCancel={this.deleteCancel}
           cancelText={formatMessage({ id: 'app.common.cancel' })}
-          okText={formatMessage({ id: 'app.common.save' })}
+          okText={formatMessage({ id: 'app.common.confirm' })}
         >
           <span>Please confirm that you want to delete this record?</span>
         </Modal>
@@ -285,6 +297,7 @@ class MenuUserGroup extends Component {
           ></Table>
           <Pagination
             showSizeChanger
+            current={page.pageNumber}
             showTotal={() =>
               `Page ${page.pageNumber} of ${Math.ceil(menuUserGroup.totalCount / page.pageSize)}`
             }
