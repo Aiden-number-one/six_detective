@@ -663,8 +663,8 @@ define(function (require, exports, module) {
                     connection_id:showContent.connect_id,
                     tableId:""
                 }).then(data=>showContent.listImport2({
-                    fileClass: "ZIP",
-                    filePath: data.bcjson.items[0].filePatch
+                    fileClass: data.bcjson.items[0].fileClass,
+                    filePath: data.bcjson.items[0].filePath
                 }).then(data=>showContent.listImport3({
                     fileClass: "ZIP",
                     downloadToken: data.bcjson.items[0].downloadToken,
