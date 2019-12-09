@@ -2,8 +2,11 @@ import React from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Drawer, Form, DatePicker, Input, Select, Upload, Icon, Button } from 'antd';
 import { SUBMISSION_REPORT, yesterday, dateFormat } from './constants';
+import styles from '../index.less';
 
 const { Option } = Select;
+
+const isLt5M = size => size / 1024 / 1024 < 5;
 
 function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
   const { getFieldDecorator, validateFields } = form;
@@ -11,8 +14,14 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
   function handleCommit() {
     validateFields((err, values) => {
       if (!err) {
-        const tradeDate = values.tradeDate.format('YYYYMMDD');
-        handleUpload({ ...values, tradeDate });
+        const { tradeDate, uploadFiles, ...rest } = values;
+        const { bcjson } = (uploadFiles && uploadFiles.length && uploadFiles[0].response) || {};
+        const { flag, items = {} } = bcjson || {};
+
+        if (flag === '1' && items) {
+          const filename = items.relativeUrl;
+          handleUpload({ tradeDate: tradeDate.format('YYYYMMDD'), filename, ...rest });
+        }
       }
     });
   }
@@ -21,6 +30,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
     <Drawer
       title={<FormattedMessage id="data-import.lop.manual-import-lop-report" />}
       width={320}
+      bodyStyle={{ paddingBottom: 80 }}
       visible={visible}
       onClose={handleCancel}
     >
@@ -75,17 +85,40 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
-          {getFieldDecorator('upload', {
+          {getFieldDecorator('uploadFiles', {
+            rules: [
+              {
+                validator: (rule, value, callback) => {
+                  if (!value) {
+                    return callback('Please select a file!');
+                  }
+                  if (value && value.length) {
+                    const file = value[0];
+                    if (!isLt5M(file.size)) {
+                      return callback('file size must less than 5M');
+                    }
+                    if (file.error) {
+                      return callback(file.error.message);
+                    }
+                  }
+                  return callback();
+                },
+              },
+            ],
             valuePropName: 'fileList',
             getValueFromEvent: e => {
-              console.log('Upload event:', e);
               if (Array.isArray(e)) {
                 return e;
               }
-              return e && e.fileList;
+              // just show one recent file
+              return e && e.fileList.slice(-1);
             },
           })(
-            <Upload>
+            <Upload
+              accept=".xlsm,.xls,.xlsx,.pdf,application/msexcel"
+              action="/upload1"
+              beforeUpload={file => isLt5M(file.size)}
+            >
               <Button>
                 <Icon type="upload" />
                 <FormattedMessage id="data-import.lop.browse" />
@@ -93,13 +126,14 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             </Upload>,
           )}
         </Form.Item>
-        <Form.Item>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button type="primary" onClick={handleCommit}>
-            Upload
-          </Button>
-        </Form.Item>
+        {/* <Form.Item></Form.Item> */}
       </Form>
+      <div className={styles['bottom-btns']}>
+        <Button onClick={handleCancel}>Cancel</Button>
+        <Button type="primary" onClick={handleCommit}>
+          Commit
+        </Button>
+      </div>
     </Drawer>
   );
 }

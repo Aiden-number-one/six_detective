@@ -11,6 +11,7 @@ import styles from '../index.less';
 export function LopLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({});
+
   useEffect(() => {
     dispatch({
       type: 'lop/fetch',
@@ -19,17 +20,7 @@ export function LopLog({ dispatch, loading, logs, total }) {
 
   function handleSearch(params) {
     setSearchParams(params);
-    console.log(params);
-
     dispatch({ type: 'lop/reload', payload: params });
-  }
-
-  function handleManual(params) {
-    dispatch({ type: 'lop/importByManual', payload: params });
-  }
-
-  function handleAuto() {
-    dispatch({ type: 'lop/importByAuto' });
   }
 
   function handlePageChange(page, pageSize) {
@@ -43,12 +34,16 @@ export function LopLog({ dispatch, loading, logs, total }) {
         <LopLogManualModal
           visible={visible}
           handleCancel={() => setVisible(false)}
-          handleUpload={handleManual}
+          handleUpload={params => dispatch({ type: 'lop/importByManual', payload: params })}
         />
         <Row className={styles['btn-group']}>
-          <Button type="primary" onClick={handleAuto} loading={loading['lop/importByAuto']}>
+          {/* <Button
+            type="primary"
+            onClick={() => dispatch({ type: 'lop/importByAuto' })}
+            loading={loading['lop/importByAuto']}
+          >
             <FormattedMessage id="data-import.lop.auto-import" />
-          </Button>
+          </Button> */}
           <Button type="primary" className={styles['no-margin']} onClick={() => setVisible(true)}>
             <FormattedMessage id="data-import.lop.manual-import" />
           </Button>

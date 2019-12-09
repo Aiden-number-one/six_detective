@@ -12,19 +12,31 @@ const { Column } = Table;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
-function AlertBtn({ selectedKeys }) {
+function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
   return (
     <Row className={styles.btns}>
       <Col span={18}>
-        <Button type="primary" disabled={!selectedKeys.length}>
+        <Button
+          type="primary"
+          disabled={!selectedKeys.length}
+          onClick={() =>
+            Modal.confirm({
+              title: 'Confirm',
+              content: 'Are you sure claim these alerts?',
+              okText: 'Sure',
+              cancelText: 'Cancel',
+              onOk: () => claimAlert(selectedKeys),
+            })
+          }
+        >
           <IconFont type="iconqizhi" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button disabled={!selectedKeys.length}>
+        <Button disabled={!selectedKeys.length} onClick={closeAlert}>
           <IconFont type="iconic_circle_close" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.close" />
         </Button>
-        <Button disabled={!selectedKeys.length}>
+        <Button disabled={!selectedKeys.length} onClick={exportAlert}>
           <IconFont type="iconbatch-export" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </Button>
@@ -52,12 +64,34 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
     if (alerts && alerts.length > 0) {
       const [firstAlert] = alerts;
       getAlert(firstAlert);
+      // dispatch({
+      //   type: 'alertCenter/fetchAlertItems',
+      //   payload: {
+      //     alertType: firstAlert.alertType,
+      //   },
+      // });
     }
   }, [alerts]);
 
+  // // update alertItems
+  // useEffect(() => {
+  //   if (alertItems.length > 0) {
+  //     getAlertItems(alertItems);
+  //   }
+  // }, [alertItems]);
+
+  function claimAlert(alertIds) {
+    dispatch({
+      type: 'alertCenter/claim',
+      payload: {
+        alertIds,
+      },
+    });
+  }
+
   return (
     <div className={styles.list}>
-      <AlertBtn selectedKeys={selectedKeys} />
+      <AlertBtn selectedKeys={selectedKeys} claimAlert={claimAlert} />
       <Table
         border
         dataSource={alerts}
@@ -71,6 +105,9 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         pagination={{
           total,
           showSizeChanger: true,
+          showTotal(count) {
+            return `Total ${count} items`;
+          },
           onChange(page, pageSize) {
             dispatch({
               type: 'alertCenter/fetch',
@@ -83,7 +120,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           onShowSizeChange(page, pageSize) {
             dispatch({
               type: 'alertCenter/fetch',
-              params: {
+              payload: {
                 page,
                 pageSize,
               },
@@ -93,6 +130,12 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         onRow={record => ({
           onClick() {
             getAlert(record);
+            // dispatch({
+            //   type: 'alertCenter/fetchAlertItems',
+            //   payload: {
+            //     alertType: record.alertType,
+            //   },
+            // });
           },
         })}
       >
@@ -151,14 +194,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
                     content: 'Are you sure claim this alert?',
                     okText: 'Sure',
                     cancelText: 'Cancel',
-                    onOk() {
-                      dispatch({
-                        type: 'alertCenter/claim',
-                        params: {
-                          alertIds: record.alertId,
-                        },
-                      });
-                    },
+                    onOk: () => claimAlert([record.alertId]),
                   })
                 }
               />
@@ -166,11 +202,6 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
                 type="iconic_circle_close"
                 className={styles.icon}
                 title={formatMessage({ id: 'alert-center.close' })}
-              />
-              <IconFont
-                type="iconbatch-export"
-                className={styles.icon}
-                title={formatMessage({ id: 'alert-center.export' })}
               />
             </Row>
           )}
@@ -180,9 +211,10 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
   );
 }
 
-export default connect(({ loading, alertCenter: { alerts, page, total } }) => ({
+export default connect(({ loading, alertCenter: { alerts, alertItems, page, total } }) => ({
   alerts,
   page,
   total,
+  alertItems,
   loading: loading.effects,
 }))(AlertList);

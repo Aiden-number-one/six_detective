@@ -4,8 +4,9 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-07 20:22:38
+ * @LastEditTime: 2019-12-09 16:06:48
  */
+import { message } from 'antd';
 import { request } from '@/utils/request.default';
 
 // import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from './AlertList';
@@ -23,7 +24,7 @@ export async function getAlertItems({ alertType }) {
 }
 
 export async function claimAlert({ alertIds }) {
-  return request('set_alert_claim', { data: { alertIds } });
+  return request('set_alert_claim', { data: { alertIds: alertIds.join(',') } });
 }
 
 export default {
@@ -32,6 +33,7 @@ export default {
     alerts: [],
     alertItems: [],
     total: 0,
+    alertOwner: '',
   },
   reducers: {
     save(state, { payload }) {
@@ -43,9 +45,20 @@ export default {
         total,
       };
     },
-    claimOk(state) {
+    claimOk(state, { payload }) {
+      const owner = localStorage.getItem('loginName') || '';
+      const { alertIds } = payload;
+      const alerts = state.alerts.map(alert => {
+        if (alertIds.includes(alert.alertId)) {
+          return { ...alert, owner };
+        }
+        return alert;
+      });
+      message.success('claim success');
+
       return {
         ...state,
+        alerts,
       };
     },
   },
@@ -85,13 +98,16 @@ export default {
       });
     },
     *claim({ payload }, { call, put }) {
-      const { alertIds } = payload || {};
+      const { alertIds } = payload || [];
       const { err } = yield call(claimAlert, { alertIds });
       if (err) {
         throw new Error(err);
       }
       yield put({
         type: 'claimOk',
+        payload: {
+          alertIds,
+        },
       });
     },
   },

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
  * @LastEditors: iron
- * @LastEditTime: 2019-12-06 10:24:36
+ * @LastEditTime: 2019-12-09 17:16:19
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
@@ -57,6 +57,7 @@ export default {
   'menu.systemManagement.scheduling': 'Scheduling Plan',
   'menu.systemManagement.jobMonitor': 'Job Monitor',
   'menu.alertManagement': 'ALERT MANAGEMENT',
+  'menu.alertManagement.alertCenter': 'ALERT CENTER',
   'menu.alertManagement.formItem': 'FormItem Reference',
   'menu.alertManagement.Stylespecification': 'Alert Specification',
   'menu.welcome': 'Welcome',

@@ -27,19 +27,6 @@ export default [
         hideInMenu: true,
       },
       {
-        path: '/alert-center',
-        name: 'alertCenter',
-        routes: [
-          { path: '/alert-center', name: 'alertCenter', component: './AlertCenter/Alert' },
-          {
-            path: 'information',
-            name: 'informationCenter',
-            component: './AlertCenter/Information',
-            hideInMenu: true,
-          },
-        ],
-      },
-      {
         path: '/data-source',
         name: 'dataSource',
         component: './DataSource/DataSource',
@@ -328,6 +315,13 @@ export default [
         name: 'alertManagement',
         icon: 'icon-jinggao',
         routes: [
+          { path: 'alert-center', name: 'alertCenter', component: './AlertCenter/Alert' },
+          {
+            path: 'information',
+            name: 'informationCenter',
+            component: './AlertCenter/Information',
+            hideInMenu: true,
+          },
           {
             path: './alert-management/formItem',
             name: 'formItem',

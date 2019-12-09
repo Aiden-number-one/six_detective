@@ -18,6 +18,9 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
         total,
         pageSizeOptions: ['10', '20', '50', '100'],
         showSizeChanger: true,
+        showTotal(count) {
+          return `Total ${count} items`;
+        },
         onChange(page, pageSize) {
           handlePageChange(page, pageSize);
         },
@@ -48,29 +51,34 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
         title={<span title={submissionReport}>{submissionReport}</span>}
       />
       <Column
+        width="10%"
+        align="center"
         dataIndex="submissionChannel"
         title={<FormattedMessage id="data-import.lop.submission-channel" />}
       />
       <Column
+        width="10%"
         align="center"
         dataIndex="submissionDate"
         title={<FormattedMessage id="data-import.lop.submission-date" />}
       />
       <Column
+        width="10%"
         align="center"
         dataIndex="submissionStatus"
         title={<FormattedMessage id="data-import.lop.submission-status" />}
       />
       <Column
+        width="10%"
         align="center"
         dataIndex="lateSubmission"
         title={<FormattedMessage id="data-import.lop.late-submission" />}
       />
-      <Column
+      {/* <Column
         align="center"
         dataIndex="latestVersion"
         title={<FormattedMessage id="data-import.lop.latest-version" />}
-      />
+      /> */}
       <Column
         align="center"
         dataIndex="arrivalTime"
@@ -86,7 +94,11 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
         align="center"
         dataIndex="download"
         title={<FormattedMessage id="data-import.lop.download" />}
-        render={() => <IconFont type="icondownload" style={{ fontSize: 24, cursor: 'pointer' }} />}
+        render={() => (
+          <a href="/download?filePath=/ECP/LOPBI_00BNP_20000925_43.xlsm">
+            <IconFont type="icondownload" style={{ fontSize: 24, cursor: 'pointer' }} />
+          </a>
+        )}
       />
     </Table>
   );
