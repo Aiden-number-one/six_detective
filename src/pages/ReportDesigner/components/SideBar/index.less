@@ -1,3 +1,4 @@
+@import '~@/assets/css/utils.less';
 .sideBar {
   &.layout {
     height: 100%;
@@ -87,6 +88,7 @@
   &.left {
     background-color: #f6f8fb;
     .datasetSelect {
+      .clearfix();
       .select {
         float: left;
         width: 278px;
@@ -94,6 +96,30 @@
       .icon {
         float: left;
         width: 22px;
+      }
+    }
+    .list {
+      height: 350px;
+      padding-left: 0;
+      li {
+        height: 22px;
+        padding-left: 36.5px;
+        font-size: 12px;
+        line-height: 20px;
+        &.blue {
+          background-color: #e7eff3;
+          border: 1px solid #abc6df;
+        }
+        &.orange {
+          background-color: #e7eff3;
+          border: 1px solid #abc6df;
+        }
+        .icon {
+          position: relative;
+          top: 2px;
+          color: #059ae8;
+          font-size: 17px;
+        }
       }
     }
   }
