@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Layout, Collapse, Icon, Form, Input, Select, Checkbox, Radio } from 'antd';
+import { Select } from 'antd';
 import classNames from 'classnames';
 import { FormattedMessage } from 'umi/locale';
 import styles from './index.less';
@@ -22,6 +22,6 @@ export default class LeftSideBar extends PureComponent {
   }
 }
 
-function ListItem() {
-  return <div className={classNames(styles.layout, styles.sideBar, styles.left)} />;
-}
+// function ListItem() {
+//   return <div className={classNames(styles.layout, styles.sideBar, styles.left)} />;
+// }

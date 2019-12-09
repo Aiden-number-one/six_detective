@@ -196,7 +196,11 @@ define(function(require, exports, module) {
                     // }, "json");
 
                     var url = "/admin_api";
-                    url = "/superlop/restv2/admin/v2.0/" + $.trim(api_name) + ".json";
+                    if (api_name === "bayconnect.superlop.file_info") {
+                        url = "/superlop/rest/admin/v2.0/" + $.trim(api_name) + ".json";
+                    } else {
+                        url = "/superlop/restv2/admin/v2.0/" + $.trim(api_name) + ".json";
+                    }
                     var type = "post";
 
 
