@@ -54,8 +54,8 @@ class alertUserGroup extends Component {
         },
       ],
       page: {
-        pageNumber: '1',
-        pageSize: '10',
+        pageNumber: 1,
+        pageSize: 10,
       },
     };
   }
@@ -183,8 +183,8 @@ class alertUserGroup extends Component {
    */
   pageChange = (pageNumber, pageSize) => {
     const page = {
-      pageNumber: pageNumber.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber,
+      pageSize,
     };
 
     this.setState(
@@ -213,8 +213,8 @@ class alertUserGroup extends Component {
     const params = {
       roleName,
       roleDesc,
-      pageNumber: this.state.page.pageNumber,
-      pageSize: this.state.page.pageSize,
+      pageNumber: this.state.page.pageNumber.toString(),
+      pageSize: this.state.page.pageSize.toString(),
     };
     dispatch({
       type: 'alertUserGroup/getAlertUserGroup',
@@ -224,8 +224,8 @@ class alertUserGroup extends Component {
 
   onShowSizeChange = (current, pageSize) => {
     const page = {
-      pageNumber: current.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber: current,
+      pageSize,
     };
     this.setState(
       {
@@ -301,8 +301,8 @@ class alertUserGroup extends Component {
             }
             onShowSizeChange={this.onShowSizeChange}
             onChange={this.pageChange}
-            total={menuUserGroup.totalCount && menuUserGroup.totalCount.toString()}
-            pageSize={page.pageSize && page.pageSize.toString()}
+            total={menuUserGroup.totalCount}
+            pageSize={page.pageSize}
           />
         </div>
       </PageHeaderWrapper>
