@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-09 13:39:04
+ * @LastEditTime: 2019-12-09 14:05:28
  */
 
 import React, { Component } from 'react';
@@ -564,7 +564,7 @@ class UserManagement extends Component {
               onOk={this.deleteConfirm}
               onCancel={this.deleteCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
+              okText={formatMessage({ id: 'app.common.confirm' })}
             >
               <span>Please confirm that you want to delete this record?</span>
             </Modal>
@@ -575,7 +575,7 @@ class UserManagement extends Component {
               onOk={this.closingConfirm}
               onCancel={this.closingCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
+              okText={formatMessage({ id: 'app.common.confirm' })}
             >
               <span>是否销户？</span>
             </Modal>
