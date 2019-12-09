@@ -605,7 +605,7 @@ define(function(require, exports, module) {
         });
         // handleLogin();
         // window.jumpToLink = jumpToLink;
-
+        init();
         // //获取用户信息
         // kweb.kingdom.getLoginName(function(data) {
         //     if (data.bcjson.flag == "0") {

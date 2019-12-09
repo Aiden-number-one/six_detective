@@ -321,7 +321,7 @@ define((require, exports, module) => {
 
     // 复制任务
     showContent.copyTaskInfo = params => {
-        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_set_task_info_copy", "v4.0", params, data => {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_task_info_copy", "v4.0", params, data => {
             if (data.bcjson.flag == "1") {
                 App.unblockUI();
                 toastr.success(data.bcjson.msg);
