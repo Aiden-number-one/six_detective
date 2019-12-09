@@ -5,7 +5,7 @@ const {
   getProcessAuditor,
   deployedModelList,
   getProcessResource,
-  getQueryMenu,
+  getAlertUserGroup,
   setAuditorConfig,
 } = Service;
 const ApprovalAuditorModel = {
@@ -28,11 +28,11 @@ const ApprovalAuditorModel = {
       if (response.bcjson.flag === '1') {
         message.success('保存成功');
       } else {
-        message.success('保存失败');
+        message.error('保存失败');
       }
     },
     *getQueryMenuDatas({ payload }, { call, put }) {
-      const response = yield call(getQueryMenu, { param: payload });
+      const response = yield call(getAlertUserGroup, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
@@ -92,7 +92,7 @@ const ApprovalAuditorModel = {
       };
     },
     setMenuDatas(state, action) {
-      const menuData = action.payload[0].MENU;
+      const menuData = action.payload;
       const checkboxList = menuData.map(item => ({ label: item.roleName, value: item.roleId }));
       return {
         ...state,

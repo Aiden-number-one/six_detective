@@ -57,6 +57,8 @@ export default {
       if (response.bcjson.flag === '1') {
         message.success('新增成功');
         callback('1', '10');
+      } else {
+        message.error('新增失败');
       }
     },
     *deleteModel({ payload, callback }, { call }) {
@@ -64,6 +66,8 @@ export default {
       if (response.bcjson.flag === '1') {
         message.success('删除成功');
         callback('1', '10');
+      } else {
+        message.error('删除失败');
       }
     },
     *importModel({ payload, callback }, { call }) {
@@ -71,6 +75,8 @@ export default {
       if (response.bcjson.flag === '1') {
         message.success('导入成功');
         callback('1', '10');
+      } else {
+        message.error('导入失败');
       }
     },
     *exportModel({ payload, callback }, { call }) {
@@ -83,14 +89,10 @@ export default {
       const response = yield call(deployModel, { param: payload });
       if (response.bcjson.flag === '1') {
         message.success('部署成功');
+      } else {
+        message.error('部署失败');
       }
     },
-    // *downloadFile({ payload }, { call }) {
-    //   const response = yield call(downloadFile, { param: payload, method: 'GET' });
-    //   if (response.bcjson.flag === '1') {
-    //     //   message.success('部署成功');
-    //   }
-    // },
   },
 
   reducers: {

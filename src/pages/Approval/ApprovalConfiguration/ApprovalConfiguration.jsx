@@ -43,7 +43,6 @@ class DrawerForm extends PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { flowNameList, configItem } = this.props;
-    console.log('businessName--', configItem.processUuid);
     return (
       <Form onSubmit={this.handleSubmit}>
         <Form.Item label="Function ID" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
@@ -155,7 +154,7 @@ class ApprovalConfiguration extends PureComponent {
 
   render() {
     const { approvalConfigList, deployedModelList } = this.props;
-    const { configItem } = this.state;
+    const { configItem, visible } = this.state;
     const setColumns = [
       {
         title: 'Function ID',
@@ -200,31 +199,35 @@ class ApprovalConfiguration extends PureComponent {
               title="Set Flow Name"
               width={500}
               onClose={this.handleCancel}
-              visible={this.state.visible}
+              visible={visible}
               bodyStyle={{ paddingBottom: 80 }}
             >
-              <ModifyForm
-                flowNameList={deployedModelList}
-                configItem={configItem}
-                ref={this.newModifyForm}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  bottom: 0,
-                  width: '100%',
-                  borderTop: '1px solid #e9e9e9',
-                  padding: '10px 16px',
-                  background: '#fff',
-                  textAlign: 'right',
-                }}
-              >
-                <Button onClick={this.handelSave} style={{ marginRight: 12 }} type="primary">
-                  Save
-                </Button>
-                <Button onClick={this.handleCancel}>Cancel</Button>
-              </div>
+              {visible && (
+                <>
+                  <ModifyForm
+                    flowNameList={deployedModelList}
+                    configItem={configItem}
+                    ref={this.newModifyForm}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      right: 0,
+                      bottom: 0,
+                      width: '100%',
+                      borderTop: '1px solid #e9e9e9',
+                      padding: '10px 16px',
+                      background: '#fff',
+                      textAlign: 'right',
+                    }}
+                  >
+                    <Button onClick={this.handelSave} style={{ marginRight: 12 }} type="primary">
+                      Save
+                    </Button>
+                    <Button onClick={this.handleCancel}>Cancel</Button>
+                  </div>
+                </>
+              )}
             </Drawer>
           </div>
         </PageHeaderWrapper>

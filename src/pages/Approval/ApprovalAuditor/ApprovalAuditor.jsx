@@ -131,7 +131,7 @@ class ApprovalAuditor extends PureComponent {
   };
 
   selectAuditor = checkedValues => {
-    console.log('checkedValues---->', checkedValues);
+    // console.log('checkedValues---->', checkedValues);
     this.setState({
       checkedValues,
     });
@@ -141,7 +141,7 @@ class ApprovalAuditor extends PureComponent {
     // const plainOptions = ['Apple', 'Pear', 'Orange'];
     const { deployedModelDatas, processDefinitionId, checkboxData } = this.props;
     const { checkedValues } = this.state;
-    console.log('checkboxData---', checkboxData, checkedValues);
+    // console.log('checkboxData---', checkboxData, checkedValues);
     const diagramUrl = `/process/diagram-viewer/index.html?isClick=1&processDefinitionId=${processDefinitionId}`;
     return (
       <Fragment>
