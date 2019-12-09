@@ -85,10 +85,22 @@ class MenuUserGroup extends Component {
   };
 
   onSave = () => {
-    this.queryUserList();
     this.setState({
       modifyVisible: false,
     });
+    const { pageSize } = this.state.page;
+    const page = {
+      pageNumber: 1,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryUserList();
+      },
+    );
   };
 
   updateUser = (res, obj) => {
@@ -285,6 +297,7 @@ class MenuUserGroup extends Component {
           ></Table>
           <Pagination
             showSizeChanger
+            current={page.pageNumber}
             showTotal={() =>
               `Page ${page.pageNumber} of ${Math.ceil(menuUserGroup.totalCount / page.pageSize)}`
             }
