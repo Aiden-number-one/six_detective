@@ -31,11 +31,6 @@ export default [
         hideInMenu: true,
       },
       {
-        path: '/alert-center',
-        name: 'alertCenter',
-        component: './AlertCenter',
-      },
-      {
         path: '/data-source',
         name: 'dataSource',
         component: './DataSource/DataSource',
@@ -50,8 +45,8 @@ export default [
             path: 'data-import',
             name: 'dataImport',
             routes: [
-              { path: 'lop-data-import', name: 'lop', component: './LopLog' },
-              { path: 'market-data-import', name: 'market', component: './MarketLog' },
+              { path: 'lop-data-import', name: 'lop', component: './DataImportLog/Lop' },
+              { path: 'market-data-import', name: 'market', component: './DataImportLog/Market' },
             ],
           },
           {
@@ -324,6 +319,13 @@ export default [
         name: 'alertManagement',
         icon: 'icon-jinggao',
         routes: [
+          { path: 'alert-center', name: 'alertCenter', component: './AlertCenter/Alert' },
+          {
+            path: 'information',
+            name: 'informationCenter',
+            component: './AlertCenter/Information',
+            hideInMenu: true,
+          },
           {
             path: './alert-management/formItem',
             name: 'formItem',

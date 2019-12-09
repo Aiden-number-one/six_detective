@@ -16,7 +16,7 @@ const NewSearchForm = Form.create({})(SearchForm);
   menuUserGroup: alertUserGroup.data,
   updateGroup: alertUserGroup.updateUserGroup,
 }))
-class alertUserGroup extends Component {
+class AlertUserGroup extends Component {
   searchForm = React.createRef();
 
   constructor() {
@@ -310,4 +310,4 @@ class alertUserGroup extends Component {
   }
 }
 
-export default alertUserGroup;
+export default AlertUserGroup;

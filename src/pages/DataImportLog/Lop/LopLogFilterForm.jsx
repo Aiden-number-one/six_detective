@@ -1,15 +1,13 @@
 import React from 'react';
+
 import { FormattedMessage } from 'umi/locale';
 import { Form, Row, Button, DatePicker, Select, Radio, Col, Input } from 'antd';
 
-import { PROCESSING_STATUS, SUBMISSION_REPORT } from './constants';
+import { PROCESSING_STATUS, SUBMISSION_REPORT, yesterday, today, dateFormat } from './constants';
+import styles from '../index.less';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-
-const formItemLayout = {
-  layout: 'vertical',
-};
 
 function LopLogFilterForm({ form, handleSearch }) {
   const { getFieldDecorator, validateFields } = form;
@@ -17,35 +15,49 @@ function LopLogFilterForm({ form, handleSearch }) {
   function handleCommit() {
     validateFields((err, values) => {
       if (!err) {
-        const tradeDate = values.tradeDate.format('MM/DD/YYYY');
-        handleSearch({ ...values, tradeDate });
+        const format = 'YYYYMMDD';
+
+        let startSubmissionDate = '';
+        let endSubmissionDate = '';
+
+        const { tradeDate: tdate, submissionDate, ...rest } = values;
+        const tradeDate = tdate && tdate.format(format);
+        if (submissionDate) {
+          const [start, end] = submissionDate;
+          startSubmissionDate = start && start.format(format);
+          endSubmissionDate = end && end.format(format);
+        }
+
+        handleSearch({ ...rest, tradeDate, startSubmissionDate, endSubmissionDate });
       }
     });
   }
 
   return (
-    <Form {...formItemLayout}>
+    <Form layout="vertical">
       <Row>
         <Col span={8}>
           <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
             {getFieldDecorator('tradeDate', {
+              initialValue: yesterday,
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select trade date!',
                 },
               ],
-            })(<DatePicker />)}
+            })(<DatePicker format={dateFormat} />)}
           </Form.Item>
           <Form.Item label={<FormattedMessage id="data-import.lop.submission-date" />}>
             {getFieldDecorator('submissionDate', {
+              initialValue: [yesterday, today],
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select submission date!',
                 },
               ],
-            })(<RangePicker />)}
+            })(<RangePicker format={dateFormat} />)}
           </Form.Item>
           <Row type="flex" justify="space-between">
             <Col span={8}>
@@ -83,34 +95,31 @@ function LopLogFilterForm({ form, handleSearch }) {
         <Col span={7} offset={1}>
           <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
             {getFieldDecorator('submitterCode', {
-              initialValue: '',
               rules: [
                 {
-                  required: true,
-                  message: 'Please input trade date!',
+                  required: false,
+                  message: 'Please input submitter code!',
                 },
               ],
             })(<Input placeholder="please input submitter code" />)}
           </Form.Item>
           <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
             {getFieldDecorator('submitterName', {
-              initialValue: '',
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please input submitter name!',
                 },
               ],
-            })(<Input placeholder="please input submmitter name" />)}
+            })(<Input placeholder="please input submitter name" />)}
           </Form.Item>
         </Col>
         <Col span={7} offset={1}>
           <Form.Item label={<FormattedMessage id="data-import.lop.processing-status" />}>
             {getFieldDecorator('processingStatus', {
-              initialValue: PROCESSING_STATUS[0],
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select processing status!',
                 },
               ],
@@ -124,10 +133,9 @@ function LopLogFilterForm({ form, handleSearch }) {
           </Form.Item>
           <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
             {getFieldDecorator('submissionReport', {
-              initialValue: SUBMISSION_REPORT[0],
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select submission report!',
                 },
               ],
@@ -142,7 +150,7 @@ function LopLogFilterForm({ form, handleSearch }) {
         </Col>
       </Row>
       <Row type="flex" justify="end">
-        <Button type="primary" icon="search" onClick={handleCommit}>
+        <Button type="primary" icon="search" className={styles['no-margin']} onClick={handleCommit}>
           <FormattedMessage id="data-import.lop.search" />
         </Button>
       </Row>

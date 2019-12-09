@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Tabs,
   Descriptions,
@@ -7,15 +7,15 @@ import {
   Col,
   Drawer,
   Typography,
-  Switch,
   Input,
   Button,
   Table,
 } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
+import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
-import styles from './index.less';
+import styles from '../index.less';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -26,14 +26,13 @@ export function AlertDes({
   alert: {
     alertId,
     alertType,
+    alertStatus,
+    alertTime,
+    alertDesc,
     tradeDate,
-    alertTimestamp,
     submissionTime,
     submitter,
-    status,
     owner,
-    description,
-    handleToday,
   },
 }) {
   return (
@@ -48,7 +47,7 @@ export function AlertDes({
         {tradeDate}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.alert-timestamp" />}>
-        {alertTimestamp}
+        {alertTime}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.submission-time" />}>
         {submissionTime}
@@ -57,16 +56,13 @@ export function AlertDes({
         {submitter}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.description" />}>
-        <Paragraph ellipsis={{ rows: 3, expandable: true }}>{description}</Paragraph>
+        <Paragraph ellipsis={{ rows: 3, expandable: true }}>{alertDesc}</Paragraph>
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.owner" />}>
         {owner}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.status" />}>
-        {status}
-      </Descriptions.Item>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.handle-today" />}>
-        <Switch checkedChildren="YES" unCheckedChildren="NO" defaultChecked={!!handleToday} />
+        {alertStatus}
       </Descriptions.Item>
     </Descriptions>
   );
@@ -152,7 +148,7 @@ function AlertAttachment({ attachments }) {
           {attachments.map(({ name, url }, index) => (
             <Col key={url}>
               <Text ellipsis style={{ width: '100%' }} title={name}>
-                <a download href={url} style={{ marginBottom: 20 }}>
+                <a download href={`/download?filePath=${url}`} style={{ marginBottom: 20 }}>
                   {index + 1}. {name}
                 </a>
               </Text>
@@ -196,14 +192,24 @@ function AlertLog({ log: { time, text } }) {
   );
 }
 
-export default function({ alert }) {
+function AlertDetail({ dispatch, alert, alertItems }) {
   const [isFullscreen, setFullscreen] = useState(false);
+
+  useEffect(() => {
+    dispatch({
+      type: 'alertCenter/fetchAlertItems',
+      payload: {
+        alertType: alert.alertType,
+      },
+    });
+  }, [alert]);
   return (
     <Row className={styles['detail-container']} gutter={16}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
         <Tabs
-          defaultActiveKey="1"
+          hideAdd
           className={styles['detail-des']}
+          defaultActiveKey="1"
           tabBarExtraContent={
             <IconFont
               type={isFullscreen ? 'iconfullscreen-exit' : 'iconfull-screen'}
@@ -214,17 +220,19 @@ export default function({ alert }) {
         >
           <TabPane
             className={styles['tab-content']}
+            closable={false}
             tab={<FormattedMessage id="alert-center.alert-detail" />}
-            key="1"
+            key=""
           >
             <AlertDes alert={alert} />
           </TabPane>
           <TabPane
             className={styles['tab-content']}
+            closable={false}
             tab={<FormattedMessage id="alert-center.alert-item-list" />}
             key="2"
           >
-            <AlertTask dataSource={alert.tasks} />
+            <AlertTask dataSource={alertItems} />
           </TabPane>
         </Tabs>
       </Col>
@@ -232,9 +240,10 @@ export default function({ alert }) {
         <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
           <TabPane tab={<FormattedMessage id="alert-center.comment-history" />} key="1">
             <ul className={styles['comment-ul']}>
-              {alert.comments.map(comment => (
-                <AlertComment comment={comment} key={comment.time} />
-              ))}
+              {alert.comments &&
+                alert.comments.map(comment => (
+                  <AlertComment comment={comment} key={comment.time} />
+                ))}
             </ul>
             <div className={styles['comment-box']}>
               <TextArea placeholder="COMMENT" className={styles.txt} />
@@ -260,9 +269,7 @@ export default function({ alert }) {
             key="2"
           >
             <Row gutter={[10, 10]} style={{ height: 440, overflowY: 'auto' }}>
-              {alert.logs.map(log => (
-                <AlertLog log={log} key={log.time} />
-              ))}
+              {alert.logs && alert.logs.map(log => <AlertLog log={log} key={log.time} />)}
             </Row>
           </TabPane>
         </Tabs>
@@ -271,3 +278,8 @@ export default function({ alert }) {
     </Row>
   );
 }
+
+export default connect(({ loading, alertCenter: { alertItems } }) => ({
+  alertItems,
+  loading: loading.effects,
+}))(AlertDetail);

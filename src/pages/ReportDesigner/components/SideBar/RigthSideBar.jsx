@@ -76,10 +76,7 @@ export default class RigthSideBar extends PureComponent {
                     label={<FormattedMessage id="report-designer.defaultstatus" />}
                     {...formLayout}
                   >
-                    {getFieldDecorator(
-                      'roleName',
-                      {},
-                    )(
+                    {getFieldDecorator('roleName', {})(
                       <Radio.Group defaultValue="a">
                         <Radio.Button value="a">
                           <FormattedMessage id="report-designer.normal" />
@@ -163,10 +160,9 @@ export default class RigthSideBar extends PureComponent {
             >
               <Panel header={<FormattedMessage id="report-designer.check" />} key="1">
                 <Form>
-                  {getFieldDecorator(
-                    'roleName',
-                    {},
-                  )(<Checkbox>{<FormattedMessage id="report-designer.allownull" />}</Checkbox>)}
+                  {getFieldDecorator('roleName', {})(
+                    <Checkbox>{<FormattedMessage id="report-designer.allownull" />}</Checkbox>,
+                  )}
                 </Form>
               </Panel>
             </Collapse>
