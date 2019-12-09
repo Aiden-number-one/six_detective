@@ -1,7 +1,13 @@
 import { message } from 'antd';
 import Service from '@/utils/Service';
 
-const { getAuditorlist, saveConfig, deployedModelList, getProcessResource, getQueryMenu } = Service;
+const {
+  getProcessAuditor,
+  deployedModelList,
+  getProcessResource,
+  getQueryMenu,
+  setAuditorConfig,
+} = Service;
 const ApprovalAuditorModel = {
   namespace: 'ApprovalAuditor',
   state: {
@@ -17,8 +23,8 @@ const ApprovalAuditorModel = {
     checkboxData: [],
   },
   effects: {
-    *saveConfigDatas({ payload }, { call }) {
-      const response = yield call(saveConfig, { param: payload });
+    *setAuditorConfigDatas({ payload }, { call }) {
+      const response = yield call(setAuditorConfig, { param: payload });
       if (response.bcjson.flag === '1') {
         message.success('保存成功');
       } else {
@@ -37,7 +43,7 @@ const ApprovalAuditorModel = {
       }
     },
     *getAuditorlistDatas({ payload }, { call, put }) {
-      const response = yield call(getAuditorlist, { param: payload });
+      const response = yield call(getProcessAuditor, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({

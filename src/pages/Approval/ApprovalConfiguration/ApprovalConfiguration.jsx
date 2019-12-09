@@ -1,6 +1,6 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-plusplus */
-import React, { PureComponent, Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Button, Table, Row, Col, Drawer, Select } from 'antd';
 import { connect } from 'dva';
@@ -19,12 +19,12 @@ class SearchForm extends PureComponent {
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label="Function ID" colon={false}>
-              {getFieldDecorator('businessName')(<Input />)}
+              {getFieldDecorator('functionId')(<Input />)}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label="Flow Name" colon={false}>
-              {getFieldDecorator('processName')(<Input />)}
+              {getFieldDecorator('flowName')(<Input />)}
             </Form.Item>
           </Col>
         </Row>
@@ -39,26 +39,26 @@ class SearchForm extends PureComponent {
 }
 const ConfigurationForm = Form.create({})(SearchForm);
 
-class DrawerForm extends Component {
+class DrawerForm extends PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { flowNameList, configItem } = this.props;
-    // console.log('businessName--', configItem);
+    console.log('businessName--', configItem.processUuid);
     return (
       <Form onSubmit={this.handleSubmit}>
         <Form.Item label="Function ID" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
-          {getFieldDecorator('name', {
-            initialValue: configItem.businessName || '',
+          {getFieldDecorator('functionID', {
+            initialValue: configItem.functionId || '',
           })(<Input disabled />)}
         </Form.Item>
         <Form.Item label="Flow Name" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
-          {getFieldDecorator('operationType', {
+          {getFieldDecorator('processUuid', {
             rules: [{ required: false }],
-            initialValue: configItem.processName,
+            initialValue: configItem.processUuid,
           })(
             <Select>
               {flowNameList.map(item => (
-                <Option value={item.name}>{item.name}</Option>
+                <Option value={item.processDefinitionId}>{item.name}</Option>
               ))}
             </Select>,
           )}
@@ -116,8 +116,8 @@ class ApprovalConfiguration extends PureComponent {
       this.configData({
         pageNumber: '1',
         pageSize: '10',
-        businessName: values.businessName,
-        processName: values.processName,
+        functionID: values.functionId,
+        flowName: values.flowName,
       });
     });
   };
@@ -137,7 +137,19 @@ class ApprovalConfiguration extends PureComponent {
 
   handelSave = () => {
     this.newModifyForm.current.validateFields((err, values) => {
-      console.log('values-------->', values);
+      // console.log('values-------->', values);
+      this.saveConfig(values);
+      this.handleCancel();
+    });
+  };
+
+  // 修改流程图设置
+  saveConfig = param => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalConfiguration/saveConfigDatas',
+      payload: param,
+      callback: obj => this.configData(obj),
     });
   };
 
@@ -147,12 +159,12 @@ class ApprovalConfiguration extends PureComponent {
     const setColumns = [
       {
         title: 'Function ID',
-        dataIndex: 'businessName',
+        dataIndex: 'functionId',
         align: 'center',
       },
       {
         title: formatMessage({ id: 'systemManagement.flowConfig.flowName' }),
-        dataIndex: 'processName',
+        dataIndex: 'flowName',
         align: 'center',
       },
       {
@@ -208,12 +220,10 @@ class ApprovalConfiguration extends PureComponent {
                   textAlign: 'right',
                 }}
               >
-                <Button onClick={this.handleCancel} style={{ marginRight: 8 }}>
-                  Cancel
-                </Button>
-                <Button onClick={this.handelSave} type="primary">
+                <Button onClick={this.handelSave} style={{ marginRight: 12 }} type="primary">
                   Save
                 </Button>
+                <Button onClick={this.handleCancel}>Cancel</Button>
               </div>
             </Drawer>
           </div>

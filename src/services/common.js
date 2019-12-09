@@ -22,6 +22,8 @@ export default {
   getConfig: `${prefix}get_audit_config_list_page`,
   addConfig: `${prefix}set_audit_config_add`,
   saveConfig: `${prefix}set_audit_config_save`,
+  setAuditorConfig: `${prefix}set_auditor_config`,
+  getProcessAuditor: `${prefix}get_audit_config_process_auditor`,
   deleteConfig: `${prefix}set_audit_config_delete`,
   getTemplate: `${prefix}get_notice_template_list`,
   templateSave: `${prefix}set_notice_template_save`,

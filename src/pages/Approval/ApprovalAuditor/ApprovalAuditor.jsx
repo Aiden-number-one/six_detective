@@ -14,6 +14,7 @@ import styles from './ApprovalAuditor.less';
   processDefinitionId: ApprovalAuditor.processDefinitionId,
   groupList: ApprovalAuditor.GroupList,
   checkboxData: ApprovalAuditor.checkboxData,
+  auditorData: ApprovalAuditor.auditorData,
 }))
 class ApprovalAuditor extends PureComponent {
   state = {
@@ -34,17 +35,24 @@ class ApprovalAuditor extends PureComponent {
   // 打开审核人设置弹窗
   showDrawer = async (processDefinitionIds, taskId) => {
     await this.getAuditorData(processDefinitionIds, taskId);
+    const { auditorData } = this.props;
+    const auditorChecked = (auditorData.length > 0 && auditorData[0].relateNo) || [];
+    // console.log('auditorChecked---->', auditorChecked);
+    const checkedList = auditorChecked.length && auditorChecked.split(',');
+
     this.setState({
       visible: true,
       stepId: taskId,
+      checkedValues: checkedList,
     });
+    console.log('auditorData-->', this.props.auditorData, this.state.checkedValues);
   };
 
   // 添加审核角色
   saveConfig = param => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'ApprovalAuditor/saveConfigDatas',
+      type: 'ApprovalAuditor/setAuditorConfigDatas',
       payload: param,
     });
   };
@@ -64,6 +72,9 @@ class ApprovalAuditor extends PureComponent {
     };
     console.log('param--->', param);
     this.saveConfig(param);
+    this.setState({
+      visible: false,
+    });
   };
 
   // 获取角色
@@ -76,9 +87,9 @@ class ApprovalAuditor extends PureComponent {
   };
 
   // 查询审核人列表
-  getAuditorData = (processUuid, stepId) => {
+  getAuditorData = async (processUuid, stepId) => {
     const { dispatch } = this.props;
-    dispatch({
+    await dispatch({
       type: 'ApprovalAuditor/getAuditorlistDatas',
       payload: {
         processUuid,
@@ -129,7 +140,8 @@ class ApprovalAuditor extends PureComponent {
   render() {
     // const plainOptions = ['Apple', 'Pear', 'Orange'];
     const { deployedModelDatas, processDefinitionId, checkboxData } = this.props;
-    console.log('checkboxData---', checkboxData);
+    const { checkedValues } = this.state;
+    console.log('checkboxData---', checkboxData, checkedValues);
     const diagramUrl = `/process/diagram-viewer/index.html?isClick=1&processDefinitionId=${processDefinitionId}`;
     return (
       <Fragment>
@@ -142,7 +154,7 @@ class ApprovalAuditor extends PureComponent {
                   chooseId={processDefinitionId}
                   currentId="processDefinitionId"
                   chooseTab={this.chooseTab}
-                  title="已部署模型列表"
+                  title="List of deployed models"
                 />
               </div>
               <div className={styles.rightBox}>
@@ -155,7 +167,11 @@ class ApprovalAuditor extends PureComponent {
                 visible={this.state.visible}
                 bodyStyle={{ paddingBottom: 80 }}
               >
-                <Checkbox.Group options={checkboxData} onChange={this.selectAuditor} />
+                <Checkbox.Group
+                  options={checkboxData}
+                  value={checkedValues}
+                  onChange={this.selectAuditor}
+                />
                 <div
                   style={{
                     position: 'absolute',
@@ -168,11 +184,11 @@ class ApprovalAuditor extends PureComponent {
                     textAlign: 'right',
                   }}
                 >
-                  <Button onClick={this.onClose} style={{ marginRight: 8 }}>
-                    Cancel
-                  </Button>
                   <Button onClick={this.onSave} type="primary">
                     Save
+                  </Button>
+                  <Button onClick={this.onClose} style={{ marginRight: 12 }}>
+                    Cancel
                   </Button>
                 </div>
               </Drawer>
