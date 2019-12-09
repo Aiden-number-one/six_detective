@@ -276,7 +276,7 @@ class MenuUserGroup extends Component {
           onOk={this.deleteConfirm}
           onCancel={this.deleteCancel}
           cancelText={formatMessage({ id: 'app.common.cancel' })}
-          okText={formatMessage({ id: 'app.common.save' })}
+          okText={formatMessage({ id: 'app.common.confirm' })}
         >
           <span>Please confirm that you want to delete this record?</span>
         </Modal>

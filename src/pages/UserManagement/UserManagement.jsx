@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-09 11:23:56
+ * @LastEditTime: 2019-12-09 13:39:04
  */
 
 import React, { Component } from 'react';
@@ -586,7 +586,7 @@ class UserManagement extends Component {
               onOk={this.updatePasswordConfirm}
               onCancel={this.updatePasswordCancel}
               cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
+              okText={formatMessage({ id: 'app.common.confirm' })}
             >
               <NewPasswordForm ref={this.passwordFormRef}></NewPasswordForm>
             </Modal>
