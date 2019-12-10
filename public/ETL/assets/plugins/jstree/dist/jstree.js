@@ -4307,7 +4307,7 @@
 						"class" : "jstree-rename-input",
 						// "size" : t.length,
 						"maxlength": maxlength,
-						"placeholder": "请输入最多" + maxlength + "个字符",
+						"placeholder": maxlength + " characters maximum",
 						"css" : {
 							"padding" : "0",
 							"border" : "1px solid silver",
