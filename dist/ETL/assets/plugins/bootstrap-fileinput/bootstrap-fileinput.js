@@ -85,10 +85,10 @@
             this.upload(e.target.form, url, function(data) {
                 App.unblockUI();
                 if (data.bcjson.flag == "0") {
-                  toastr.error("Upload failed");
+                  toastr.error("Fail");
                   return;
                 } else {
-                  toastr.success("Upload successfully");
+                  toastr.success("上传成功");
                 }
                 $("[name=fileName]").val(files[0].name);
                 $("[name=fileType]").val(filetype.toLowerCase()).change();
