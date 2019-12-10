@@ -26,9 +26,9 @@ const ApprovalAuditorModel = {
     *setAuditorConfigDatas({ payload }, { call }) {
       const response = yield call(setAuditorConfig, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('保存成功');
+        message.success('Save successfully');
       } else {
-        message.error('保存失败');
+        message.error('Save failed');
       }
     },
     *getQueryMenuDatas({ payload }, { call, put }) {
