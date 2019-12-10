@@ -30,7 +30,7 @@ const approvalConfigurationModel = {
           pageSize: '10',
         });
       } else {
-        message.success('保存失败');
+        message.error('保存失败');
       }
     },
     *deployedModelListDatas({ payload }, { call, put }) {

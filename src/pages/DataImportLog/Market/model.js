@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors: iron
- * @LastEditTime: 2019-12-02 14:20:45
+ * @LastEditTime: 2019-12-06 17:07:40
  */
 
 import fetch from '@/utils/request.default';
@@ -15,7 +15,7 @@ export default {
     logs: [],
   },
   reducers: {
-    saveLogs(state, { payload: logs }) {
+    save(state, { payload: logs }) {
       return {
         ...state,
         logs,
@@ -23,10 +23,10 @@ export default {
     },
   },
   effects: {
-    *fetchLogs({ params }, { call, put }) {
+    *fetch({ params }, { call, put }) {
       const items = yield call(fetch('logs'), params);
       yield put({
-        type: 'saveLogs',
+        type: 'save',
         payload: items,
       });
     },

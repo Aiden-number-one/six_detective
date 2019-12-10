@@ -35,7 +35,7 @@ export default class DropSelect extends Component {
     });
   };
 
-  onSearch = () => {};
+  onSearch = (/* v  */) => {};
 
   trigger = () => {
     this.setState({

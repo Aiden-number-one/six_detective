@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
  * @LastEditors: iron
- * @LastEditTime: 2019-12-03 14:17:57
+ * @LastEditTime: 2019-12-09 17:16:19
  */
 export default {
   'menu.indexdashboard': 'DASHBOARD',
@@ -12,6 +12,7 @@ export default {
   'menu.dataImport.lop': 'Lop Data Import',
   'menu.dataImport.market': 'Market Data Import',
   'menu.alertCenter': 'Alert Center',
+  'menu.alertCenter.informationCenter': 'Information Center',
   'menu.dataManagement': 'DATA MANAGEMENT',
   'menu.dataManagement.dashboard': 'Dashboard',
   'menu.dataManagement.dataProcessing': 'Data Processing',
@@ -47,15 +48,16 @@ export default {
   'menu.systemManagement.workflowHistory': 'Workflow History',
   'menu.systemManagement.emailParameter': 'Email Parameter',
   'menu.systemManagement.systemParameters': 'System Parameters',
-  'menu.systemManagement.ApprovalAuditor': 'Workflow Auditor',
-  'menu.systemManagement.ApprovalConfiguration': 'Workflow Configuration',
+  'menu.systemManagement.ApprovalAuditor': 'Approval Process Auditor',
+  'menu.systemManagement.ApprovalConfiguration': 'Approval Process Configuration',
   'menu.systemManagement.workflowConfig': 'Workflow Config',
-  'menu.systemManagement.workflowDesign': 'Workflow Design',
+  'menu.systemManagement.workflowDesign': 'Approval Process Flow Design',
   'menu.systemManagement.codeMaintenance': 'Code Maintenance',
   'menu.systemManagement.auditTrailLogging': 'Audit Trail Logging',
   'menu.systemManagement.scheduling': 'Scheduling Plan',
   'menu.systemManagement.jobMonitor': 'Job Monitor',
   'menu.alertManagement': 'ALERT MANAGEMENT',
+  'menu.alertManagement.alertCenter': 'ALERT CENTER',
   'menu.alertManagement.formItem': 'FormItem Reference',
   'menu.alertManagement.Stylespecification': 'Alert Specification',
   'menu.welcome': 'Welcome',

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-07 17:09:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-02 14:45:24
+ * @LastEditTime: 2019-12-06 19:23:53
  */
 
 import { notification } from 'antd';
@@ -17,6 +17,10 @@ export const dva = {
       notification.error({
         message: 'oops error!!!',
         description: e.toString(),
+        style: {
+          maxHeight: 135,
+          overflow: 'auto',
+        },
       });
     },
   },

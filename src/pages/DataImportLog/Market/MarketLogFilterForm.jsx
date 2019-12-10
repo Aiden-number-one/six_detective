@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Form, DatePicker, Button, Radio, Select, Row, Col } from 'antd';
+import styles from '../index.less';
 
 const { Option } = Select;
 
@@ -47,7 +48,7 @@ function MarketLogFilterForm({ form }) {
             )}
           </Form.Item>
         </Col>
-        <Col span={7} offset={1}>
+        <Col span={8} offset={1}>
           <Form.Item label={<FormattedMessage id="data-import.market.market" />}>
             {getFieldDecorator('market', {
               initialValue: 'HKFE',
@@ -61,7 +62,7 @@ function MarketLogFilterForm({ form }) {
         </Col>
       </Row>
       <Row type="flex" justify="end">
-        <Button type="primary" onClick={handleSearch}>
+        <Button type="primary" icon="search" onClick={handleSearch} className={styles['no-margin']}>
           <FormattedMessage id="data-import.market.search" />
         </Button>
       </Row>

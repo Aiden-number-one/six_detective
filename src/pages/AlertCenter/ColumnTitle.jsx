@@ -1,7 +1,12 @@
 import React from 'react';
 import { Popover } from 'antd';
 import IconFont from '@/components/IconFont';
-import styles from './index.less';
+
+const styles = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-around',
+};
 
 const content = (
   <div>
@@ -9,14 +14,10 @@ const content = (
     <p>Content</p>
   </div>
 );
+
 export default function ColumnTitle({ children }) {
   return (
-    <Popover
-      placement="bottomLeft"
-      trigger="click"
-      content={content}
-      className={styles['column-title']}
-    >
+    <Popover placement="bottomLeft" trigger="click" content={content} style={styles}>
       <IconFont
         type="iconfilter1"
         style={{
