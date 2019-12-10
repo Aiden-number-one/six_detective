@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 21:16:12
+ * @LastEditTime: 2019-12-10 13:23:04
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -37,8 +37,9 @@ export default {
   'systemManagement.flowConfig.flowChart': 'Flow Chart',
   'systemManagement.template.templateName': 'Template Name',
   'systemManagement.template.templateId': 'Template ID',
+  'systemManagement.template.templateType': 'Type',
   'systemManagement.template.templateTitle': 'Title',
   'systemManagement.template.templateContent': 'Content',
-  'systemManagement.template.keyword': 'KeyWord',
+  'systemManagement.template.keyword': 'Key word',
   'systemManagement.userGroup.remark': 'Remark',
 };
