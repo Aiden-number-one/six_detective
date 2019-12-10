@@ -35,7 +35,7 @@ export default class DropSelect extends Component {
     });
   };
 
-  onSearch = v => {};
+  onSearch = () => {};
 
   trigger = () => {
     this.setState({
@@ -57,7 +57,7 @@ export default class DropSelect extends Component {
         <div
           className={styles.dropSelect}
           style={{
-            width: visible ? '250px' : `calc(100% - ${addon ? '29px' : '0px'}) `,
+            width: `calc(100% - ${addon ? '29px' : '0px'}) `,
             right: addon ? '30px' : '0px',
           }}
         >
