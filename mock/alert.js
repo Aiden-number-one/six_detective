@@ -4,14 +4,14 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-03 16:32:36
  * @LastEditors: iron
- * @LastEditTime: 2019-12-07 10:01:49
+ * @LastEditTime: 2019-12-10 21:07:46
  */
 import { mp, mockRes } from './utils';
 
 export default {
-  [mp('alerts')]: mockRes(100, [
+  [mp('get_alert_center_page_list')]: mockRes(100, [
     {
-      alertId: '@guid',
+      alertId: '@id()',
       'alertType|1-2': 1,
       alertTime: 15982218188,
       alertDesc: '@paragraph',
@@ -20,30 +20,50 @@ export default {
       tradeDate: '@date("yyyy-MM-dd")',
       owner: '@name',
       submitter: '@name',
-      // 'handleToday|0-1': 0,
       submissionTime: '@date("yyyy-MM-dd")',
-      // 'comments|1-50': [
-      //   {
-      //     time: '@datetime',
-      //     text: '@paragraph',
-      //     'attachments|1-8': [
-      //       {
-      //         name: '@title',
-      //         url: '@url',
-      //       },
-      //     ],
-      //   },
-      // ],
-      // 'tasks|1-50': [
-      //   {
-      //     market: 'HEFE',
-      //     epCode: '@string',
-      //     epName: 'ICBC',
-      //     owner: '@name',
-      //     'status|0-6': 2,
-      //   },
-      // ],
-      // 'logs|1-10': [{ time: '@datetime', text: '@paragraph' }],
+    },
+  ]),
+  [mp('get_alert_item_list')]: mockRes(50, [
+    {
+      ALERT_ID: '@id',
+      EP_NAME: '@string',
+      ALERT_TYPE: 'New EP',
+      EP_CODE: '1001',
+      OWNER_ID: '@name',
+      MARKET: '@name',
+      STATUS: 'open',
+      USER_NAME: null,
+    },
+  ]),
+  [mp('get_alert_comment_list')]: mockRes(50, [
+    {
+      id: '@id',
+      alertId: '@id',
+      operateMode: '',
+      commitTime: '@date("yyyy-MM-dd")',
+      rowsCount: '0',
+      filePath: null,
+      commentContent: '@paragraph',
+      fileList: null,
+    },
+  ]),
+  [mp('get_alert_comment_list')]: mockRes(50, [
+    {
+      id: '@id',
+      alertId: '@id',
+      operateMode: '',
+      commitTime: '@date("yyyy-MM-dd")',
+      rowsCount: '0',
+      filePath: null,
+      commentContent: '@paragraph',
+      fileList: null,
+    },
+  ]),
+  [mp('get_alert_log_list')]: mockRes(50, [
+    {
+      id: '@id',
+      log: '@paragraph',
+      operateTime: '@date("yyyy-MM-dd")',
     },
   ]),
 };

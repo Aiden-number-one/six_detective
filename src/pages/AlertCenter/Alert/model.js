@@ -4,12 +4,10 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-09 16:06:48
+ * @LastEditTime: 2019-12-10 20:53:00
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-
-// import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from './AlertList';
 
 // just for unit test
 // `fetch` high order function return anonymous func
@@ -23,8 +21,26 @@ export async function getAlertItems({ alertType }) {
   return request('get_alert_item_list', { data: { mappingId: alertType } });
 }
 
+export async function getAlertComments({ alertId, page = 1, pageSize = 10 }) {
+  return request('get_alert_comment_list', {
+    data: { alertId, pageNumber: page.toString(), pageSize: pageSize.toString() },
+  });
+}
+export async function getAlertLogs({ alertId, page = 1, pageSize = 10 }) {
+  return request('get_alert_log_list', {
+    data: { alertId, pageNumber: page.toString(), pageSize: pageSize.toString() },
+  });
+}
+export async function setAlertComment({ alertId, content }) {
+  return request('set_alert_comment', {
+    data: { alertId, commentContent: content },
+  });
+}
 export async function claimAlert({ alertIds }) {
   return request('set_alert_claim', { data: { alertIds: alertIds.join(',') } });
+}
+export async function closeAlert({ alertIds }) {
+  return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
 }
 
 export default {
@@ -33,7 +49,10 @@ export default {
     alerts: [],
     alertItems: [],
     total: 0,
+    alertItemsTotal: 0,
     alertOwner: '',
+    comments: [],
+    logs: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -43,6 +62,24 @@ export default {
         alerts,
         page,
         total,
+      };
+    },
+    saveAlertItems(state, { payload }) {
+      return {
+        ...state,
+        alertItems: payload.alertItems,
+      };
+    },
+    saveComments(state, { payload }) {
+      return {
+        ...state,
+        comments: payload.comments,
+      };
+    },
+    saveLogs(state, { payload }) {
+      return {
+        ...state,
+        logs: payload.logs,
       };
     },
     claimOk(state, { payload }) {
@@ -85,15 +122,55 @@ export default {
     },
     *fetchAlertItems({ payload }, { call, put }) {
       const { alertType } = payload || {};
-      const { items, err } = yield call(getAlertItems, { alertType });
+      const { items, totalCount, err } = yield call(getAlertItems, { alertType });
       if (err) {
         throw new Error(err);
       }
 
       yield put({
-        type: 'save',
+        type: 'saveAlertItems',
         payload: {
           alertItems: items,
+          alertItemsTotal: totalCount,
+        },
+      });
+    },
+    *fetchComments({ payload }, { call, put }) {
+      const { alertId } = payload;
+      const { items, err } = yield call(getAlertComments, { alertId });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveComments',
+        payload: {
+          comments: items,
+        },
+      });
+    },
+    *fetchLogs({ payload }, { call, put }) {
+      const { alertId } = payload;
+      const { items, err } = yield call(getAlertLogs, { alertId });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveLogs',
+        payload: {
+          logs: items,
+        },
+      });
+    },
+    *postComment({ payload }, { call, put }) {
+      const { alertId, content } = payload;
+      const { err } = yield call(setAlertComment, { alertId, content });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'fetchComments',
+        payload: {
+          alertId,
         },
       });
     },
@@ -108,6 +185,16 @@ export default {
         payload: {
           alertIds,
         },
+      });
+    },
+    *close({ payload }, { call, put }) {
+      const { alertIds } = payload || [];
+      const { err } = yield call(closeAlert, { alertIds });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'fetch',
       });
     },
   },

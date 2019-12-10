@@ -32,7 +32,18 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
           <IconFont type="iconqizhi" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button disabled={!selectedKeys.length} onClick={closeAlert}>
+        <Button
+          disabled={!selectedKeys.length}
+          onClick={() =>
+            Modal.confirm({
+              title: 'Confirm',
+              content: 'Are you sure close these alerts?',
+              okText: 'Sure',
+              cancelText: 'Cancel',
+              onOk: () => closeAlert(selectedKeys),
+            })
+          }
+        >
           <IconFont type="iconic_circle_close" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.close" />
         </Button>
@@ -43,7 +54,7 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
       </Col>
       <Col span={6} align="right">
         <Button type="link">
-          <Link to="/alert-center/information">information</Link>
+          <Link to="/alert-management/information">information</Link>
         </Button>
       </Col>
     </Row>
@@ -51,6 +62,7 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
 }
 
 function AlertList({ dispatch, loading, alerts, total, getAlert }) {
+  const [alert, setAlert] = useState({});
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   useEffect(() => {
@@ -64,22 +76,19 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
     if (alerts && alerts.length > 0) {
       const [firstAlert] = alerts;
       getAlert(firstAlert);
-      // dispatch({
-      //   type: 'alertCenter/fetchAlertItems',
-      //   payload: {
-      //     alertType: firstAlert.alertType,
-      //   },
-      // });
+      setAlert(firstAlert);
     }
   }, [alerts]);
 
-  // // update alertItems
-  // useEffect(() => {
-  //   if (alertItems.length > 0) {
-  //     getAlertItems(alertItems);
-  //   }
-  // }, [alertItems]);
-
+  function handlePageChange(page, pageSize) {
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        page,
+        pageSize,
+      },
+    });
+  }
   function claimAlert(alertIds) {
     dispatch({
       type: 'alertCenter/claim',
@@ -89,13 +98,22 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
     });
   }
 
+  function closeAlert(alertIds) {
+    dispatch({
+      type: 'alertCenter/close',
+      payload: {
+        alertIds,
+      },
+    });
+  }
   return (
     <div className={styles.list}>
-      <AlertBtn selectedKeys={selectedKeys} claimAlert={claimAlert} />
+      <AlertBtn selectedKeys={selectedKeys} claimAlert={claimAlert} closeAlert={closeAlert} />
       <Table
         border
         dataSource={alerts}
         rowKey="alertId"
+        rowClassName={record => (record.alertId === alert.alertId ? 'active' : '')}
         loading={loading['alertCenter/fetch']}
         rowSelection={{
           onChange: selectedRowKeys => {
@@ -108,45 +126,20 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           showTotal(count) {
             return `Total ${count} items`;
           },
-          onChange(page, pageSize) {
-            dispatch({
-              type: 'alertCenter/fetch',
-              payload: {
-                page,
-                pageSize,
-              },
-            });
-          },
-          onShowSizeChange(page, pageSize) {
-            dispatch({
-              type: 'alertCenter/fetch',
-              payload: {
-                page,
-                pageSize,
-              },
-            });
-          },
+          onChange: (page, pageSize) => handlePageChange(page, pageSize),
+          onShowSizeChange: (page, pageSize) => handlePageChange(page, pageSize),
         }}
         onRow={record => ({
           onClick() {
             getAlert(record);
-            // dispatch({
-            //   type: 'alertCenter/fetchAlertItems',
-            //   payload: {
-            //     alertType: record.alertType,
-            //   },
-            // });
+            setAlert(record);
           },
         })}
       >
         <Column
           align="center"
           dataIndex="alertId"
-          title={
-            <ColumnTitle>
-              <FormattedMessage id="alert-center.alert-id" />
-            </ColumnTitle>
-          }
+          title={<FormattedMessage id="alert-center.alert-id" />}
         />
         <Column
           align="center"
@@ -202,6 +195,15 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
                 type="iconic_circle_close"
                 className={styles.icon}
                 title={formatMessage({ id: 'alert-center.close' })}
+                onClick={() =>
+                  Modal.confirm({
+                    title: 'Confirm',
+                    content: 'Are you sure close this alert?',
+                    okText: 'Sure',
+                    cancelText: 'Cancel',
+                    onOk: () => closeAlert([record.alertId]),
+                  })
+                }
               />
             </Row>
           )}

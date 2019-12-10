@@ -1,14 +1,13 @@
 :global {
   .ant-btn {
     width: auto;
-  }
-  .ant-table-thead tr th {
-    background-color: #fff;
+    &:last-child {
+      margin-right: 0;
+    }
   }
   .ant-table-tbody tr {
-    td,
-    &:hover {
-      background-color: #fff;
+    &.active {
+      color: #0d87d4;
     }
   }
 }
@@ -70,6 +69,7 @@
   .detail-comment {
     background-color: #fff;
     .comment-ul {
+      min-height: 200px;
       max-height: 300px;
       margin: 0 0 18px;
       padding: 0 18px;
@@ -85,6 +85,29 @@
         height: 46px;
         background-color: #fff;
       }
+      .up-attachments {
+        background-color: #eef1f4;
+        .file-desc {
+          padding: 4px 10px;
+          color: #3d4a59;
+        }
+        > ul {
+          margin: 0;
+          padding: 6px 16px;
+          color: #464c51;
+        }
+      }
+    }
+  }
+}
+.phase {
+  width: 150px;
+  margin: 0;
+  padding: 4px 6px;
+  > li {
+    cursor: pointer;
+    &:hover {
+      color: #4c83b3;
     }
   }
 }
