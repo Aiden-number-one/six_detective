@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-09 15:59:24
+ * @LastEditTime: 2019-12-10 19:23:49
  */
 
 import React, { Component } from 'react';
@@ -445,6 +445,14 @@ class UserManagement extends Component {
    * @return: undefined
    */
   queryLog = () => {
+    const { page } = this.state;
+    const newPage = {
+      pageNumber: 1,
+      pageSize: page.pageSize,
+    };
+    this.setState({
+      page: newPage,
+    });
     this.searchForm.current.validateFields((err, values) => {
       console.log('values===', values);
       const params = {
