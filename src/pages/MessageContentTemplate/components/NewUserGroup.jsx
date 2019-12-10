@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Row, Col, Button, Form, Input, message } from 'antd';
+import { Row, Col, Button, Form, Input, message, Select } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
@@ -8,6 +8,7 @@ import { connect } from 'dva';
 // import ClassifyTree from '@/components/ClassifyTree';
 
 const { TextArea } = Input;
+const { Option } = Select;
 class FormUser extends Component {
   constructor() {
     super();
@@ -16,7 +17,7 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { groupMenuInfo } = this.props;
+    const { groupMenuInfo, typeOptions } = this.props;
     return (
       <Fragment>
         <Form>
@@ -53,11 +54,19 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input Name of Alert User Group',
+                  message: 'Type of email should not be empty',
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.type,
-            })(<Input placeholder="Please input" />)}
+            })(
+              <Select placeholder="Please Select">
+                {typeOptions.map(item => (
+                  <Option key={item.key} value={item.value}>
+                    {item.title}
+                  </Option>
+                ))}
+              </Select>,
+            )}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.template.templateTitle' })}
@@ -68,7 +77,7 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input Name of Alert User Group',
+                  message: 'Title of email should not be empty',
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.title,
@@ -83,7 +92,7 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input Name of Alert User Group',
+                  message: 'Content of email should not be empty',
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.content,
@@ -95,12 +104,6 @@ class FormUser extends Component {
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('keyWord', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input Name of Alert User Group',
-                },
-              ],
               initialValue: groupMenuInfo && groupMenuInfo.keyWord,
             })(<Input placeholder="Please input" />)}
           </Form.Item>
@@ -150,8 +153,11 @@ class NewUser extends Component {
       }
       if (!updateFlag) {
         const param = {
-          alertName: values.roleName,
-          alertDesc: values.roleDesc,
+          templateId: values.templateId,
+          templateName: values.templateName,
+          title: values.title,
+          content: values.content,
+          type: values.type,
         };
         // debugger
         dispatch({
@@ -167,12 +173,12 @@ class NewUser extends Component {
           },
         });
       } else {
-        const { groupMenuInfo } = this.props;
         const params = {
-          operType: 'modifyById',
-          roleId: groupMenuInfo.roleId,
-          roleName: values.roleName,
-          roleDesc: values.roleDesc,
+          templateId: values.templateId,
+          templateName: values.templateName,
+          type: values.type,
+          title: values.title,
+          content: values.content,
         };
         dispatch({
           type: 'alertUserGroup/updateUserAlert',
@@ -185,30 +191,15 @@ class NewUser extends Component {
     });
   };
 
-  getMenuGrops = () => {
-    const { dispatch, groupMenuInfo } = this.props;
-    const that = this;
-    const params = {
-      operType: 'queryById',
-      roleId: groupMenuInfo.roleId,
-    };
-    dispatch({
-      type: 'alertUserGroup/updateUserGroup',
-      payload: params,
-      callback: () => {
-        const selectedKeys = this.props.updateGroup.map(element => element.menuId);
-        that.setState({
-          selectedKeys,
-        });
-      },
-    });
-  };
-
   render() {
-    const { groupMenuInfo } = this.props;
+    const { groupMenuInfo, typeOptions } = this.props;
     return (
       <Fragment>
-        <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
+        <NewFormUser
+          ref={this.newUserRef}
+          groupMenuInfo={groupMenuInfo}
+          typeOptions={typeOptions}
+        />
         <Row
           type="flex"
           justify="end"

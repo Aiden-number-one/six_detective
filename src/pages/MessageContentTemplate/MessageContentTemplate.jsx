@@ -4,6 +4,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
+import { templateTypeFormat } from '@/utils/filter';
 
 import styles from './MessageContentTemplate.less';
 import SearchForm from './components/SearchForm';
@@ -26,6 +27,14 @@ export default class MessageContentTemplate extends Component {
       deleteVisible: false,
       updateFlag: false,
       groupMenuInfo: {},
+      typeOptions: [
+        { key: '', value: '', title: 'All' },
+        { key: '1', value: '1', title: 'Management Email' },
+        { key: '2', value: '2', title: 'Alert Email' },
+        { key: '3', value: '3', title: 'Information Email' },
+        { key: '4', value: '4', title: 'Information Message' },
+        { key: '5', value: '5', title: 'Alert Message' },
+      ],
       columns: [
         {
           title: formatMessage({ id: 'systemManagement.template.templateName' }),
@@ -41,6 +50,7 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'systemManagement.template.templateType' }),
           dataIndex: 'type',
           key: 'type',
+          render: (res, obj) => <span>{templateTypeFormat(obj.type)}</span>,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.templateTitle' }),
@@ -65,9 +75,6 @@ export default class MessageContentTemplate extends Component {
             <span className={styles.operation}>
               <a href="#" onClick={() => this.updateUser(res, obj)}>
                 {formatMessage({ id: 'app.common.modify' })}
-              </a>
-              <a href="#" onClick={() => this.deleteUser(res, obj)}>
-                {formatMessage({ id: 'app.common.delete' })}
               </a>
             </span>
           ),
@@ -138,16 +145,6 @@ export default class MessageContentTemplate extends Component {
     });
   };
 
-  deleteUser = (res, obj) => {
-    const groupMenuInfo = {
-      roleId: obj.roleId,
-    };
-    this.setState({
-      deleteVisible: true,
-      groupMenuInfo,
-    });
-  };
-
   deleteConfirm = () => {
     const { dispatch } = this.props;
     const { groupMenuInfo } = this.state;
@@ -185,8 +182,9 @@ export default class MessageContentTemplate extends Component {
         return;
       }
       const params = {
-        roleName: values.roleName,
-        roleDesc: values.roleDesc,
+        templateName: values.templateName,
+        templateId: values.templateId,
+        type: values.type,
       };
       this.queryUserList(params);
     });
@@ -220,15 +218,17 @@ export default class MessageContentTemplate extends Component {
    */
   queryUserList = (
     param = {
-      roleName: undefined,
-      roleDesc: undefined,
+      templateName: undefined,
+      templateId: undefined,
+      type: undefined,
     },
   ) => {
     const { dispatch } = this.props;
-    const { roleName, roleDesc } = param;
+    const { templateName, templateId, type } = param;
     const params = {
-      roleName,
-      roleDesc,
+      templateName,
+      templateId,
+      type,
       pageNumber: this.state.page.pageNumber.toString(),
       pageSize: this.state.page.pageSize.toString(),
     };
@@ -256,10 +256,16 @@ export default class MessageContentTemplate extends Component {
   render() {
     const { loading, menuUserGroup } = this.props;
     const { groupTitle, deleteVisible, groupMenuInfo, updateFlag } = this.state;
-    const { columns, page, modifyVisible } = this.state;
+    const { typeOptions, columns, page, modifyVisible } = this.state;
+    const modifyTypeOptions = Object.assign([], typeOptions);
+    modifyTypeOptions.shift();
     return (
       <PageHeaderWrapper>
-        <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
+        <NewSearchForm
+          search={this.queryLog}
+          ref={this.searchForm}
+          typeOptions={typeOptions}
+        ></NewSearchForm>
         <Drawer
           // drawerStyle={
           //   {
@@ -278,6 +284,7 @@ export default class MessageContentTemplate extends Component {
               onSave={this.onSave}
               groupMenuInfo={groupMenuInfo}
               updateFlag={updateFlag}
+              typeOptions={modifyTypeOptions}
             ></NewUserGroup>
           )}
         </Drawer>
