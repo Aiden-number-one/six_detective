@@ -115,7 +115,7 @@ class ApprovalConfiguration extends PureComponent {
       this.configData({
         pageNumber: '1',
         pageSize: '10',
-        functionID: values.functionId,
+        functionId: values.functionId,
         flowName: values.flowName,
       });
     });
