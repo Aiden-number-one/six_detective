@@ -22,10 +22,12 @@ export default class ReportDesigner extends PureComponent {
 
   componentDidMount() {
     const { initSheet } = this.props;
+    const leftWidth = document.getElementById('leftSideBar').offsetWidth;
+    const rigthWidth = document.getElementById('rigthSideBar').offsetWidth;
     initSheet({
       view: {
         height: () => window.innerHeight,
-        width: () => window.innerWidth - 378,
+        width: () => window.innerWidth - leftWidth - rigthWidth,
       },
     });
     setTimeout(() => {
@@ -72,10 +74,13 @@ export default class ReportDesigner extends PureComponent {
               <SpreadSheet />
             </div>
           </div>
-          <div className={classNames(styles.left, styles.col)}>
+          <div id="leftSideBar" className={classNames(styles.left, styles.col)}>
             <LeftSideBar />
           </div>
-          <div className={classNames(styles.right, styles.col, styles.rigthSideBar)}>
+          <div
+            id="rigthSideBar"
+            className={classNames(styles.right, styles.col, styles.rigthSideBar)}
+          >
             <RigthSideBar />
           </div>
         </div>

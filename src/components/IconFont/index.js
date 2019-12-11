@@ -10,7 +10,7 @@ import { Icon } from 'antd';
 
 const IconFont = Icon.createFromIconfontCN({
   // scriptUrl: `http://${window.location.host}/iconfont.js`,
-  scriptUrl: '//at.alicdn.com/t/font_1472528_8a8hn3tv0dm.js',
+  scriptUrl: '//at.alicdn.com/t/font_1472528_gbafle6mtwa.js',
 });
 
 export default IconFont;
