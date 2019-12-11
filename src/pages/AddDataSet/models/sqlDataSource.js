@@ -7,10 +7,10 @@
 import { message } from 'antd';
 import Service from '@/utils/Service';
 
-const { getDataSourceList, getTableData } = Service;
+const { getDataSourceList, getTableData, getMetadataTablePerform } = Service;
 
 export default {
-  namespace: 'sqlDataSetList',
+  namespace: 'sqlDataSource',
 
   state: {
     activeKey: '', // 数据表列表active
@@ -18,13 +18,17 @@ export default {
     metaDataTableList: [], // 数据表列表
     dataSourceList: [], // 数据源配置列表
     connectionId: '', //
+    tableData: [], //
+    column: [], // table的column
   },
 
   effects: {
-    *getDataSourceConfig({ payload }, { call, put }) {
+    // 获取数据源数据
+    *getDataSourceList({ payload }, { call, put }) {
       const { connectionId, ...param } = payload;
       const res = yield call(getDataSourceList, { param });
       if (res && res.bcjson.flag === '1') {
+        // 保存数据源
         yield put({
           type: 'setDataSourceList',
           payload: res.bcjson.items,
@@ -35,22 +39,22 @@ export default {
           payload: [],
         });
         yield put({
-          type: 'getMetadataTableInfo',
+          type: 'getMetadataList',
           payload: {
             connection_id:
               connectionId || (res.bcjson.items[0] && res.bcjson.items[0].connectionId),
             pageNumber: '1',
             pageSize: '30',
-            ignoreMdType: 'U',
           },
         });
       } else {
         message.error(res.bcjson.msg.substring(0, 1000));
       }
     },
-    *getMetadataTableInfo({ payload }, { call, put, select }) {
+    // 获取数据源下的表
+    *getMetadataList({ payload }, { call, put, select }) {
       const metaDataTableList = yield select(
-        ({ sqlDataSetList }) => sqlDataSetList.metaDataTableList,
+        ({ sqlDataSource }) => sqlDataSource.metaDataTableList,
       );
       const res = yield call(getTableData, { param: payload });
       if (res && res.bcjson.flag === '1') {
@@ -71,6 +75,32 @@ export default {
         });
       } else {
         message.error(res.bcjson.msg.substring(0, 1000));
+      }
+    },
+    // 获取表数据
+    *getMetadataTablePerform({ payload }, { call, put }) {
+      const res = yield call(getMetadataTablePerform, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        const tableHead = res.bcjson.items[0] ? res.bcjson.items[0] : {};
+        const column = Object.keys(tableHead).map(value => ({
+          value,
+          // eslint-disable-next-line no-restricted-globals
+          type: isNaN(tableHead[value]) ? 'dimension' : 'measure',
+          width: 150,
+        }));
+        yield put({
+          type: 'changeColumn',
+          payload: column,
+        });
+        yield put({
+          type: 'addMetadataTablePerform',
+          payload: res.bcjson.items,
+        });
+      } else {
+        yield put({
+          type: 'addMetadataTablePerform',
+          payload: [],
+        });
       }
     },
   },
@@ -105,6 +135,25 @@ export default {
       return {
         ...state,
         connectionId: action.payload.connectionId,
+      };
+    },
+    changeColumn(state, action) {
+      return {
+        ...state,
+        column: action.payload,
+      };
+    },
+    addMetadataTablePerform(state, action) {
+      return {
+        ...state,
+        tableData: action.payload,
+      };
+    },
+    clearMetadata(state) {
+      return {
+        ...state,
+        tableData: [],
+        column: [],
       };
     },
   },
