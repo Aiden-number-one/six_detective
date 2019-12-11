@@ -47,8 +47,8 @@ export const userManagement = {
     *getMenuUserGroup({ payload }, { call, put }) {
       const response = yield call(getMenuUserGroup, { param: payload });
       const userMenu = response.bcjson.items.map(element => ({
-        label: element.roleName,
-        value: element.roleId,
+        label: element.groupName,
+        value: element.groupId,
       }));
 
       if (response.bcjson.flag === '1') {
@@ -63,8 +63,8 @@ export const userManagement = {
     *getAlertUserGroup({ payload }, { call, put }) {
       const response = yield call(getAlertUserGroup, { param: payload });
       const userMenu = response.bcjson.items.map(element => ({
-        label: element.roleName,
-        value: element.roleId,
+        label: element.groupName,
+        value: element.groupId,
       }));
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {

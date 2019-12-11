@@ -166,7 +166,7 @@ function saveFlowInfo(){
 	params.max_parallel = "";
 	params.fault_type = "";
 	params.valid_flag = "";
-	params.creator = "admin";
+	params.creator = localStorage.getItem('loginName');
 	if ($("#_saveJobType").val() === '2' || $("#_ifNew").val() == 'true') {
 		params.operType = "ADD";
 	} else {

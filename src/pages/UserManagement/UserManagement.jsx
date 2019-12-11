@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-09 15:59:24
+ * @LastEditTime: 2019-12-11 19:28:15
  */
 
 import React, { Component } from 'react';
@@ -45,6 +45,8 @@ class UserManagement extends Component {
     updatePasswordVisible: false,
     resetPasswordVisible: false,
     customerno: null,
+    searchUserId: undefined,
+    searchUserName: undefined,
     userInfo: {
       userId: '',
       userName: '',
@@ -126,17 +128,12 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  queryUserList = (
-    param = {
-      userId: undefined,
-      userName: undefined,
-    },
-  ) => {
+  queryUserList = () => {
     const { dispatch } = this.props;
-    const { userId, userName } = param;
+    const { searchUserId, searchUserName } = this.state;
     const params = {
-      userId,
-      userName,
+      userId: searchUserId,
+      userName: searchUserName,
       operType: 'queryAllList',
       pageNumber: this.state.page.pageNumber.toString(),
       pageSize: this.state.page.pageSize.toString(),
@@ -445,13 +442,24 @@ class UserManagement extends Component {
    * @return: undefined
    */
   queryLog = () => {
+    const { page } = this.state;
+    const newPage = {
+      pageNumber: 1,
+      pageSize: page.pageSize,
+    };
+    this.setState({
+      page: newPage,
+    });
     this.searchForm.current.validateFields((err, values) => {
-      console.log('values===', values);
-      const params = {
-        userId: values.userId,
-        userName: values.userName,
-      };
-      this.queryUserList(params);
+      this.setState(
+        {
+          searchUserId: values.userId,
+          searchUserName: values.userName,
+        },
+        () => {
+          this.queryUserList();
+        },
+      );
     });
   };
 

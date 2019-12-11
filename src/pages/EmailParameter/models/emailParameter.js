@@ -3,20 +3,21 @@
  * @Author: dailinbo
  * @Date: 2019-11-05 14:04:16
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-11-18 19:16:06
+ * @LastEditTime: 2019-12-11 14:41:53
  */
 import Service from '@/utils/Service';
 
-const { emailList, addEmail, deleteEmail } = Service;
+const { emailList, addEmail, deleteEmail, updateEmail } = Service;
 const emailParameter = {
   namespace: 'getEmail',
   state: {
     data: [],
     datas: {},
     deleteDatas: {},
+    modifyData: {},
   },
   effects: {
-    *getEmailList({ payload }, { call, put }) {
+    *getEmailList({ payload, callback }, { call, put }) {
       const response = yield call(emailList, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -24,6 +25,19 @@ const emailParameter = {
             type: 'getDatas',
             payload: response.bcjson,
           });
+          callback();
+        }
+      }
+    },
+    *updateEmail({ payload, callback }, { call, put }) {
+      const response = yield call(updateEmail, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'setDatas',
+            payload: response.bcjson.items,
+          });
+          callback();
         }
       }
     },
@@ -57,6 +71,12 @@ const emailParameter = {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    setDatas(state, action) {
+      return {
+        ...state,
+        modifyData: action.payload,
       };
     },
     addDatas(state, action) {

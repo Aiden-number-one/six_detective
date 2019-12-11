@@ -25,17 +25,19 @@ class MenuUserGroup extends Component {
       modifyVisible: false,
       deleteVisible: false,
       updateFlag: false,
+      searchGroupName: undefined,
+      searchGroupDesc: undefined,
       groupMenuInfo: {},
       columns: [
         {
           title: formatMessage({ id: 'systemManagement.userMaintenance.name' }),
-          dataIndex: 'roleName',
-          key: 'roleName',
+          dataIndex: 'groupName',
+          key: 'groupName',
         },
         {
           title: formatMessage({ id: 'systemManagement.userGroup.remark' }),
-          dataIndex: 'roleDesc',
-          key: 'roleDesc',
+          dataIndex: 'groupDesc',
+          key: 'groupDesc',
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),
@@ -108,13 +110,13 @@ class MenuUserGroup extends Component {
     // this.props.dispatch(
     //   routerRedux.push({
     //     pathname: '/system-management/user-maintenance/modify-menu-user',
-    //     query: { roleId: obj.roleId },
+    //     query: { groupId: obj.groupId },
     //   }),
     // );
     const groupMenuInfo = {
-      roleId: obj.roleId,
-      roleName: obj.roleName,
-      roleDesc: obj.roleDesc,
+      groupId: obj.groupId,
+      groupName: obj.groupName,
+      groupDesc: obj.groupDesc,
     };
     this.setState({
       modifyVisible: true,
@@ -127,7 +129,7 @@ class MenuUserGroup extends Component {
   deleteUser = (res, obj) => {
     console.log('delete====', obj);
     const groupMenuInfo = {
-      roleId: obj.roleId,
+      groupId: obj.groupId,
     };
     this.setState({
       deleteVisible: true,
@@ -140,7 +142,7 @@ class MenuUserGroup extends Component {
     const { groupMenuInfo } = this.state;
     const params = {
       operType: 'deleteById',
-      roleId: groupMenuInfo.roleId,
+      groupId: groupMenuInfo.groupId,
     };
     dispatch({
       type: 'menuUserGroup/updateUserGroup',
@@ -169,11 +171,15 @@ class MenuUserGroup extends Component {
     // });
     this.searchForm.current.validateFields((err, values) => {
       console.log('values===', values);
-      const params = {
-        roleName: values.roleName,
-        roleDesc: values.roleDesc,
-      };
-      this.queryUserList(params);
+      this.setState(
+        {
+          searchGroupName: values.groupName,
+          searchGroupDesc: values.groupDesc,
+        },
+        () => {
+          this.queryUserList();
+        },
+      );
     });
   };
 
@@ -203,17 +209,12 @@ class MenuUserGroup extends Component {
    * @param {type} null
    * @return: undefined
    */
-  queryUserList = (
-    param = {
-      roleName: undefined,
-      roleDesc: undefined,
-    },
-  ) => {
+  queryUserList = () => {
     const { dispatch } = this.props;
-    const { roleName, roleDesc } = param;
+    const { searchGroupName, searchGroupDesc } = this.state;
     const params = {
-      roleName,
-      roleDesc,
+      groupName: searchGroupName,
+      groupDesc: searchGroupDesc,
       pageNumber: this.state.page.pageNumber.toString(),
       pageSize: this.state.page.pageSize.toString(),
     };
