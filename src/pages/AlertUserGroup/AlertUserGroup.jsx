@@ -83,15 +83,23 @@ class AlertUserGroup extends Component {
     });
   };
 
-  onSave = () => {
+  onSave = updateFlag => {
     this.setState({
       modifyVisible: false,
     });
-    const { pageSize } = this.state.page;
-    const page = {
-      pageNumber: 1,
-      pageSize,
-    };
+    const { pageSize, pageNumber } = this.state.page;
+    let page = {};
+    if (!updateFlag) {
+      page = {
+        pageNumber: 1,
+        pageSize,
+      };
+    } else {
+      page = {
+        pageNumber,
+        pageSize,
+      };
+    }
     this.setState(
       {
         page,

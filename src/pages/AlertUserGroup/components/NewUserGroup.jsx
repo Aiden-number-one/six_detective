@@ -109,7 +109,7 @@ class NewUser extends Component {
             //     pathname: '/system-management/menu-user-group',
             //     params: values,
             //   });
-            this.props.onSave();
+            this.props.onSave(false);
           },
         });
       } else {
@@ -124,7 +124,7 @@ class NewUser extends Component {
           type: 'alertUserGroup/updateUserAlert',
           payload: params,
           callback: () => {
-            this.props.onSave();
+            this.props.onSave(true);
           },
         });
       }
