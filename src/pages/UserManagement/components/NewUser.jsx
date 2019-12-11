@@ -189,7 +189,7 @@ export default class NewUser extends Component {
       callback: () => {
         const groupIds = this.props.modifyUserData.map(element => {
           let groupId = '';
-          if (element.userGroupType === 'MENU') {
+          if (element.userGroupType === 'menu') {
             // eslint-disable-next-line prefer-destructuring
             groupId = element.groupId;
           }
@@ -197,7 +197,7 @@ export default class NewUser extends Component {
         });
         const alertIds = this.props.modifyUserData.map(element => {
           let groupId = '';
-          if (element.userGroupType === 'ALERT') {
+          if (element.userGroupType === 'alert') {
             // eslint-disable-next-line prefer-destructuring
             groupId = element.groupId;
           }
