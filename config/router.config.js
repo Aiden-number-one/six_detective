@@ -338,6 +338,11 @@ export default [
             component: './Stylespecification/Stylespecification',
             // hideInMenu: true,
           },
+          {
+            path: '/alert-management/Approval-Process-Center',
+            name: 'ApprovalProcessCenter',
+            component: './ApprovalProcessCenter/index',
+          },
         ],
       },
     ],
