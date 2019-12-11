@@ -26,6 +26,9 @@ export default class MessageContentTemplate extends Component {
       modifyVisible: false,
       deleteVisible: false,
       updateFlag: false,
+      searchTemplateName: undefined,
+      searchTemplateId: undefined,
+      searchType: undefined,
       groupMenuInfo: {},
       typeOptions: [
         { key: '', value: '', title: 'All' },
@@ -191,12 +194,16 @@ export default class MessageContentTemplate extends Component {
       if (err) {
         return;
       }
-      const params = {
-        templateName: values.templateName,
-        templateId: values.templateId,
-        type: values.type,
-      };
-      this.queryUserList(params);
+      this.setState(
+        {
+          searchTemplateName: values.templateName,
+          searchTemplateId: values.templateId,
+          searchType: values.type,
+        },
+        () => {
+          this.queryUserList();
+        },
+      );
     });
   };
 
@@ -226,19 +233,13 @@ export default class MessageContentTemplate extends Component {
    * @param {type} null
    * @return: undefined
    */
-  queryUserList = (
-    param = {
-      templateName: undefined,
-      templateId: undefined,
-      type: undefined,
-    },
-  ) => {
+  queryUserList = () => {
     const { dispatch } = this.props;
-    const { templateName, templateId, type } = param;
+    const { searchTemplateName, searchTemplateId, searchType } = this.state;
     const params = {
-      templateName,
-      templateId,
-      type,
+      templateName: searchTemplateName,
+      templateId: searchTemplateId,
+      type: searchType,
       pageNumber: this.state.page.pageNumber.toString(),
       pageSize: this.state.page.pageSize.toString(),
     };
