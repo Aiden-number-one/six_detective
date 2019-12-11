@@ -2,12 +2,12 @@
  * @Description: kddes
  * @Author: mus
  * @Date: 2019-09-19 20:07:10
- * @LastEditTime: 2019-09-20 10:44:13
+ * @LastEditTime: 2019-12-09 10:14:42
  * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
 const kddes = {
-  r(r, n, m, s) {
+  r: function(r, n, m, s) {
     (n && n != '') || (n = String.fromCharCode(0x6b, 0x69, 0x6e, 0x67, 0x64, 0x6f, 0x6d));
     var c,
       i,
@@ -95,7 +95,7 @@ const kddes = {
       }
     return v;
   },
-  e(r) {
+  e: function(r) {
     var e = new Array(),
       n = r.length,
       m = parseInt(n / 4),
@@ -104,7 +104,7 @@ const kddes = {
     for (f = 0; m > f; f++) e[f] = kddes.a(r.substring(4 * f + 0, 4 * f + 4));
     return s > 0 && (e[f] = kddes.a(r.substring(4 * f + 0, n))), e;
   },
-  a(r) {
+  a: function(r) {
     var e = r.length,
       a = new Array(64);
     if (4 > e) {
@@ -141,7 +141,7 @@ const kddes = {
       }
     return a;
   },
-  s(r) {
+  s: function(r) {
     var e;
     switch (r) {
       case '0000':
@@ -194,7 +194,7 @@ const kddes = {
     }
     return e;
   },
-  f(r) {
+  f: function(r) {
     var e = '';
     for (i = 0; i < 16; i++) {
       var a = '';
@@ -203,7 +203,7 @@ const kddes = {
     }
     return e;
   },
-  o(r, e) {
+  o: function(r, e) {
     var a = kddes.A(e),
       n = kddes.c(r),
       m = new Array(32),
@@ -226,14 +226,14 @@ const kddes = {
     for (o = 0; 32 > o; o++) (h[o] = s[o]), (h[32 + o] = m[o]);
     return kddes.v(h);
   },
-  c(r) {
+  c: function(r) {
     var e = new Array(64);
     for (i = 0, m = 1, n = 0; i < 4; i++, m += 2, n += 2)
       for (j = 7, k = 0; j >= 0; j--, k++)
         (e[8 * i + k] = r[8 * j + m]), (e[8 * i + k + 32] = r[8 * j + n]);
     return e;
   },
-  t(r) {
+  t: function(r) {
     var e = new Array(48);
     for (i = 0; i < 8; i++)
       (e[6 * i + 0] = 0 == i ? r[31] : r[4 * i - 1]),
@@ -244,12 +244,12 @@ const kddes = {
         (e[6 * i + 5] = 7 == i ? r[0] : r[4 * i + 4]);
     return e;
   },
-  u(r, e) {
+  u: function(r, e) {
     var a = new Array(r.length);
     for (i = 0; i < r.length; i++) a[i] = r[i] ^ e[i];
     return a;
   },
-  b(r) {
+  b: function(r) {
     var e = new Array(32),
       a = '',
       n = [
@@ -339,7 +339,7 @@ const kddes = {
     }
     return e;
   },
-  l(r) {
+  l: function(r) {
     var e = new Array(32);
     return (
       (e[0] = r[15]),
@@ -377,7 +377,7 @@ const kddes = {
       e
     );
   },
-  v(r) {
+  v: function(r) {
     var e = new Array(64);
     return (
       (e[0] = r[39]),
@@ -447,7 +447,7 @@ const kddes = {
       e
     );
   },
-  w(r) {
+  w: function(r) {
     var e = '';
     switch (r) {
       case 0:
@@ -500,7 +500,7 @@ const kddes = {
     }
     return e;
   },
-  A(r) {
+  A: function(r) {
     var e = new Array(56),
       a = new Array();
     (a[0] = new Array()),
@@ -633,7 +633,7 @@ const kddes = {
     return a;
   },
 
-  getDes(e, a, n, m) {
+  getDes: function(e, a, n, m) {
     return kddes.r(e, a, n, m);
   },
 };

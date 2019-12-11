@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-13 16:47:20
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-05 08:55:03
+ * @LastEditTime: 2019-12-10 17:44:16
  */
 // import moment from 'moment';
 import { formatTimeString } from '@/utils/utils';
@@ -19,6 +19,17 @@ const userStatus = value => {
     6: '密码重置',
   };
   return payWayMap[value] || '未知状态';
+};
+
+const templateTypeFormat = value => {
+  const payWayMap = {
+    1: 'Management Email',
+    2: 'Alert Email',
+    3: 'Information Email',
+    4: 'Information Message',
+    5: 'Alert Message',
+  };
+  return payWayMap[value] || 'stateless';
 };
 
 const timeFormat = time => {
@@ -40,4 +51,4 @@ const timeFormat = time => {
 };
 // const timeFormat = time => time;
 
-export { userStatus, timeFormat };
+export { userStatus, templateTypeFormat, timeFormat };
