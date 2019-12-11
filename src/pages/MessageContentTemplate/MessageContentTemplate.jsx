@@ -40,6 +40,8 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'systemManagement.template.templateName' }),
           dataIndex: 'templateName',
           key: 'templateName',
+          ellipsis: true,
+          width: 150,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.templateId' }),
@@ -51,21 +53,29 @@ export default class MessageContentTemplate extends Component {
           dataIndex: 'type',
           key: 'type',
           render: (res, obj) => <span>{templateTypeFormat(obj.type)}</span>,
+          ellipsis: true,
+          width: 120,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.templateTitle' }),
           dataIndex: 'title',
           key: 'title',
+          ellipsis: true,
+          width: 120,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.templateContent' }),
           dataIndex: 'content',
           key: 'content',
+          ellipsis: true,
+          width: 200,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.keyword' }),
           dataIndex: 'keyWord',
           key: 'keyWord',
+          ellipsis: true,
+          width: 200,
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),
