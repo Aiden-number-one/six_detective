@@ -25,6 +25,8 @@ class AlertUserGroup extends Component {
       modifyVisible: false,
       deleteVisible: false,
       updateFlag: false,
+      searchGroupName: undefined,
+      searchGroupDesc: undefined,
       groupMenuInfo: {},
       columns: [
         {
@@ -83,23 +85,15 @@ class AlertUserGroup extends Component {
     });
   };
 
-  onSave = updateFlag => {
+  onSave = () => {
     this.setState({
       modifyVisible: false,
     });
-    const { pageSize, pageNumber } = this.state.page;
-    let page = {};
-    if (!updateFlag) {
-      page = {
-        pageNumber: 1,
-        pageSize,
-      };
-    } else {
-      page = {
-        pageNumber,
-        pageSize,
-      };
-    }
+    const { pageSize } = this.state.page;
+    const page = {
+      pageNumber: 1,
+      pageSize,
+    };
     this.setState(
       {
         page,
@@ -176,11 +170,15 @@ class AlertUserGroup extends Component {
       if (err) {
         return;
       }
-      const params = {
-        groupName: values.groupName,
-        groupDesc: values.groupDesc,
-      };
-      this.queryUserList(params);
+      this.setState(
+        {
+          searchGroupName: values.groupName,
+          searchGroupDesc: values.groupDesc,
+        },
+        () => {
+          this.queryUserList();
+        },
+      );
     });
   };
 
@@ -210,17 +208,12 @@ class AlertUserGroup extends Component {
    * @param {type} null
    * @return: undefined
    */
-  queryUserList = (
-    param = {
-      groupName: undefined,
-      groupDesc: undefined,
-    },
-  ) => {
+  queryUserList = () => {
     const { dispatch } = this.props;
-    const { groupName, groupDesc } = param;
+    const { searchGroupName, searchGroupDesc } = this.state;
     const params = {
-      groupName,
-      groupDesc,
+      groupName: searchGroupName,
+      groupDesc: searchGroupDesc,
       pageNumber: this.state.page.pageNumber.toString(),
       pageSize: this.state.page.pageSize.toString(),
     };
