@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form } from 'antd';
+import { Form, Modal } from 'antd';
 import { connect } from 'dva';
-// import { formatMessage } from 'umi/locale';
-// import styles from './EmailParameter.less';
+import { formatMessage } from 'umi/locale';
+import styles from './EmailParameter.less';
 import ModifyEmail from './components/ModifyEmail';
 
 const NewModifyForm = Form.create({})(ModifyEmail);
@@ -13,10 +13,16 @@ const NewModifyForm = Form.create({})(ModifyEmail);
 }))
 class EmailParameter extends Component {
   state = {
-    page: {
-      pageNumber: '1',
-      pageSize: '10',
+    visible: false,
+    confirmLoading: false,
+    emailObj: {
+      emailHost: '',
+      emailPort: '',
+      emailAddress: '',
+      emailPassword: '',
+      status: '',
     },
+    emailListData: [],
   };
 
   addFormRef = React.createRef();
@@ -58,8 +64,6 @@ class EmailParameter extends Component {
       mailAddress: obj.mailAddress,
       mailPassword: obj.mailPassword,
       isopen: obj.isopen,
-      remark: obj.remark,
-      isAddConfig: obj.isAddConfig,
     };
     this.setState(
       {
@@ -94,64 +98,113 @@ class EmailParameter extends Component {
 
   getEmailInit = () => {
     const { dispatch } = this.props;
-    const params = {
-      pageNumber: this.state.page.pageNumber,
-      pageSize: this.state.page.pageSize,
-    };
+    const params = {};
     dispatch({
       type: 'getEmail/getEmailList',
       payload: params,
+      callback: () => {
+        this.formatEmailObj(this.props.getEmailListData.items);
+      },
     });
   };
 
-  // 数据处理函数
-  formatIsOpen = value => {
-    const obj = {
-      0: '关闭',
-      1: '开启',
-    };
-    return obj[value];
+  formatEmailObj = getEmailListData => {
+    console.log('getEmailListData=', getEmailListData);
+    // emailHost: '',
+    // emailPort: '',
+    // emailAddress: '',
+    // emailPassword: '',
+    // isopen: '',
+    const emailObj = {};
+    getEmailListData.map(element => {
+      const paramKey = element.paramKey.split('.')[2];
+      console.log();
+      switch (paramKey) {
+        case 'host':
+          emailObj.emailHost = element.paramRealValue;
+          break;
+        case 'port':
+          emailObj.emailPort = element.paramRealValue;
+          break;
+        case 'username':
+          emailObj.emailAddress = element.paramRealValue;
+          break;
+        case 'password':
+          emailObj.emailPassword = element.paramRealValue;
+          break;
+        case 'status':
+          emailObj.status = element.paramRealValue;
+          break;
+        case 'from':
+          emailObj.form = element.paramRealValue;
+          break;
+        default:
+          emailObj.form = element.paramRealValue;
+      }
+      return true;
+    });
+    this.setState({
+      emailObj,
+    });
   };
 
-  /**
-   * @description: This is for paging function.
-   * @param {type} null
-   * @return: undefined
-   */
-  pageChange = (pageNumber, pageSize) => {
-    const page = {
-      pageNumber: pageNumber.toString(),
-      pageSize: pageSize.toString(),
-    };
-
-    this.setState(
-      {
-        page,
-      },
-      () => {
-        this.getEmailInit();
-      },
-    );
+  onSave = params => {
+    console.log('params=', params);
+    this.setState({
+      emailListData: params,
+      visible: true,
+    });
   };
 
-  onShowSizeChange = (pageNumber, pageSize) => {
-    console.log('pageNumber, pageSize=', pageNumber, pageSize);
+  handleOk = () => {
+    const { emailListData } = this.state;
+    const { dispatch } = this.props;
+    const params = {
+      operType: 'operType',
+      paramInfo: JSON.stringify(emailListData),
+    };
+    dispatch({
+      type: 'getEmail/updateEmail',
+      payload: params,
+      callback: () => {
+        this.setState({
+          visible: false,
+        });
+      },
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
   };
 
   render() {
     const { loading, getEmailListData } = this.props;
+    const { visible, confirmLoading } = this.state;
     return (
       <PageHeaderWrapper>
         <Fragment>
           <div>
-            <div>
+            <div className={styles.emailWraper}>
               {/* 修改 */}
               <NewModifyForm
                 ref={this.modifyForm}
                 emailObj={this.state.emailObj}
-                getEmailListData={getEmailListData}
+                getEmailListData={getEmailListData.items}
+                onSave={this.onSave}
                 loading={loading}
               ></NewModifyForm>
+              <Modal
+                title={formatMessage({ id: 'app.common.save' })}
+                visible={visible}
+                onOk={this.handleOk}
+                confirmLoading={confirmLoading}
+                onCancel={this.handleCancel}
+              >
+                <p>All of you change have been saved</p>
+              </Modal>
             </div>
           </div>
         </Fragment>

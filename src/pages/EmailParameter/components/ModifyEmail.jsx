@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Row, Col, Button, Form, Input, message } from 'antd';
+import { Row, Col, Button, Form, Input, Checkbox } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
+import { severIPPattern } from '@/utils/validate';
 // import { routerRedux } from 'dva/router';
 // import styles from '../AlertUserGroup.less';
 
@@ -24,14 +25,15 @@ class FormUser extends Component {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
-            {getFieldDecorator('mailHost', {
+            {getFieldDecorator('emailHost', {
               rules: [
                 {
                   required: true,
                   message: 'Please Input Server IP',
+                  pattern: severIPPattern,
                 },
               ],
-              initialValue: emailObj && emailObj.mailHost,
+              initialValue: emailObj && emailObj.emailHost,
             })(<Input />)}
           </Form.Item>
           <Form.Item
@@ -39,14 +41,14 @@ class FormUser extends Component {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
-            {getFieldDecorator('mailPort', {
+            {getFieldDecorator('emailPort', {
               rules: [
                 {
                   required: true,
                   message: 'Please Input Port of Email Sever',
                 },
               ],
-              initialValue: emailObj && emailObj.mailPort,
+              initialValue: emailObj && emailObj.emailPort,
             })(<Input />)}
           </Form.Item>
           <Form.Item
@@ -54,7 +56,7 @@ class FormUser extends Component {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
-            {getFieldDecorator('mailAddress', {
+            {getFieldDecorator('emailAddress', {
               rules: [
                 {
                   type: 'email',
@@ -65,7 +67,7 @@ class FormUser extends Component {
                   message: 'Please Input Sender Email Address',
                 },
               ],
-              initialValue: emailObj && emailObj.mailAddress,
+              initialValue: emailObj && emailObj.emailAddress,
             })(<Input />)}
           </Form.Item>
           <Form.Item
@@ -73,15 +75,27 @@ class FormUser extends Component {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
-            {getFieldDecorator('mailPassword', {
+            {getFieldDecorator('emailPassword', {
               rules: [
                 {
                   required: true,
                   message: 'Please Input Sender Email Password',
                 },
               ],
-              initialValue: emailObj && emailObj.mailPassword,
+              initialValue: emailObj && emailObj.emailPassword,
             })(<Input.Password />)}
+          </Form.Item>
+          <Form.Item label="Forbidden" labelCol={{ span: 6 }} wrapperCol={{ span: 8 }}>
+            {getFieldDecorator('status', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please Input Sender Email Password',
+                },
+              ],
+              valuePropName: 'checked',
+              initialValue: emailObj && emailObj.status,
+            })(<Checkbox></Checkbox>)}
           </Form.Item>
         </Form>
       </Fragment>
@@ -113,46 +127,73 @@ class NewUser extends Component {
   }
 
   onSave = () => {
-    const { dispatch, updateFlag } = this.props;
+    // const { dispatch, updateFlag } = this.props;
+    const { getEmailListData } = this.props;
+    const newEmailListData = Object.assign([], getEmailListData);
     this.newUserRef.current.validateFields((err, values) => {
-      console.log('err=======', err);
+      console.log('err=======', err, values);
       if (err) {
         return;
       }
-      if (!updateFlag) {
-        const param = {
-          alertName: values.roleName,
-          alertDesc: values.roleDesc,
-        };
-        // debugger
-        dispatch({
-          type: 'alertUserGroup/newAlertUser',
-          payload: param,
-          callback: () => {
-            message.success('success');
-            //   this.props.history.push({
-            //     pathname: '/system-management/menu-user-group',
-            //     params: values,
-            //   });
-            this.props.onSave();
-          },
-        });
-      } else {
-        const { groupMenuInfo } = this.props;
-        const params = {
-          operType: 'modifyById',
-          roleId: groupMenuInfo.roleId,
-          roleName: values.roleName,
-          roleDesc: values.roleDesc,
-        };
-        dispatch({
-          type: 'alertUserGroup/updateUserAlert',
-          payload: params,
-          callback: () => {
-            this.props.onSave();
-          },
-        });
-      }
+      newEmailListData.forEach(element => {
+        const paramKey = element.paramKey.split('.')[2];
+        console.log();
+        switch (paramKey) {
+          case 'host':
+            element.paramRealValue = values.emailHost;
+            break;
+          case 'port':
+            element.paramRealValue = values.emailPort;
+            break;
+          case 'username':
+            element.paramRealValue = values.emailAddress;
+            break;
+          case 'password':
+            element.paramRealValue = values.emailPassword;
+            break;
+          case 'status':
+            element.paramRealValue = values.status;
+            break;
+          default:
+            console.log(1);
+        }
+        this.props.onSave(newEmailListData);
+      });
+      this.props.onSave(newEmailListData);
+      // if (!updateFlag) {
+      //   const param = {
+      //     alertName: values.roleName,
+      //     alertDesc: values.roleDesc,
+      //   };
+      //   // debugger
+      //   dispatch({
+      //     type: 'alertUserGroup/newAlertUser',
+      //     payload: param,
+      //     callback: () => {
+      //       message.success('success');
+      //       //   this.props.history.push({
+      //       //     pathname: '/system-management/menu-user-group',
+      //       //     params: values,
+      //       //   });
+      //       this.props.onSave();
+      //     },
+      //   });
+      // } else {
+      //   const { groupMenuInfo } = this.props;
+      //   const params = {
+      //     operType: 'modifyById',
+      //     roleId: groupMenuInfo.roleId,
+      //     roleName: values.roleName,
+      //     roleDesc: values.roleDesc,
+      //   };
+      //   dispatch({
+      //     type: 'alertUserGroup/updateUserAlert',
+      //     payload: params,
+      //     callback: () => {
+      //       this.props.onSave();
+      //     },
+      //   });
+      // }
     });
   };
 
