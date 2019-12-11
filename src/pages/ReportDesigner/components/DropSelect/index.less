@@ -11,8 +11,8 @@
   align-items: center;
   width: calc(100% - 29px);
   height: 28px;
-  background: #fff;
   border: 1px solid #ddd;
+  border-bottom: 0;
   transition: 0.2s;
   .valueBox {
     align-items: center;
@@ -46,7 +46,7 @@
     height: 26px;
     padding: 0 8px;
     span {
-      color: $green;
+      color: #e7eff3;
       cursor: pointer;
     }
     > i {
@@ -65,13 +65,13 @@
       transition: 0.2s;
       // @include ellipsis; ...
       &.active {
-        background: lighten($green, 45%);
+        background: #e7eff3;
         &:hover {
-          background: lighten($green, 45%);
+          background: #e7eff3;
         }
       }
       &:hover {
-        background: lighten($green, 50%);
+        background: #e7eff3;
       }
     }
     .noData {
@@ -98,6 +98,7 @@
     color: #999;
     font-size: 12px;
     background: transparent;
+    border: 0;
   }
   i {
     cursor: pointer;
@@ -106,6 +107,6 @@
 
 .hover {
   &:hover {
-    color: $green !important;
+    color: #e7eff3 !important;
   }
 }
