@@ -160,7 +160,7 @@ class EmailParameter extends Component {
     const { emailListData } = this.state;
     const { dispatch } = this.props;
     const params = {
-      operType: 'operType',
+      operType: 'emailUpdate',
       paramInfo: JSON.stringify(emailListData),
     };
     dispatch({

@@ -29,12 +29,15 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please Input Server IP',
+                  message:
+                    emailObj && emailObj.emailHost
+                      ? 'Please Input Correct Server IP'
+                      : 'Please Input Server IP',
                   pattern: severIPPattern,
                 },
               ],
               initialValue: emailObj && emailObj.emailHost,
-            })(<Input />)}
+            })(<Input placeholder="Please input" />)}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.emailParameter.port' })}
@@ -49,7 +52,7 @@ class FormUser extends Component {
                 },
               ],
               initialValue: emailObj && emailObj.emailPort,
-            })(<Input />)}
+            })(<Input placeholder="Please input" />)}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.emailParameter.senderEmailAddress' })}
@@ -68,7 +71,7 @@ class FormUser extends Component {
                 },
               ],
               initialValue: emailObj && emailObj.emailAddress,
-            })(<Input />)}
+            })(<Input placeholder="Please input" />)}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.emailParameter.senderEmailPassword' })}
@@ -83,7 +86,7 @@ class FormUser extends Component {
                 },
               ],
               initialValue: emailObj && emailObj.emailPassword,
-            })(<Input.Password />)}
+            })(<Input.Password placeholder="Please input" />)}
           </Form.Item>
           <Form.Item label="Forbidden" labelCol={{ span: 6 }} wrapperCol={{ span: 8 }}>
             {getFieldDecorator('status', {
@@ -149,7 +152,7 @@ class NewUser extends Component {
             element.paramRealValue = values.emailAddress;
             break;
           case 'password':
-            element.paramRealValue = values.emailPassword;
+            element.paramRealValue = window.kddes.getDes(values.emailPassword);
             break;
           case 'status':
             element.paramRealValue = values.status;
