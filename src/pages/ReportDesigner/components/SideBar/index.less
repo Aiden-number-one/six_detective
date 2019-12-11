@@ -6,7 +6,6 @@
   .header {
     height: 35px;
     background-color: #f6f8fb;
-    border-bottom: 1px #d6e2ec solid;
     .title {
       float: left;
       width: 270px;
@@ -85,6 +84,17 @@
     background-color: #f6f8fb !important;
     border-left: 1px #d6e2ec solid;
   }
+  .topList {
+    height: 60%;
+  }
+  .divider {
+    height: 1px;
+    margin: 0 6px;
+    background-color: #ddd;
+  }
+  .bottomList {
+    height: 40%;
+  }
   &.left {
     background-color: #f6f8fb;
     .datasetSelect {
@@ -99,28 +109,58 @@
       }
     }
     .list {
-      height: 350px;
       padding-left: 0;
       li {
-        height: 22px;
+        height: 25px;
         padding-left: 36.5px;
         font-size: 12px;
-        line-height: 20px;
+        line-height: 23px;
         &.blue {
           background-color: #e7eff3;
           border: 1px solid #abc6df;
         }
         &.orange {
-          background-color: #e7eff3;
-          border: 1px solid #abc6df;
+          background-color: #f3ece2ff;
+          border: 1px solid #f0be78ff;
         }
         .icon {
           position: relative;
-          top: 2px;
-          color: #059ae8;
+          top: 3px;
+          padding-right: 5px;
           font-size: 17px;
+          &.blue {
+            color: #059ae8;
+          }
+          &.orange {
+            color: #ff6a00ff;
+          }
         }
       }
     }
   }
+}
+
+.addon {
+  position: absolute;
+  right: 0;
+  align-items: center;
+  width: 30px;
+  height: 28px;
+  padding: 3px 8px;
+  border: 1px solid #ddd;
+  border-bottom: 0;
+  border-left: 0;
+  cursor: pointer;
+}
+
+.treeParent {
+  height: 28px;
+  padding-left: 8px;
+  line-height: 28px;
+}
+
+.iconwenjianjia {
+  position: relative;
+  top: 2px;
+  font-size: 20px;
 }

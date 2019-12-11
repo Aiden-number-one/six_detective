@@ -25,14 +25,14 @@ class FormUser extends Component {
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 8 }}
           >
-            {getFieldDecorator('roleName', {
+            {getFieldDecorator('groupName', {
               rules: [
                 {
                   required: true,
                   message: 'Please input Name of Menu User Group',
                 },
               ],
-              initialValue: groupMenuInfo && groupMenuInfo.roleName,
+              initialValue: groupMenuInfo && groupMenuInfo.groupName,
             })(<Input placeholder="Please input" />)}
           </Form.Item>
           <Form.Item
@@ -40,14 +40,14 @@ class FormUser extends Component {
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 8 }}
           >
-            {getFieldDecorator('roleDesc', {
+            {getFieldDecorator('groupDesc', {
               rules: [
                 {
                   required: true,
                   message: 'Please input Remark of Menu User Group',
                 },
               ],
-              initialValue: groupMenuInfo && groupMenuInfo.roleDesc,
+              initialValue: groupMenuInfo && groupMenuInfo.groupDesc,
             })(<TextArea rows={4} placeholder="Please input" />)}
           </Form.Item>
         </Form>
@@ -105,8 +105,8 @@ class NewUser extends Component {
       selectedKeysArray = [...new Set(selectedKeysArray)];
       if (!updateFlag) {
         const param = {
-          roleName: values.roleName,
-          roleDesc: values.roleDesc,
+          groupName: values.groupName,
+          groupDesc: values.groupDesc,
           menuIds: selectedKeysArray.join(','),
         };
         dispatch({
@@ -118,23 +118,23 @@ class NewUser extends Component {
             //     pathname: '/system-management/menu-user-group',
             //     params: values,
             //   });
-            this.props.onSave();
+            this.props.onSave(false);
           },
         });
       } else {
         const { groupMenuInfo } = this.props;
         const params = {
           operType: 'modifyById',
-          roleId: groupMenuInfo.roleId,
-          roleName: values.roleName,
-          roleDesc: values.roleDesc,
+          groupId: groupMenuInfo.groupId,
+          groupName: values.groupName,
+          groupDesc: values.groupDesc,
           menuIds: selectedKeysArray.join(','),
         };
         dispatch({
           type: 'menuUserGroup/updateUserGroup',
           payload: params,
           callback: () => {
-            this.props.onSave();
+            this.props.onSave(true);
           },
         });
       }
@@ -146,7 +146,7 @@ class NewUser extends Component {
     const that = this;
     const params = {
       operType: 'queryById',
-      roleId: groupMenuInfo.roleId,
+      groupId: groupMenuInfo.groupId,
     };
     dispatch({
       type: 'menuUserGroup/updateUserGroup',

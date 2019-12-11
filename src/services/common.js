@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-12-07 16:57:30
+ * @LastEditTime: 2019-12-10 20:57:21
  * @LastEditors: dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -52,6 +52,7 @@ export default {
   updateUser: `${prefix}set_user_update`,
   operationUser: `${prefix}set_user_service_impl`,
   emailList: `${prefix}get_mail_config_list`,
+  updateEmail: `${prefix}get_mail_config_list`,
   addEmail: `${prefix}set_mail_config_save`,
   deleteEmail: `${prefix}set_mail_config_delete`,
   getAuditLog: `${prefix}get_bex_run_log_list_page`,
@@ -71,4 +72,6 @@ export default {
   getAlertUserGroup: `${prefix}get_alert_group_list`,
   newAlertUser: `${prefix}set_alert_group`,
   updateAlertUser: `${prefix}set_alert_group_menu`,
+  getTemplateList: `${prefix}get_template_list`,
+  updateTemplate: `${prefix}set_template_update`,
 };

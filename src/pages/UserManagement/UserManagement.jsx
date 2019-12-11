@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-09 15:59:24
+ * @LastEditTime: 2019-12-11 10:48:10
  */
 
 import React, { Component } from 'react';
@@ -190,15 +190,23 @@ class UserManagement extends Component {
     // );
   };
 
-  addConfrim = () => {
+  addConfrim = NewFlag => {
     this.setState({
       visible: false,
     });
-    const { pageSize } = this.state.page;
-    const page = {
-      pageNumber: 1,
-      pageSize,
-    };
+    const { pageSize, pageNumber } = this.state.page;
+    let page = {};
+    if (NewFlag) {
+      page = {
+        pageNumber: 1,
+        pageSize,
+      };
+    } else {
+      page = {
+        pageNumber,
+        pageSize,
+      };
+    }
     this.setState(
       {
         page,
@@ -445,6 +453,14 @@ class UserManagement extends Component {
    * @return: undefined
    */
   queryLog = () => {
+    const { page } = this.state;
+    const newPage = {
+      pageNumber: 1,
+      pageSize: page.pageSize,
+    };
+    this.setState({
+      page: newPage,
+    });
     this.searchForm.current.validateFields((err, values) => {
       console.log('values===', values);
       const params = {

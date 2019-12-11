@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   align-items: stretch;
-  height: 100px;
+  height: 104px;
   padding: 6px 10px 0;
   overflow: hidden;
   font-size: 12px;
@@ -16,11 +16,60 @@
 
 .group {
   display: inline-block;
-  padding: 0 10px;
   vertical-align: top;
-  & + .group {
-    border-left: 1px solid #10416c;
+  .topBottom {
+    display: inline-block;
+    height: 52px;
+    margin-right: 12px;
+    padding-top: 5px;
+    text-align: center;
+    i {
+      font-size: 20px;
+      vertical-align: middle;
+    }
+    p {
+      margin-bottom: 0;
+      font-size: 12px;
+      line-height: 2.2;
+      &.brP {
+        margin-top: 6px;
+        line-height: 1.2;
+      }
+    }
   }
+  .topBottomTwo {
+    display: inline-block;
+    height: 52px;
+    margin-right: 12px;
+    i {
+      position: relative;
+      font-size: 20px;
+    }
+    span {
+      font-size: 12px;
+      vertical-align: text-bottom;
+    }
+  }
+
+  &.iconGroup {
+    i {
+      font-size: 15px;
+    }
+  }
+
+  // select相关
+  :global {
+    .ant-select-selection.ant-select-selection--single {
+      border-radius: 0;
+    }
+  }
+}
+
+.divider {
+  display: inline-block;
+  width: 0.5px;
+  height: 100%;
+  background-color: #b7c4ceff;
 }
 
 .tableFormat {
@@ -250,9 +299,6 @@
       .ant-btn {
         background: darken(rgb(241, 241, 241), 12%);
         border: 1px solid darken(rgb(241, 241, 241), 7%);
-        i {
-          color: #fff;
-        }
       }
     }
 
