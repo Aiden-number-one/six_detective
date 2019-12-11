@@ -1,12 +1,12 @@
 import React from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, TreeSelect } from 'antd';
 import { formatMessage } from 'umi/locale';
 // 上传文件弹出框
 export default React.memo(
   Form.create()(
     class extends React.Component {
       render() {
-        const { visible, form, toggleModal, sqlTableName, isSaveOther } = this.props;
+        const { visible, form, toggleModal, sqlTableName, isSaveOther, classifyTree } = this.props;
         const { getFieldDecorator } = form;
         const Layout = {
           labelCol: { span: 7 },
@@ -35,11 +35,23 @@ export default React.memo(
             }}
           >
             <Form>
-              <Form.Item {...Layout} label={formatMessage({ id: 'index.name' })}>
+              <Form.Item {...Layout} label="DataSet Name">
                 {getFieldDecorator('sqlTableName', {
                   rules: [{ required: true, message: formatMessage({ id: 'index.inputName' }) }],
                   initialValue: isSaveOther ? `${sqlTableName}_副本` : sqlTableName,
                 })(<Input placeholder={formatMessage({ id: 'index.inputName' })} />)}
+              </Form.Item>
+              <Form.Item {...Layout} label="Folder">
+                {getFieldDecorator('folder', {
+                  rules: [{ required: true, message: formatMessage({ id: 'index.inputName' }) }],
+                  // initialValue: isSaveOther ? `${sqlTableName}_副本` : sqlTableName,
+                })(
+                  <TreeSelect
+                    treeData={classifyTree}
+                    placeholder="Please select"
+                    // treeDefaultExpandAll
+                  />,
+                )}
               </Form.Item>
             </Form>
           </Modal>

@@ -25,13 +25,18 @@ class CodeMirrorComponent extends Component {
           let insertSql = '';
           if (e.key === '1') {
             insertSql = sqlItem.name;
+            dispatch({
+              type: 'sqlKeydown/changeSql',
+              payload: sql + insertSql,
+            });
           } else {
-            insertSql = `select * from ${sqlItem.name}`;
+            dispatch({
+              type: 'sqlKeydown/querySql',
+              payload: {
+                tableId: sqlItem.id,
+              },
+            });
           }
-          dispatch({
-            type: 'sqlKeydown/changeSql',
-            payload: sql + insertSql,
-          });
           dispatch({
             type: 'sqlKeydown/changeSqlDropDown',
             payload: false,

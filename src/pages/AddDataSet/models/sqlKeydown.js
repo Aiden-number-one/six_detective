@@ -6,7 +6,7 @@
  */
 import Service from '@/utils/Service';
 
-const { getMetadataTablePerform, getSqlParserInfo } = Service;
+const { getMetadataTablePerform, getSqlParserInfo, getQryStatement } = Service;
 
 export default {
   namespace: 'sqlKeydown',
@@ -23,21 +23,35 @@ export default {
       // eslint-disable-next-line @typescript-eslint/camelcase
       const { connection_id, ...param } = payload;
       const res = yield call(getSqlParserInfo, { param });
-      if (res && res.kdjson.flag === '1') {
+      if (res && res.bcjson.flag === '1') {
         yield put({
           type: 'changeSql',
-          payload: res.kdjson.items[0].formatedSql,
+          payload: res.bcjson.items[0].formatedSql,
         });
       }
     },
     *getMetadataTablePerform({ payload }, { call, put }) {
       // const sql = yield select(({ sqlKeydown }) => sqlKeydown.sql);
       const data = yield call(getMetadataTablePerform, { param: payload });
-      if (data && data.kdjson.flag === '1') {
+      if (data && data.bcjson.flag === '1') {
         yield put({
           type: 'changeSql',
-          payload: data.kdjson.items[0].viewSql,
+          payload: data.bcjson.items[0].viewSql,
         });
+      }
+    },
+    // 获取sql语句
+    *querySql({ payload }, { call, put, select }) {
+      const sql = yield select(({ sqlKeydown }) => sqlKeydown.sql);
+      const data = yield call(getQryStatement, { param: payload });
+      if (data && data.bcjson.flag === '1') {
+        yield put({
+          type: 'changeSql',
+          payload: sql + data.bcjson.items[0].qryStatement,
+        });
+        // yield put({
+        //   type: 'sqlDataSource/clearMetadata',
+        // })
       }
     },
   },

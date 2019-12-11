@@ -88,7 +88,7 @@ var saveJobInfo = function(params) {
     params.max_parallel = "";
     params.fault_type = "";
     params.valid_flag = "";
-    params.creator = "admin";
+    params.creator = localStorage.getItem('loginName');
     params.operType = "ADD";
     $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_job_info", "v4.0", params, function(data) {
         if (data.bcjson.flag === "1") {
