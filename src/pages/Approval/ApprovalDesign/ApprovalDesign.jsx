@@ -311,11 +311,11 @@ class ApprovalDesign extends PureComponent {
                   textAlign: 'right',
                 }}
               >
-                <Button onClick={this.handleCancel} style={{ marginRight: 8 }}>
-                  Cancel
-                </Button>
                 <Button onClick={this.AddNewFlowChart} type="primary">
                   Save
+                </Button>
+                <Button onClick={this.handleCancel} style={{ marginRight: 12 }}>
+                  Cancel
                 </Button>
               </div>
             </Drawer>

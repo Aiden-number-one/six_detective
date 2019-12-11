@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-12-07 16:57:30
+ * @LastEditTime: 2019-12-10 11:56:56
  * @LastEditors: dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -22,6 +22,8 @@ export default {
   getConfig: `${prefix}get_audit_config_list_page`,
   addConfig: `${prefix}set_audit_config_add`,
   saveConfig: `${prefix}set_audit_config_save`,
+  setAuditorConfig: `${prefix}set_auditor_config`,
+  getProcessAuditor: `${prefix}get_audit_config_process_auditor`,
   deleteConfig: `${prefix}set_audit_config_delete`,
   getTemplate: `${prefix}get_notice_template_list`,
   templateSave: `${prefix}set_notice_template_save`,
@@ -69,4 +71,6 @@ export default {
   getAlertUserGroup: `${prefix}get_alert_group_list`,
   newAlertUser: `${prefix}set_alert_group`,
   updateAlertUser: `${prefix}set_alert_group_menu`,
+  getTemplateList: `${prefix}get_template_list`,
+  updateTemplate: `${prefix}set_template_update`,
 };

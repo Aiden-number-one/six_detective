@@ -24,13 +24,13 @@ const approvalConfigurationModel = {
     *saveConfigDatas({ payload, callback }, { call }) {
       const response = yield call(saveConfig, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('保存成功');
+        message.success('Save successfully');
         callback({
           pageNumber: '1',
           pageSize: '10',
         });
       } else {
-        message.success('保存失败');
+        message.error('Save failed');
       }
     },
     *deployedModelListDatas({ payload }, { call, put }) {

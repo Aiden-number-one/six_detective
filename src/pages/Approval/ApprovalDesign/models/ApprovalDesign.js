@@ -55,42 +55,46 @@ export default {
     *createModel({ payload, callback }, { call }) {
       const response = yield call(createModel, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('新增成功');
+        message.success('New success');
         callback('1', '10');
+      } else {
+        message.error('New failure');
       }
     },
     *deleteModel({ payload, callback }, { call }) {
       const response = yield call(deleteModel, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('删除成功');
+        message.success('Delete successful');
         callback('1', '10');
+      } else {
+        message.error('Delete failed');
       }
     },
     *importModel({ payload, callback }, { call }) {
       const response = yield call(importModel, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('导入成功');
+        message.success('Successful import');
         callback('1', '10');
+      } else {
+        message.error('Import failed');
       }
     },
     *exportModel({ payload, callback }, { call }) {
       const response = yield call(exportModel, { param: payload });
       if (response.bcjson.flag === '1') {
         callback(response.bcjson.items);
+      } else {
+        message.error('Export failure');
       }
     },
     *deployModel({ payload }, { call }) {
       const response = yield call(deployModel, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('部署成功');
+        message.success('Deployment success');
+      } else {
+        message.error('Deployment failure');
       }
     },
-    // *downloadFile({ payload }, { call }) {
-    //   const response = yield call(downloadFile, { param: payload, method: 'GET' });
-    //   if (response.bcjson.flag === '1') {
-    //     //   message.success('部署成功');
-    //   }
-    // },
   },
 
   reducers: {

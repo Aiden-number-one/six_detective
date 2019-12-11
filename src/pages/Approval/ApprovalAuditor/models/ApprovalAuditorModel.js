@@ -1,7 +1,13 @@
 import { message } from 'antd';
 import Service from '@/utils/Service';
 
-const { getAuditorlist, saveConfig, deployedModelList, getProcessResource, getQueryMenu } = Service;
+const {
+  getProcessAuditor,
+  deployedModelList,
+  getProcessResource,
+  getAlertUserGroup,
+  setAuditorConfig,
+} = Service;
 const ApprovalAuditorModel = {
   namespace: 'ApprovalAuditor',
   state: {
@@ -17,16 +23,16 @@ const ApprovalAuditorModel = {
     checkboxData: [],
   },
   effects: {
-    *saveConfigDatas({ payload }, { call }) {
-      const response = yield call(saveConfig, { param: payload });
+    *setAuditorConfigDatas({ payload }, { call }) {
+      const response = yield call(setAuditorConfig, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('保存成功');
+        message.success('Save successfully');
       } else {
-        message.success('保存失败');
+        message.error('Save failed');
       }
     },
     *getQueryMenuDatas({ payload }, { call, put }) {
-      const response = yield call(getQueryMenu, { param: payload });
+      const response = yield call(getAlertUserGroup, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
@@ -37,7 +43,7 @@ const ApprovalAuditorModel = {
       }
     },
     *getAuditorlistDatas({ payload }, { call, put }) {
-      const response = yield call(getAuditorlist, { param: payload });
+      const response = yield call(getProcessAuditor, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
@@ -86,7 +92,7 @@ const ApprovalAuditorModel = {
       };
     },
     setMenuDatas(state, action) {
-      const menuData = action.payload[0].MENU;
+      const menuData = action.payload;
       const checkboxList = menuData.map(item => ({ label: item.roleName, value: item.roleId }));
       return {
         ...state,

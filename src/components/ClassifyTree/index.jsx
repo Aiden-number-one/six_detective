@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-07 20:26:20
+ * @LastEditTime: 2019-12-09 20:54:25
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -175,6 +175,7 @@ function loop(orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTr
       }
       return (
         <TreeNode
+          checkable
           key={currentKey}
           title={
             <TitleMessage
@@ -229,22 +230,53 @@ class ClassifyTree extends Component {
   componentDidMount() {
     setTimeout(() => {
       const { treeData, checkedKeys, all } = this.props;
+      const { menuList } = this.state;
       this.setState({
         checkedKeys,
       });
       this.props.onSelect(treeData[0] && treeData[0][this.props.treeKey.currentKey]);
       if (all) {
         this.compareAllChecked();
+        this.setState({
+          checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
+        });
       }
     }, 600);
   }
 
-  componentDidUpdate() {}
+  formatCheckedKeys = (menuList, checkedKeys) => {
+    const newCheckedKeys = checkedKeys.map(element => element.substring(0, 3));
+    let checkedKeysArray = Object.assign([], checkedKeys);
+    newCheckedKeys.forEach(element => checkedKeysArray.push(element));
+    checkedKeysArray = [...new Set(checkedKeysArray)];
+    menuList.forEach(element => {
+      if (checkedKeysArray.includes(element.menuid)) {
+        if (element.children.some(item => checkedKeysArray.includes(item.menuid))) {
+          const idx = checkedKeysArray.indexOf(element.menuid);
+          if (idx > -1) {
+            checkedKeysArray.splice(idx, 1);
+          }
+        }
+      }
+    });
+    return checkedKeysArray;
+  };
 
   onExpand = expandedKeys => {
     this.setState({
       expandedKeys,
       autoExpandParent: false,
+    });
+  };
+
+  compareMenuChecked = () => {
+    const { checkedKeys } = this.props;
+    const { menuList } = this.state;
+    menuList.forEach(element => {
+      if (checkedKeys.includes(element.menuid)) {
+        const children = element.children.map(item => item.menuid);
+        this.arrayEquals(children);
+      }
     });
   };
 
@@ -354,7 +386,6 @@ class ClassifyTree extends Component {
     const { menuList } = this.state;
     const checkedKeys = this.setGridDataFromTree([], menuList);
     const newCheckedKeys = checkedKeys.map(element => element.menuid);
-    console.log('newCheckedKeys===', newCheckedKeys);
     if (e.target.checked) {
       this.setState({
         checkedKeys: newCheckedKeys,
@@ -410,6 +441,7 @@ class ClassifyTree extends Component {
         )}
         <Tree
           // showLine
+          // checkStrictly
           checkable={checkable}
           onExpand={this.onExpand}
           onSelect={this.onSelect}
