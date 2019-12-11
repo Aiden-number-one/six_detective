@@ -89,6 +89,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
       },
     });
   }
+
   function claimAlert(alertIds) {
     dispatch({
       type: 'alertCenter/claim',

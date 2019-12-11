@@ -2,18 +2,26 @@ import React, { useState } from 'react';
 import { Drawer, Button, Table } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
+import styles from '@/pages/AlertCenter/index.less';
 
 const { Column } = Table;
 
 function AlertTaskModal({ visible, handleCancel }) {
+  function handleCommit() {}
   return (
     <Drawer
       title={<FormattedMessage id="alert-center.assign" />}
       width={320}
       visible={visible}
+      closable={false}
       onClose={handleCancel}
     >
-      1323
+      <div className={styles['bottom-btns']}>
+        <Button onClick={handleCancel}>Cancel</Button>
+        <Button type="primary" onClick={handleCommit}>
+          Commit
+        </Button>
+      </div>
     </Drawer>
   );
 }

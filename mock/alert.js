@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-03 16:32:36
  * @LastEditors: iron
- * @LastEditTime: 2019-12-10 21:07:46
+ * @LastEditTime: 2019-12-11 09:49:49
  */
 import { mp, mockRes } from './utils';
 
@@ -59,6 +59,9 @@ export default {
       fileList: null,
     },
   ]),
+  [mp('set_alert_comment')]: mockRes(1, []),
+  [mp('set_alert_claim')]: mockRes(1, []),
+  [mp('set_alert_close')]: mockRes(1, []),
   [mp('get_alert_log_list')]: mockRes(50, [
     {
       id: '@id',

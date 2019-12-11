@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-10 20:53:00
+ * @LastEditTime: 2019-12-11 10:46:37
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -42,7 +42,9 @@ export async function claimAlert({ alertIds }) {
 export async function closeAlert({ alertIds }) {
   return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
 }
-
+export async function getUsers() {
+  return request('api_get_alert_group_list');
+}
 export default {
   namespace: 'alertCenter',
   state: {
@@ -52,7 +54,9 @@ export default {
     alertItemsTotal: 0,
     alertOwner: '',
     comments: [],
+    alertCommentsTotal: 0,
     logs: [],
+    users: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -71,15 +75,22 @@ export default {
       };
     },
     saveComments(state, { payload }) {
+      const { comments } = state;
       return {
         ...state,
-        comments: payload.comments,
+        comments: [...comments, ...payload.comments],
       };
     },
     saveLogs(state, { payload }) {
       return {
         ...state,
         logs: payload.logs,
+      };
+    },
+    saveUsers(state, { payload }) {
+      return {
+        ...state,
+        users: payload.users,
       };
     },
     claimOk(state, { payload }) {
@@ -136,8 +147,8 @@ export default {
       });
     },
     *fetchComments({ payload }, { call, put }) {
-      const { alertId } = payload;
-      const { items, err } = yield call(getAlertComments, { alertId });
+      const { alertId, page } = payload;
+      const { items, err } = yield call(getAlertComments, { alertId, page });
       if (err) {
         throw new Error(err);
       }
@@ -158,6 +169,20 @@ export default {
         type: 'saveLogs',
         payload: {
           logs: items,
+        },
+      });
+    },
+    *fetchUsers({ payload }, { call, put }) {
+      console.log(payload);
+
+      const { items, err } = yield call(getUsers);
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveUsers',
+        payload: {
+          users: items,
         },
       });
     },

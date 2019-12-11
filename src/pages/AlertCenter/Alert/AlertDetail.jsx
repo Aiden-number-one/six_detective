@@ -1,25 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Row, Col, Input, Button, Empty, Spin, Upload } from 'antd';
+import { Tabs, Row, Col, Button, Empty, Spin } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
 import styles from '@/pages/AlertCenter/index.less';
-import {
-  AlertDes,
-  AlertTask,
-  AlertComment,
-  AlertLog,
-  AlertAttachments,
-  AlertPhase,
-} from './components';
+import { AlertDes, AlertTask, AlertComment, AlertLog, AlertRichText } from './components';
 
 const { TabPane } = Tabs;
-const { TextArea } = Input;
 
 function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
   const [isFullscreen, setFullscreen] = useState(false);
-  const [comment, setComment] = useState('');
-  const [upAttachments, setUpAttachements] = useState([]);
+  const [commentPage, setCommentPage] = useState(1);
 
   useEffect(() => {
     const { alertType, alertId } = alert;
@@ -30,12 +21,6 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
       },
     });
     dispatch({
-      type: 'alertCenter/fetchComments',
-      payload: {
-        alertId,
-      },
-    });
-    dispatch({
       type: 'alertCenter/fetchLogs',
       payload: {
         alertId,
@@ -43,7 +28,18 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
     });
   }, [alert]);
 
-  async function commitComment() {
+  useEffect(() => {
+    const { alertId } = alert;
+    dispatch({
+      type: 'alertCenter/fetchComments',
+      payload: {
+        alertId,
+        page: commentPage,
+      },
+    });
+  }, [alert, commentPage]);
+
+  async function commitComment(comment) {
     await dispatch({
       type: 'alertCenter/postComment',
       payload: {
@@ -51,15 +47,12 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
         content: comment,
       },
     });
-    setComment('');
   }
 
-  function handleUpAttachments(info) {
-    let fileList = [...info.fileList];
-    // limit 5 files
-    fileList = fileList.slice(-5);
-    setUpAttachements(fileList);
+  function fetchMoreComments() {
+    setCommentPage(commentPage + 1);
   }
+
   return (
     <Row className={styles['detail-container']} gutter={16}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -115,60 +108,32 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
                   {comments.map(item => (
                     <AlertComment comment={item} key={item.id} />
                   ))}
+                  <li className={styles['loading-more']}>
+                    <Button onClick={fetchMoreComments}>load more</Button>
+                  </li>
                 </ul>
               ) : (
                 <Empty />
               )}
             </Spin>
-            <div className={styles['comment-box']}>
-              <TextArea
-                placeholder="COMMENT"
-                className={styles.txt}
-                value={comment}
-                onChange={({ target: { value } }) => setComment(value)}
-              />
-              <Row
-                className={styles['comment-commit']}
-                type="flex"
-                align="middle"
-                justify="space-between"
-              >
-                <Col span={11} offset={1}>
-                  <AlertPhase postComment={c => setComment(`${comment}${c}`)} />
-                </Col>
-                <Col span={6} align="right">
-                  <Upload
-                    showUploadList={false}
-                    fileList={upAttachments}
-                    onChange={handleUpAttachments}
-                  >
-                    <IconFont type="iconbiezhen" style={{ cursor: 'pointer', marginRight: 4 }} />
-                    {upAttachments.length > 0 && upAttachments.length}
-                  </Upload>
-                </Col>
-                <Col span={6} align="right">
-                  <Button type="primary" onClick={commitComment}>
-                    Submit
-                  </Button>
-                </Col>
-              </Row>
-              {!!upAttachments.length && <AlertAttachments attachments={upAttachments} />}
-            </div>
+            <AlertRichText commitComment={comment => commitComment(comment)} />
           </TabPane>
           <TabPane
             key="2"
             className={styles['tab-content']}
             tab={<FormattedMessage id="alert-center.alert-lifecycle" />}
           >
-            {logs ? (
-              <Row gutter={[10, 10]} style={{ height: 440, overflowY: 'auto' }}>
-                {logs.map(log => (
-                  <AlertLog log={log} key={log.id} />
-                ))}
-              </Row>
-            ) : (
-              <Empty />
-            )}
+            <Spin spinning={loading['alertCenter/fetchLogs']}>
+              {logs ? (
+                <Row gutter={[10, 10]} style={{ height: 430, overflowY: 'auto' }}>
+                  {logs.map(log => (
+                    <AlertLog log={log} key={log.id} />
+                  ))}
+                </Row>
+              ) : (
+                <Empty />
+              )}
+            </Spin>
           </TabPane>
         </Tabs>
       </Col>

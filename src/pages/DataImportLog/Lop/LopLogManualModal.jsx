@@ -30,6 +30,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
     <Drawer
       title={<FormattedMessage id="data-import.lop.manual-import-lop-report" />}
       width={320}
+      closable={false}
       bodyStyle={{ paddingBottom: 80 }}
       visible={visible}
       onClose={handleCancel}
