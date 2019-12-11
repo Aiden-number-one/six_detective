@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-11 10:48:10
+ * @LastEditTime: 2019-12-11 19:21:54
  */
 
 import React, { Component } from 'react';
@@ -45,6 +45,8 @@ class UserManagement extends Component {
     updatePasswordVisible: false,
     resetPasswordVisible: false,
     customerno: null,
+    searchUserId: undefined,
+    searchUserName: undefined,
     userInfo: {
       userId: '',
       userName: '',
@@ -126,17 +128,12 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  queryUserList = (
-    param = {
-      userId: undefined,
-      userName: undefined,
-    },
-  ) => {
+  queryUserList = () => {
     const { dispatch } = this.props;
-    const { userId, userName } = param;
+    const { searchUserId, searchUserName } = this.state;
     const params = {
-      userId,
-      userName,
+      userId: searchUserId,
+      userName: searchUserName,
       operType: 'queryAllList',
       pageNumber: this.state.page.pageNumber.toString(),
       pageSize: this.state.page.pageSize.toString(),
@@ -190,23 +187,15 @@ class UserManagement extends Component {
     // );
   };
 
-  addConfrim = NewFlag => {
+  addConfrim = () => {
     this.setState({
       visible: false,
     });
-    const { pageSize, pageNumber } = this.state.page;
-    let page = {};
-    if (NewFlag) {
-      page = {
-        pageNumber: 1,
-        pageSize,
-      };
-    } else {
-      page = {
-        pageNumber,
-        pageSize,
-      };
-    }
+    const { pageSize } = this.state.page;
+    const page = {
+      pageNumber: 1,
+      pageSize,
+    };
     this.setState(
       {
         page,
@@ -462,12 +451,11 @@ class UserManagement extends Component {
       page: newPage,
     });
     this.searchForm.current.validateFields((err, values) => {
-      console.log('values===', values);
-      const params = {
-        userId: values.userId,
-        userName: values.userName,
-      };
-      this.queryUserList(params);
+      this.setState({
+        searchUserId: values.userId,
+        searchUserName: values.userName,
+      });
+      this.queryUserList();
     });
   };
 
