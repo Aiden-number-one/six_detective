@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-11 19:21:54
+ * @LastEditTime: 2019-12-11 19:28:15
  */
 
 import React, { Component } from 'react';
@@ -451,11 +451,15 @@ class UserManagement extends Component {
       page: newPage,
     });
     this.searchForm.current.validateFields((err, values) => {
-      this.setState({
-        searchUserId: values.userId,
-        searchUserName: values.userName,
-      });
-      this.queryUserList();
+      this.setState(
+        {
+          searchUserId: values.userId,
+          searchUserName: values.userName,
+        },
+        () => {
+          this.queryUserList();
+        },
+      );
     });
   };
 
