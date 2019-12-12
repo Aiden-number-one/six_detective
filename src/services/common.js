@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime: 2019-12-11 13:40:27
+ * @LastEditTime: 2019-12-12 09:58:00
  * @LastEditors: dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -56,7 +56,7 @@ export default {
   addEmail: `${prefix}set_mail_config_save`,
   deleteEmail: `${prefix}set_mail_config_delete`,
   getAuditLog: `${prefix}get_bex_run_log_list_page`,
-  systemParamsList: `${prefix}get_sys_params_config_list`,
+  systemParamsList: `${prefix}get_system_config_list`,
   systemParamsUpdate: `${prefix}set_sys_params_config_update`,
   paramsType: `${prefix}get_sys_params_config_filter_list`,
   codeList: `${prefix}get_system_dict_menu`,

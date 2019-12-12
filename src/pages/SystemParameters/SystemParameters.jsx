@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Modal, Select, Table, Form } from 'antd';
+import { Input, Modal, Select, Table, Form, Pagination } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './SystemParameters.less';
-import TableHeader from '@/components/TableHeader';
+
+import SearchForm from './components/SearchForm';
 
 const { Option } = Select;
+
+const NewSearchForm = Form.create({})(SearchForm);
 
 class ModifyForm extends Component {
   render() {
@@ -106,13 +109,17 @@ const NewModifyForm = Form.create({})(ModifyForm);
   getParamsTypeData: systemParams.getParamsData,
 }))
 class SystemParams extends Component {
+  searchForm = React.createRef();
+
   constructor() {
     super();
     this.modifyFormRef = React.createRef();
     this.state = {
       updateSystemParamsVisible: false,
-      pageNum: '1',
-      pageSize: '10',
+      page: {
+        pageNumber: 1,
+        pageSize: 10,
+      },
       columns: [
         {
           title: formatMessage({ id: 'app.common.number' }),
@@ -121,23 +128,23 @@ class SystemParams extends Component {
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterType' }),
-          dataIndex: 'paramType',
-          key: 'paramType',
+          dataIndex: 'parameterType',
+          key: 'parameterType',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterKey' }),
-          dataIndex: 'paramId',
-          key: 'paramId',
+          dataIndex: 'parameterKey',
+          key: 'parameterKey',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterValue' }),
-          dataIndex: 'paramValue',
-          key: 'paramValue',
+          dataIndex: 'parameterValue',
+          key: 'parameterValue',
         },
         {
           title: formatMessage({ id: 'app.common.note' }),
-          dataIndex: 'comments',
-          key: 'comments',
+          dataIndex: 'note',
+          key: 'note',
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),
@@ -158,14 +165,12 @@ class SystemParams extends Component {
         },
       ],
       getSystemParamsList: [],
-      ParamsTypeData: {},
       paramObj: {},
     };
   }
 
   componentDidMount() {
     this.querySystemParams();
-    this.getParamsTypeList();
   }
 
   updateSystemParamsComfirm = () => {
@@ -206,12 +211,14 @@ class SystemParams extends Component {
     this.setState({ updateSystemParamsVisible: true, paramObj });
   };
 
-  querySystemParams = (paramType = '') => {
+  querySystemParams = () => {
     const { dispatch } = this.props;
+    const { page, paramType } = this.state;
+
     const param = {
       paramType,
-      pageNumber: this.state.pageNum,
-      pageSize: this.state.pageSize,
+      pageNumber: page.pageNumber,
+      pageSize: page.pageSize,
     };
     dispatch({
       type: 'systemParams/getSystemParamsList',
@@ -219,23 +226,24 @@ class SystemParams extends Component {
     });
   };
 
-  getParamsTypeList = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'systemParams/getParamsType',
-      payload: {},
-    });
-  };
-
   onChangeOption = value => {
     this.querySystemParams(value);
   };
 
-  pageChange = pagination => {
+  /**
+   * @description: This is for paging function.
+   * @param {type} null
+   * @return: undefined
+   */
+  pageChange = (pageNumber, pageSize) => {
+    const page = {
+      pageNumber,
+      pageSize,
+    };
+
     this.setState(
       {
-        pageNum: pagination.current,
-        pageSize: pagination.pageSize,
+        page,
       },
       () => {
         this.querySystemParams();
@@ -243,18 +251,34 @@ class SystemParams extends Component {
     );
   };
 
+  onShowSizeChange = (current, pageSize) => {
+    const page = {
+      pageNumber: current,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.querySystemParams();
+      },
+    );
+  };
+
+  queryLog = () => {};
+
   render() {
-    const { loading, getParamsTypeData, getSystemParamsListData } = this.props;
-    let { ParamsTypeData, getSystemParamsList } = this.state;
-    const { pageSize } = this.state;
-    ParamsTypeData = getParamsTypeData;
+    const { loading, getSystemParamsListData } = this.props;
+    let { getSystemParamsList } = this.state;
+    const { page } = this.state;
     getSystemParamsList = getSystemParamsListData.items;
-    const totalCount = getSystemParamsListData && getSystemParamsListData.totalCount;
+    // const totalCount = getSystemParamsListData && getSystemParamsListData.totalCount;
     // eslint-disable-next-line no-unused-expressions
     getSystemParamsList &&
       getSystemParamsList.forEach((element, index) => {
         // eslint-disable-next-line no-param-reassign
-        element.index = (this.state.pageNum - 1) * pageSize + index + 1;
+        element.index = (page.pageNumber - 1) * page.pageSize + index + 1;
       });
     return (
       <PageHeaderWrapper>
@@ -262,20 +286,7 @@ class SystemParams extends Component {
           <div>
             <div>
               <div>
-                <span>
-                  {formatMessage({ id: 'systemManagement.systemParameters.parameterType' })}：
-                </span>
-                <Select
-                  defaultValue="请选择"
-                  onChange={this.onChangeOption}
-                  style={{ width: '220px' }}
-                >
-                  <Option value="">请选择</Option>
-                  {ParamsTypeData[0] &&
-                    ParamsTypeData[0].data.map(element => (
-                      <Option value={element}>{element}</Option>
-                    ))}
-                </Select>
+                <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
               </div>
               <Modal
                 title="修改系统参数"
@@ -292,14 +303,25 @@ class SystemParams extends Component {
               </Modal>
             </div>
             <div>
-              <TableHeader showEdit={false} showSelect={false}></TableHeader>
               <Table
                 loading={loading['systemParams/getSystemParamsList']}
                 dataSource={getSystemParamsList}
                 columns={this.state.columns}
-                pagination={{ total: totalCount, pageSize }}
-                onChange={this.pageChange}
+                pagination={false}
               ></Table>
+              <Pagination
+                showSizeChanger
+                current={page.pageNumber}
+                showTotal={() =>
+                  `Page ${page.pageNumber.toString()} of ${Math.ceil(
+                    getSystemParamsListData.totalCount / page.pageSize,
+                  ).toString()}`
+                }
+                onShowSizeChange={this.onShowSizeChange}
+                onChange={this.pageChange}
+                total={getSystemParamsListData.totalCount}
+                pageSize={page.pageSize}
+              />
             </div>
           </div>
         </Fragment>
