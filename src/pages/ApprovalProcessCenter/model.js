@@ -27,6 +27,12 @@ export async function claimTask({ taskCode }) {
   return request('set_task_claim', { data: { taskCode: taskCode.join(',') } });
 }
 
+export async function setTaskSave({ taskCode, epCname }) {
+  return request('set_approval_task_data_save', {
+    data: { taskCode: taskCode.join(','), epCname },
+  });
+}
+
 export default {
   namespace: 'approvalCenter',
   state: {
@@ -114,12 +120,15 @@ export default {
         message.success('claim success');
         callback();
       }
-      //   yield put({
-      //     type: 'claimOk',
-      //     payload: {
-      //       taskIds,
-      //     },
-      //   });
+    },
+    *saveTask({ payload }, { call }) {
+      const { taskCode, epCname } = payload || [];
+      const { err } = yield call(setTaskSave, { taskCode, epCname });
+      if (err) {
+        message.success('save failure');
+      } else {
+        message.success('save success');
+      }
     },
   },
 };

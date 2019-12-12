@@ -16,7 +16,7 @@ const { Paragraph, Text } = Typography;
 
 function DetailForm({ form, detailItem }) {
   const { getFieldDecorator } = form;
-  const detailList = detailItem.data;
+  const detailList = detailItem.data || [];
   console.log('detailItem---->', detailItem.data);
   return (
     // <Form>
@@ -178,9 +178,18 @@ function ProcessDetail({ dispatch, task, detailItems }) {
 
   function saveTask() {
     newDetailForm.current.validateFields((err, values) => {
+      const epCname = '';
       if (!err) {
         console.log('Received values of form: ', values);
+        // epCname = values.map(item => ({ label: item.groupName, value: item.groupId }));
       }
+      dispatch({
+        type: 'approvalCenter/saveTask',
+        payload: {
+          taskCode: task.taskCode,
+          epCname,
+        },
+      });
     });
   }
 
