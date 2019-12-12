@@ -260,7 +260,7 @@ class CodeMaintenance extends Component {
     const params = {
       pageNumber: `${this.state.pageNumber}` || '1',
       pageSize: `${this.state.pageSize}` || '10',
-      dictIdName: this.state.itemNameValue || '',
+      operType: 'codeQuery',
     };
     dispatch({
       type: 'codeList/getCodeList',
