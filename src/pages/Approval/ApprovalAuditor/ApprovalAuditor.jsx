@@ -37,7 +37,7 @@ class ApprovalAuditor extends PureComponent {
     await this.getAuditorData(processDefinitionIds, taskId);
     const { auditorData } = this.props;
     const auditorChecked = (auditorData.length > 0 && auditorData[0].relateNo) || [];
-    // console.log('auditorChecked---->', auditorChecked);
+    // console.log('auditorChecked---->', auditorData,auditorChecked);
     const checkedList = auditorChecked.length && auditorChecked.split(',');
 
     this.setState({
@@ -45,6 +45,7 @@ class ApprovalAuditor extends PureComponent {
       stepId: taskId,
       checkedValues: checkedList,
     });
+    // debugger
     console.log('auditorData-->', this.props.auditorData, this.state.checkedValues);
   };
 
@@ -141,7 +142,7 @@ class ApprovalAuditor extends PureComponent {
     // const plainOptions = ['Apple', 'Pear', 'Orange'];
     const { deployedModelDatas, processDefinitionId, checkboxData } = this.props;
     const { checkedValues } = this.state;
-    // console.log('checkboxData---', checkboxData, checkedValues);
+    console.log('checkboxData---', checkboxData, checkedValues);
     const diagramUrl = `/process/diagram-viewer/index.html?isClick=1&processDefinitionId=${processDefinitionId}`;
     return (
       <Fragment>

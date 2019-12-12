@@ -93,7 +93,7 @@ const ApprovalAuditorModel = {
     },
     setMenuDatas(state, action) {
       const menuData = action.payload;
-      const checkboxList = menuData.map(item => ({ label: item.roleName, value: item.roleId }));
+      const checkboxList = menuData.map(item => ({ label: item.groupName, value: item.groupId }));
       return {
         ...state,
         GroupList: menuData,

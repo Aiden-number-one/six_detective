@@ -1,0 +1,90 @@
+:global {
+  .ant-btn {
+    width: auto;
+  }
+  .ant-table-thead tr th {
+    background-color: #fff;
+  }
+  .ant-table-tbody tr {
+    td,
+    &:hover {
+      background-color: #fff;
+    }
+  }
+}
+
+.list-container {
+  padding: 0 4px;
+  .list {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
+  }
+  .btns {
+    margin: 10px 0;
+    .btn-icon {
+      font-size: 18px;
+      vertical-align: middle;
+    }
+    .icon {
+      font-size: 20px;
+      vertical-align: middle;
+      cursor: pointer;
+      &:nth-child(2) {
+        margin: 0 8px;
+        font-size: 19px;
+      }
+    }
+  }
+}
+
+.detail-container {
+  margin-bottom: 20px;
+  .tab-content {
+    padding: 0 18px;
+  }
+  .fullscreen {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10050;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0 20px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  .detail-des {
+    background-color: #fff;
+    box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
+    .fullscreen-icon {
+      margin: 14px 14px 0 0;
+      font-size: 22px;
+      cursor: pointer;
+    }
+  }
+  .detail-comment {
+    background-color: #fff;
+    .comment-ul {
+      max-height: 300px;
+      margin: 0 0 18px;
+      padding: 0 18px;
+      overflow-y: auto;
+    }
+    .comment-box {
+      padding-top: 8px;
+      background-color: #f6f9fa;
+      > .txt {
+        height: 100px;
+      }
+      .comment-commit {
+        height: 46px;
+        background-color: #fff;
+      }
+    }
+  }
+}
