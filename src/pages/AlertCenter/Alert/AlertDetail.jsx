@@ -8,16 +8,25 @@ import { AlertDes, AlertTask, AlertComment, AlertLog, AlertRichText } from './co
 
 const { TabPane } = Tabs;
 
-function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
+function CustomEmpty({ className = '', style = {} }) {
+  return (
+    <Row className={className} style={style} type="flex" align="middle" justify="center">
+      <Empty />
+    </Row>
+  );
+}
+
+function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs, users }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [commentPage, setCommentPage] = useState(1);
+  const { alertTypeId, alertId } = alert;
 
   useEffect(() => {
-    const { alertType, alertId } = alert;
     dispatch({
       type: 'alertCenter/fetchAlertItems',
       payload: {
-        alertType,
+        alertTypeId,
+        alertId,
       },
     });
     dispatch({
@@ -26,10 +35,9 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
         alertId,
       },
     });
-  }, [alert]);
+  }, [alertTypeId, alertId]);
 
   useEffect(() => {
-    const { alertId } = alert;
     dispatch({
       type: 'alertCenter/fetchComments',
       payload: {
@@ -37,7 +45,7 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
         page: commentPage,
       },
     });
-  }, [alert, commentPage]);
+  }, [alertId, commentPage]);
 
   async function commitComment(comment) {
     await dispatch({
@@ -77,22 +85,18 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
             <AlertDes alert={alert} />
           </TabPane>
           <TabPane
+            key="2"
             className={styles['tab-content']}
             closable={false}
             tab={<FormattedMessage id="alert-center.alert-item-list" />}
-            key="2"
           >
             <AlertTask
-              dataSource={alertItems}
-              loading={loading['alertCenter/fetchAlertItems']}
-              handleChange={(page, pageSize) => {
+              alertItems={alertItems}
+              users={users}
+              loading={loading}
+              getUsers={() => {
                 dispatch({
-                  type: 'alertCenter/fetchAlertItems',
-                  payload: {
-                    alertType: alert.alertType,
-                    page,
-                    pageSize,
-                  },
+                  type: 'alertCenter/fetchUsers',
                 });
               }}
             />
@@ -103,8 +107,8 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
         <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
           <TabPane key="1" tab={<FormattedMessage id="alert-center.comment-history" />}>
             <Spin spinning={loading['alertCenter/fetchComments']}>
-              {comments ? (
-                <ul className={styles['comment-ul']}>
+              {comments.length > 0 ? (
+                <ul className={styles['comment-list']}>
                   {comments.map(item => (
                     <AlertComment comment={item} key={item.id} />
                   ))}
@@ -113,26 +117,20 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
                   </li>
                 </ul>
               ) : (
-                <Empty />
+                <CustomEmpty className={styles['comment-list']} />
               )}
             </Spin>
             <AlertRichText commitComment={comment => commitComment(comment)} />
           </TabPane>
-          <TabPane
-            key="2"
-            className={styles['tab-content']}
-            tab={<FormattedMessage id="alert-center.alert-lifecycle" />}
-          >
+          <TabPane key="2" tab={<FormattedMessage id="alert-center.alert-lifecycle" />}>
             <Spin spinning={loading['alertCenter/fetchLogs']}>
-              {logs ? (
-                <Row gutter={[10, 10]} style={{ height: 430, overflowY: 'auto' }}>
-                  {logs.map(log => (
-                    <AlertLog log={log} key={log.id} />
-                  ))}
-                </Row>
-              ) : (
-                <Empty />
-              )}
+              <div style={{ height: 370, overflowY: 'auto', padding: '0 18px' }}>
+                {logs.length > 0 ? (
+                  logs.map(log => <AlertLog log={log} key={log.id} />)
+                ) : (
+                  <CustomEmpty className={styles['comment-list']} style={{ height: 370 }} />
+                )}
+              </div>
             </Spin>
           </TabPane>
         </Tabs>
@@ -141,9 +139,10 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs }) {
   );
 }
 
-export default connect(({ loading, alertCenter: { alertItems, comments, logs } }) => ({
+export default connect(({ loading, alertCenter: { alertItems, comments, logs, users } }) => ({
   loading: loading.effects,
   alertItems,
   comments,
   logs,
+  users,
 }))(AlertDetail);

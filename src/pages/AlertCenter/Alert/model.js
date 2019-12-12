@@ -4,11 +4,11 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-11 10:46:37
+ * @LastEditTime: 2019-12-12 14:20:37
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-
+import { ALERT_STATUS } from './constants';
 // just for unit test
 // `fetch` high order function return anonymous func
 export async function getAlerts({ page = 1, pageSize = 10 }) {
@@ -17,8 +17,8 @@ export async function getAlerts({ page = 1, pageSize = 10 }) {
   });
 }
 
-export async function getAlertItems({ alertType }) {
-  return request('get_alert_item_list', { data: { mappingId: alertType } });
+export async function getAlertItems({ alertId, alertTypeId }) {
+  return request('get_alert_item_list', { data: { alertTypeId, alertId } });
 }
 
 export async function getAlertComments({ alertId, page = 1, pageSize = 10 }) {
@@ -43,7 +43,7 @@ export async function closeAlert({ alertIds }) {
   return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
 }
 export async function getUsers() {
-  return request('api_get_alert_group_list');
+  return request('get_user_list_information', { data: { operType: 'queryByAlertRoleId' } });
 }
 export default {
   namespace: 'alertCenter',
@@ -52,7 +52,6 @@ export default {
     alertItems: [],
     total: 0,
     alertItemsTotal: 0,
-    alertOwner: '',
     comments: [],
     alertCommentsTotal: 0,
     logs: [],
@@ -60,7 +59,11 @@ export default {
   },
   reducers: {
     save(state, { payload }) {
-      const { alerts, page, total } = payload;
+      const { alerts: list, page, total } = payload;
+      const alerts = list.map(alert => ({
+        ...alert,
+        alertStatus: ALERT_STATUS[alert.alertStatus],
+      }));
       return {
         ...state,
         alerts,
@@ -93,12 +96,23 @@ export default {
         users: payload.users,
       };
     },
+    // closeOk(state, { payload }) {
+    //   const { msg } = payload;
+    //   return {
+    //     ...state,
+    //     alerts,
+    //   };
+    // },
+    closeFail(state, { payload }) {
+      const { msg } = payload;
+      message.warn(msg);
+      return state;
+    },
     claimOk(state, { payload }) {
-      const owner = localStorage.getItem('loginName') || '';
-      const { alertIds } = payload;
+      const { alertIds, userName } = payload;
       const alerts = state.alerts.map(alert => {
         if (alertIds.includes(alert.alertId)) {
-          return { ...alert, owner };
+          return { ...alert, userName };
         }
         return alert;
       });
@@ -132,8 +146,8 @@ export default {
       });
     },
     *fetchAlertItems({ payload }, { call, put }) {
-      const { alertType } = payload || {};
-      const { items, totalCount, err } = yield call(getAlertItems, { alertType });
+      const { alertTypeId, alertId } = payload || {};
+      const { items, err } = yield call(getAlertItems, { alertTypeId, alertId });
       if (err) {
         throw new Error(err);
       }
@@ -142,7 +156,6 @@ export default {
         type: 'saveAlertItems',
         payload: {
           alertItems: items,
-          alertItemsTotal: totalCount,
         },
       });
     },
@@ -173,9 +186,7 @@ export default {
       });
     },
     *fetchUsers({ payload }, { call, put }) {
-      console.log(payload);
-
-      const { items, err } = yield call(getUsers);
+      const { items, err } = yield call(getUsers, payload);
       if (err) {
         throw new Error(err);
       }
@@ -201,26 +212,37 @@ export default {
     },
     *claim({ payload }, { call, put }) {
       const { alertIds } = payload || [];
-      const { err } = yield call(claimAlert, { alertIds });
-      if (err) {
+      const { err, items } = yield call(claimAlert, { alertIds });
+      if (err || (!items && !items.length)) {
         throw new Error(err);
       }
+
       yield put({
         type: 'claimOk',
         payload: {
           alertIds,
+          userName: items[0].bcLoginUserName,
         },
       });
     },
     *close({ payload }, { call, put }) {
       const { alertIds } = payload || [];
-      const { err } = yield call(closeAlert, { alertIds });
+      const { err, msg, items } = yield call(closeAlert, { alertIds });
       if (err) {
         throw new Error(err);
       }
-      yield put({
-        type: 'fetch',
-      });
+      if (msg) {
+        yield put({
+          type: 'closeFail',
+          payload: {
+            msg,
+          },
+        });
+      } else if (items) {
+        yield put({
+          type: 'fetch',
+        });
+      }
     },
   },
 };

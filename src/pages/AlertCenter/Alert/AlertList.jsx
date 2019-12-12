@@ -12,6 +12,32 @@ const { Column } = Table;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
+function Title({ dispatch, loading, isNum, filterItems, tableColumn, id }) {
+  return (
+    <ColumnTitle
+      isNum={isNum}
+      loading={loading}
+      filterItems={filterItems}
+      getFilterItems={() => {
+        dispatch({
+          type: 'global/fetchTableFilterItems',
+          payload: {
+            tableName: 'slop_biz.v_alert_center',
+            tableColumn,
+          },
+        });
+      }}
+    >
+      <FormattedMessage id={`alert-center.${id}`} />
+    </ColumnTitle>
+  );
+}
+
+const WrapTitle = connect(({ loading, global: { filterItems } }) => ({
+  loading: loading.effects['global/fetchTableFilterItems'],
+  filterItems,
+}))(Title);
+
 function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
   return (
     <Row className={styles.btns}>
@@ -114,12 +140,10 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         border
         dataSource={alerts}
         rowKey="alertId"
-        rowClassName={record => (record.alertId === alert.alertId ? 'active' : '')}
         loading={loading['alertCenter/fetch']}
+        rowClassName={record => (record.alertId === alert.alertId ? 'active' : '')}
         rowSelection={{
-          onChange: selectedRowKeys => {
-            setSelectedKeys(selectedRowKeys);
-          },
+          onChange: selectedRowKeys => setSelectedKeys(selectedRowKeys),
         }}
         pagination={{
           total,
@@ -131,42 +155,40 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           onShowSizeChange: (page, pageSize) => handlePageChange(page, pageSize),
         }}
         onRow={record => ({
-          onClick() {
-            getAlert(record);
-            setAlert(record);
+          onClick(e) {
+            if (!e.target.className) {
+              getAlert(record);
+              setAlert(record);
+            }
           },
         })}
       >
         <Column
           align="center"
           dataIndex="alertId"
-          title={<FormattedMessage id="alert-center.alert-id" />}
+          title={<WrapTitle tableColumn="alertId" id="alert-id" />}
         />
         <Column
           align="center"
           dataIndex="alertType"
-          title={
-            <ColumnTitle>
-              <FormattedMessage id="alert-center.alert-type" />
-            </ColumnTitle>
-          }
+          title={<WrapTitle tableColumn="alertType" id="alert-type" />}
         />
         <Column
           align="center"
           dataIndex="tradeDate"
-          title={<FormattedMessage id="alert-center.trade-date" />}
+          title={<WrapTitle tableColumn="tradeDate" id="trade-date" />}
         />
         <Column
           align="center"
           dataIndex="alertTime"
-          title={<FormattedMessage id="alert-center.alert-timestamp" />}
+          title={<WrapTitle tableColumn="alertTime" id="alert-timestamp" />}
         />
         <Column
           align="center"
           dataIndex="itemsTotal"
-          title={<FormattedMessage id="alert-center.items-total" />}
+          title={<WrapTitle isNum tableColumn="alertId" id="items-total" />}
         />
-        <Column dataIndex="owner" title={<FormattedMessage id="alert-center.owner" />} />
+        <Column dataIndex="userName" title={<FormattedMessage id="alert-center.owner" />} />
         <Column
           align="center"
           dataIndex="alertStatus"
@@ -174,6 +196,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         />
         <Column
           align="center"
+          width="10%"
           dataIndex="action"
           title={<FormattedMessage id="alert-center.action" />}
           render={(text, record) => (
@@ -182,15 +205,15 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
                 type="iconqizhi"
                 className={styles.icon}
                 title={formatMessage({ id: 'alert-center.claim' })}
-                onClick={() =>
+                onClick={() => {
                   Modal.confirm({
                     title: 'Confirm',
                     content: 'Are you sure claim this alert?',
                     okText: 'Sure',
                     cancelText: 'Cancel',
                     onOk: () => claimAlert([record.alertId]),
-                  })
-                }
+                  });
+                }}
               />
               <IconFont
                 type="iconic_circle_close"

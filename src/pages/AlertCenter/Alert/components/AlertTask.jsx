@@ -1,21 +1,42 @@
 import React, { useState } from 'react';
-import { Drawer, Button, Table } from 'antd';
+import { Drawer, Button, Table, Radio, Empty, Spin } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import styles from '@/pages/AlertCenter/index.less';
 
 const { Column } = Table;
 
-function AlertTaskModal({ visible, handleCancel }) {
+const radioStyle = {
+  display: 'block',
+  height: '30px',
+  lineHeight: '30px',
+};
+
+function AlertTaskModal({ loading, visible, users, handleCancel }) {
   function handleCommit() {}
+  function hanleChange() {}
   return (
     <Drawer
       title={<FormattedMessage id="alert-center.assign" />}
       width={320}
       visible={visible}
       closable={false}
+      bodyStyle={{ paddingBottom: 80 }}
       onClose={handleCancel}
     >
+      <Spin spinning={loading}>
+        {users.length > 0 ? (
+          <Radio.Group onChange={hanleChange}>
+            {users.map(user => (
+              <Radio style={radioStyle} value={user.userId} key={user.userId}>
+                {user.userName}
+              </Radio>
+            ))}
+          </Radio.Group>
+        ) : (
+          <Empty />
+        )}
+      </Spin>
       <div className={styles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
         <Button type="primary" onClick={handleCommit}>
@@ -26,34 +47,37 @@ function AlertTaskModal({ visible, handleCancel }) {
   );
 }
 
-export default function({ loading, dataSource /* total, handleChange */ }) {
+export default function({ loading, alertItems, users, getUsers }) {
   const [visible, setVisible] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState([]);
 
+  function assignUser() {
+    setVisible(true);
+    getUsers();
+  }
+
   return (
     <>
-      <AlertTaskModal visible={visible} handleCancel={() => setVisible(false)} />
-      <Button
-        style={{ marginBottom: 10 }}
-        disabled={!selectedKeys.length}
-        onClick={() => setVisible(true)}
-      >
+      <AlertTaskModal
+        loading={loading['alertCenter/fetchUsers']}
+        visible={visible}
+        users={users}
+        handleCancel={() => setVisible(false)}
+      />
+      <Button style={{ marginBottom: 10 }} disabled={!selectedKeys.length} onClick={assignUser}>
         <FormattedMessage id="alert-center.assign" />
       </Button>
       <Table
         border
-        dataSource={dataSource}
-        rowKey="ALERT_ID"
+        dataSource={alertItems}
+        rowKey="ALERT_ITEM_ID"
         scroll={{ y: 320 }}
-        loading={loading}
+        loading={loading['alertCenter/fetchAlertItems']}
         pagination={{
-          // total,
           showSizeChanger: true,
           showTotal(count) {
             return `Total ${count} items`;
           },
-          // onChange: (page, pageSize) => handleChange(page, pageSize),
-          // onShowSizeChange: (page, pageSize) => handleChange(page, pageSize),
         }}
         rowSelection={{
           onChange: selectedRowKeys => {
