@@ -127,6 +127,9 @@ class SystemParams extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          render: (res, recode, index) => (
+            <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+          ),
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterType' }),
@@ -166,7 +169,6 @@ class SystemParams extends Component {
           ),
         },
       ],
-      getSystemParamsList: [],
       paramObj: {},
     };
   }
@@ -303,17 +305,8 @@ class SystemParams extends Component {
 
   render() {
     const { loading, getSystemParamsListData } = this.props;
-    let { getSystemParamsList } = this.state;
     const { paramObj } = this.state;
     const { page } = this.state;
-    getSystemParamsList = getSystemParamsListData.items;
-    // const totalCount = getSystemParamsListData && getSystemParamsListData.totalCount;
-    // eslint-disable-next-line no-unused-expressions
-    getSystemParamsList &&
-      getSystemParamsList.forEach((element, index) => {
-        // eslint-disable-next-line no-param-reassign
-        element.index = (page.pageNumber - 1) * page.pageSize + index + 1;
-      });
     return (
       <PageHeaderWrapper>
         <Fragment>
@@ -322,19 +315,6 @@ class SystemParams extends Component {
               <div>
                 <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
               </div>
-              {/* <Modal
-                title="修改系统参数"
-                visible={this.state.updateSystemParamsVisible}
-                onOk={this.updateSystemParamsComfirm}
-                onCancel={this.updateSystemParamsCancel}
-                cancelText={formatMessage({ id: 'app.common.cancel' })}
-                okText={formatMessage({ id: 'app.common.save' })}
-              >
-                <NewModifyForm
-                  ref={this.modifyFormRef}
-                  paramObj={this.state.paramObj}
-                ></NewModifyForm>
-              </Modal> */}
               <Drawer
                 // drawerStyle={
                 //   {
@@ -342,7 +322,7 @@ class SystemParams extends Component {
                 //   }
                 // }
                 closable={false}
-                title="修改系统参数"
+                title="Modify System Parameter"
                 width={700}
                 onClose={this.onClose}
                 visible={this.state.updateSystemParamsVisible}
@@ -359,7 +339,7 @@ class SystemParams extends Component {
             <div>
               <Table
                 loading={loading['systemParams/getSystemParamsList']}
-                dataSource={getSystemParamsList}
+                dataSource={getSystemParamsListData.items}
                 columns={this.state.columns}
                 pagination={false}
               ></Table>
