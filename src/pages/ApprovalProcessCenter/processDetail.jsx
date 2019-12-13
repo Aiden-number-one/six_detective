@@ -39,22 +39,22 @@ function DetailForm({ form, detailItem, task }) {
     //   </Form.Item>
     // </Form>
     <>
-      <Form>
-        {isShowForm &&
-          detailList.length &&
-          detailList.map(item => (
+      {isShowForm && detailList.length ? (
+        <Form>
+          {detailList.map(item => (
             <Form.Item label={item.key} labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
               {getFieldDecorator(item.key, {
                 initialValue: item.oldValue,
               })(<Input disabled={!item.isEdit} />)}
             </Form.Item>
           ))}
-      </Form>
-      {!isShowForm && (
+        </Form>
+      ) : (
         <div className={styles.ListBox}>
           <List
             header={
-              task && (
+              task &&
+              detailList.length && (
                 <List.Item>
                   <div className={styles.ListItem}>
                     <p></p>
@@ -395,12 +395,16 @@ function ProcessDetail({
                 {detailItems.isStarter ? (
                   <>
                     <Col span={6}>
-                      <Button type="primary" onClick={() => submitDrawer('submit')}>
+                      <Button
+                        style={{ margin: '0 10px' }}
+                        type="primary"
+                        onClick={() => submitDrawer('submit')}
+                      >
                         Submit
                       </Button>
                     </Col>
                     <Col span={6} align="right">
-                      <Button type="primary" onClick={saveTask}>
+                      <Button style={{ margin: '0 10px' }} type="primary" onClick={saveTask}>
                         Save
                       </Button>
                     </Col>
@@ -408,12 +412,20 @@ function ProcessDetail({
                 ) : (
                   <>
                     <Col span={6}>
-                      <Button type="primary" onClick={() => submitDrawer('pass')}>
+                      <Button
+                        style={{ margin: '0 10px' }}
+                        type="primary"
+                        onClick={() => submitDrawer('pass')}
+                      >
                         Approve
                       </Button>
                     </Col>
                     <Col span={6}>
-                      <Button type="primary" onClick={() => submitDrawer('reject')}>
+                      <Button
+                        style={{ margin: '0 10px' }}
+                        type="primary"
+                        onClick={() => submitDrawer('reject')}
+                      >
                         Reject
                       </Button>
                     </Col>
