@@ -324,7 +324,7 @@ export default [
             component: './CodeMaintenance/CodeMaintenance',
           },
           {
-            path: '/system-management/audit-log',
+            path: '/system-management/audit-trail-logging',
             name: 'auditTrailLogging',
             component: './AuditLog/AuditLog',
           },
