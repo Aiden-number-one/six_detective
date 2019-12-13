@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import Service from '@/utils/Service';
 import fetch from '@/utils/request.default';
 import { formatTree } from '@/utils/utils';
@@ -36,12 +37,21 @@ export const userManagement = {
     },
     *newUser({ payload, callback }, { call, put }) {
       const response = yield call(addUser, { param: payload });
-      if (response.bcjson.flag === '1' || !response.bcjson.flag) {
+      if (response.bcjson.flag === '1') {
         yield put({
           type: 'save',
           payload: response.bcjson.items,
         });
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *getMenuUserGroup({ payload }, { call, put }) {
@@ -58,6 +68,15 @@ export const userManagement = {
             payload: userMenu,
           });
         }
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *getAlertUserGroup({ payload }, { call, put }) {
@@ -73,6 +92,15 @@ export const userManagement = {
             payload: userMenu,
           });
         }
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *addUserModelDatas({ payload, callback }, { call, put }) {
@@ -83,6 +111,15 @@ export const userManagement = {
           payload: response.bcjson.items,
         });
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *updateUserModelDatas({ payload, callback }, { call, put }) {
@@ -93,6 +130,15 @@ export const userManagement = {
           payload: response.bcjson.items,
         });
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *operationUserModelDatas({ payload, callback }, { call, put }) {
@@ -102,6 +148,15 @@ export const userManagement = {
           yield put({
             type: 'operationDatas',
             payload: response.bcjson.items,
+          });
+        } else {
+          notification.error({
+            message: 'error!!!',
+            description: response.bcjson.msg.toString(),
+            style: {
+              maxHeight: 135,
+              overflow: 'auto',
+            },
           });
         }
       }
