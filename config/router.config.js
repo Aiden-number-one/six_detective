@@ -37,18 +37,18 @@ export default [
         hideInMenu: true,
       },
       {
+        path: 'data-import',
+        name: 'dataImport',
+        routes: [
+          { path: 'lop-data-import', name: 'lop', component: './DataImportLog/Lop' },
+          { path: 'market-data-import', name: 'market', component: './DataImportLog/Market' },
+        ],
+      },
+      {
         path: '/data-management',
         name: 'dataManagement',
         icon: 'icon-zhuxian',
         routes: [
-          {
-            path: 'data-import',
-            name: 'dataImport',
-            routes: [
-              { path: 'lop-data-import', name: 'lop', component: './DataImportLog/Lop' },
-              { path: 'market-data-import', name: 'market', component: './DataImportLog/Market' },
-            ],
-          },
           {
             path: '/data-management/dashboard',
             name: 'dashboard',
