@@ -112,15 +112,15 @@ const iframe = {
 // };
 
 const menuIcons = {
-  // Homepage: 'icon-zhuxian',
-  'Data Module': 'icon-zhuxian',
-  'Account Module': 'icon-user',
-  // 'ETL Center': 'icon-zhuxian',
-  'Account Management': 'icon-user',
-  Surveillance: 'icon-shipin',
-  Report: 'icon-text',
-  Analysis: 'icon-chartpie',
-  'System Management': 'icon-diannao',
+  Homepage: 'icon-Home',
+  'Data Module': 'icon-data',
+  'Account Module': 'icon-account',
+  'ETL Center': 'icon-ETLCenter',
+  'Account Management': 'icon-surveillance',
+  Surveillance: 'icon-surveillance',
+  Report: 'icon-report',
+  Analysis: 'icon-analysis',
+  'System Management': 'icon-systemmanagement',
   'Alert Management': 'icon-jinggao',
 };
 
