@@ -87,6 +87,11 @@ export default function({ loading, alertItems, users, getUsers }) {
       >
         <Column
           align="center"
+          dataIndex="TASK_ID"
+          title={<FormattedMessage id="alert-center.task-id" />}
+        />
+        <Column
+          align="center"
           dataIndex="MARKET"
           title={<FormattedMessage id="alert-center.market" />}
         />

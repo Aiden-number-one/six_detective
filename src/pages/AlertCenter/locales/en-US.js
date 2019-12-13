@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:34:48
  * @LastEditors: iron
- * @LastEditTime: 2019-12-12 19:28:16
+ * @LastEditTime: 2019-12-13 15:45:34
  */
 export default {
   'alert-center.alert-id': 'ALERT ID',
@@ -28,6 +28,7 @@ export default {
   'alert-center.export': 'EXPORT',
   'alert-center.market': 'MARKET',
   'alert-center.ep-name': 'EP NAME',
+  'alert-center.task-id': 'TASK ID',
   'alert-center.ep-code': 'EP CODE',
   'alert-center.enter-workflow': 'ENTER WORKFLOW',
   'alert-center.alert-detail': 'Alert Detail',
