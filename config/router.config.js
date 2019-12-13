@@ -236,17 +236,17 @@ export default [
               {
                 path: '/system-management/approval-process-management/approval-process-flow-design',
                 name: 'Approval Process Flow Design',
-                component: './Page404',
+                component: './Approval/ApprovalDesign/ApprovalDesign',
               },
               {
                 path: '/system-management/approval-process-management/approval-process-auditor',
                 name: 'Approval Process Auditor',
-                component: './Page404',
+                component: './Approval/ApprovalAuditor/ApprovalAuditor',
               },
               {
                 path: '/system-management/approval-process-management/approval-process-configuration',
                 name: 'Approval Process Configuration',
-                component: './Page404',
+                component: './Approval/ApprovalConfiguration/ApprovalConfiguration',
               },
             ],
           },
@@ -447,31 +447,6 @@ export default [
             path: '/system-management/message-content-template',
             name: 'messageContentTemplate',
             component: './MessageContentTemplate/MessageContentTemplate',
-          },
-          {
-            path: '/system-management/workflow-design',
-            name: 'workflowDesign',
-            component: './Approval/ApprovalDesign/ApprovalDesign',
-          },
-          {
-            path: '/system-management/workflow-auditor',
-            name: 'ApprovalAuditor',
-            component: './Approval/ApprovalAuditor/ApprovalAuditor',
-          },
-          {
-            path: '/system-management/workflow-configuration',
-            name: 'ApprovalConfiguration',
-            component: './Approval/ApprovalConfiguration/ApprovalConfiguration',
-          },
-          {
-            path: '/system-management/workflow-config',
-            name: 'workflowConfig',
-            component: './Approval/ApprovalSet/ApprovalSet',
-          },
-          {
-            path: '/system-management/workflow-history',
-            name: 'workflowHistory',
-            component: './Approval/ApprovalEheck/ApprovalEheck',
           },
           {
             path: '/system-management/email-parameter',

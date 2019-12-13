@@ -15,7 +15,12 @@ import { request } from '@/utils/request.default';
 // `fetch` high order function return anonymous func
 export async function getApprovalTaskList({ page = 1, pageSize = 10, taskCode, type }) {
   return request('get_approval_task_list_page', {
-    data: { pageNumber: page.toString(), pageSize: pageSize.toString(), taskCode, type },
+    data: {
+      pageNumber: page.toString(),
+      pageSize: pageSize.toString(),
+      taskCode: taskCode ? taskCode.toString() : '',
+      type,
+    },
   });
 }
 
