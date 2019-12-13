@@ -207,19 +207,24 @@ export default [
             component: './IframePage/IframePage',
           },
           {
-            path: '/etl-center/task-plan-setting',
-            name: 'Task Plan Setting',
-            component: './IframePage/IframePage',
+            path: '/etl-center/monitoring-management',
+            name: 'Monitoring Management',
+            routes: [
+              {
+                path: '/etl-center/monitoring-management/monitoring',
+                name: 'Monitoring',
+                component: './IframePage/IframePage',
+              },
+              {
+                path: '/etl-center/monitoring-management/log-monitoring',
+                name: 'Log Monitoring',
+                component: './IframePage/IframePage',
+              },
+            ],
           },
-          // 隐藏的菜单
           {
             path: '/etl-center/datasource-change',
             name: 'Data Source Change',
-            component: './IframePage/IframePage',
-          },
-          {
-            path: '/etl-center//log-query',
-            name: 'Log Query',
             component: './IframePage/IframePage',
           },
         ],
