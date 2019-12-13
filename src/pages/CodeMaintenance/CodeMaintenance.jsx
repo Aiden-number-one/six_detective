@@ -343,7 +343,7 @@ class CodeMaintenance extends Component {
       codeId: `${this.state.codeId}`,
     };
     dispatch({
-      type: 'codeList/getCodeItemList',
+      type: 'codeList/getCodeList',
       payload: params,
     });
   };
