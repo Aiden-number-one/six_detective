@@ -53,6 +53,123 @@ export default [
           },
         ],
       },
+      // Report
+      {
+        path: '/report',
+        name: 'Report',
+        routes: [
+          {
+            path: '/report/report-designer',
+            name: 'Report Designer',
+            routes: [
+              {
+                path: '/report/report-designer/report-designer',
+                name: 'Report Designer',
+                // component: './ReportDesigner/ReportDesigner',
+                component: './Page404',
+              },
+              {
+                path: '/report/report-designer/dataset-mamagement',
+                name: 'Dataset Mamagement',
+                component: './DatasetManagement/DatasetManagement',
+              },
+            ],
+          },
+          {
+            path: '/report/report-designer/high-sla-reports',
+            name: 'highSlaReports',
+            component: './Page404',
+            hideInMenu: true,
+          },
+          {
+            path: '/report/report-designer/visualization-dashboard',
+            name: 'visualizationDashboard',
+            component: './Page404',
+            hideInMenu: true,
+          },
+        ],
+      },
+      // Data Module
+      {
+        path: '/data-module',
+        name: 'Data Module',
+        routes: [
+          {
+            path: '/data-module/data-import',
+            name: 'Data Import',
+            routes: [
+              {
+                path: '/data-module/data-import/lop-data-import',
+                name: 'LOP Data Import',
+                component: './DataImportLog/Lop',
+              },
+              {
+                path: '/data-module/data-import/market-data-dirs-import',
+                name: 'Market Data DIRS Import',
+                component: './DataImportLog/Market',
+              },
+              {
+                path: '/data-module/data-import/market-data-omd-import',
+                name: 'Market Data OMD Import',
+                component: './DataImportLog/Market',
+              },
+            ],
+          },
+          {
+            path: '/data-module/data-enquiry',
+            name: 'Data Enquiry',
+            routes: [
+              {
+                path: '/data-module/data-enquiry/hkfe-market-data',
+                name: 'HKFE Market Data',
+                component: './Page404',
+              },
+              {
+                path: '/data-module/data-enquiry/hkfe-lop-data',
+                name: 'HKFE LOP Data',
+                component: './Page404',
+              },
+              {
+                path: '/data-module/data-enquiry/sehk-market-data',
+                name: 'SEHK Market Data',
+                component: './Page404',
+              },
+              {
+                path: '/data-module/data-enquiry/sehk-lop-data',
+                name: 'SEHK LOP Data',
+                component: './Page404',
+              },
+            ],
+          },
+          {
+            path: '/data-module/data-processing',
+            name: 'Data Processing',
+            component: './Page404',
+          },
+        ],
+      },
+      // Account Module
+      {
+        path: '/account-module',
+        name: 'Account Module',
+        routes: [
+          {
+            path: '/account-module/data-import',
+            name: 'Data Import',
+            component: './Page404',
+          },
+          {
+            path: '/account-module/account-information',
+            name: 'Account Information',
+            component: './Page404',
+          },
+          {
+            path: '/account-module/submitter-information',
+            name: 'Submitter Information',
+            component: './Page404',
+          },
+        ],
+      },
       // ETL center
       {
         path: '/etl-center',
@@ -107,6 +224,76 @@ export default [
           },
         ],
       },
+      // System Management
+      {
+        path: '/system-management',
+        name: 'System Management',
+        routes: [
+          {
+            path: '/system-management/approval-process-management',
+            name: 'Approval Process Management',
+            routes: [
+              {
+                path: '/system-management/approval-process-management/approval-process-flow-design',
+                name: 'Approval Process Flow Design',
+                component: './Page404',
+              },
+              {
+                path: '/system-management/approval-process-management/approval-process-auditor',
+                name: 'Approval Process Auditor',
+                component: './Page404',
+              },
+              {
+                path: '/system-management/approval-process-management/approval-process-configuration',
+                name: 'Approval Process Configuration',
+                component: './Page404',
+              },
+            ],
+          },
+          {
+            path: '/system-management/user-maintenance',
+            name: 'User Maintenance',
+            component: './Page404',
+          },
+          {
+            path: '/system-management/menu-user-group',
+            name: 'Menu User Group',
+            component: './Page404',
+          },
+          {
+            path: '/system-management/alert-user-group',
+            name: 'Alert User Group',
+            component: './Page404',
+          },
+          {
+            path: '/system-management/email-parameter',
+            name: 'Email Parameter',
+            component: './Page404',
+          },
+          {
+            path: '/system-management/message-content-template',
+            name: 'Message Content Template',
+            component: './Page404',
+          },
+          {
+            path: '/system-management/audit-trail-logging',
+            name: 'Audit Trail Logging',
+            component: './Page404',
+          },
+          {
+            path: '/system-management/code-maintenance',
+            name: 'Code Maintenance',
+            component: './Page404',
+          },
+          {
+            path: '/system-management/system-parameters',
+            name: 'System Parameters',
+            component: './Page404',
+          },
+        ],
+      },
+
+      // 后面的没改过
       {
         path: '/data-source',
         name: 'dataSource',
@@ -190,28 +377,6 @@ export default [
             path: '/surveillance/modal-management',
             name: 'modalManagement',
             component: './Page404',
-          },
-        ],
-      },
-      {
-        path: '/report',
-        name: 'report',
-        icon: 'icon-text',
-        routes: [
-          {
-            path: '/report/high-sla-reports',
-            name: 'highSlaReports',
-            component: './Page404',
-          },
-          {
-            path: '/report/visualization-dashboard',
-            name: 'visualizationDashboard',
-            component: './Page404',
-          },
-          {
-            path: '/report/report-designer/dataset-mamagement',
-            name: 'datasetmanagement',
-            component: './DatasetManagement/DatasetManagement',
           },
         ],
       },
