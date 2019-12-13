@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Modal } from 'antd';
+import { Form, Modal, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import styles from './EmailParameter.less';
@@ -167,6 +167,7 @@ class EmailParameter extends Component {
       type: 'getEmail/updateEmail',
       payload: params,
       callback: () => {
+        message.success('success');
         this.setState({
           visible: false,
         });

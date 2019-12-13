@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, Checkbox } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import { severIPPattern } from '@/utils/validate';
+import { severIPPattern, portPattern } from '@/utils/validate';
 // import { routerRedux } from 'dva/router';
 // import styles from '../AlertUserGroup.less';
 
@@ -49,6 +49,7 @@ class FormUser extends Component {
                 {
                   required: true,
                   message: 'Please Input Port of Email Sever',
+                  pattern: portPattern,
                 },
               ],
               initialValue: emailObj && emailObj.emailPort,
@@ -90,14 +91,8 @@ class FormUser extends Component {
           </Form.Item>
           <Form.Item label="Forbidden" labelCol={{ span: 6 }} wrapperCol={{ span: 8 }}>
             {getFieldDecorator('status', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please Input Sender Email Password',
-                },
-              ],
               valuePropName: 'checked',
-              initialValue: emailObj && emailObj.status,
+              initialValue: (emailObj && emailObj.status) === '0' || !emailObj.status,
             })(<Checkbox></Checkbox>)}
           </Form.Item>
         </Form>
@@ -134,7 +129,6 @@ class NewUser extends Component {
     const { getEmailListData } = this.props;
     const newEmailListData = Object.assign([], getEmailListData);
     this.newUserRef.current.validateFields((err, values) => {
-      console.log('err=======', err, values);
       if (err) {
         return;
       }
@@ -152,10 +146,10 @@ class NewUser extends Component {
             element.paramRealValue = values.emailAddress;
             break;
           case 'password':
-            element.paramRealValue = window.kddes.getDes(values.emailPassword);
+            element.paramRealValue = values.emailPassword;
             break;
           case 'status':
-            element.paramRealValue = values.status;
+            element.paramRealValue = values.status ? '0' : '1';
             break;
           default:
             console.log(1);
