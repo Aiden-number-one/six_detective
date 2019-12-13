@@ -25,23 +25,36 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       {
-        path: '/',
-        name: 'indexdashboard',
-        component: './Monitor/Monitor',
-        hideInMenu: true,
-      },
-      {
-        path: '/data-source',
-        name: 'dataSource',
-        component: './DataSource/DataSource',
-        hideInMenu: true,
-      },
-      {
-        path: 'data-import',
-        name: 'dataImport',
+        path: '/homepage',
+        name: 'HomePage',
         routes: [
-          { path: 'lop-data-import', name: 'lop', component: './DataImportLog/Lop' },
-          { path: 'market-data-import', name: 'market', component: './DataImportLog/Market' },
+          {
+            path: 'homepage',
+            name: 'indexdashboard',
+            component: './Monitor/Monitor',
+            hideInMenu: true,
+          },
+          { path: 'alert-center', name: 'alertCenter', component: './AlertCenter/Alert' },
+          {
+            path: 'information',
+            name: 'informationCenter',
+            component: './AlertCenter/Information',
+            hideInMenu: true,
+          },
+        ],
+      },
+      {
+        path: '/data-module',
+        name: 'DataModule',
+        routes: [
+          {
+            path: 'data-import',
+            name: 'dataImport',
+            routes: [
+              { path: 'lop-data-import', name: 'lop', component: './DataImportLog/Lop' },
+              { path: 'market-data-import', name: 'market', component: './DataImportLog/Market' },
+            ],
+          },
         ],
       },
       {

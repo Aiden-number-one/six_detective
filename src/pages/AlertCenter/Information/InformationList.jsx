@@ -3,7 +3,6 @@ import Link from 'umi/link';
 import { FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Button } from 'antd';
 import IconFont from '@/components/IconFont';
-import ColumnTitle from '@/pages/AlertCenter/ColumnTitle';
 import styles from '../index.less';
 
 const { Column } = Table;
@@ -46,20 +45,12 @@ export default function({ dataSource, loading, getInfomation }) {
           ellipsis
           width={150}
           dataIndex="informationNo"
-          title={
-            <ColumnTitle>
-              <FormattedMessage id="alert-center.information-no" />
-            </ColumnTitle>
-          }
+          title={<FormattedMessage id="alert-center.information-no" />}
         />
         <Column
           align="center"
           dataIndex="informationType"
-          title={
-            <ColumnTitle>
-              <FormattedMessage id="alert-center.information-type" />
-            </ColumnTitle>
-          }
+          title={<FormattedMessage id="alert-center.information-type" />}
         />
         <Column
           align="center"
