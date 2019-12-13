@@ -33,11 +33,6 @@ function DetailForm({ form, detailItem, task }) {
   const isShowForm = detailItem.isStarter;
   console.log('detailItem---->', detailItem.data);
   return (
-    // <Form>
-    //   <Form.Item label="name" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
-    //     {getFieldDecorator('name')(<Input />)}
-    //   </Form.Item>
-    // </Form>
     <>
       {isShowForm && detailList.length ? (
         <Form>
@@ -54,7 +49,7 @@ function DetailForm({ form, detailItem, task }) {
           <List
             header={
               task &&
-              detailList.length && (
+              detailList.length > 0 && (
                 <List.Item>
                   <div className={styles.ListItem}>
                     <p></p>

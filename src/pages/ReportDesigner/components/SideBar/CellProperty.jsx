@@ -38,7 +38,10 @@ export default props => {
               label={<FormattedMessage id="report-designer.insertelement" />}
               {...formLayout}
             >
-              {getFieldDecorator('roleName', {})(
+              {getFieldDecorator(
+                'roleName',
+                {},
+              )(
                 <Select
                   onChange={e => {
                     changeCellType(e);
