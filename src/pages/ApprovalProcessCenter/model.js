@@ -119,9 +119,9 @@ export default {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const { current, pageSize, taskCode, type } = payload || {};
+      const { page, pageSize, taskCode, type } = payload || {};
       const { items, totalCount, err } = yield call(getApprovalTaskList, {
-        current,
+        page,
         pageSize,
         taskCode,
         type,
@@ -135,7 +135,7 @@ export default {
         type: 'save',
         payload: {
           tasks: items,
-          page: current,
+          page,
           total: totalCount,
         },
       });

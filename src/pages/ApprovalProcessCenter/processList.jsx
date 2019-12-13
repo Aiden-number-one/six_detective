@@ -52,11 +52,11 @@ function TaskBtn({
           <FormattedMessage id="alert-center.claim" />
         </Button>
         <Button disabled={!selectedKeys.length} onClick={closeAlert}>
-          {/* <IconFont type="iconic_circle_close" className={styles['btn-icon']} /> */}
+          <IconFont type="iconicon-assign" className={styles['btn-icon']} />
           Assign
         </Button>
         <Button disabled={!selectedKeys.length} onClick={closeAlert}>
-          <IconFont type="iconic_circle_close" className={styles['btn-icon']} />
+          <IconFont type="iconicon-withdraw" className={styles['btn-icon']} />
           Withdraw
         </Button>
         <Button disabled={!selectedKeys.length} onClick={exportAlert}>
@@ -86,6 +86,7 @@ function ProcessList({
 }) {
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [selectedCurrentTask, setSelectedTasks] = useState('all');
+  const [currentPage, setcurrentPage] = useState('1');
 
   useEffect(() => {
     const taskCode = GetQueryString('taskcode');
@@ -193,9 +194,10 @@ function ProcessList({
           total,
           showSizeChanger: true,
           showTotal(count) {
-            return `Total ${count} items`;
+            return `Page ${currentPage} of ${Math.ceil(count / 10).toString()}`;
           },
           onChange(page, pageSize) {
+            setcurrentPage(page);
             dispatch({
               type: 'approvalCenter/fetch',
               payload: {
@@ -206,6 +208,7 @@ function ProcessList({
             });
           },
           onShowSizeChange(page, pageSize) {
+            setcurrentPage(page);
             dispatch({
               type: 'approvalCenter/fetch',
               payload: {
