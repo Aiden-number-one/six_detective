@@ -69,18 +69,18 @@ class CodeMaintenance extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemID' }),
-        dataIndex: 'dictItemId',
-        key: 'dictItemId',
+        dataIndex: 'subitemId',
+        key: 'subitemId',
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemName' }),
-        dataIndex: 'dictItemIdName',
-        key: 'dictItemIdName',
+        dataIndex: 'subitemName',
+        key: 'subitemName',
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.sequence' }),
-        dataIndex: 'sortNo',
-        key: 'sortNo',
+        dataIndex: 'sequence',
+        key: 'sequence',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -351,7 +351,7 @@ class CodeMaintenance extends Component {
       codeId: `${this.state.codeId}`,
     };
     dispatch({
-      type: 'codeList/getCodeList',
+      type: 'codeList/getCodeItemList',
       payload: params,
     });
   };
