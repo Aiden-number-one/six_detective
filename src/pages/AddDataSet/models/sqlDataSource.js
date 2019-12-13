@@ -13,6 +13,7 @@ export default {
   namespace: 'sqlDataSource',
 
   state: {
+    sqlDataSetName: '', // sql数据集名称,
     activeKey: '', // 数据表列表active
     totalCount: 0, // 数据表列表数量
     metaDataTableList: [], // 数据表列表
@@ -20,6 +21,7 @@ export default {
     connectionId: '', //
     tableData: [], //
     column: [], // table的column
+    defaultPageSize: 5, // tableData一页默认展示
   },
 
   effects: {
@@ -118,7 +120,12 @@ export default {
         metaDataTableList: [],
       };
     },
-    setDataTableList(state, { payload: { list, totalCount } }) {
+    setDataTableList(
+      state,
+      {
+        payload: { list, totalCount },
+      },
+    ) {
       return {
         ...state,
         metaDataTableList: list,
@@ -154,6 +161,18 @@ export default {
         ...state,
         tableData: [],
         column: [],
+      };
+    },
+    changeDataSetName(state, action) {
+      return {
+        ...state,
+        sqlDataSetName: action.payload,
+      };
+    },
+    changeDefaultPageSize(state, { payload }) {
+      return {
+        ...state,
+        defaultPageSize: payload,
       };
     },
   },

@@ -1,143 +1,155 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Modal, Select, Table, Form } from 'antd';
+import { Table, Form, Pagination, Drawer } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './SystemParameters.less';
-import TableHeader from '@/components/TableHeader';
 
-const { Option } = Select;
+import SearchForm from './components/SearchForm';
+import ModifySystem from './components/ModifySystem';
 
-class ModifyForm extends Component {
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { paramObj } = this.props;
-    return (
-      <Fragment>
-        <div>
-          <Form layout="inline" className={styles.formWrap}>
-            <Form.Item
-              label={formatMessage({ id: 'systemManagement.systemParameters.parameterType' })}
-            >
-              {getFieldDecorator('paramType', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your paramType',
-                  },
-                ],
-                initialValue: paramObj.paramType,
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item
-              label={formatMessage({ id: 'systemManagement.systemParameters.parameterKey' })}
-            >
-              {getFieldDecorator('paramId', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your paramId',
-                  },
-                ],
-                initialValue: paramObj.paramId,
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item
-              label={formatMessage({ id: 'systemManagement.systemParameters.parameterValue' })}
-            >
-              {getFieldDecorator('paramValue', {
-                rules: [
-                  {
-                    type: 'email',
-                    message: 'The input is not valid paramValue!',
-                  },
-                  {
-                    required: true,
-                    message: 'Please input your paramValue',
-                  },
-                ],
-                initialValue: paramObj.paramValue,
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-            <Form.Item label="是否开启：">
-              {getFieldDecorator('paramStatus', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your paramStatus',
-                  },
-                ],
-                initialValue: paramObj.paramStatus,
-              })(
-                <Select
-                  defaultValue="0"
-                  style={{ width: 300 }}
-                  onChange={this.handleChange}
-                  placeholder="Please select"
-                  className={styles.inputValue}
-                >
-                  <Option value="0">停用</Option>
-                  <Option value="1">启用</Option>
-                </Select>,
-              )}
-            </Form.Item>
-            <Form.Item label={formatMessage({ id: 'app.common.note' })}>
-              {getFieldDecorator('comments', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your comments',
-                  },
-                ],
-                initialValue: paramObj.comments,
-              })(<Input className={styles.inputValue} />)}
-            </Form.Item>
-          </Form>
-        </div>
-      </Fragment>
-    );
-  }
-}
+// const { Option } = Select;
 
-const NewModifyForm = Form.create({})(ModifyForm);
+const NewSearchForm = Form.create({})(SearchForm);
+
+// class ModifyForm extends Component {
+//   render() {
+//     const { getFieldDecorator } = this.props.form;
+//     const { paramObj } = this.props;
+//     return (
+//       <Fragment>
+//         <div>
+//           <Form layout="inline" className={styles.formWrap}>
+//             <Form.Item
+//               label={formatMessage({ id: 'systemManagement.systemParameters.parameterType' })}
+//             >
+//               {getFieldDecorator('paramType', {
+//                 rules: [
+//                   {
+//                     required: true,
+//                     message: 'Please input your paramType',
+//                   },
+//                 ],
+//                 initialValue: paramObj.paramType,
+//               })(<Input className={styles.inputValue} />)}
+//             </Form.Item>
+//             <Form.Item
+//               label={formatMessage({ id: 'systemManagement.systemParameters.parameterKey' })}
+//             >
+//               {getFieldDecorator('paramId', {
+//                 rules: [
+//                   {
+//                     required: true,
+//                     message: 'Please input your paramId',
+//                   },
+//                 ],
+//                 initialValue: paramObj.paramId,
+//               })(<Input className={styles.inputValue} />)}
+//             </Form.Item>
+//             <Form.Item
+//               label={formatMessage({ id: 'systemManagement.systemParameters.parameterValue' })}
+//             >
+//               {getFieldDecorator('paramValue', {
+//                 rules: [
+//                   {
+//                     type: 'email',
+//                     message: 'The input is not valid paramValue!',
+//                   },
+//                   {
+//                     required: true,
+//                     message: 'Please input your paramValue',
+//                   },
+//                 ],
+//                 initialValue: paramObj.paramValue,
+//               })(<Input className={styles.inputValue} />)}
+//             </Form.Item>
+//             <Form.Item label="是否开启：">
+//               {getFieldDecorator('paramStatus', {
+//                 rules: [
+//                   {
+//                     required: true,
+//                     message: 'Please input your paramStatus',
+//                   },
+//                 ],
+//                 initialValue: paramObj.paramStatus,
+//               })(
+//                 <Select
+//                   defaultValue="0"
+//                   style={{ width: 300 }}
+//                   onChange={this.handleChange}
+//                   placeholder="Please select"
+//                   className={styles.inputValue}
+//                 >
+//                   <Option value="0">停用</Option>
+//                   <Option value="1">启用</Option>
+//                 </Select>,
+//               )}
+//             </Form.Item>
+//             <Form.Item label={formatMessage({ id: 'app.common.note' })}>
+//               {getFieldDecorator('comments', {
+//                 rules: [
+//                   {
+//                     required: true,
+//                     message: 'Please input your comments',
+//                   },
+//                 ],
+//                 initialValue: paramObj.comments,
+//               })(<Input className={styles.inputValue} />)}
+//             </Form.Item>
+//           </Form>
+//         </div>
+//       </Fragment>
+//     );
+//   }
+// }
+
+// const NewModifyForm = Form.create({})(ModifyForm);
 @connect(({ systemParams, loading }) => ({
   loading: loading.effects,
   getSystemParamsListData: systemParams.data,
   getParamsTypeData: systemParams.getParamsData,
 }))
 class SystemParams extends Component {
+  searchForm = React.createRef();
+
   constructor() {
     super();
     this.modifyFormRef = React.createRef();
     this.state = {
       updateSystemParamsVisible: false,
-      pageNum: '1',
-      pageSize: '10',
+      searchParameterType: undefined,
+      page: {
+        pageNumber: 1,
+        pageSize: 10,
+      },
       columns: [
         {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          render: (res, recode, index) => (
+            <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+          ),
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterType' }),
-          dataIndex: 'paramType',
-          key: 'paramType',
+          dataIndex: 'parameterType',
+          key: 'parameterType',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterKey' }),
-          dataIndex: 'paramId',
-          key: 'paramId',
+          dataIndex: 'parameterKey',
+          key: 'parameterKey',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterValue' }),
-          dataIndex: 'paramValue',
-          key: 'paramValue',
+          dataIndex: 'parameterValue',
+          key: 'parameterValue',
         },
         {
           title: formatMessage({ id: 'app.common.note' }),
-          dataIndex: 'comments',
-          key: 'comments',
+          dataIndex: 'note',
+          key: 'note',
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),
@@ -157,15 +169,12 @@ class SystemParams extends Component {
           ),
         },
       ],
-      getSystemParamsList: [],
-      ParamsTypeData: {},
       paramObj: {},
     };
   }
 
   componentDidMount() {
     this.querySystemParams();
-    this.getParamsTypeList();
   }
 
   updateSystemParamsComfirm = () => {
@@ -197,21 +206,23 @@ class SystemParams extends Component {
 
   updateSystemParams = (res, obj) => {
     const paramObj = {
-      comments: obj.comments,
+      note: obj.note,
       paramId: obj.paramId,
-      paramStatus: obj.paramStatus,
-      paramType: obj.paramType,
-      paramValue: obj.paramValue,
+      parameterKey: obj.parameterKey,
+      parameterType: obj.parameterType,
+      parameterValue: obj.parameterValue,
     };
     this.setState({ updateSystemParamsVisible: true, paramObj });
   };
 
-  querySystemParams = (paramType = '') => {
+  querySystemParams = () => {
     const { dispatch } = this.props;
+    const { page, searchParameterType } = this.state;
+
     const param = {
-      paramType,
-      pageNumber: this.state.pageNum,
-      pageSize: this.state.pageSize,
+      groupNo: searchParameterType,
+      pageNumber: page.pageNumber,
+      pageSize: page.pageSize,
     };
     dispatch({
       type: 'systemParams/getSystemParamsList',
@@ -219,23 +230,24 @@ class SystemParams extends Component {
     });
   };
 
-  getParamsTypeList = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'systemParams/getParamsType',
-      payload: {},
-    });
-  };
-
   onChangeOption = value => {
     this.querySystemParams(value);
   };
 
-  pageChange = pagination => {
+  /**
+   * @description: This is for paging function.
+   * @param {type} null
+   * @return: undefined
+   */
+  pageChange = (pageNumber, pageSize) => {
+    const page = {
+      pageNumber,
+      pageSize,
+    };
+
     this.setState(
       {
-        pageNum: pagination.current,
-        pageSize: pagination.pageSize,
+        page,
       },
       () => {
         this.querySystemParams();
@@ -243,63 +255,107 @@ class SystemParams extends Component {
     );
   };
 
+  onClose = () => {
+    this.setState({
+      updateSystemParamsVisible: false,
+    });
+  };
+
+  onSave = () => {
+    this.setState(
+      {
+        updateSystemParamsVisible: false,
+      },
+      () => {
+        this.querySystemParams();
+      },
+    );
+  };
+
+  onShowSizeChange = (current, pageSize) => {
+    const page = {
+      pageNumber: current,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.querySystemParams();
+      },
+    );
+  };
+
+  queryLog = () => {
+    this.searchForm.current.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState(
+        {
+          searchParameterType: values.parameterType,
+        },
+        () => {
+          this.querySystemParams();
+        },
+      );
+    });
+  };
+
   render() {
-    const { loading, getParamsTypeData, getSystemParamsListData } = this.props;
-    let { ParamsTypeData, getSystemParamsList } = this.state;
-    const { pageSize } = this.state;
-    ParamsTypeData = getParamsTypeData;
-    getSystemParamsList = getSystemParamsListData.items;
-    const totalCount = getSystemParamsListData && getSystemParamsListData.totalCount;
-    // eslint-disable-next-line no-unused-expressions
-    getSystemParamsList &&
-      getSystemParamsList.forEach((element, index) => {
-        // eslint-disable-next-line no-param-reassign
-        element.index = (this.state.pageNum - 1) * pageSize + index + 1;
-      });
+    const { loading, getSystemParamsListData } = this.props;
+    const { paramObj } = this.state;
+    const { page } = this.state;
     return (
       <PageHeaderWrapper>
         <Fragment>
           <div>
             <div>
               <div>
-                <span>
-                  {formatMessage({ id: 'systemManagement.systemParameters.parameterType' })}：
-                </span>
-                <Select
-                  defaultValue="请选择"
-                  onChange={this.onChangeOption}
-                  style={{ width: '220px' }}
-                >
-                  <Option value="">请选择</Option>
-                  {ParamsTypeData[0] &&
-                    ParamsTypeData[0].data.map(element => (
-                      <Option value={element}>{element}</Option>
-                    ))}
-                </Select>
+                <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
               </div>
-              <Modal
-                title="修改系统参数"
+              <Drawer
+                // drawerStyle={
+                //   {
+                //     height: '200px',
+                //   }
+                // }
+                closable={false}
+                title="Modify System Parameter"
+                width={700}
+                onClose={this.onClose}
                 visible={this.state.updateSystemParamsVisible}
-                onOk={this.updateSystemParamsComfirm}
-                onCancel={this.updateSystemParamsCancel}
-                cancelText={formatMessage({ id: 'app.common.cancel' })}
-                okText={formatMessage({ id: 'app.common.save' })}
               >
-                <NewModifyForm
-                  ref={this.modifyFormRef}
-                  paramObj={this.state.paramObj}
-                ></NewModifyForm>
-              </Modal>
+                {this.state.updateSystemParamsVisible && (
+                  <ModifySystem
+                    onCancel={this.onClose}
+                    onSave={this.onSave}
+                    paramObj={paramObj}
+                  ></ModifySystem>
+                )}
+              </Drawer>
             </div>
             <div>
-              <TableHeader showEdit={false} showSelect={false}></TableHeader>
               <Table
                 loading={loading['systemParams/getSystemParamsList']}
-                dataSource={getSystemParamsList}
+                dataSource={getSystemParamsListData.items}
                 columns={this.state.columns}
-                pagination={{ total: totalCount, pageSize }}
-                onChange={this.pageChange}
+                pagination={false}
               ></Table>
+              <Pagination
+                showSizeChanger
+                current={page.pageNumber}
+                showTotal={() =>
+                  `Page ${page.pageNumber.toString()} of ${Math.ceil(
+                    getSystemParamsListData.totalCount / page.pageSize,
+                  ).toString()}`
+                }
+                onShowSizeChange={this.onShowSizeChange}
+                onChange={this.pageChange}
+                total={getSystemParamsListData.totalCount}
+                pageSize={page.pageSize}
+              />
             </div>
           </div>
         </Fragment>

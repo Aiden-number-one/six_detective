@@ -451,7 +451,7 @@
 
   /* radio相关 */
   .ant-radio-inner {
-    background-color: #cfddea;
+    // background-color: #cfddea;
     border-color: #cfddea;
   }
   .ant-radio-checked .ant-radio-inner {
@@ -592,7 +592,9 @@
       }
     }
     .ant-pagination-total-text {
-      float: left;
+      // float: left;
+      flex: 1;
+      text-align: left;
     }
   }
 
@@ -671,8 +673,14 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
-    & li:first-child {
+    // & li:first-child {
+    //   // flex: 1;
+    //   text-align: left;
+    // }
+    .ant-pagination-total-text {
+      // float: left;
       flex: 1;
+      text-align: left;
     }
   }
 }

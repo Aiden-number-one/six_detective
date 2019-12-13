@@ -24,18 +24,36 @@ export default class ReportDesigner extends PureComponent {
     const { initSheet } = this.props;
     const leftWidth = document.getElementById('leftSideBar').offsetWidth;
     const rigthWidth = document.getElementById('rigthSideBar').offsetWidth;
-    initSheet({
-      view: {
-        height: () => window.innerHeight,
-        width: () => window.innerWidth - leftWidth - rigthWidth,
+    initSheet(
+      {
+        view: {
+          // sheet的宽高
+          height: () => window.innerHeight - 104 - 111,
+          width: () => window.innerWidth - leftWidth - rigthWidth,
+        },
       },
-    });
+      {
+        afterSelection: this.afterSelection,
+      },
+    );
     setTimeout(() => {
       this.setState({
         display: true,
       });
     });
   }
+
+  // 单元格选择后
+  afterSelection = (rowIndex, columnIndex) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'formArea/changeCellPosition',
+      payload: {
+        rowIndex,
+        columnIndex,
+      },
+    });
+  };
 
   // 设置单元格样式
   setCellStyle = (property, value) => {
@@ -67,7 +85,7 @@ export default class ReportDesigner extends PureComponent {
     return (
       <Fragment>
         <ToolBar {...toolBarProps} />
-        <div className={styles.container}>
+        <div className={styles.container} style={{ height: `${window.innerHeight - 104}px` }}>
           <div className={classNames(styles.main, styles.col)}>
             {display && <CustomSearchArea />}
             <div>

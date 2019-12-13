@@ -55,8 +55,13 @@ function resetFTP() {
 }
 
 //文件格式转换
-function resetFTP() {
+function resetTFP() {
 	$('#nodeformbox18').window('close');
+}
+
+//WebApi
+function resetAS() {
+	$('#nodeformbox19').window('close');
 }
 // ------------------------节点取消操作 end---------------
 var _id, _text = '';
