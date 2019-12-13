@@ -241,7 +241,7 @@ function ProcessDetail({
   }, [task]);
 
   function submitDrawer(type) {
-    if (taskGroup && taskGroup.nextRelateNo === null) {
+    if (taskGroup && !taskGroup.nextRelateNo) {
       submitOrApproveTask(type);
       return;
     }

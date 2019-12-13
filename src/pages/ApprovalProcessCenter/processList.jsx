@@ -48,19 +48,19 @@ function TaskBtn({
             })
           }
         >
-          <IconFont type="iconqizhi" className={styles['btn-icon']} />
+          <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
         <Button disabled={!selectedKeys.length} onClick={closeAlert}>
-          <IconFont type="iconicon-assign" className={styles['btn-icon']} />
+          <IconFont type="iconicon_assign" className={styles['btn-icon']} />
           Assign
         </Button>
         <Button disabled={!selectedKeys.length} onClick={closeAlert}>
-          <IconFont type="iconicon-withdraw" className={styles['btn-icon']} />
+          <IconFont type="iconicon_withdraw1 " className={styles['btn-icon']} />
           Withdraw
         </Button>
         <Button disabled={!selectedKeys.length} onClick={exportAlert}>
-          <IconFont type="iconbatch-export" className={styles['btn-icon']} />
+          <IconFont type="iconicon_export" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </Button>
       </Col>
