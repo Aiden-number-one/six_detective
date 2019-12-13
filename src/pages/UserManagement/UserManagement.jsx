@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-13 13:31:29
+ * @LastEditTime: 2019-12-13 13:40:32
  */
 
 import React, { Component } from 'react';
@@ -60,11 +60,11 @@ class UserManagement extends Component {
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
       },
-      // {
-      //   title: formatMessage({ id: 'app.common.userId' }),
-      //   dataIndex: 'userId',
-      //   key: 'userId',
-      // },
+      {
+        title: formatMessage({ id: 'app.common.userId' }),
+        dataIndex: 'userId',
+        key: 'userId',
+      },
       {
         title: formatMessage({ id: 'app.common.username' }),
         dataIndex: 'userName',
