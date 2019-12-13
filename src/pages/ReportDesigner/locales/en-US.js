@@ -4,10 +4,15 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-06 13:40:22
  * @LastEditors: mus
- * @LastEditTime: 2019-12-07 16:24:37
+ * @LastEditTime: 2019-12-12 16:49:11
  */
 
 export default {
+  // 公共
+  'report-designer.start': 'Start',
+  'report-designer.dataset': 'Data Set',
+  'report-designer.datacolumn': 'Data Column',
+  // 控件设置
   'report-designer.widgetcontrol': 'Widget Control',
   'report-designer.widgettype': 'Widget Type',
   'report-designer.basic': 'Basic',
@@ -24,8 +29,11 @@ export default {
   'report-designer.option': 'Option',
   'report-designer.from': 'From',
   'report-designer.datasource': 'Data Source',
-  'report-designer.dataset': 'Data Set',
-  'report-designer.datacolumn': 'Data Column',
   'report-designer.check': 'Check',
   'report-designer.allownull': 'Allow Null',
+  // 单元格设置
+  'report-designer.cellproperty': 'Cell Property',
+  'report-designer.cell': 'Cell',
+  'report-designer.insertelement': 'Insert Element',
+  'report-designer.datasettings': 'Data Settings',
 };
