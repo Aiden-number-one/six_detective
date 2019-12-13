@@ -1,6 +1,6 @@
 import Service from '@/utils/Service';
 
-const { getSystemCode, codeItemList, addCodeItem, updateCodeItem, deleteCodeItem } = Service;
+const { getSystemCode, addCodeItem, updateCodeItem, deleteCodeItem } = Service;
 const codeMaintenance = {
   namespace: 'codeList',
   state: {
@@ -24,7 +24,7 @@ const codeMaintenance = {
       }
     },
     *getCodeItemList({ payload }, { call, put }) {
-      const response = yield call(codeItemList, { param: payload });
+      const response = yield call(getSystemCode, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
