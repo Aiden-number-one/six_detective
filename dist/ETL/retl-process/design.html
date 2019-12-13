@@ -544,6 +544,40 @@ i{
       </div>
     </div>
 
+    <div id='nodeformbox19' class="easyui-window" title="WebService Request" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit19' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId19' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id="i_nodeName19" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId19']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName19" />
+                    <input id='i_nodeItem_id19' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskMInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox19").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id='nodeformbox5' class="easyui-window" title="Procedure Execution" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
