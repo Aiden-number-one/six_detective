@@ -4,11 +4,11 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:34:48
  * @LastEditors: iron
- * @LastEditTime: 2019-12-12 14:13:52
+ * @LastEditTime: 2019-12-12 19:28:16
  */
 export default {
   'alert-center.alert-id': 'ALERT ID',
-  'alert-center.alert-type': 'ALERT TPYE',
+  'alert-center.alert-type': 'ALERT TYPE',
   'alert-center.alert-timestamp': 'ALERT TIMESTAMP',
   'alert-center.information-timestamp': 'TIMESTAMP',
   'alert-center.trade-date': 'TRADE DATE',

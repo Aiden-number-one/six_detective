@@ -1,9 +1,3 @@
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
 .icon {
   margin-right: 5px;
   font-size: 18px;
@@ -40,7 +34,18 @@
     input {
       color: #11416c;
       font-weight: bold;
-      // background-color: #10416c;
+    }
+  }
+  .filter-type {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    > span {
+      margin-right: 10px;
+      color: #10416c;
+    }
+    > .type {
+      flex: 1;
     }
   }
   .des {

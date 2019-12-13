@@ -16,25 +16,60 @@ const CONDITIONS = [
   { id: 7, name: 'CONTAIN' },
 ];
 
-function TypeSelect({ isNum, handleTypeChange }) {
-  const condition = ({ id }) => (isNum ? id !== 7 : [1, 2, 7].includes(id));
+export function FilterHeader() {
+  function handleClear() {}
   return (
-    <Select
-      ellipsis
-      defaultValue={isNum ? 1 : 7}
-      style={{ width: '100%' }}
-      onChange={val => handleTypeChange(val)}
-    >
-      {CONDITIONS.filter(condition).map(({ id, name }) => (
-        <Option value={id} key={id}>
-          {name}
-        </Option>
-      ))}
-    </Select>
+    <Row className={styles.title}>
+      <Col span={12} align="left">
+        <IconFont type="iconsort-asc" className={styles.icon} />
+        <IconFont type="iconsort-desc" className={styles.icon} />
+      </Col>
+      <Col span={12} align="right">
+        <span className={styles.clear} onClick={handleClear}>
+          <IconFont type="icondelete" className={styles.icon} />
+          <span className={styles.text}>CLEAR</span>
+        </span>
+      </Col>
+    </Row>
   );
 }
 
-function SingelItem({ filterItems }) {
+export function FilterFooter({ onCancel, onOk }) {
+  return (
+    <div className={styles['bottom-btns']}>
+      <Button size="small" onClick={onCancel}>
+        Cancel
+      </Button>
+      <Button type="primary" onClick={onOk}>
+        Commit
+      </Button>
+    </div>
+  );
+}
+
+export function FilterType({ isNum, loading, handleTypeChange }) {
+  const condition = ({ id }) => (isNum ? id !== 7 : [1, 2, 7].includes(id));
+  return (
+    <div className={styles['filter-type']}>
+      <span>{isNum ? 'Numeric' : 'Text'}</span>
+      <Select
+        ellipsis
+        loading={loading}
+        className={styles.type}
+        defaultValue={isNum ? 1 : 7}
+        onChange={val => handleTypeChange(val)}
+      >
+        {CONDITIONS.filter(condition).map(({ id, name }) => (
+          <Option value={id} key={id}>
+            {name}
+          </Option>
+        ))}
+      </Select>
+    </div>
+  );
+}
+
+export function FilterSelect({ filterItems }) {
   function onSearch(val) {
     console.log('search:', val);
   }
@@ -66,7 +101,7 @@ function SingelItem({ filterItems }) {
   );
 }
 
-function MultipleItem({ loading, filterItems }) {
+export function FilterCheckbox({ loading, filterItems }) {
   const [isCheckAll, setCheckAll] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
   const [checkedList, setcheckedList] = useState([]);
@@ -120,50 +155,5 @@ function MultipleItem({ loading, filterItems }) {
         )}
       </Spin>
     </>
-  );
-}
-export default function({ isNum, hidePop, loading, filterItems = [], getFilteredState }) {
-  const [curSelectType, setSelectType] = useState('1');
-
-  function handleClear() {
-    getFilteredState(false);
-    hidePop();
-  }
-
-  function handleFilter() {
-    hidePop();
-  }
-
-  return (
-    <div className={styles.content}>
-      <Row className={styles.title}>
-        <Col span={12} align="left">
-          <IconFont type="iconsort-asc" className={styles.icon} />
-          <IconFont type="iconsort-desc" className={styles.icon} />
-        </Col>
-        <Col span={12} align="right">
-          <span className={styles.clear} onClick={handleClear}>
-            <IconFont type="icondelete" className={styles.icon} />
-            <span className={styles.text}>CLEAR</span>
-          </span>
-        </Col>
-      </Row>
-      <Row className={styles.filter}>
-        <TypeSelect isNum={isNum} handleTypeChange={val => setSelectType(val)} />
-        {[1, 3, 4, 5, 6].some(v => v === curSelectType) ? (
-          <SingelItem loading={loading} filterItems={filterItems} />
-        ) : (
-          <MultipleItem loading={loading} filterItems={filterItems} />
-        )}
-        <div className={styles['bottom-btns']}>
-          <Button size="small" onClick={hidePop}>
-            Cancel
-          </Button>
-          <Button type="primary" onClick={handleFilter}>
-            Commit
-          </Button>
-        </div>
-      </Row>
-    </div>
   );
 }

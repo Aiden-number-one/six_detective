@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Popover, Button } from 'antd';
 import styles from '@/pages/AlertCenter/index.less';
-
-const PHASES = ['AA', 'BB', 'CC', 'DD'];
+import { PHASES } from '../constants';
 
 export default function({ postComment }) {
   const [phaseVisible, setPhaseVisible] = useState(false);
@@ -14,7 +13,7 @@ export default function({ postComment }) {
   return (
     <Popover
       visible={phaseVisible}
-      placement="topLeft"
+      placement="topRight"
       trigger="click"
       content={
         <ul className={styles.phase}>

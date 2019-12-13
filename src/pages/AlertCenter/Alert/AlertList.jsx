@@ -12,21 +12,22 @@ const { Column } = Table;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
-function Title({ dispatch, loading, isNum, filterItems, tableColumn, id }) {
+function Title({ dispatch, loading, filterItems, tableColumn, id }) {
+  function handleFilterItems() {
+    dispatch({
+      type: 'global/fetchTableFilterItems',
+      payload: {
+        tableName: 'slop_biz.v_alert_center',
+        tableColumn,
+      },
+    });
+  }
   return (
     <ColumnTitle
-      isNum={isNum}
+      isNum={tableColumn === 'itemsTotal'}
       loading={loading}
       filterItems={filterItems}
-      getFilterItems={() => {
-        dispatch({
-          type: 'global/fetchTableFilterItems',
-          payload: {
-            tableName: 'slop_biz.v_alert_center',
-            tableColumn,
-          },
-        });
-      }}
+      getFilterItems={handleFilterItems}
     >
       <FormattedMessage id={`alert-center.${id}`} />
     </ColumnTitle>
@@ -80,7 +81,7 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
       </Col>
       <Col span={6} align="right">
         <Button type="link">
-          <Link to="/alert-management/information">information</Link>
+          <Link to="/alert-management/information">INFORMATION</Link>
         </Button>
       </Col>
     </Row>
@@ -186,7 +187,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         <Column
           align="center"
           dataIndex="itemsTotal"
-          title={<WrapTitle isNum tableColumn="alertId" id="items-total" />}
+          title={<WrapTitle tableColumn="itemsTotal" id="items-total" />}
         />
         <Column dataIndex="userName" title={<FormattedMessage id="alert-center.owner" />} />
         <Column
@@ -200,7 +201,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           dataIndex="action"
           title={<FormattedMessage id="alert-center.action" />}
           render={(text, record) => (
-            <Row className={styles.btns}>
+            <Row type="flex" justify="space-around" align="middle">
               <IconFont
                 type="iconqizhi"
                 className={styles.icon}

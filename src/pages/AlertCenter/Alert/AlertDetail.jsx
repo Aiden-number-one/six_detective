@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Row, Col, Button, Empty, Spin } from 'antd';
+import { Tabs, Row, Col, Empty, Spin } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
@@ -18,7 +18,6 @@ function CustomEmpty({ className = '', style = {} }) {
 
 function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs, users }) {
   const [isFullscreen, setFullscreen] = useState(false);
-  const [commentPage, setCommentPage] = useState(1);
   const { alertTypeId, alertId } = alert;
 
   useEffect(() => {
@@ -35,17 +34,13 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs, use
         alertId,
       },
     });
-  }, [alertTypeId, alertId]);
-
-  useEffect(() => {
     dispatch({
       type: 'alertCenter/fetchComments',
       payload: {
         alertId,
-        page: commentPage,
       },
     });
-  }, [alertId, commentPage]);
+  }, [alertTypeId, alertId]);
 
   async function commitComment(comment) {
     await dispatch({
@@ -55,10 +50,6 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs, use
         content: comment,
       },
     });
-  }
-
-  function fetchMoreComments() {
-    setCommentPage(commentPage + 1);
   }
 
   return (
@@ -112,15 +103,15 @@ function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs, use
                   {comments.map(item => (
                     <AlertComment comment={item} key={item.id} />
                   ))}
-                  <li className={styles['loading-more']}>
-                    <Button onClick={fetchMoreComments}>load more</Button>
-                  </li>
                 </ul>
               ) : (
                 <CustomEmpty className={styles['comment-list']} />
               )}
             </Spin>
-            <AlertRichText commitComment={comment => commitComment(comment)} />
+            <AlertRichText
+              loading={loading['alertCenter/postComment']}
+              commitComment={comment => commitComment(comment)}
+            />
           </TabPane>
           <TabPane key="2" tab={<FormattedMessage id="alert-center.alert-lifecycle" />}>
             <Spin spinning={loading['alertCenter/fetchLogs']}>

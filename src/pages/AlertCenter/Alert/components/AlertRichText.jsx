@@ -7,7 +7,7 @@ import AlertPhase from './AlertPhase';
 
 const { TextArea } = Input;
 
-export default function({ commitComment }) {
+export default function({ loading, commitComment }) {
   const [comment, setComment] = useState('');
   const [upAttachments, setUpAttachements] = useState([]);
 
@@ -33,7 +33,7 @@ export default function({ commitComment }) {
       />
       <Row className={styles['comment-commit']} type="flex" align="middle" justify="space-between">
         <Col span={11} offset={1}>
-          <AlertPhase postComment={c => setComment(`${comment}${c}`)} />
+          <AlertPhase postComment={c => setComment(`${comment}${c} `)} />
         </Col>
         <Col span={6} align="right">
           <Upload showUploadList={false} fileList={upAttachments} onChange={handleUpAttachments}>
@@ -46,7 +46,12 @@ export default function({ commitComment }) {
           </Upload>
         </Col>
         <Col span={6} align="right">
-          <Button type="primary" onClick={handleCommitComment}>
+          <Button
+            type="primary"
+            loading={loading}
+            disabled={!comment}
+            onClick={handleCommitComment}
+          >
             Submit
           </Button>
         </Col>

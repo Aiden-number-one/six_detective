@@ -32,21 +32,20 @@
     box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
   }
   .btns {
-    margin: 10px 0;
+    margin-bottom: 10px;
     .btn-icon {
       font-size: 18px;
       vertical-align: middle;
     }
-    .icon {
-      color: #4e5459;
-      font-size: 20px;
-      vertical-align: middle;
-      cursor: pointer;
-      &:nth-child(2) {
-        margin: 0 8px;
-        font-size: 19px;
-      }
-    }
+  }
+}
+
+.icon {
+  color: #4e5459;
+  font-size: 20px;
+  cursor: pointer;
+  &:nth-child(2) {
+    font-size: 18px;
   }
 }
 
@@ -119,9 +118,9 @@
   }
 }
 .phase {
-  width: 150px;
+  min-width: 150px;
   margin: 0;
-  padding: 4px 6px;
+  padding: 6px 10px;
   > li {
     cursor: pointer;
     &:hover {

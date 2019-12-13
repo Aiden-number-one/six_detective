@@ -96,7 +96,7 @@ export default function({ loading, alertItems, users, getUsers }) {
           title={<FormattedMessage id="alert-center.ep-code" />}
         />
         <Column dataIndex="EP_NAME" title={<FormattedMessage id="alert-center.ep-name" />} />
-        <Column dataIndex="OWNER_ID" title={<FormattedMessage id="alert-center.owner" />} />
+        <Column dataIndex="USER_NAME" title={<FormattedMessage id="alert-center.owner" />} />
         <Column
           align="center"
           dataIndex="STATUS"
@@ -106,8 +106,11 @@ export default function({ loading, alertItems, users, getUsers }) {
           align="center"
           dataIndex="action"
           title={<FormattedMessage id="alert-center.action" />}
-          render={() => (
-            <Link to="/system-management/workflow-design" style={{ fontSize: 12 }}>
+          render={(text, record) => (
+            <Link
+              to={`/alert-management/Approval-Process-Center?taskcode=${record.TASK_ID}`}
+              style={{ fontSize: 12 }}
+            >
               <FormattedMessage id="alert-center.enter-workflow" />
             </Link>
           )}

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-12 14:20:37
+ * @LastEditTime: 2019-12-12 14:42:28
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -21,9 +21,9 @@ export async function getAlertItems({ alertId, alertTypeId }) {
   return request('get_alert_item_list', { data: { alertTypeId, alertId } });
 }
 
-export async function getAlertComments({ alertId, page = 1, pageSize = 10 }) {
+export async function getAlertComments({ alertId }) {
   return request('get_alert_comment_list', {
-    data: { alertId, pageNumber: page.toString(), pageSize: pageSize.toString() },
+    data: { alertId },
   });
 }
 export async function getAlertLogs({ alertId, page = 1, pageSize = 10 }) {
@@ -78,10 +78,10 @@ export default {
       };
     },
     saveComments(state, { payload }) {
-      const { comments } = state;
+      const { comments } = payload;
       return {
         ...state,
-        comments: [...comments, ...payload.comments],
+        comments,
       };
     },
     saveLogs(state, { payload }) {
@@ -160,8 +160,8 @@ export default {
       });
     },
     *fetchComments({ payload }, { call, put }) {
-      const { alertId, page } = payload;
-      const { items, err } = yield call(getAlertComments, { alertId, page });
+      const { alertId } = payload;
+      const { items, err } = yield call(getAlertComments, { alertId });
       if (err) {
         throw new Error(err);
       }
@@ -213,7 +213,7 @@ export default {
     *claim({ payload }, { call, put }) {
       const { alertIds } = payload || [];
       const { err, items } = yield call(claimAlert, { alertIds });
-      if (err || (!items && !items.length)) {
+      if (err || !items || !items.length) {
         throw new Error(err);
       }
 
