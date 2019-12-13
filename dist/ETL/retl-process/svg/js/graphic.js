@@ -88,7 +88,7 @@ var saveJobInfo = function(params) {
     params.max_parallel = "";
     params.fault_type = "";
     params.valid_flag = "";
-    params.creator = "admin";
+    params.creator = localStorage.getItem('loginName');
     params.operType = "ADD";
     $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_job_info", "v4.0", params, function(data) {
         if (data.bcjson.flag === "1") {
@@ -691,6 +691,45 @@ function Graphic(svg, xmlDoc) {
             }
             thisGraph.update();
             $(thisGraph.formbox + '18').window('close');
+
+            thisGraph.commands();
+        }
+    });
+    $('#node_edit19').submit(function(e) { // Web api
+        e.preventDefault();
+        if ($("#node_edit19").form('validate')) {
+            var nodeName = '';
+            var item_id = '';
+            var nodeId = '';
+
+            var formText = $("#node_edit19").serializeArray();
+            $.each(formText, function(i, ele) {
+                var name = ele.name;
+                var value = ele.value;
+                switch (name) {
+                    case 'i_nodeId':
+                        nodeId = value;
+                        break;
+                    case 'i_nodeName':
+                        nodeName = value;
+                        break;
+                    case 'i_nodeItem_id':
+                        item_id = value;
+                        break;
+                }
+            });
+            var item_name = $("#i_nodeItem_id19").combobox('getText');
+            for (var i = 0; i < thisGraph.nodes.length; i++) {
+                var node = thisGraph.nodes[i];
+                if (node.id == nodeId) {
+                    node.name = nodeName;
+                    node.item_id = item_id;
+                    node.item_name = item_name;
+                    break;
+                }
+            }
+            thisGraph.update();
+            $(thisGraph.formbox + '19').window('close');
 
             thisGraph.commands();
         }

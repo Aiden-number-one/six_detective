@@ -2,8 +2,8 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-12-02 15:07:42
- * @LastEditors: iron
+ * @LastEditTime: 2019-12-12 21:28:25
+ * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -35,7 +35,15 @@ export default WrapperComponent =>
       //
     }
 
-    initSheet = options => {
+    /**
+     * @description: 初始化sheet
+     * @param {object} options sheet的options，用于补充options
+     * @param {object} callbackProps 钩子中的回调函数集合
+     * @return:
+     * @Author: mus
+     * @Date: 2019-12-12 11:27:53
+     */
+    initSheet = (options, callbackProps) => {
       const { data = {} } = this.props;
       const xsOptions = {
         showGrid: true, // 是否显示默认网格
@@ -130,6 +138,7 @@ export default WrapperComponent =>
            */
           afterSelection: (sri, sci, eri, eci) => {
             this.clickCell(sri, sci, eri, eci);
+            callbackProps.afterSelection(sri, sci, eri, eci);
           },
           /** 拖动鼠标多选之后 回调
            * @description:
@@ -238,8 +247,8 @@ export default WrapperComponent =>
           toolbar.paintformatActive = () => false;
         }, 0);
       }
-      // this.clickCellReflectFunc(data.getCellStyle(sri, sci) || {});
       this.clickCellReflectFunc(data || {});
+      // this.clickCellReflectFunc(data.getCellStyle(sri, sci) || {});
     };
 
     // 设置cell属性

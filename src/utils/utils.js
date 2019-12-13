@@ -4,8 +4,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-12-05 14:38:00
- * @LastEditors: dailinbo
+ * @LastEditTime: 2019-12-12 13:36:29
+ * @LastEditors: mus
  */
 
 import {
@@ -227,4 +227,24 @@ export function msFormat(ms) {
 
   return `${h}:${min}:${sec}`;
 }
+export function GetQueryString(name) {
+  const regs = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
+  const r = window.location.search.substr(1).match(regs);
+  if (r != null) return r[2];
+  return null;
+}
+
+export function createCellPos(n) {
+  const ordA = 'A'.charCodeAt(0);
+  const ordZ = 'Z'.charCodeAt(0);
+  const len = ordZ - ordA + 1;
+  let s = '';
+
+  while (n >= 0) {
+    s = String.fromCharCode((n % len) + ordA) + s;
+    n = Math.floor(n / len) - 1;
+  }
+  return s;
+}
+
 export { isProOrDev, isUrl, geneMenuData, getRandowNVPS, passWordStrength };

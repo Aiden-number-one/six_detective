@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Button, Input, Modal, Table } from 'antd';
+import { Form, Button, Input, Modal, Table, Drawer, Pagination } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 
-import TableHeader from '@/components/TableHeader';
+// import TableHeader from '@/components/TableHeader';
 import styles from './CodeMaintenance.less';
 // import { thisExpression } from '@babel/types';
 
@@ -13,13 +13,13 @@ class CodeForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dictId, dictItemId, dictItemIdName, sortNo } = this.props;
+    const { codeId, dictItemId, dictItemIdName, sortNo } = this.props;
     return (
       <div>
         <Form layout="inline" className={styles.formWrap}>
           <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.codeID' })}>
-            {getFieldDecorator('dictId', {
-              initialValue: dictId || undefined,
+            {getFieldDecorator('codeId', {
+              initialValue: codeId || undefined,
             })(<Input className={styles.inputValue} disabled></Input>)}
           </Form.Item>
           <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.subitemID' })}>
@@ -112,24 +112,26 @@ class CodeMaintenance extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.codeID' }),
-        dataIndex: 'dictId',
-        key: 'dictId',
+        dataIndex: 'codeId',
+        key: 'codeId',
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.codeName' }),
-        dataIndex: 'dictIdName',
-        key: 'dictIdName',
+        dataIndex: 'codeName',
+        key: 'codeName',
       },
     ],
-    pageNumber: '1',
-    pageSize: '10',
-    dictId: '',
+    page: {
+      pageNumber: 1,
+      pageSize: 10,
+    },
+    codeId: '',
     itemPage: {
-      pageNum: '1',
+      pageNumber: '1',
       pageSize: '10',
     },
     updateCodeItemParams: {
-      dictId: '',
+      codeId: '',
       dictItemId: '',
       dictItemIdName: '',
       sortNo: '',
@@ -150,7 +152,7 @@ class CodeMaintenance extends Component {
     const { dispatch } = this.props;
     this.codeFormRef.current.validateFields((err, values) => {
       const params = {
-        dictId: this.state.dictId,
+        codeId: this.state.codeId,
         dictItemId: values.dictItemId,
         dictItemIdName: values.dictItemIdName,
         sortNo: values.sortNo,
@@ -175,7 +177,7 @@ class CodeMaintenance extends Component {
   updateCode = (res, recode) => {
     const newUpdateCodeItemParams = {
       // eslint-disable-next-line react/no-access-state-in-setstate
-      dictId: `${this.state.dictId}`,
+      codeId: `${this.state.codeId}`,
       dictItemId: recode.dictItemId,
       dictItemIdName: recode.dictItemIdName,
       sortNo: recode.sortNo,
@@ -191,7 +193,7 @@ class CodeMaintenance extends Component {
     const { dispatch } = this.props;
     this.codeFormRef.current.validateFields((err, values) => {
       const params = {
-        dictId: this.state.dictId,
+        codeId: this.state.codeId,
         dictItemId: this.state.updateCodeItemParams.dictItemId,
         updDictItemId: values.dictItemId,
         dictItemIdName: values.dictItemIdName,
@@ -230,7 +232,7 @@ class CodeMaintenance extends Component {
   deleteCodeItemConfirm = () => {
     const { dispatch } = this.props;
     const params = {
-      dictId: this.state.dictId,
+      codeId: this.state.codeId,
       dictItemId: this.state.updateCodeItemParams.dictItemId,
     };
     dispatch({
@@ -257,10 +259,11 @@ class CodeMaintenance extends Component {
 
   queryCodeList = () => {
     const { dispatch } = this.props;
+    const { page } = this.state;
     const params = {
-      pageNumber: `${this.state.pageNumber}` || '1',
-      pageSize: `${this.state.pageSize}` || '10',
-      dictIdName: this.state.itemNameValue || '',
+      pageNumber: page.pageNumber.toString(),
+      pageSize: page.pageSize.toString(),
+      operType: 'codeQuery',
     };
     dispatch({
       type: 'codeList/getCodeList',
@@ -268,8 +271,8 @@ class CodeMaintenance extends Component {
       callback: () => {
         this.setState(
           {
-            dictId:
-              this.props.getCodeListData.items[0] && this.props.getCodeListData.items[0].dictId,
+            codeId:
+              this.props.getCodeListData.items[0] && this.props.getCodeListData.items[0].codeId,
           },
           () => {
             this.queryCodeItemList();
@@ -290,24 +293,27 @@ class CodeMaintenance extends Component {
     this.queryCodeList();
   };
 
-  pageChange = pagination => {
-    this.setState(
-      {
-        pageNumber: pagination.current,
-        pageSize: pagination.pageSize,
-      },
-      () => {
-        this.queryCodeList();
-      },
-    );
-  };
+  // pageChange = pagination => {
+  //   this.setState(
+  //     {
+  //       pageNumber: pagination.current,
+  //       pageSize: pagination.pageSize,
+  //     },
+  //     () => {
+  //       this.queryCodeList();
+  //     },
+  //   );
+  // };
 
   onShowSizeChange = (current, pageSize) => {
+    const page = {
+      pageNumber: current,
+      pageSize,
+    };
     this.setState(
       {
         // eslint-disable-next-line react/no-unused-state
-        pageNumber: current,
-        pageSize,
+        page,
       },
       () => {
         this.queryCodeList();
@@ -319,7 +325,7 @@ class CodeMaintenance extends Component {
     this.setState(
       {
         // eslint-disable-next-line no-underscore-dangle
-        dictId: record.dictId,
+        codeId: record.codeId,
       },
       () => {
         this.queryCodeItemList();
@@ -331,12 +337,13 @@ class CodeMaintenance extends Component {
   queryCodeItemList = () => {
     const { dispatch } = this.props;
     const params = {
-      pageNumber: `${this.state.itemPage.pageNum}` || '1',
+      operType: 'subitemQueryBycodeId',
+      pageNumber: `${this.state.itemPage.pageNumber}` || '1',
       pageSize: `${this.state.itemPage.pageSize}` || '10',
-      dictId: `${this.state.dictId}`,
+      codeId: `${this.state.codeId}`,
     };
     dispatch({
-      type: 'codeList/getCodeItemList',
+      type: 'codeList/getCodeList',
       payload: params,
     });
   };
@@ -345,7 +352,7 @@ class CodeMaintenance extends Component {
     const { loading, getCodeListData, getCodeItemListData } = this.props;
     const totalCount = getCodeListData && getCodeListData.totalCount;
     const totalCountItem = getCodeItemListData && getCodeItemListData.totalCount;
-    const { pageSize, updateCodeItemParams } = this.state;
+    const { page, itemPage, updateCodeItemParams } = this.state;
 
     const codeListData = getCodeListData && getCodeListData.items;
     const codeItemListData = getCodeItemListData && getCodeItemListData.items;
@@ -353,14 +360,14 @@ class CodeMaintenance extends Component {
     codeListData &&
       codeListData.forEach((element, index) => {
         // eslint-disable-next-line no-param-reassign
-        element.index = (this.state.pageNumber - 1) * this.state.pageSize + index + 1;
+        element.index = (this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1;
       });
     // eslint-disable-next-line no-unused-expressions
     codeItemListData &&
       codeItemListData.forEach((element, index) => {
         // eslint-disable-next-line no-param-reassign
         element.index =
-          (this.state.itemPage.pageNum - 1) * this.state.itemPage.pageSize + index + 1;
+          (this.state.itemPage.pageNumber - 1) * this.state.itemPage.pageSize + index + 1;
       });
 
     return (
@@ -385,14 +392,26 @@ class CodeMaintenance extends Component {
                 loading={loading['codeList/getCodeList']}
                 dataSource={codeListData}
                 columns={this.state.codeColumns}
-                pagination={{ total: totalCount, pageSize }}
-                onChange={this.pageChange}
+                pagination={false}
                 onRow={record => ({
                   onClick: () => {
                     this.connectCodeList(record);
                   }, // 点击行
                 })}
               ></Table>
+              <Pagination
+                showSizeChanger
+                current={page.pageNumber}
+                showTotal={() =>
+                  `Page ${(totalCount || 0) && page.pageNumber} of ${Math.ceil(
+                    (totalCount || 0) / page.pageSize,
+                  ).toString()}`
+                }
+                onShowSizeChange={this.onShowSizeChange}
+                onChange={this.pageChange}
+                total={totalCount}
+                pageSize={page.pageSize}
+              />
               {/* <Pagination
               showSizeChanger
               showQuickJumper
@@ -415,7 +434,23 @@ class CodeMaintenance extends Component {
               >
                 添加
               </Button> */}
-              <Modal
+              <Drawer
+                // drawerStyle={
+                //   {
+                //     height: '200px',
+                //   }
+                // }
+                closable={false}
+                title="新增字典子项"
+                width={700}
+                onClose={this.codeCancel}
+                visible={this.state.codeVisible}
+              >
+                {this.state.codeVisible && (
+                  <NewCodeForm ref={this.codeFormRef} codeId={this.state.codeId}></NewCodeForm>
+                )}
+              </Drawer>
+              {/* <Modal
                 title="新增字典子项"
                 visible={this.state.codeVisible}
                 onOk={this.codeConfirm}
@@ -423,8 +458,8 @@ class CodeMaintenance extends Component {
                 cancelText={formatMessage({ id: 'app.common.cancel' })}
                 okText={formatMessage({ id: 'app.common.save' })}
               >
-                <NewCodeForm ref={this.codeFormRef} dictId={this.state.dictId}></NewCodeForm>
-              </Modal>
+                <NewCodeForm ref={this.codeFormRef} codeId={this.state.codeId}></NewCodeForm>
+              </Modal> */}
               {/* 修改 */}
               <Modal
                 title="修改字典子项"
@@ -451,14 +486,32 @@ class CodeMaintenance extends Component {
                 </div>
               </Modal>
             </div>
-            <div>
-              <TableHeader showEdit showSelect addTableData={() => this.addCode()} />
+            <div className={styles.content}>
+              {/* <TableHeader showEdit showSelect addTableData={() => this.addCode()} /> */}
+              <div className={styles.tableTop}>
+                <Button onClick={this.addCode} type="primary" className="btn_usual">
+                  + Add
+                </Button>
+              </div>
               <Table
                 loading={loading['codeList/getCodeItemList']}
                 dataSource={codeItemListData}
-                pagination={{ total: totalCountItem, pageSize: 10 }}
+                pagination={false}
                 columns={this.state.columns}
               ></Table>
+              <Pagination
+                showSizeChanger
+                current={itemPage.pageNumber}
+                showTotal={() =>
+                  `Page ${(totalCountItem || 0) && itemPage.pageNumber} of ${Math.ceil(
+                    (totalCountItem || 0) / itemPage.pageSize,
+                  ).toString()}`
+                }
+                onShowSizeChange={this.onShowSizeChange}
+                onChange={this.pageChange}
+                total={totalCountItem}
+                pageSize={itemPage.pageSize}
+              />
             </div>
           </div>
         </Fragment>

@@ -45,8 +45,8 @@ class DrawerForm extends PureComponent {
     const { flowNameList, configItem } = this.props;
     return (
       <Form onSubmit={this.handleSubmit}>
-        <Form.Item label="Function ID" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
-          {getFieldDecorator('functionID', {
+        <Form.Item label="Function Id" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
+          {getFieldDecorator('functionId', {
             initialValue: configItem.functionId || '',
           })(<Input disabled />)}
         </Form.Item>
@@ -136,7 +136,7 @@ class ApprovalConfiguration extends PureComponent {
 
   handelSave = () => {
     this.newModifyForm.current.validateFields((err, values) => {
-      // console.log('values-------->', values);
+      console.log('values-------->', values);
       this.saveConfig(values);
       this.handleCancel();
     });

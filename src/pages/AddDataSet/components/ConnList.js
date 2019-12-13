@@ -10,14 +10,14 @@ import { DragSource, DndProvider } from 'react-dnd';
 import IconFont from '@/components/IconFont';
 import styles from '../AddDataSet.less';
 
-@connect(({ sqlDataSetList }) => ({
-  activeKey: sqlDataSetList.activeKey,
+@connect(({ sqlDataSource }) => ({
+  activeKey: sqlDataSource.activeKey,
 }))
 class ConnList extends PureComponent {
   changeActiveKey(activeKey) {
     const { dispatch } = this.props;
     dispatch({
-      type: 'sqlDataSetList/changeActive',
+      type: 'sqlDataSource/changeActive',
       payload: activeKey,
     });
   }
@@ -37,9 +37,9 @@ class ConnList extends PureComponent {
           }
         }}
       >
-        <DndProvider>
-          {data &&
-            data.map((item, index) => (
+        {data[0] ? (
+          data.map((item, index) => (
+            <DndProvider>
               <WrapperDropTarget
                 key={`${item.id + index}`}
                 item={item}
@@ -48,8 +48,19 @@ class ConnList extends PureComponent {
                   this.changeActiveKey(activeKeys);
                 }}
               />
-            ))}
-        </DndProvider>
+            </DndProvider>
+          ))
+        ) : (
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: 30,
+              color: '#10416c',
+            }}
+          >
+            No Data
+          </div>
+        )}
       </ul>
     );
   }

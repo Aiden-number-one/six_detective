@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-10 19:23:49
+ * @LastEditTime: 2019-12-13 13:40:32
  */
 
 import React, { Component } from 'react';
@@ -45,11 +45,21 @@ class UserManagement extends Component {
     updatePasswordVisible: false,
     resetPasswordVisible: false,
     customerno: null,
+    searchUserId: undefined,
+    searchUserName: undefined,
     userInfo: {
       userId: '',
       userName: '',
     },
     columns: [
+      {
+        title: formatMessage({ id: 'app.common.number' }),
+        dataIndex: 'index',
+        key: 'index',
+        render: (res, recode, index) => (
+          <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+        ),
+      },
       {
         title: formatMessage({ id: 'app.common.userId' }),
         dataIndex: 'userId',
@@ -126,17 +136,12 @@ class UserManagement extends Component {
    * @param {type} null
    * @return: undefined
    */
-  queryUserList = (
-    param = {
-      userId: undefined,
-      userName: undefined,
-    },
-  ) => {
+  queryUserList = () => {
     const { dispatch } = this.props;
-    const { userId, userName } = param;
+    const { searchUserId, searchUserName } = this.state;
     const params = {
-      userId,
-      userName,
+      userId: searchUserId,
+      userName: searchUserName,
       operType: 'queryAllList',
       pageNumber: this.state.page.pageNumber.toString(),
       pageSize: this.state.page.pageSize.toString(),
@@ -454,12 +459,15 @@ class UserManagement extends Component {
       page: newPage,
     });
     this.searchForm.current.validateFields((err, values) => {
-      console.log('values===', values);
-      const params = {
-        userId: values.userId,
-        userName: values.userName,
-      };
-      this.queryUserList(params);
+      this.setState(
+        {
+          searchUserId: values.userId,
+          searchUserName: values.userName,
+        },
+        () => {
+          this.queryUserList();
+        },
+      );
     });
   };
 

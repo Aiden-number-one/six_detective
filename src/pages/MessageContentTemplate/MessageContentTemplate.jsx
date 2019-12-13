@@ -26,6 +26,9 @@ export default class MessageContentTemplate extends Component {
       modifyVisible: false,
       deleteVisible: false,
       updateFlag: false,
+      searchTemplateName: undefined,
+      searchTemplateId: undefined,
+      searchType: undefined,
       groupMenuInfo: {},
       typeOptions: [
         { key: '', value: '', title: 'All' },
@@ -40,6 +43,8 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'systemManagement.template.templateName' }),
           dataIndex: 'templateName',
           key: 'templateName',
+          ellipsis: true,
+          width: 150,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.templateId' }),
@@ -51,21 +56,29 @@ export default class MessageContentTemplate extends Component {
           dataIndex: 'type',
           key: 'type',
           render: (res, obj) => <span>{templateTypeFormat(obj.type)}</span>,
+          ellipsis: true,
+          width: 120,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.templateTitle' }),
           dataIndex: 'title',
           key: 'title',
+          ellipsis: true,
+          width: 120,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.templateContent' }),
           dataIndex: 'content',
           key: 'content',
+          ellipsis: true,
+          width: 200,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.keyword' }),
           dataIndex: 'keyWord',
           key: 'keyWord',
+          ellipsis: true,
+          width: 200,
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),
@@ -181,12 +194,16 @@ export default class MessageContentTemplate extends Component {
       if (err) {
         return;
       }
-      const params = {
-        templateName: values.templateName,
-        templateId: values.templateId,
-        type: values.type,
-      };
-      this.queryUserList(params);
+      this.setState(
+        {
+          searchTemplateName: values.templateName,
+          searchTemplateId: values.templateId,
+          searchType: values.type,
+        },
+        () => {
+          this.queryUserList();
+        },
+      );
     });
   };
 
@@ -216,19 +233,13 @@ export default class MessageContentTemplate extends Component {
    * @param {type} null
    * @return: undefined
    */
-  queryUserList = (
-    param = {
-      templateName: undefined,
-      templateId: undefined,
-      type: undefined,
-    },
-  ) => {
+  queryUserList = () => {
     const { dispatch } = this.props;
-    const { templateName, templateId, type } = param;
+    const { searchTemplateName, searchTemplateId, searchType } = this.state;
     const params = {
-      templateName,
-      templateId,
-      type,
+      templateName: searchTemplateName,
+      templateId: searchTemplateId,
+      type: searchType,
       pageNumber: this.state.page.pageNumber.toString(),
       pageSize: this.state.page.pageSize.toString(),
     };

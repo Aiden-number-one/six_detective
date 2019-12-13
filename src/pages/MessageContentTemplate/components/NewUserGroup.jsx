@@ -71,7 +71,7 @@ class FormUser extends Component {
           <Form.Item
             label={formatMessage({ id: 'systemManagement.template.templateTitle' })}
             labelCol={{ span: 4 }}
-            wrapperCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
           >
             {getFieldDecorator('title', {
               rules: [
@@ -86,7 +86,7 @@ class FormUser extends Component {
           <Form.Item
             label={formatMessage({ id: 'systemManagement.template.templateContent' })}
             labelCol={{ span: 4 }}
-            wrapperCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
           >
             {getFieldDecorator('content', {
               rules: [
@@ -105,7 +105,7 @@ class FormUser extends Component {
           >
             {getFieldDecorator('keyWord', {
               initialValue: groupMenuInfo && groupMenuInfo.keyWord,
-            })(<Input placeholder="Please input" />)}
+            })(<Input disabled placeholder="Please input" />)}
           </Form.Item>
         </Form>
       </Fragment>

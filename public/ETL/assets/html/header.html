@@ -1,1 +1,200 @@
-<div class="page-header navbar navbar-fixed-top" style="z-index:500"><div class="page-header-inner"><div class="page-logo"><a href="index.html"><img alt="logo" class="logo-default" src="assets/img/layouts/toubao_logo.png" style="width:165px;height:27px;margin-top:9px"></a><div class="menu-toggler sidebar-toggler"></div></div><a href="javascript:;" data-toggle="collapse" class="menu-toggler responsive-toggler" data-target=".navbar-collapse"></a><div class="page-top navbar-nav-b"><ul class="nav navbar-nav" id="menu_list"></ul><div class="top-menu"><ul class="nav navbar-nav pull-right"><li class="dropdown dropdown-user dropdown-dark"><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle" data-close-others="true" data-hover="dropdown"><img alt="" class="img-circle" src="assets/img/layouts/avatar.png"> <span class="username username-hide-on-mobile"></span> <i class="fa fa-angle-down"></i></a><ul class="dropdown-menu dropdown-menu-default"><li><a href="/index.html#indexInformation"><i class="fa fa-file-text-o"></i> 信息统计</a></li><li><a href="/index.html#common-page" data-toggle="link" data-linkto="home-password-modification"><i class="icon-key"></i> 修改密码</a></li><li><a href="javascript:;" data-link="login.html" id="js-logout1"><i class="fa fa-sign-out"></i> <span>退出系统</span></a></li></ul></li></ul></div></div></div></div><style type="text/css">.login-box{overflow-x:hidden;overflow-y:auto;position:fixed;top:80px;right:0;bottom:0;left:0;z-index:10000000;webkit-overflow-scrolling:touch;outline:0;display:block;text-align:center}.blur{-webkit-filter:blur(3px);-moz-filter:blur(3px);-o-filter:blur(3px);filter:blur(3px)}.login-box .mask{display:block;position:fixed;top:80px;right:0;bottom:0;left:0;z-index:9998;background-color:#000;opacity:.3;-moz-opacity:.3}.login-box .login-window{display:inline-block;position:relative;min-width:330px;margin:30px auto 0;background-color:#fff;z-index:9999;border-radius:4px}.login-box .login-window-topbar{height:50px;width:100%;border-bottom:1px solid #e5e5e5;position:relative;text-align:left}.login-box .close{font-size:21px;font-weight:700;color:#000;text-shadow:0 1px 0 #fff;opacity:.5}.login-box .title{height:50px;line-height:50px;padding-left:15px;width:100%;font-size:16px;color:#333;position:relative;font-weight:400}.login-box .close-window{position:absolute;right:10px;top:10px;width:30px;height:30px;line-height:30px;text-align:center;color:#000;cursor:pointer}.login-box .login-board{width:320px;right:auto;position:relative;margin:auto}</style><div class="login-box hide" id="loginDialog"><div class="mask"></div><div class="login-window"><div class="login-window-topbar"><h4 class="title">登录<span class="errortip1" style="margin-left:20px;color:#f1723b;font-size:14px"></span></h4></div><div class="login-board"><form class="login-form" id="login-form2"><ul><li class="username"><i class="iconfont"></i> <input id="name1" placeholder="用户名或注册手机号码" type="text" name="name1"></li><li class="password"><i class="iconfont"></i> <input id="password1" placeholder="密码" type="password" name="password1"></li><li class="captcha"><input id="captcha1" placeholder="验证码" type="text"></li><li class="login"><button class="btn btn-lg btn-orange" id="submit" style="line-height:38px" type="button">登录</button></li><li class="register"><a href="/forget_password.html">忘记密码？</a> <span class="hide">没有账号？<a href="/kasp/register_regist.html">马上注册</a></span></li></ul></form></div></div></div>
+<div class="page-header navbar navbar-fixed-top" style="z-index: 500">
+    <!-- BEGIN HEADER INNER -->
+    <div class="page-header-inner ">
+        <!-- BEGIN LOGO -->
+        <div class="page-logo">
+            <a href="index.html">
+                <img src="assets/img/layouts/toubao_logo.png" alt="logo" class="logo-default" style="width: 165px;height: 27px;margin-top: 9px;"/>
+            </a>
+            <div class="menu-toggler sidebar-toggler">
+                <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+            </div>
+        </div>
+        <!-- END LOGO -->
+        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"> </a>
+        <!-- END RESPONSIVE MENU TOGGLER -->
+        <!-- BEGIN PAGE TOP -->
+        <div class="page-top navbar-nav-b">
+            <ul class="nav navbar-nav" id="menu_list">
+               <!--  <li>   head-navBtn
+                    <a href="index.html">
+                        <i class="fa fa-file-text-o"></i> <span>统一账户系统</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="index.html">
+                        <i class="fa fa-file-text-o"></i> <span>投保系统</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="index.html">
+                        <i class="fa fa-file-text-o"></i> <span>大数据分析</span>
+                    </a>
+                </li> -->
+              <!--   <li>
+                    <a href="/index.html#common-page" data-toggle="link" data-linkto="home-password-modification">
+                        <i class="icon-key"></i> <span>修改密码</span> </a>
+                </li>
+                <li>
+                    <a href="javascript:;" id="js-logout" data-link="login.html">
+                        <i class="fa fa-sign-out"></i> <span>退出系统</span> </a>
+                </li> -->
+            </ul>
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+                    <li class="dropdown dropdown-user dropdown-dark">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <img alt="" class="img-circle" src="assets/img/layouts/avatar.png">
+                            <span class="username username-hide-on-mobile"></span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <!-- <img alt="" class="img-circle" src="assets/img/layouts/avatar.png" />
+                        <span class="username username-hide-on-mobile"> 系统管理员 </span> -->
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a href="/index.html#indexInformation">
+                                    <i class="fa fa-file-text-o"></i> 信息统计 </a>
+                            </li>
+
+                           <li>
+                                <a href="/index.html#common-page" data-toggle="link" data-linkto="home-password-modification">
+                                    <i class="icon-key"></i> 修改密码</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" id="js-logout1" data-link="login.html">
+                                    <i class="fa fa-sign-out"></i> <span>退出系统</span> </a>
+                            </li>
+                                    <!-- <li class="divider"> <> -->
+                        </ul>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE TOP -->
+    </div>
+    <!-- END HEADER INNER -->
+</div>
+<style type="text/css">
+.login-box {
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    top: 80px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10000000;
+    webkit-overflow-scrolling: touch;
+    outline: 0;
+    display: block;
+    text-align: center;
+}
+.blur{
+    -webkit-filter: blur(3px);
+  -moz-filter: blur(3px);
+  -o-filter: blur(3px);
+  -ms-filter: progid:DXImageTransform.Microsoft.Blur(pixelradius=14,makeshadow=false);
+  filter: blur(3px);
+}
+.login-box .mask {
+    display: block;
+    position: fixed;
+    top: 80px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9998;
+    background-color: #000;
+    filter: alpha(opacity=30);
+    opacity: 0.3;
+    -moz-opacity: 0.3;
+}
+.login-box .login-window {
+    display: inline-block;
+    position: relative;
+    min-width: 330px;
+    margin: 30px auto 0;
+    background-color: #fff;
+    z-index: 9999;
+    border-radius: 4px;
+}
+.login-box .login-window-topbar {
+    height: 50px;
+    width: 100%;
+    border-bottom: 1px solid #e5e5e5;
+    position: relative;
+    text-align: left;
+}
+.login-box .close {
+    font-size: 21px;
+    font-weight: 700;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+    filter: alpha(opacity=20);
+}
+.login-box .title {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 15px;
+    width: 100%;
+    font-size: 16px;
+    color: #333;
+    position: relative;
+    font-weight: 400;
+}
+.login-box .close-window {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: #000;
+    cursor: pointer;
+}
+.login-box .login-board{
+    width: 320px;
+    right: auto;
+    position: relative;
+    margin:auto;
+}
+
+</style>
+<div class="login-box hide" id="loginDialog">
+    <div class="mask"></div>
+    <div class="login-window">
+        <div class="login-window-topbar">
+            <h4 class="title">登录<span class="errortip1" style="margin-left:20px;color:#f1723b;font-size: 14px;"></span></h4>
+        </div>
+        <div class="login-board">
+            <form class="login-form" id="login-form2">
+                <ul>
+                    <li class="username">
+                        <i class="iconfont"></i>
+                        <input name="name1" id="name1" type="text" placeholder="用户名或注册手机号码">
+                    </li>
+                    <li class="password">
+                        <i class="iconfont"></i>
+                        <input name="password1" id="password1" type="password" placeholder="密码">
+                    </li>
+                    <li class="captcha">
+                        <input type="text" id="captcha1" placeholder="验证码">
+                        <!-- <img src="../../assets/images/thumbnail.png" alt="验证码" title="验证码"> -->
+                    </li>
+                    <li class="login">
+                        <button class="btn btn-lg btn-orange" id="submit" style="line-height:38px;" type="button">登录</button>
+                    </li>
+                    <li class="register ">
+                        <a href="/forget_password.html">忘记密码？</a>
+                        <span class="hide">没有账号？<a href="/kasp/register_regist.html">马上注册</a></span>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- <link charset="utf-8" rel="stylesheet" href="assets/css/layouts/register.css"> -->

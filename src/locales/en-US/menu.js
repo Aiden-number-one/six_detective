@@ -58,6 +58,7 @@ export default {
   'menu.systemManagement.jobMonitor': 'Job Monitor',
   'menu.alertManagement': 'ALERT MANAGEMENT',
   'menu.alertManagement.alertCenter': 'ALERT CENTER',
+  'menu.alertManagement.ApprovalProcessCenter': 'Approval Process Center',
   'menu.alertManagement.formItem': 'FormItem Reference',
   'menu.alertManagement.Stylespecification': 'Alert Specification',
   'menu.welcome': 'Welcome',

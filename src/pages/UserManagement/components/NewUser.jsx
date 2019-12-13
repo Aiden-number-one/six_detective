@@ -137,7 +137,7 @@ export default class NewUser extends Component {
     this.state = {
       accountLock: 'N',
       locedChecked: false,
-      roleIds: [],
+      groupIds: [],
       alertIds: [],
     };
   }
@@ -187,24 +187,24 @@ export default class NewUser extends Component {
       type: 'userManagement/updateUserModelDatas',
       payload: params,
       callback: () => {
-        const roleIds = this.props.modifyUserData.map(element => {
-          let roleId = '';
+        const groupIds = this.props.modifyUserData.map(element => {
+          let groupId = '';
           if (element.userGroupType === 'menu') {
             // eslint-disable-next-line prefer-destructuring
-            roleId = element.roleId;
+            groupId = element.groupId;
           }
-          return roleId;
+          return groupId;
         });
         const alertIds = this.props.modifyUserData.map(element => {
-          let roleId = '';
+          let groupId = '';
           if (element.userGroupType === 'alert') {
             // eslint-disable-next-line prefer-destructuring
-            roleId = element.roleId;
+            groupId = element.groupId;
           }
-          return roleId;
+          return groupId;
         });
         this.setState({
-          roleIds,
+          groupIds,
           alertIds,
         });
       },
@@ -213,10 +213,10 @@ export default class NewUser extends Component {
 
   setRoleIds = modifyUserData => {
     if (modifyUserData.length <= 0) return;
-    const roleIds = [];
-    roleIds.push(modifyUserData[0].roleId);
+    const groupIds = [];
+    groupIds.push(modifyUserData[0].groupId);
     this.setState({
-      roleIds,
+      groupIds,
     });
   };
 
@@ -243,7 +243,7 @@ export default class NewUser extends Component {
 
   onChangeMenuUserGroup = checkedValue => {
     this.setState({
-      roleIds: checkedValue,
+      groupIds: checkedValue,
     });
   };
 
@@ -254,13 +254,13 @@ export default class NewUser extends Component {
   };
 
   onSave = () => {
-    const { accountLock, roleIds, alertIds } = this.state;
+    const { accountLock, groupIds, alertIds } = this.state;
     const { NewFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
       if (err) {
         return;
       }
-      if (roleIds.length <= 0) {
+      if (groupIds.length <= 0) {
         message.warning('Please checked Menu User Group');
         return;
       }
@@ -274,7 +274,7 @@ export default class NewUser extends Component {
         const params = {
           userName: values.userName,
           userPwd: window.kddes.getDes(values.userPwd),
-          roleIds: roleIds.join(','),
+          groupIds: groupIds.join(','),
           userId: values.userId,
           alertIds: alertIds.join(','),
           accountLock,
@@ -284,7 +284,7 @@ export default class NewUser extends Component {
           payload: params,
           callback: () => {
             message.success('save success');
-            this.props.onSave();
+            this.props.onSave(true);
             //   this.props.history.push({
             //     pathname: '/system-management/user-maintenance',
             //     params: values,
@@ -295,7 +295,7 @@ export default class NewUser extends Component {
         const params = {
           operType: 'updateUserById',
           userName: values.userName,
-          roleIds: roleIds.join(','),
+          groupIds: groupIds.join(','),
           userId: values.userId,
           alertIds: alertIds.join(','),
           accountLock,
@@ -305,7 +305,7 @@ export default class NewUser extends Component {
           payload: params,
           callback: () => {
             message.success('save success');
-            this.props.onSave();
+            this.props.onSave(false);
             //   this.props.history.push({
             //     pathname: '/system-management/user-maintenance',
             //     params: values,
@@ -318,7 +318,7 @@ export default class NewUser extends Component {
 
   render() {
     const { menuUserGroup, NewFlag, userInfo, alertUserGroups } = this.props;
-    const { locedChecked, roleIds, alertIds } = this.state;
+    const { locedChecked, groupIds, alertIds } = this.state;
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} NewFlag={NewFlag} userInfo={userInfo} />
@@ -338,7 +338,7 @@ export default class NewUser extends Component {
               options={menuUserGroup}
               defaultValue={['Operator']}
               onChange={this.onChangeMenuUserGroup}
-              value={roleIds}
+              value={groupIds}
             ></Checkbox.Group>
           </li>
         </ul>
