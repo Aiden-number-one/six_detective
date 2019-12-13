@@ -87,6 +87,7 @@ function ProcessList({
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [selectedCurrentTask, setSelectedTasks] = useState('all');
   const [currentPage, setcurrentPage] = useState('1');
+  const [currentRow, setcurrentRow] = useState('1');
 
   useEffect(() => {
     const taskCode = GetQueryString('taskcode');
@@ -103,6 +104,7 @@ function ProcessList({
     if (tasks && tasks.length > 0) {
       const [firstTasks] = tasks;
       getTask(firstTasks);
+      setcurrentRow(firstTasks);
       setCurrentTaskType(selectedCurrentTask);
     } else {
       getTask(false);
@@ -185,6 +187,7 @@ function ProcessList({
         dataSource={tasks}
         rowKey="taskCode"
         loading={loading['approvalCenter/fetch']}
+        rowClassName={record => (record.taskCode === currentRow.taskCode ? 'active' : '')}
         rowSelection={{
           onChange: selectedRowKeys => {
             setSelectedKeys(selectedRowKeys);
@@ -222,6 +225,7 @@ function ProcessList({
         onRow={record => ({
           onClick() {
             getTask(record);
+            setcurrentRow(record);
           },
         })}
       >
