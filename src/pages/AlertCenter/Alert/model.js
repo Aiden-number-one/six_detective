@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-12 14:42:28
+ * @LastEditTime: 2019-12-13 15:42:33
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -96,13 +96,6 @@ export default {
         users: payload.users,
       };
     },
-    // closeOk(state, { payload }) {
-    //   const { msg } = payload;
-    //   return {
-    //     ...state,
-    //     alerts,
-    //   };
-    // },
     closeFail(state, { payload }) {
       const { msg } = payload;
       message.warn(msg);
@@ -126,9 +119,9 @@ export default {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const { current, pageSize } = payload || {};
+      const { page, pageSize } = payload || {};
       const { items, totalCount, err } = yield call(getAlerts, {
-        current,
+        page,
         pageSize,
       });
 
@@ -140,7 +133,7 @@ export default {
         type: 'save',
         payload: {
           alerts: items,
-          page: current,
+          page,
           total: totalCount,
         },
       });
@@ -223,6 +216,9 @@ export default {
           alertIds,
           userName: items[0].bcLoginUserName,
         },
+      });
+      yield put({
+        type: 'fetch',
       });
     },
     *close({ payload }, { call, put }) {

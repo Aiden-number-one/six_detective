@@ -16,7 +16,15 @@ function CustomEmpty({ className = '', style = {} }) {
   );
 }
 
-function AlertDetail({ dispatch, loading, alert, alertItems, comments, logs, users }) {
+function AlertDetail({
+  dispatch,
+  loading,
+  alert,
+  alertItems = [],
+  comments = [],
+  logs = [],
+  users,
+}) {
   const [isFullscreen, setFullscreen] = useState(false);
   const { alertTypeId, alertId } = alert;
 

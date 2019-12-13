@@ -7,6 +7,9 @@ import { formatMessage } from 'umi/locale';
 // import TableHeader from '@/components/TableHeader';
 import styles from './CodeMaintenance.less';
 // import { thisExpression } from '@babel/types';
+import SearchForm from './components/SearchForm';
+
+const NewSearchForm = Form.create({})(SearchForm);
 
 class CodeForm extends Component {
   state = {};
@@ -50,10 +53,13 @@ const NewCodeForm = Form.create({})(CodeForm);
   getCodeItemListData: codeList.itemData,
 }))
 class CodeMaintenance extends Component {
+  searchForm = React.createRef();
+
   state = {
     codeVisible: false,
     updateCodeItemVisible: false,
     deleteCodeItemVisible: false,
+    codeName: '',
     // eslint-disable-next-line react/no-unused-state
     itemNameValue: '',
     columns: [
@@ -267,11 +273,12 @@ class CodeMaintenance extends Component {
 
   queryCodeList = () => {
     const { dispatch } = this.props;
-    const { page } = this.state;
+    const { page, codeName } = this.state;
     const params = {
       pageNumber: page.pageNumber.toString(),
       pageSize: page.pageSize.toString(),
       operType: 'codeQuery',
+      codeName,
     };
     dispatch({
       type: 'codeList/getCodeList',
@@ -298,7 +305,19 @@ class CodeMaintenance extends Component {
   };
 
   queryCode = () => {
-    this.queryCodeList();
+    this.searchForm.current.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState(
+        {
+          codeName: values.codeName,
+        },
+        () => {
+          this.queryCodeList();
+        },
+      );
+    });
   };
 
   // pageChange = pagination => {
@@ -383,7 +402,7 @@ class CodeMaintenance extends Component {
         <Fragment>
           <div>
             <div>
-              <ul className={styles.clearfix}>
+              {/* <ul className={styles.clearfix}>
                 <li className={styles.fl}>
                   <span>
                     {formatMessage({ id: 'systemManagement.codeMaintenance.codeName' })}：
@@ -393,7 +412,8 @@ class CodeMaintenance extends Component {
                 <li className={styles.fl}>
                   <Button type="primary" icon="search" onClick={this.queryCode}></Button>
                 </li>
-              </ul>
+              </ul> */}
+              <NewSearchForm search={this.queryCode} ref={this.searchForm}></NewSearchForm>
             </div>
             <div>
               <Table

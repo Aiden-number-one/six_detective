@@ -13,14 +13,12 @@ export default class SearchForm extends Component {
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item
-              label={formatMessage({ id: 'systemManagement.systemParameter.parameterType' })}
-            >
-              {getFieldDecorator('parameterType', {})(
+            <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.codeName' })}>
+              {getFieldDecorator('codeName', {})(
                 <Input
                   className={styles.inputvalue}
                   placeholder={`Please Input ${formatMessage({
-                    id: 'systemManagement.systemParameter.parameterType',
+                    id: 'systemManagement.codeMaintenance.codeName',
                   })}`}
                 />,
               )}
