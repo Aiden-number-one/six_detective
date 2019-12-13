@@ -40,6 +40,14 @@ export default class MessageContentTemplate extends Component {
       ],
       columns: [
         {
+          title: formatMessage({ id: 'app.common.number' }),
+          dataIndex: 'index',
+          key: 'index',
+          render: (res, recode, index) => (
+            <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+          ),
+        },
+        {
           title: formatMessage({ id: 'systemManagement.template.templateName' }),
           dataIndex: 'templateName',
           key: 'templateName',

@@ -81,7 +81,7 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
       </Col>
       <Col span={6} align="right">
         <Button type="link">
-          <Link to="/alert-management/information">INFORMATION</Link>
+          <Link to="/homepage/information">INFORMATION</Link>
         </Button>
       </Col>
     </Row>

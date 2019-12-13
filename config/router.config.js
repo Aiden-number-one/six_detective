@@ -30,6 +30,83 @@ export default [
         component: './Monitor/Monitor',
         hideInMenu: true,
       },
+      // homepage
+      {
+        path: '/homepage',
+        name: 'Homepage',
+        routes: [
+          {
+            path: '/homepage/homepage',
+            name: 'Homepage',
+            component: './Monitor/Monitor',
+          },
+          {
+            path: '/homepage/alert-center',
+            name: 'Alert Center',
+            component: './AlertCenter/Alert',
+          },
+          {
+            path: '/homepage/information',
+            name: 'Information Center',
+            component: './AlertCenter/Information',
+            hideInMenu: true,
+          },
+        ],
+      },
+      // ETL center
+      {
+        path: '/etl-center',
+        name: 'ETL Center',
+        routes: [
+          {
+            path: '/etl-center/data-management',
+            name: 'Data Management',
+            routes: [
+              {
+                path: '/etl-center/data-management/data-driver-management',
+                name: 'Data Driver Management',
+                component: './IframePage/IframePage',
+              },
+              {
+                path: '/etl-center/data-management/data-sourcemanagement',
+                name: 'Data Source Management',
+                component: './IframePage/IframePage',
+              },
+            ],
+          },
+          {
+            path: '/etl-center/task-management',
+            name: 'Task Management',
+            component: './IframePage/IframePage',
+          },
+          {
+            path: '/etl-center/job-management',
+            name: 'Job Management',
+            component: './IframePage/IframePage',
+          },
+          {
+            path: '/etl-center/schedule-management',
+            name: 'Schedule Management',
+            component: './IframePage/IframePage',
+          },
+          // 隐藏的菜单
+          {
+            path: '/etl-center//task-plan-setting',
+            name: 'Task Plan Setting',
+            component: './IframePage/IframePage',
+          },
+          {
+            path: '/etl-center/datasource-change',
+            name: 'Data Source Change',
+            component: './IframePage/IframePage',
+          },
+          {
+            path: '/etl-center//log-query',
+            name: 'Log Query',
+            component: './IframePage/IframePage',
+          },
+        ],
+      },
       {
         path: '/data-source',
         name: 'dataSource',
@@ -37,18 +114,18 @@ export default [
         hideInMenu: true,
       },
       {
-        path: 'data-import',
-        name: 'dataImport',
-        routes: [
-          { path: 'lop-data-import', name: 'lop', component: './DataImportLog/Lop' },
-          { path: 'market-data-import', name: 'market', component: './DataImportLog/Market' },
-        ],
-      },
-      {
         path: '/data-management',
         name: 'dataManagement',
         icon: 'icon-zhuxian',
         routes: [
+          {
+            path: 'data-import',
+            name: 'dataImport',
+            routes: [
+              { path: 'lop-data-import', name: 'lop', component: './DataImportLog/Lop' },
+              { path: 'market-data-import', name: 'market', component: './DataImportLog/Market' },
+            ],
+          },
           {
             path: '/data-management/dashboard',
             name: 'dashboard',
@@ -58,62 +135,6 @@ export default [
             path: '/data-management/data-processing',
             name: 'dataProcessing',
             component: './RulesEngine/RulesEngine',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#datasource-change',
-            path: '/data-management/data-enquiry',
-            name: 'datasourceChange',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#data-source-configuration',
-            path: '/data-management/data-maintenance',
-            name: 'dataMaintenance',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#data-driven',
-            path: '/data-management/drive-management',
-            name: 'driveManagement',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#task-config-setting',
-            path: '/data-management/task-config-setting',
-            name: 'taskConfigSetting',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#report-table-info-manage',
-            path: '/data-management/report-table-info-manage',
-            name: 'jobManage',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#task-plan-setting',
-            path: '/data-management/task-plan-setting',
-            name: 'taskPlanSetting',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#perform-monitoring',
-            path: '/data-management/perform-monitoring',
-            name: 'performMonitoring',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#log-query',
-            path: '/data-management/log-query',
-            name: 'logQuery',
-            component: './IframePage/IframePage',
           },
           {
             path: '/data-management/task-switch',
@@ -188,7 +209,7 @@ export default [
             component: './Page404',
           },
           {
-            path: '/report/dataset-management',
+            path: '/report/report-designer/dataset-mamagement',
             name: 'datasetmanagement',
             component: './DatasetManagement/DatasetManagement',
           },
