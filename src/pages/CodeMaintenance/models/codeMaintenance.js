@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import Service from '@/utils/Service';
 
 const { getSystemCode, addCodeItem, updateCodeItem, deleteCodeItem } = Service;
@@ -21,6 +22,15 @@ const codeMaintenance = {
           });
         }
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *getCodeItemList({ payload }, { call, put }) {
@@ -32,6 +42,15 @@ const codeMaintenance = {
             payload: response.bcjson,
           });
         }
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *addCodeItem({ payload, callback }, { call, put }) {
@@ -44,6 +63,15 @@ const codeMaintenance = {
           });
         }
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *updateCodeItem({ payload, callback }, { call, put }) {
@@ -56,6 +84,15 @@ const codeMaintenance = {
           });
         }
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *deleteCodeItem({ payload, callback }, { call, put }) {
@@ -68,6 +105,15 @@ const codeMaintenance = {
           });
         }
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
   },

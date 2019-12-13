@@ -3,8 +3,9 @@
  * @Author: dailinbo
  * @Date: 2019-11-05 14:04:16
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-11 14:41:53
+ * @LastEditTime: 2019-12-13 14:19:48
  */
+import { notification } from 'antd';
 import Service from '@/utils/Service';
 
 const { emailList, addEmail, deleteEmail, updateEmail } = Service;
@@ -27,6 +28,15 @@ const emailParameter = {
           });
           callback();
         }
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *updateEmail({ payload, callback }, { call, put }) {
@@ -39,6 +49,15 @@ const emailParameter = {
           });
           callback();
         }
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *addEmailDate({ payload, callback }, { call, put }) {
@@ -51,6 +70,15 @@ const emailParameter = {
           });
           callback();
         }
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *deleteEmailDate({ payload, callback }, { call, put }) {
@@ -63,6 +91,15 @@ const emailParameter = {
           });
         }
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
   },

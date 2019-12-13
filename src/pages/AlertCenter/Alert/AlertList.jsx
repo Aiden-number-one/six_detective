@@ -12,6 +12,33 @@ const { Column } = Table;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
+function Title({ dispatch, loading, filterItems, tableColumn, id }) {
+  function handleFilterItems() {
+    dispatch({
+      type: 'global/fetchTableFilterItems',
+      payload: {
+        tableName: 'slop_biz.v_alert_center',
+        tableColumn,
+      },
+    });
+  }
+  return (
+    <ColumnTitle
+      isNum={tableColumn === 'itemsTotal'}
+      loading={loading}
+      filterItems={filterItems}
+      getFilterItems={handleFilterItems}
+    >
+      <FormattedMessage id={`alert-center.${id}`} />
+    </ColumnTitle>
+  );
+}
+
+const WrapTitle = connect(({ loading, global: { filterItems } }) => ({
+  loading: loading.effects['global/fetchTableFilterItems'],
+  filterItems,
+}))(Title);
+
 function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
   return (
     <Row className={styles.btns}>
@@ -32,7 +59,18 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
           <IconFont type="iconqizhi" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button disabled={!selectedKeys.length} onClick={closeAlert}>
+        <Button
+          disabled={!selectedKeys.length}
+          onClick={() =>
+            Modal.confirm({
+              title: 'Confirm',
+              content: 'Are you sure close these alerts?',
+              okText: 'Sure',
+              cancelText: 'Cancel',
+              onOk: () => closeAlert(selectedKeys),
+            })
+          }
+        >
           <IconFont type="iconic_circle_close" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.close" />
         </Button>
@@ -43,7 +81,7 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
       </Col>
       <Col span={6} align="right">
         <Button type="link">
-          <Link to="/alert-center/information">information</Link>
+          <Link to="/homepage/information">INFORMATION</Link>
         </Button>
       </Col>
     </Row>
@@ -51,6 +89,7 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
 }
 
 function AlertList({ dispatch, loading, alerts, total, getAlert }) {
+  const [alert, setAlert] = useState({});
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   useEffect(() => {
@@ -64,21 +103,19 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
     if (alerts && alerts.length > 0) {
       const [firstAlert] = alerts;
       getAlert(firstAlert);
-      // dispatch({
-      //   type: 'alertCenter/fetchAlertItems',
-      //   payload: {
-      //     alertType: firstAlert.alertType,
-      //   },
-      // });
+      setAlert(firstAlert);
     }
   }, [alerts]);
 
-  // // update alertItems
-  // useEffect(() => {
-  //   if (alertItems.length > 0) {
-  //     getAlertItems(alertItems);
-  //   }
-  // }, [alertItems]);
+  function handlePageChange(page, pageSize) {
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        page,
+        pageSize,
+      },
+    });
+  }
 
   function claimAlert(alertIds) {
     dispatch({
@@ -89,18 +126,25 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
     });
   }
 
+  function closeAlert(alertIds) {
+    dispatch({
+      type: 'alertCenter/close',
+      payload: {
+        alertIds,
+      },
+    });
+  }
   return (
     <div className={styles.list}>
-      <AlertBtn selectedKeys={selectedKeys} claimAlert={claimAlert} />
+      <AlertBtn selectedKeys={selectedKeys} claimAlert={claimAlert} closeAlert={closeAlert} />
       <Table
         border
         dataSource={alerts}
         rowKey="alertId"
         loading={loading['alertCenter/fetch']}
+        rowClassName={record => (record.alertId === alert.alertId ? 'active' : '')}
         rowSelection={{
-          onChange: selectedRowKeys => {
-            setSelectedKeys(selectedRowKeys);
-          },
+          onChange: selectedRowKeys => setSelectedKeys(selectedRowKeys),
         }}
         pagination={{
           total,
@@ -108,71 +152,44 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           showTotal(count) {
             return `Total ${count} items`;
           },
-          onChange(page, pageSize) {
-            dispatch({
-              type: 'alertCenter/fetch',
-              payload: {
-                page,
-                pageSize,
-              },
-            });
-          },
-          onShowSizeChange(page, pageSize) {
-            dispatch({
-              type: 'alertCenter/fetch',
-              payload: {
-                page,
-                pageSize,
-              },
-            });
-          },
+          onChange: (page, pageSize) => handlePageChange(page, pageSize),
+          onShowSizeChange: (page, pageSize) => handlePageChange(page, pageSize),
         }}
         onRow={record => ({
-          onClick() {
-            getAlert(record);
-            // dispatch({
-            //   type: 'alertCenter/fetchAlertItems',
-            //   payload: {
-            //     alertType: record.alertType,
-            //   },
-            // });
+          onClick(e) {
+            if (!e.target.className) {
+              getAlert(record);
+              setAlert(record);
+            }
           },
         })}
       >
         <Column
           align="center"
           dataIndex="alertId"
-          title={
-            <ColumnTitle>
-              <FormattedMessage id="alert-center.alert-id" />
-            </ColumnTitle>
-          }
+          title={<WrapTitle tableColumn="alertId" id="alert-id" />}
         />
         <Column
           align="center"
           dataIndex="alertType"
-          title={
-            <ColumnTitle>
-              <FormattedMessage id="alert-center.alert-type" />
-            </ColumnTitle>
-          }
+          title={<WrapTitle tableColumn="alertType" id="alert-type" />}
         />
         <Column
           align="center"
           dataIndex="tradeDate"
-          title={<FormattedMessage id="alert-center.trade-date" />}
+          title={<WrapTitle tableColumn="tradeDate" id="trade-date" />}
         />
         <Column
           align="center"
           dataIndex="alertTime"
-          title={<FormattedMessage id="alert-center.alert-timestamp" />}
+          title={<WrapTitle tableColumn="alertTime" id="alert-timestamp" />}
         />
         <Column
           align="center"
           dataIndex="itemsTotal"
-          title={<FormattedMessage id="alert-center.items-total" />}
+          title={<WrapTitle tableColumn="itemsTotal" id="items-total" />}
         />
-        <Column dataIndex="owner" title={<FormattedMessage id="alert-center.owner" />} />
+        <Column dataIndex="userName" title={<FormattedMessage id="alert-center.owner" />} />
         <Column
           align="center"
           dataIndex="alertStatus"
@@ -180,28 +197,38 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         />
         <Column
           align="center"
+          width="10%"
           dataIndex="action"
           title={<FormattedMessage id="alert-center.action" />}
           render={(text, record) => (
-            <Row className={styles.btns}>
+            <Row type="flex" justify="space-around" align="middle">
               <IconFont
                 type="iconqizhi"
                 className={styles.icon}
                 title={formatMessage({ id: 'alert-center.claim' })}
-                onClick={() =>
+                onClick={() => {
                   Modal.confirm({
                     title: 'Confirm',
                     content: 'Are you sure claim this alert?',
                     okText: 'Sure',
                     cancelText: 'Cancel',
                     onOk: () => claimAlert([record.alertId]),
-                  })
-                }
+                  });
+                }}
               />
               <IconFont
                 type="iconic_circle_close"
                 className={styles.icon}
                 title={formatMessage({ id: 'alert-center.close' })}
+                onClick={() =>
+                  Modal.confirm({
+                    title: 'Confirm',
+                    content: 'Are you sure close this alert?',
+                    okText: 'Sure',
+                    cancelText: 'Cancel',
+                    onOk: () => closeAlert([record.alertId]),
+                  })
+                }
               />
             </Row>
           )}

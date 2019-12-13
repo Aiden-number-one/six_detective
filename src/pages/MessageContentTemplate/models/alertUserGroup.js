@@ -3,8 +3,9 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-10 16:17:07
+ * @LastEditTime: 2019-12-13 14:22:03
  */
+import { notification } from 'antd';
 import Service from '@/utils/Service';
 
 const { getTemplateList, newAlertUser, updateTemplate } = Service;
@@ -26,6 +27,15 @@ const alertUserGroup = {
             payload: response.bcjson,
           });
         }
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *newAlertUser({ payload, callback }, { call, put }) {
@@ -36,16 +46,34 @@ const alertUserGroup = {
           payload: response.bcjson.items,
         });
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *updateUserAlert({ payload, callback }, { call, put }) {
       const response = yield call(updateTemplate, { param: payload });
-      if (response.bcjson.flag === '1' || !response.bcjson.flag) {
+      if (response.bcjson.flag === '1') {
         yield put({
           type: 'update',
           payload: response.bcjson.items,
         });
         callback();
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
   },

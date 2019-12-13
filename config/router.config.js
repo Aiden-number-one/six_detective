@@ -43,7 +43,13 @@ export default [
           {
             path: '/homepage/alert-center',
             name: 'Alert Center',
-            component: './Monitor/Monitor',
+            component: './AlertCenter/Alert',
+          },
+          {
+            path: '/homepage/information',
+            name: 'Information Center',
+            component: './AlertCenter/Information',
+            hideInMenu: true,
           },
         ],
       },

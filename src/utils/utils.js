@@ -227,6 +227,12 @@ export function msFormat(ms) {
 
   return `${h}:${min}:${sec}`;
 }
+export function GetQueryString(name) {
+  const regs = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
+  const r = window.location.search.substr(1).match(regs);
+  if (r != null) return r[2];
+  return null;
+}
 
 export function createCellPos(n) {
   const ordA = 'A'.charCodeAt(0);
