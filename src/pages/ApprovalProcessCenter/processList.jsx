@@ -146,6 +146,7 @@ function ProcessList({
           type: 'approvalCenter/fetch',
           payload: {
             type: selectedCurrentTask,
+            taskCode,
           },
         });
       },
