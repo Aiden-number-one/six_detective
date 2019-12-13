@@ -2,17 +2,40 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-09-20 10:14:51
- * @LastEditors: mus
+ * @LastEditTime: 2019-12-11 12:07:07
+ * @LastEditors: iron
  */
+import fetch from '@/utils/request.default';
+
 const global = {
   namespace: 'global',
   state: {
     notices: [],
     collapsed: false,
+    filterItems: [],
   },
-  effects: {},
+  effects: {
+    *fetchTableFilterItems({ payload }, { call, put }) {
+      // const { tableName, tableColumn, condition, sort } = payload;
+      const { err, items } = yield call(fetch('get_table_column_filter_list'), { ...payload });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveFilterItems',
+        payload: {
+          filterItems: items,
+        },
+      });
+    },
+  },
   reducers: {
+    saveFilterItems(state, { payload }) {
+      return {
+        ...state,
+        filterItems: payload.filterItems,
+      };
+    },
     changeLayoutCollapsed(state, { payload }) {
       return { ...state, collapsed: payload };
     },
