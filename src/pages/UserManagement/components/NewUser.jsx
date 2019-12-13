@@ -19,7 +19,7 @@ class FormUser extends Component {
     return (
       <Fragment>
         <Form>
-          <Form.Item label="User Id：" labelCol={{ span: 4 }} wrapperCol={{ span: 7 }}>
+          {/* <Form.Item label="User Id：" labelCol={{ span: 4 }} wrapperCol={{ span: 7 }}>
             {getFieldDecorator('userId', {
               rules: [
                 {
@@ -34,7 +34,7 @@ class FormUser extends Component {
                 placeholder={`Please input ${formatMessage({ id: 'app.common.userId' })}`}
               />,
             )}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label={formatMessage({ id: 'app.common.username' })}
             labelCol={{ span: 4 }}
