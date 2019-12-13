@@ -38,7 +38,7 @@ const UserLayout = props => {
           <div className={styles.loginContent}>
             <div className={styles.logoDiv}>
               <img alt="logo" className={styles.logo} src={logoTrans} />
-              <span className={styles.title}>Welcome to HKEX</span>
+              <span className={styles.title}>Welcome to Super LOP System</span>
             </div>
             <div className={styles.loginDiv}>{children}</div>
           </div>

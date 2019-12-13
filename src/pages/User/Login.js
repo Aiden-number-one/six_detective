@@ -2,8 +2,8 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-12-06 16:12:30
- * @LastEditors: lan
+ * @LastEditTime: 2019-12-13 09:29:59
+ * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -105,7 +105,7 @@ class Login extends Component {
             </div>
             <UserName
               name="loginName"
-              placeholder="Log in"
+              placeholder="User Name"
               rules={[
                 {
                   required: true,
