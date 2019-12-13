@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Popover, Row, Col, Typography, Input, Button, Form } from 'antd';
+import {
+  Tabs,
+  Popover,
+  Row,
+  Col,
+  Typography,
+  Input,
+  Button,
+  Form,
+  List,
+  Drawer,
+  Radio,
+  message,
+} from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
@@ -14,9 +27,10 @@ const { Paragraph, Text } = Typography;
 //   return <div></div>;
 // }
 
-function DetailForm({ form, detailItem }) {
+function DetailForm({ form, detailItem, task }) {
   const { getFieldDecorator } = form;
-  const detailList = detailItem.data || [];
+  const detailList = task ? detailItem.data || [] : [];
+  const isShowForm = detailItem.isStarter;
   console.log('detailItem---->', detailItem.data);
   return (
     // <Form>
@@ -24,16 +38,47 @@ function DetailForm({ form, detailItem }) {
     //     {getFieldDecorator('name')(<Input />)}
     //   </Form.Item>
     // </Form>
-    <Form>
-      {detailList.length &&
-        detailList.map(item => (
-          <Form.Item label={item.key} labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
-            {getFieldDecorator(item.key, {
-              initialValue: item.oldValue,
-            })(<Input disabled={!item.isEdit} />)}
-          </Form.Item>
-        ))}
-    </Form>
+    <>
+      <Form>
+        {isShowForm &&
+          detailList.length &&
+          detailList.map(item => (
+            <Form.Item label={item.key} labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
+              {getFieldDecorator(item.key, {
+                initialValue: item.oldValue,
+              })(<Input disabled={!item.isEdit} />)}
+            </Form.Item>
+          ))}
+      </Form>
+      {!isShowForm && (
+        <div className={styles.ListBox}>
+          <List
+            header={
+              task && (
+                <List.Item>
+                  <div className={styles.ListItem}>
+                    <p></p>
+                    <p>New INFO</p>
+                    <p>Old INFO</p>
+                  </div>
+                </List.Item>
+              )
+            }
+            bordered
+            dataSource={detailList}
+            renderItem={item => (
+              <List.Item>
+                <div className={styles.ListItem}>
+                  <p>{item.key}</p>
+                  <p>{item.newValue}</p>
+                  <p>{item.oldValue}</p>
+                </div>
+              </List.Item>
+            )}
+          />
+        </div>
+      )}
+    </>
   );
 }
 
@@ -163,25 +208,101 @@ function AlertLog({ log: { time, text } }) {
   );
 }
 
-function ProcessDetail({ dispatch, task, detailItems }) {
+function ProcessDetail({
+  dispatch,
+  task,
+  detailItems,
+  taskGroup,
+  submitRadioList,
+  currentTaskType,
+}) {
   const [isFullscreen, setFullscreen] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [radioValue, setRadioValue] = useState('');
+  const [submitType, setSubmitType] = useState('');
   const newDetailForm = React.createRef();
-  console.log('detailItem---->', detailItems);
+  console.log('detailItem--000-->', radioValue, taskGroup);
+
   useEffect(() => {
+    if (task) {
+      dispatch({
+        type: 'approvalCenter/fetchTaskDetail',
+        payload: {
+          taskCode: task.taskCode,
+        },
+      });
+    }
+  }, [task]);
+
+  useEffect(() => {
+    if (task) {
+      dispatch({
+        type: 'approvalCenter/featchTaskGroup',
+        payload: {
+          taskCode: task.taskCode,
+        },
+      });
+    }
+  }, [task]);
+
+  function submitDrawer(type) {
+    if (taskGroup && taskGroup.nextRelateNo === null) {
+      submitOrApproveTask(type);
+      return;
+    }
+    if (taskGroup) {
+      setSubmitType(type);
+      setVisible(true);
+      getUserList();
+      return;
+    }
+    message.error('submit failure');
+  }
+
+  function submitOrApproveTask(type) {
     dispatch({
-      type: 'approvalCenter/fetchTaskDetail',
+      type: 'approvalCenter/approveAndReject',
       payload: {
         taskCode: task.taskCode,
+        type,
+        userId: radioValue,
+      },
+      callback: () => {
+        dispatch({
+          type: 'approvalCenter/fetch',
+          payload: {
+            type: currentTaskType,
+          },
+        });
       },
     });
-  }, [task]);
+    setVisible(false);
+  }
+
+  function getUserList() {
+    dispatch({
+      type: 'approvalCenter/fetchUserList',
+      payload: {
+        operType: 'queryByAlertGroupId',
+        groupId: taskGroup.nextRelateNo,
+      },
+    });
+  }
 
   function saveTask() {
     newDetailForm.current.validateFields((err, values) => {
-      const epCname = '';
+      let epCname = [];
+      const detailData = detailItems.data;
       if (!err) {
         console.log('Received values of form: ', values);
-        // epCname = values.map(item => ({ label: item.groupName, value: item.groupId }));
+        // eslint-disable-next-line array-callback-return
+        detailData.map(item => {
+          if (item.isEdit) {
+            epCname.push(values[item.key]);
+          }
+        });
+        epCname = epCname.join(',');
+        console.log('epCname---->', epCname);
       }
       dispatch({
         type: 'approvalCenter/saveTask',
@@ -209,7 +330,44 @@ function ProcessDetail({ dispatch, task, detailItems }) {
           }
         >
           <TabPane className={styles['tab-content']} closable={false} tab="Task Detail" key="">
-            <DetailList ref={newDetailForm} saveTask={saveTask} detailItem={detailItems} />
+            <DetailList
+              ref={newDetailForm}
+              saveTask={saveTask}
+              detailItem={detailItems}
+              task={task}
+            />
+            <Drawer
+              title="Assign to"
+              width={500}
+              visible={visible}
+              onClose={() => setVisible(false)}
+              bodyStyle={{ paddingBottom: 80 }}
+            >
+              <Radio.Group
+                options={submitRadioList}
+                onChange={e => setRadioValue(e.target.value)}
+                value={radioValue}
+              ></Radio.Group>
+              <div
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  bottom: 0,
+                  width: '100%',
+                  borderTop: '1px solid #e9e9e9',
+                  padding: '10px 16px',
+                  background: '#fff',
+                  textAlign: 'right',
+                }}
+              >
+                <Button onClick={() => submitOrApproveTask(submitType)} type="primary">
+                  Save
+                </Button>
+                <Button onClick={() => setVisible(false)} style={{ marginRight: 12 }}>
+                  Cancel
+                </Button>
+              </div>
+            </Drawer>
           </TabPane>
         </Tabs>
       </Col>
@@ -233,15 +391,36 @@ function ProcessDetail({ dispatch, task, detailItems }) {
                 {/* <Col span={11} offset={1}>
                   <Button type="primary">Phase</Button>
                 </Col> */}
-                <Col span={6}>
-                  <Button type="primary">Submit</Button>
-                </Col>
+
+                {detailItems.isStarter ? (
+                  <>
+                    <Col span={6}>
+                      <Button type="primary" onClick={() => submitDrawer('submit')}>
+                        Submit
+                      </Button>
+                    </Col>
+                    <Col span={6} align="right">
+                      <Button type="primary" onClick={saveTask}>
+                        Save
+                      </Button>
+                    </Col>
+                  </>
+                ) : (
+                  <>
+                    <Col span={6}>
+                      <Button type="primary" onClick={() => submitDrawer('pass')}>
+                        Approve
+                      </Button>
+                    </Col>
+                    <Col span={6}>
+                      <Button type="primary" onClick={() => submitDrawer('reject')}>
+                        Reject
+                      </Button>
+                    </Col>
+                  </>
+                )}
+
                 {/* <Col span={6}>attachments</Col> */}
-                <Col span={6} align="right">
-                  <Button type="primary" onClick={saveTask}>
-                    Save
-                  </Button>
-                </Col>
               </Row>
             </div>
           </TabPane>
@@ -257,7 +436,12 @@ function ProcessDetail({ dispatch, task, detailItems }) {
   );
 }
 
-export default connect(({ loading, approvalCenter: { detailItems } }) => ({
-  detailItems,
-  loading: loading.effects,
-}))(ProcessDetail);
+export default connect(
+  ({ loading, approvalCenter: { detailItems, userList, submitRadioList, taskGroup } }) => ({
+    detailItems,
+    userList,
+    submitRadioList,
+    taskGroup,
+    loading: loading.effects,
+  }),
+)(ProcessDetail);

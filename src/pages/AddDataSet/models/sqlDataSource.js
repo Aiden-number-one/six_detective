@@ -120,7 +120,12 @@ export default {
         metaDataTableList: [],
       };
     },
-    setDataTableList(state, { payload: { list, totalCount } }) {
+    setDataTableList(
+      state,
+      {
+        payload: { list, totalCount },
+      },
+    ) {
       return {
         ...state,
         metaDataTableList: list,
