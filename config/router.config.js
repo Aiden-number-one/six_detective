@@ -206,12 +206,12 @@ export default [
             name: 'Schedule Management',
             component: './IframePage/IframePage',
           },
-          // 隐藏的菜单
           {
-            path: '/etl-center//task-plan-setting',
+            path: '/etl-center/task-plan-setting',
             name: 'Task Plan Setting',
             component: './IframePage/IframePage',
           },
+          // 隐藏的菜单
           {
             path: '/etl-center/datasource-change',
             name: 'Data Source Change',

@@ -99,7 +99,7 @@ const iframe = {
   // 质量问题分析
   '/etl-center/job-management': 'index.html#report-table-info-manage',
   // 任务管理
-  '/data-management/task-plan-setting': 'index.html#task-plan-setting',
+  '/etl-center/task-plan-setting': 'index.html#task-plan-setting',
   // 作业管理
   '/etl-center/schedule-management': 'index.html#perform-monitoring',
   // 执行日志
