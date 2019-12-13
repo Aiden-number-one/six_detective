@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Input, Button, DatePicker, Table, Row, Col } from 'antd';
+import { Form, Input, Button, DatePicker, Table, Row, Col, Pagination } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
-import TableHeader from '@/components/TableHeader';
 
 import styles from './AuditLog.less';
 
 class OperatorForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { search, reset } = this.props;
+    const { search } = this.props;
     return (
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
@@ -46,9 +45,6 @@ class OperatorForm extends Component {
           </Col>
         </Row>
         <div className="btnArea">
-          <Button icon="close" onClick={reset}>
-            重置
-          </Button>
           <Button type="primary" onClick={search}>
             {formatMessage({ id: 'app.common.search' })}
           </Button>
@@ -67,6 +63,10 @@ class AuditLog extends Component {
   state = {
     pageNum: '1',
     pageSize: '10',
+    page: {
+      pageNumber: 1,
+      pageSize: 10,
+    },
     columns: [
       {
         title: formatMessage({ id: 'app.common.number' }),
@@ -74,34 +74,44 @@ class AuditLog extends Component {
         key: 'index',
       },
       {
-        title: '操作时间',
-        dataIndex: 'runtime',
-        key: 'runtime',
+        title: 'Function Name',
+        dataIndex: 'userName',
+        key: 'userName',
       },
       {
-        title: '操作员名称',
-        dataIndex: 'operatorName',
-        key: 'operatorName',
+        title: 'Table Name',
+        dataIndex: 'formName',
+        key: 'formName',
       },
       {
-        title: '业务名称',
-        dataIndex: 'bexDesc',
-        key: 'bexDesc',
+        title: 'Code',
+        dataIndex: 'biToCode',
+        key: 'biToCode',
       },
       {
-        title: '状态',
-        dataIndex: 'errorCodeName',
-        key: 'errorCodeName',
+        title: 'Product Code',
+        dataIndex: 'productCode',
+        key: 'productCode',
       },
       {
-        title: '返回信息',
-        dataIndex: 'errorMessage',
-        key: 'errorMessage',
+        title: 'Effective Date',
+        dataIndex: 'operateDate',
+        key: 'operateDate',
       },
       {
-        title: '来访IP',
+        title: 'Field Updated',
         dataIndex: 'ipAddress',
         key: 'ipAddress',
+      },
+      {
+        title: 'Update Type',
+        dataIndex: 'ipAddress',
+        key: 'ipAddress',
+      },
+      {
+        title: 'Log Time',
+        dataIndex: 'operateTime',
+        key: 'operateTime',
       },
     ],
     getAuditLogList: [],
@@ -161,7 +171,7 @@ class AuditLog extends Component {
   render() {
     const { loading } = this.props;
     let { getAuditLogList } = this.state;
-    const { pageSize } = this.state;
+    const { pageSize, page } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     // eslint-disable-next-line no-unused-expressions
@@ -177,13 +187,25 @@ class AuditLog extends Component {
           reset={this.operatorReset}
           ref={this.auditLogForm}
         />
-        <TableHeader showEdit={false} showSelect={false} />
         <Table
           loading={loading['auditLog/getAuditLogList']}
           dataSource={getAuditLogList}
           pagination={{ total: totalCount, pageSize }}
           onChange={this.pageChange}
           columns={this.state.columns}
+        />
+        <Pagination
+          showSizeChanger
+          current={page.pageNumber}
+          showTotal={() =>
+            `Page ${page.pageNumber.toString()} of ${Math.ceil(
+              totalCount / page.pageSize,
+            ).toString()}`
+          }
+          onShowSizeChange={this.onShowSizeChange}
+          onChange={this.pageChange}
+          total={totalCount}
+          pageSize={page.pageSize}
         />
       </PageHeaderWrapper>
     );
