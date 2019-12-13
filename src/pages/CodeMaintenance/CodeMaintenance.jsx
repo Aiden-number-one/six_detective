@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Button, Input, Modal, Table, Drawer, Pagination } from 'antd';
+import { Form, Button, Input, Modal, Table, Drawer, Pagination, Row, Col } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 
@@ -477,6 +477,26 @@ class CodeMaintenance extends Component {
                 {this.state.codeVisible && (
                   <NewCodeForm ref={this.codeFormRef} codeId={this.state.codeId}></NewCodeForm>
                 )}
+                <Row
+                  type="flex"
+                  justify="end"
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    bottom: 0,
+                    width: '100%',
+                    padding: '10px 16px',
+                    background: '#fff',
+                    textAlign: 'right',
+                  }}
+                >
+                  <Col>
+                    <Button onClick={this.updateCodeItemCancel}>CANCEL</Button>
+                    <Button type="primary" onClick={this.updateCodeItemConfirm}>
+                      SAVE
+                    </Button>
+                  </Col>
+                </Row>
               </Drawer>
               {/* <Modal
                 title="新增字典子项"
