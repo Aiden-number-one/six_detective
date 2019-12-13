@@ -52,6 +52,10 @@ define((require, exports, module) => {
         $("body").on("change", `${PAGE} [name=userPassword]`, function() {
             $(this).attr("changed", "changed");
         });
+        $("body").on("change", `${PAGE} [name=requestSecretWord]`, function() {
+            $(this).attr("changed", "changed");
+        });
+        
 
         // 点击弹框保存 通用
         $("body").on("click", `${PAGE} .J_save`, function() {
@@ -63,7 +67,6 @@ define((require, exports, module) => {
                 let formParams = App.getFormParams(formId);
                 formParams.taskType = taskType;
                 formParams.creator = localStorage.getItem('loginName');
-
                 // 抽取任务
                 if (modalId === "J_modal_TE") {
                     if (!$("#J_select2_multi_tab_1_1").val()) {
@@ -210,6 +213,67 @@ define((require, exports, module) => {
                 } else if(modalId === "J_modal_TFP") {
                     formParams.dbTable = $("#J_select2_multi_tab_13_1").select2('data')[0].text.replace(/\(.+\)/g, "");
                 }
+                // 执行Web任务
+                if (modalId === "J_modal_AS") {
+                    if (oparatetype === 'add') {
+                        formParams.operType = 'addApi';
+                    } else {
+                        formParams.operType = 'updateApi';
+                    }
+                    let apiParamsInputCommon = [];
+                    $.each($('#tab_14_2 [name=apiParamsInputCommon]'), function(i){
+                        let name = $(this).find("[name=name]").val();
+                        let value = $(this).find("[name=value]").val();
+                        let position = $(this).find("[name=position]").val();
+                        apiParamsInputCommon.push({
+                            name,
+                            value,
+                            position,
+                        })
+                    })
+                    formParams.apiParamsInputCommon = JSON.stringify(apiParamsInputCommon)
+                    let apiParamsInput = [];
+                    $.each($('#tab_14_3 [name=apiParamsInput]'), function(i){
+                        let name = $(this).find("[name=name]").val();
+                        let value = $(this).find("[name=value]").val();
+                        let position = $(this).find("[name=position]").val();
+                        apiParamsInput.push({
+                            name,
+                            value,
+                            position,
+                        })
+                    })
+                    formParams.apiParamsInput = JSON.stringify(apiParamsInput)
+                    let apiParamsOutput = [];
+                    $.each($('#tab_14_3 [name=apiParamsOutput]'), function(i){
+                        let name = $(this).find("[name=name]").val();
+                        let successful = $(this).find("[name=successful]").val();
+                        let failed = $(this).find("[name=failed]").val();
+                        apiParamsOutput.push({
+                            name,
+                            successful,
+                            failed,
+                        })
+                    })
+                    formParams.apiParamsOutput = JSON.stringify(apiParamsOutput)
+                    
+                    // 修改过则加密
+                    if ($("[name=requestSecretWord]").attr("changed")) {
+                        formParams.requestSecretWord = $.des.getDes(formParams.requestSecretWord);
+                        $("[name=requestSecretWord]").removeAttr("changed");
+                    }
+                    App.blockUI({
+                        boxed: true,
+                        message: "Processing..."
+                    });
+                    showContent.setWebTaskInfo(formParams, (data) => {
+                        // 触发查询列表
+                        $(`#J_foldname_tree [folderid=${formParams.folderId}]>.jstree-anchor`).click();
+                        $("#" + modalId).modal("hide");
+                    })
+                    return;
+                }
+                debugger;
                 App.blockUI({
                     boxed: true,
                     message: "Processing..."
@@ -262,6 +326,13 @@ define((require, exports, module) => {
                         taskId,
                         taskType
                     });
+                });
+                return;
+            }
+            if (taskType === 'AS') {
+                showContent.getTaskApiInfo({
+                    taskId,
+                    taskType,
                 });
                 return;
             }
@@ -1119,6 +1190,82 @@ define((require, exports, module) => {
         }
         //    $(this)
         });
+
+        
+        // 执行Web任务 -> 添加公共参数
+        $("body").on("click", '#tab_14_2 [name=apiParamsInputCommon] #add', function() {
+            let html_t = `<div name="apiParamsInputCommon" style="position: relative;height: 60px;">
+                <div class="form-group col-md-4">
+                    <label class="control-label col-md-4">
+                        <span>Name：</span>
+                    </label>
+                    <div class="form-group col-md-8">
+                        <input type="text" class="form-control" maxlength="64" name="name" placeholder="64 characters maximum">
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label col-md-4">
+                        <span>Value：</span>
+                    </label>
+                    <div class="form-group col-md-8">
+                        <input type="text" class="form-control" maxlength="64" name="value" placeholder="64 characters maximum">
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label col-md-4">
+                        <span>Location：</span>
+                    </label>
+                    <div class="form-group col-md-8">
+                        <select class="form-control" name="position">
+                            <option value="Header">Header</option>
+                            <option value="Body">Body</option>
+                        </select>
+                    </div>
+                </div>
+                <a style="position: relative;top: 8px;right: 0;" id='del' title=""><i class="fa fa-trash-o"></i></a>
+            </div>`
+            $(this).parent().after(html_t);
+        }) 
+
+        // 执行Web任务 -> 添加api参数
+        $("body").on("click", '#tab_14_3 [name=apiParamsInput] #add', function() {
+            let html_t = `<div name="apiParamsInput" style="position: relative;height: 60px;">
+                <div class="form-group col-md-4">
+                    <label class="control-label col-md-4">
+                        <span>Name：</span>
+                    </label>
+                    <div class="form-group col-md-8">
+                        <input type="text" class="form-control" maxlength="64" name="name" placeholder="64 characters maximum">
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label col-md-4">
+                        <span>Value：</span>
+                    </label>
+                    <div class="form-group col-md-8">
+                        <input type="text" class="form-control" maxlength="64" name="value" placeholder="64 characters maximum">
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label col-md-4">
+                        <span>Location：</span>
+                    </label>
+                    <div class="form-group col-md-8">
+                        <select class="form-control" name="position">
+                            <option value="Header">Header</option>
+                            <option value="Body">Body</option>
+                        </select>
+                    </div>
+                </div>
+                <a style="position: relative;top: 8px;right: 0;" id='del' title=""><i class="fa fa-trash-o"></i></a>
+            </div>`
+            $(this).parent().after(html_t);
+        }) 
+
+        // 执行Web任务 -> 删除公共和api参数
+        $("body").on("click", '#tab_14_2 [name=apiParamsInputCommon] #del,  #tab_14_3 [name=apiParamsInput] #del', function() {
+            $(this).parent().remove();
+        }) 
         
         // 数据剖析->剖析对象->查询预览
         // $("body").on("click", `${PAGE} #J_preview_sql_DQ`, function() {

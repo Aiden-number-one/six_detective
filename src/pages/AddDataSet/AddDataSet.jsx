@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime: 2019-12-11 13:51:01
+ * @LastEditTime: 2019-12-12 14:36:23
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -14,11 +14,12 @@ import classNames from 'classnames';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import IconFont from '@/components/IconFont';
+import '@/assets/css/index.less';
 import styles from './AddDataSet.less';
 import ConnList from './components/ConnList';
 import CodeMirrorComponent from './components/CodeMirror';
-import AddTask from './components/modals/AddTask';
-import Save from './components/modals/Save';
+import ParamSetting from './components/drawers/ParamSetting';
+import Save from './components/drawers/Save';
 import ResizeableTitle from './components/ResizeableTitle';
 
 const { Sider, Content, Header } = Layout;
@@ -32,6 +33,8 @@ const { Option } = Select;
   metaDataTableList: sqlDataSource.metaDataTableList,
   tableData: sqlDataSource.tableData,
   column: sqlDataSource.column,
+  sqlDataSetName: sqlDataSource.sqlDataSetName,
+  defaultPageSize: sqlDataSource.defaultPageSize,
 }))
 class AddDataSet extends PureComponent {
   components = {
@@ -51,7 +54,7 @@ class AddDataSet extends PureComponent {
 
   state = {
     visible: {
-      addTask: false,
+      paramSetting: false,
       save: false,
     },
     AlterDataSetName: true,
@@ -238,7 +241,7 @@ class AddDataSet extends PureComponent {
         connection_id: this.connection_id,
         setType: 'viewSet',
         viewSql: sql,
-        viewName: fieldsValue.sqlTableName,
+        viewName: fieldsValue.sqlDataSetName,
       },
     });
   };
@@ -250,9 +253,8 @@ class AddDataSet extends PureComponent {
       dispatch,
       tableData,
       classifyTree,
-      // column,
-      // defaultPageSize,
-      sqlTableName,
+      defaultPageSize,
+      sqlDataSetName,
       // tableData2,
       // targetObj,
       // column2,
@@ -295,18 +297,17 @@ class AddDataSet extends PureComponent {
                     }}
                     style={{ color: '#fff' }}
                   >
-                    {sqlTableName || 'DataSet Name'}
+                    {sqlDataSetName || 'DataSet Name'}
                   </span>
                 )}
                 {!AlterDataSetName && (
-                  <input
+                  <Input
                     ref={this.inputRef}
                     type="text"
-                    style={{ background: 'transparent', color: '#fff' }}
-                    value={sqlTableName}
+                    value={sqlDataSetName}
                     onBlur={e => {
                       dispatch({
-                        type: 'addSqlDataSet/changeDataSetName',
+                        type: 'sqlDataSource/changeDataSetName',
                         payload: e.target.value,
                       });
                       this.setState({
@@ -315,7 +316,7 @@ class AddDataSet extends PureComponent {
                     }}
                     onChange={e => {
                       dispatch({
-                        type: 'addSqlDataSet/changeDataSetName',
+                        type: 'sqlDataSource/changeDataSetName',
                         payload: e.target.value,
                       });
                     }}
@@ -433,7 +434,7 @@ class AddDataSet extends PureComponent {
               <Layout className={styles.layoutTable}>
                 <div className={styles.tableWrapper}>
                   <div className={styles.flowContent}>
-                    <div style={{ position: 'absolute', top: 20, right: 15, zIndex: 1000 }}>
+                    <div style={{ position: 'absolute', top: 20, right: 25, zIndex: 1000 }}>
                       <Button
                         type="primary"
                         style={{ marginRight: 10 }}
@@ -456,7 +457,7 @@ class AddDataSet extends PureComponent {
                         type="primary"
                         style={{ marginRight: 10 }}
                         onClick={() => {
-                          this.toggleModal('addTask');
+                          this.toggleModal('paramSetting');
                         }}
                       >
                         Variable Setting
@@ -480,7 +481,7 @@ class AddDataSet extends PureComponent {
                       )}
                       title="表数据"
                     >
-                      <IconFont type="icon-weibiaoti-" />
+                      <IconFont type="iconbianjiqi_charubiaoge" />
                     </Button>
                     <Button
                       onClick={() => {
@@ -493,9 +494,8 @@ class AddDataSet extends PureComponent {
                         this.state.tableView === 'attr' ? styles.tableActive : '',
                       )}
                       title="表属性"
-                      style={{ marginLeft: 10 }}
                     >
-                      <IconFont type="icon-fenleimulu" />
+                      <IconFont type="iconorderedlist" />
                     </Button>
                     {/* <span
                       onClick={() => {
@@ -527,14 +527,14 @@ class AddDataSet extends PureComponent {
                         <InputNumber
                           onChange={value => {
                             dispatch({
-                              type: 'addSqlDataSet/changeDefaultPageSize',
+                              type: 'sqlDataSource/changeDefaultPageSize',
                               payload: value,
                             });
                           }}
                           className={styles.inputNumber}
                           min={1}
                           max={100}
-                          defaultValue={10}
+                          defaultValue={5}
                         />
                         行
                       </span>
@@ -548,18 +548,20 @@ class AddDataSet extends PureComponent {
                       bordered
                       columns={renderColumn}
                       dataSource={tableData}
-                      // pagination={{ pageSize: defaultPageSize }}
-                      pagination={{ pageSize: 5 }}
+                      pagination={{ pageSize: defaultPageSize, size: 'small' }}
+                      // pagination={{ pageSize: 5 }}
                     />
                   )}
                   {this.state.tableView === 'attr' && (
                     <Table
-                    // view={this.state.view}
-                    // tableData2={tableData2}
-                    // dispatch={dispatch}
-                    // tableJoin={tableJoin}
-                    // defaultPageSize={defaultPageSize}
-                    // column2={column2}
+                      className={styles.editDataSetTable}
+                      bordered
+                      // view={this.state.view}
+                      // tableData2={tableData2}
+                      // dispatch={dispatch}
+                      // tableJoin={tableJoin}
+                      // defaultPageSize={defaultPageSize}
+                      // column2={column2}
                     />
                   )}
                 </div>
@@ -567,10 +569,10 @@ class AddDataSet extends PureComponent {
             </Layout>
             {/* </Spin> */}
           </Content>
-          <AddTask visible={this.state.visible.addTask} toggleModal={this.toggleModal} />
+          <ParamSetting visible={this.state.visible.paramSetting} toggleModal={this.toggleModal} />
           <Save
             saveSql={this.saveSql}
-            sqlTableName={sqlTableName}
+            sqlDataSetName={sqlDataSetName}
             isSaveOther={this.isSaveOther}
             visible={this.state.visible.save}
             toggleModal={this.toggleModal}

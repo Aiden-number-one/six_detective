@@ -127,6 +127,27 @@ define((require, exports, module) => {
         }
     }
 
+    // WebAPI任务详情
+    showContent.getTaskApiInfo = params => {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_task_api_information", "v4.0", params, data => {
+            if (data.bcjson.flag == "1") {
+                let items = data.bcjson.items[0];
+                let modalSelector = $(`#J_task_option_1 a[data-id=${params.taskType}]`).data("target");
+                let formName = $(modalSelector).find("form[type=main]").attr("name");
+                App.setFormData(formName, items);
+                if (modalSelector === '#J_modal_AS') {
+                    debugger
+                }
+                App.updateUniform();
+                $(`${modalSelector} [type=jstree]`).jstree(true).open_all();
+                $(`${modalSelector} [type=jstree] [folderid=${items.folderId}]>.jstree-anchor`).click(); // 注：这个click事件写在main.js
+                $(modalSelector + " .J_save").data("tasktype", params.taskType).data("type", "edit"); // 把重要参数绑在保存按钮上
+                $(modalSelector + " [name=requestSecretWord]").removeAttr("changed"); // 接口返回密码是des加密，是不可逆，用changed属性判断密码是否被修改过 被修改了就再次加密
+                $(modalSelector).modal("show");
+            }
+        })
+    }
+
     // 查询任务详情
     showContent.getTaskInfo = params => {
         $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_task_detail_info", "v4.0", params, data => {
@@ -356,6 +377,24 @@ define((require, exports, module) => {
             message: "Processing..."
         });
         let api = oparatetype === "add" ? "bayconnect.superlop.set_task_info" : "bayconnect.superlop.set_task_info_modify";
+        $.kingdom.doKoauthAdminAPI(api, "v4.0", params, data => {
+            App.unblockUI();
+            if (data.bcjson.flag == "1") {
+                toastr.success(data.bcjson.msg);
+                if (typeof cb === "function") cb(data);
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+        });
+    };
+
+    // 保存WEBAPI任务信息 新增 编辑 通用
+    showContent.setWebTaskInfo = (params, cb) => {
+        App.blockUI({
+            boxed: true,
+            message: "Processing..."
+        });
+        let api = "bayconnect.superlop.set_task_api_information";
         $.kingdom.doKoauthAdminAPI(api, "v4.0", params, data => {
             App.unblockUI();
             if (data.bcjson.flag == "1") {
@@ -994,7 +1033,7 @@ define((require, exports, module) => {
         reorder: () => {
             $.each($("#J_data_field_tbody_2 tr"), function(i) {
                 $(this).find("td:first").text(i + 1);
-                $(this).find("td[data-type=import]").html(` 第 ${i + 1} 列 `);
+                $(this).find("td[data-type=import]").html(` The ${i + 1} Column `);
 
             });
         },
@@ -1471,7 +1510,7 @@ define((require, exports, module) => {
         });
 
         // 文件格式转换
-        $('#J_form_TFDP').validate({
+        $('#J_form_TFP').validate({
             debug: true,
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
@@ -1493,6 +1532,57 @@ define((require, exports, module) => {
                     required: true,
                 },
                 columnFileData: {
+                    required: true,
+                },
+                isAuth: {
+                    required: true,
+                }
+            },
+            invalidHandler: function(event, validator) { //display error alert on form submit
+                // $('.alert-danger', $('.login-form')).show();
+            },
+            highlight: function(element) { // hightlight error inputs
+                $(element).closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            success: function(label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function(error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function(form) {}
+        });
+
+        // 执行Web任务
+        $('#J_form_AS').validate({
+            debug: true,
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                taskName: {
+                    required: true,
+                },
+                folderName: {
+                    required: true,
+                },
+                baseUrl: {
+                    required: true,
+                },
+                subUrl: {
+                    required: true,
+                },
+                requestUserName: {
+                    required: true,
+                },
+                requestSecretWord: {
+                    required: true,
+                },
+                requestType: {
+                    required: true,
+                },
+                responseDataFormat: {
                     required: true,
                 },
             },
