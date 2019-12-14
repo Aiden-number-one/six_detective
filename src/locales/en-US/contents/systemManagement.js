@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-14 16:12:52
+ * @LastEditTime: 2019-12-14 17:07:10
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -45,7 +45,15 @@ export default {
   'systemManagement.userGroup.remark': 'Remark',
   'systemManagement.systemParameter.parameterType': 'Parameter Type',
   'systemManagement.systemParameter.note': 'Note',
-  'systemManagement.auditLog.logDate': 'Log Date',
+  'systemManagement.auditLog.logDate': 'Log Time',
   'systemManagement.auditLog.updatedBy': 'Updated By',
   'systemManagement.auditLog.functionName': 'Function Name',
+  'systemManagement.auditLog.tableName': 'Table Name',
+  'systemManagement.auditLog.BITOCode': 'BI/TO Code',
+  'systemManagement.auditLog.productCode': 'Product Code',
+  'systemManagement.auditLog.effectiveDate': 'Effective Date',
+  'systemManagement.auditLog.fieldUpdated': 'Field Updated',
+  'systemManagement.auditLog.updateType': 'Update Type',
+  'systemManagement.auditLog.before': 'Before',
+  'systemManagement.auditLog.after': 'After',
 };

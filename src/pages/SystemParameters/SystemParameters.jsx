@@ -336,7 +336,7 @@ class SystemParams extends Component {
                 )}
               </Drawer>
             </div>
-            <div>
+            <div className={styles.content}>
               <Table
                 loading={loading['systemParams/getSystemParamsList']}
                 dataSource={getSystemParamsListData.items}
