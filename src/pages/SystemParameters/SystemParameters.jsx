@@ -347,8 +347,9 @@ class SystemParams extends Component {
                 showSizeChanger
                 current={page.pageNumber}
                 showTotal={() =>
-                  `Page ${page.pageNumber.toString()} of ${Math.ceil(
-                    getSystemParamsListData.totalCount / page.pageSize,
+                  `Page ${(getSystemParamsListData.totalCount || 0) &&
+                    page.pageNumber.toString()} of ${Math.ceil(
+                    (getSystemParamsListData.totalCount || 0) / page.pageSize,
                   ).toString()}`
                 }
                 onShowSizeChange={this.onShowSizeChange}

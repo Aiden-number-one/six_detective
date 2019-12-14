@@ -307,7 +307,7 @@ class MenuUserGroup extends Component {
             showSizeChanger
             current={page.pageNumber}
             showTotal={() =>
-              `Page ${page.pageNumber} of ${Math.ceil(
+              `Page ${(menuUserGroup.totalCount || 0) && page.pageNumber} of ${Math.ceil(
                 (menuUserGroup.totalCount || 0) / page.pageSize,
               )}`
             }

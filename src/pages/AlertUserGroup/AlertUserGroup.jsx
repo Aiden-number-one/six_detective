@@ -305,7 +305,7 @@ class AlertUserGroup extends Component {
             showSizeChanger
             current={page.pageNumber}
             showTotal={() =>
-              `Page ${page.pageNumber.toString()} of ${Math.ceil(
+              `Page ${(menuUserGroup.totalCount || 0) && page.pageNumber.toString()} of ${Math.ceil(
                 (menuUserGroup.totalCount || 0) / page.pageSize,
               ).toString()}`
             }

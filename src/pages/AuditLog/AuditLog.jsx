@@ -198,8 +198,8 @@ class AuditLog extends Component {
           showSizeChanger
           current={page.pageNumber}
           showTotal={() =>
-            `Page ${page.pageNumber.toString()} of ${Math.ceil(
-              totalCount / page.pageSize,
+            `Page ${(totalCount || 0) && page.pageNumber.toString()} of ${Math.ceil(
+              (totalCount || 0) / page.pageSize,
             ).toString()}`
           }
           onShowSizeChange={this.onShowSizeChange}

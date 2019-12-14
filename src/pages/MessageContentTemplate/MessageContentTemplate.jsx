@@ -296,9 +296,6 @@ export default class MessageContentTemplate extends Component {
         <div className={styles.content}>
           <Table
             loading={loading['messageContentTemplate/getTemplateList']}
-            // pagination={{ total: messageTemplate.totalCount, pageSize: page.pageSize }}
-            // rowSelection={rowSelection}
-            // onChange={this.pageChange}
             dataSource={messageTemplate.items}
             columns={columns}
             pagination={false}
@@ -307,7 +304,8 @@ export default class MessageContentTemplate extends Component {
             showSizeChanger
             current={page.pageNumber}
             showTotal={() =>
-              `Page ${page.pageNumber.toString()} of ${Math.ceil(
+              `Page ${(messageTemplate.totalCount || 0) &&
+                page.pageNumber.toString()} of ${Math.ceil(
                 (messageTemplate.totalCount || 0) / page.pageSize,
               ).toString()}`
             }

@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-14 14:28:57
+ * @LastEditTime: 2019-12-14 14:47:50
  */
 
 import React, { Component } from 'react';
@@ -638,7 +638,7 @@ class UserManagement extends Component {
               current={page.pageNumber}
               showSizeChanger
               showTotal={() =>
-                `Page ${page.pageNumber} of ${Math.ceil(
+                `Page ${(userManagementData.totalCount || 0) && page.pageNumber} of ${Math.ceil(
                   (userManagementData.totalCount || 0) / page.pageSize,
                 )}`
               }

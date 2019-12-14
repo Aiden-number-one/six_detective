@@ -30,7 +30,7 @@ class FormUser extends Component {
             })(<Input disabled></Input>)}
           </Form.Item>
           <Form.Item
-            label={formatMessage({ id: 'systemManagement.codeMaintenance.subitemID' })}
+            label={formatMessage({ id: 'systemManagement.codeMaintenance.subitemId' })}
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 8 }}
           >
