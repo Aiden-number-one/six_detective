@@ -3,6 +3,7 @@ import { Table, Form, Pagination, Drawer } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
+import IconFont from '@/components/IconFont';
 import styles from './SystemParameters.less';
 
 import SearchForm from './components/SearchForm';
@@ -155,6 +156,7 @@ class SystemParams extends Component {
           title: formatMessage({ id: 'app.common.operation' }),
           dataIndex: 'operation',
           key: 'operation',
+          align: 'center',
           render: (res, recode, index, active) => (
             <span className={styles.operation}>
               <a
@@ -163,7 +165,7 @@ class SystemParams extends Component {
                   this.updateSystemParams(res, recode, index, active);
                 }}
               >
-                {formatMessage({ id: 'app.common.modify' })}
+                <IconFont type="icon-edit" className={styles['btn-icon']} />
               </a>
             </span>
           ),

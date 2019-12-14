@@ -3,6 +3,7 @@ import { Form, Table, Pagination, Drawer, Modal } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
+import IconFont from '@/components/IconFont';
 // import { routerRedux } from 'dva/router';
 import { templateTypeFormat } from '@/utils/filter';
 
@@ -43,6 +44,7 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          width: 60,
           render: (res, recode, index) => (
             <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
           ),
@@ -58,6 +60,7 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'systemManagement.template.templateId' }),
           dataIndex: 'templateId',
           key: 'templateId',
+          width: 120,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.templateType' }),
@@ -92,10 +95,11 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'app.common.operation' }),
           dataIndex: 'operation',
           key: 'operation',
+          align: 'center',
           render: (res, obj) => (
             <span className={styles.operation}>
               <a href="#" onClick={() => this.updateUser(res, obj)}>
-                {formatMessage({ id: 'app.common.modify' })}
+                <IconFont type="icon-edit" className={styles['btn-icon']} />
               </a>
             </span>
           ),

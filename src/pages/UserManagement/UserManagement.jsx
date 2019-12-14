@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-14 14:47:50
+ * @LastEditTime: 2019-12-14 18:27:41
  */
 
 import React, { Component } from 'react';
@@ -57,6 +57,7 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
+        minWidth: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
@@ -97,6 +98,7 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'app.common.operation' }),
         dataIndex: 'operation',
         key: 'operation',
+        align: 'center',
         render: (res, obj) => (
           <span className={styles.operation}>
             <a href="#" onClick={() => this.updateUser(res, obj)}>

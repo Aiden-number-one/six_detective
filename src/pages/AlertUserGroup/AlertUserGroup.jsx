@@ -34,6 +34,7 @@ class AlertUserGroup extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          minWidth: 60,
           render: (res, recode, index) => (
             <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
           ),
@@ -52,6 +53,7 @@ class AlertUserGroup extends Component {
           title: formatMessage({ id: 'app.common.operation' }),
           dataIndex: 'operation',
           key: 'operation',
+          align: 'center',
           render: (res, obj) => (
             <span className={styles.operation}>
               <a href="#" onClick={() => this.updateUser(res, obj)}>
