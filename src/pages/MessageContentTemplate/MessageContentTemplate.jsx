@@ -3,19 +3,20 @@ import { Form, Table, Pagination, Drawer, Modal } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
+import IconFont from '@/components/IconFont';
 // import { routerRedux } from 'dva/router';
 import { templateTypeFormat } from '@/utils/filter';
 
 import styles from './MessageContentTemplate.less';
 import SearchForm from './components/SearchForm';
-import NewUserGroup from './components/NewUserGroup';
+import ModifyTemplate from './components/ModifyTemplate';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
-@connect(({ alertUserGroup, loading }) => ({
+@connect(({ messageContentTemplate, loading }) => ({
   loading: loading.effects,
-  menuUserGroup: alertUserGroup.data,
-  updateGroup: alertUserGroup.updateUserGroup,
+  messageTemplate: messageContentTemplate.data,
+  updateTemplate: messageContentTemplate.updateData,
 }))
 export default class MessageContentTemplate extends Component {
   searchForm = React.createRef();
@@ -43,6 +44,7 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          width: 60,
           render: (res, recode, index) => (
             <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
           ),
@@ -58,6 +60,7 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'systemManagement.template.templateId' }),
           dataIndex: 'templateId',
           key: 'templateId',
+          width: 120,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.templateType' }),
@@ -92,10 +95,11 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'app.common.operation' }),
           dataIndex: 'operation',
           key: 'operation',
+          align: 'center',
           render: (res, obj) => (
             <span className={styles.operation}>
               <a href="#" onClick={() => this.updateUser(res, obj)}>
-                {formatMessage({ id: 'app.common.modify' })}
+                <IconFont type="icon-edit" className={styles['btn-icon']} />
               </a>
             </span>
           ),
@@ -111,19 +115,6 @@ export default class MessageContentTemplate extends Component {
   componentDidMount() {
     this.queryUserList();
   }
-
-  newUser = () => {
-    // this.props.dispatch(
-    //   routerRedux.push({
-    //     pathname: '/system-management/user-maintenance/new-menu-user',
-    //   }),
-    // );
-    this.setState({
-      modifyVisible: true,
-      groupTitle: 'New Alert User Group',
-      updateFlag: false,
-    });
-  };
 
   onClose = () => {
     this.setState({
@@ -151,12 +142,6 @@ export default class MessageContentTemplate extends Component {
   };
 
   updateUser = (res, obj) => {
-    // this.props.dispatch(
-    //   routerRedux.push({
-    //     pathname: '/system-management/user-maintenance/modify-menu-user',
-    //     query: { roleId: obj.roleId },
-    //   }),
-    // );
     const groupMenuInfo = Object.assign({}, obj);
     this.setState({
       modifyVisible: true,
@@ -174,7 +159,7 @@ export default class MessageContentTemplate extends Component {
       roleId: groupMenuInfo.roleId,
     };
     dispatch({
-      type: 'alertUserGroup/updateUserAlert',
+      type: 'messageContentTemplate/updateTemplate',
       payload: params,
       callback: () => {
         this.queryUserList();
@@ -192,12 +177,6 @@ export default class MessageContentTemplate extends Component {
   };
 
   queryLog = () => {
-    // const { dispatch } = this.props;
-    // const params = {};
-    // dispatch({
-    //   type: 'menuUserGroup/getAlertUserGroup',
-    //   payload: params,
-    // });
     this.searchForm.current.validateFields((err, values) => {
       if (err) {
         return;
@@ -252,7 +231,7 @@ export default class MessageContentTemplate extends Component {
       pageSize: this.state.page.pageSize.toString(),
     };
     dispatch({
-      type: 'alertUserGroup/getAlertUserGroup',
+      type: 'messageContentTemplate/getTemplateList',
       payload: params,
     });
   };
@@ -273,7 +252,7 @@ export default class MessageContentTemplate extends Component {
   };
 
   render() {
-    const { loading, menuUserGroup } = this.props;
+    const { loading, messageTemplate } = this.props;
     const { groupTitle, deleteVisible, groupMenuInfo, updateFlag } = this.state;
     const { typeOptions, columns, page, modifyVisible } = this.state;
     const modifyTypeOptions = Object.assign([], typeOptions);
@@ -298,13 +277,13 @@ export default class MessageContentTemplate extends Component {
           visible={modifyVisible}
         >
           {modifyVisible && (
-            <NewUserGroup
+            <ModifyTemplate
               onCancel={this.onClose}
               onSave={this.onSave}
               groupMenuInfo={groupMenuInfo}
               updateFlag={updateFlag}
               typeOptions={modifyTypeOptions}
-            ></NewUserGroup>
+            ></ModifyTemplate>
           )}
         </Drawer>
         {/* delete */}
@@ -320,11 +299,8 @@ export default class MessageContentTemplate extends Component {
         </Modal>
         <div className={styles.content}>
           <Table
-            loading={loading['menuUserGroup/getAlertUserGroup']}
-            // pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
-            // rowSelection={rowSelection}
-            // onChange={this.pageChange}
-            dataSource={menuUserGroup.items}
+            loading={loading['messageContentTemplate/getTemplateList']}
+            dataSource={messageTemplate.items}
             columns={columns}
             pagination={false}
           ></Table>
@@ -332,13 +308,14 @@ export default class MessageContentTemplate extends Component {
             showSizeChanger
             current={page.pageNumber}
             showTotal={() =>
-              `Page ${page.pageNumber.toString()} of ${Math.ceil(
-                menuUserGroup.totalCount / page.pageSize,
+              `Page ${(messageTemplate.totalCount || 0) &&
+                page.pageNumber.toString()} of ${Math.ceil(
+                (messageTemplate.totalCount || 0) / page.pageSize,
               ).toString()}`
             }
             onShowSizeChange={this.onShowSizeChange}
             onChange={this.pageChange}
-            total={menuUserGroup.totalCount}
+            total={messageTemplate.totalCount}
             pageSize={page.pageSize}
           />
         </div>

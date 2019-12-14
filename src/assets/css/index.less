@@ -10,6 +10,48 @@
   src: url('../AvenirBook.ttc');
 }
 
+.page404 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  min-height: 500px;
+  background-color: #d1dde6;
+  .font404 {
+    color: #f3374c;
+    font-size: 132px;
+    font-family: AvenirHeavy, sans-serif;
+  }
+  .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 390px;
+    height: 390px;
+    color: #fff;
+    font-size: 15px;
+    background-color: #0d87d4;
+    border-radius: 50%;
+    div {
+      width: 330px;
+      height: 52px;
+      line-height: 52px;
+      text-align: center;
+      border: 1px solid #fff;
+    }
+    span {
+      margin-top: 10px;
+      font-family: AvenirHeavy, sans-serif;
+    }
+    img {
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
 :global {
   // 基础表单
   .form-item {
@@ -112,6 +154,7 @@
       line-height: 24px;
     }
     .btnArea {
+      padding-bottom: 20px;
       .clearfix();
       .ant-btn {
         float: right;

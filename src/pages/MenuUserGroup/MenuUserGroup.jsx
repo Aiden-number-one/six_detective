@@ -4,6 +4,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
+import IconFont from '@/components/IconFont';
 
 import styles from './MenuUserGroup.less';
 import SearchForm from './components/SearchForm';
@@ -33,6 +34,7 @@ class MenuUserGroup extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          minWidth: 60,
           render: (res, recode, index) => (
             <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
           ),
@@ -51,13 +53,14 @@ class MenuUserGroup extends Component {
           title: formatMessage({ id: 'app.common.operation' }),
           dataIndex: 'operation',
           key: 'operation',
+          align: 'center',
           render: (res, obj) => (
             <span className={styles.operation}>
               <a href="#" onClick={() => this.updateUser(res, obj)}>
-                {formatMessage({ id: 'app.common.modify' })}
+                <IconFont type="icon-edit" className={styles['btn-icon']} />
               </a>
               <a href="#" onClick={() => this.deleteUser(res, obj)}>
-                {formatMessage({ id: 'app.common.delete' })}
+                <IconFont type="icon-delete" className={styles['btn-icon']} />
               </a>
             </span>
           ),
@@ -259,7 +262,9 @@ class MenuUserGroup extends Component {
     // };
     return (
       <PageHeaderWrapper>
-        <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
+        <div>
+          <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
+        </div>
         <Drawer
           closable={false}
           title={groupTitle}
@@ -306,7 +311,7 @@ class MenuUserGroup extends Component {
             showSizeChanger
             current={page.pageNumber}
             showTotal={() =>
-              `Page ${page.pageNumber} of ${Math.ceil(
+              `Page ${(menuUserGroup.totalCount || 0) && page.pageNumber} of ${Math.ceil(
                 (menuUserGroup.totalCount || 0) / page.pageSize,
               )}`
             }

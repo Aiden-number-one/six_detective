@@ -288,8 +288,14 @@ define((require, exports, module) => {
             }
         });
 
+        $("body").on("change", '#tab_14_2 [name=baseUrl]', function(e) {
+            debugger;
+            $('#tab_14_3 #baseUrl').text(e.target.value)
+        });
+
         $("body").on("hide.bs.modal", '#J_modal_AS', function() {
             $('#tab_14_2 [name=apiParamsInputCommon] #del,  #tab_14_3 [name=apiParamsInput] #del').parent().remove();
+            $('#tab_14_3 #baseUrl').text("");
         });
 
         // 点击新增下拉框 操作类型，保存操作类型

@@ -136,7 +136,152 @@ define((require, exports, module) => {
                 let formName = $(modalSelector).find("form[type=main]").attr("name");
                 App.setFormData(formName, items);
                 if (modalSelector === '#J_modal_AS') {
-                    debugger
+                    const apiParamsInputCommon = (items.apiParamsInputCommon && JSON.parse(items.apiParamsInputCommon)) || [];
+                    let apiParamsCommonHtml = '';
+                    apiParamsInputCommon.forEach((item, index) => {
+                        if (index === 0) {
+                            apiParamsCommonHtml = `<div name="apiParamsInputCommon" style="position: relative;height: 60px;">
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Name：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <input type="text" class="form-control" maxlength="64" value="${item.name}" name="name" placeholder="64 characters maximum">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Value：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <input type="text" class="form-control" maxlength="64" name="value" value="${item.value}" placeholder="64 characters maximum">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Location：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <select class="form-control" name="position">
+                                    ${item.position === 'Header' ? ' <option value="Header" selected>Header</option>' : ' <option value="Header">Header</option>'}
+                                    ${item.position === 'Body' ? ' <option value="Body" selected>Body</option>' : ' <option value="Body">Body</option>'}
+                                    </select>
+                                </div>
+                            </div>
+                            <a style="position: relative;top: 8px;right: 0;" title="" id='add'><i class="fa fa-plus"></i></a>
+                        </div>`;
+                        } else {
+                            apiParamsCommonHtml = apiParamsCommonHtml + `<div name="apiParamsInputCommon" style="position: relative;height: 60px;">
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Name：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <input type="text" class="form-control" maxlength="64" value="${item.name}" name="name" placeholder="64 characters maximum">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Value：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <input type="text" class="form-control" maxlength="64" value="${item.value}" name="value" placeholder="64 characters maximum">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Location：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <select class="form-control" name="position">
+                                    ${item.position === 'Header' ? ' <option value="Header" selected>Header</option>' : ' <option value="Header">Header</option>'}
+                                    ${item.position === 'Body' ? ' <option value="Body" selected>Body</option>' : ' <option value="Body">Body</option>'}
+                                    </select>
+                                </div>
+                            </div>
+                            <a style="position: relative;top: 8px;right: 0;" id='del' title=""><i class="fa fa-trash-o"></i></a>
+                        </div>`;
+                        }
+                    });
+                    $('#tab_14_2 [name=apiParamsInputCommon]').after(apiParamsCommonHtml);
+                    $('#tab_14_2 [name=apiParamsInputCommon]')[0].remove()
+                    const apiParamsInput = (items.apiParamsInput && JSON.parse(items.apiParamsInput)) || [];
+                    let apiParamsHtml = '';
+                    apiParamsInput.forEach((item, index) => {
+                        if (index === 0) {
+                            apiParamsHtml = `<div name="apiParamsInput" style="position: relative;height: 60px;">
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Name：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <input type="text" class="form-control" maxlength="64" value="${item.name}" name="name" placeholder="64 characters maximum">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Value：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <input type="text" class="form-control" maxlength="64" name="value" value="${item.value}" placeholder="64 characters maximum">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Location：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <select class="form-control" name="position">
+                                    ${item.position === 'Header' ? ' <option value="Header" selected>Header</option>' : ' <option value="Header">Header</option>'}
+                                    ${item.position === 'Body' ? ' <option value="Body" selected>Body</option>' : ' <option value="Body">Body</option>'}
+                                    </select>
+                                </div>
+                            </div>
+                            <a style="position: relative;top: 8px;right: 0;" title="" id='add'><i class="fa fa-plus"></i></a>
+                        </div>`;
+                        } else {
+                            apiParamsHtml = apiParamsHtml + `<div name="apiParamsInput" style="position: relative;height: 60px;">
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Name：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <input type="text" class="form-control" maxlength="64" value="${item.name}" name="name" placeholder="64 characters maximum">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Value：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <input type="text" class="form-control" maxlength="64" value="${item.value}" name="value" placeholder="64 characters maximum">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label col-md-4">
+                                    <span>Location：</span>
+                                </label>
+                                <div class="form-group col-md-8">
+                                    <select class="form-control" name="position">
+                                    ${item.position === 'Header' ? ' <option value="Header" selected>Header</option>' : ' <option value="Header">Header</option>'}
+                                    ${item.position === 'Body' ? ' <option value="Body" selected>Body</option>' : ' <option value="Body">Body</option>'}
+                                    </select>
+                                </div>
+                            </div>
+                            <a style="position: relative;top: 8px;right: 0;" id='del' title=""><i class="fa fa-trash-o"></i></a>
+                        </div>`;
+                        }
+                    });
+                    $('#tab_14_3 [name=apiParamsInput]').after(apiParamsHtml);
+                    $('#tab_14_3 [name=apiParamsInput]')[0].remove();
+                    const apiParamsOutput = (items.apiParamsOutput && JSON.parse(items.apiParamsOutput)) || [];
+                    if (apiParamsOutput[0]) {
+                        $('#tab_14_3 [name=apiParamsOutput] [name=name]').val(apiParamsOutput[0].name);
+                        $('#tab_14_3 [name=apiParamsOutput] [name=successful]').val(apiParamsOutput[0].successful);
+                        $('#tab_14_3 [name=apiParamsOutput] [name=failed]').val(apiParamsOutput[0].failed);
+                    }
+                    $('#tab_14_3 [name=requestType]').val(items.requestType);
+                    $('#tab_14_3 [name=responseDataFormat]').val(items.responseDataFormat);
                 }
                 App.updateUniform();
                 $(`${modalSelector} [type=jstree]`).jstree(true).open_all();
