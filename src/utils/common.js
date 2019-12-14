@@ -121,7 +121,7 @@ const menuIcons = {
   Report: 'icon-report',
   Analysis: 'icon-analysis',
   'System Management': 'icon-systemmanagement',
-  'Alert Management': 'icon-jinggao',
+  'Alert Management': 'icon-alertmanagement',
 };
 
 // 数据类型
