@@ -1,5 +1,3 @@
-import authRoutes from './router.config.auth';
-
 export default [
   {
     path: '/login',
@@ -11,10 +9,6 @@ export default [
     component: './ReportDesigner/ReportDesigner',
   },
   {
-    path: '/sheet',
-    component: './Sheet/Sheet',
-  },
-  {
     path: '/add-dataset',
     component: './AddDataSet/AddDataSet',
   },
@@ -24,13 +18,6 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
-      {
-        path: '/',
-        name: 'indexdashboard',
-        component: './Monitor/Monitor',
-        hideInMenu: true,
-      },
-      // homepage
       {
         path: '/homepage',
         name: 'Homepage',
@@ -249,7 +236,8 @@ export default [
                 component: './Approval/ApprovalAuditor/ApprovalAuditor',
               },
               {
-                path: '/system-management/approval-process-management/approval-process-configuration',
+                path:
+                  '/system-management/approval-process-management/approval-process-configuration',
                 name: 'Approval Process Configuration',
                 component: './Approval/ApprovalConfiguration/ApprovalConfiguration',
               },
@@ -300,29 +288,10 @@ export default [
 
       // 后面的没改过
       {
-        path: '/data-source',
-        name: 'dataSource',
-        component: './DataSource/DataSource',
-        hideInMenu: true,
-      },
-      {
         path: '/data-management',
         name: 'dataManagement',
         icon: 'icon-zhuxian',
         routes: [
-          {
-            path: 'data-import',
-            name: 'dataImport',
-            routes: [
-              { path: 'lop-data-import', name: 'lop', component: './DataImportLog/Lop' },
-              { path: 'market-data-import', name: 'market', component: './DataImportLog/Market' },
-            ],
-          },
-          {
-            path: '/data-management/dashboard',
-            name: 'dashboard',
-            component: './DataPanel/DataPanel',
-          },
           {
             path: '/data-management/data-processing',
             name: 'dataProcessing',
@@ -478,12 +447,6 @@ export default [
             name: 'scheduling',
             component: './Scheduling/Scheduling',
           },
-          {
-            path: '/system-management/job-monitor',
-            name: 'jobMonitor',
-            component: './JobMonitor',
-          },
-          ...authRoutes,
         ],
       },
       {
@@ -491,25 +454,6 @@ export default [
         name: 'alertManagement',
         icon: 'icon-jinggao',
         routes: [
-          { path: 'alert-center', name: 'alertCenter', component: './AlertCenter/Alert' },
-          {
-            path: 'information',
-            name: 'informationCenter',
-            component: './AlertCenter/Information',
-            hideInMenu: true,
-          },
-          {
-            path: './alert-management/formItem',
-            name: 'formItem',
-            component: './FormItem/FormItem',
-            // hideInMenu: true,
-          },
-          {
-            path: './alert-management/stylespecification',
-            name: 'Stylespecification',
-            component: './Stylespecification/Stylespecification',
-            // hideInMenu: true,
-          },
           {
             path: '/alert-management/Approval-Process-Center',
             name: 'ApprovalProcessCenter',
