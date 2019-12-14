@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-13 15:40:11
+ * @LastEditTime: 2019-12-14 10:13:10
  */
 
 import React, { Component } from 'react';
@@ -14,6 +14,7 @@ import { connect } from 'dva';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 import { timeFormat } from '@/utils/filter';
+import IconFont from '@/components/IconFont';
 
 import SearchForm from './components/SearchForm';
 import NewUser from './components/NewUser';
@@ -99,10 +100,10 @@ class UserManagement extends Component {
         render: (res, obj) => (
           <span className={styles.operation}>
             <a href="#" onClick={() => this.updateUser(res, obj)}>
-              {formatMessage({ id: 'app.common.modify' })}
+              <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
             <a href="#" onClick={() => this.deleteUser(res, obj)}>
-              {formatMessage({ id: 'app.common.delete' })}
+              <IconFont type="icon-delete" className={styles['btn-icon']} />
             </a>
           </span>
         ),

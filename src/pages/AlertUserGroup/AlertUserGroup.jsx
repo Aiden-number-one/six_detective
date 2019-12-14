@@ -3,6 +3,7 @@ import { Form, Table, Pagination, Button, Drawer, Modal } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
+import IconFont from '@/components/IconFont';
 // import { routerRedux } from 'dva/router';
 
 import styles from './AlertUserGroup.less';
@@ -54,10 +55,10 @@ class AlertUserGroup extends Component {
           render: (res, obj) => (
             <span className={styles.operation}>
               <a href="#" onClick={() => this.updateUser(res, obj)}>
-                {formatMessage({ id: 'app.common.modify' })}
+                <IconFont type="icon-edit" className={styles['btn-icon']} />
               </a>
               <a href="#" onClick={() => this.deleteUser(res, obj)}>
-                {formatMessage({ id: 'app.common.delete' })}
+                <IconFont type="icon-delete" className={styles['btn-icon']} />
               </a>
             </span>
           ),

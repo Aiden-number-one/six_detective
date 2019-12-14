@@ -1,7 +1,7 @@
 import { notification } from 'antd';
 import Service from '@/utils/Service';
 
-const { getSystemCode, addCodeItem, updateCodeItem, deleteCodeItem } = Service;
+const { getSystemCode, updateCodeItem, deleteCodeItem } = Service;
 const codeMaintenance = {
   namespace: 'codeList',
   state: {
@@ -54,7 +54,7 @@ const codeMaintenance = {
       }
     },
     *addCodeItem({ payload, callback }, { call, put }) {
-      const response = yield call(addCodeItem, { param: payload });
+      const response = yield call(getSystemCode, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson) {
           yield put({
