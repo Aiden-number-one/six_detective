@@ -3,22 +3,21 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-13 14:22:03
+ * @LastEditTime: 2019-12-14 14:04:19
  */
 import { notification } from 'antd';
 import Service from '@/utils/Service';
 
-const { getTemplateList, newAlertUser, updateTemplate } = Service;
+const { getTemplateList, updateTemplate } = Service;
 
-const alertUserGroup = {
-  namespace: 'alertUserGroup',
+const messageContentTemplate = {
+  namespace: 'messageContentTemplate',
   state: {
     data: [],
-    saveUser: {},
     updateData: {},
   },
   effects: {
-    *getAlertUserGroup({ payload }, { call, put }) {
+    *getTemplateList({ payload }, { call, put }) {
       const response = yield call(getTemplateList, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -38,26 +37,7 @@ const alertUserGroup = {
         });
       }
     },
-    *newAlertUser({ payload, callback }, { call, put }) {
-      const response = yield call(newAlertUser, { param: payload });
-      if (response.bcjson.flag === '1') {
-        yield put({
-          type: 'save',
-          payload: response.bcjson.items,
-        });
-        callback();
-      } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
-      }
-    },
-    *updateUserAlert({ payload, callback }, { call, put }) {
+    *updateTemplate({ payload, callback }, { call, put }) {
       const response = yield call(updateTemplate, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
@@ -84,12 +64,6 @@ const alertUserGroup = {
         data: action.payload,
       };
     },
-    save(state, action) {
-      return {
-        ...state,
-        saveUser: action.payload,
-      };
-    },
     update(state, action) {
       return {
         ...state,
@@ -99,4 +73,4 @@ const alertUserGroup = {
   },
 };
 
-export default alertUserGroup;
+export default messageContentTemplate;

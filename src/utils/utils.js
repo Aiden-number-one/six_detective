@@ -4,15 +4,11 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-12-13 14:05:53
+ * @LastEditTime: 2019-12-14 16:56:41
  * @LastEditors: lan
  */
 
-import {
-  // components,
-  menuIcons,
-  iframe,
-} from '@/utils/common';
+import { components, menuIcons, iframe } from '@/utils/common';
 
 const geneMenuData = data => {
   if (!data || !data.length || !data[0] || !data[0].menu) return [];
@@ -22,14 +18,14 @@ const geneMenuData = data => {
   const newData = data[0].menu.map(item => ({
     ...item,
     menuid: item.menuid,
-    key: item.menuid,
+    // key: item.menuid,
     menuname: item.menuname,
     path: item.page || '',
     icon: menuIcons[item.menuname],
     name: item.parentmenuid === '-1' ? item.menuname.toUpperCase() : item.menuname,
     hideInMenu: item.menutype === '1',
     target: item.linecss,
-    // component: components[item.page],
+    component: components[item.page],
     iframeUrl: getIframe(iframe[item.page]),
   }));
 
