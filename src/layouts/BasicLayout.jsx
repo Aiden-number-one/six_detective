@@ -10,7 +10,7 @@ import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { setLocale } from 'umi/locale';
-import CustomizeSelectLang from '@/components/CustomizeSelectLang';
+// import CustomizeSelectLang from '@/components/CustomizeSelectLang';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
@@ -34,7 +34,8 @@ const menuDataRender = menuList =>
 const footerRender = () => (
   <footer className={styles.footerRender}>
     {/* eslint-disable-next-line global-require */}
-    <img src={require('@/assets/logo.png')} alt="HKEX" />
+    {/* <img src={require('@/assets/logo.png')} alt="HKEX" /> */}
+    <div />
     <div>@ 2019 Hong Kong Exchanges and Clearing Limited. All rights reserved</div>
   </footer>
 );
@@ -153,7 +154,7 @@ const BasicLayout = props => {
           </div>
           <div className={styles.user}>
             <IconFont type="icon-usercircle" className={styles.avatar} />
-            <CustomizeSelectLang />
+            {/* <CustomizeSelectLang /> */}
             <span title="Thomas Chow" className={styles.username}>
               {window.localStorage.loginName}
             </span>
@@ -233,7 +234,13 @@ const BasicLayout = props => {
       menuProps={{
         openKeys,
         onOpenChange: openKeysNew => {
-          setOpenKeys(openKeysNew);
+          console.log(menuData);
+          const latestOpenKey = openKeysNew.find(key => openKeys.indexOf(key) === -1);
+          if (menuData.map(value => value.menuid).indexOf(latestOpenKey) === -1) {
+            setOpenKeys(openKeysNew);
+          } else {
+            setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+          }
         },
       }}
     >
