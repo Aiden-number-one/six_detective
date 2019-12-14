@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Drawer, Row, Col, Input, Select, Icon } from 'antd';
+import { Drawer, Row, Col, Input, Select, Icon, Button } from 'antd';
+import styles from '../../AddDataSet.less';
 
 const { Option } = Select;
 
@@ -18,22 +19,34 @@ export default class ParamSetting extends PureComponent {
           toggleModal('paramSetting');
         }}
         width={800}
+        className={styles.paramsDrawer}
       >
-        <ul>
+        <Button type="primary">
+          <Icon type="download" />
+          快速提取
+        </Button>
+        <ul style={{ padding: 0, marginTop: 10 }}>
+          <li>
+            <Row style={{ lineHeigh: '50px' }}>
+              <Col span={10}>变量名</Col>
+              <Col span={7}>变量类型</Col>
+              <Col span={2}>操作</Col>
+            </Row>
+          </li>
           {conditionData.map(() => (
             <li>
-              <Row>
+              <Row style={{ lineHeigh: '50px' }}>
                 <Col span={10}>
-                  <Input disabled />
+                  <Input disabled style={{ width: '90%' }} />
                 </Col>
                 <Col span={7}>
-                  <Select defaultValue="lucy" style={{ width: 130 }}>
+                  <Select defaultValue="lucy" style={{ width: '90%' }}>
                     <Option value="jack">Jack</Option>
                     <Option value="lucy">Lucy</Option>
                     <Option value="Yiminghe">yiminghe</Option>
                   </Select>
                 </Col>
-                <Col span={7}>
+                <Col span={2}>
                   <Icon
                     style={{
                       paddingLeft: 6,
@@ -44,9 +57,30 @@ export default class ParamSetting extends PureComponent {
               </Row>
             </li>
           ))}
-          {/* <Button type="primary" ghost icon="plus" style={{ marginLeft: 8, marginTop: 8 }}>
-            新建数据集
-          </Button> */}
+          <div
+            style={{
+              position: 'absolute',
+              right: 0,
+              bottom: 0,
+              width: '100%',
+              borderTop: '1px solid #e9e9e9',
+              padding: '10px 16px',
+              background: '#fff',
+              textAlign: 'right',
+            }}
+          >
+            <Button
+              onClick={() => {
+                toggleModal('paramSetting');
+              }}
+              style={{ marginRight: 8 }}
+            >
+              Cancel
+            </Button>
+            <Button htmlType="submit" type="primary">
+              Submit
+            </Button>
+          </div>
         </ul>
       </Drawer>
     );
