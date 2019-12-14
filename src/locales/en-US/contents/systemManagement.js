@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-14 11:33:22
+ * @LastEditTime: 2019-12-14 16:12:52
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -45,4 +45,7 @@ export default {
   'systemManagement.userGroup.remark': 'Remark',
   'systemManagement.systemParameter.parameterType': 'Parameter Type',
   'systemManagement.systemParameter.note': 'Note',
+  'systemManagement.auditLog.logDate': 'Log Date',
+  'systemManagement.auditLog.updatedBy': 'Updated By',
+  'systemManagement.auditLog.functionName': 'Function Name',
 };

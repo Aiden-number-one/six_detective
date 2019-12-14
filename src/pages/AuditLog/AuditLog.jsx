@@ -1,59 +1,12 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Input, Button, DatePicker, Table, Row, Col, Pagination } from 'antd';
+import { Form, Table, Pagination } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
+import SearchForm from './components/SearchForm';
 
-import styles from './AuditLog.less';
-
-class OperatorForm extends Component {
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { search } = this.props;
-    return (
-      <Form className="ant-advanced-search-form">
-        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label={formatMessage({ id: 'app.common.username' })}>
-              {getFieldDecorator('operatorName', {})(<Input className={styles.inputvalue} />)}
-            </Form.Item>
-          </Col>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label={formatMessage({ id: 'app.common.dateFrom' })}>
-              {getFieldDecorator('beginDate', {})(
-                <DatePicker
-                  onChange={this.changeBeginDate}
-                  className={styles.inputvalue}
-                  format="YYYY-MM-DD"
-                  placeholder=""
-                />,
-              )}
-            </Form.Item>
-          </Col>
-          <Col xs={12} sm={12} lg={8}>
-            <Form.Item label={formatMessage({ id: 'app.common.dateTo' })}>
-              {getFieldDecorator('endDate', {})(
-                <DatePicker
-                  onChange={this.changeEndDate}
-                  className={styles.inputvalue}
-                  format="YYYY-MM-DD"
-                  placeholder=""
-                />,
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <div className="btnArea">
-          <Button type="primary" onClick={search}>
-            {formatMessage({ id: 'app.common.search' })}
-          </Button>
-        </div>
-      </Form>
-    );
-  }
-}
-const NewOperatorForm = Form.create({})(OperatorForm);
+const NewSearchForm = Form.create({})(SearchForm);
 
 @connect(({ auditLog, loading }) => ({
   loading: loading.effects,
@@ -61,17 +14,22 @@ const NewOperatorForm = Form.create({})(OperatorForm);
 }))
 class AuditLog extends Component {
   state = {
-    pageNum: '1',
-    pageSize: '10',
     page: {
       pageNumber: 1,
       pageSize: 10,
     },
+    logStartDate: undefined,
+    logEndDate: undefined,
+    functionName: undefined,
+    updatedBy: undefined,
     columns: [
       {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
+        render: (res, recode, index) => (
+          <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+        ),
       },
       {
         title: 'Function Name',
@@ -123,13 +81,15 @@ class AuditLog extends Component {
     this.getAuditLog();
   }
 
-  getAuditLog = (operatorName = '', beginDate = '', endDate = '') => {
+  getAuditLog = () => {
+    const { logStartDate, logEndDate, functionName, updatedBy, page } = this.state;
     const param = {
-      pageNumber: `${this.state.pageNum}`,
-      pageSize: `${this.state.pageSize}`,
-      operatorName,
-      beginDate,
-      endDate,
+      pageNumber: page.pageNumber.toString(),
+      pageSize: page.pageSize.toString(),
+      operatorName: functionName,
+      beginDate: logStartDate,
+      endDate: logEndDate,
+      updatedBy,
     };
     const { dispatch } = this.props;
     dispatch({
@@ -138,11 +98,14 @@ class AuditLog extends Component {
     });
   };
 
-  pageChange = pagination => {
+  pageChange = (pageNumber, pageSize) => {
+    const page = {
+      pageNumber,
+      pageSize,
+    };
     this.setState(
       {
-        pageNum: `${pagination.current}`,
-        pageSize: pagination.pageSize,
+        page,
       },
       () => {
         this.getAuditLog();
@@ -156,11 +119,23 @@ class AuditLog extends Component {
 
   queryLog = () => {
     this.auditLogForm.current.validateFields((err, values) => {
-      let beginDate = values.beginDate ? moment(values.beginDate).format('YYYY-MM-DD') : '';
-      beginDate = beginDate.split('-').join('');
-      let endDate = values.endDate ? moment(values.endDate || '').format('YYYY-MM-DD') : '';
-      endDate = endDate.split('-').join('');
-      this.getAuditLog(values.operatorName, beginDate, endDate);
+      if (err) {
+        return;
+      }
+      const { logDate } = values;
+      let logStartDate;
+      let logEndDate;
+      if (logDate.length > 0) {
+        logStartDate = moment(logDate[0]).format('YYYY-MM-DD');
+        logEndDate = moment(logDate[1]).format('YYYY-MM-DD');
+      }
+      this.setState({
+        logStartDate,
+        logEndDate,
+        functionName: values.functionName,
+        updatedBy: values.updatedBy,
+      });
+      this.getAuditLog();
     });
   };
 
@@ -171,27 +146,16 @@ class AuditLog extends Component {
   render() {
     const { loading } = this.props;
     let { getAuditLogList } = this.state;
-    const { pageSize, page } = this.state;
+    const { page } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
-    // eslint-disable-next-line no-unused-expressions
-    getAuditLogList &&
-      getAuditLogList.forEach((element, index) => {
-        // eslint-disable-next-line no-param-reassign
-        element.index = (this.state.pageNum - 1) * pageSize + index + 1;
-      });
     return (
       <PageHeaderWrapper>
-        <NewOperatorForm
-          search={this.queryLog}
-          reset={this.operatorReset}
-          ref={this.auditLogForm}
-        />
+        <NewSearchForm search={this.queryLog} ref={this.auditLogForm} />
         <Table
           loading={loading['auditLog/getAuditLogList']}
           dataSource={getAuditLogList}
-          pagination={{ total: totalCount, pageSize }}
-          onChange={this.pageChange}
+          pagination={false}
           columns={this.state.columns}
         />
         <Pagination
