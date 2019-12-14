@@ -22,6 +22,12 @@ class AuditLog extends Component {
     logEndDate: undefined,
     functionName: undefined,
     updatedBy: undefined,
+    functionNameOptions: [
+      { key: '', value: '', title: 'All' },
+      { key: '1', value: '1', title: 'Name One' },
+      { key: '2', value: '2', title: 'Name Two' },
+      { key: '3', value: '3', title: 'Name Three' },
+    ],
     columns: [
       {
         title: formatMessage({ id: 'app.common.number' }),
@@ -32,42 +38,57 @@ class AuditLog extends Component {
         ),
       },
       {
-        title: 'Function Name',
+        title: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
         dataIndex: 'userName',
         key: 'userName',
       },
       {
-        title: 'Table Name',
+        title: formatMessage({ id: 'systemManagement.auditLog.tableName' }),
         dataIndex: 'formName',
         key: 'formName',
       },
       {
-        title: 'Code',
+        title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),
         dataIndex: 'biToCode',
         key: 'biToCode',
       },
       {
-        title: 'Product Code',
+        title: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
         dataIndex: 'productCode',
         key: 'productCode',
       },
       {
-        title: 'Effective Date',
+        title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         dataIndex: 'operateDate',
         key: 'operateDate',
       },
       {
-        title: 'Field Updated',
+        title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
         dataIndex: 'ipAddress',
         key: 'ipAddress',
       },
       {
-        title: 'Update Type',
+        title: formatMessage({ id: 'systemManagement.auditLog.updateType' }),
         dataIndex: 'ipAddress',
         key: 'ipAddress',
       },
       {
-        title: 'Log Time',
+        title: formatMessage({ id: 'systemManagement.auditLog.logDate' }),
+        dataIndex: 'operateTime',
+        key: 'operateTime',
+      },
+      {
+        title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
+        dataIndex: 'operateTime',
+        key: 'operateTime',
+      },
+      {
+        title: formatMessage({ id: 'systemManagement.auditLog.before' }),
+        dataIndex: 'operateTime',
+        key: 'operateTime',
+      },
+      {
+        title: formatMessage({ id: 'systemManagement.auditLog.after' }),
         dataIndex: 'operateTime',
         key: 'operateTime',
       },
@@ -125,7 +146,7 @@ class AuditLog extends Component {
       const { logDate } = values;
       let logStartDate;
       let logEndDate;
-      if (logDate.length > 0) {
+      if (logDate && logDate.length > 0) {
         logStartDate = moment(logDate[0]).format('YYYY-MM-DD');
         logEndDate = moment(logDate[1]).format('YYYY-MM-DD');
       }
@@ -146,12 +167,16 @@ class AuditLog extends Component {
   render() {
     const { loading } = this.props;
     let { getAuditLogList } = this.state;
-    const { page } = this.state;
+    const { page, functionNameOptions } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     return (
       <PageHeaderWrapper>
-        <NewSearchForm search={this.queryLog} ref={this.auditLogForm} />
+        <NewSearchForm
+          search={this.queryLog}
+          ref={this.auditLogForm}
+          functionNameOptions={functionNameOptions}
+        />
         <Table
           loading={loading['auditLog/getAuditLogList']}
           dataSource={getAuditLogList}
