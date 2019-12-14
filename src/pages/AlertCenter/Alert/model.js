@@ -4,16 +4,21 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-13 15:42:33
+ * @LastEditTime: 2019-12-14 17:50:46
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-import { ALERT_STATUS } from './constants';
 // just for unit test
 // `fetch` high order function return anonymous func
-export async function getAlerts({ page = 1, pageSize = 10 }) {
+export async function getAlerts({ page = 1, pageSize = 10, sort, currentColumn, conditions }) {
   return request('get_alert_center_page_list', {
-    data: { pageNumber: page.toString(), pageSize: pageSize.toString() },
+    data: {
+      sort,
+      currentColumn,
+      conditions: conditions && JSON.stringify(conditions),
+      pageNumber: page.toString(),
+      pageSize: pageSize.toString(),
+    },
   });
 }
 
@@ -39,11 +44,16 @@ export async function setAlertComment({ alertId, content }) {
 export async function claimAlert({ alertIds }) {
   return request('set_alert_claim', { data: { alertIds: alertIds.join(',') } });
 }
+export async function getAssignUsers({ alertItemIds }) {
+  return request('get_user_list_by_process_instance_step', {
+    data: { alertItemIds: alertItemIds.join(',') },
+  });
+}
+export async function assignAlertItem({ taskIds, userId }) {
+  return request('set_alert_item_owner', { data: { taskIds: taskIds.join(','), userId } });
+}
 export async function closeAlert({ alertIds }) {
   return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
-}
-export async function getUsers() {
-  return request('get_user_list_information', { data: { operType: 'queryByAlertRoleId' } });
 }
 export default {
   namespace: 'alertCenter',
@@ -59,11 +69,7 @@ export default {
   },
   reducers: {
     save(state, { payload }) {
-      const { alerts: list, page, total } = payload;
-      const alerts = list.map(alert => ({
-        ...alert,
-        alertStatus: ALERT_STATUS[alert.alertStatus],
-      }));
+      const { alerts, page, total } = payload;
       return {
         ...state,
         alerts,
@@ -101,6 +107,12 @@ export default {
       message.warn(msg);
       return state;
     },
+    assignUserOk(state) {
+      message.success('assign success');
+      return {
+        ...state,
+      };
+    },
     claimOk(state, { payload }) {
       const { alertIds, userName } = payload;
       const alerts = state.alerts.map(alert => {
@@ -119,10 +131,13 @@ export default {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const { page, pageSize } = payload || {};
+      const { page, pageSize, currentColumn, sort, conditions } = payload || {};
       const { items, totalCount, err } = yield call(getAlerts, {
         page,
         pageSize,
+        sort,
+        currentColumn,
+        conditions,
       });
 
       if (err) {
@@ -178,8 +193,8 @@ export default {
         },
       });
     },
-    *fetchUsers({ payload }, { call, put }) {
-      const { items, err } = yield call(getUsers, payload);
+    *fetchAssignUsers({ payload }, { call, put }) {
+      const { items, err } = yield call(getAssignUsers, payload);
       if (err) {
         throw new Error(err);
       }
@@ -188,6 +203,15 @@ export default {
         payload: {
           users: items,
         },
+      });
+    },
+    *assignTask({ payload }, { call, put }) {
+      const { err } = yield call(assignAlertItem, payload);
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'assignUserOk',
       });
     },
     *postComment({ payload }, { call, put }) {

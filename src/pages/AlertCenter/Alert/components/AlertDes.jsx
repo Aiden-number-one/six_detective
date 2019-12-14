@@ -8,13 +8,13 @@ export default function({
   alert: {
     alertId,
     alertType,
-    alertStatus,
+    alertStatusDesc,
     alertTime,
     alertDesc,
     tradeDate,
     submissionTime,
     submitter,
-    owner,
+    userName,
   },
 }) {
   return (
@@ -41,10 +41,10 @@ export default function({
         <Paragraph ellipsis={{ rows: 3, expandable: true }}>{alertDesc}</Paragraph>
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.owner" />}>
-        {owner}
+        {userName}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.status" />}>
-        {alertStatus}
+        {alertStatusDesc}
       </Descriptions.Item>
     </Descriptions>
   );

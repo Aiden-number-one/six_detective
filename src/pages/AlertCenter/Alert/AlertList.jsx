@@ -22,12 +22,24 @@ function Title({ dispatch, loading, filterItems, tableColumn, id }) {
       },
     });
   }
+
+  async function handleCommit(condition) {
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        currentColumn: tableColumn,
+        conditions: [condition],
+      },
+    });
+  }
   return (
     <ColumnTitle
       isNum={tableColumn === 'itemsTotal'}
+      tableColumn={tableColumn}
       loading={loading}
       filterItems={filterItems}
       getFilterItems={handleFilterItems}
+      handleCommit={handleCommit}
     >
       <FormattedMessage id={`alert-center.${id}`} />
     </ColumnTitle>
@@ -192,7 +204,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         <Column dataIndex="userName" title={<FormattedMessage id="alert-center.owner" />} />
         <Column
           align="center"
-          dataIndex="alertStatus"
+          dataIndex="alertStatusDesc"
           title={<FormattedMessage id="alert-center.status" />}
         />
         <Column

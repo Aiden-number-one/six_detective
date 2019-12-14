@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Popover, Row } from 'antd';
-// import classNames from 'classnames';
-// import IconFont from '@/components/IconFont';
+import { Popover } from 'antd';
+import classNames from 'classnames';
+import IconFont from '@/components/IconFont';
 import {
   FilterHeader,
   FilterFooter,
@@ -15,46 +15,80 @@ export default function ColumnTitle({
   children,
   isNum,
   loading,
+  tableColumn,
   filterItems = [],
-  // getFilterItems,
+  getFilterItems,
+  handleCommit,
 }) {
   // const [isFiltered, setFiltered] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [filterType, setFilterType] = useState(1);
-
+  const [filterType, setFilterType] = useState(isNum ? 1 : 7);
+  const [checkedList, setcheckedList] = useState([]);
   const isFilterSelect = [1, 3, 4, 5, 6].includes(filterType);
+  // const [conditions, setConditions] = useState([]);
 
-  // function hanldeFilterItems() {
-  //   if (!visible) {
-  //     getFilterItems();
-  //   }
-  // }
+  function hanldeFilterItems() {
+    if (!visible) {
+      getFilterItems();
+    }
+  }
 
-  function handleCommit() {
+  // useEffect(() => {
+  //   setConditions(prev => [
+  //     ...prev,
+  //     ...[
+  //       {
+  //         column: tableColumn,
+  //         value: checkedList.toString(),
+  //         condition: filterType.toString(),
+  //       },
+  //     ],
+  //   ]);
+  // }, [tableColumn, checkedList, filterType]);
+
+  async function handleOk() {
+    const condition = {
+      column: tableColumn,
+      value: checkedList.toString(),
+      condition: filterType.toString(),
+    };
+    await handleCommit(condition);
     setVisible(false);
+  }
+
+  function handleCheckList(cList) {
+    setcheckedList(cList);
   }
   return (
     <Popover
       placement="bottomLeft"
       trigger="click"
       visible={visible}
-      // onVisibleChange={v => setVisible(v)}
+      onVisibleChange={v => setVisible(v)}
+      overlayStyle={{ width: 260 }}
       content={
-        <div className={styles.content}>
+        <>
           <FilterHeader />
-          <Row className={styles.filter}>
+          <div className={styles.content}>
             <FilterType isNum={isNum} handleTypeChange={type => setFilterType(type)} />
             {isFilterSelect ? (
               <FilterSelect filterItems={filterItems} />
             ) : (
-              <FilterCheckbox loading={loading} filterItems={filterItems} />
+              <FilterCheckbox
+                loading={loading}
+                filterItems={filterItems}
+                getCheckList={handleCheckList}
+              />
             )}
-            <FilterFooter onCancel={() => setVisible(false)} onOk={handleCommit} />
-          </Row>
-        </div>
+            <FilterFooter onCancel={() => setVisible(false)} onOk={handleOk} />
+          </div>
+        </>
       }
     >
-      <Row>{children}</Row>
+      <div onClick={hanldeFilterItems}>
+        <IconFont type="iconfilter1" className={classNames(styles.icon, styles['filter-icon'])} />
+        {children}
+      </div>
     </Popover>
   );
 }

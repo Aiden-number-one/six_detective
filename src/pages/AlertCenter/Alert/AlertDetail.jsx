@@ -16,15 +16,7 @@ function CustomEmpty({ className = '', style = {} }) {
   );
 }
 
-function AlertDetail({
-  dispatch,
-  loading,
-  alert,
-  alertItems = [],
-  comments = [],
-  logs = [],
-  users,
-}) {
+function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const { alertTypeId, alertId } = alert;
 
@@ -89,16 +81,7 @@ function AlertDetail({
             closable={false}
             tab={<FormattedMessage id="alert-center.alert-item-list" />}
           >
-            <AlertTask
-              alertItems={alertItems}
-              users={users}
-              loading={loading}
-              getUsers={() => {
-                dispatch({
-                  type: 'alertCenter/fetchUsers',
-                });
-              }}
-            />
+            <AlertTask />
           </TabPane>
         </Tabs>
       </Col>
@@ -138,10 +121,8 @@ function AlertDetail({
   );
 }
 
-export default connect(({ loading, alertCenter: { alertItems, comments, logs, users } }) => ({
+export default connect(({ loading, alertCenter: { comments, logs } }) => ({
   loading: loading.effects,
-  alertItems,
   comments,
   logs,
-  users,
 }))(AlertDetail);

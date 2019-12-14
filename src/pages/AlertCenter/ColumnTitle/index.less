@@ -13,15 +13,11 @@
   }
 }
 
-.content {
-  width: 260px;
-  .title {
-    height: 26px;
-    padding: 0 10px;
-    color: #fff;
-    background-color: #10416c;
-    border-left: 4px solid #f4374c;
-  }
+.title {
+  padding: 4px 10px;
+  color: #fff;
+  background-color: #10416c;
+  border-left: 4px solid #f4374c;
   .clear {
     cursor: pointer;
     > .text {
@@ -29,42 +25,12 @@
       vertical-align: middle;
     }
   }
+}
 
-  .search {
-    input {
-      color: #11416c;
-      font-weight: bold;
-    }
-  }
-  .filter-type {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    > span {
-      margin-right: 10px;
-      color: #10416c;
-    }
-    > .type {
-      flex: 1;
-    }
-  }
-  .des {
-    height: 26px;
-    margin-bottom: 10px;
-    padding-left: 16px;
-    color: #464c51;
-    line-height: 26px;
-    background-color: #f9f9f9;
-  }
-  .filter {
-    padding: 16px 16px 50px;
-    border: 1px solid #10416c;
-  }
-  .scroll-container {
-    width: 100%;
-    max-height: 150px;
-    overflow-y: auto;
-  }
+.content {
+  position: relative;
+  padding: 16px 16px 50px;
+  border: 1px solid #10416c;
   .bottom-btns {
     position: absolute;
     right: 0;
@@ -80,6 +46,86 @@
       &:last-child {
         margin-right: 0;
       }
+    }
+  }
+}
+
+.filter-type {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #10416c;
+  border-bottom: 0;
+  > span {
+    padding: 0 6px;
+    color: #10416c;
+    font-size: 12px;
+  }
+  > .type {
+    flex: 1;
+    overflow: hidden;
+    font-size: 12px;
+    :global {
+      .ant-select-selection {
+        border: 0;
+        &:active,
+        &:focus {
+          box-shadow: unset;
+        }
+      }
+    }
+  }
+}
+
+.des {
+  height: 26px;
+  margin-bottom: 10px;
+  padding-left: 16px;
+  color: #464c51;
+  line-height: 26px;
+  text-align: left;
+  background-color: #f9f9f9;
+}
+
+.selectbox {
+  height: 245px;
+  overflow-y: auto;
+  text-align: center;
+  border: 1px solid #10416c;
+  .select {
+    width: 90%;
+  }
+}
+.checkbox {
+  border: 1px solid #10416c;
+  .search {
+    border: 0;
+    border-bottom: 1px solid #10416c;
+    box-shadow: unset;
+    &:focus,
+    &:hover {
+      border: 0;
+      border-bottom: 1px solid #10416c;
+    }
+    input {
+      color: #10416c;
+      background: #f2f6f8;
+      border: 0;
+      outline: none;
+      box-shadow: unset;
+      &:focus,
+      &:hover {
+        border: 0;
+      }
+    }
+  }
+
+  .check-content {
+    padding: 0 16px;
+    .scroll-container {
+      width: 100%;
+      height: 150px;
+      overflow-y: auto;
     }
   }
 }
