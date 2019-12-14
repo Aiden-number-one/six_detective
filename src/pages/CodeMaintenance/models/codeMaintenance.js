@@ -1,14 +1,13 @@
 import { notification } from 'antd';
 import Service from '@/utils/Service';
 
-const { getSystemCode, updateCodeItem, deleteCodeItem } = Service;
+const { getSystemCode } = Service;
 const codeMaintenance = {
   namespace: 'codeList',
   state: {
     data: [],
     itemData: [],
     obj: {},
-    objUpdate: {},
     objDelete: {},
   },
   effects: {
@@ -74,29 +73,8 @@ const codeMaintenance = {
         });
       }
     },
-    *updateCodeItem({ payload, callback }, { call, put }) {
-      const response = yield call(updateCodeItem, { param: payload });
-      if (response.bcjson.flag === '1') {
-        if (response.bcjson) {
-          yield put({
-            type: 'updateDatas',
-            payload: response.bcjson,
-          });
-        }
-        callback();
-      } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
-      }
-    },
     *deleteCodeItem({ payload, callback }, { call, put }) {
-      const response = yield call(deleteCodeItem, { param: payload });
+      const response = yield call(getSystemCode, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson) {
           yield put({
@@ -134,12 +112,6 @@ const codeMaintenance = {
       return {
         ...state,
         obj: action.payload,
-      };
-    },
-    updateDatas(state, action) {
-      return {
-        ...state,
-        objUpdate: action.payload,
       };
     },
     deleteDatas(state, action) {

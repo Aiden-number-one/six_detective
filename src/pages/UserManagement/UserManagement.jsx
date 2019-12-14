@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-14 10:13:10
+ * @LastEditTime: 2019-12-14 14:28:57
  */
 
 import React, { Component } from 'react';
@@ -576,7 +576,7 @@ class UserManagement extends Component {
             </Modal>
             {/* delete */}
             <Modal
-              title="CONFIRM"
+              title={formatMessage({ id: 'app.common.confirm' })}
               visible={this.state.deleteVisible}
               onOk={this.deleteConfirm}
               onCancel={this.deleteCancel}

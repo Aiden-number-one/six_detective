@@ -155,7 +155,7 @@ class CodeMaintenance extends Component {
   // 删除
   deleteCodeItem = (res, recode) => {
     const updateCodeItemParams = {
-      dictItemId: recode.dictItemId,
+      subitemId: recode.subitemId,
     };
     this.setState({
       deleteCodeItemVisible: true,
@@ -166,8 +166,9 @@ class CodeMaintenance extends Component {
   deleteCodeItemConfirm = () => {
     const { dispatch } = this.props;
     const params = {
+      operType: 'subitemDeleteBycodeId',
       codeId: this.state.codeId,
-      dictItemId: this.state.updateCodeItemParams.dictItemId,
+      subitemId: this.state.updateCodeItemParams.subitemId,
     };
     dispatch({
       type: 'codeList/deleteCodeItem',
@@ -341,15 +342,15 @@ class CodeMaintenance extends Component {
               </Drawer>
               {/* 删除 */}
               <Modal
-                title="提示"
+                title={formatMessage({ id: 'app.common.confirm' })}
                 visible={this.state.deleteCodeItemVisible}
                 onOk={this.deleteCodeItemConfirm}
                 onCancel={this.deleteCodeItemCancel}
                 cancelText={formatMessage({ id: 'app.common.cancel' })}
-                okText={formatMessage({ id: 'app.common.save' })}
+                okText={formatMessage({ id: 'app.common.confirm' })}
               >
                 <div>
-                  <span>确定删除吗？</span>
+                  <span>Please confirm that you want to delete this record?</span>
                 </div>
               </Modal>
             </div>
