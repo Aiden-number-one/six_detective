@@ -3,6 +3,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Button, Modal, Table, Drawer, Pagination } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
+import IconFont from '@/components/IconFont';
 
 // import TableHeader from '@/components/TableHeader';
 import styles from './CodeMaintenance.less';
@@ -56,6 +57,7 @@ class CodeMaintenance extends Component {
         title: formatMessage({ id: 'app.common.operation' }),
         dataIndex: 'operation',
         key: 'operation',
+        align: 'center',
         render: (res, recode, index, active) => (
           <span className={styles.operation}>
             <a
@@ -64,7 +66,7 @@ class CodeMaintenance extends Component {
                 this.updateCode(res, recode, index, active);
               }}
             >
-              {formatMessage({ id: 'app.common.modify' })}
+              <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
             <a
               href="#"
@@ -72,7 +74,7 @@ class CodeMaintenance extends Component {
                 this.deleteCodeItem(res, recode);
               }}
             >
-              {formatMessage({ id: 'app.common.delete' })}
+              <IconFont type="icon-delete" className={styles['btn-icon']} />
             </a>
           </span>
         ),
