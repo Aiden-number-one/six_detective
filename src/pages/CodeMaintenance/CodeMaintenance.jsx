@@ -278,6 +278,38 @@ class CodeMaintenance extends Component {
     });
   };
 
+  pageChange = (pageNumber, pageSize) => {
+    const page = {
+      pageNumber,
+      pageSize,
+    };
+
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryCodeList();
+      },
+    );
+  };
+
+  pageItemChange = (pageNumber, pageSize) => {
+    const itemPage = {
+      pageNumber,
+      pageSize,
+    };
+
+    this.setState(
+      {
+        itemPage,
+      },
+      () => {
+        this.queryCodeItemList();
+      },
+    );
+  };
+
   render() {
     const { loading, getCodeListData, getCodeItemListData } = this.props;
     const totalCount = getCodeListData && getCodeListData.totalCount;
@@ -375,7 +407,7 @@ class CodeMaintenance extends Component {
                   ).toString()}`
                 }
                 onShowSizeChange={this.onShowSizeChange}
-                onChange={this.pageChange}
+                onChange={this.pageItemChange}
                 total={totalCountItem}
                 pageSize={itemPage.pageSize}
               />
