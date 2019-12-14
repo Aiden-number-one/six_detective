@@ -99,11 +99,11 @@ const iframe = {
   // 质量问题分析
   '/etl-center/job-management': 'index.html#report-table-info-manage',
   // 任务管理
-  '/data-management/task-plan-setting': 'index.html#task-plan-setting',
+  '/etl-center/schedule-management': 'index.html#task-plan-setting',
   // 作业管理
-  '/etl-center/schedule-management': 'index.html#perform-monitoring',
+  '/etl-center/monitoring-management/monitoring': 'index.html#perform-monitoring',
   // 执行日志
-  '/data-management/log-query': 'index.html#log-query',
+  '/etl-center/monitoring-management/log-monitoring': 'index.html#log-query',
   // 数据源监控
   '/data-management/data-enquiry': 'index.html#datasource-change',
 };

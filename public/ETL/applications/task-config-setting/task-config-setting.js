@@ -273,7 +273,6 @@ define((require, exports, module) => {
                     })
                     return;
                 }
-                debugger;
                 App.blockUI({
                     boxed: true,
                     message: "Processing..."
@@ -287,6 +286,10 @@ define((require, exports, module) => {
              else {
                 toastr.info("Please check the invalid fields");
             }
+        });
+
+        $("body").on("hide.bs.modal", '#J_modal_AS', function() {
+            $('#tab_14_2 [name=apiParamsInputCommon] #del,  #tab_14_3 [name=apiParamsInput] #del').parent().remove();
         });
 
         // 点击新增下拉框 操作类型，保存操作类型
