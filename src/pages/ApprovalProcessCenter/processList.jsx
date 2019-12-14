@@ -28,6 +28,7 @@ function TaskBtn({
   selectedKeys,
   selectedCurrentTask,
   searchTask,
+  urlTaskCode,
   claimOk,
   closeAlert,
   exportAlert,
@@ -48,25 +49,26 @@ function TaskBtn({
             })
           }
         >
-          <IconFont type="iconqizhi" className={styles['btn-icon']} />
+          <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
         <Button disabled={!selectedKeys.length} onClick={closeAlert}>
-          <IconFont type="iconicon-assign" className={styles['btn-icon']} />
+          <IconFont type="iconicon_assign" className={styles['btn-icon']} />
           Assign
         </Button>
         <Button disabled={!selectedKeys.length} onClick={closeAlert}>
-          <IconFont type="iconicon-withdraw" className={styles['btn-icon']} />
+          <IconFont type="iconicon_withdraw1 " className={styles['btn-icon']} />
           Withdraw
         </Button>
         <Button disabled={!selectedKeys.length} onClick={exportAlert}>
-          <IconFont type="iconbatch-export" className={styles['btn-icon']} />
+          <IconFont type="iconicon_export" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </Button>
       </Col>
       <Col span={6}>
         <Search
           placeholder="search"
+          defaultValue={urlTaskCode}
           onSearch={value => searchTask(selectedCurrentTask, value)}
           style={{ width: 264, height: 36 }}
         />
@@ -88,13 +90,13 @@ function ProcessList({
   const [selectedCurrentTask, setSelectedTasks] = useState('all');
   const [currentPage, setcurrentPage] = useState('1');
   const [currentRow, setcurrentRow] = useState('1');
-
+  const urlTaskCode = GetQueryString('taskcode');
+  console.log('urlTaskCode------>', urlTaskCode);
   useEffect(() => {
-    const taskCode = GetQueryString('taskcode');
     dispatch({
       type: 'approvalCenter/fetch',
       payload: {
-        taskCode,
+        taskCode: urlTaskCode,
       },
     });
   }, []);
@@ -181,6 +183,7 @@ function ProcessList({
         selectedKeys={selectedKeys}
         selectedCurrentTask={selectedCurrentTask}
         searchTask={searchTask}
+        urlTaskCode={urlTaskCode}
         claimOk={claimOk}
       />
       <Table
@@ -236,7 +239,7 @@ function ProcessList({
         <Column align="center" dataIndex="details" title="DETAILS" />
         <Column align="center" dataIndex="updateDate" title="UPDATE DATE" />
         <Column dataIndex="owner" title="OWNER" />
-        <Column align="center" dataIndex="status" title="STATUS" />
+        <Column align="center" dataIndex="statusDesc" title="statusDesc" />
         <Column
           align="center"
           dataIndex="action"

@@ -50,6 +50,7 @@
 
     .searchBoxButton {
       min-width: 90px;
+      margin-right: 15px;
       background-color: #0d87d4;
       border-color: #0d87d4;
     }
@@ -197,7 +198,7 @@
         // @include clearfix;
 
         .icon {
-          width: 26px;
+          width: 26px !important;
           height: 26px;
           margin: 0;
           margin-left: 5px;
@@ -297,5 +298,17 @@
 
   .inputNumber {
     margin: 0 10px 0 10px;
+  }
+}
+.paramsDrawer {
+  :global {
+    .ant-row {
+      margin-top: 10px;
+      line-height: 50px;
+    }
+    .ant-col {
+      padding-left: 20px;
+      background-color: #f2f6f8;
+    }
   }
 }

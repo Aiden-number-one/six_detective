@@ -155,44 +155,50 @@ export default class ToolBar extends Component {
   componentDidMount() {
     const { setCellCallback } = this.props;
     const { btnActiveStatus } = this.state;
-    setCellCallback(data => {
-      const cellStyle = data.getSelectedCellStyle();
-      const cell = data.getSelectedCell();
-      const cellType = cell ? cell.cellProps || {} : {};
-      let isMerge = false;
-      let freeze = false;
-      if (cell && cell.merge) {
-        isMerge = true;
-      }
-      if (
-        data.freeze[0] !== 0 &&
-        data.freeze[1] !== 0 &&
-        data.freeze[0] === data.selector.ri &&
-        data.freeze[1] === data.selector.ci
-      ) {
-        freeze = true;
-      }
-      this.setState({
-        backgroundColor: cellStyle.bgcolor,
-        fontColor: cellStyle.color,
-        btnActiveStatus: {
-          // 回显按钮样式
-          ...btnActiveStatus,
-          autoLineBreak: cellStyle.textwrap,
-          textAlign: cellStyle.align,
-          verticalAlign: cellStyle.valign,
-          fontWeight: cellStyle.font.bold ? 'bold' : 'normal',
-          fontStyle: cellStyle.font.italic ? 'italic' : 'normal',
-          fontSize: cellStyle.font.size,
-          fontFamily: cellStyle.font.name,
-          textDecoration: cellStyle.underline ? 'underline' : 'none',
-          isMerge,
-          freeze,
-          paintformatActive: false,
-        },
-        cellType,
-      });
-    });
+    setCellCallback(
+      data => {
+        const cellStyle = data.getSelectedCellStyle();
+        const cell = data.getSelectedCell();
+        const cellType = cell ? cell.cellProps || {} : {};
+        let isMerge = false;
+        let freeze = false;
+        if (cell && cell.merge) {
+          isMerge = true;
+        }
+        if (
+          data.freeze[0] !== 0 &&
+          data.freeze[1] !== 0 &&
+          data.freeze[0] === data.selector.ri &&
+          data.freeze[1] === data.selector.ci
+        ) {
+          freeze = true;
+        }
+        this.setState({
+          backgroundColor: cellStyle.bgcolor,
+          fontColor: cellStyle.color,
+          btnActiveStatus: {
+            // 回显按钮样式
+            ...btnActiveStatus,
+            autoLineBreak: cellStyle.textwrap,
+            textAlign: cellStyle.align,
+            verticalAlign: cellStyle.valign,
+            fontWeight: cellStyle.font.bold ? 'bold' : 'normal',
+            fontStyle: cellStyle.font.italic ? 'italic' : 'normal',
+            fontSize: cellStyle.font.size,
+            fontFamily: cellStyle.font.name,
+            textDecoration: cellStyle.underline ? 'underline' : 'none',
+            isMerge,
+            freeze,
+          },
+          cellType,
+        });
+      },
+      paintformatActive => {
+        this.setState({
+          paintformatActive,
+        });
+      },
+    );
   }
 
   // 取消设置行高
@@ -365,19 +371,19 @@ export default class ToolBar extends Component {
           <TabPane tab={<FormattedMessage id="report-designer.start" />} key="1">
             <div style={tabPanelStyle}>
               <div className={styles.group}>
-                <Button className={classNames('btn', 'btn2', 'mr6')}>
+                <Button className={classNames('btn', 'btn2Report', 'mr6')}>
                   <div className={styles.topBottom}>
                     <IconFont type="iconicon_previrew" />
                     <p>Preview</p>
                   </div>
                 </Button>
-                <Button className={classNames('btn', 'btn2', 'mr6')}>
+                <Button className={classNames('btn', 'btn2Report', 'mr6')}>
                   <div className={styles.topBottom}>
                     <IconFont type="icondaoru" />
                     <p>Import</p>
                   </div>
                 </Button>
-                <Button className={classNames('btn', 'btn2', 'mr6')}>
+                <Button className={classNames('btn', 'btn2Report', 'mr6')}>
                   <div className={styles.topBottom}>
                     <IconFont type="iconfilesearch" />
                     <p>Search</p>
@@ -409,7 +415,9 @@ export default class ToolBar extends Component {
                 </div>
               </div>
               <div className={styles.group}>
-                <Button className={classNames('btn', 'btn2', 'mr6', paintformatActive && 'active')}>
+                <Button
+                  className={classNames('btn', 'btn2Report', 'mr6', paintformatActive && 'active')}
+                >
                   <div
                     className={classNames(styles.topBottom)}
                     onClick={() => {
@@ -429,7 +437,7 @@ export default class ToolBar extends Component {
               <div className={styles.group}>
                 <div className="mb4">
                   <Select
-                    style={{ width: '140px' }}
+                    style={{ width: '140px', borderRight: 0 }}
                     defaultValue="3"
                     value={btnActiveStatus.fontFamily}
                     size="small"
@@ -571,7 +579,7 @@ export default class ToolBar extends Component {
                       btnActiveStatus.textDecoration === 'underline' && 'active',
                     )}
                   >
-                    <IconFont type="iconU-copy" />
+                    <IconFont type="iconxiahuaxian1" />
                   </Button>
                   <ButtonGroup className="btn-group mr6">
                     <Popover content="边框" {...popoverProps}>
@@ -876,12 +884,18 @@ export default class ToolBar extends Component {
               <div className={styles.divider} />
               <div className={styles.group}>
                 <Button
-                  className={classNames('btn', 'btn2', 'mr6', this.props.formatPainter && 'active')}
+                  className={classNames(
+                    'btn',
+                    'btn2Report',
+                    'mr6',
+                    btnActiveStatus.isMerge && 'active',
+                  )}
                 >
                   <div
                     className={classNames(styles.topBottom)}
                     onClick={() => {
-                      setCellStyle('paintformat', true);
+                      setCellStyle('merge', true);
+                      setCellStyle('align', 'center');
                     }}
                   >
                     <IconFont type="iconhuanhang" />
@@ -893,12 +907,17 @@ export default class ToolBar extends Component {
                   </div>
                 </Button>
                 <Button
-                  className={classNames('btn', 'btn2', 'mr6', this.props.formatPainter && 'active')}
+                  className={classNames(
+                    'btn',
+                    'btn2Report',
+                    'mr6',
+                    btnActiveStatus.autoLineBreak && 'active',
+                  )}
                 >
                   <div
-                    className={classNames(styles.topBottom, this.props.formatPainter && 'active')}
+                    className={classNames(styles.topBottom)}
                     onClick={() => {
-                      setCellStyle('paintformat', true);
+                      setCellStyle('textwrap', !btnActiveStatus.autoLineBreak);
                     }}
                   >
                     <IconFont type="iconhebingdanyuange_danyuangecaozuo_jurassic" />
@@ -1014,7 +1033,12 @@ export default class ToolBar extends Component {
               </div>
               <div className={styles.group}>
                 <Button
-                  className={classNames('btn', 'btn2', 'mr6', this.props.formatPainter && 'active')}
+                  className={classNames(
+                    'btn',
+                    'btn2Report',
+                    'mr6',
+                    this.props.formatPainter && 'active',
+                  )}
                 >
                   <div className={styles.topBottom}>
                     <IconFont type="iconlianjie" />
@@ -1022,7 +1046,12 @@ export default class ToolBar extends Component {
                   </div>
                 </Button>
                 <Button
-                  className={classNames('btn', 'btn2', 'mr6', this.props.formatPainter && 'active')}
+                  className={classNames(
+                    'btn',
+                    'btn2Report',
+                    'mr6',
+                    this.props.formatPainter && 'active',
+                  )}
                 >
                   <div className={styles.topBottom}>
                     <IconFont type="iconfreeze" />
@@ -1030,7 +1059,12 @@ export default class ToolBar extends Component {
                   </div>
                 </Button>
                 <Button
-                  className={classNames('btn', 'btn2', 'mr6', this.props.formatPainter && 'active')}
+                  className={classNames(
+                    'btn',
+                    'btn2Report',
+                    'mr6',
+                    this.props.formatPainter && 'active',
+                  )}
                 >
                   <div className={styles.topBottom}>
                     <IconFont type="iconfilesearch" />

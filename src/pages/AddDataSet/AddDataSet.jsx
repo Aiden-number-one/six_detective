@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime: 2019-12-13 15:14:14
+ * @LastEditTime: 2019-12-14 13:32:24
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -14,7 +14,6 @@ import classNames from 'classnames';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import IconFont from '@/components/IconFont';
-import '@/assets/css/index.less';
 import styles from './AddDataSet.less';
 import ConnList from './components/ConnList';
 import CodeMirrorComponent from './components/CodeMirror';
@@ -557,15 +556,17 @@ class AddDataSet extends PureComponent {
                       columns={renderColumn}
                       dataSource={tableData}
                       pagination={{
-                        pageSize: defaultPageSize,
-                        showTotal: () =>
-                          `Page ${pageNumber.toString()} of ${Math.ceil(
-                            20 / defaultPageSize,
-                          ).toString()}`,
+                        pageSize: tableData[0] && defaultPageSize,
+                        showTotal:
+                          tableData[0] &&
+                          (() =>
+                            `Page ${pageNumber.toString()} of ${Math.ceil(
+                              20 / defaultPageSize,
+                            ).toString()}`),
 
-                        current: pageNumber,
-                        total: 20,
-                        onChange: this.pageChange,
+                        current: tableData[0] && pageNumber,
+                        total: tableData[0] && 20,
+                        onChange: tableData[0] && this.pageChange,
                         size: 'small',
                       }}
                       // pagination={{ pageSize: 5 }}

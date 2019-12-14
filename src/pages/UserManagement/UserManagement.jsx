@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-13 13:40:32
+ * @LastEditTime: 2019-12-14 18:27:41
  */
 
 import React, { Component } from 'react';
@@ -14,6 +14,7 @@ import { connect } from 'dva';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 import { timeFormat } from '@/utils/filter';
+import IconFont from '@/components/IconFont';
 
 import SearchForm from './components/SearchForm';
 import NewUser from './components/NewUser';
@@ -56,6 +57,7 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
+        minWidth: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
@@ -96,13 +98,14 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'app.common.operation' }),
         dataIndex: 'operation',
         key: 'operation',
+        align: 'center',
         render: (res, obj) => (
           <span className={styles.operation}>
             <a href="#" onClick={() => this.updateUser(res, obj)}>
-              {formatMessage({ id: 'app.common.modify' })}
+              <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
             <a href="#" onClick={() => this.deleteUser(res, obj)}>
-              {formatMessage({ id: 'app.common.delete' })}
+              <IconFont type="icon-delete" className={styles['btn-icon']} />
             </a>
           </span>
         ),
@@ -575,7 +578,7 @@ class UserManagement extends Component {
             </Modal>
             {/* delete */}
             <Modal
-              title="CONFIRM"
+              title={formatMessage({ id: 'app.common.confirm' })}
               visible={this.state.deleteVisible}
               onOk={this.deleteConfirm}
               onCancel={this.deleteCancel}
@@ -637,8 +640,8 @@ class UserManagement extends Component {
               current={page.pageNumber}
               showSizeChanger
               showTotal={() =>
-                `Page ${page.pageNumber} of ${Math.ceil(
-                  userManagementData.totalCount / page.pageSize,
+                `Page ${(userManagementData.totalCount || 0) && page.pageNumber} of ${Math.ceil(
+                  (userManagementData.totalCount || 0) / page.pageSize,
                 )}`
               }
               onShowSizeChange={this.onShowSizeChange}

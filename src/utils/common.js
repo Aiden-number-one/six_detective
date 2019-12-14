@@ -99,17 +99,24 @@ const iframe = {
   // 质量问题分析
   '/etl-center/job-management': 'index.html#report-table-info-manage',
   // 任务管理
-  '/data-management/task-plan-setting': 'index.html#task-plan-setting',
+  '/etl-center/schedule-management': 'index.html#task-plan-setting',
   // 作业管理
-  '/etl-center/schedule-management': 'index.html#perform-monitoring',
+  '/etl-center/monitoring-management/monitoring': 'index.html#perform-monitoring',
   // 执行日志
-  '/data-management/log-query': 'index.html#log-query',
+  '/etl-center/monitoring-management/log-monitoring': 'index.html#log-query',
   // 数据源监控
   '/data-management/data-enquiry': 'index.html#datasource-change',
 };
 
-// const components = {
-// };
+const components = {
+  // '/etl-center/data-management/data-driver-management': './IframePage/IframePage',
+  // '/etl-center/data-management/data-sourcemanagement': './IframePage/IframePage',
+  // '/etl-center/task-management': './IframePage/IframePage',
+  // '/etl-center/job-management': './IframePage/IframePage',
+  // '/etl-center/schedule-management': './IframePage/IframePage',
+  // '/etl-center/monitoring-management/monitoring': './IframePage/IframePage',
+  // '/etl-center/monitoring-management/log-monitoring': './IframePage/IframePage',
+};
 
 const menuIcons = {
   Homepage: 'icon-Home',
@@ -121,7 +128,7 @@ const menuIcons = {
   Report: 'icon-report',
   Analysis: 'icon-analysis',
   'System Management': 'icon-systemmanagement',
-  'Alert Management': 'icon-jinggao',
+  'Alert Management': 'icon-alertmanagement',
 };
 
 // 数据类型
@@ -142,7 +149,7 @@ export {
   colors,
   status,
   iframe,
-  // components,
+  components,
   typeMap,
   menuIcons,
 };

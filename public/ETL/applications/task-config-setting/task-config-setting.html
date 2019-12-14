@@ -2,7 +2,7 @@
  * @Author: limin01
  * @Date: 2019-08-09 13:47:16
  * @LastEditors: lan
- * @LastEditTime: 2019-12-12 20:32:27
+ * @LastEditTime: 2019-12-14 18:19:15
  * @Description: 
  -->
 <style type="text/css">
@@ -2202,7 +2202,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title title-color-blue"> WebService Request </h4>
+                    <h4 class="modal-title title-color-blue"> WEB Task </h4>
                 </div>
                 <div class="modal-body" style="min-height: 300px;    overflow: auto;">
                     <div class="tabbable-line">
@@ -2262,7 +2262,7 @@
                                                 <span class="required" aria-required="true"> * </span><span>URL(root address)：</span>
                                             </label>
                                             <div class="form-group col-md-8">
-                                                <input type="text" class="form-control" maxlength="64" name="baseUrl" placeholder="64 characters maximum">
+                                                <input type="text" class="form-control" maxlength="256" name="baseUrl" placeholder="256 characters maximum">
                                             </div>
                                         </div>
                                         <div class="form-group" style="margin-bottom: 0;">
@@ -2279,7 +2279,7 @@
                                                     <span>Name：</span>
                                                 </label>
                                                 <div class="form-group col-md-8">
-                                                    <input type="text" class="form-control" maxlength="64" name="name" placeholder="64 characters maximum">
+                                                    <input type="text" class="form-control" maxlength="256" name="name" placeholder="256 characters maximum">
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
@@ -2287,7 +2287,7 @@
                                                     <span>Value：</span>
                                                 </label>
                                                 <div class="form-group col-md-8">
-                                                    <input type="text" class="form-control" maxlength="64" name="value" placeholder="64 characters maximum">
+                                                    <input type="text" class="form-control" maxlength="256" name="value" placeholder="256 characters maximum">
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
@@ -2317,7 +2317,7 @@
                                             </label>
                                             <div class="form-group col-md-8">
                                                 <span id='baseUrl'>10.201.62.105:8090</span>
-                                                <input type="text" class="form-control" style="width: 250px;" name="subUrl">
+                                                <input type="text" class="form-control" style="width: 250px;" name="subUrl" maxlength="256">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -2339,7 +2339,7 @@
                                                 <span class="required" aria-required="true"> * </span> <span>User Name：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control" name="requestUserName">
+                                                <input type="text" class="form-control" name="requestUserName" maxlength="256">
                                             </div>
                                         </div>
                                         <div class="form-group col-md-6">
@@ -2347,7 +2347,7 @@
                                                 <span class="required" aria-required="true"> * </span> <span>Password：</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control" name="requestSecretWord">
+                                                <input type="text" class="form-control" name="requestSecretWord" maxlength="256">
                                             </div>
                                         </div>
                                         </div>
@@ -2389,7 +2389,7 @@
                                                     <span>Name：</span>
                                                 </label>
                                                 <div class="form-group col-md-8">
-                                                    <input type="text" class="form-control" maxlength="64" name="name" placeholder="64 characters maximum">
+                                                    <input type="text" class="form-control" maxlength="256" name="name" placeholder="256 characters maximum">
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
@@ -2397,7 +2397,7 @@
                                                     <span>Value：</span>
                                                 </label>
                                                 <div class="form-group col-md-8">
-                                                    <input type="text" class="form-control" maxlength="64" name="value" placeholder="64 characters maximum">
+                                                    <input type="text" class="form-control" maxlength="256" name="value" placeholder="256 characters maximum">
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
@@ -2427,7 +2427,7 @@
                                                     <span>Name：</span>
                                                 </label>
                                                 <div class="form-group col-md-8">
-                                                    <input type="text" class="form-control" maxlength="64" name="name" placeholder="64 characters maximum">
+                                                    <input type="text" class="form-control" maxlength="256" name="name" placeholder="256 characters maximum">
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
@@ -2435,7 +2435,7 @@
                                                     <span>Successful：</span>
                                                 </label>
                                                 <div class="form-group col-md-8">
-                                                    <input type="text" class="form-control" maxlength="64" name="successful" placeholder="64 characters maximum">
+                                                    <input type="text" class="form-control" maxlength="256" name="successful" placeholder="256 characters maximum">
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
@@ -2443,7 +2443,7 @@
                                                     <span>Failed：</span>
                                                 </label>
                                                 <div class="form-group col-md-8">
-                                                    <input type="text" class="form-control" maxlength="64" name="failed" placeholder="64 characters maximum">
+                                                    <input type="text" class="form-control" maxlength="256" name="failed" placeholder="256 characters maximum">
                                                 </div>
                                             </div>
                                         </div>
