@@ -108,8 +108,15 @@ const iframe = {
   '/data-management/data-enquiry': 'index.html#datasource-change',
 };
 
-// const components = {
-// };
+const components = {
+  // '/etl-center/data-management/data-driver-management': './IframePage/IframePage',
+  // '/etl-center/data-management/data-sourcemanagement': './IframePage/IframePage',
+  // '/etl-center/task-management': './IframePage/IframePage',
+  // '/etl-center/job-management': './IframePage/IframePage',
+  // '/etl-center/schedule-management': './IframePage/IframePage',
+  // '/etl-center/monitoring-management/monitoring': './IframePage/IframePage',
+  // '/etl-center/monitoring-management/log-monitoring': './IframePage/IframePage',
+};
 
 const menuIcons = {
   Homepage: 'icon-Home',
@@ -121,7 +128,7 @@ const menuIcons = {
   Report: 'icon-report',
   Analysis: 'icon-analysis',
   'System Management': 'icon-systemmanagement',
-  'Alert Management': 'icon-jinggao',
+  'Alert Management': 'icon-alertmanagement',
 };
 
 // 数据类型
@@ -142,7 +149,7 @@ export {
   colors,
   status,
   iframe,
-  // components,
+  components,
   typeMap,
   menuIcons,
 };
