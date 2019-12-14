@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Button, Input, Modal, Table, Drawer, Pagination, Row, Col } from 'antd';
+import { Form, Button, Modal, Table, Drawer, Pagination } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 
@@ -8,45 +8,10 @@ import { formatMessage } from 'umi/locale';
 import styles from './CodeMaintenance.less';
 // import { thisExpression } from '@babel/types';
 import SearchForm from './components/SearchForm';
+import ModifyCode from './components/ModifyCode';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
-class CodeForm extends Component {
-  state = {};
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { codeId, dictItemId, dictItemIdName, sortNo } = this.props;
-    return (
-      <div>
-        <Form layout="inline" className={styles.formWrap}>
-          <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.codeID' })}>
-            {getFieldDecorator('codeId', {
-              initialValue: codeId || undefined,
-            })(<Input className={styles.inputValue} disabled></Input>)}
-          </Form.Item>
-          <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.subitemID' })}>
-            {getFieldDecorator('dictItemId', {
-              initialValue: dictItemId || undefined,
-            })(<Input className={styles.inputValue}></Input>)}
-          </Form.Item>
-          <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.subitemName' })}>
-            {getFieldDecorator('dictItemIdName', {
-              initialValue: dictItemIdName || undefined,
-            })(<Input className={styles.inputValue}></Input>)}
-          </Form.Item>
-          <Form.Item label={formatMessage({ id: 'systemManagement.codeMaintenance.sequence' })}>
-            {getFieldDecorator('sortNo', {
-              initialValue: sortNo || undefined,
-            })(<Input className={styles.inputValue}></Input>)}
-          </Form.Item>
-        </Form>
-      </div>
-    );
-  }
-}
-
-const NewCodeForm = Form.create({})(CodeForm);
 @connect(({ codeList, loading }) => ({
   loading: loading.effects,
   getCodeListData: codeList.data,
@@ -57,7 +22,6 @@ class CodeMaintenance extends Component {
 
   state = {
     codeVisible: false,
-    updateCodeItemVisible: false,
     deleteCodeItemVisible: false,
     codeName: '',
     // eslint-disable-next-line react/no-unused-state
@@ -74,7 +38,7 @@ class CodeMaintenance extends Component {
         ),
       },
       {
-        title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemID' }),
+        title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemId' }),
         dataIndex: 'subitemId',
         key: 'subitemId',
       },
@@ -139,6 +103,7 @@ class CodeMaintenance extends Component {
       pageNumber: 1,
       pageSize: 10,
     },
+    modifyFlag: false,
     codeId: '',
     itemPage: {
       pageNumber: '1',
@@ -146,9 +111,9 @@ class CodeMaintenance extends Component {
     },
     updateCodeItemParams: {
       codeId: '',
-      dictItemId: '',
-      dictItemIdName: '',
-      sortNo: '',
+      subitemId: '',
+      subitemName: '',
+      sequence: '',
     },
   };
 
@@ -159,83 +124,38 @@ class CodeMaintenance extends Component {
   }
 
   addCode = () => {
-    this.setState({ codeVisible: true });
+    this.setState({ codeVisible: true, modifyFlag: false });
   };
 
   codeConfirm = () => {
-    const { dispatch } = this.props;
-    this.codeFormRef.current.validateFields((err, values) => {
-      const params = {
-        codeId: this.state.codeId,
-        dictItemId: values.dictItemId,
-        dictItemIdName: values.dictItemIdName,
-        sortNo: values.sortNo,
-      };
-      dispatch({
-        type: 'codeList/addCodeItem',
-        payload: params,
-        callback: () => {
-          this.queryCodeItemList();
-        },
-      });
+    this.setState({ codeVisible: false }, () => {
+      this.queryCodeItemList();
     });
-    this.setState({ codeVisible: false });
   };
 
   codeCancel = () => {
     this.setState({ codeVisible: false });
   };
 
-  handleChange = () => {};
-
   updateCode = (res, recode) => {
+    const { codeId } = this.state;
     const newUpdateCodeItemParams = {
-      // eslint-disable-next-line react/no-access-state-in-setstate
-      codeId: `${this.state.codeId}`,
-      dictItemId: recode.dictItemId,
-      dictItemIdName: recode.dictItemIdName,
-      sortNo: recode.sortNo,
+      codeId,
+      subitemId: recode.subitemId,
+      subitemName: recode.subitemName,
+      sequence: recode.sequence,
     };
     this.setState({
-      updateCodeItemVisible: true,
-      // eslint-disable-next-line react/no-unused-state
+      codeVisible: true,
+      modifyFlag: true,
       updateCodeItemParams: newUpdateCodeItemParams,
-    });
-  };
-
-  updateCodeItemConfirm = () => {
-    const { dispatch } = this.props;
-    this.codeFormRef.current.validateFields((err, values) => {
-      const params = {
-        codeId: this.state.codeId,
-        dictItemId: this.state.updateCodeItemParams.dictItemId,
-        updDictItemId: values.dictItemId,
-        dictItemIdName: values.dictItemIdName,
-        sortNo: values.sortNo,
-      };
-      dispatch({
-        type: 'codeList/updateCodeItem',
-        payload: params,
-        callback: () => {
-          this.queryCodeItemList();
-        },
-      });
-    });
-    this.setState({
-      updateCodeItemVisible: false,
-    });
-  };
-
-  updateCodeItemCancel = () => {
-    this.setState({
-      updateCodeItemVisible: false,
     });
   };
 
   // 删除
   deleteCodeItem = (res, recode) => {
     const updateCodeItemParams = {
-      dictItemId: recode.dictItemId,
+      subitemId: recode.subitemId,
     };
     this.setState({
       deleteCodeItemVisible: true,
@@ -246,8 +166,9 @@ class CodeMaintenance extends Component {
   deleteCodeItemConfirm = () => {
     const { dispatch } = this.props;
     const params = {
+      operType: 'subitemDeleteBycodeId',
       codeId: this.state.codeId,
-      dictItemId: this.state.updateCodeItemParams.dictItemId,
+      subitemId: this.state.updateCodeItemParams.subitemId,
     };
     dispatch({
       type: 'codeList/deleteCodeItem',
@@ -266,10 +187,6 @@ class CodeMaintenance extends Component {
       deleteCodeItemVisible: false,
     });
   };
-
-  setServer = () => {};
-
-  handleSubmit = () => {};
 
   queryCodeList = () => {
     const { dispatch } = this.props;
@@ -320,18 +237,6 @@ class CodeMaintenance extends Component {
     });
   };
 
-  // pageChange = pagination => {
-  //   this.setState(
-  //     {
-  //       pageNumber: pagination.current,
-  //       pageSize: pagination.pageSize,
-  //     },
-  //     () => {
-  //       this.queryCodeList();
-  //     },
-  //   );
-  // };
-
   onShowSizeChange = (current, pageSize) => {
     const page = {
       pageNumber: current,
@@ -339,7 +244,6 @@ class CodeMaintenance extends Component {
     };
     this.setState(
       {
-        // eslint-disable-next-line react/no-unused-state
         page,
       },
       () => {
@@ -351,7 +255,6 @@ class CodeMaintenance extends Component {
   connectCodeList = record => {
     this.setState(
       {
-        // eslint-disable-next-line no-underscore-dangle
         codeId: record.codeId,
       },
       () => {
@@ -379,40 +282,16 @@ class CodeMaintenance extends Component {
     const { loading, getCodeListData, getCodeItemListData } = this.props;
     const totalCount = getCodeListData && getCodeListData.totalCount;
     const totalCountItem = getCodeItemListData && getCodeItemListData.totalCount;
-    const { page, itemPage, updateCodeItemParams } = this.state;
+    const { page, itemPage, updateCodeItemParams, modifyFlag } = this.state;
 
     const codeListData = getCodeListData && getCodeListData.items;
     const codeItemListData = getCodeItemListData && getCodeItemListData.items;
-    // eslint-disable-next-line no-unused-expressions
-    codeListData &&
-      codeListData.forEach((element, index) => {
-        // eslint-disable-next-line no-param-reassign
-        element.index = (this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1;
-      });
-    // eslint-disable-next-line no-unused-expressions
-    codeItemListData &&
-      codeItemListData.forEach((element, index) => {
-        // eslint-disable-next-line no-param-reassign
-        element.index =
-          (this.state.itemPage.pageNumber - 1) * this.state.itemPage.pageSize + index + 1;
-      });
 
     return (
       <PageHeaderWrapper>
         <Fragment>
           <div>
             <div>
-              {/* <ul className={styles.clearfix}>
-                <li className={styles.fl}>
-                  <span>
-                    {formatMessage({ id: 'systemManagement.codeMaintenance.codeName' })}：
-                  </span>
-                  <Input className={styles['login-name']} onChange={this.itemNameChange}></Input>
-                </li>
-                <li className={styles.fl}>
-                  <Button type="primary" icon="search" onClick={this.queryCode}></Button>
-                </li>
-              </ul> */}
               <NewSearchForm search={this.queryCode} ref={this.searchForm}></NewSearchForm>
             </div>
             <div>
@@ -440,102 +319,42 @@ class CodeMaintenance extends Component {
                 total={totalCount}
                 pageSize={page.pageSize}
               />
-              {/* <Pagination
-              showSizeChanger
-              showQuickJumper
-              total={totalCount}
-              showTotal={total => `总共${total}条`}
-              pageSizeOptions={['5', '10', '20', '30', '40']}
-              pageSize={pageSize}
-              onChange={this.pageChange}
-              onShowSizeChange={this.onShowSizeChange}
-            ></Pagination> */}
             </div>
           </div>
           <div>
             <div>
-              {/* <Button
-                type="primary"
-                onClick={() => {
-                  this.addCode();
-                }}
-              >
-                添加
-              </Button> */}
               <Drawer
-                // drawerStyle={
-                //   {
-                //     height: '200px',
-                //   }
-                // }
                 closable={false}
-                title="新增字典子项"
+                title={modifyFlag ? 'Modify Subiem' : 'Add Subitem'}
                 width={700}
                 onClose={this.codeCancel}
                 visible={this.state.codeVisible}
               >
                 {this.state.codeVisible && (
-                  <NewCodeForm ref={this.codeFormRef} codeId={this.state.codeId}></NewCodeForm>
+                  <ModifyCode
+                    modifyFlag={modifyFlag}
+                    codeId={this.state.codeId}
+                    updateCodeItemParams={updateCodeItemParams}
+                    onCancel={this.codeCancel}
+                    onSave={this.codeConfirm}
+                  ></ModifyCode>
                 )}
-                <Row
-                  type="flex"
-                  justify="end"
-                  style={{
-                    position: 'absolute',
-                    right: 0,
-                    bottom: 0,
-                    width: '100%',
-                    padding: '10px 16px',
-                    background: '#fff',
-                    textAlign: 'right',
-                  }}
-                >
-                  <Col>
-                    <Button onClick={this.updateCodeItemCancel}>CANCEL</Button>
-                    <Button type="primary" onClick={this.updateCodeItemConfirm}>
-                      SAVE
-                    </Button>
-                  </Col>
-                </Row>
               </Drawer>
-              {/* <Modal
-                title="新增字典子项"
-                visible={this.state.codeVisible}
-                onOk={this.codeConfirm}
-                onCancel={this.codeCancel}
-                cancelText={formatMessage({ id: 'app.common.cancel' })}
-                okText={formatMessage({ id: 'app.common.save' })}
-              >
-                <NewCodeForm ref={this.codeFormRef} codeId={this.state.codeId}></NewCodeForm>
-              </Modal> */}
-              {/* 修改 */}
-              <Modal
-                title="修改字典子项"
-                visible={this.state.updateCodeItemVisible}
-                onOk={this.updateCodeItemConfirm}
-                onCancel={this.updateCodeItemCancel}
-                cancelText={formatMessage({ id: 'app.common.cancel' })}
-                okText={formatMessage({ id: 'app.common.save' })}
-              >
-                <NewCodeForm ref={this.codeFormRef} {...updateCodeItemParams}></NewCodeForm>
-              </Modal>
-              {/* 删除 */}
               {/* 删除 */}
               <Modal
-                title="提示"
+                title={formatMessage({ id: 'app.common.confirm' })}
                 visible={this.state.deleteCodeItemVisible}
                 onOk={this.deleteCodeItemConfirm}
                 onCancel={this.deleteCodeItemCancel}
                 cancelText={formatMessage({ id: 'app.common.cancel' })}
-                okText={formatMessage({ id: 'app.common.save' })}
+                okText={formatMessage({ id: 'app.common.confirm' })}
               >
                 <div>
-                  <span>确定删除吗？</span>
+                  <span>Please confirm that you want to delete this record?</span>
                 </div>
               </Modal>
             </div>
             <div className={styles.content}>
-              {/* <TableHeader showEdit showSelect addTableData={() => this.addCode()} /> */}
               <div className={styles.tableTop}>
                 <Button onClick={this.addCode} type="primary" className="btn_usual">
                   + Add

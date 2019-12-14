@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-12-12 21:28:25
+ * @LastEditTime: 2019-12-13 17:23:46
  * @LastEditors: mus
  * @Email: mus@szkingdom.com
  */
@@ -24,6 +24,8 @@ export default WrapperComponent =>
       this.spreadSheet = null;
       // 点击单元格回调函数
       this.clickCellReflectFunc = () => {};
+      // 格式刷的回调函数
+      this.paintformatActiveFunc = () => {};
       // 点击单元格返回属性
       // 点击cell
       // this.clickCell = _.debounce(this.clickCell, 500);
@@ -74,41 +76,61 @@ export default WrapperComponent =>
           // { finalFirstRows: 0, finalLastRows: 0 },
           // { finalFirstRows: 3, finalLastRows: 10 },
         ],
-        isCalCulatorFormula: true, // 是否运算公式
-        isCalculatorDropdownRange: true, // 是否运算下拉项
+        isCalCulatorFormula: false, // 是否运算公式
+        isCalculatorDropdownRange: false, // 是否运算下拉项
         imageImg: document.querySelectorAll('.sheet-img-collection img')[0],
         imageFile: document.querySelectorAll('.sheet-img-collection img')[1],
         imageCheckedBox: document.querySelectorAll('.sheet-img-collection img')[2],
         imageUncheckedBox: document.querySelectorAll('.sheet-img-collection img')[3],
         contextMenuItems: [
+          // 自定义右键菜单内容 TODO: FIXME: 是否需要补充快捷键
+          { key: 'copy', title: 'contextmenu.copy' },
+          { key: 'cut', title: 'contextmenu.cut' },
           {
-            key: 'freezePanes',
-            isShow: true,
+            key: 'paste-options',
+            title: 'contextmenu.pasteOptions',
+            subItems: [
+              { key: 'paste', title: 'contextmenu.paste' },
+              { key: 'paste-value', title: 'contextmenu.pasteValue' },
+              { key: 'paste-format', title: 'contextmenu.pasteFormat' },
+            ],
           },
-          { key: 'divider', isShow: true },
+          { key: 'divider' },
           {
-            key: 'edit_modal',
-            title: '编辑',
-            isShow: true,
-            callback(params) {
-              console.table(params);
+            key: 'filter',
+            title: 'contextmenu.filter',
+            callback: (type, obj) => {
+              console.log(type, obj);
             },
           },
-          { key: 'divider', isShow: true },
           {
-            key: 'insert_modal',
-            title: '插入',
-            isShow: true,
-            callback(params) {
-              console.table(params);
+            key: 'sort',
+            title: 'contextmenu.sort',
+            callback: (type, obj) => {
+              console.log(type, obj);
+            },
+          },
+          { key: 'divider' },
+          {
+            key: 'insert-comment',
+            title: 'contextmenu.insertComment',
+            callback: (type, obj) => {
+              console.log(type, obj);
+            },
+          },
+          { key: 'divider' },
+          {
+            key: 'clear',
+            title: 'contextmenu.clear',
+            callback: (type, obj) => {
+              console.log(type, obj);
             },
           },
           {
-            key: 'delete_settings',
-            title: '删除',
-            isShow: true,
-            callback: params => {
-              console.table(params);
+            key: 'data-design',
+            title: 'contextmenu.dataDesign',
+            callback: (type, obj) => {
+              console.log(type, obj);
             },
           },
         ],
@@ -216,7 +238,7 @@ export default WrapperComponent =>
         ...options,
         // hideCol: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       };
-      window.xsObj.spreadsheet.locale('zhCn');
+      // window.xsObj.spreadsheet.locale('zhCn');
       this.spreadSheet = window.xsObj
         .spreadsheet('#x-spreadsheet', xsOptions)
         .loadData(data)
@@ -245,7 +267,8 @@ export default WrapperComponent =>
         data.paste('format', () => {});
         setTimeout(() => {
           toolbar.paintformatActive = () => false;
-        }, 0);
+          this.paintformatActiveFunc(toolbar.paintformatActive());
+        }, 100);
       }
       this.clickCellReflectFunc(data || {});
       // this.clickCellReflectFunc(data.getCellStyle(sri, sci) || {});
@@ -254,14 +277,17 @@ export default WrapperComponent =>
     // 设置cell属性
     setCellStyle = (property, value) => {
       const {
+        data,
         sheet,
         sheet: { cellAttrChange, toolbar },
       } = this.spreadSheet;
       if (property === 'paintformat') {
         // 对格式刷进行处理
         toolbar.paintformatActive = () => true;
+        this.paintformatActiveFunc(toolbar.paintformatActive());
       }
       cellAttrChange.call(sheet, property, value);
+      this.clickCellReflectFunc(data);
     };
 
     // 设置cellType
@@ -319,8 +345,16 @@ export default WrapperComponent =>
     };
 
     // 设置点击单元格的回调函数
-    setCellCallback = callback => {
-      this.clickCellReflectFunc = callback;
+    /**
+     * @description: 用于设置回调
+     * @param {function} 用于设置单元格样式的回调
+     * @param {function} 用于设置格式刷的回调
+     * @Author: mus
+     * @Date: 2019-12-13 11:22:43
+     */
+    setCellCallback = (callbackOne, callbackOneTwo) => {
+      this.clickCellReflectFunc = callbackOne;
+      this.paintformatActiveFunc = callbackOneTwo;
     };
 
     render() {

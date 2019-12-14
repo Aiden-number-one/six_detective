@@ -4,6 +4,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
+import IconFont from '@/components/IconFont';
 
 import styles from './MenuUserGroup.less';
 import SearchForm from './components/SearchForm';
@@ -54,10 +55,10 @@ class MenuUserGroup extends Component {
           render: (res, obj) => (
             <span className={styles.operation}>
               <a href="#" onClick={() => this.updateUser(res, obj)}>
-                {formatMessage({ id: 'app.common.modify' })}
+                <IconFont type="icon-edit" className={styles['btn-icon']} />
               </a>
               <a href="#" onClick={() => this.deleteUser(res, obj)}>
-                {formatMessage({ id: 'app.common.delete' })}
+                <IconFont type="icon-delete" className={styles['btn-icon']} />
               </a>
             </span>
           ),
@@ -306,7 +307,7 @@ class MenuUserGroup extends Component {
             showSizeChanger
             current={page.pageNumber}
             showTotal={() =>
-              `Page ${page.pageNumber} of ${Math.ceil(
+              `Page ${(menuUserGroup.totalCount || 0) && page.pageNumber} of ${Math.ceil(
                 (menuUserGroup.totalCount || 0) / page.pageSize,
               )}`
             }
