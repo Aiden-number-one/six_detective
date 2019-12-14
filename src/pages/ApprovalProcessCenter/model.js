@@ -43,9 +43,9 @@ export async function setTaskSubmit({ taskCode, userId, epCname }) {
     data: { taskCode: taskCode.toString(), userId: userId.toString(), epCname },
   });
 }
-export async function approveAndReject({ taskCode, userId, type }) {
+export async function approveAndReject({ taskCode, userId, type, epCname }) {
   return request('set_task_approve_and_reject', {
-    data: { taskCode: taskCode.toString(), userId: userId.toString(), type },
+    data: { taskCode: taskCode.toString(), userId: userId.toString(), type, epCname },
   });
 }
 export async function getTaskGroup({ taskCode }) {
@@ -187,8 +187,8 @@ export default {
       }
     },
     *approveAndReject({ payload, callback }, { call }) {
-      const { taskCode, userId, type } = payload || [];
-      const { err } = yield call(approveAndReject, { taskCode, userId, type });
+      const { taskCode, userId, type, epCname } = payload || [];
+      const { err } = yield call(approveAndReject, { taskCode, userId, type, epCname });
       if (err) {
         message.error('failure');
       } else {

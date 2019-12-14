@@ -12,6 +12,7 @@ import {
   Drawer,
   Radio,
   message,
+  Modal,
 } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
@@ -26,6 +27,14 @@ const { Paragraph, Text } = Typography;
 // export function TaskDes({ detailItem }) {
 //   return <div></div>;
 // }
+
+function ConfirmModel({ title, confirmVisible, comfirm, closeModel }) {
+  return (
+    <Modal title={title} visible={confirmVisible} onOk={comfirm} onCancel={closeModel}>
+      <p>Do you comfirm to reject this task?</p>
+    </Modal>
+  );
+}
 
 function DetailForm({ form, detailItem, task }) {
   const { getFieldDecorator } = form;
@@ -215,6 +224,7 @@ function ProcessDetail({
   const [visible, setVisible] = useState(false);
   const [radioValue, setRadioValue] = useState('');
   const [submitType, setSubmitType] = useState('');
+  const [confirmVisible, setConfirmVisible] = useState(false);
   const newDetailForm = React.createRef();
   console.log('detailItem--000-->', radioValue, taskGroup);
 
@@ -241,12 +251,16 @@ function ProcessDetail({
   }, [task]);
 
   function submitDrawer(type) {
+    setSubmitType(type);
+    if (type === 'reject') {
+      setConfirmVisible(true);
+      return;
+    }
     if (taskGroup && !taskGroup.nextRelateNo) {
       submitOrApproveTask(type);
       return;
     }
     if (taskGroup) {
-      setSubmitType(type);
       setVisible(true);
       getUserList();
       return;
@@ -255,12 +269,33 @@ function ProcessDetail({
   }
 
   function submitOrApproveTask(type) {
+    let epCname = '';
+    if (type === 'submit') {
+      newDetailForm.current.validateFields((err, values) => {
+        epCname = [];
+        const detailData = detailItems.data;
+        if (!err) {
+          console.log('Received values of form: ', values);
+          // eslint-disable-next-line array-callback-return
+          detailData.map(item => {
+            if (item.isEdit) {
+              epCname.push(values[item.key]);
+            }
+          });
+          epCname = epCname.join(',');
+        }
+      });
+    }
+    if (type === 'reject') {
+      setConfirmVisible(false);
+    }
     dispatch({
       type: 'approvalCenter/approveAndReject',
       payload: {
         taskCode: task.taskCode,
         type,
         userId: radioValue,
+        epCname,
       },
       callback: () => {
         dispatch({
@@ -297,7 +332,6 @@ function ProcessDetail({
           }
         });
         epCname = epCname.join(',');
-        console.log('epCname---->', epCname);
       }
       dispatch({
         type: 'approvalCenter/saveTask',
@@ -310,136 +344,143 @@ function ProcessDetail({
   }
 
   return (
-    <Row className={styles['detail-container']} gutter={16}>
-      <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
-        <Tabs
-          hideAdd
-          className={styles['detail-des']}
-          defaultActiveKey="1"
-          tabBarExtraContent={
-            <IconFont
-              type={isFullscreen ? 'iconfullscreen-exit' : 'iconfull-screen'}
-              className={styles['fullscreen-icon']}
-              onClick={() => setFullscreen(!isFullscreen)}
-            />
-          }
-        >
-          <TabPane className={styles['tab-content']} closable={false} tab="Task Detail" key="">
-            <DetailList
-              ref={newDetailForm}
-              saveTask={saveTask}
-              detailItem={detailItems}
-              task={task}
-            />
-            <Drawer
-              title="Assign to"
-              width={500}
-              visible={visible}
-              onClose={() => setVisible(false)}
-              bodyStyle={{ paddingBottom: 80 }}
-            >
-              <Radio.Group
-                options={submitRadioList}
-                onChange={e => setRadioValue(e.target.value)}
-                value={radioValue}
-              ></Radio.Group>
-              <div
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  bottom: 0,
-                  width: '100%',
-                  borderTop: '1px solid #e9e9e9',
-                  padding: '10px 16px',
-                  background: '#fff',
-                  textAlign: 'right',
-                }}
+    <>
+      <ConfirmModel
+        title="CONFIRM"
+        closeModel={() => setConfirmVisible(false)}
+        confirmVisible={confirmVisible}
+        comfirm={() => submitOrApproveTask(submitType)}
+      />
+      <Row className={styles['detail-container']} gutter={16}>
+        <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
+          <Tabs
+            hideAdd
+            className={styles['detail-des']}
+            defaultActiveKey="1"
+            tabBarExtraContent={
+              <IconFont
+                type={isFullscreen ? 'iconfullscreen-exit' : 'iconfull-screen'}
+                className={styles['fullscreen-icon']}
+                onClick={() => setFullscreen(!isFullscreen)}
+              />
+            }
+          >
+            <TabPane className={styles['tab-content']} closable={false} tab="Task Detail" key="">
+              <DetailList
+                ref={newDetailForm}
+                saveTask={saveTask}
+                detailItem={detailItems}
+                task={task}
+              />
+              <Drawer
+                title="Assign to"
+                width={500}
+                visible={visible}
+                onClose={() => setVisible(false)}
+                bodyStyle={{ paddingBottom: 80 }}
               >
-                <Button onClick={() => submitOrApproveTask(submitType)} type="primary">
-                  Save
-                </Button>
-                <Button onClick={() => setVisible(false)} style={{ marginRight: 12 }}>
-                  Cancel
-                </Button>
-              </div>
-            </Drawer>
-          </TabPane>
-        </Tabs>
-      </Col>
-      <Col span={8}>
-        <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
-          <TabPane tab="Approval History" key="1">
-            <ul className={styles['comment-ul']}>
-              {alert.comments &&
-                alert.comments.map(comment => (
-                  <AlertComment comment={comment} key={comment.time} />
-                ))}
-            </ul>
-            <div className={styles['comment-box']}>
-              <TextArea placeholder="COMMENT" className={styles.txt} />
-              <Row
-                className={styles['comment-commit']}
-                type="flex"
-                align="middle"
-                justify="space-between"
-              >
-                {/* <Col span={11} offset={1}>
+                <Radio.Group
+                  options={submitRadioList}
+                  onChange={e => setRadioValue(e.target.value)}
+                  value={radioValue}
+                ></Radio.Group>
+                <div
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    bottom: 0,
+                    width: '100%',
+                    borderTop: '1px solid #e9e9e9',
+                    padding: '10px 16px',
+                    background: '#fff',
+                    textAlign: 'right',
+                  }}
+                >
+                  <Button onClick={() => submitOrApproveTask(submitType)} type="primary">
+                    Save
+                  </Button>
+                  <Button onClick={() => setVisible(false)} style={{ marginRight: 12 }}>
+                    Cancel
+                  </Button>
+                </div>
+              </Drawer>
+            </TabPane>
+          </Tabs>
+        </Col>
+        <Col span={8}>
+          <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
+            <TabPane tab="Approval History" key="1">
+              <ul className={styles['comment-ul']}>
+                {alert.comments &&
+                  alert.comments.map(comment => (
+                    <AlertComment comment={comment} key={comment.time} />
+                  ))}
+              </ul>
+              <div className={styles['comment-box']}>
+                <TextArea placeholder="COMMENT" className={styles.txt} />
+                <Row
+                  className={styles['comment-commit']}
+                  type="flex"
+                  align="middle"
+                  justify="space-between"
+                >
+                  {/* <Col span={11} offset={1}>
                   <Button type="primary">Phase</Button>
                 </Col> */}
 
-                {detailItems.isStarter ? (
-                  <>
-                    <Col span={6}>
-                      <Button
-                        style={{ margin: '0 10px' }}
-                        type="primary"
-                        onClick={() => submitDrawer('submit')}
-                      >
-                        Submit
-                      </Button>
-                    </Col>
-                    <Col span={6} align="right">
-                      <Button style={{ margin: '0 10px' }} type="primary" onClick={saveTask}>
-                        Save
-                      </Button>
-                    </Col>
-                  </>
-                ) : (
-                  <>
-                    <Col span={6}>
-                      <Button
-                        style={{ margin: '0 10px' }}
-                        type="primary"
-                        onClick={() => submitDrawer('pass')}
-                      >
-                        Approve
-                      </Button>
-                    </Col>
-                    <Col span={6}>
-                      <Button
-                        style={{ margin: '0 10px' }}
-                        type="primary"
-                        onClick={() => submitDrawer('reject')}
-                      >
-                        Reject
-                      </Button>
-                    </Col>
-                  </>
-                )}
+                  {detailItems.isStarter ? (
+                    <>
+                      <Col span={6}>
+                        <Button
+                          style={{ margin: '0 10px' }}
+                          type="primary"
+                          onClick={() => submitDrawer('submit')}
+                        >
+                          Submit
+                        </Button>
+                      </Col>
+                      <Col span={6} align="right">
+                        <Button style={{ margin: '0 10px' }} type="primary" onClick={saveTask}>
+                          Save
+                        </Button>
+                      </Col>
+                    </>
+                  ) : (
+                    <>
+                      <Col span={6}>
+                        <Button
+                          style={{ margin: '0 10px' }}
+                          type="primary"
+                          onClick={() => submitDrawer('pass')}
+                        >
+                          Approve
+                        </Button>
+                      </Col>
+                      <Col span={6}>
+                        <Button
+                          style={{ margin: '0 10px' }}
+                          type="primary"
+                          onClick={() => submitDrawer('reject')}
+                        >
+                          Reject
+                        </Button>
+                      </Col>
+                    </>
+                  )}
 
-                {/* <Col span={6}>attachments</Col> */}
+                  {/* <Col span={6}>attachments</Col> */}
+                </Row>
+              </div>
+            </TabPane>
+            <TabPane className={styles['tab-content']} tab="Task Lifecycle" key="2">
+              <Row gutter={[10, 10]} style={{ height: 440, overflowY: 'auto' }}>
+                {alert.logs && alert.logs.map(log => <AlertLog log={log} key={log.time} />)}
               </Row>
-            </div>
-          </TabPane>
-          <TabPane className={styles['tab-content']} tab="Task Lifecycle" key="2">
-            <Row gutter={[10, 10]} style={{ height: 440, overflowY: 'auto' }}>
-              {alert.logs && alert.logs.map(log => <AlertLog log={log} key={log.time} />)}
-            </Row>
-          </TabPane>
-        </Tabs>
-      </Col>
-      {/* <FormattedMessage id="alert-center.attachment-des" values={{ count: 7, size: 18 }} /> */}
-    </Row>
+            </TabPane>
+          </Tabs>
+        </Col>
+      </Row>
+    </>
   );
 }
 
