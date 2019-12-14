@@ -3,7 +3,7 @@ import { Row, Col, Button, Form, Input, message, Select } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
-// import styles from '../AlertUserGroup.less';
+// import styles from '../messageContentTemplate.less';
 
 // import ClassifyTree from '@/components/ClassifyTree';
 
@@ -115,12 +115,12 @@ class FormUser extends Component {
 
 const NewFormUser = Form.create()(FormUser);
 
-@connect(({ alertUserGroup, loading }) => ({
+@connect(({ messageContentTemplate, loading }) => ({
   loading: loading.effects,
-  userGroup: alertUserGroup.saveUser,
-  updateGroup: alertUserGroup.updateData,
+  userGroup: messageContentTemplate.saveUser,
+  updateGroup: messageContentTemplate.updateData,
 }))
-class NewUser extends Component {
+class ModifyTemplate extends Component {
   newUserRef = React.createRef();
 
   constructor(props) {
@@ -161,7 +161,7 @@ class NewUser extends Component {
         };
         // debugger
         dispatch({
-          type: 'alertUserGroup/newAlertUser',
+          type: 'messageContentTemplate/newAlertUser',
           payload: param,
           callback: () => {
             message.success('success');
@@ -181,7 +181,7 @@ class NewUser extends Component {
           content: values.content,
         };
         dispatch({
-          type: 'alertUserGroup/updateUserAlert',
+          type: 'messageContentTemplate/updateUserAlert',
           payload: params,
           callback: () => {
             this.props.onSave();
@@ -225,4 +225,4 @@ class NewUser extends Component {
   }
 }
 
-export default NewUser;
+export default ModifyTemplate;
