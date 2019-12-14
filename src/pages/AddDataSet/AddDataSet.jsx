@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime: 2019-12-12 14:36:23
+ * @LastEditTime: 2019-12-13 15:14:14
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -59,6 +59,7 @@ class AddDataSet extends PureComponent {
     },
     AlterDataSetName: true,
     tableView: 'data',
+    pageNumber: '1',
   };
 
   componentDidMount() {
@@ -246,6 +247,13 @@ class AddDataSet extends PureComponent {
     });
   };
 
+  // 表格分页
+  pageChange = pageNumber => {
+    this.setState({
+      pageNumber,
+    });
+  };
+
   render() {
     const {
       dataSourceList,
@@ -259,7 +267,7 @@ class AddDataSet extends PureComponent {
       // targetObj,
       // column2,
     } = this.props;
-    const { AlterDataSetName } = this.state;
+    const { AlterDataSetName, pageNumber } = this.state;
     const renderColumn = this.perfectColumn();
     return (
       <DndProvider backend={HTML5Backend}>
@@ -548,14 +556,24 @@ class AddDataSet extends PureComponent {
                       bordered
                       columns={renderColumn}
                       dataSource={tableData}
-                      pagination={{ pageSize: defaultPageSize, size: 'small' }}
+                      pagination={{
+                        pageSize: defaultPageSize,
+                        showTotal: () =>
+                          `Page ${pageNumber.toString()} of ${Math.ceil(
+                            20 / defaultPageSize,
+                          ).toString()}`,
+
+                        current: pageNumber,
+                        total: 20,
+                        onChange: this.pageChange,
+                        size: 'small',
+                      }}
                       // pagination={{ pageSize: 5 }}
                     />
                   )}
                   {this.state.tableView === 'attr' && (
                     <Table
                       className={styles.editDataSetTable}
-                      bordered
                       // view={this.state.view}
                       // tableData2={tableData2}
                       // dispatch={dispatch}

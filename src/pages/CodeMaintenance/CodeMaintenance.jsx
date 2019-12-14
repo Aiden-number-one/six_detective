@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Button, Input, Modal, Table, Drawer, Pagination } from 'antd';
+import { Form, Button, Input, Modal, Table, Drawer, Pagination, Row, Col } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 
 // import TableHeader from '@/components/TableHeader';
 import styles from './CodeMaintenance.less';
 // import { thisExpression } from '@babel/types';
+import SearchForm from './components/SearchForm';
+
+const NewSearchForm = Form.create({})(SearchForm);
 
 class CodeForm extends Component {
   state = {};
@@ -50,10 +53,13 @@ const NewCodeForm = Form.create({})(CodeForm);
   getCodeItemListData: codeList.itemData,
 }))
 class CodeMaintenance extends Component {
+  searchForm = React.createRef();
+
   state = {
     codeVisible: false,
     updateCodeItemVisible: false,
     deleteCodeItemVisible: false,
+    codeName: '',
     // eslint-disable-next-line react/no-unused-state
     itemNameValue: '',
     columns: [
@@ -61,21 +67,26 @@ class CodeMaintenance extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
+        render: (res, recode, index) => (
+          <span>
+            {(this.state.itemPage.pageNumber - 1) * this.state.itemPage.pageSize + index + 1}
+          </span>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemID' }),
-        dataIndex: 'dictItemId',
-        key: 'dictItemId',
+        dataIndex: 'subitemId',
+        key: 'subitemId',
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemName' }),
-        dataIndex: 'dictItemIdName',
-        key: 'dictItemIdName',
+        dataIndex: 'subitemName',
+        key: 'subitemName',
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.sequence' }),
-        dataIndex: 'sortNo',
-        key: 'sortNo',
+        dataIndex: 'sequence',
+        key: 'sequence',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -109,6 +120,9 @@ class CodeMaintenance extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
+        render: (res, recode, index) => (
+          <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.codeID' }),
@@ -259,11 +273,12 @@ class CodeMaintenance extends Component {
 
   queryCodeList = () => {
     const { dispatch } = this.props;
-    const { page } = this.state;
+    const { page, codeName } = this.state;
     const params = {
       pageNumber: page.pageNumber.toString(),
       pageSize: page.pageSize.toString(),
       operType: 'codeQuery',
+      codeName,
     };
     dispatch({
       type: 'codeList/getCodeList',
@@ -290,7 +305,19 @@ class CodeMaintenance extends Component {
   };
 
   queryCode = () => {
-    this.queryCodeList();
+    this.searchForm.current.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState(
+        {
+          codeName: values.codeName,
+        },
+        () => {
+          this.queryCodeList();
+        },
+      );
+    });
   };
 
   // pageChange = pagination => {
@@ -343,7 +370,7 @@ class CodeMaintenance extends Component {
       codeId: `${this.state.codeId}`,
     };
     dispatch({
-      type: 'codeList/getCodeList',
+      type: 'codeList/getCodeItemList',
       payload: params,
     });
   };
@@ -375,7 +402,7 @@ class CodeMaintenance extends Component {
         <Fragment>
           <div>
             <div>
-              <ul className={styles.clearfix}>
+              {/* <ul className={styles.clearfix}>
                 <li className={styles.fl}>
                   <span>
                     {formatMessage({ id: 'systemManagement.codeMaintenance.codeName' })}：
@@ -385,7 +412,8 @@ class CodeMaintenance extends Component {
                 <li className={styles.fl}>
                   <Button type="primary" icon="search" onClick={this.queryCode}></Button>
                 </li>
-              </ul>
+              </ul> */}
+              <NewSearchForm search={this.queryCode} ref={this.searchForm}></NewSearchForm>
             </div>
             <div>
               <Table
@@ -449,6 +477,26 @@ class CodeMaintenance extends Component {
                 {this.state.codeVisible && (
                   <NewCodeForm ref={this.codeFormRef} codeId={this.state.codeId}></NewCodeForm>
                 )}
+                <Row
+                  type="flex"
+                  justify="end"
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    bottom: 0,
+                    width: '100%',
+                    padding: '10px 16px',
+                    background: '#fff',
+                    textAlign: 'right',
+                  }}
+                >
+                  <Col>
+                    <Button onClick={this.updateCodeItemCancel}>CANCEL</Button>
+                    <Button type="primary" onClick={this.updateCodeItemConfirm}>
+                      SAVE
+                    </Button>
+                  </Col>
+                </Row>
               </Drawer>
               {/* <Modal
                 title="新增字典子项"

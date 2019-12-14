@@ -91,19 +91,19 @@ const colors = [
 // iframe 映射
 const iframe = {
   // 数据连接
-  '/data-management/data-maintenance': 'index.html#data-source-configuration',
+  '/etl-center/data-management/data-sourcemanagement': 'index.html#data-source-configuration',
   // 驱动管理
-  '/data-management/drive-management': 'index.html#data-driven',
+  '/etl-center/data-management/data-driver-management': 'index.html#data-driven',
   // 规则管理
-  '/data-management/task-config-setting': 'index.html#task-config-setting',
+  '/etl-center/task-management': 'index.html#task-config-setting',
   // 质量问题分析
-  '/data-management/report-table-info-manage': 'index.html#report-table-info-manage',
+  '/etl-center/job-management': 'index.html#report-table-info-manage',
   // 任务管理
-  '/data-management/task-plan-setting': 'index.html#task-plan-setting',
+  '/etl-center/schedule-management': 'index.html#task-plan-setting',
   // 作业管理
-  '/data-management/perform-monitoring': 'index.html#perform-monitoring',
+  '/etl-center/monitoring-management/monitoring': 'index.html#perform-monitoring',
   // 执行日志
-  '/data-management/log-query': 'index.html#log-query',
+  '/etl-center/monitoring-management/log-monitoring': 'index.html#log-query',
   // 数据源监控
   '/data-management/data-enquiry': 'index.html#datasource-change',
 };
@@ -112,12 +112,15 @@ const iframe = {
 // };
 
 const menuIcons = {
-  'ETL Center': 'icon-zhuxian',
-  'Account Management': 'icon-user',
-  Surveillance: 'icon-shipin',
-  Report: 'icon-text',
-  Analysis: 'icon-chartpie',
-  'System Management': 'icon-diannao',
+  Homepage: 'icon-Home',
+  'Data Module': 'icon-data',
+  'Account Module': 'icon-account',
+  'ETL Center': 'icon-ETLCenter',
+  'Account Management': 'icon-surveillance',
+  Surveillance: 'icon-surveillance',
+  Report: 'icon-report',
+  Analysis: 'icon-analysis',
+  'System Management': 'icon-systemmanagement',
   'Alert Management': 'icon-jinggao',
 };
 

@@ -6,10 +6,21 @@
     background-color: #fff;
   }
   .ant-table-tbody tr {
-    td,
-    &:hover {
-      background-color: #fff;
+    &.active {
+      color: #10416c;
+      background: rgba(242, 246, 248, 1);
     }
+  }
+  .ant-list-bordered .ant-list-header {
+    padding: 0;
+  }
+  .ant-radio-wrapper {
+    display: block;
+  }
+  .ant-input[disabled] {
+    color: rgba(0, 0, 0, 0.25);
+    background-color: #fff;
+    border: none;
   }
 }
 
@@ -24,7 +35,8 @@
   .btns {
     margin: 10px 0;
     .btn-icon {
-      font-size: 18px;
+      color: #464c51 !important;
+      font-size: 14px !important;
       vertical-align: middle;
     }
     .icon {
@@ -58,6 +70,20 @@
     overflow: hidden;
     background-color: #fff;
   }
+  .ListBox {
+    padding-bottom: 18px;
+    .ListItem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      p {
+        width: 200px;
+        margin: 0;
+      }
+    }
+  }
+
   .detail-des {
     background-color: #fff;
     box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);

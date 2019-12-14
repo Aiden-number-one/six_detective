@@ -30,6 +30,14 @@ class AlertUserGroup extends Component {
       groupMenuInfo: {},
       columns: [
         {
+          title: formatMessage({ id: 'app.common.number' }),
+          dataIndex: 'index',
+          key: 'index',
+          render: (res, recode, index) => (
+            <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+          ),
+        },
+        {
           title: formatMessage({ id: 'systemManagement.userMaintenance.name' }),
           dataIndex: 'groupName',
           key: 'groupName',
@@ -280,7 +288,7 @@ class AlertUserGroup extends Component {
         <div className={styles.content}>
           <div className={styles.tableTop}>
             <Button onClick={this.newUser} type="primary" className="btn_usual">
-              + Alert User Group
+              + New Alert Group
             </Button>
           </div>
           <Table
@@ -297,7 +305,7 @@ class AlertUserGroup extends Component {
             current={page.pageNumber}
             showTotal={() =>
               `Page ${page.pageNumber.toString()} of ${Math.ceil(
-                menuUserGroup.totalCount / page.pageSize,
+                (menuUserGroup.totalCount || 0) / page.pageSize,
               ).toString()}`
             }
             onShowSizeChange={this.onShowSizeChange}

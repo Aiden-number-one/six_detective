@@ -30,6 +30,275 @@ export default [
         component: './Monitor/Monitor',
         hideInMenu: true,
       },
+      // homepage
+      {
+        path: '/homepage',
+        name: 'Homepage',
+        routes: [
+          {
+            path: '/homepage/homepage',
+            name: 'Homepage',
+            component: './Monitor/Monitor',
+          },
+          {
+            path: '/homepage/alert-center',
+            name: 'Alert Center',
+            component: './AlertCenter/Alert',
+          },
+          {
+            path: '/homepage/information',
+            name: 'Information Center',
+            component: './AlertCenter/Information',
+            hideInMenu: true,
+          },
+        ],
+      },
+      // Report
+      {
+        path: '/report',
+        name: 'Report',
+        routes: [
+          {
+            path: '/report/report-designer',
+            name: 'Report Designer',
+            routes: [
+              {
+                path: '/report/report-designer/report-designer',
+                name: 'Report Designer',
+                // component: './ReportDesigner/ReportDesigner',
+                component: './Page404',
+              },
+              {
+                path: '/report/report-designer/dataset-mamagement',
+                name: 'Dataset Mamagement',
+                component: './DatasetManagement/DatasetManagement',
+              },
+            ],
+          },
+          {
+            path: '/report/report-designer/high-sla-reports',
+            name: 'highSlaReports',
+            component: './Page404',
+            hideInMenu: true,
+          },
+          {
+            path: '/report/report-designer/visualization-dashboard',
+            name: 'visualizationDashboard',
+            component: './Page404',
+            hideInMenu: true,
+          },
+        ],
+      },
+      // Data Module
+      {
+        path: '/data-module',
+        name: 'Data Module',
+        routes: [
+          {
+            path: '/data-module/data-import',
+            name: 'Data Import',
+            routes: [
+              {
+                path: '/data-module/data-import/lop-data-import',
+                name: 'LOP Data Import',
+                component: './DataImportLog/Lop',
+              },
+              {
+                path: '/data-module/data-import/market-data-dirs-import',
+                name: 'Market Data DIRS Import',
+                component: './DataImportLog/Market',
+              },
+              {
+                path: '/data-module/data-import/market-data-omd-import',
+                name: 'Market Data OMD Import',
+                component: './DataImportLog/Market',
+              },
+            ],
+          },
+          {
+            path: '/data-module/data-enquiry',
+            name: 'Data Enquiry',
+            routes: [
+              {
+                path: '/data-module/data-enquiry/hkfe-market-data',
+                name: 'HKFE Market Data',
+                component: './Page404',
+              },
+              {
+                path: '/data-module/data-enquiry/hkfe-lop-data',
+                name: 'HKFE LOP Data',
+                component: './Page404',
+              },
+              {
+                path: '/data-module/data-enquiry/sehk-market-data',
+                name: 'SEHK Market Data',
+                component: './Page404',
+              },
+              {
+                path: '/data-module/data-enquiry/sehk-lop-data',
+                name: 'SEHK LOP Data',
+                component: './Page404',
+              },
+            ],
+          },
+          {
+            path: '/data-module/data-processing',
+            name: 'Data Processing',
+            component: './Page404',
+          },
+        ],
+      },
+      // Account Module
+      {
+        path: '/account-module',
+        name: 'Account Module',
+        routes: [
+          {
+            path: '/account-module/data-import',
+            name: 'Data Import',
+            component: './Page404',
+          },
+          {
+            path: '/account-module/account-information',
+            name: 'Account Information',
+            component: './Page404',
+          },
+          {
+            path: '/account-module/submitter-information',
+            name: 'Submitter Information',
+            component: './Page404',
+          },
+        ],
+      },
+      // ETL center
+      {
+        path: '/etl-center',
+        name: 'ETL Center',
+        routes: [
+          {
+            path: '/etl-center/data-management',
+            name: 'Data Management',
+            routes: [
+              {
+                path: '/etl-center/data-management/data-driver-management',
+                name: 'Data Driver Management',
+                component: './IframePage/IframePage',
+              },
+              {
+                path: '/etl-center/data-management/data-sourcemanagement',
+                name: 'Data Source Management',
+                component: './IframePage/IframePage',
+              },
+            ],
+          },
+          {
+            path: '/etl-center/task-management',
+            name: 'Task Management',
+            component: './IframePage/IframePage',
+          },
+          {
+            path: '/etl-center/job-management',
+            name: 'Job Management',
+            component: './IframePage/IframePage',
+          },
+          {
+            path: '/etl-center/schedule-management',
+            name: 'Schedule Management',
+            component: './IframePage/IframePage',
+          },
+          {
+            path: '/etl-center/monitoring-management',
+            name: 'Monitoring Management',
+            routes: [
+              {
+                path: '/etl-center/monitoring-management/monitoring',
+                name: 'Monitoring',
+                component: './IframePage/IframePage',
+              },
+              {
+                path: '/etl-center/monitoring-management/log-monitoring',
+                name: 'Log Monitoring',
+                component: './IframePage/IframePage',
+              },
+            ],
+          },
+          {
+            path: '/etl-center/datasource-change',
+            name: 'Data Source Change',
+            component: './IframePage/IframePage',
+          },
+        ],
+      },
+      // System Management
+      {
+        path: '/system-management',
+        name: 'System Management',
+        routes: [
+          {
+            path: '/system-management/approval-process-management',
+            name: 'Approval Process Management',
+            routes: [
+              {
+                path: '/system-management/approval-process-management/approval-process-flow-design',
+                name: 'Approval Process Flow Design',
+                component: './Approval/ApprovalDesign/ApprovalDesign',
+              },
+              {
+                path: '/system-management/approval-process-management/approval-process-auditor',
+                name: 'Approval Process Auditor',
+                component: './Approval/ApprovalAuditor/ApprovalAuditor',
+              },
+              {
+                path: '/system-management/approval-process-management/approval-process-configuration',
+                name: 'Approval Process Configuration',
+                component: './Approval/ApprovalConfiguration/ApprovalConfiguration',
+              },
+            ],
+          },
+          {
+            path: '/system-management/user-maintenance',
+            name: 'User Maintenance',
+            component: './UserManagement/UserManagement',
+          },
+          {
+            path: '/system-management/menu-user-group',
+            name: 'Menu User Group',
+            component: './MenuUserGroup/MenuUserGroup',
+          },
+          {
+            path: '/system-management/alert-user-group',
+            name: 'Alert User Group',
+            component: './AlertUserGroup/AlertUserGroup',
+          },
+          {
+            path: '/system-management/email-parameter',
+            name: 'Email Parameter',
+            component: './EmailParameter/EmailParameter',
+          },
+          {
+            path: '/system-management/message-content-template',
+            name: 'Message Content Template',
+            component: './MessageContentTemplate/MessageContentTemplate',
+          },
+          {
+            path: '/system-management/audit-trail-logging',
+            name: 'Audit Trail Logging',
+            component: './AuditLog/AuditLog',
+          },
+          {
+            path: '/system-management/code-maintenance',
+            name: 'Code Maintenance',
+            component: './CodeMaintenance/CodeMaintenance',
+          },
+          {
+            path: '/system-management/system-parameters',
+            name: 'System Parameters',
+            component: './SystemParameters/SystemParameters',
+          },
+        ],
+      },
+
+      // 后面的没改过
       {
         path: '/data-source',
         name: 'dataSource',
@@ -58,62 +327,6 @@ export default [
             path: '/data-management/data-processing',
             name: 'dataProcessing',
             component: './RulesEngine/RulesEngine',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#datasource-change',
-            path: '/data-management/data-enquiry',
-            name: 'datasourceChange',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#data-source-configuration',
-            path: '/data-management/data-maintenance',
-            name: 'dataMaintenance',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#data-driven',
-            path: '/data-management/drive-management',
-            name: 'driveManagement',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#task-config-setting',
-            path: '/data-management/task-config-setting',
-            name: 'taskConfigSetting',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#report-table-info-manage',
-            path: '/data-management/report-table-info-manage',
-            name: 'jobManage',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#task-plan-setting',
-            path: '/data-management/task-plan-setting',
-            name: 'taskPlanSetting',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#perform-monitoring',
-            path: '/data-management/perform-monitoring',
-            name: 'performMonitoring',
-            component: './IframePage/IframePage',
-          },
-          {
-            isIframe: true,
-            iframeUrl: 'http://localhost:8000/ETL/index.html#log-query',
-            path: '/data-management/log-query',
-            name: 'logQuery',
-            component: './IframePage/IframePage',
           },
           {
             path: '/data-management/task-switch',
@@ -169,28 +382,6 @@ export default [
             path: '/surveillance/modal-management',
             name: 'modalManagement',
             component: './Page404',
-          },
-        ],
-      },
-      {
-        path: '/report',
-        name: 'report',
-        icon: 'icon-text',
-        routes: [
-          {
-            path: '/report/high-sla-reports',
-            name: 'highSlaReports',
-            component: './Page404',
-          },
-          {
-            path: '/report/visualization-dashboard',
-            name: 'visualizationDashboard',
-            component: './Page404',
-          },
-          {
-            path: '/report/dataset-management',
-            name: 'datasetmanagement',
-            component: './DatasetManagement/DatasetManagement',
           },
         ],
       },
@@ -263,31 +454,6 @@ export default [
             component: './MessageContentTemplate/MessageContentTemplate',
           },
           {
-            path: '/system-management/workflow-design',
-            name: 'workflowDesign',
-            component: './Approval/ApprovalDesign/ApprovalDesign',
-          },
-          {
-            path: '/system-management/workflow-auditor',
-            name: 'ApprovalAuditor',
-            component: './Approval/ApprovalAuditor/ApprovalAuditor',
-          },
-          {
-            path: '/system-management/workflow-configuration',
-            name: 'ApprovalConfiguration',
-            component: './Approval/ApprovalConfiguration/ApprovalConfiguration',
-          },
-          {
-            path: '/system-management/workflow-config',
-            name: 'workflowConfig',
-            component: './Approval/ApprovalSet/ApprovalSet',
-          },
-          {
-            path: '/system-management/workflow-history',
-            name: 'workflowHistory',
-            component: './Approval/ApprovalEheck/ApprovalEheck',
-          },
-          {
             path: '/system-management/email-parameter',
             name: 'emailParameter',
             component: './EmailParameter/EmailParameter',
@@ -303,7 +469,7 @@ export default [
             component: './CodeMaintenance/CodeMaintenance',
           },
           {
-            path: '/system-management/audit-log',
+            path: '/system-management/audit-trail-logging',
             name: 'auditTrailLogging',
             component: './AuditLog/AuditLog',
           },

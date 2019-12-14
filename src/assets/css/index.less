@@ -159,6 +159,9 @@
     padding: 0;
     background: transparent;
   }
+  .ant-page-header.has-breadcrumb {
+    padding-top: 0;
+  }
   .ant-breadcrumb {
     height: 30px;
     padding-left: 15px;
@@ -592,7 +595,9 @@
       }
     }
     .ant-pagination-total-text {
-      float: left;
+      // float: left;
+      flex: 1;
+      text-align: left;
     }
   }
 
@@ -671,8 +676,17 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
-    & li:first-child {
+    // & li:first-child {
+    //   // flex: 1;
+    //   text-align: left;
+    // }
+    .ant-pagination-total-text {
+      // float: left;
       flex: 1;
+      text-align: left;
     }
+  }
+  .ant-modal-title {
+    color: #fff;
   }
 }

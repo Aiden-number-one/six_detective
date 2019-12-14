@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Button, Modal, Input, Radio } from 'antd';
 import IconFont from '@/components/IconFont';
+import { GetQueryString } from '@/utils/utils';
 import styles from './index.less';
 
 const { Column } = Table;
@@ -47,19 +48,19 @@ function TaskBtn({
             })
           }
         >
-          <IconFont type="iconqizhi" className={styles['btn-icon']} />
+          <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
         <Button disabled={!selectedKeys.length} onClick={closeAlert}>
-          {/* <IconFont type="iconic_circle_close" className={styles['btn-icon']} /> */}
+          <IconFont type="iconicon_assign" className={styles['btn-icon']} />
           Assign
         </Button>
         <Button disabled={!selectedKeys.length} onClick={closeAlert}>
-          <IconFont type="iconic_circle_close" className={styles['btn-icon']} />
+          <IconFont type="iconicon_withdraw1 " className={styles['btn-icon']} />
           Withdraw
         </Button>
         <Button disabled={!selectedKeys.length} onClick={exportAlert}>
-          <IconFont type="iconbatch-export" className={styles['btn-icon']} />
+          <IconFont type="iconicon_export" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </Button>
       </Col>
@@ -74,13 +75,27 @@ function TaskBtn({
   );
 }
 
-function ProcessList({ dispatch, loading, tasks, detailItems, total, getTask }) {
+function ProcessList({
+  dispatch,
+  loading,
+  tasks,
+  detailItems,
+  total,
+  getTask,
+  setCurrentTaskType,
+}) {
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [selectedCurrentTask, setSelectedTasks] = useState('all');
+  const [currentPage, setcurrentPage] = useState('1');
+  const [currentRow, setcurrentRow] = useState('1');
 
   useEffect(() => {
+    const taskCode = GetQueryString('taskcode');
     dispatch({
       type: 'approvalCenter/fetch',
+      payload: {
+        taskCode,
+      },
     });
   }, []);
 
@@ -89,21 +104,12 @@ function ProcessList({ dispatch, loading, tasks, detailItems, total, getTask }) 
     if (tasks && tasks.length > 0) {
       const [firstTasks] = tasks;
       getTask(firstTasks);
-      // dispatch({
-      //   type: 'alertCenter/fetchAlertItems',
-      //   payload: {
-      //     alertType: firstAlert.alertType,
-      //   },
-      // });
+      setcurrentRow(firstTasks);
+      setCurrentTaskType(selectedCurrentTask);
+    } else {
+      getTask(false);
     }
   }, [tasks]);
-
-  // // update alertItems
-  // useEffect(() => {
-  //   if (alertItems.length > 0) {
-  //     getAlertItems(alertItems);
-  //   }
-  // }, [alertItems]);
 
   async function claimTask(taskCode) {
     await dispatch({
@@ -113,7 +119,7 @@ function ProcessList({ dispatch, loading, tasks, detailItems, total, getTask }) 
       },
     });
     // console.log('taskIds--->', taskCode);
-    if (taskCode) {
+    if (detailItems.ownerId) {
       Modal.confirm({
         title: 'Confirm',
         content: `This task has been claimed by [${detailItems.ownerId}]
@@ -140,6 +146,7 @@ function ProcessList({ dispatch, loading, tasks, detailItems, total, getTask }) 
           type: 'approvalCenter/fetch',
           payload: {
             type: selectedCurrentTask,
+            taskCode,
           },
         });
       },
@@ -161,6 +168,7 @@ function ProcessList({ dispatch, loading, tasks, detailItems, total, getTask }) 
       <TabBtn
         changeTab={selectedTasks => {
           setSelectedTasks(selectedTasks);
+          setCurrentTaskType(selectedCurrentTask);
           dispatch({
             type: 'approvalCenter/fetch',
             payload: {
@@ -180,6 +188,7 @@ function ProcessList({ dispatch, loading, tasks, detailItems, total, getTask }) 
         dataSource={tasks}
         rowKey="taskCode"
         loading={loading['approvalCenter/fetch']}
+        rowClassName={record => (record.taskCode === currentRow.taskCode ? 'active' : '')}
         rowSelection={{
           onChange: selectedRowKeys => {
             setSelectedKeys(selectedRowKeys);
@@ -189,9 +198,10 @@ function ProcessList({ dispatch, loading, tasks, detailItems, total, getTask }) 
           total,
           showSizeChanger: true,
           showTotal(count) {
-            return `Total ${count} items`;
+            return `Page ${currentPage} of ${Math.ceil(count / 10).toString()}`;
           },
           onChange(page, pageSize) {
+            setcurrentPage(page);
             dispatch({
               type: 'approvalCenter/fetch',
               payload: {
@@ -202,6 +212,7 @@ function ProcessList({ dispatch, loading, tasks, detailItems, total, getTask }) 
             });
           },
           onShowSizeChange(page, pageSize) {
+            setcurrentPage(page);
             dispatch({
               type: 'approvalCenter/fetch',
               payload: {
@@ -215,12 +226,7 @@ function ProcessList({ dispatch, loading, tasks, detailItems, total, getTask }) 
         onRow={record => ({
           onClick() {
             getTask(record);
-            // dispatch({
-            //   type: 'alertCenter/fetchAlertItems',
-            //   payload: {
-            //     alertType: record.alertType,
-            //   },
-            // });
+            setcurrentRow(record);
           },
         })}
       >

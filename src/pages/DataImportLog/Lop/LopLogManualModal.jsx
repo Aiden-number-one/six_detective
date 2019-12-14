@@ -30,6 +30,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
     <Drawer
       title={<FormattedMessage id="data-import.lop.manual-import-lop-report" />}
       width={320}
+      closable={false}
       bodyStyle={{ paddingBottom: 80 }}
       visible={visible}
       onClose={handleCancel}
@@ -116,7 +117,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
           })(
             <Upload
               accept=".xlsm,.xls,.xlsx,.pdf,application/msexcel"
-              action="/upload1"
+              action="/upload"
               beforeUpload={file => isLt5M(file.size)}
             >
               <Button>
@@ -126,7 +127,6 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             </Upload>,
           )}
         </Form.Item>
-        {/* <Form.Item></Form.Item> */}
       </Form>
       <div className={styles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>

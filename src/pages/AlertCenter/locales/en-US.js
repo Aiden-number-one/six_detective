@@ -4,11 +4,11 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:34:48
  * @LastEditors: iron
- * @LastEditTime: 2019-12-07 10:05:56
+ * @LastEditTime: 2019-12-13 15:45:34
  */
 export default {
   'alert-center.alert-id': 'ALERT ID',
-  'alert-center.alert-type': 'ALERT TPYE',
+  'alert-center.alert-type': 'ALERT TYPE',
   'alert-center.alert-timestamp': 'ALERT TIMESTAMP',
   'alert-center.information-timestamp': 'TIMESTAMP',
   'alert-center.trade-date': 'TRADE DATE',
@@ -28,6 +28,7 @@ export default {
   'alert-center.export': 'EXPORT',
   'alert-center.market': 'MARKET',
   'alert-center.ep-name': 'EP NAME',
+  'alert-center.task-id': 'TASK ID',
   'alert-center.ep-code': 'EP CODE',
   'alert-center.enter-workflow': 'ENTER WORKFLOW',
   'alert-center.alert-detail': 'Alert Detail',
@@ -40,7 +41,10 @@ export default {
   'alert-center.download-all': 'Download All',
   'alert-center.delete-all': 'Delete All',
   'alert-center.attachement-list': 'Attachment List',
-  'alert-center.attachment-des': 'Total {count} Attachments, About {size}',
+  'alert-center.attachment-des': 'Total {count} Attachments, About {size} KB',
   'alert-center.information-no': 'INFORMATION NO',
   'alert-center.information-type': 'INFORMATION TYPE',
+  'alert-center.processing': 'PROCESSING',
+  'alert-center.closed': 'CLOSED',
+  'alert-center.invalid': 'INVALID',
 };

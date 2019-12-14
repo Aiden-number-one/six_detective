@@ -4,8 +4,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-12-12 13:36:29
- * @LastEditors: mus
+ * @LastEditTime: 2019-12-13 14:05:53
+ * @LastEditors: lan
  */
 
 import {
@@ -226,6 +226,12 @@ export function msFormat(ms) {
   [h, min, sec] = [h, min, sec].map(t => (t >= 10 ? t : `0${t}`));
 
   return `${h}:${min}:${sec}`;
+}
+export function GetQueryString(name) {
+  const regs = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
+  const r = window.location.search.substr(1).match(regs);
+  if (r != null) return r[2];
+  return null;
 }
 
 export function createCellPos(n) {
