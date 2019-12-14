@@ -64,7 +64,17 @@
 
   // select相关
   :global {
+    .ant-select {
+      border: 1px #464c51ff solid;
+      .ant-select-arrow {
+        color: #464c51ff;
+      }
+      .ant-select-selection-selected-value {
+        color: #464c51ff;
+      }
+    }
     .ant-select-selection.ant-select-selection--single {
+      background-color: #fff;
       border-radius: 0;
     }
   }
@@ -294,7 +304,9 @@
   .btn-group {
     display: inline-block;
     border: 1px solid transparent;
-
+    .ant-btn {
+      margin-right: 0;
+    }
     &:hover {
       .ant-btn {
         border: 1px solid darken(rgb(241, 241, 241), 7%);
@@ -322,7 +334,7 @@
   }
 
   .ant-btn.btn {
-    &.btn2 {
+    &.btn2Report {
       height: 60px;
     }
 
