@@ -16,7 +16,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
 import logoSamll from '../assets/logo-small.png';
 import styles from './BasicLayout.less';
-import '@/assets/css/index.less';
+import globalStyles from '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
 import { isProOrDev } from '@/utils/utils';
 
@@ -174,6 +174,7 @@ const BasicLayout = props => {
 
   return (
     <ProLayout
+      className={globalStyles.proLayout}
       iconfontUrl={`http://${window.location.host}/iconfont.js`}
       siderWidth={250}
       logo={collapsed ? logoSamll : logo}
@@ -234,9 +235,8 @@ const BasicLayout = props => {
       menuProps={{
         openKeys,
         onOpenChange: openKeysNew => {
-          console.log(menuData);
-          const latestOpenKey = openKeysNew.find(key => openKeys.indexOf(key) === -1);
-          if (menuData.map(value => value.menuid).indexOf(latestOpenKey) === -1) {
+          const latestOpenKey = openKeysNew.slice(-1) ? openKeysNew.slice(-1)[0] : '';
+          if (menuData.map(value => value.page).indexOf(latestOpenKey) === -1) {
             setOpenKeys(openKeysNew);
           } else {
             setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
