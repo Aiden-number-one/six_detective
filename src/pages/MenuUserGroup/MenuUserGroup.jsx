@@ -260,7 +260,9 @@ class MenuUserGroup extends Component {
     // };
     return (
       <PageHeaderWrapper>
-        <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
+        <div>
+          <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
+        </div>
         <Drawer
           closable={false}
           title={groupTitle}

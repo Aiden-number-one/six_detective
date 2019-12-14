@@ -326,7 +326,7 @@ class CodeMaintenance extends Component {
             <div>
               <NewSearchForm search={this.queryCode} ref={this.searchForm}></NewSearchForm>
             </div>
-            <div>
+            <div className={styles.content}>
               <Table
                 loading={loading['codeList/getCodeList']}
                 dataSource={codeListData}

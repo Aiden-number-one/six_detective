@@ -4,6 +4,7 @@ import { Form, Table, Pagination } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
+import styles from './AuditLog.less';
 import SearchForm from './components/SearchForm';
 
 const NewSearchForm = Form.create({})(SearchForm);
@@ -177,25 +178,27 @@ class AuditLog extends Component {
           ref={this.auditLogForm}
           functionNameOptions={functionNameOptions}
         />
-        <Table
-          loading={loading['auditLog/getAuditLogList']}
-          dataSource={getAuditLogList}
-          pagination={false}
-          columns={this.state.columns}
-        />
-        <Pagination
-          showSizeChanger
-          current={page.pageNumber}
-          showTotal={() =>
-            `Page ${(totalCount || 0) && page.pageNumber.toString()} of ${Math.ceil(
-              (totalCount || 0) / page.pageSize,
-            ).toString()}`
-          }
-          onShowSizeChange={this.onShowSizeChange}
-          onChange={this.pageChange}
-          total={totalCount}
-          pageSize={page.pageSize}
-        />
+        <div className={styles.content}>
+          <Table
+            loading={loading['auditLog/getAuditLogList']}
+            dataSource={getAuditLogList}
+            pagination={false}
+            columns={this.state.columns}
+          />
+          <Pagination
+            showSizeChanger
+            current={page.pageNumber}
+            showTotal={() =>
+              `Page ${(totalCount || 0) && page.pageNumber.toString()} of ${Math.ceil(
+                (totalCount || 0) / page.pageSize,
+              ).toString()}`
+            }
+            onShowSizeChange={this.onShowSizeChange}
+            onChange={this.pageChange}
+            total={totalCount}
+            pageSize={page.pageSize}
+          />
+        </div>
       </PageHeaderWrapper>
     );
   }
