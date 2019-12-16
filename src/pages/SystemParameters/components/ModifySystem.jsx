@@ -22,7 +22,7 @@ class FormUser extends Component {
         <Form>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.systemParameters.parameterType' })}
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('parameterType', {
@@ -31,7 +31,7 @@ class FormUser extends Component {
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.systemParameters.parameterKey' })}
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('parameterKey', {
@@ -46,7 +46,7 @@ class FormUser extends Component {
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.systemParameters.parameterValue' })}
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('parameterValue', {
@@ -61,7 +61,7 @@ class FormUser extends Component {
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'app.common.note' })}
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('note', {
