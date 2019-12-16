@@ -48,6 +48,11 @@ export async function approveAndReject({ taskCode, userId, type, epCname }) {
     data: { taskCode: taskCode.toString(), userId: userId.toString(), type, epCname },
   });
 }
+export async function setTaskWithdraw({ taskCode, comment }) {
+  return request('set_task_withdraw', {
+    data: { taskCode: taskCode.toString(), comment },
+  });
+}
 export async function getTaskGroup({ taskCode }) {
   return request('get_approval_task_node_group', {
     data: { taskCode: taskCode.toString() },
@@ -193,6 +198,16 @@ export default {
         message.error('failure');
       } else {
         message.success('success');
+        callback();
+      }
+    },
+    *setTaskWithdraw({ payload, callback }, { call }) {
+      const { taskCode, comment } = payload || [];
+      const { err } = yield call(setTaskWithdraw, { taskCode, comment });
+      if (err) {
+        message.error('Withdraw failure');
+      } else {
+        message.success('Withdraw success');
         callback();
       }
     },
