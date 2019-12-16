@@ -10,13 +10,13 @@ import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { setLocale } from 'umi/locale';
-import CustomizeSelectLang from '@/components/CustomizeSelectLang';
+// import CustomizeSelectLang from '@/components/CustomizeSelectLang';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
 import logoSamll from '../assets/logo-small.png';
 import styles from './BasicLayout.less';
-import '@/assets/css/index.less';
+import globalStyles from '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
 import { isProOrDev } from '@/utils/utils';
 
@@ -34,7 +34,8 @@ const menuDataRender = menuList =>
 const footerRender = () => (
   <footer className={styles.footerRender}>
     {/* eslint-disable-next-line global-require */}
-    <img src={require('@/assets/logo.png')} alt="HKEX" />
+    {/* <img src={require('@/assets/logo.png')} alt="HKEX" /> */}
+    <div />
     <div>@ 2019 Hong Kong Exchanges and Clearing Limited. All rights reserved</div>
   </footer>
 );
@@ -153,7 +154,7 @@ const BasicLayout = props => {
           </div>
           <div className={styles.user}>
             <IconFont type="icon-usercircle" className={styles.avatar} />
-            <CustomizeSelectLang />
+            {/* <CustomizeSelectLang /> */}
             <span title="Thomas Chow" className={styles.username}>
               {window.localStorage.loginName}
             </span>
@@ -173,6 +174,7 @@ const BasicLayout = props => {
 
   return (
     <ProLayout
+      className={globalStyles.proLayout}
       iconfontUrl={`http://${window.location.host}/iconfont.js`}
       siderWidth={250}
       logo={collapsed ? logoSamll : logo}
@@ -233,7 +235,12 @@ const BasicLayout = props => {
       menuProps={{
         openKeys,
         onOpenChange: openKeysNew => {
-          setOpenKeys(openKeysNew);
+          const latestOpenKey = openKeysNew.slice(-1) ? openKeysNew.slice(-1)[0] : '';
+          if (menuData.map(value => value.page).indexOf(latestOpenKey) === -1) {
+            setOpenKeys(openKeysNew);
+          } else {
+            setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+          }
         },
       }}
     >
