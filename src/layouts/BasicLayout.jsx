@@ -17,7 +17,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
 import logoSamll from '../assets/logo-small.png';
 import styles from './BasicLayout.less';
-import globalStyles from '@/assets/css/index.less';
+// import globalStyles from '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
 import { isProOrDev } from '@/utils/utils';
 
@@ -173,7 +173,7 @@ const BasicLayout = props => {
   );
 
   return (
-    <div className={globalStyles.proLayout}>
+    <div className="proLayout">
       <ProLayout
         iconfontUrl={`http://${window.location.host}/iconfont.js`}
         siderWidth={250}
