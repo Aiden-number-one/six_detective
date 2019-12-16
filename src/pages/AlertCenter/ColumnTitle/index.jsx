@@ -33,19 +33,6 @@ export default function ColumnTitle({
     }
   }
 
-  // useEffect(() => {
-  //   setConditions(prev => [
-  //     ...prev,
-  //     ...[
-  //       {
-  //         column: tableColumn,
-  //         value: checkedList.toString(),
-  //         condition: filterType.toString(),
-  //       },
-  //     ],
-  //   ]);
-  // }, [tableColumn, checkedList, filterType]);
-
   async function handleOk() {
     const condition = {
       column: tableColumn,
@@ -65,6 +52,7 @@ export default function ColumnTitle({
       trigger="click"
       visible={visible}
       onVisibleChange={v => setVisible(v)}
+      overlayClassName={styles.container}
       overlayStyle={{ width: 260 }}
       content={
         <>

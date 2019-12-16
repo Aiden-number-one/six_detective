@@ -55,19 +55,7 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
   return (
     <Row className={styles.btns}>
       <Col span={18}>
-        <Button
-          type="primary"
-          disabled={!selectedKeys.length}
-          onClick={() =>
-            Modal.confirm({
-              title: 'Confirm',
-              content: 'Are you sure claim these alerts?',
-              okText: 'Sure',
-              cancelText: 'Cancel',
-              onOk: () => claimAlert(selectedKeys),
-            })
-          }
-        >
+        <Button type="primary" disabled={!selectedKeys.length} onClick={claimAlert}>
           <IconFont type="iconqizhi" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
@@ -102,6 +90,9 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
 
 function AlertList({ dispatch, loading, alerts, total, getAlert }) {
   const [alert, setAlert] = useState({});
+  const [curAlertId, setAlertId] = useState('');
+  const [claimUser, setClaimUser] = useState({});
+  const [claimVisible, setClaimVisible] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   useEffect(() => {
@@ -129,15 +120,32 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
     });
   }
 
-  function claimAlert(alertIds) {
-    dispatch({
-      type: 'alertCenter/claim',
-      payload: {
-        alertIds,
-      },
-    });
+  function claimAlert({ alertId, userName }) {
+    setAlertId(alertId);
+    if (userName) {
+      setClaimVisible(true);
+      setClaimUser(userName);
+    } else {
+      dispatch({
+        type: 'alertCenter/claim',
+        payload: {
+          alertIds: [alertId],
+          isCoverClaim: 0,
+        },
+      });
+    }
   }
 
+  async function handleReClaim() {
+    await dispatch({
+      type: 'alertCenter/claim',
+      payload: {
+        alertIds: [curAlertId],
+        isCoverClaim: 1,
+      },
+    });
+    setClaimVisible(false);
+  }
   function closeAlert(alertIds) {
     dispatch({
       type: 'alertCenter/close',
@@ -148,7 +156,19 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
   }
   return (
     <div className={styles.list}>
-      <AlertBtn selectedKeys={selectedKeys} claimAlert={claimAlert} closeAlert={closeAlert} />
+      <AlertBtn selectedKeys={selectedKeys} claiAmlert={claimAlert} closeAlert={closeAlert} />
+      <Modal
+        title="CONFIRM"
+        visible={claimVisible}
+        closable={false}
+        onCancel={() => setClaimVisible(false)}
+        onOk={() => handleReClaim()}
+      >
+        <div style={{ textAlign: 'center' }}>
+          <div>This alert has been claimed by {claimUser}.</div>
+          <div>Do you confirm to re-claim?</div>
+        </div>
+      </Modal>
       <Table
         border
         dataSource={alerts}
@@ -218,15 +238,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
                 type="iconqizhi"
                 className={styles.icon}
                 title={formatMessage({ id: 'alert-center.claim' })}
-                onClick={() => {
-                  Modal.confirm({
-                    title: 'Confirm',
-                    content: 'Are you sure claim this alert?',
-                    okText: 'Sure',
-                    cancelText: 'Cancel',
-                    onOk: () => claimAlert([record.alertId]),
-                  });
-                }}
+                onClick={() => claimAlert(record)}
               />
               <IconFont
                 type="iconic_circle_close"

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-14 17:50:46
+ * @LastEditTime: 2019-12-14 20:53:29
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -41,8 +41,10 @@ export async function setAlertComment({ alertId, content }) {
     data: { alertId, commentContent: content },
   });
 }
-export async function claimAlert({ alertIds }) {
-  return request('set_alert_claim', { data: { alertIds: alertIds.join(',') } });
+export async function claimAlert({ alertIds, isCoverClaim }) {
+  return request('set_alert_claim', {
+    data: { alertIds: alertIds.join(','), isCoverClaim: isCoverClaim.toString() },
+  });
 }
 export async function getAssignUsers({ alertItemIds }) {
   return request('get_user_list_by_process_instance_step', {
@@ -61,11 +63,10 @@ export default {
     alerts: [],
     alertItems: [],
     total: 0,
-    alertItemsTotal: 0,
     comments: [],
-    alertCommentsTotal: 0,
     logs: [],
     users: [],
+    claimInfo: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -113,21 +114,27 @@ export default {
         ...state,
       };
     },
-    claimOk(state, { payload }) {
-      const { alertIds, userName } = payload;
-      const alerts = state.alerts.map(alert => {
-        if (alertIds.includes(alert.alertId)) {
-          return { ...alert, userName };
-        }
-        return alert;
-      });
-      message.success('claim success');
-
+    reclaim(state, { payload }) {
       return {
         ...state,
-        alerts,
+        claimInfo: payload.claimInfo,
       };
     },
+    // claimOk(state, { payload }) {
+    //   // const { alertIds, userName } = payload;
+    //   // const alerts = state.alerts.map(alert => {
+    //   //   if (alertIds.includes(alert.alertId)) {
+    //   //     return { ...alert, userName };
+    //   //   }
+    //   //   return alert;
+    //   // });
+    //   message.success('claim success');
+
+    //   return {
+    //     ...state,
+    //     alerts,
+    //   };
+    // },
   },
   effects: {
     *fetch({ payload }, { call, put }) {
@@ -228,22 +235,28 @@ export default {
       });
     },
     *claim({ payload }, { call, put }) {
-      const { alertIds } = payload || [];
-      const { err, items } = yield call(claimAlert, { alertIds });
-      if (err || !items || !items.length) {
+      const { alertIds, isCoverClaim } = payload || [];
+      const { err, items } = yield call(claimAlert, { alertIds, isCoverClaim });
+      if (err) {
         throw new Error(err);
       }
 
-      yield put({
-        type: 'claimOk',
-        payload: {
-          alertIds,
-          userName: items[0].bcLoginUserName,
-        },
-      });
-      yield put({
-        type: 'fetch',
-      });
+      if (items && items.length) {
+        yield put({
+          type: 'reclaim',
+          payload: {
+            claimInfo: items,
+          },
+        });
+      } else {
+        yield put({
+          type: 'claimOk',
+        });
+        yield put({
+          type: 'fetch',
+        });
+        message.success('claim success');
+      }
     },
     *close({ payload }, { call, put }) {
       const { alertIds } = payload || [];
