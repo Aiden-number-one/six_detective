@@ -1,19 +1,34 @@
-import React from 'react';
-import { Table } from 'antd';
+import React, { useState } from 'react';
+import { Table, Icon } from 'antd';
+import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
+import { dateFormat, timestampFormat } from '../constants';
 
 const { Column } = Table;
 
 const submissionReport = formatMessage({ id: 'data-import.lop.submission-report' });
 const processingStatus = formatMessage({ id: 'data-import.lop.processing-status' });
 
-export default function({ dataSource, loading, total, handlePageChange, handlePageSizeChange }) {
+export default function({
+  dataSource,
+  loading,
+  total,
+  handlePageChange,
+  handlePageSizeChange,
+  handleDownload,
+}) {
+  const [curImpId, setImpId] = useState('');
+
+  function handleClick(id) {
+    setImpId(id);
+    handleDownload(id);
+  }
   return (
     <Table
       dataSource={dataSource}
       rowKey="lopImpId"
-      loading={loading}
+      loading={loading['lop/fetch']}
       pagination={{
         total,
         pageSizeOptions: ['10', '20', '50', '100'],
@@ -34,6 +49,7 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
         align="center"
         dataIndex="tradeDate"
         title={<FormattedMessage id="data-import.lop.trade-date" />}
+        render={(text, record) => <span>{moment(record.tradeDate).format(dateFormat)}</span>}
       />
       <Column
         align="center"
@@ -61,6 +77,7 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
         align="center"
         dataIndex="submissionDate"
         title={<FormattedMessage id="data-import.lop.submission-date" />}
+        render={(text, record) => moment(record.submissionDate).format(timestampFormat)}
       />
       <Column
         width="10%"
@@ -74,15 +91,10 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
         dataIndex="lateSubmission"
         title={<FormattedMessage id="data-import.lop.late-submission" />}
       />
-      {/* <Column
+      <Column
         align="center"
         dataIndex="latestVersion"
         title={<FormattedMessage id="data-import.lop.latest-version" />}
-      /> */}
-      <Column
-        align="center"
-        dataIndex="arrivalTime"
-        title={<FormattedMessage id="data-import.lop.arrival-time" />}
       />
       <Column
         ellipsis
@@ -94,10 +106,18 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
         align="center"
         dataIndex="download"
         title={<FormattedMessage id="data-import.lop.download" />}
-        render={() => (
-          <a href="/download?filePath=/ECP/LOPBI_00BNP_20000925_43.xlsm">
-            <IconFont type="icondownload" style={{ fontSize: 24, cursor: 'pointer' }} />
-          </a>
+        render={(text, { lopImpId }) => (
+          <>
+            {loading['lop/fetchReportUrl'] && lopImpId === curImpId ? (
+              <Icon type="loading" />
+            ) : (
+              <IconFont
+                type="icondownload"
+                onClick={() => handleClick(lopImpId)}
+                style={{ fontSize: 24, cursor: 'pointer' }}
+              />
+            )}
+          </>
         )}
       />
     </Table>

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 18:53:34
  * @LastEditors: iron
- * @LastEditTime: 2019-12-07 19:48:34
+ * @LastEditTime: 2019-12-16 21:16:49
  */
 import moment from 'moment';
 
@@ -26,7 +26,9 @@ export const SUBMISSION_REPORT = [
   'EXCESS POSITION LIMIT FOR ETF MARKET MAKERS REPORTING',
 ];
 
-export const dateFormat = 'MM-DD-YYYY';
+export const dateFormat = 'DD-MM-YYYY';
+export const timeFormat = 'hh:mm:ss';
+export const timestampFormat = `${dateFormat} ${timeFormat}`;
 
 export const yesterday = moment().subtract(1, 'days');
 export const today = moment();

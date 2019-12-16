@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Drawer, Form, DatePicker, Input, Select, Upload, Icon, Button } from 'antd';
-import { SUBMISSION_REPORT, yesterday, dateFormat } from './constants';
+import { SUBMISSION_REPORT, yesterday, dateFormat } from '../constants';
 import styles from '../index.less';
 
 const { Option } = Select;
@@ -12,7 +12,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
   const { getFieldDecorator, validateFields } = form;
 
   function handleCommit() {
-    validateFields((err, values) => {
+    validateFields(async (err, values) => {
       if (!err) {
         const { tradeDate, uploadFiles, ...rest } = values;
         const { bcjson } = (uploadFiles && uploadFiles.length && uploadFiles[0].response) || {};
@@ -20,7 +20,8 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
 
         if (flag === '1' && items) {
           const filename = items.relativeUrl;
-          handleUpload({ tradeDate: tradeDate.format('YYYYMMDD'), filename, ...rest });
+          await handleUpload({ tradeDate: tradeDate.format('YYYYMMDD'), filename, ...rest });
+          form.resetFields();
         }
       }
     });
@@ -31,11 +32,11 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       title={<FormattedMessage id="data-import.lop.manual-import-lop-report" />}
       width={320}
       closable={false}
-      bodyStyle={{ paddingBottom: 80 }}
+      bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
       visible={visible}
       onClose={handleCancel}
     >
-      <Form>
+      <Form className={styles['modal-form']}>
         <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
           {getFieldDecorator('tradeDate', {
             initialValue: yesterday,
@@ -78,7 +79,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
               },
             ],
           })(
-            <Select placeholder="please select submission report">
+            <Select placeholder="please select submission report" allowClear>
               {SUBMISSION_REPORT.map(report => (
                 <Option key={report}>{report}</Option>
               ))}

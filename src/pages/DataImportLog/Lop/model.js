@@ -4,9 +4,9 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors: iron
- * @LastEditTime: 2019-12-07 19:55:30
+ * @LastEditTime: 2019-12-16 20:43:13
  */
-
+import { message } from 'antd';
 import { request } from '@/utils/request.default';
 
 export async function getLogs(params = {}) {
@@ -28,6 +28,14 @@ export async function postAuto(params) {
   return request('set_lop_report_auto_import', { data: params });
 }
 
+export async function getReportUrl({ lopImpId }) {
+  return request('set_lop_report_download', {
+    data: {
+      lopImpId: lopImpId.toString(),
+    },
+  });
+}
+
 export const pageSelector = ({ lop }) => lop.page;
 
 export default {
@@ -35,6 +43,7 @@ export default {
   state: {
     logs: [],
     total: 0,
+    reportUrl: '',
   },
   reducers: {
     save(state, { payload }) {
@@ -43,6 +52,13 @@ export default {
         ...state,
         logs,
         total,
+      };
+    },
+    saveReportUrl(state, { payload }) {
+      const { reportUrl } = payload;
+      return {
+        ...state,
+        reportUrl,
       };
     },
   },
@@ -67,6 +83,7 @@ export default {
       if (err) {
         throw new Error(err);
       }
+      message.success('upload success');
       yield put({ type: 'reload' });
     },
     *importByAuto({ payload }, { call, put }) {
@@ -74,7 +91,21 @@ export default {
       if (err) {
         throw new Error(err);
       }
+      message.success('upload success');
       yield put({ type: 'reload' });
+    },
+    *fetchReportUrl({ payload }, { call, put }) {
+      console.log(payload);
+      const { err, items } = yield call(getReportUrl, payload);
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveReportUrl',
+        payload: {
+          reportUrl: items,
+        },
+      });
     },
     *reload({ payload }, { put }) {
       yield put({ type: 'fetch', payload });
