@@ -10,13 +10,14 @@ import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { setLocale } from 'umi/locale';
-import CustomizeSelectLang from '@/components/CustomizeSelectLang';
+import router from 'umi/router';
+// import CustomizeSelectLang from '@/components/CustomizeSelectLang';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
 import logoSamll from '../assets/logo-small.png';
 import styles from './BasicLayout.less';
-import '@/assets/css/index.less';
+import globalStyles from '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
 import { isProOrDev } from '@/utils/utils';
 
@@ -34,7 +35,8 @@ const menuDataRender = menuList =>
 const footerRender = () => (
   <footer className={styles.footerRender}>
     {/* eslint-disable-next-line global-require */}
-    <img src={require('@/assets/logo.png')} alt="HKEX" />
+    {/* <img src={require('@/assets/logo.png')} alt="HKEX" /> */}
+    <div />
     <div>@ 2019 Hong Kong Exchanges and Clearing Limited. All rights reserved</div>
   </footer>
 );
@@ -122,123 +124,137 @@ const BasicLayout = props => {
     </div>
   );
 
-  const headerRender = () => {
-    if (window.location.pathname === '/') {
-      return (
-        <div className={styles.headerRender} style={{ position: 'absolute', border: 'none' }}>
-          <div className={styles.left} style={{ border: 'none' }}>
-            <Icon
-              className={styles.collapsed}
-              type={collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={() => handleMenuCollapse()}
-            />
-          </div>
+  // if (window.location.pathname === '/') {
+  //   return (
+  //     <div className={styles.headerRender} style={{ position: 'absolute', border: 'none' }}>
+  //       <div className={styles.left} style={{ border: 'none' }}>
+  //         <Icon
+  //           className={styles.collapsed}
+  //           type={collapsed ? 'menu-unfold' : 'menu-fold'}
+  //           onClick={() => handleMenuCollapse()}
+  //         />
+  //       </div>
+  //     </div>
+  //   );
+  // }
+  // return
+  const headerRender = () => (
+    <div className={styles.headerRender}>
+      <div className={styles.left}>
+        <Icon
+          className={styles.collapsed}
+          type={collapsed ? 'menu-unfold' : 'menu-fold'}
+          onClick={() => handleMenuCollapse()}
+        />
+      </div>
+      <div className={styles.right}>
+        <div className={styles.info}>
+          <Badge dot>
+            <IconFont type="icon-xiaoxi" className={styles.bell} />
+          </Badge>
         </div>
-      );
-    }
-    return (
-      <div className={styles.headerRender}>
-        <div className={styles.left}>
-          <Icon
-            className={styles.collapsed}
-            type={collapsed ? 'menu-unfold' : 'menu-fold'}
-            onClick={() => handleMenuCollapse()}
-          />
-        </div>
-        <div className={styles.right}>
-          <div className={styles.info}>
-            <Badge dot>
-              <IconFont type="icon-xiaoxi" className={styles.bell} />
-            </Badge>
-          </div>
-          <div className={styles.user}>
-            <IconFont type="icon-usercircle" className={styles.avatar} />
-            <CustomizeSelectLang />
-            <span title="Thomas Chow" className={styles.username}>
-              {window.localStorage.loginName}
-            </span>
-            <Popover
-              placement="bottomRight"
-              content={popoverContent()}
-              trigger="click"
-              overlayClassName="userinfo"
-            >
-              <Icon type="caret-down" />
-            </Popover>
-          </div>
+        <div className={styles.user}>
+          <IconFont type="icon-usercircle" className={styles.avatar} />
+          {/* <CustomizeSelectLang /> */}
+          <span title="Thomas Chow" className={styles.username}>
+            {window.localStorage.loginName}
+          </span>
+          <Popover
+            placement="bottomRight"
+            content={popoverContent()}
+            trigger="click"
+            overlayClassName="userinfo"
+          >
+            <Icon type="caret-down" />
+          </Popover>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 
   return (
-    <ProLayout
-      iconfontUrl={`http://${window.location.host}/iconfont.js`}
-      siderWidth={250}
-      logo={collapsed ? logoSamll : logo}
-      headerRender={headerRender}
-      menuHeaderRender={logoItem => <a>{logoItem}</a>}
-      onCollapse={handleMenuCollapse}
-      menuItemRender={(menuItemProps, defaultDom) => {
-        if (menuItemProps.isUrl || menuItemProps.children) {
-          return defaultDom;
-        }
-        if (menuItemProps.iframeUrl) {
-          return (
-            <Link
-              to={{
-                pathname: menuItemProps.path,
-                query: {
-                  iframeUrl: menuItemProps.iframeUrl,
-                },
-              }}
-            >
-              {defaultDom}
-            </Link>
-          );
-        }
+    <div className={globalStyles.proLayout}>
+      <ProLayout
+        iconfontUrl={`http://${window.location.host}/iconfont.js`}
+        siderWidth={250}
+        logo={collapsed ? logoSamll : logo}
+        headerRender={headerRender}
+        menuHeaderRender={logoItem => (
+          <a
+            onClick={() => {
+              router.push('/homepage/homepage');
+            }}
+          >
+            {logoItem}
+          </a>
+        )}
+        onCollapse={handleMenuCollapse}
+        menuItemRender={(menuItemProps, defaultDom) => {
+          if (menuItemProps.isUrl || menuItemProps.children) {
+            return defaultDom;
+          }
+          if (menuItemProps.iframeUrl) {
+            return (
+              <Link
+                to={{
+                  pathname: menuItemProps.path,
+                  query: {
+                    iframeUrl: menuItemProps.iframeUrl,
+                  },
+                }}
+              >
+                {defaultDom}
+              </Link>
+            );
+          }
 
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-      }}
-      breadcrumbRender={(routers = []) => [
-        {
-          path: '/',
-          breadcrumbName: formatMessage({
-            id: 'menu.home',
-            defaultMessage: 'Home',
-          }),
-        },
-        ...routers,
-      ]}
-      itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0;
-        return first ? (
-          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-        ) : (
-          <span>{route.breadcrumbName}</span>
-        );
-      }}
-      footerRender={footerRender}
-      menuDataRender={() => menuDataRender(menuData)}
-      // menuDataRender={menuDataRender}
-      formatMessage={formatMessage}
-      rightContentRender={rightProps => <RightContent {...rightProps} />}
-      // menuRender={(a, b) => {
-      //   debugger;
-      //   return null;
-      // }}
-      {...props}
-      {...settings}
-      // 展开一个，其他默认收起
-      menuProps={{
-        openKeys,
-        onOpenChange: openKeysNew => {
-          setOpenKeys(openKeysNew);
-        },
-      }}
-    >
-      {children}
-    </ProLayout>
+          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        }}
+        breadcrumbRender={(routers = []) => [
+          {
+            path: '/',
+            breadcrumbName: formatMessage({
+              id: 'menu.home',
+              defaultMessage: 'Home',
+            }),
+          },
+          ...routers,
+        ]}
+        itemRender={(route, params, routes, paths) => {
+          const first = routes.indexOf(route) === 0;
+          return first ? (
+            <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+          ) : (
+            <span>{route.breadcrumbName}</span>
+          );
+        }}
+        footerRender={footerRender}
+        menuDataRender={() => menuDataRender(menuData)}
+        // menuDataRender={menuDataRender}
+        formatMessage={formatMessage}
+        rightContentRender={rightProps => <RightContent {...rightProps} />}
+        // menuRender={(a, b) => {
+        //   debugger;
+        //   return null;
+        // }}
+        {...props}
+        {...settings}
+        // 展开一个，其他默认收起
+        menuProps={{
+          openKeys,
+          onOpenChange: openKeysNew => {
+            const latestOpenKey = openKeysNew.slice(-1) ? openKeysNew.slice(-1)[0] : '';
+            if (menuData.map(value => value.page).indexOf(latestOpenKey) === -1) {
+              setOpenKeys(openKeysNew);
+            } else {
+              setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+            }
+          },
+        }}
+      >
+        {children}
+      </ProLayout>
+    </div>
   );
 };
 

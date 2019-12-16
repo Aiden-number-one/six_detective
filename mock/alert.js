@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-03 16:32:36
  * @LastEditors: iron
- * @LastEditTime: 2019-12-12 10:20:07
+ * @LastEditTime: 2019-12-14 10:49:14
  */
 import { mp, mockRes } from './utils';
 
@@ -59,7 +59,7 @@ export default {
       fileList: null,
     },
   ]),
-  [mp('get_table_column_filter_list')]: mockRes(60, ['1', '2', '3']),
+  [mp('get_table_column_filter_list')]: mockRes(1, ['1', '2', '3']),
   [mp('set_alert_comment')]: mockRes(1, []),
   [mp('set_alert_claim')]: mockRes(1, []),
   [mp('set_alert_close')]: mockRes(1, []),

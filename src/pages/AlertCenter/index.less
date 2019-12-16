@@ -1,17 +1,3 @@
-:global {
-  .ant-btn {
-    width: auto;
-    &:last-child {
-      margin-right: 0;
-    }
-  }
-  .ant-table-tbody tr {
-    &.active {
-      color: #0d87d4;
-    }
-  }
-}
-
 .bottom-btns {
   position: absolute;
   right: 0;
@@ -21,6 +7,14 @@
   text-align: right;
   background-color: #fff;
   border-top: 1px solid #e9e9e9;
+  :global {
+    .ant-btn {
+      width: auto;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 .list-container {
@@ -30,12 +24,27 @@
     padding: 10px;
     background-color: #fff;
     box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
+    :global {
+      .ant-table-tbody tr {
+        &.active {
+          color: #0d87d4;
+        }
+      }
+    }
   }
   .btns {
     margin-bottom: 10px;
     .btn-icon {
       font-size: 18px;
       vertical-align: middle;
+    }
+    :global {
+      .ant-btn {
+        width: auto;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
     }
   }
 }
@@ -112,6 +121,14 @@
           margin: 0;
           padding: 6px 16px;
           color: #464c51;
+        }
+      }
+      :global {
+        .ant-btn {
+          width: auto;
+          &:last-child {
+            margin-right: 0;
+          }
         }
       }
     }

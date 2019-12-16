@@ -21,7 +21,7 @@ export default function({ dataSource, loading, getInfomation }) {
         </Col>
         <Col span={6} align="right">
           <Button type="link">
-            <Link to="/alert-center">Alert Center</Link>
+            <Link to="/homepage/alert-center">Alert Center</Link>
           </Button>
         </Col>
       </Row>

@@ -19,7 +19,7 @@ const Page404 = () => (
   // ></Result>
   <div className={styles.page404}>
     <span className={styles.font404}>404</span>
-    <img src={seperate} alt="" height="390" />
+    <img src={seperate} alt="" height="300" />
     <div className={styles.box}>
       <div>Sorry! We Lost the page, please try again later.</div>
       <span>Go To Home </span>

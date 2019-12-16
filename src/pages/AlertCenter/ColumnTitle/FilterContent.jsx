@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Select, Input, Checkbox, Button, Empty, Spin } from 'antd';
 import IconFont from '@/components/IconFont';
 import styles from './index.less';
@@ -51,7 +51,7 @@ export function FilterType({ isNum, loading, handleTypeChange }) {
   const condition = ({ id }) => (isNum ? id !== 7 : [1, 2, 7].includes(id));
   return (
     <div className={styles['filter-type']}>
-      <span>{isNum ? 'Numeric' : 'Text'}</span>
+      <span>{isNum ? 'NUM' : 'TEXT'}</span>
       <Select
         ellipsis
         loading={loading}
@@ -78,12 +78,12 @@ export function FilterSelect({ filterItems }) {
   }
 
   return (
-    <>
+    <div className={styles.selectbox}>
       <div className={styles.des}>Description</div>
       <Select
         showSearch
-        className={styles['scroll-container']}
         placeholder="Select a item"
+        className={styles.select}
         optionFilterProp="children"
         onChange={onChange}
         onSearch={onSearch}
@@ -97,38 +97,53 @@ export function FilterSelect({ filterItems }) {
           </Option>
         ))}
       </Select>
-    </>
+    </div>
   );
 }
 
-export function FilterCheckbox({ loading, filterItems }) {
+export function FilterCheckbox({ loading, filterItems, getCheckList }) {
+  const [searchList, setSearchList] = useState([]);
+
+  useEffect(() => {
+    setSearchList(filterItems);
+  }, [filterItems]);
+
   const [isCheckAll, setCheckAll] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
-  const [checkedList, setcheckedList] = useState([]);
+  const [checkedList, setcheckedList] = useState(searchList);
 
   function handleChange(cList) {
     setcheckedList(cList);
-    setIndeterminate(!!cList.length && cList.length < filterItems.length);
-    setCheckAll(cList.length === filterItems.length);
+    setIndeterminate(!!cList.length && cList.length < searchList.length);
+    setCheckAll(cList.length === searchList.length);
+    getCheckList(cList);
   }
 
   function handleCheckAllChange(e) {
     const { checked } = e.target;
-    setcheckedList(checked ? filterItems : []);
+    setcheckedList(checked ? searchList : []);
     setIndeterminate(false);
     setCheckAll(checked);
+    getCheckList(filterItems);
   }
 
   function handleSearch(value) {
-    console.log(value);
+    console.log('value', value);
+    const sList = searchList.filter(item => item.toLowerCase() === value.toLowerCase());
+    setSearchList(sList || filterItems);
   }
+
   return (
-    <>
-      <Search placeholder="input search text" className={styles.search} onSearch={handleSearch} />
+    <div className={styles.checkbox}>
+      <Search
+        placeholder="input search keyword"
+        className={styles.search}
+        onSearch={handleSearch}
+      />
       <div className={styles.des}>Description</div>
       <Spin spinning={loading}>
-        {filterItems.length > 0 ? (
-          <div>
+        {searchList.length > 0 ? (
+          <div className={styles['check-content']}>
             <Row>
               <Checkbox
                 indeterminate={indeterminate}
@@ -140,12 +155,15 @@ export function FilterCheckbox({ loading, filterItems }) {
             </Row>
             <Checkbox.Group
               className={styles['scroll-container']}
+              defaultValue={checkedList}
               value={checkedList}
               onChange={handleChange}
             >
-              {filterItems.map(item => (
+              {searchList.map(item => (
                 <Row key={item}>
-                  <Checkbox value={item}>{item}</Checkbox>
+                  <Checkbox value={item} defaultChecked>
+                    {item}
+                  </Checkbox>
                 </Row>
               ))}
             </Checkbox.Group>
@@ -154,6 +172,6 @@ export function FilterCheckbox({ loading, filterItems }) {
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
       </Spin>
-    </>
+    </div>
   );
 }

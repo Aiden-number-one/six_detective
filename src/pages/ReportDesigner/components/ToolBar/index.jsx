@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react';
 import { SketchPicker } from 'react-color';
 import classNames from 'classnames';
@@ -291,8 +292,18 @@ export default class ToolBar extends Component {
       whiteSpace: 'nowrap',
     };
     return (
-      <div className={classNames(styles.tabs, 'card-container')}>
-        {/* <div className={styles.fileBox}>
+      <>
+        <div className={classNames(styles.switchTabs)}>
+          <div className={styles.leftBlock} />
+          <div className={styles.middleBlock}>
+            <div className={styles.nameSpace}></div>
+            <div className={styles.tabsName}></div>
+            <div className={styles.tabsAreaAction}></div>
+          </div>
+          <div className={styles.rightBlock} />
+        </div>
+        <div className={classNames(styles.tabs, 'card-container')}>
+          {/* <div className={styles.fileBox}>
           <Dropdown
             trigger={['click']}
             overlay={
@@ -367,237 +378,242 @@ export default class ToolBar extends Component {
             </Button>
           </Dropdown>
         </div> */}
-        <Tabs type="card" defaultActiveKey="1">
-          <TabPane tab={<FormattedMessage id="report-designer.start" />} key="1">
-            <div style={tabPanelStyle}>
-              <div className={styles.group}>
-                <Button className={classNames('btn', 'btn2Report', 'mr6')}>
-                  <div className={styles.topBottom}>
-                    <IconFont type="iconicon_previrew" />
-                    <p>Preview</p>
+          <Tabs type="card" defaultActiveKey="1">
+            <TabPane tab={<FormattedMessage id="report-designer.start" />} key="1">
+              <div style={tabPanelStyle}>
+                <div className={styles.group}>
+                  <Button className={classNames('btn', 'btn2Report', 'mr6')}>
+                    <div className={styles.topBottom}>
+                      <IconFont type="iconicon_previrew" />
+                      <p>Preview</p>
+                    </div>
+                  </Button>
+                  <Button className={classNames('btn', 'btn2Report', 'mr6')}>
+                    <div className={styles.topBottom}>
+                      <IconFont type="icondaoru" />
+                      <p>Import</p>
+                    </div>
+                  </Button>
+                  <Button className={classNames('btn', 'btn2Report', 'mr6')}>
+                    <div className={styles.topBottom}>
+                      <IconFont type="iconfilesearch" />
+                      <p>Search</p>
+                    </div>
+                  </Button>
+                  <div className={styles.topBottomTwo}>
+                    <div>
+                      <Button
+                        className={classNames('btn', 'mr6')}
+                        onClick={() => {
+                          setCellStyle('cut');
+                        }}
+                      >
+                        <IconFont type="iconcut-solid-copy" />
+                        <span>Cut</span>
+                      </Button>
+                    </div>
+                    <div>
+                      <Button
+                        className={classNames('btn', 'mr6')}
+                        onClick={() => {
+                          setCellStyle('copy');
+                        }}
+                      >
+                        <IconFont type="iconcopy" />
+                        <span>Copy</span>
+                      </Button>
+                    </div>
                   </div>
-                </Button>
-                <Button className={classNames('btn', 'btn2Report', 'mr6')}>
-                  <div className={styles.topBottom}>
-                    <IconFont type="icondaoru" />
-                    <p>Import</p>
-                  </div>
-                </Button>
-                <Button className={classNames('btn', 'btn2Report', 'mr6')}>
-                  <div className={styles.topBottom}>
-                    <IconFont type="iconfilesearch" />
-                    <p>Search</p>
-                  </div>
-                </Button>
-                <div className={styles.topBottomTwo}>
-                  <div>
-                    <Button
-                      className={classNames('btn', 'mr6')}
+                </div>
+                <div className={styles.group}>
+                  <Button
+                    className={classNames(
+                      'btn',
+                      'btn2Report',
+                      'mr6',
+                      paintformatActive && 'active',
+                    )}
+                  >
+                    <div
+                      className={classNames(styles.topBottom)}
                       onClick={() => {
-                        setCellStyle('cut');
+                        setCellStyle('paintformat', true);
                       }}
                     >
-                      <IconFont type="iconcut-solid-copy" />
-                      <span>Cut</span>
+                      <IconFont type="icongeshishua" />
+                      <p className={styles.brP}>
+                        <span>Format</span>
+                        <br />
+                        <span>Painter</span>
+                      </p>
+                    </div>
+                  </Button>
+                </div>
+                <div className={styles.divider} />
+                <div className={styles.group}>
+                  <div className="mb4">
+                    <Select
+                      style={{ width: '140px', borderRight: 0 }}
+                      defaultValue="3"
+                      value={btnActiveStatus.fontFamily}
+                      size="small"
+                      suffixIcon={<Icon type="caret-down" />}
+                      onChange={value => {
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            fontFamily: value,
+                          },
+                        });
+                        setCellStyle('font-name', value);
+                      }}
+                    >
+                      {fontFamilySelect.map(item => (
+                        <Option value={item.value}>{item.key}</Option>
+                      ))}
+                    </Select>
+                    <Select
+                      className="select mr6"
+                      style={{ width: '66px' }}
+                      defaultValue="6"
+                      value={btnActiveStatus.fontSize}
+                      size="small"
+                      suffixIcon={<Icon type="caret-down" />}
+                      onChange={value => {
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            fontSize: value,
+                          },
+                        });
+                        setCellStyle('font-size', value);
+                      }}
+                    >
+                      {fontSizeSelect.map(item => (
+                        <Option value={item}>{item}</Option>
+                      ))}
+                    </Select>
+
+                    <Button
+                      className="btn mr6"
+                      onClick={() => {
+                        let index = fontSizeSelect.findIndex(
+                          item => item === btnActiveStatus.fontSize,
+                        );
+                        if (index === 16) {
+                          index = 0;
+                        } else {
+                          index += 1;
+                        }
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            fontSize: fontSizeSelect[index],
+                          },
+                        });
+                        setCellStyle('font-size', fontSizeSelect[index]);
+                      }}
+                    >
+                      <span>A+</span>
+                    </Button>
+
+                    <Button
+                      className="btn mr6"
+                      onClick={() => {
+                        let index = fontSizeSelect.findIndex(
+                          item => item === btnActiveStatus.fontSize,
+                        );
+                        if (index === 0) {
+                          index = 16;
+                        } else {
+                          index -= 1;
+                        }
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            fontSize: fontSizeSelect[index],
+                          },
+                        });
+                        setCellStyle('font-size', fontSizeSelect[index]);
+                      }}
+                    >
+                      <span>A-</span>
                     </Button>
                   </div>
                   <div>
                     <Button
-                      className={classNames('btn', 'mr6')}
                       onClick={() => {
-                        setCellStyle('copy');
+                        this.setState(() => ({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            fontWeight: btnActiveStatus.fontWeight === 'normal' ? 'bold' : 'normal',
+                          },
+                        }));
+                        setCellStyle('font-bold', true);
+                      }}
+                      className={classNames(
+                        'btn',
+                        'mr6',
+                        btnActiveStatus.fontWeight === 'bold' && 'active',
+                      )}
+                    >
+                      <IconFont type="iconB" />
+                    </Button>
+                    <Button
+                      className={classNames(
+                        'btn',
+                        'mr6',
+                        btnActiveStatus.fontStyle === 'italic' && 'active',
+                      )}
+                      onClick={() => {
+                        this.setState(() => ({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            fontStyle: btnActiveStatus.fontStyle === 'normal' ? 'italic' : 'normal',
+                          },
+                        }));
+                        setCellStyle('font-italic', true);
                       }}
                     >
-                      <IconFont type="iconcopy" />
-                      <span>Copy</span>
+                      <IconFont type="iconI" />
                     </Button>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.group}>
-                <Button
-                  className={classNames('btn', 'btn2Report', 'mr6', paintformatActive && 'active')}
-                >
-                  <div
-                    className={classNames(styles.topBottom)}
-                    onClick={() => {
-                      setCellStyle('paintformat', true);
-                    }}
-                  >
-                    <IconFont type="icongeshishua" />
-                    <p className={styles.brP}>
-                      <span>Format</span>
-                      <br />
-                      <span>Painter</span>
-                    </p>
-                  </div>
-                </Button>
-              </div>
-              <div className={styles.divider} />
-              <div className={styles.group}>
-                <div className="mb4">
-                  <Select
-                    style={{ width: '140px', borderRight: 0 }}
-                    defaultValue="3"
-                    value={btnActiveStatus.fontFamily}
-                    size="small"
-                    suffixIcon={<Icon type="caret-down" />}
-                    onChange={value => {
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          fontFamily: value,
-                        },
-                      });
-                      setCellStyle('font-name', value);
-                    }}
-                  >
-                    {fontFamilySelect.map(item => (
-                      <Option value={item.value}>{item.key}</Option>
-                    ))}
-                  </Select>
-                  <Select
-                    className="select mr6"
-                    style={{ width: '66px' }}
-                    defaultValue="6"
-                    value={btnActiveStatus.fontSize}
-                    size="small"
-                    suffixIcon={<Icon type="caret-down" />}
-                    onChange={value => {
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          fontSize: value,
-                        },
-                      });
-                      setCellStyle('font-size', value);
-                    }}
-                  >
-                    {fontSizeSelect.map(item => (
-                      <Option value={item}>{item}</Option>
-                    ))}
-                  </Select>
 
-                  <Button
-                    className="btn mr6"
-                    onClick={() => {
-                      let index = fontSizeSelect.findIndex(
-                        item => item === btnActiveStatus.fontSize,
-                      );
-                      if (index === 16) {
-                        index = 0;
-                      } else {
-                        index += 1;
-                      }
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          fontSize: fontSizeSelect[index],
-                        },
-                      });
-                      setCellStyle('font-size', fontSizeSelect[index]);
-                    }}
-                  >
-                    <span>A+</span>
-                  </Button>
-
-                  <Button
-                    className="btn mr6"
-                    onClick={() => {
-                      let index = fontSizeSelect.findIndex(
-                        item => item === btnActiveStatus.fontSize,
-                      );
-                      if (index === 0) {
-                        index = 16;
-                      } else {
-                        index -= 1;
-                      }
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          fontSize: fontSizeSelect[index],
-                        },
-                      });
-                      setCellStyle('font-size', fontSizeSelect[index]);
-                    }}
-                  >
-                    <span>A-</span>
-                  </Button>
-                </div>
-                <div>
-                  <Button
-                    onClick={() => {
-                      this.setState(() => ({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          fontWeight: btnActiveStatus.fontWeight === 'normal' ? 'bold' : 'normal',
-                        },
-                      }));
-                      setCellStyle('font-bold', true);
-                    }}
-                    className={classNames(
-                      'btn',
-                      'mr6',
-                      btnActiveStatus.fontWeight === 'bold' && 'active',
-                    )}
-                  >
-                    <IconFont type="iconB" />
-                  </Button>
-                  <Button
-                    className={classNames(
-                      'btn',
-                      'mr6',
-                      btnActiveStatus.fontStyle === 'italic' && 'active',
-                    )}
-                    onClick={() => {
-                      this.setState(() => ({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          fontStyle: btnActiveStatus.fontStyle === 'normal' ? 'italic' : 'normal',
-                        },
-                      }));
-                      setCellStyle('font-italic', true);
-                    }}
-                  >
-                    <IconFont type="iconI" />
-                  </Button>
-
-                  <Button
-                    onClick={() => {
-                      this.setState(() => ({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          textDecoration:
-                            btnActiveStatus.textDecoration === 'none' ? 'underline' : 'none',
-                        },
-                      }));
-                      setCellStyle('underline', true);
-                    }}
-                    className={classNames(
-                      'btn',
-                      'mr6',
-                      btnActiveStatus.textDecoration === 'underline' && 'active',
-                    )}
-                  >
-                    <IconFont type="iconxiahuaxian1" />
-                  </Button>
-                  <ButtonGroup className="btn-group mr6">
-                    <Popover content="边框" {...popoverProps}>
-                      <Button className="btn" onClick={() => {}}>
-                        <IconFont type="iconborder-none-solid" />
-                      </Button>
-                    </Popover>
-                    <Dropdown
-                      overlay={this.creatMenu(borderMenu, 'border')}
-                      trigger={['click']}
-                      placement="bottomLeft"
+                    <Button
+                      onClick={() => {
+                        this.setState(() => ({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            textDecoration:
+                              btnActiveStatus.textDecoration === 'none' ? 'underline' : 'none',
+                          },
+                        }));
+                        setCellStyle('underline', true);
+                      }}
+                      className={classNames(
+                        'btn',
+                        'mr6',
+                        btnActiveStatus.textDecoration === 'underline' && 'active',
+                      )}
                     >
-                      <Button className="btn with-icon">
-                        <Icon type="caret-down" />
-                      </Button>
-                    </Dropdown>
-                  </ButtonGroup>
-                  {/* <ButtonGroup className="btn-group mr6">
+                      <IconFont type="iconxiahuaxian1" />
+                    </Button>
+                    <ButtonGroup className="btn-group mr6">
+                      <Popover content="边框" {...popoverProps}>
+                        <Button className="btn" onClick={() => {}}>
+                          <IconFont type="iconborder-none-solid" />
+                        </Button>
+                      </Popover>
+                      <Dropdown
+                        overlay={this.creatMenu(borderMenu, 'border')}
+                        trigger={['click']}
+                        placement="bottomLeft"
+                      >
+                        <Button className="btn with-icon">
+                          <Icon type="caret-down" />
+                        </Button>
+                      </Dropdown>
+                    </ButtonGroup>
+                    {/* <ButtonGroup className="btn-group mr6">
                   <Popover content="绘图边框" {...popoverProps}>
                     <Button className="btn" onClick={this.handleButtonClick}>
                       <Icon component={() => <CustomizeIcon type="drawingBorder" />} />
@@ -613,75 +629,75 @@ export default class ToolBar extends Component {
                     </Button>
                   </Dropdown>
                 </ButtonGroup> */}
-                  <ButtonGroup className="btn-group mr6">
-                    <Button
-                      className="btn"
-                      onClick={() => {
-                        setCellStyle('bgcolor', backgroundColor);
-                      }}
-                    >
-                      <IconFont type="iconic_format_color_fill" />
-                    </Button>
-                    <Dropdown
-                      overlay={
-                        <SketchPicker
-                          color={backgroundColor}
-                          onChange={value => {
-                            this.setState({
-                              backgroundColor: value.hex,
-                            });
-                            setCellStyle('bgcolor', value.hex);
-                          }}
-                        />
-                      }
-                      trigger={['click']}
-                      placement="bottomLeft"
-                    >
-                      <Button className="btn with-icon">
-                        <Icon type="caret-down" />
+                    <ButtonGroup className="btn-group mr6">
+                      <Button
+                        className="btn"
+                        onClick={() => {
+                          setCellStyle('bgcolor', backgroundColor);
+                        }}
+                      >
+                        <IconFont type="iconic_format_color_fill" />
                       </Button>
-                    </Dropdown>
-                  </ButtonGroup>
-                  <ButtonGroup className="btn-group mr6">
-                    <Button
-                      className="btn"
-                      onClick={() => {
-                        setCellStyle('color', fontColor);
-                      }}
-                    >
-                      <IconFont type="iconic_format_color_text_px" />
-                    </Button>
-                    <Dropdown
-                      overlay={
-                        <SketchPicker
-                          color={fontColor}
-                          onChange={value => {
-                            this.setState({
-                              fontColor: value.hex,
-                            });
-                            setCellStyle('color', value.hex);
-                          }}
-                        />
-                      }
-                      trigger={['click']}
-                      placement="bottomLeft"
-                    >
-                      <Button className="btn with-icon">
-                        <Icon type="caret-down" />
+                      <Dropdown
+                        overlay={
+                          <SketchPicker
+                            color={backgroundColor}
+                            onChange={value => {
+                              this.setState({
+                                backgroundColor: value.hex,
+                              });
+                              setCellStyle('bgcolor', value.hex);
+                            }}
+                          />
+                        }
+                        trigger={['click']}
+                        placement="bottomLeft"
+                      >
+                        <Button className="btn with-icon">
+                          <Icon type="caret-down" />
+                        </Button>
+                      </Dropdown>
+                    </ButtonGroup>
+                    <ButtonGroup className="btn-group mr6">
+                      <Button
+                        className="btn"
+                        onClick={() => {
+                          setCellStyle('color', fontColor);
+                        }}
+                      >
+                        <IconFont type="iconic_format_color_text_px" />
                       </Button>
-                    </Dropdown>
-                  </ButtonGroup>
+                      <Dropdown
+                        overlay={
+                          <SketchPicker
+                            color={fontColor}
+                            onChange={value => {
+                              this.setState({
+                                fontColor: value.hex,
+                              });
+                              setCellStyle('color', value.hex);
+                            }}
+                          />
+                        }
+                        trigger={['click']}
+                        placement="bottomLeft"
+                      >
+                        <Button className="btn with-icon">
+                          <Icon type="caret-down" />
+                        </Button>
+                      </Dropdown>
+                    </ButtonGroup>
 
-                  {/* <ButtonGroup className="btn-group"> */}
-                  <Button
-                    className="btn"
-                    onClick={() => {
-                      setCellStyle('clearformat');
-                    }}
-                  >
-                    <IconFont type="iconeraser-ps" />
-                  </Button>
-                  {/* <Dropdown
+                    {/* <ButtonGroup className="btn-group"> */}
+                    <Button
+                      className="btn"
+                      onClick={() => {
+                        setCellStyle('clearformat');
+                      }}
+                    >
+                      <IconFont type="iconeraser-ps" />
+                    </Button>
+                    {/* <Dropdown
                     overlay={this.creatMenu(clearMenu, 'clear')}
                     trigger={['click']}
                     placement="bottomLeft"
@@ -691,68 +707,69 @@ export default class ToolBar extends Component {
                     </Button>
                   </Dropdown>
                 </ButtonGroup> */}
+                  </div>
                 </div>
-              </div>
-              <div className={styles.divider} />
-              <div className={classNames(styles.group, styles.iconGroup)}>
-                <div className="mb4">
-                  <Button
-                    onClick={() => {
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          verticalAlign: btnActiveStatus.verticalAlign === 'top' ? 'middle' : 'top',
-                        },
-                      });
-                      setCellStyle('valign', 'top');
-                    }}
-                    className={classNames(
-                      'btn',
-                      'mr6',
-                      btnActiveStatus.verticalAlign === 'top' && 'active',
-                    )}
-                  >
-                    <IconFont type="icondingduiqi" />
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          verticalAlign: 'middle',
-                        },
-                      });
-                      setCellStyle('valign', 'middle');
-                    }}
-                    className={classNames(
-                      'btn',
-                      'mr6',
-                      btnActiveStatus.verticalAlign === 'middle' && 'active',
-                    )}
-                  >
-                    <IconFont type="iconshuipingduiqi1" />
-                  </Button>
+                <div className={styles.divider} />
+                <div className={classNames(styles.group, styles.iconGroup)}>
+                  <div className="mb4">
+                    <Button
+                      onClick={() => {
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            verticalAlign:
+                              btnActiveStatus.verticalAlign === 'top' ? 'middle' : 'top',
+                          },
+                        });
+                        setCellStyle('valign', 'top');
+                      }}
+                      className={classNames(
+                        'btn',
+                        'mr6',
+                        btnActiveStatus.verticalAlign === 'top' && 'active',
+                      )}
+                    >
+                      <IconFont type="icondingduiqi" />
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            verticalAlign: 'middle',
+                          },
+                        });
+                        setCellStyle('valign', 'middle');
+                      }}
+                      className={classNames(
+                        'btn',
+                        'mr6',
+                        btnActiveStatus.verticalAlign === 'middle' && 'active',
+                      )}
+                    >
+                      <IconFont type="iconshuipingduiqi1" />
+                    </Button>
 
-                  <Button
-                    onClick={() => {
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          verticalAlign:
-                            btnActiveStatus.verticalAlign === 'bottom' ? 'middle' : 'bottom',
-                        },
-                      });
-                      setCellStyle('valign', 'bottom');
-                    }}
-                    className={classNames(
-                      'btn',
-                      'mr6',
-                      btnActiveStatus.verticalAlign === 'bottom' && 'active',
-                    )}
-                  >
-                    <IconFont type="icondiduiqi" />
-                  </Button>
-                  {/* <Popover content="减少缩进量" {...popoverProps} onClick={() => {}}>
+                    <Button
+                      onClick={() => {
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            verticalAlign:
+                              btnActiveStatus.verticalAlign === 'bottom' ? 'middle' : 'bottom',
+                          },
+                        });
+                        setCellStyle('valign', 'bottom');
+                      }}
+                      className={classNames(
+                        'btn',
+                        'mr6',
+                        btnActiveStatus.verticalAlign === 'bottom' && 'active',
+                      )}
+                    >
+                      <IconFont type="icondiduiqi" />
+                    </Button>
+                    {/* <Popover content="减少缩进量" {...popoverProps} onClick={() => {}}>
                   <Button className="btn mr6">
                     <Icon component={() => <CustomizeIcon type="decreaseIndent" />} />
                   </Button>
@@ -762,7 +779,7 @@ export default class ToolBar extends Component {
                     <Icon component={() => <CustomizeIcon type="increaseIndent" />} />
                   </Button>
                 </Popover> */}
-                  {/* <Popover content="合并居中" {...popoverProps}>
+                    {/* <Popover content="合并居中" {...popoverProps}>
                   <Button
                     className={classNames('btn', btnActiveStatus.isMerge && 'active')}
                     onClick={() => {
@@ -779,64 +796,64 @@ export default class ToolBar extends Component {
                     合并居中
                   </Button>
                 </Popover> */}
-                </div>
-                <div>
-                  <Button
-                    onClick={() => {
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          textAlign: 'left',
-                        },
-                      });
-                      setCellStyle('align', 'left');
-                    }}
-                    className={classNames(
-                      'btn',
-                      'mr6',
-                      btnActiveStatus.textAlign === 'left' && 'active',
-                    )}
-                  >
-                    <IconFont type="iconalign-left-solid" />
-                  </Button>
+                  </div>
+                  <div>
+                    <Button
+                      onClick={() => {
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            textAlign: 'left',
+                          },
+                        });
+                        setCellStyle('align', 'left');
+                      }}
+                      className={classNames(
+                        'btn',
+                        'mr6',
+                        btnActiveStatus.textAlign === 'left' && 'active',
+                      )}
+                    >
+                      <IconFont type="iconalign-left-solid" />
+                    </Button>
 
-                  <Button
-                    onClick={() => {
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          textAlign: btnActiveStatus.textAlign === 'center' ? 'left' : 'center',
-                        },
-                      });
-                      setCellStyle('align', 'center');
-                    }}
-                    className={classNames(
-                      'btn',
-                      'mr6',
-                      btnActiveStatus.textAlign === 'center' && 'active',
-                    )}
-                  >
-                    <IconFont type="iconalign-center-solid" />
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      this.setState({
-                        btnActiveStatus: {
-                          ...btnActiveStatus,
-                          textAlign: btnActiveStatus.textAlign === 'right' ? 'left' : 'right',
-                        },
-                      });
-                      setCellStyle('align', 'right');
-                    }}
-                    className={classNames(
-                      'btn',
-                      'mr6',
-                      btnActiveStatus.textAlign === 'right' && 'active',
-                    )}
-                  >
-                    <IconFont type="iconalign-right-solid" />
-                  </Button>
-                  {/* <Popover content="两端对齐" {...popoverProps} onClick={() => {}}>
+                    <Button
+                      onClick={() => {
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            textAlign: btnActiveStatus.textAlign === 'center' ? 'left' : 'center',
+                          },
+                        });
+                        setCellStyle('align', 'center');
+                      }}
+                      className={classNames(
+                        'btn',
+                        'mr6',
+                        btnActiveStatus.textAlign === 'center' && 'active',
+                      )}
+                    >
+                      <IconFont type="iconalign-center-solid" />
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        this.setState({
+                          btnActiveStatus: {
+                            ...btnActiveStatus,
+                            textAlign: btnActiveStatus.textAlign === 'right' ? 'left' : 'right',
+                          },
+                        });
+                        setCellStyle('align', 'right');
+                      }}
+                      className={classNames(
+                        'btn',
+                        'mr6',
+                        btnActiveStatus.textAlign === 'right' && 'active',
+                      )}
+                    >
+                      <IconFont type="iconalign-right-solid" />
+                    </Button>
+                    {/* <Popover content="两端对齐" {...popoverProps} onClick={() => {}}>
                   <Button
                     className={classNames(
                       'btn',
@@ -862,7 +879,7 @@ export default class ToolBar extends Component {
                     <Icon component={() => <CustomizeIcon type="alignBoth" />} />
                   </Button>
                 </Popover> */}
-                  {/* <Popover content="自动换行" {...popoverProps}>
+                    {/* <Popover content="自动换行" {...popoverProps}>
                   <Button
                     className={classNames('btn', btnActiveStatus.autoLineBreak && 'active')}
                     onClick={() => {
@@ -879,95 +896,95 @@ export default class ToolBar extends Component {
                     自动换行
                   </Button>
                 </Popover> */}
+                  </div>
                 </div>
-              </div>
-              <div className={styles.divider} />
-              <div className={styles.group}>
-                <Button
-                  className={classNames(
-                    'btn',
-                    'btn2Report',
-                    'mr6',
-                    btnActiveStatus.isMerge && 'active',
-                  )}
-                >
-                  <div
-                    className={classNames(styles.topBottom)}
-                    onClick={() => {
-                      setCellStyle('merge', true);
-                      setCellStyle('align', 'center');
-                    }}
+                <div className={styles.divider} />
+                <div className={styles.group}>
+                  <Button
+                    className={classNames(
+                      'btn',
+                      'btn2Report',
+                      'mr6',
+                      btnActiveStatus.isMerge && 'active',
+                    )}
                   >
-                    <IconFont type="iconhuanhang" />
-                    <p className={styles.brP}>
-                      <span>Merge and</span>
-                      <br />
-                      <span>center</span>
-                    </p>
-                  </div>
-                </Button>
-                <Button
-                  className={classNames(
-                    'btn',
-                    'btn2Report',
-                    'mr6',
-                    btnActiveStatus.autoLineBreak && 'active',
-                  )}
-                >
-                  <div
-                    className={classNames(styles.topBottom)}
-                    onClick={() => {
-                      setCellStyle('textwrap', !btnActiveStatus.autoLineBreak);
-                    }}
-                  >
-                    <IconFont type="iconhebingdanyuange_danyuangecaozuo_jurassic" />
-                    <p className={styles.brP}>
-                      <span>Wrap</span>
-                      <br />
-                      <span>Text</span>
-                    </p>
-                  </div>
-                </Button>
-              </div>
-              <div className={styles.divider} />
-              <div className={styles.group}>
-                <div className="mb4">
-                  <Popover content="数字格式" {...popoverProps}>
-                    <Select
-                      className="select"
-                      style={{ width: '139px' }}
-                      defaultValue="1"
-                      suffixIcon={<Icon type="caret-down" />}
-                      value={cellType.format ? cellType.format : undefined}
-                      size="small"
-                      onChange={value => {
-                        this.setState({
-                          cellType: {
-                            format: value,
-                          },
-                        });
-                        setCellType('cellType', this.cellTypeMap[value]);
+                    <div
+                      className={classNames(styles.topBottom)}
+                      onClick={() => {
+                        setCellStyle('merge', true);
+                        setCellStyle('align', 'center');
                       }}
                     >
-                      {this.cellType.map(item => (
-                        <Option key={item.key} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Popover>
+                      <IconFont type="iconhuanhang" />
+                      <p className={styles.brP}>
+                        <span>Merge and</span>
+                        <br />
+                        <span>center</span>
+                      </p>
+                    </div>
+                  </Button>
+                  <Button
+                    className={classNames(
+                      'btn',
+                      'btn2Report',
+                      'mr6',
+                      btnActiveStatus.autoLineBreak && 'active',
+                    )}
+                  >
+                    <div
+                      className={classNames(styles.topBottom)}
+                      onClick={() => {
+                        setCellStyle('textwrap', !btnActiveStatus.autoLineBreak);
+                      }}
+                    >
+                      <IconFont type="iconhebingdanyuange_danyuangecaozuo_jurassic" />
+                      <p className={styles.brP}>
+                        <span>Wrap</span>
+                        <br />
+                        <span>Text</span>
+                      </p>
+                    </div>
+                  </Button>
                 </div>
-                <div>
-                  <Button className="btn mr6">
-                    <IconFont type="iconrenminbi" />
-                  </Button>
-                  <Button className="btn mr6">
-                    <IconFont type="iconpercent-solid" />
-                  </Button>
-                  <Button className="btn mr6">
-                    <IconFont type="iconjisuan" />
-                  </Button>
-                  {/* <Popover content="千分位分隔样式" {...popoverProps} onClick={() => {}}>
+                <div className={styles.divider} />
+                <div className={styles.group}>
+                  <div className="mb4">
+                    <Popover content="数字格式" {...popoverProps}>
+                      <Select
+                        className="select"
+                        style={{ width: '139px' }}
+                        defaultValue="1"
+                        suffixIcon={<Icon type="caret-down" />}
+                        value={cellType.format ? cellType.format : undefined}
+                        size="small"
+                        onChange={value => {
+                          this.setState({
+                            cellType: {
+                              format: value,
+                            },
+                          });
+                          setCellType('cellType', this.cellTypeMap[value]);
+                        }}
+                      >
+                        {this.cellType.map(item => (
+                          <Option key={item.key} value={item.value}>
+                            {item.label}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Popover>
+                  </div>
+                  <div>
+                    <Button className="btn mr6">
+                      <IconFont type="iconrenminbi" />
+                    </Button>
+                    <Button className="btn mr6">
+                      <IconFont type="iconpercent-solid" />
+                    </Button>
+                    <Button className="btn mr6">
+                      <IconFont type="iconjisuan" />
+                    </Button>
+                    {/* <Popover content="千分位分隔样式" {...popoverProps} onClick={() => {}}>
                   <Button className="btn mr6">
                     <Icon component={() => <CustomizeIcon type="formatMoney" />} />
                   </Button>
@@ -982,35 +999,35 @@ export default class ToolBar extends Component {
                     <Icon component={() => <CustomizeIcon type="decreaseDecimal" />} />
                   </Button>
                 </Popover> */}
-                </div>
-              </div>
-              <div className={styles.divider} />
-              <div className={styles.group}>
-                <div style={{ display: 'inline-block' }}>
-                  <div className="mb4">
-                    <Button className="btn mr6" onClick={() => {}}>
-                      <IconFont type="iconfilter" />
-                    </Button>
-                    <Button className="btn mr6" onClick={() => {}}>
-                      <IconFont type="iconfilter" style={{ color: '#949EA7FF' }} />
-                    </Button>
-                    <Button className="btn mr6" onClick={() => {}}>
-                      <IconFont type="iconbiao-biaoge_jurassic" />
-                    </Button>
-                  </div>
-                  <div>
-                    <Button className="btn mr6" onClick={() => {}}>
-                      <IconFont type="iconsort-amount-up-solid" />
-                    </Button>
-                    <Button className="btn mr6" onClick={() => {}}>
-                      <IconFont type="iconsort-amount-down-solid" />
-                    </Button>
-                    <Button className="btn mr6" onClick={() => {}}>
-                      <IconFont type="iconbiaoge1" />
-                    </Button>
                   </div>
                 </div>
-                {/* <div className="btn-group-dropmenu">
+                <div className={styles.divider} />
+                <div className={styles.group}>
+                  <div style={{ display: 'inline-block' }}>
+                    <div className="mb4">
+                      <Button className="btn mr6" onClick={() => {}}>
+                        <IconFont type="iconfilter" />
+                      </Button>
+                      <Button className="btn mr6" onClick={() => {}}>
+                        <IconFont type="iconfilter" style={{ color: '#949EA7FF' }} />
+                      </Button>
+                      <Button className="btn mr6" onClick={() => {}}>
+                        <IconFont type="iconbiao-biaoge_jurassic" />
+                      </Button>
+                    </div>
+                    <div>
+                      <Button className="btn mr6" onClick={() => {}}>
+                        <IconFont type="iconsort-amount-up-solid" />
+                      </Button>
+                      <Button className="btn mr6" onClick={() => {}}>
+                        <IconFont type="iconsort-amount-down-solid" />
+                      </Button>
+                      <Button className="btn mr6" onClick={() => {}}>
+                        <IconFont type="iconbiaoge1" />
+                      </Button>
+                    </div>
+                  </div>
+                  {/* <div className="btn-group-dropmenu">
                 <Popover content="套用表格样式" {...popoverProps}>
                   <Button className="btn">
                     <Icon component={() => <CustomizeIcon type="formatCell" size="lg" />} />
@@ -1030,50 +1047,50 @@ export default class ToolBar extends Component {
                   </Dropdown>
                 </ButtonGroup>
               </div> */}
-              </div>
-              <div className={styles.group}>
-                <Button
-                  className={classNames(
-                    'btn',
-                    'btn2Report',
-                    'mr6',
-                    this.props.formatPainter && 'active',
-                  )}
-                >
-                  <div className={styles.topBottom}>
-                    <IconFont type="iconlianjie" />
-                    <p>Link</p>
-                  </div>
-                </Button>
-                <Button
-                  className={classNames(
-                    'btn',
-                    'btn2Report',
-                    'mr6',
-                    this.props.formatPainter && 'active',
-                  )}
-                >
-                  <div className={styles.topBottom}>
-                    <IconFont type="iconfreeze" />
-                    <p>Freeze</p>
-                  </div>
-                </Button>
-                <Button
-                  className={classNames(
-                    'btn',
-                    'btn2Report',
-                    'mr6',
-                    this.props.formatPainter && 'active',
-                  )}
-                >
-                  <div className={styles.topBottom}>
-                    <IconFont type="iconfilesearch" />
-                    <p>Picture</p>
-                  </div>
-                </Button>
-              </div>
-              <div className={styles.group}>
-                {/* <div className="btn-group-dropmenu mr6">
+                </div>
+                <div className={styles.group}>
+                  <Button
+                    className={classNames(
+                      'btn',
+                      'btn2Report',
+                      'mr6',
+                      this.props.formatPainter && 'active',
+                    )}
+                  >
+                    <div className={styles.topBottom}>
+                      <IconFont type="iconlianjie" />
+                      <p>Link</p>
+                    </div>
+                  </Button>
+                  <Button
+                    className={classNames(
+                      'btn',
+                      'btn2Report',
+                      'mr6',
+                      this.props.formatPainter && 'active',
+                    )}
+                  >
+                    <div className={styles.topBottom}>
+                      <IconFont type="iconfreeze" />
+                      <p>Freeze</p>
+                    </div>
+                  </Button>
+                  <Button
+                    className={classNames(
+                      'btn',
+                      'btn2Report',
+                      'mr6',
+                      this.props.formatPainter && 'active',
+                    )}
+                  >
+                    <div className={styles.topBottom}>
+                      <IconFont type="iconfilesearch" />
+                      <p>Picture</p>
+                    </div>
+                  </Button>
+                </div>
+                <div className={styles.group}>
+                  {/* <div className="btn-group-dropmenu mr6">
                 <Popover content="行和列" {...popoverProps}>
                   <Button
                     className="btn"
@@ -1095,7 +1112,7 @@ export default class ToolBar extends Component {
                   </Dropdown>
                 </ButtonGroup>
               </div> */}
-                {/* <div className="mr6" style={{ display: 'inline-block', verticalAlign: 'top' }}>
+                  {/* <div className="mr6" style={{ display: 'inline-block', verticalAlign: 'top' }}>
                 <div className="mb4">
                   <Popover content="添加超链接" {...popoverProps}>
                     <Button
@@ -1149,18 +1166,19 @@ export default class ToolBar extends Component {
                   </ButtonGroup>
                 </div>
               </div> */}
+                </div>
               </div>
-            </div>
-          </TabPane>
-          <TabPane
-            tab={<FormattedMessage id="report-designer.widgetcontrol" />}
-            key="2"
-            style={tabPanelStyle}
-          >
-            <div style={tabPanelStyle}></div>
-          </TabPane>
-        </Tabs>
-      </div>
+            </TabPane>
+            <TabPane
+              tab={<FormattedMessage id="report-designer.widgetcontrol" />}
+              key="2"
+              style={tabPanelStyle}
+            >
+              <div style={tabPanelStyle}></div>
+            </TabPane>
+          </Tabs>
+        </div>
+      </>
     );
   }
 }

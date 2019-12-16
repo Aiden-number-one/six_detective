@@ -1,4 +1,4 @@
-﻿ /*killIe*/
+ /*killIe*/
                         $.parser.parse($("body"));
                         var cpro_id = "u1331261";
 
