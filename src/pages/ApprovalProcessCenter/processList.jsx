@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Button, Modal, Input, Radio } from 'antd';
 import IconFont from '@/components/IconFont';
+// import { ConfirmModel } from './component/ConfirmModel';
 import { GetQueryString } from '@/utils/utils';
 import styles from './index.less';
 
@@ -37,7 +38,6 @@ function TaskBtn({
     <Row className={styles.btns}>
       <Col span={12}>
         <Button
-          type="primary"
           disabled={!selectedKeys.length}
           onClick={() =>
             Modal.confirm({
@@ -56,10 +56,10 @@ function TaskBtn({
           <IconFont type="iconicon_assign" className={styles['btn-icon']} />
           Assign
         </Button>
-        <Button disabled={!selectedKeys.length} onClick={closeAlert}>
+        {/* <Button disabled={!selectedKeys.length} onClick={() => setTaskWithdraw(selectedKeys)}>
           <IconFont type="iconicon_withdraw1 " className={styles['btn-icon']} />
           Withdraw
-        </Button>
+        </Button> */}
         <Button disabled={!selectedKeys.length} onClick={exportAlert}>
           <IconFont type="iconicon_export" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.export" />

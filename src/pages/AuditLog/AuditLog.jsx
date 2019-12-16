@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Table, Pagination } from 'antd';
+import { Form, Table, Pagination, Modal, Radio } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -23,6 +23,7 @@ class AuditLog extends Component {
     logEndDate: undefined,
     functionName: undefined,
     updatedBy: undefined,
+    exportDataVisible: false,
     functionNameOptions: [
       { key: '', value: '', title: 'All' },
       { key: '1', value: '1', title: 'Name One' },
@@ -63,6 +64,11 @@ class AuditLog extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         dataIndex: 'operateDate',
         key: 'operateDate',
+        render: (res, obj) => (
+          <div>
+            <span>{obj.operateDate && moment(obj.operateDate).format('DD/MM/YYYY')}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
@@ -162,6 +168,24 @@ class AuditLog extends Component {
     });
   };
 
+  exportData = () => {
+    this.setState({
+      exportDataVisible: true,
+    });
+  };
+
+  exportDataConfirm = () => {
+    this.setState({
+      exportDataVisible: false,
+    });
+  };
+
+  exportDataCancel = () => {
+    this.setState({
+      exportDataVisible: false,
+    });
+  };
+
   operatorReset = () => {
     this.auditLogForm.current.resetFields();
   };
@@ -169,13 +193,14 @@ class AuditLog extends Component {
   render() {
     const { loading } = this.props;
     let { getAuditLogList } = this.state;
-    const { page, functionNameOptions } = this.state;
+    const { page, functionNameOptions, exportDataVisible } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     return (
       <PageHeaderWrapper>
         <NewSearchForm
           search={this.queryLog}
+          exportData={this.exportData}
           ref={this.auditLogForm}
           functionNameOptions={functionNameOptions}
         />
@@ -200,6 +225,23 @@ class AuditLog extends Component {
             pageSize={page.pageSize}
           />
         </div>
+        <Modal
+          title="Select export format"
+          visible={exportDataVisible}
+          onOk={this.exportDataConfirm}
+          onCancel={this.exportDataCancel}
+          cancelText={formatMessage({ id: 'app.common.cancel' })}
+          okText={formatMessage({ id: 'app.common.save' })}
+        >
+          <div>
+            <Radio.Group name="radiogroup" defaultValue={2}>
+              <Radio value={1}>csv</Radio>
+              <Radio value={2}>xlsx</Radio>
+              <Radio value={3}>docx</Radio>
+              <Radio value={4}>pdf</Radio>
+            </Radio.Group>
+          </div>
+        </Modal>
       </PageHeaderWrapper>
     );
   }
