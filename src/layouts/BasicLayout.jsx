@@ -173,79 +173,80 @@ const BasicLayout = props => {
   };
 
   return (
-    <ProLayout
-      className={globalStyles.proLayout}
-      iconfontUrl={`http://${window.location.host}/iconfont.js`}
-      siderWidth={250}
-      logo={collapsed ? logoSamll : logo}
-      headerRender={headerRender}
-      menuHeaderRender={logoItem => <a>{logoItem}</a>}
-      onCollapse={handleMenuCollapse}
-      menuItemRender={(menuItemProps, defaultDom) => {
-        if (menuItemProps.isUrl || menuItemProps.children) {
-          return defaultDom;
-        }
-        if (menuItemProps.iframeUrl) {
-          return (
-            <Link
-              to={{
-                pathname: menuItemProps.path,
-                query: {
-                  iframeUrl: menuItemProps.iframeUrl,
-                },
-              }}
-            >
-              {defaultDom}
-            </Link>
-          );
-        }
-
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-      }}
-      breadcrumbRender={(routers = []) => [
-        {
-          path: '/',
-          breadcrumbName: formatMessage({
-            id: 'menu.home',
-            defaultMessage: 'Home',
-          }),
-        },
-        ...routers,
-      ]}
-      itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0;
-        return first ? (
-          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-        ) : (
-          <span>{route.breadcrumbName}</span>
-        );
-      }}
-      footerRender={footerRender}
-      menuDataRender={() => menuDataRender(menuData)}
-      // menuDataRender={menuDataRender}
-      formatMessage={formatMessage}
-      rightContentRender={rightProps => <RightContent {...rightProps} />}
-      // menuRender={(a, b) => {
-      //   debugger;
-      //   return null;
-      // }}
-      {...props}
-      {...settings}
-      // 展开一个，其他默认收起
-      menuProps={{
-        openKeys,
-        onOpenChange: openKeysNew => {
-          const latestOpenKey = openKeysNew.slice(-1) ? openKeysNew.slice(-1)[0] : '';
-          if (menuData.map(value => value.page).indexOf(latestOpenKey) === -1) {
-            setOpenKeys(openKeysNew);
-          } else {
-            setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    <div className={globalStyles.proLayout}>
+      <ProLayout
+        iconfontUrl={`http://${window.location.host}/iconfont.js`}
+        siderWidth={250}
+        logo={collapsed ? logoSamll : logo}
+        headerRender={headerRender}
+        menuHeaderRender={logoItem => <a>{logoItem}</a>}
+        onCollapse={handleMenuCollapse}
+        menuItemRender={(menuItemProps, defaultDom) => {
+          if (menuItemProps.isUrl || menuItemProps.children) {
+            return defaultDom;
           }
-        },
-      }}
-    >
-      {children}
-    </ProLayout>
+          if (menuItemProps.iframeUrl) {
+            return (
+              <Link
+                to={{
+                  pathname: menuItemProps.path,
+                  query: {
+                    iframeUrl: menuItemProps.iframeUrl,
+                  },
+                }}
+              >
+                {defaultDom}
+              </Link>
+            );
+          }
+
+          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        }}
+        breadcrumbRender={(routers = []) => [
+          {
+            path: '/',
+            breadcrumbName: formatMessage({
+              id: 'menu.home',
+              defaultMessage: 'Home',
+            }),
+          },
+          ...routers,
+        ]}
+        itemRender={(route, params, routes, paths) => {
+          const first = routes.indexOf(route) === 0;
+          return first ? (
+            <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+          ) : (
+            <span>{route.breadcrumbName}</span>
+          );
+        }}
+        footerRender={footerRender}
+        menuDataRender={() => menuDataRender(menuData)}
+        // menuDataRender={menuDataRender}
+        formatMessage={formatMessage}
+        rightContentRender={rightProps => <RightContent {...rightProps} />}
+        // menuRender={(a, b) => {
+        //   debugger;
+        //   return null;
+        // }}
+        {...props}
+        {...settings}
+        // 展开一个，其他默认收起
+        menuProps={{
+          openKeys,
+          onOpenChange: openKeysNew => {
+            const latestOpenKey = openKeysNew.slice(-1) ? openKeysNew.slice(-1)[0] : '';
+            if (menuData.map(value => value.page).indexOf(latestOpenKey) === -1) {
+              setOpenKeys(openKeysNew);
+            } else {
+              setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+            }
+          },
+        }}
+      >
+        {children}
+      </ProLayout>
+    </div>
   );
 };
 
