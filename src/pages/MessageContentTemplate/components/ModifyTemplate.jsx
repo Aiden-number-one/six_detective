@@ -181,9 +181,10 @@ class ModifyTemplate extends Component {
           content: values.content,
         };
         dispatch({
-          type: 'messageContentTemplate/updateUserAlert',
+          type: 'messageContentTemplate/updateTemplate',
           payload: params,
           callback: () => {
+            message.success('save success');
             this.props.onSave();
           },
         });
