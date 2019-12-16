@@ -10,6 +10,7 @@ import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { setLocale } from 'umi/locale';
+import router from 'umi/router';
 // import CustomizeSelectLang from '@/components/CustomizeSelectLang';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
@@ -123,54 +124,53 @@ const BasicLayout = props => {
     </div>
   );
 
-  const headerRender = () => {
-    if (window.location.pathname === '/') {
-      return (
-        <div className={styles.headerRender} style={{ position: 'absolute', border: 'none' }}>
-          <div className={styles.left} style={{ border: 'none' }}>
-            <Icon
-              className={styles.collapsed}
-              type={collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={() => handleMenuCollapse()}
-            />
-          </div>
+  // if (window.location.pathname === '/') {
+  //   return (
+  //     <div className={styles.headerRender} style={{ position: 'absolute', border: 'none' }}>
+  //       <div className={styles.left} style={{ border: 'none' }}>
+  //         <Icon
+  //           className={styles.collapsed}
+  //           type={collapsed ? 'menu-unfold' : 'menu-fold'}
+  //           onClick={() => handleMenuCollapse()}
+  //         />
+  //       </div>
+  //     </div>
+  //   );
+  // }
+  // return
+  const headerRender = () => (
+    <div className={styles.headerRender}>
+      <div className={styles.left}>
+        <Icon
+          className={styles.collapsed}
+          type={collapsed ? 'menu-unfold' : 'menu-fold'}
+          onClick={() => handleMenuCollapse()}
+        />
+      </div>
+      <div className={styles.right}>
+        <div className={styles.info}>
+          <Badge dot>
+            <IconFont type="icon-xiaoxi" className={styles.bell} />
+          </Badge>
         </div>
-      );
-    }
-    return (
-      <div className={styles.headerRender}>
-        <div className={styles.left}>
-          <Icon
-            className={styles.collapsed}
-            type={collapsed ? 'menu-unfold' : 'menu-fold'}
-            onClick={() => handleMenuCollapse()}
-          />
-        </div>
-        <div className={styles.right}>
-          <div className={styles.info}>
-            <Badge dot>
-              <IconFont type="icon-xiaoxi" className={styles.bell} />
-            </Badge>
-          </div>
-          <div className={styles.user}>
-            <IconFont type="icon-usercircle" className={styles.avatar} />
-            {/* <CustomizeSelectLang /> */}
-            <span title="Thomas Chow" className={styles.username}>
-              {window.localStorage.loginName}
-            </span>
-            <Popover
-              placement="bottomRight"
-              content={popoverContent()}
-              trigger="click"
-              overlayClassName="userinfo"
-            >
-              <Icon type="caret-down" />
-            </Popover>
-          </div>
+        <div className={styles.user}>
+          <IconFont type="icon-usercircle" className={styles.avatar} />
+          {/* <CustomizeSelectLang /> */}
+          <span title="Thomas Chow" className={styles.username}>
+            {window.localStorage.loginName}
+          </span>
+          <Popover
+            placement="bottomRight"
+            content={popoverContent()}
+            trigger="click"
+            overlayClassName="userinfo"
+          >
+            <Icon type="caret-down" />
+          </Popover>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 
   return (
     <div className={globalStyles.proLayout}>
@@ -179,7 +179,15 @@ const BasicLayout = props => {
         siderWidth={250}
         logo={collapsed ? logoSamll : logo}
         headerRender={headerRender}
-        menuHeaderRender={logoItem => <a>{logoItem}</a>}
+        menuHeaderRender={logoItem => (
+          <a
+            onClick={() => {
+              router.push('/homepage/homepage');
+            }}
+          >
+            {logoItem}
+          </a>
+        )}
         onCollapse={handleMenuCollapse}
         menuItemRender={(menuItemProps, defaultDom) => {
           if (menuItemProps.isUrl || menuItemProps.children) {
