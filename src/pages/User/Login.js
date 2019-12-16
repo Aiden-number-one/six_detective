@@ -2,8 +2,8 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-12-13 09:29:59
- * @LastEditors: mus
+ * @LastEditTime: 2019-12-16 10:39:41
+ * @LastEditors: lan
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -60,7 +60,7 @@ class Login extends Component {
           }
           const item = response.bcjson.items[0];
           localStorage.setItem('loginName', item.name);
-          router.push('/');
+          router.push('/homepage/homepage');
         },
       });
     }

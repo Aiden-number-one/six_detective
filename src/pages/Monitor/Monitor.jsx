@@ -29,9 +29,9 @@ const mockData1 = {
 
 export default class Monitor extends PureComponent {
   componentDidMount() {
-    document.getElementsByClassName('ant-layout-header')[0].style.position = 'absolute';
-    document.getElementsByClassName('ant-layout-header')[0].style.background = 'transparent';
-    document.getElementsByClassName('ant-layout-header')[0].style.width = '';
+    // document.getElementsByClassName('ant-layout-header')[0].style.position = 'absolute';
+    // document.getElementsByClassName('ant-layout-header')[0].style.background = 'transparent';
+    // document.getElementsByClassName('ant-layout-header')[0].style.width = '';
     const scale = document.getElementById('pageWidth').offsetWidth / 1920;
     document.getElementById('scaleDiv').style.transform = `scale(${scale})`;
     const height = document.getElementById('scaleDiv').offsetHeight * scale;
@@ -49,11 +49,11 @@ export default class Monitor extends PureComponent {
     }, 300);
   }
 
-  componentWillUnmount() {
-    document.getElementsByClassName('ant-layout-header')[0].style.position = '';
-    document.getElementsByClassName('ant-layout-header')[0].style.background = '';
-    document.getElementsByClassName('ant-layout-header')[0].style.width = '100%';
-  }
+  // componentWillUnmount() {
+  //   document.getElementsByClassName('ant-layout-header')[0].style.position = '';
+  //   document.getElementsByClassName('ant-layout-header')[0].style.background = '';
+  //   document.getElementsByClassName('ant-layout-header')[0].style.width = '100%';
+  // }
 
   render() {
     return (
