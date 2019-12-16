@@ -9,50 +9,53 @@
   font-family: 'AvenirBook';
   src: url('../AvenirBook.ttc');
 }
-.proLayout {
-  .page404 {
+
+.page404 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 155px);
+  min-height: 500px;
+  background-color: #d1dde6;
+  .font404 {
+    color: #f3374c;
+    font-size: 120px;
+    font-family: AvenirHeavy, sans-serif;
+  }
+  .box {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: calc(100vh - 155px);
-    min-height: 500px;
-    background-color: #d1dde6;
-    .font404 {
-      color: #f3374c;
-      font-size: 120px;
+    width: 300px;
+    height: 300px;
+    color: #fff;
+    font-size: 12px;
+    background-color: #0d87d4;
+    border-radius: 50%;
+    div {
+      width: 270px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      border: 1px solid #fff;
+    }
+    span {
+      margin-top: 10px;
       font-family: AvenirHeavy, sans-serif;
     }
-    .box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 300px;
-      height: 300px;
-      color: #fff;
-      font-size: 12px;
-      background-color: #0d87d4;
-      border-radius: 50%;
-      div {
-        width: 270px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        border: 1px solid #fff;
-      }
-      span {
-        margin-top: 10px;
-        font-family: AvenirHeavy, sans-serif;
-      }
-      img {
-        margin-top: 10px;
-        cursor: pointer;
-      }
+    img {
+      margin-top: 10px;
+      cursor: pointer;
     }
   }
+}
 
-  :global {
+:global {
+  .proLayout,
+  .ant-drawer-right,
+  .ant-popover-inner-content {
     // 基础表单
     .form-item {
       padding-right: 20px;

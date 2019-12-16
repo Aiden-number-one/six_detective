@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 17:50:23
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-09 13:38:14
+ * @LastEditTime: 2019-12-16 11:00:51
  */
 export default {
   'app.common.userId': 'User ID',
@@ -12,6 +12,7 @@ export default {
   'app.common.email': 'Email',
   'app.common.operation': 'Operation',
   'app.common.search': 'Search',
+  'app.common.export': 'Export',
   'app.common.newUser': 'New User',
   'app.common.modify': 'Modify',
   'app.common.delete': 'Delete',

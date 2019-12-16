@@ -12,11 +12,11 @@ import {
   Drawer,
   Radio,
   message,
-  Modal,
 } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
+import { ConfirmModel } from './component/ConfirmModel';
 import styles from './index.less';
 
 const { TabPane } = Tabs;
@@ -27,14 +27,6 @@ const { Paragraph, Text } = Typography;
 // export function TaskDes({ detailItem }) {
 //   return <div></div>;
 // }
-
-function ConfirmModel({ title, confirmVisible, comfirm, closeModel }) {
-  return (
-    <Modal title={title} visible={confirmVisible} onOk={comfirm} onCancel={closeModel}>
-      <p>Do you comfirm to reject this task?</p>
-    </Modal>
-  );
-}
 
 function DetailForm({ form, detailItem, task }) {
   const { getFieldDecorator } = form;
@@ -225,6 +217,7 @@ function ProcessDetail({
   const [radioValue, setRadioValue] = useState('');
   const [submitType, setSubmitType] = useState('');
   const [confirmVisible, setConfirmVisible] = useState(false);
+  const [withdrawConfirmVisible, setWithdrawConfirmVisible] = useState(false);
   const newDetailForm = React.createRef();
   console.log('detailItem--000-->', radioValue, taskGroup);
 
@@ -309,6 +302,27 @@ function ProcessDetail({
     setVisible(false);
   }
 
+  // 撤销
+  function setTaskWithdraw() {
+    dispatch({
+      type: 'approvalCenter/setTaskWithdraw',
+      payload: {
+        taskCode: task.taskCode,
+        comment: '',
+      },
+      callback: () => {
+        dispatch({
+          type: 'approvalCenter/fetch',
+          payload: {
+            type: currentTaskType,
+            taskCode: task.taskCode,
+          },
+        });
+      },
+    });
+    setWithdrawConfirmVisible(false);
+  }
+
   function getUserList() {
     dispatch({
       type: 'approvalCenter/fetchUserList',
@@ -347,9 +361,17 @@ function ProcessDetail({
     <>
       <ConfirmModel
         title="CONFIRM"
+        content="Do you comfirm to reject this task?"
         closeModel={() => setConfirmVisible(false)}
         confirmVisible={confirmVisible}
         comfirm={() => submitOrApproveTask(submitType)}
+      />
+      <ConfirmModel
+        title="CONFIRM"
+        content="Do you comfirm to withdraw this task?"
+        closeModel={() => setWithdrawConfirmVisible(false)}
+        confirmVisible={withdrawConfirmVisible}
+        comfirm={setTaskWithdraw}
       />
       <Row className={styles['detail-container']} gutter={16}>
         <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -448,25 +470,27 @@ function ProcessDetail({
                   ) : (
                     <>
                       <Col span={6}>
-                        <Button
-                          style={{ margin: '0 10px' }}
-                          type="primary"
-                          onClick={() => submitDrawer('pass')}
-                        >
+                        <Button type="primary" onClick={() => submitDrawer('pass')}>
                           Approve
                         </Button>
                       </Col>
                       <Col span={6}>
-                        <Button
-                          style={{ margin: '0 10px' }}
-                          type="primary"
-                          onClick={() => submitDrawer('reject')}
-                        >
+                        <Button type="primary" onClick={() => submitDrawer('reject')}>
                           Reject
                         </Button>
                       </Col>
                     </>
                   )}
+                  {/* <Col span={6}>
+                    <Button style={{ margin: '0 10px' }} type="primary">
+                      attachments
+                    </Button>
+                  </Col> */}
+                  <Col span={6}>
+                    <Button onClick={() => setWithdrawConfirmVisible(true)} type="primary">
+                      Withtraw
+                    </Button>
+                  </Col>
 
                   {/* <Col span={6}>attachments</Col> */}
                 </Row>

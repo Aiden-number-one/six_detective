@@ -3,9 +3,9 @@
  * @Author: dailinbo
  * @Date: 2019-11-13 16:47:20
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-10 17:44:16
+ * @LastEditTime: 2019-12-16 15:25:56
  */
-// import moment from 'moment';
+import moment from 'moment';
 import { formatTimeString } from '@/utils/utils';
 
 const userStatus = value => {
@@ -37,12 +37,7 @@ const timeFormat = time => {
   const strArr = str.split(' ');
   const str1 = strArr[0];
   const str2 = strArr[1];
-  const strA1 = str1.split('/');
-  const temp = strA1[0];
-  // eslint-disable-next-line prefer-destructuring
-  strA1[0] = strA1[2];
-  strA1[2] = temp;
-  const s1 = strA1.join('/');
+  const s1 = moment(str1).format('DD/MM/YYYY');
   const obj = {
     t1: s1,
     t2: str2,
