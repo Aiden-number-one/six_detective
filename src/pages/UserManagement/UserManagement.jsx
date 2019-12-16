@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-14 18:27:41
+ * @LastEditTime: 2019-12-16 15:30:45
  */
 
 import React, { Component } from 'react';
@@ -14,6 +14,7 @@ import { connect } from 'dva';
 import styles from './UserManagement.less';
 import { passWordStrength } from '@/utils/utils';
 import { timeFormat } from '@/utils/filter';
+// import moment from 'moment';
 import IconFont from '@/components/IconFont';
 
 import SearchForm from './components/SearchForm';
@@ -83,9 +84,10 @@ class UserManagement extends Component {
         key: 'updateTime',
         render: (res, obj) => (
           <div>
-            <span>{timeFormat(obj.updateTime).t1}</span>
+            <span>{obj.updateTime && timeFormat(obj.updateTime).t1}</span>
             <br />
-            <span>{timeFormat(obj.updateTime).t2}</span>
+            <span>{obj.updateTime && timeFormat(obj.updateTime).t2}</span>
+            {/* <span>{moment(obj.updateTime).format('YYYY-MM-DD')}</span> */}
           </div>
         ),
       },

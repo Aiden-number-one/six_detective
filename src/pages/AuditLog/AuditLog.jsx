@@ -64,6 +64,11 @@ class AuditLog extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         dataIndex: 'operateDate',
         key: 'operateDate',
+        render: (res, obj) => (
+          <div>
+            <span>{obj.operateDate && moment(obj.operateDate).format('DD/MM/YYYY')}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
