@@ -40,7 +40,7 @@ class MenuUserGroup extends Component {
           ),
         },
         {
-          title: formatMessage({ id: 'systemManagement.userMaintenance.name' }),
+          title: formatMessage({ id: 'systemManagement.userMaintenance.menuGroupName' }),
           dataIndex: 'groupName',
           key: 'groupName',
         },
