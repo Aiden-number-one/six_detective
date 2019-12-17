@@ -81,7 +81,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
             closable={false}
             tab={<FormattedMessage id="alert-center.alert-item-list" />}
           >
-            <AlertTask />
+            <AlertTask alert={alert} />
           </TabPane>
         </Tabs>
       </Col>

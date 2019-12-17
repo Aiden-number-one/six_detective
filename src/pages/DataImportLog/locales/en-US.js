@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 10:54:40
  * @LastEditors: iron
- * @LastEditTime: 2019-12-06 16:16:21
+ * @LastEditTime: 2019-12-16 15:08:27
  */
 export default {
   'data-import.lop.trade-date': 'Trade Date',
@@ -34,5 +34,7 @@ export default {
   'data-import.market.description': 'Description',
   'data-import.market.download': 'Download',
   'data-import.market.search': 'Search',
+  'data-import.market.file': 'File',
+  'data-import.market.manual-upload': 'MANUAL UPLOAD',
   'data-import.market.history': 'Market Data Import History',
 };

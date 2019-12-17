@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { FormattedMessage } from 'umi/locale';
-import { Form, Row, Button, DatePicker, Select, Radio, Col, Input } from 'antd';
-
-import { PROCESSING_STATUS, SUBMISSION_REPORT, yesterday, today, dateFormat } from './constants';
+import { Form, Row, Button, DatePicker, Select, Col, Input } from 'antd';
+import { SUBMISSION_REPORT, yesterday, today, dateFormat } from '../constants';
 import styles from '../index.less';
 
 const { RangePicker } = DatePicker;
@@ -16,81 +15,70 @@ function LopLogFilterForm({ form, handleSearch }) {
     validateFields((err, values) => {
       if (!err) {
         const format = 'YYYYMMDD';
+        const { tradeDate, submissionDate, ...rest } = values;
 
         let startSubmissionDate = '';
         let endSubmissionDate = '';
 
-        const { tradeDate: tdate, submissionDate, ...rest } = values;
-        const tradeDate = tdate && tdate.format(format);
+        let startTradeDate = '';
+        let endTadeDate = '';
+
+        if (tradeDate) {
+          const [start, end] = tradeDate;
+          startTradeDate = start && start.format(format);
+          endTadeDate = end && end.format(format);
+        }
+
         if (submissionDate) {
           const [start, end] = submissionDate;
           startSubmissionDate = start && start.format(format);
           endSubmissionDate = end && end.format(format);
         }
 
-        handleSearch({ ...rest, tradeDate, startSubmissionDate, endSubmissionDate });
+        handleSearch({
+          ...rest,
+          startTradeDate,
+          endTadeDate,
+          startSubmissionDate,
+          endSubmissionDate,
+        });
       }
     });
   }
 
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" className={styles.form}>
       <Row>
-        <Col span={8}>
+        <Col span={7}>
           <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
             {getFieldDecorator('tradeDate', {
-              initialValue: yesterday,
+              initialValue: [yesterday, today],
               rules: [
                 {
                   required: false,
                   message: 'Please select trade date!',
                 },
               ],
-            })(<DatePicker format={dateFormat} />)}
+            })(<RangePicker format={dateFormat} />)}
           </Form.Item>
-          <Form.Item label={<FormattedMessage id="data-import.lop.submission-date" />}>
-            {getFieldDecorator('submissionDate', {
-              initialValue: [yesterday, today],
+        </Col>
+        <Col span={7} offset={1}>
+          <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
+            {getFieldDecorator('submissionReport', {
               rules: [
                 {
                   required: false,
-                  message: 'Please select submission date!',
+                  message: 'Please select submission report!',
                 },
               ],
-            })(<RangePicker format={dateFormat} />)}
+            })(
+              <Select placeholder="please select submission report" allowClear>
+                {SUBMISSION_REPORT.map(report => (
+                  <Option key={report}>{report}</Option>
+                ))}
+              </Select>,
+            )}
           </Form.Item>
-          <Row type="flex" justify="space-between">
-            <Col span={8}>
-              <Form.Item label={<FormattedMessage id="data-import.lop.late-submission" />}>
-                {getFieldDecorator('lateSubmission', {
-                  initialValue: 'y',
-                })(
-                  <Radio.Group>
-                    <Radio value="y">Y</Radio>
-                    <Radio value="n">N</Radio>
-                  </Radio.Group>,
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label={<FormattedMessage id="data-import.lop.submission-channel" />}>
-                {getFieldDecorator('submissionChannel', {
-                  initialValue: 'ecp',
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please select submission channel!',
-                    },
-                  ],
-                })(
-                  <Radio.Group>
-                    <Radio value="ecp">ECP</Radio>
-                    <Radio value="user">User</Radio>
-                  </Radio.Group>,
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
         </Col>
         <Col span={7} offset={1}>
           <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
@@ -103,6 +91,10 @@ function LopLogFilterForm({ form, handleSearch }) {
               ],
             })(<Input placeholder="please input submitter code" />)}
           </Form.Item>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={7}>
           <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
             {getFieldDecorator('submitterName', {
               rules: [
@@ -112,40 +104,6 @@ function LopLogFilterForm({ form, handleSearch }) {
                 },
               ],
             })(<Input placeholder="please input submitter name" />)}
-          </Form.Item>
-        </Col>
-        <Col span={7} offset={1}>
-          <Form.Item label={<FormattedMessage id="data-import.lop.processing-status" />}>
-            {getFieldDecorator('processingStatus', {
-              rules: [
-                {
-                  required: false,
-                  message: 'Please select processing status!',
-                },
-              ],
-            })(
-              <Select placeholder="please select processing status">
-                {PROCESSING_STATUS.map(status => (
-                  <Option key={status}>{status}</Option>
-                ))}
-              </Select>,
-            )}
-          </Form.Item>
-          <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
-            {getFieldDecorator('submissionReport', {
-              rules: [
-                {
-                  required: false,
-                  message: 'Please select submission report!',
-                },
-              ],
-            })(
-              <Select placeholder="please select submission report">
-                {SUBMISSION_REPORT.map(report => (
-                  <Option key={report}>{report}</Option>
-                ))}
-              </Select>,
-            )}
           </Form.Item>
         </Col>
       </Row>

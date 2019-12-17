@@ -114,6 +114,7 @@ class CodeMaintenance extends Component {
     updateCodeItemParams: {
       codeId: '',
       subitemId: '',
+      subitem: '',
       subitemName: '',
       sequence: '',
     },
@@ -144,6 +145,7 @@ class CodeMaintenance extends Component {
     const newUpdateCodeItemParams = {
       codeId,
       subitemId: recode.subitemId,
+      subitem: recode.subitem,
       subitemName: recode.subitemName,
       sequence: recode.sequence,
     };

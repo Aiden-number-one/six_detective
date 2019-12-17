@@ -31,7 +31,7 @@ function TaskBtn({
   searchTask,
   urlTaskCode,
   claimOk,
-  closeAlert,
+  setTaskAssign,
   exportAlert,
 }) {
   return (
@@ -39,20 +39,21 @@ function TaskBtn({
       <Col span={12}>
         <Button
           disabled={!selectedKeys.length}
-          onClick={() =>
-            Modal.confirm({
-              title: 'Confirm',
-              content: 'Are you sure claim these tasks?',
-              okText: 'Sure',
-              cancelText: 'Cancel',
-              onOk: () => claimOk(selectedKeys),
-            })
-          }
+          onClick={() => claimOk(selectedKeys)}
+          //   onClick={() =>
+          //     Modal.confirm({
+          //       title: 'Confirm',
+          //       content: 'Are you sure claim these tasks?',
+          //       okText: 'Sure',
+          //       cancelText: 'Cancel',
+          //       onOk: () => claimOk(selectedKeys),
+          //     })
+          //   }
         >
           <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button disabled={!selectedKeys.length} onClick={closeAlert}>
+        <Button disabled={!selectedKeys.length} onClick={() => setTaskAssign(selectedKeys)}>
           <IconFont type="iconicon_assign" className={styles['btn-icon']} />
           Assign
         </Button>
@@ -98,6 +99,10 @@ function ProcessList({
       payload: {
         taskCode: urlTaskCode,
       },
+    });
+    dispatch({
+      type: 'approvalCenter/getUserListByUserId',
+      payload: {},
     });
   }, []);
 
@@ -155,6 +160,17 @@ function ProcessList({
     });
   }
 
+  function setTaskAssign(taskCode) {
+    console.log('taskCode----------->', taskCode);
+    dispatch({
+      type: 'approvalCenter/setTaskAssign',
+      payload: {
+        taskCode,
+        userId: '',
+      },
+    });
+  }
+
   function searchTask(taskType, value) {
     dispatch({
       type: 'approvalCenter/fetch',
@@ -185,6 +201,7 @@ function ProcessList({
         searchTask={searchTask}
         urlTaskCode={urlTaskCode}
         claimOk={claimOk}
+        setTaskAssign={setTaskAssign}
       />
       <Table
         border

@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-14 17:07:10
+ * @LastEditTime: 2019-12-16 19:25:08
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -13,7 +13,9 @@ export default {
   'systemManagement.userMaintenance.LastUpdateTime': 'Last Update Time',
   'systemManagement.userMaintenance.LastUpdateUser': 'Last Update User',
   'systemManagement.userMaintenance.menuUserGroup': 'Menu User Group',
+  'systemManagement.userMaintenance.menuGroupName': 'Menu Group Name',
   'systemManagement.userMaintenance.alertUserGroup': 'Alert User Group',
+  'systemManagement.userMaintenance.alertGroupName': 'Alert Group Name',
   'systemManagement.emailParameter.severIP': 'Sever IP',
   'systemManagement.emailParameter.port': 'Port',
   'systemManagement.emailParameter.senderEmailAddress': 'Sender email address',

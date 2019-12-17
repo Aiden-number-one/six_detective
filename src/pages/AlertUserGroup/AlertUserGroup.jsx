@@ -40,7 +40,7 @@ class AlertUserGroup extends Component {
           ),
         },
         {
-          title: formatMessage({ id: 'systemManagement.userMaintenance.name' }),
+          title: formatMessage({ id: 'systemManagement.userMaintenance.alertGroupName' }),
           dataIndex: 'groupName',
           key: 'groupName',
         },
