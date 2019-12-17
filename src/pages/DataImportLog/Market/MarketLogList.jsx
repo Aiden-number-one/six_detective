@@ -1,33 +1,55 @@
 import React from 'react';
 import { Table } from 'antd';
 import { FormattedMessage } from 'umi/locale';
-import styles from '../index.less';
+// import styles from '../index.less';
 
 const { Column } = Table;
 
-export default function({ dataSource }) {
+export default function({ dataSource, loading, total, handlePageChange, handlePageSizeChange }) {
   return (
-    <Table dataSource={dataSource} className={styles['list-container']}>
+    <Table
+      dataSource={dataSource}
+      loading={loading}
+      pagination={{
+        total,
+        pageSizeOptions: ['10', '20', '50', '100'],
+        showSizeChanger: true,
+        showTotal(count) {
+          return `Total ${count} items`;
+        },
+        onChange(page, pageSize) {
+          handlePageChange(page, pageSize);
+        },
+        onShowSizeChange(page, pageSize) {
+          handlePageSizeChange(page, pageSize);
+        },
+      }}
+    >
       <Column
+        align="center"
         dataIndex="tradeDate"
         title={<FormattedMessage id="data-import.market.trade-date" />}
       />
-      <Column dataIndex="market" title={<FormattedMessage id="data-import.market.market" />} />
+      <Column
+        align="center"
+        dataIndex="market"
+        title={<FormattedMessage id="data-import.market.market" />}
+      />
       <Column dataIndex="fileType" title={<FormattedMessage id="data-import.market.file-type" />} />
       <Column
         dataIndex="uploadDate"
         title={<FormattedMessage id="data-import.market.upload-date" />}
       />
       <Column
+        align="center"
         dataIndex="uploadChannel"
         title={<FormattedMessage id="data-import.market.upload-channel" />}
       />
-      <Column dataIndex="status" title={<FormattedMessage id="data-import.market.status" />} />
+      <Column dataIndex="statusMark" title={<FormattedMessage id="data-import.market.status" />} />
       <Column
         dataIndex="description"
         title={<FormattedMessage id="data-import.market.description" />}
       />
-      <Column dataIndex="download" title={<FormattedMessage id="data-import.market.download" />} />
     </Table>
   );
 }

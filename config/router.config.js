@@ -19,14 +19,19 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       {
+        path: '/',
+        name: 'Homepage',
+        component: './Monitor/Monitor',
+      },
+      {
         path: '/homepage',
         name: 'Homepage',
         routes: [
-          {
-            path: '/homepage/homepage',
-            name: 'Homepage',
-            component: './Monitor/Monitor',
-          },
+          // {
+          //   path: '/homepage/homepage',
+          //   name: 'Homepage',
+          //   component: './Monitor/Monitor',
+          // },
           {
             path: '/homepage/alert-center',
             name: 'Alert Center',

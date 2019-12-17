@@ -53,6 +53,11 @@ export async function setTaskWithdraw({ taskCode, comment }) {
     data: { taskCode: taskCode.toString(), comment },
   });
 }
+export async function setTaskAssign({ taskCode, userId }) {
+  return request('set_task_assign', {
+    data: { taskCode: taskCode.toString(), userId: userId.toString() },
+  });
+}
 export async function getTaskGroup({ taskCode }) {
   return request('get_approval_task_node_group', {
     data: { taskCode: taskCode.toString() },
@@ -62,6 +67,11 @@ export async function getTaskGroup({ taskCode }) {
 export async function getUserList({ operType, groupId }) {
   return request('get_user_list_information', {
     data: { operType, groupId },
+  });
+}
+export async function getUserListByUserId() {
+  return request('get_user_list_by_user_id', {
+    data: {},
   });
 }
 
@@ -211,6 +221,15 @@ export default {
         callback();
       }
     },
+    *setTaskAssign({ payload }, { call }) {
+      const { taskCode, userId } = payload || [];
+      const { err } = yield call(setTaskAssign, { taskCode, userId });
+      if (err) {
+        message.error('Assign failure');
+      } else {
+        message.success('Assign success');
+      }
+    },
     *featchTaskGroup({ payload }, { call, put }) {
       const { taskCode } = payload || [];
       const { items, err } = yield call(getTaskGroup, { taskCode });
@@ -237,6 +256,22 @@ export default {
           userList: items,
         },
       });
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    *getUserListByUserId({ payload }, { call }) {
+      const { items, err } = yield call(getUserListByUserId);
+      if (err) {
+        // message.error('getUserList failure');
+        // return;
+      } else {
+        console.log('items--->', items);
+      }
+      //   yield put({
+      //     type: 'saveUserList',
+      //     payload: {
+      //       userList: items,
+      //     },
+      //   });
     },
   },
 };
