@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
  * @LastEditors: iron
- * @LastEditTime: 2019-12-14 15:41:00
+ * @LastEditTime: 2019-12-17 15:40:31
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -13,7 +13,7 @@
 import { extend } from 'umi-request';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
-import { notification } from 'antd';
+import { message } from 'antd';
 import { getRandowNVPS, isProOrDev } from './utils';
 
 const API_PREFFIX = '/api';
@@ -46,12 +46,9 @@ export function errorHandler(error) {
   const { response } = error;
 
   if (response && response.status) {
-    const { status, statusText, url } = response;
+    const { statusText } = response;
     const errorText = statusText;
-    notification.error({
-      message: errorText,
-      description: `request error ${status}: ${/[^/]*\.json/.exec(url)}`,
-    });
+    message.error(errorText);
   }
   return response;
 }
