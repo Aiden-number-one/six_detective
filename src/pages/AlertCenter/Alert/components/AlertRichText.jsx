@@ -6,20 +6,31 @@ import AlertAttachments from './AlertAttachments';
 import AlertPhase from './AlertPhase';
 
 const { TextArea } = Input;
+const isLt5M = size => size / 1024 / 1024 < 5;
 
-export default function({ loading, commitComment }) {
+export default function({ loading, onCommit }) {
   const [comment, setComment] = useState('');
   const [upAttachments, setUpAttachements] = useState([]);
 
   async function handleCommitComment() {
-    await commitComment(comment);
+    await onCommit(comment, upAttachments);
     setComment('');
+    setUpAttachements([]);
   }
 
   function handleUpAttachments(info) {
     let fileList = [...info.fileList];
     // limit 5 files
     fileList = fileList.slice(-5);
+    fileList = fileList.map(file => {
+      const { bcjson } = file.response || {};
+      const { flag, items = {} } = bcjson || {};
+
+      if (flag === '1' && items) {
+        return { url: items.relativeUrl, ...file };
+      }
+      return file;
+    });
     setUpAttachements(fileList);
   }
 
@@ -36,7 +47,14 @@ export default function({ loading, commitComment }) {
           <AlertPhase postComment={c => setComment(`${comment}${c} `)} />
         </Col>
         <Col span={6} align="right">
-          <Upload showUploadList={false} fileList={upAttachments} onChange={handleUpAttachments}>
+          <Upload
+            multiple
+            action="/upload?fileClass=alert_comment"
+            beforeUpload={file => isLt5M(file.size)}
+            showUploadList={false}
+            fileList={upAttachments}
+            onChange={handleUpAttachments}
+          >
             <IconFont
               type="iconbiezhen"
               style={{ cursor: 'pointer', marginRight: 4 }}

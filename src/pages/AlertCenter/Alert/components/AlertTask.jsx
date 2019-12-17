@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
+import styles from '@/pages/AlertCenter/index.less';
 import AlertTaskModal from './AlertTaskModal';
 import AlertTaskOfEp from './AlertTaskOfEp';
 import AlertTaskOfProduct from './AlertTaskOfProduct';
@@ -32,7 +33,7 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId }, alertItems, user
     setVisible(false);
   }
   return (
-    <>
+    <div className={styles['task-container']}>
       <AlertTaskModal
         loading={loading}
         visible={visible}
@@ -64,7 +65,7 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId }, alertItems, user
           getSelectedRows={rows => setSelectedRows(rows)}
         />
       )}
-    </>
+    </div>
   );
 }
 

@@ -202,6 +202,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           title={<WrapTitle tableColumn="alertId" id="alert-id" />}
         />
         <Column
+          ellipsis
           align="center"
           dataIndex="alertType"
           title={<WrapTitle tableColumn="alertType" id="alert-type" />}
@@ -221,7 +222,12 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           dataIndex="itemsTotal"
           title={<WrapTitle tableColumn="itemsTotal" id="items-total" />}
         />
-        <Column dataIndex="userName" title={<FormattedMessage id="alert-center.owner" />} />
+        <Column
+          align="center"
+          width="8%"
+          dataIndex="userName"
+          title={<FormattedMessage id="alert-center.owner" />}
+        />
         <Column
           align="center"
           dataIndex="alertStatusDesc"
@@ -229,7 +235,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         />
         <Column
           align="center"
-          width="10%"
+          width="8%"
           dataIndex="action"
           title={<FormattedMessage id="alert-center.action" />}
           render={(text, record) => (
