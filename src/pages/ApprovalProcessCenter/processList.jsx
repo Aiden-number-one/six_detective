@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Col, Button, Modal, Input, Radio } from 'antd';
+import { Table, Row, Col, Button, Modal, Input, Radio, Drawer } from 'antd';
 import IconFont from '@/components/IconFont';
 // import { ConfirmModel } from './component/ConfirmModel';
 import { GetQueryString } from '@/utils/utils';
@@ -20,6 +20,7 @@ function TabBtn({ changeTab }) {
         <Radio.Group defaultValue="all" onChange={e => changeTab(e.target.value)}>
           <Radio.Button value="all">All Task</Radio.Button>
           <Radio.Button value="my">My task</Radio.Button>
+          <Radio.Button value="his">History</Radio.Button>
         </Radio.Group>
       </Col>
     </Row>
@@ -31,29 +32,17 @@ function TaskBtn({
   searchTask,
   urlTaskCode,
   claimOk,
-  setTaskAssign,
+  setVisible,
   exportAlert,
 }) {
   return (
     <Row className={styles.btns}>
       <Col span={12}>
-        <Button
-          disabled={!selectedKeys.length}
-          onClick={() => claimOk(selectedKeys)}
-          //   onClick={() =>
-          //     Modal.confirm({
-          //       title: 'Confirm',
-          //       content: 'Are you sure claim these tasks?',
-          //       okText: 'Sure',
-          //       cancelText: 'Cancel',
-          //       onOk: () => claimOk(selectedKeys),
-          //     })
-          //   }
-        >
+        <Button disabled={!selectedKeys.length} onClick={() => claimOk(selectedKeys)}>
           <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button disabled={!selectedKeys.length} onClick={() => setTaskAssign(selectedKeys)}>
+        <Button disabled={!selectedKeys.length} onClick={() => setVisible(true)}>
           <IconFont type="iconicon_assign" className={styles['btn-icon']} />
           Assign
         </Button>
@@ -83,6 +72,7 @@ function ProcessList({
   loading,
   tasks,
   detailItems,
+  assignRadioList,
   total,
   getTask,
   setCurrentTaskType,
@@ -91,8 +81,10 @@ function ProcessList({
   const [selectedCurrentTask, setSelectedTasks] = useState('all');
   const [currentPage, setcurrentPage] = useState('1');
   const [currentRow, setcurrentRow] = useState('1');
+  const [visible, setVisible] = useState(false);
+  const [radioValue, setRadioValue] = useState('');
   const urlTaskCode = GetQueryString('taskcode');
-  console.log('urlTaskCode------>', urlTaskCode);
+  console.log('selectedCurrentTask------>', selectedCurrentTask);
   useEffect(() => {
     dispatch({
       type: 'approvalCenter/fetch',
@@ -153,7 +145,6 @@ function ProcessList({
           type: 'approvalCenter/fetch',
           payload: {
             type: selectedCurrentTask,
-            taskCode,
           },
         });
       },
@@ -161,12 +152,21 @@ function ProcessList({
   }
 
   function setTaskAssign(taskCode) {
-    console.log('taskCode----------->', taskCode);
+    setVisible(false);
     dispatch({
       type: 'approvalCenter/setTaskAssign',
       payload: {
         taskCode,
-        userId: '',
+        userId: radioValue,
+      },
+      callback: () => {
+        setRadioValue('');
+        dispatch({
+          type: 'approvalCenter/fetch',
+          payload: {
+            type: selectedCurrentTask,
+          },
+        });
       },
     });
   }
@@ -183,10 +183,42 @@ function ProcessList({
 
   return (
     <div className={styles.list}>
+      <Drawer
+        title="Assign to"
+        width={500}
+        visible={visible}
+        onClose={() => setVisible(false)}
+        bodyStyle={{ paddingBottom: 80 }}
+      >
+        <Radio.Group
+          options={assignRadioList}
+          onChange={e => setRadioValue(e.target.value)}
+          value={radioValue}
+        ></Radio.Group>
+        <div
+          style={{
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e9e9e9',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}
+        >
+          <Button onClick={() => setTaskAssign(selectedKeys)} type="primary">
+            Save
+          </Button>
+          <Button onClick={() => setVisible(false)} style={{ marginRight: 12 }}>
+            Cancel
+          </Button>
+        </div>
+      </Drawer>
       <TabBtn
         changeTab={selectedTasks => {
           setSelectedTasks(selectedTasks);
-          setCurrentTaskType(selectedCurrentTask);
+          setCurrentTaskType(selectedTasks);
           dispatch({
             type: 'approvalCenter/fetch',
             payload: {
@@ -202,6 +234,7 @@ function ProcessList({
         urlTaskCode={urlTaskCode}
         claimOk={claimOk}
         setTaskAssign={setTaskAssign}
+        setVisible={setVisible}
       />
       <Table
         border
@@ -279,10 +312,13 @@ function ProcessList({
   );
 }
 
-export default connect(({ loading, approvalCenter: { tasks, detailItems, page, total } }) => ({
-  tasks,
-  page,
-  total,
-  detailItems,
-  loading: loading.effects,
-}))(ProcessList);
+export default connect(
+  ({ loading, approvalCenter: { tasks, detailItems, assignRadioList, page, total } }) => ({
+    tasks,
+    page,
+    total,
+    detailItems,
+    assignRadioList,
+    loading: loading.effects,
+  }),
+)(ProcessList);
