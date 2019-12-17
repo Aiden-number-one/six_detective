@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-16 19:19:52
+ * @LastEditTime: 2019-12-17 16:10:58
  */
 
 import React, { Component } from 'react';
@@ -12,7 +12,7 @@ import { Form, Modal, Table, Button, Drawer, message, Pagination } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './UserManagement.less';
-import { timeFormat } from '@/utils/filter';
+import { timeFormat, lockedFormat } from '@/utils/filter';
 import IconFont from '@/components/IconFont';
 
 import SearchForm from './components/SearchForm';
@@ -47,11 +47,11 @@ class UserManagement extends Component {
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
       },
-      {
-        title: formatMessage({ id: 'app.common.userId' }),
-        dataIndex: 'userId',
-        key: 'userId',
-      },
+      // {
+      //   title: formatMessage({ id: 'app.common.userId' }),
+      //   dataIndex: 'userId',
+      //   key: 'userId',
+      // },
       {
         title: formatMessage({ id: 'app.common.username' }),
         dataIndex: 'userName',
@@ -61,6 +61,11 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
         dataIndex: 'accountLock',
         key: 'accountLock',
+        render: (res, obj) => (
+          <div>
+            <span>{lockedFormat(obj.accountLock)}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
