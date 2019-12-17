@@ -256,6 +256,21 @@ class CodeMaintenance extends Component {
     );
   };
 
+  onShowItemSizeChange = (current, pageSize) => {
+    const itemPage = {
+      pageNumber: current,
+      pageSize,
+    };
+    this.setState(
+      {
+        itemPage,
+      },
+      () => {
+        this.queryCodeItemList();
+      },
+    );
+  };
+
   connectCodeList = record => {
     this.setState(
       {
@@ -393,7 +408,7 @@ class CodeMaintenance extends Component {
             <div className={styles.content}>
               <div className={styles.tableTop}>
                 <Button onClick={this.addCode} type="primary" className="btn_usual">
-                  + Add
+                  + Add Subitem
                 </Button>
               </div>
               <Table
@@ -410,7 +425,7 @@ class CodeMaintenance extends Component {
                     (totalCountItem || 0) / itemPage.pageSize,
                   ).toString()}`
                 }
-                onShowSizeChange={this.onShowSizeChange}
+                onShowSizeChange={this.onShowItemSizeChange}
                 onChange={this.pageItemChange}
                 total={totalCountItem}
                 pageSize={itemPage.pageSize}
