@@ -4,10 +4,10 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-04 09:16:05
  * @LastEditors: iron
- * @LastEditTime: 2019-12-07 18:04:12
+ * @LastEditTime: 2019-12-17 16:00:51
  */
 import { mp, mockRes } from './utils';
-import { PROCESSING_STATUS, SUBMISSION_REPORT } from '@/pages/DataImportLog/Lop/constants';
+import { PROCESSING_STATUS, SUBMISSION_REPORT } from '@/pages/DataImportLog/constants';
 
 export default {
   [mp('loplogs')]: mockRes(100, [

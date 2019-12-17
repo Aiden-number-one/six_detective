@@ -5,8 +5,12 @@ import styles from '../index.less';
 
 const isLt5M = size => size / 1024 / 1024 < 5;
 
-function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
+function MarketLogManualModal({ form, visible, handleCancel, handleUpload }) {
   const { getFieldDecorator, validateFields } = form;
+
+  function handleBeforeUpload(file) {
+    return isLt5M(file.size) && /^\d{8}_\d{1}_/.test(file.name);
+  }
 
   function handleCommit() {
     validateFields((err, values) => {
@@ -52,6 +56,9 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
                     if (!isLt5M(file.size)) {
                       return callback('file size must less than 5M');
                     }
+                    if (!/^\d{8}_\d{1}_/.test(file.name)) {
+                      return callback('file name error');
+                    }
                     if (file.error) {
                       return callback(file.error.message);
                     }
@@ -72,7 +79,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             <Upload
               accept=".xlsm,.csv,.xls,.xlsx,.pdf,application/msexcel"
               action="/upload?fileClass=MARKET"
-              beforeUpload={file => isLt5M(file.size)}
+              beforeUpload={handleBeforeUpload}
             >
               <Button>
                 <Icon type="upload" />
@@ -92,4 +99,4 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
   );
 }
 
-export default Form.create()(LopLogManualModal);
+export default Form.create()(MarketLogManualModal);

@@ -19,7 +19,7 @@ class FormUser extends Component {
     return (
       <Fragment>
         <Form>
-          <Form.Item label="User Id：" labelCol={{ span: 4 }} wrapperCol={{ span: 7 }}>
+          {/* <Form.Item label="User Id：" labelCol={{ span: 4 }} wrapperCol={{ span: 7 }}>
             {getFieldDecorator('userId', {
               rules: [
                 {
@@ -34,7 +34,7 @@ class FormUser extends Component {
                 placeholder={`Please input ${formatMessage({ id: 'app.common.userId' })}`}
               />,
             )}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label={formatMessage({ id: 'app.common.username' })}
             labelCol={{ span: 4 }}
@@ -135,7 +135,7 @@ export default class NewUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accountLock: 'N',
+      accountLock: '0',
       locedChecked: false,
       groupIds: [],
       alertIds: [],
@@ -145,7 +145,7 @@ export default class NewUser extends Component {
   componentDidMount() {
     const { userInfo } = this.props;
     let locedChecked = false;
-    if (userInfo.accountLock && userInfo.accountLock !== 'N') {
+    if (userInfo.accountLock && userInfo.accountLock === 'L') {
       locedChecked = true;
     }
     this.queryLog();
@@ -230,12 +230,12 @@ export default class NewUser extends Component {
   onChangeLocked = e => {
     if (e.target.checked) {
       this.setState({
-        accountLock: 'Y',
+        accountLock: 'L',
         locedChecked: true,
       });
     } else {
       this.setState({
-        accountLock: 'N',
+        accountLock: '0',
         locedChecked: false,
       });
     }
@@ -255,7 +255,7 @@ export default class NewUser extends Component {
 
   onSave = () => {
     const { accountLock, groupIds, alertIds } = this.state;
-    const { NewFlag } = this.props;
+    const { NewFlag, userInfo } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
       if (err) {
         return;
@@ -275,7 +275,7 @@ export default class NewUser extends Component {
           userName: values.userName,
           userPwd: window.kddes.getDes(values.userPwd),
           groupIds: groupIds.join(','),
-          userId: values.userId,
+          // userId: values.userId,
           alertIds: alertIds.join(','),
           accountLock,
         };
@@ -296,7 +296,7 @@ export default class NewUser extends Component {
           operType: 'updateUserById',
           userName: values.userName,
           groupIds: groupIds.join(','),
-          userId: values.userId,
+          userId: userInfo.userId,
           alertIds: alertIds.join(','),
           accountLock,
         };

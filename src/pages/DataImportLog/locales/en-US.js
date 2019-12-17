@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 10:54:40
  * @LastEditors: iron
- * @LastEditTime: 2019-12-16 15:08:27
+ * @LastEditTime: 2019-12-17 13:26:25
  */
 export default {
   'data-import.lop.trade-date': 'Trade Date',
@@ -20,7 +20,7 @@ export default {
   'data-import.lop.latest-version': 'Latest Version',
   'data-import.lop.arrival-time': 'Arrival Time',
   'data-import.lop.search': 'SEARCH',
-  'data-import.lop.auto-import': 'AUTO IMPORT',
+  'data-import.lop.auto-import': 'EXECUTE',
   'data-import.lop.manual-import': 'MANUAL IMPORT',
   'data-import.lop.manual-import-lop-report': 'MANUAL IMPORT LOP REPORT',
   'data-import.lop.download': 'Download',

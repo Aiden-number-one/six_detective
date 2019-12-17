@@ -50,7 +50,6 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
           {getFieldDecorator('submitterCode', {
-            initialValue: '',
             rules: [
               {
                 required: true,
@@ -61,7 +60,6 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
           {getFieldDecorator('submitterName', {
-            initialValue: '',
             rules: [
               {
                 required: true,

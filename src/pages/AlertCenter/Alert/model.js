@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-14 20:53:29
+ * @LastEditTime: 2019-12-17 14:33:45
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -36,9 +36,9 @@ export async function getAlertLogs({ alertId, page = 1, pageSize = 10 }) {
     data: { alertId, pageNumber: page.toString(), pageSize: pageSize.toString() },
   });
 }
-export async function setAlertComment({ alertId, content }) {
+export async function setAlertComment({ alertId, content, fileList = [] }) {
   return request('set_alert_comment', {
-    data: { alertId, commentContent: content },
+    data: { alertId, commentContent: content, fileList: fileList.toString() },
   });
 }
 export async function claimAlert({ alertIds, isCoverClaim }) {
@@ -120,21 +120,6 @@ export default {
         claimInfo: payload.claimInfo,
       };
     },
-    // claimOk(state, { payload }) {
-    //   // const { alertIds, userName } = payload;
-    //   // const alerts = state.alerts.map(alert => {
-    //   //   if (alertIds.includes(alert.alertId)) {
-    //   //     return { ...alert, userName };
-    //   //   }
-    //   //   return alert;
-    //   // });
-    //   message.success('claim success');
-
-    //   return {
-    //     ...state,
-    //     alerts,
-    //   };
-    // },
   },
   effects: {
     *fetch({ payload }, { call, put }) {
@@ -222,8 +207,8 @@ export default {
       });
     },
     *postComment({ payload }, { call, put }) {
-      const { alertId, content } = payload;
-      const { err } = yield call(setAlertComment, { alertId, content });
+      const { alertId, content, fileList } = payload;
+      const { err } = yield call(setAlertComment, { alertId, content, fileList });
       if (err) {
         throw new Error(err);
       }

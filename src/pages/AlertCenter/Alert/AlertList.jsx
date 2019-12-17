@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Col, Button, Modal } from 'antd';
+import { Table, Row, Col, Button, Modal, Icon } from 'antd';
 import IconFont from '@/components/IconFont';
 import ColumnTitle from '../ColumnTitle';
 import styles from '../index.less';
@@ -11,6 +11,41 @@ const { Column } = Table;
 
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
+
+function ClaimModal({ visible, onCancel, onOk, loading, claimUser }) {
+  return (
+    <Modal
+      title="CONFIRM"
+      visible={visible}
+      closable={false}
+      onCancel={onCancel}
+      onOk={onOk}
+      confirmLoading={loading}
+    >
+      <div style={{ textAlign: 'center' }}>
+        <div>This alert has been claimed by {claimUser}.</div>
+        <div>Do you confirm to re-claim?</div>
+      </div>
+    </Modal>
+  );
+}
+
+function CloseModal({ visible, onCancel, loading, onOk }) {
+  return (
+    <Modal
+      title="CONFIRM"
+      visible={visible}
+      closable={false}
+      onCancel={onCancel}
+      onOk={onOk}
+      confirmLoading={loading}
+    >
+      <div style={{ textAlign: 'center' }}>
+        <div>Do you confirm to close this alert?</div>
+      </div>
+    </Modal>
+  );
+}
 
 function Title({ dispatch, loading, filterItems, tableColumn, id }) {
   function handleFilterItems() {
@@ -93,6 +128,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
   const [curAlertId, setAlertId] = useState('');
   const [claimUser, setClaimUser] = useState({});
   const [claimVisible, setClaimVisible] = useState(false);
+  const [closeVisible, setCloseVisible] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   useEffect(() => {
@@ -146,29 +182,38 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
     });
     setClaimVisible(false);
   }
-  function closeAlert(alertIds) {
-    dispatch({
+
+  function handleClose({ alertId }) {
+    setCloseVisible(true);
+    setAlertId(alertId);
+  }
+
+  async function closeAlert() {
+    await dispatch({
       type: 'alertCenter/close',
       payload: {
-        alertIds,
+        alertIds: [curAlertId],
       },
     });
+    setCloseVisible(false);
   }
+
   return (
     <div className={styles.list}>
       <AlertBtn selectedKeys={selectedKeys} claiAmlert={claimAlert} closeAlert={closeAlert} />
-      <Modal
-        title="CONFIRM"
+      <ClaimModal
         visible={claimVisible}
-        closable={false}
+        claimUser={claimUser}
         onCancel={() => setClaimVisible(false)}
-        onOk={() => handleReClaim()}
-      >
-        <div style={{ textAlign: 'center' }}>
-          <div>This alert has been claimed by {claimUser}.</div>
-          <div>Do you confirm to re-claim?</div>
-        </div>
-      </Modal>
+        onOk={handleReClaim}
+        loading={loading['alertCenter/claim']}
+      />
+      <CloseModal
+        visible={closeVisible}
+        onCancel={() => setCloseVisible(false)}
+        onOk={closeAlert}
+        loading={loading['alertCenter/close']}
+      />
       <Table
         border
         dataSource={alerts}
@@ -202,6 +247,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           title={<WrapTitle tableColumn="alertId" id="alert-id" />}
         />
         <Column
+          ellipsis
           align="center"
           dataIndex="alertType"
           title={<WrapTitle tableColumn="alertType" id="alert-type" />}
@@ -221,7 +267,12 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           dataIndex="itemsTotal"
           title={<WrapTitle tableColumn="itemsTotal" id="items-total" />}
         />
-        <Column dataIndex="userName" title={<FormattedMessage id="alert-center.owner" />} />
+        <Column
+          align="center"
+          width="8%"
+          dataIndex="userName"
+          title={<FormattedMessage id="alert-center.owner" />}
+        />
         <Column
           align="center"
           dataIndex="alertStatusDesc"
@@ -229,30 +280,26 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         />
         <Column
           align="center"
-          width="10%"
+          width="8%"
           dataIndex="action"
           title={<FormattedMessage id="alert-center.action" />}
           render={(text, record) => (
             <Row type="flex" justify="space-around" align="middle">
-              <IconFont
-                type="iconqizhi"
-                className={styles.icon}
-                title={formatMessage({ id: 'alert-center.claim' })}
-                onClick={() => claimAlert(record)}
-              />
+              {loading['alertCenter/claim'] && curAlertId === record.alertId ? (
+                <Icon type="loading" />
+              ) : (
+                <IconFont
+                  type="iconqizhi"
+                  className={styles.icon}
+                  title={formatMessage({ id: 'alert-center.claim' })}
+                  onClick={() => claimAlert(record)}
+                />
+              )}
               <IconFont
                 type="iconic_circle_close"
                 className={styles.icon}
                 title={formatMessage({ id: 'alert-center.close' })}
-                onClick={() =>
-                  Modal.confirm({
-                    title: 'Confirm',
-                    content: 'Are you sure close this alert?',
-                    okText: 'Sure',
-                    cancelText: 'Cancel',
-                    onOk: () => closeAlert([record.alertId]),
-                  })
-                }
+                onClick={() => handleClose(record)}
               />
             </Row>
           )}

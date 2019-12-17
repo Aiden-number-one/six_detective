@@ -26,13 +26,22 @@ export const userManagement = {
   effects: {
     *userManagemetDatas({ payload }, { call, put }) {
       const response = yield call(getUserList, { param: payload });
-      if (response.bcjson.flag === '1' || !response.bcjson.flag) {
+      if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
             type: 'setDatas',
             payload: response.bcjson,
           });
         }
+      } else {
+        notification.error({
+          message: 'error!!!',
+          description: response.bcjson.msg.toString(),
+          style: {
+            maxHeight: 135,
+            overflow: 'auto',
+          },
+        });
       }
     },
     *newUser({ payload, callback }, { call, put }) {
