@@ -145,7 +145,7 @@ export default class NewUser extends Component {
   componentDidMount() {
     const { userInfo } = this.props;
     let locedChecked = false;
-    if (userInfo.accountLock && userInfo.accountLock !== '0') {
+    if (userInfo.accountLock && userInfo.accountLock === 'L') {
       locedChecked = true;
     }
     this.queryLog();
@@ -230,7 +230,7 @@ export default class NewUser extends Component {
   onChangeLocked = e => {
     if (e.target.checked) {
       this.setState({
-        accountLock: 'Y',
+        accountLock: 'L',
         locedChecked: true,
       });
     } else {

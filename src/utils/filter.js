@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-13 16:47:20
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-16 15:25:56
+ * @LastEditTime: 2019-12-17 16:07:48
  */
 import moment from 'moment';
 import { formatTimeString } from '@/utils/utils';
@@ -32,6 +32,8 @@ const templateTypeFormat = value => {
   return payWayMap[value] || 'stateless';
 };
 
+const lockedFormat = value => (value === 'L' ? 'Y' : 'N');
+
 const timeFormat = time => {
   const str = formatTimeString(time);
   const strArr = str.split(' ');
@@ -46,4 +48,4 @@ const timeFormat = time => {
 };
 // const timeFormat = time => time;
 
-export { userStatus, templateTypeFormat, timeFormat };
+export { userStatus, templateTypeFormat, timeFormat, lockedFormat };
