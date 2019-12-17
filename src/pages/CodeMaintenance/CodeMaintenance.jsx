@@ -160,6 +160,7 @@ class CodeMaintenance extends Component {
   deleteCodeItem = (res, recode) => {
     const updateCodeItemParams = {
       subitemId: recode.subitemId,
+      subitem: recode.subitem,
     };
     this.setState({
       deleteCodeItemVisible: true,
@@ -172,7 +173,7 @@ class CodeMaintenance extends Component {
     const params = {
       operType: 'subitemDeleteBycodeId',
       codeId: this.state.codeId,
-      subitemId: this.state.updateCodeItemParams.subitemId,
+      subitem: this.state.updateCodeItemParams.subitem,
     };
     dispatch({
       type: 'codeList/deleteCodeItem',
