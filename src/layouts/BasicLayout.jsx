@@ -182,7 +182,7 @@ const BasicLayout = props => {
         menuHeaderRender={logoItem => (
           <a
             onClick={() => {
-              router.push('/homepage/homepage');
+              router.push('/');
             }}
           >
             {logoItem}

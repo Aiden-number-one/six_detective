@@ -1,3 +1,4 @@
+// 头部的switchTabs栏
 .switchTabs {
   display: flex;
   height: 50px;
@@ -12,18 +13,80 @@
   }
   .middleBlock {
     display: flex;
+    flex: 1;
+    justify-content: center;
     color: #fff;
+    // 文件名输入处
+    .nameSpace {
+      display: flex;
+      align-items: center;
+      width: 251px;
+      margin-left: 15px;
+      .inputName {
+        margin-left: 12.5px;
+      }
+    }
+    // Tab切换按钮
+    .tabsName {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      .tabButt {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 30px;
+        cursor: pointer;
+        &.active {
+          background-color: #0d87d4ff;
+          border-radius: 3px;
+        }
+      }
+    }
+    // 操作按钮
+    .tabsAreaAction {
+      display: flex;
+      margin-right: 15px;
+      .actionButt {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        span {
+          padding: 0 5px;
+        }
+        & + .actionButt {
+          margin-left: 30px;
+        }
+      }
+    }
   }
 }
+
+// 查询条件区域
+.insertContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  padding: 9px 0;
+  background: #f1f1f1ff;
+  i {
+    margin-right: 7.5px;
+    font-size: 15px;
+  }
+}
+
 .tabs {
   position: relative;
   display: flex;
   align-items: stretch;
-  height: 104px;
-  padding: 6px 10px 0;
+  height: 70px;
+  padding: 0;
   overflow: hidden;
   font-size: 12px;
-  background: #496699;
+  background: #f1f1f1ff;
   :global {
     .ant-tabs-card > .ant-tabs-content > .ant-tabs-tabpane {
       padding: 0 !important;
@@ -99,7 +162,7 @@
 
 .divider {
   display: inline-block;
-  width: 0.5px;
+  width: 1px;
   height: 100%;
   margin-right: 12px;
   background-color: #b7c4ceff;
