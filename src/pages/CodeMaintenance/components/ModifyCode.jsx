@@ -110,7 +110,7 @@ class ModifySystem extends Component {
         operType: modifyFlag ? 'subitemUpdateBycodeId' : 'subitemAddBycodeId',
         codeId,
         subitemId: values.subitemId,
-        subitem: modifyFlag ? updateCodeItemParams.subitem : values.subitem,
+        subitem: modifyFlag ? updateCodeItemParams.subitem : values.subitemId,
         subitemName: values.subitemName,
         sequence: values.sequence,
       };

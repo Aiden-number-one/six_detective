@@ -2,8 +2,8 @@
  * @Description:
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-12 14:11:40
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-18 09:41:52
  */
 import Service from '@/utils/Service';
 
@@ -25,6 +25,8 @@ const systemParameters = {
             payload: response.bcjson,
           });
         }
+      } else {
+        throw new Error(response.bcjson.msg);
       }
     },
     *systemParamsUpdate({ payload, callback }, { call, put }) {
@@ -37,6 +39,8 @@ const systemParameters = {
           });
         }
         callback();
+      } else {
+        throw new Error(response.bcjson.msg);
       }
     },
     *getParamsType({ payload, callback }, { call, put }) {
@@ -50,6 +54,8 @@ const systemParameters = {
         }
         // eslint-disable-next-line no-unused-expressions
         callback && callback();
+      } else {
+        throw new Error(response.bcjson.msg);
       }
     },
   },
