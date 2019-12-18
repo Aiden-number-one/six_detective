@@ -12,7 +12,7 @@ const { Column } = Table;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
-function ClaimModal({ visible, onCancel, onOk, loading, claimUser }) {
+function ClaimModal({ visible, onCancel, onOk, loading, content }) {
   return (
     <Modal
       title="CONFIRM"
@@ -23,14 +23,14 @@ function ClaimModal({ visible, onCancel, onOk, loading, claimUser }) {
       confirmLoading={loading}
     >
       <div style={{ textAlign: 'center' }}>
-        <div>This alert has been claimed by {claimUser}.</div>
+        {content}
         <div>Do you confirm to re-claim?</div>
       </div>
     </Modal>
   );
 }
 
-function CloseModal({ visible, onCancel, loading, onOk }) {
+function CloseModal({ visible, onCancel, loading, onOk, content }) {
   return (
     <Modal
       title="CONFIRM"
@@ -40,9 +40,7 @@ function CloseModal({ visible, onCancel, loading, onOk }) {
       onOk={onOk}
       confirmLoading={loading}
     >
-      <div style={{ textAlign: 'center' }}>
-        <div>Do you confirm to close this alert?</div>
-      </div>
+      <div style={{ textAlign: 'center' }}>{content}</div>
     </Modal>
   );
 }
@@ -86,30 +84,24 @@ const WrapTitle = connect(({ loading, global: { filterItems } }) => ({
   filterItems,
 }))(Title);
 
-function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
+function AlertBtn({ disabled, loading, claimAlert, closeAlert, exportAlert }) {
   return (
     <Row className={styles.btns}>
       <Col span={18}>
-        <Button type="primary" disabled={!selectedKeys.length} onClick={claimAlert}>
+        <Button
+          type="primary"
+          disabled={disabled}
+          onClick={claimAlert}
+          loading={loading['alertCenter/claim']}
+        >
           <IconFont type="iconqizhi" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button
-          disabled={!selectedKeys.length}
-          onClick={() =>
-            Modal.confirm({
-              title: 'Confirm',
-              content: 'Are you sure close these alerts?',
-              okText: 'Sure',
-              cancelText: 'Cancel',
-              onOk: () => closeAlert(selectedKeys),
-            })
-          }
-        >
-          <IconFont type="iconic_circle_close" className={styles['btn-icon']} />
+        <Button disabled={disabled} onClick={closeAlert} loading={loading['alertCenter/close']}>
+          <IconFont type="iconclose" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.close" />
         </Button>
-        <Button disabled={!selectedKeys.length} onClick={exportAlert}>
+        <Button disabled={disabled} onClick={exportAlert} loading={loading['alertCenter/claim']}>
           <IconFont type="iconbatch-export" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </Button>
@@ -123,13 +115,14 @@ function AlertBtn({ selectedKeys, claimAlert, closeAlert, exportAlert }) {
   );
 }
 
-function AlertList({ dispatch, loading, alerts, total, getAlert }) {
+function AlertList({ dispatch, loading, alerts, total, claimInfos, getAlert }) {
   const [alert, setAlert] = useState({});
-  const [curAlertId, setAlertId] = useState('');
-  const [claimUser, setClaimUser] = useState({});
   const [claimVisible, setClaimVisible] = useState(false);
+  const [claimContent, setClaimContent] = useState('');
   const [closeVisible, setCloseVisible] = useState(false);
-  const [selectedKeys, setSelectedKeys] = useState([]);
+  const [closeContent, setCloseContent] = useState('');
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [isBatchAction, setBatchAction] = useState(false);
 
   useEffect(() => {
     dispatch({
@@ -146,6 +139,16 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
     }
   }, [alerts]);
 
+  // check latest claim state
+  useEffect(() => {
+    const localUserName = localStorage.getItem('loginName');
+    claimInfos.forEach(item => {
+      if (item.userName !== localUserName) {
+        setClaimVisible(true);
+      }
+    });
+  }, [claimInfos]);
+
   function handlePageChange(page, pageSize) {
     dispatch({
       type: 'alertCenter/fetch',
@@ -156,43 +159,75 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
     });
   }
 
-  function claimAlert({ alertId, userName }) {
-    setAlertId(alertId);
-    if (userName) {
-      setClaimVisible(true);
-      setClaimUser(userName);
+  function claimAlert(record) {
+    if (record) {
+      setAlert(record);
+      setBatchAction(false);
+      if (record.userName) {
+        setClaimVisible(true);
+        setClaimContent(<div>this alert has been claimed by {record.userName}</div>);
+      } else {
+        dispatch({
+          type: 'alertCenter/claim',
+          payload: {
+            alertIds: [record.alertId],
+            isCoverClaim: 0,
+          },
+        });
+      }
     } else {
-      dispatch({
-        type: 'alertCenter/claim',
-        payload: {
-          alertIds: [alertId],
-          isCoverClaim: 0,
-        },
-      });
+      const findAlert = selectedRows.find(item => item.userName);
+      if (findAlert && findAlert.userName) {
+        setClaimVisible(true);
+        setBatchAction(true);
+        setClaimContent(<div>some alerts has been claimed</div>);
+      } else {
+        dispatch({
+          type: 'alertCenter/claim',
+          payload: {
+            alertIds: selectedRows.map(item => item.alertId),
+            isCoverClaim: 0,
+          },
+        });
+      }
     }
   }
 
   async function handleReClaim() {
+    const curAlertId = alert.alertId;
     await dispatch({
       type: 'alertCenter/claim',
       payload: {
-        alertIds: [curAlertId],
+        alertIds: !isBatchAction ? [curAlertId] : selectedRows.map(item => item.alertId),
         isCoverClaim: 1,
       },
     });
     setClaimVisible(false);
   }
 
-  function handleClose({ alertId }) {
+  function showCloseModal(record) {
     setCloseVisible(true);
-    setAlertId(alertId);
+    if (record) {
+      setAlert(record);
+      setBatchAction(false);
+      setCloseContent(
+        <>
+          <div>Do you confirm to close this alert?</div>
+          <div>(AlertId: {record.alertId})</div>
+        </>,
+      );
+    } else {
+      setBatchAction(true);
+      setCloseContent('Do you confirm to close these alerts?');
+    }
   }
 
   async function closeAlert() {
+    const curAlertId = alert.alertId;
     await dispatch({
       type: 'alertCenter/close',
       payload: {
-        alertIds: [curAlertId],
+        alertIds: !isBatchAction ? [curAlertId] : selectedRows.map(item => item.alertId),
       },
     });
     setCloseVisible(false);
@@ -200,10 +235,15 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
 
   return (
     <div className={styles.list}>
-      <AlertBtn selectedKeys={selectedKeys} claiAmlert={claimAlert} closeAlert={closeAlert} />
+      <AlertBtn
+        loading={loading}
+        disabled={!selectedRows.length}
+        claimAlert={() => claimAlert()}
+        closeAlert={() => showCloseModal()}
+      />
       <ClaimModal
         visible={claimVisible}
-        claimUser={claimUser}
+        content={claimContent}
         onCancel={() => setClaimVisible(false)}
         onOk={handleReClaim}
         loading={loading['alertCenter/claim']}
@@ -212,6 +252,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         visible={closeVisible}
         onCancel={() => setCloseVisible(false)}
         onOk={closeAlert}
+        content={closeContent}
         loading={loading['alertCenter/close']}
       />
       <Table
@@ -221,7 +262,12 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         loading={loading['alertCenter/fetch']}
         rowClassName={record => (record.alertId === alert.alertId ? 'active' : '')}
         rowSelection={{
-          onChange: selectedRowKeys => setSelectedKeys(selectedRowKeys),
+          getCheckboxProps: record => ({
+            disabled: +record.alertStatus === 1,
+          }),
+          onChange(selectedRowKeys, sRows) {
+            setSelectedRows(sRows);
+          },
         }}
         pagination={{
           total,
@@ -247,7 +293,7 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           title={<WrapTitle tableColumn="alertId" id="alert-id" />}
         />
         <Column
-          ellipsis
+          width="15%"
           align="center"
           dataIndex="alertType"
           title={<WrapTitle tableColumn="alertType" id="alert-type" />}
@@ -269,7 +315,6 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
         />
         <Column
           align="center"
-          width="8%"
           dataIndex="userName"
           title={<FormattedMessage id="alert-center.owner" />}
         />
@@ -284,23 +329,30 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
           dataIndex="action"
           title={<FormattedMessage id="alert-center.action" />}
           render={(text, record) => (
-            <Row type="flex" justify="space-around" align="middle">
-              {loading['alertCenter/claim'] && curAlertId === record.alertId ? (
+            <Row type="flex" justify="space-around" align="middle" className={styles['icon-btns']}>
+              {loading['alertCenter/claim'] && alert.alertId === record.alertId ? (
                 <Icon type="loading" />
               ) : (
-                <IconFont
-                  type="iconqizhi"
-                  className={styles.icon}
+                <button
+                  type="button"
+                  disabled={+record.alertStatus === 1}
                   title={formatMessage({ id: 'alert-center.claim' })}
                   onClick={() => claimAlert(record)}
-                />
+                >
+                  <IconFont type="iconqizhi" className={styles.icon} />
+                </button>
               )}
-              <IconFont
-                type="iconic_circle_close"
-                className={styles.icon}
-                title={formatMessage({ id: 'alert-center.close' })}
-                onClick={() => handleClose(record)}
-              />
+              {/* never can close by manual */}
+              {+record.isClosedManually === 1 && (
+                <button
+                  type="button"
+                  disabled={+record.alertStatus === 1}
+                  title={formatMessage({ id: 'alert-center.close' })}
+                  onClick={() => showCloseModal(record)}
+                >
+                  <IconFont type="iconclose" className={styles.icon} />
+                </button>
+              )}
             </Row>
           )}
         />
@@ -309,10 +361,15 @@ function AlertList({ dispatch, loading, alerts, total, getAlert }) {
   );
 }
 
-export default connect(({ loading, alertCenter: { alerts, alertItems, page, total } }) => ({
+const mapStateToProps = ({
+  loading,
+  alertCenter: { alerts, alertItems, page, total, claimInfos },
+}) => ({
   alerts,
   page,
   total,
   alertItems,
+  claimInfos,
   loading: loading.effects,
-}))(AlertList);
+});
+export default connect(mapStateToProps)(AlertList);

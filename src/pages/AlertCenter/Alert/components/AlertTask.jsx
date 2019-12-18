@@ -22,8 +22,8 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId }, alertItems, user
     });
   }
 
-  function handleAssignUser(userId) {
-    dispatch({
+  async function handleAssignUser(userId) {
+    await dispatch({
       type: 'alertCenter/assignTask',
       payload: {
         userId,
