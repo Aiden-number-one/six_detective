@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime: 2019-12-18 11:02:54
+ * @LastEditTime: 2019-12-18 14:40:04
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -261,19 +261,21 @@ class AddDataSet extends PureComponent {
   saveSql = fieldsValue => {
     const { dispatch, sql } = this.props;
     dispatch({
-      type: 'addSqlDataSet/addMetaData',
+      type: 'sqlDataSource/addDataSet',
       payload: {
-        // basicOperation: save，update，del,
-        // dbId: this.connection_id,
-        // sqlStatement:sql,
-        // sqlStatementPram: sqlStatementPram,
-        // sqlName: fieldsValue.sqlDataSetName,
-        // classId: folder,
-        tableId: this.isSaveOther ? '' : this.tableId,
-        connection_id: this.connection_id,
-        setType: 'viewSet',
-        viewSql: sql,
-        viewName: fieldsValue.sqlDataSetName,
+        basicOperation: 'save',
+        // update,del,
+        dbId: this.connection_id,
+        sqlStatement: sql,
+        sqlStatementPram: {},
+        // sqlStatementPram,
+        sqlName: fieldsValue.sqlDataSetName,
+        classId: fieldsValue.folder,
+        // tableId: this.isSaveOther ? '' : this.tableId,
+        // connection_id: this.connection_id,
+        // setType: 'viewSet',
+        // viewSql: sql,
+        // viewName: fieldsValue.sqlDataSetName,
       },
     });
   };
