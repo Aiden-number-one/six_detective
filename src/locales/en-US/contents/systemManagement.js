@@ -2,8 +2,8 @@
  * @Description: This is a English i18n for system management module.
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-16 19:25:08
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-18 14:11:28
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -58,4 +58,12 @@ export default {
   'systemManagement.auditLog.updateType': 'Update Type',
   'systemManagement.auditLog.before': 'Before',
   'systemManagement.auditLog.after': 'After',
+  'systemManagement.dataProcessing.inspectData': 'Inspect Data',
+  'systemManagement.dataProcessing.market': 'Market',
+  'systemManagement.dataProcessing.alertName': 'Alert Name',
+  'systemManagement.dataProcessing.numberOfAlert': 'Number Of Alert',
+  'systemManagement.dataProcessing.bypass': 'Bypass',
+  'systemManagement.dataProcessing.alertOwner': 'Alert Owner',
+  'systemManagement.dataProcessing.submitterCode': 'Submitter Code',
+  'systemManagement.dataProcessing.submitterName': 'Submitter Name',
 };
