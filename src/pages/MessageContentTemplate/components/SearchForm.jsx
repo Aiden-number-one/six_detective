@@ -16,7 +16,10 @@ export default class SearchForm extends Component {
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'systemManagement.template.templateName' })}>
-              {getFieldDecorator('templateName', {})(
+              {getFieldDecorator(
+                'templateName',
+                {},
+              )(
                 <Input
                   className={styles.inputvalue}
                   placeholder={`Please Input ${formatMessage({
@@ -28,7 +31,10 @@ export default class SearchForm extends Component {
           </Col>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'systemManagement.template.templateId' })}>
-              {getFieldDecorator('templateId', {})(
+              {getFieldDecorator(
+                'templateId',
+                {},
+              )(
                 <Input
                   className={styles.inputvalue}
                   placeholder={`Please Input ${formatMessage({
@@ -40,7 +46,9 @@ export default class SearchForm extends Component {
           </Col>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'systemManagement.template.templateType' })}>
-              {getFieldDecorator('type', {})(
+              {getFieldDecorator('type', {
+                initialValue: '',
+              })(
                 <Select className={styles.inputvalue} placeholder="Please Select">
                   {typeOptions.map(item => (
                     <Option key={item.key} value={item.value}>

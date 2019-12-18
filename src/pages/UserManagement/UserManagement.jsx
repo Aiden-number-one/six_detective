@@ -2,8 +2,8 @@
  * @Description: This is for userManagement page.
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-17 16:10:58
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-18 20:35:07
  */
 
 import React, { Component } from 'react';
@@ -161,7 +161,10 @@ class UserManagement extends Component {
   addConfrim = () => {
     this.setState({
       visible: false,
+      searchUserId: undefined,
+      searchUserName: undefined,
     });
+    this.searchForm.current.resetFields();
     const { pageSize } = this.state.page;
     const page = {
       pageNumber: 1,

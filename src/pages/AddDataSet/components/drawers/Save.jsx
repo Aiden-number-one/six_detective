@@ -2,7 +2,7 @@
  * @Description: 111
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime: 2019-12-12 14:34:56
+ * @LastEditTime: 2019-12-18 14:45:20
  * @LastEditors: lan
  */
 import React from 'react';
@@ -12,13 +12,14 @@ import { formatMessage } from 'umi/locale';
 export default React.memo(
   Form.create()(
     class extends React.Component {
-      handleSubmit = () => {
-        const { form, toggleModal } = this.props;
-        form.validateFields(err => {
+      handleSubmit = e => {
+        e.preventDefault();
+        const { form, toggleModal, saveSql } = this.props;
+        form.validateFields((err, fieldsValue) => {
           if (err) return;
+          if (saveSql) saveSql(fieldsValue);
           form.resetFields();
           toggleModal('save');
-          // saveSql && saveSql(fieldsValue);
         });
       };
 

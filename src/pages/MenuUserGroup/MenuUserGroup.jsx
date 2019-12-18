@@ -92,12 +92,25 @@ class MenuUserGroup extends Component {
   };
 
   onClose = () => {
+    const groupMenuInfo = {
+      groupId: undefined,
+      groupName: undefined,
+      groupDesc: undefined,
+    };
     this.setState({
       modifyVisible: false,
+      groupMenuInfo,
     });
   };
 
-  onSave = () => {
+  onSave = updateFlag => {
+    if (!updateFlag) {
+      this.searchForm.current.resetFields();
+      this.setState({
+        searchGroupName: undefined,
+        searchGroupDesc: undefined,
+      });
+    }
     this.setState({
       modifyVisible: false,
     });
