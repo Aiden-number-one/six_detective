@@ -8,18 +8,25 @@ import AlertTaskOfEp from './AlertTaskOfEp';
 import AlertTaskOfProduct from './AlertTaskOfProduct';
 import AlertTaskOfCa from './AlertTaskOfCa';
 
+const TaskMap = {
+  301: AlertTaskOfEp,
+  302: AlertTaskOfProduct,
+  303: AlertTaskOfCa,
+};
+
 function AlertTask({ dispatch, loading, alert: { alertTypeId }, alertItems, users }) {
   const [visible, setVisible] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
+  const AlertTaskType = TaskMap[+alertTypeId];
 
-  function showUsers() {
-    setVisible(true);
-    dispatch({
+  async function showUsers() {
+    await dispatch({
       type: 'alertCenter/fetchAssignUsers',
       payload: {
         alertItemIds: selectedRows.map(item => item.ALERT_ITEM_ID),
       },
     });
+    setVisible(true);
   }
 
   async function handleAssignUser(userId) {
@@ -44,22 +51,8 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId }, alertItems, user
       <Button style={{ marginBottom: 10 }} disabled={!selectedRows.length} onClick={showUsers}>
         <FormattedMessage id="alert-center.assign" />
       </Button>
-      {alertTypeId === '301' && (
-        <AlertTaskOfEp
-          dataSource={alertItems}
-          loading={loading}
-          getSelectedRows={rows => setSelectedRows(rows)}
-        />
-      )}
-      {alertTypeId === '302' && (
-        <AlertTaskOfProduct
-          dataSource={alertItems}
-          loading={loading}
-          getSelectedRows={rows => setSelectedRows(rows)}
-        />
-      )}
-      {alertTypeId === '303' && (
-        <AlertTaskOfCa
+      {AlertTaskType && (
+        <AlertTaskType
           dataSource={alertItems}
           loading={loading}
           getSelectedRows={rows => setSelectedRows(rows)}

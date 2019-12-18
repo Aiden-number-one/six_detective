@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
+import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Button, Modal, Icon } from 'antd';
 import IconFont from '@/components/IconFont';
+import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
 import ColumnTitle from '../ColumnTitle';
 import styles from '../index.less';
 
@@ -280,7 +282,12 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos, getAlert }) {
         }}
         onRow={record => ({
           onClick(e) {
-            if (!e.target.className) {
+            if (
+              ![
+                'antd-pro-pages-alert-center-index-icon-btns',
+                'ant-table-selection-column',
+              ].includes(e.target.className)
+            ) {
               getAlert(record);
               setAlert(record);
             }
@@ -302,16 +309,19 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos, getAlert }) {
           align="center"
           dataIndex="tradeDate"
           title={<WrapTitle tableColumn="tradeDate" id="trade-date" />}
+          render={(text, record) => moment(record.tradeDate).format(dateFormat)}
         />
         <Column
           align="center"
           dataIndex="alertTime"
           title={<WrapTitle tableColumn="alertTime" id="alert-timestamp" />}
+          render={(text, record) => moment(record.alertTime).format(timestampFormat)}
         />
         <Column
           align="center"
           dataIndex="itemsTotal"
           title={<WrapTitle tableColumn="itemsTotal" id="items-total" />}
+          render={(text, record) => +record.itemsTotal}
         />
         <Column
           align="center"

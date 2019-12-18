@@ -18,7 +18,7 @@ function CustomEmpty({ className = '', style = {} }) {
 
 function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
   const [isFullscreen, setFullscreen] = useState(false);
-  const { alertTypeId, alertId } = alert;
+  const { alertTypeId, alertId, itemsTotal } = alert;
 
   useEffect(() => {
     // no items
@@ -80,7 +80,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
           >
             <AlertDes alert={alert} />
           </TabPane>
-          {+alertTypeId !== 101 && (
+          {+itemsTotal !== 0 && (
             <TabPane
               key="2"
               className={styles['tab-content']}

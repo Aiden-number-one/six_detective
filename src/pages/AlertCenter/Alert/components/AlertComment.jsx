@@ -1,7 +1,9 @@
 import React from 'react';
 import { Row, Col, Popover, Typography } from 'antd';
 import { FormattedMessage } from 'umi/locale';
+import moment from 'moment';
 import IconFont from '@/components/IconFont';
+import { timestampFormat } from '@/pages/DataImportLog/constants';
 
 const { Paragraph, Text } = Typography;
 
@@ -44,7 +46,7 @@ export default function({ comment: { id, commitTime, commentContent, fileList } 
     <li key={id}>
       <Row>
         <Col span={18} style={{ color: '#0D87D4' }}>
-          {commitTime}
+          {moment(commitTime).format(timestampFormat)}
         </Col>
         <Col span={5} offset={1} align="right">
           {attachments.length > 0 && <AlertAttachmentPop attachments={attachments} />}

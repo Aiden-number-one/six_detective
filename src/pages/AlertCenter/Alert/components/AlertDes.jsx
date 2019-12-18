@@ -1,6 +1,8 @@
 import React from 'react';
 import { Descriptions, Typography } from 'antd';
 import { FormattedMessage } from 'umi/locale';
+import moment from 'moment';
+import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
 
 const { Paragraph } = Typography;
 
@@ -26,17 +28,21 @@ export default function({
         {alertType}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.trade-date" />}>
-        {tradeDate}
+        {moment(tradeDate).format(dateFormat)}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.alert-timestamp" />}>
-        {alertTime}
+        {moment(alertTime).format(timestampFormat)}
       </Descriptions.Item>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.submission-time" />}>
-        {submissionTime}
-      </Descriptions.Item>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.submitter" />}>
-        {submitter}
-      </Descriptions.Item>
+      {submissionTime && (
+        <Descriptions.Item label={<FormattedMessage id="alert-center.submission-time" />}>
+          {moment(submissionTime).format(timestampFormat)}
+        </Descriptions.Item>
+      )}
+      {submitter && (
+        <Descriptions.Item label={<FormattedMessage id="alert-center.submitter" />}>
+          {submitter}
+        </Descriptions.Item>
+      )}
       <Descriptions.Item label={<FormattedMessage id="alert-center.description" />}>
         <Paragraph ellipsis={{ rows: 3, expandable: true }}>{alertDesc}</Paragraph>
       </Descriptions.Item>
