@@ -39,45 +39,23 @@ const generateJson = (spreedSheetData, saveCallback) => {
         Object.entries(cellContent.style).forEach(([singleStyle, singleStyleValue]) => {
           if (singleStyle === 'bgcolor') {
             // 背景颜色
-            currentCellProps.style.bgc = singleStyleValue;
+            currentCellProps.style.background_color = singleStyleValue;
           }
           if (singleStyle === 'color') {
             // 字体颜色
-            currentCellProps.style.c = singleStyleValue;
+            currentCellProps.style.color = singleStyleValue;
           }
           if (singleStyle === 'underline' && singleStyleValue) {
             // 下划线
-            currentCellProps.style.tdc = 'underline';
+            currentCellProps.style.text_decoration = ['underline'];
           }
           if (singleStyle === 'align') {
             // 水平对齐方式
-            if (singleStyleValue === 'center') {
-              // 居中
-              currentCellProps.style.jc = 'c';
-            }
-            if (singleStyleValue === 'left') {
-              // 居左
-              currentCellProps.style.jc = 's';
-            }
-            if (singleStyleValue === 'right') {
-              // 居右
-              currentCellProps.style.jc = 'e';
-            }
+            currentCellProps.style.text_align = singleStyleValue;
           }
           if (singleStyle === 'valign') {
             // 垂直对齐方式
-            if (singleStyleValue === 'middle') {
-              // 居中
-              currentCellProps.style.ali = 'c';
-            }
-            if (singleStyleValue === 'top') {
-              // 居上
-              currentCellProps.style.ali = 'c';
-            }
-            if (singleStyleValue === 'bottom') {
-              // 居下
-              currentCellProps.style.ali = 'c';
-            }
+            currentCellProps.style.vertical_align = singleStyleValue;
           }
           if (singleStyle === 'font') {
             // 字体相关
@@ -85,19 +63,19 @@ const generateJson = (spreedSheetData, saveCallback) => {
               ([fontStyle, fontStyleValue]) => {
                 if (fontStyle === 'name') {
                   // 字体 font-family
-                  currentCellProps.style.fa = fontStyleValue;
+                  currentCellProps.style.font_family = fontStyleValue;
                 }
                 if (fontStyle === 'size') {
                   // 字体 font-size
-                  currentCellProps.style.fs = fontStyleValue;
+                  currentCellProps.style.font_size = fontStyleValue;
                 }
                 if (fontStyle === 'italic' && fontStyleValue) {
                   // 字体 斜体
-                  currentCellProps.style.fst = 'italic';
+                  currentCellProps.style.font_style = 'italic';
                 }
                 if (fontStyle === 'bold' && fontStyleValue) {
                   // 字体 加粗
-                  currentCellProps.style.fw = 'bold';
+                  currentCellProps.style.font_weight = 'bold';
                 }
               },
             );
@@ -106,24 +84,30 @@ const generateJson = (spreedSheetData, saveCallback) => {
             // 边框相关样式
             Object.entries(cellContent.style[singleStyle]).forEach(
               ([borderStyle, borderStyleValue]) => {
-                const [color, thickness] = borderStyleValue;
-                console.log(thickness);
-
+                const [color] = borderStyleValue;
                 if (borderStyle === 'bottom') {
                   // 下边框
-                  currentCellProps.style.bb = `${'1px solid'}${color}`;
+                  currentCellProps.style.border_bottom = `${'1px solid'}${color}`;
+                  currentCellProps.style.border_bottom_color = color;
+                  currentCellProps.style.border_bottom_type = 'SOLID';
                 }
                 if (borderStyle === 'top') {
                   // 上边框
-                  currentCellProps.style.bt = `${'1px solid'}${color}`;
+                  currentCellProps.style.border_top = `${'1px solid'}${color}`;
+                  currentCellProps.style.border_top_color = color;
+                  currentCellProps.style.border_top_type = 'SOLID';
                 }
                 if (borderStyle === 'left') {
                   // 左边框
-                  currentCellProps.style.bl = `${'1px solid'}${color}`;
+                  currentCellProps.style.border_left = `${'1px solid'}${color}`;
+                  currentCellProps.style.border_left_color = color;
+                  currentCellProps.style.border_left_type = 'SOLID';
                 }
                 if (borderStyle === 'rigth') {
                   // 有边框
-                  currentCellProps.style.br = `${'1px solid'}${color}`;
+                  currentCellProps.style.border_right = `${'1px solid'}${color}`;
+                  currentCellProps.style.border_right_color = color;
+                  currentCellProps.style.border_right_type = 'SOLID';
                 }
               },
             );
