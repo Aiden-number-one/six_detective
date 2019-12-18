@@ -21,13 +21,17 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
   const { alertTypeId, alertId } = alert;
 
   useEffect(() => {
-    dispatch({
-      type: 'alertCenter/fetchAlertItems',
-      payload: {
-        alertTypeId,
-        alertId,
-      },
-    });
+    // no items
+    if (+alertTypeId !== 101) {
+      dispatch({
+        type: 'alertCenter/fetchAlertItems',
+        payload: {
+          alertTypeId,
+          alertId,
+        },
+      });
+    }
+
     dispatch({
       type: 'alertCenter/fetchLogs',
       payload: {
@@ -42,12 +46,13 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
     });
   }, [alertTypeId, alertId]);
 
-  async function commitComment(comment) {
+  async function handleCommit(comment, fileList) {
     await dispatch({
       type: 'alertCenter/postComment',
       payload: {
         alertId: alert.alertId,
         content: comment,
+        fileList: fileList.map(file => file.url),
       },
     });
   }
@@ -75,14 +80,16 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
           >
             <AlertDes alert={alert} />
           </TabPane>
-          <TabPane
-            key="2"
-            className={styles['tab-content']}
-            closable={false}
-            tab={<FormattedMessage id="alert-center.alert-item-list" />}
-          >
-            <AlertTask alert={alert} />
-          </TabPane>
+          {+alertTypeId !== 101 && (
+            <TabPane
+              key="2"
+              className={styles['tab-content']}
+              closable={false}
+              tab={<FormattedMessage id="alert-center.alert-item-list" />}
+            >
+              <AlertTask alert={alert} />
+            </TabPane>
+          )}
         </Tabs>
       </Col>
       <Col span={8}>
@@ -99,10 +106,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
                 <CustomEmpty className={styles['comment-list']} />
               )}
             </Spin>
-            <AlertRichText
-              loading={loading['alertCenter/postComment']}
-              commitComment={comment => commitComment(comment)}
-            />
+            <AlertRichText loading={loading['alertCenter/postComment']} onCommit={handleCommit} />
           </TabPane>
           <TabPane key="2" tab={<FormattedMessage id="alert-center.alert-lifecycle" />}>
             <Spin spinning={loading['alertCenter/fetchLogs']}>

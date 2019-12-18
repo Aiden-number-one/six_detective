@@ -30,7 +30,16 @@ function AlertAttachmentPop({ attachments }) {
   );
 }
 
-export default function({ comment: { id, commitTime, commentContent, attachments } }) {
+export default function({ comment: { id, commitTime, commentContent, fileList } }) {
+  let attachments = fileList ? fileList.split(',') : [];
+  attachments = attachments.map(file => {
+    const l = file.split('/');
+    const f = l.slice(-1)[0];
+    return {
+      name: f,
+      url: file,
+    };
+  });
   return (
     <li key={id}>
       <Row>
@@ -38,7 +47,7 @@ export default function({ comment: { id, commitTime, commentContent, attachments
           {commitTime}
         </Col>
         <Col span={5} offset={1} align="right">
-          {attachments && <AlertAttachmentPop attachments={attachments} />}
+          {attachments.length > 0 && <AlertAttachmentPop attachments={attachments} />}
         </Col>
       </Row>
       <Row>

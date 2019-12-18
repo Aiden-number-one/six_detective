@@ -124,6 +124,7 @@ class NewUser extends Component {
           type: 'alertUserGroup/updateUserAlert',
           payload: params,
           callback: () => {
+            message.success('success');
             this.props.onSave(true);
           },
         });
