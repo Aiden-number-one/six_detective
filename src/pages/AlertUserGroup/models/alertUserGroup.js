@@ -2,10 +2,9 @@
  * @Description:
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-13 14:16:13
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-18 09:39:15
  */
-import { notification } from 'antd';
 import Service from '@/utils/Service';
 
 const { getAlertUserGroup, newAlertUser, updateAlertUser } = Service;
@@ -28,14 +27,7 @@ const alertUserGroup = {
           });
         }
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
     *newAlertUser({ payload, callback }, { call, put }) {
@@ -47,14 +39,7 @@ const alertUserGroup = {
         });
         callback();
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
     *updateUserAlert({ payload, callback }, { call, put }) {
@@ -66,14 +51,7 @@ const alertUserGroup = {
         });
         callback();
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
   },

@@ -30,7 +30,7 @@ const Model = {
       if (response.bcjson.flag === '1') {
         const item = response.bcjson.items[0];
         if (item.isNeedLock === 'Y' || item.IpOrAgentOrAlllow !== 'Allow') {
-          message.warning('您的账号在其他地方登录,请重新登录');
+          message.warning(response.bcjson.msg);
           yield put({
             type: 'logout',
           });

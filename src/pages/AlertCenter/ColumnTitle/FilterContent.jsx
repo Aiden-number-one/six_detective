@@ -54,6 +54,7 @@ export function FilterType({ isNum, loading, handleTypeChange }) {
       <span>{isNum ? 'NUM' : 'TEXT'}</span>
       <Select
         ellipsis
+        allowClear
         loading={loading}
         className={styles.type}
         defaultValue={isNum ? 1 : 7}

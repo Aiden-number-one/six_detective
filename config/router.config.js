@@ -136,7 +136,7 @@ export default [
           {
             path: '/data-module/data-processing',
             name: 'Data Processing',
-            component: './Page404',
+            component: './DataProcessing/DataProcessing',
           },
         ],
       },
