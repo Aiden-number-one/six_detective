@@ -2,6 +2,8 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import { setLocale } from 'umi/locale';
+import { DndProvider } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import SpreadSheet from '@/components/SpreadSheet';
 import CustomSearchArea from './components/CustomSearchArea/index';
 import ToolBar from './components/ToolBar/index';
@@ -83,26 +85,28 @@ export default class ReportDesigner extends PureComponent {
       dispatch,
     };
     return (
-      <Fragment>
-        <ToolBar {...toolBarProps} />
-        <div className={styles.container} style={{ height: `${window.innerHeight - 104}px` }}>
-          <div className={classNames(styles.main, styles.col)}>
-            {display && <CustomSearchArea />}
-            <div>
-              <SpreadSheet />
+      <DndProvider backend={HTML5Backend}>
+        <Fragment>
+          <ToolBar {...toolBarProps} />
+          <div className={styles.container} style={{ height: `${window.innerHeight - 104}px` }}>
+            <div className={classNames(styles.main, styles.col)}>
+              {display && <CustomSearchArea />}
+              <div>
+                <SpreadSheet />
+              </div>
+            </div>
+            <div id="leftSideBar" className={classNames(styles.left, styles.col)}>
+              <LeftSideBar />
+            </div>
+            <div
+              id="rigthSideBar"
+              className={classNames(styles.right, styles.col, styles.rigthSideBar)}
+            >
+              <RigthSideBar />
             </div>
           </div>
-          <div id="leftSideBar" className={classNames(styles.left, styles.col)}>
-            <LeftSideBar />
-          </div>
-          <div
-            id="rigthSideBar"
-            className={classNames(styles.right, styles.col, styles.rigthSideBar)}
-          >
-            <RigthSideBar />
-          </div>
-        </div>
-      </Fragment>
+        </Fragment>
+      </DndProvider>
     );
   }
 }

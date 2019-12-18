@@ -3,30 +3,29 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
- * @LastEditors: mus
- * @LastEditTime: 2019-12-05 16:32:49
+ * @LastEditors  : mus
+ * @LastEditTime : 2019-12-18 14:22:14
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Icon, Input } from 'antd';
-import { WidthProvider, Responsive } from 'react-grid-layout';
+// import { Icon } from 'antd';
+import { DropTarget } from 'react-dnd';
+import RGL, { WidthProvider } from 'react-grid-layout';
 import styles from './index.less';
 
-const ResponsiveReactGridLayout = WidthProvider(Responsive);
+const ResponsiveReactGridLayout = WidthProvider(RGL);
 
-@connect(({ formArea }) => ({
-  customSearchData: formArea.customSearchData,
-}))
-export default class CustomSearchArea extends PureComponent {
+class CustomSearchArea extends PureComponent {
   static defaultProps = {
-    rowHeight: 40,
+    rowHeight: 25,
   };
 
   generateDOM = () => {
     const { customSearchData } = this.props;
     return customSearchData.map(el => (
-      <div key={el.i} className={styles.bulk}>
-        <Input />
+      <div key={el.i}>
+        <div className={styles.bulk}></div>
+        {/* <Input /> */}
       </div>
     ));
   };
@@ -38,9 +37,36 @@ export default class CustomSearchArea extends PureComponent {
    * @Author: mus
    * @Date: 2019-12-05 10:46:07
    */
-  addWidgetArea = type => {
-    const { dispatch, customSearchData } = this.props;
-    const value = {
+  // addWidgetArea = type => {
+  //   // const { dispatch, customSearchData } = this.props;
+  //   // const value = ;
+  //   // dispatch({
+  //   //   type: 'formArea/changeCustomSearchData',
+  //   //   payload: [...customSearchData, value],
+  //   // });
+  // };
+
+  render() {
+    // const widgetAreaAction = {
+    //   addWidgetArea: this.addWidgetArea,
+    // };
+    const { customSearchData, connectDropTarget } = this.props;
+    return connectDropTarget(
+      <div className={styles.customSearchArea}>
+        <ResponsiveReactGridLayout layout={customSearchData} {...this.props}>
+          {this.generateDOM()}
+        </ResponsiveReactGridLayout>
+        {/* <WidgetArea {...widgetAreaAction} /> */}
+      </div>,
+    );
+  }
+}
+
+const targetSpec = {
+  drop(props, monitor) {
+    const { dispatch, customSearchData } = props;
+    const { type } = monitor.getItem();
+    const newSearchData = {
       type, // 控件类型
       name: '', // 控件名称
       placeholder: '', // 控件placeholder
@@ -64,46 +90,33 @@ export default class CustomSearchArea extends PureComponent {
     };
     dispatch({
       type: 'formArea/changeCustomSearchData',
-      payload: [...customSearchData, value],
+      payload: [...customSearchData, newSearchData],
     });
-  };
+  },
+};
 
-  render() {
-    const widgetAreaAction = {
-      addWidgetArea: this.addWidgetArea,
-    };
-    return (
-      <div className={styles.customSearchArea}>
-        <ResponsiveReactGridLayout
-          onDragStart={() => {
-            if (document.activeElement.className.indexOf('ant-input') > -1) {
-              return false;
-            }
-            return true;
-          }}
-          onLayoutChange={this.onLayoutChange}
-          {...this.props}
-        >
-          {this.generateDOM()}
-        </ResponsiveReactGridLayout>
-        <WidgetArea {...widgetAreaAction} />
-      </div>
-    );
-  }
-}
+const WrapperDropContent = DropTarget('InsertMenu', targetSpec, (connected, monitor) => ({
+  connectDropTarget: connected.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop(),
+}))(CustomSearchArea);
 
-function WidgetArea({ addWidgetArea }) {
-  return (
-    <div className={styles.widgetArea}>
-      <div className={styles.editArea}>
-        <Icon
-          type="plus"
-          onClick={() => {
-            addWidgetArea('input');
-          }}
-        />
-      </div>
-      <div className={styles.closeArea}>Close</div>
-    </div>
-  );
-}
+export default connect(({ formArea }) => ({
+  customSearchData: formArea.customSearchData,
+}))(WrapperDropContent);
+
+// function WidgetArea({ addWidgetArea }) {
+//   return (
+//     <div className={styles.widgetArea}>
+//       <div className={styles.editArea}>
+//         <Icon
+//           type="plus"
+//           onClick={() => {
+//             addWidgetArea('input');
+//           }}
+//         />
+//       </div>
+//       <div className={styles.closeArea}>Close</div>
+//     </div>
+//   );
+// }
