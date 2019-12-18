@@ -1,3 +1,10 @@
+/*
+ * @Description: This is AuditLog
+ * @Author: dailinbo
+ * @Date: 2019-11-01 10:40:21
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-18 09:45:02
+ */
 import Service from '@/utils/Service';
 
 const { getAuditLog } = Service;
@@ -17,6 +24,8 @@ const getAuditLogModel = {
             payload: response.bcjson,
           });
         }
+      } else {
+        throw new Error(response.bcjson.msg);
       }
     },
   },

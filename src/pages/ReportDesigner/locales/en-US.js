@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-06 13:40:22
  * @LastEditors: mus
- * @LastEditTime: 2019-12-12 16:49:11
+ * @LastEditTime: 2019-12-17 15:52:42
  */
 
 export default {
@@ -12,6 +12,9 @@ export default {
   'report-designer.start': 'Start',
   'report-designer.dataset': 'Data Set',
   'report-designer.datacolumn': 'Data Column',
+  'report-designer.inputkeywords': 'Please input keywords',
+  'report-designer.nodata': 'No Data',
+  'report-designer.adddataset': 'Add Dataset',
   // 控件设置
   'report-designer.widgetcontrol': 'Widget Control',
   'report-designer.widgettype': 'Widget Type',
