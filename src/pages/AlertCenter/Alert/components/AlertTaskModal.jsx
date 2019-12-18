@@ -12,6 +12,10 @@ const radioStyle = {
 export default function AlertTaskModal({ loading, visible, users, handleCancel, assignUser }) {
   const [curUserId, setUserId] = useState('');
 
+  async function handleCommit() {
+    await assignUser(curUserId);
+    setUserId('');
+  }
   return (
     <Drawer
       title={<FormattedMessage id="alert-center.assign" />}
@@ -23,7 +27,7 @@ export default function AlertTaskModal({ loading, visible, users, handleCancel, 
     >
       <Spin spinning={loading['alertCenter/fetchAssignUsers']}>
         {users.length > 0 ? (
-          <Radio.Group onChange={e => setUserId(e.target.value)}>
+          <Radio.Group onChange={e => setUserId(e.target.value)} value={curUserId}>
             {users.map(user => (
               <Radio style={radioStyle} value={user.userId} key={user.userId}>
                 {user.userName}
@@ -38,7 +42,8 @@ export default function AlertTaskModal({ loading, visible, users, handleCancel, 
         <Button onClick={handleCancel}>Cancel</Button>
         <Button
           type="primary"
-          onClick={() => assignUser(curUserId)}
+          disabled={!curUserId}
+          onClick={handleCommit}
           loading={loading['alertCenter/assignTask']}
         >
           Commit
