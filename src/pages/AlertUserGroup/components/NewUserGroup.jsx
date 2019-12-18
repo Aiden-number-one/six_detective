@@ -21,8 +21,8 @@ class FormUser extends Component {
       <Fragment>
         <Form>
           <Form.Item
-            label={formatMessage({ id: 'systemManagement.userMaintenance.name' })}
-            labelCol={{ span: 4 }}
+            label={formatMessage({ id: 'systemManagement.userMaintenance.alertGroupName' })}
+            labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('groupName', {
@@ -37,7 +37,7 @@ class FormUser extends Component {
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.userGroup.remark' })}
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 6 }}
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('groupDesc', {
@@ -124,6 +124,7 @@ class NewUser extends Component {
           type: 'alertUserGroup/updateUserAlert',
           payload: params,
           callback: () => {
+            message.success('success');
             this.props.onSave(true);
           },
         });

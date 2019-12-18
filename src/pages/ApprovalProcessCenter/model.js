@@ -43,9 +43,19 @@ export async function setTaskSubmit({ taskCode, userId, epCname }) {
     data: { taskCode: taskCode.toString(), userId: userId.toString(), epCname },
   });
 }
-export async function approveAndReject({ taskCode, userId, type, epCname }) {
+export async function approveAndReject({ taskCode, userId, type, epCname, comment }) {
   return request('set_task_approve_and_reject', {
-    data: { taskCode: taskCode.toString(), userId: userId.toString(), type, epCname },
+    data: { taskCode: taskCode.toString(), userId: userId.toString(), type, epCname, comment },
+  });
+}
+export async function setTaskWithdraw({ taskCode, comment }) {
+  return request('set_task_withdraw', {
+    data: { taskCode: taskCode.toString(), comment },
+  });
+}
+export async function setTaskAssign({ taskCode, userId }) {
+  return request('set_task_assign', {
+    data: { taskCode: taskCode.toString(), userId: userId.toString() },
   });
 }
 export async function getTaskGroup({ taskCode }) {
@@ -59,6 +69,16 @@ export async function getUserList({ operType, groupId }) {
     data: { operType, groupId },
   });
 }
+export async function getUserListByUserId() {
+  return request('get_user_list_by_user_id', {
+    data: {},
+  });
+}
+export async function getApprovalTaskHistory({ taskCode }) {
+  return request('get_approval_task_history', {
+    data: { taskCode: taskCode.toString() },
+  });
+}
 
 export default {
   namespace: 'approvalCenter',
@@ -70,7 +90,10 @@ export default {
     alertOwner: '',
     userList: [],
     submitRadioList: [],
+    currentUserList: [],
+    assignRadioList: [],
     taskGroup: '',
+    taskHistoryList: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -105,22 +128,26 @@ export default {
         submitRadioList,
       };
     },
+    saveCurrentUserList(state, { payload }) {
+      const { currentUserList } = payload;
+      const assignRadioList = currentUserList.map(item => ({
+        label: item.userName,
+        value: item.userId,
+      }));
+      return {
+        ...state,
+        currentUserList,
+        assignRadioList,
+      };
+    },
 
-    // claimOk(state, { payload }) {
-    //   const owner = localStorage.getItem('loginName') || '';
-    //   const { taskIds } = payload;
-    //   const alerts = state.alerts.map(alert => {
-    //     if (taskIds.includes(alert.alertId)) {
-    //       return { ...alert, owner };
-    //     }
-    //     return alert;
-    //   });
-
-    //   return {
-    //     ...state,
-    //     alerts,
-    //   };
-    // },
+    saveTaskHistory(state, { payload }) {
+      const { taskHistoryList } = payload;
+      return {
+        ...state,
+        taskHistoryList,
+      };
+    },
   },
   effects: {
     *fetch({ payload }, { call, put }) {
@@ -187,12 +214,32 @@ export default {
       }
     },
     *approveAndReject({ payload, callback }, { call }) {
-      const { taskCode, userId, type, epCname } = payload || [];
-      const { err } = yield call(approveAndReject, { taskCode, userId, type, epCname });
+      const { taskCode, userId, type, epCname, comment } = payload || [];
+      const { err } = yield call(approveAndReject, { taskCode, userId, type, epCname, comment });
       if (err) {
         message.error('failure');
       } else {
         message.success('success');
+        callback();
+      }
+    },
+    *setTaskWithdraw({ payload, callback }, { call }) {
+      const { taskCode, comment } = payload || [];
+      const { err } = yield call(setTaskWithdraw, { taskCode, comment });
+      if (err) {
+        message.error('Withdraw failure');
+      } else {
+        message.success('Withdraw success');
+        callback();
+      }
+    },
+    *setTaskAssign({ payload, callback }, { call }) {
+      const { taskCode, userId } = payload || [];
+      const { err } = yield call(setTaskAssign, { taskCode, userId });
+      if (err) {
+        message.error('Assign failure');
+      } else {
+        message.success('Assign success');
         callback();
       }
     },
@@ -220,6 +267,34 @@ export default {
         type: 'saveUserList',
         payload: {
           userList: items,
+        },
+      });
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    *getUserListByUserId({ payload }, { call, put }) {
+      const { items, err } = yield call(getUserListByUserId);
+      if (err) {
+        // message.error('getUserList failure');
+        return;
+      }
+      yield put({
+        type: 'saveCurrentUserList',
+        payload: {
+          currentUserList: items,
+        },
+      });
+    },
+    *getApprovalTaskHistory({ payload }, { call, put }) {
+      const { taskCode } = payload || [];
+      const { items, err } = yield call(getApprovalTaskHistory, { taskCode });
+      if (err) {
+        // message.error('getUserList failure');
+        return;
+      }
+      yield put({
+        type: 'saveTaskHistory',
+        payload: {
+          taskHistoryList: items.approvalHistory,
         },
       });
     },

@@ -12,12 +12,17 @@ import {
   Drawer,
   Radio,
   message,
-  Modal,
+  Upload,
+  Empty,
+  Spin,
 } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
+import { ConfirmModel } from './component/ConfirmModel';
 import styles from './index.less';
+import Phase from './component/phase';
+import TaskAttachments from './component/TaskAttachments';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -27,15 +32,13 @@ const { Paragraph, Text } = Typography;
 // export function TaskDes({ detailItem }) {
 //   return <div></div>;
 // }
-
-function ConfirmModel({ title, confirmVisible, comfirm, closeModel }) {
+function CustomEmpty({ className = '', style = {} }) {
   return (
-    <Modal title={title} visible={confirmVisible} onOk={comfirm} onCancel={closeModel}>
-      <p>Do you comfirm to reject this task?</p>
-    </Modal>
+    <Row className={className} style={style} type="flex" align="middle" justify="center">
+      <Empty />
+    </Row>
   );
 }
-
 function DetailForm({ form, detailItem, task }) {
   const { getFieldDecorator } = form;
   const detailList = task ? detailItem.data || [] : [];
@@ -214,19 +217,24 @@ function AlertLog({ log: { time, text } }) {
 
 function ProcessDetail({
   dispatch,
+  loading,
   task,
   detailItems,
   taskGroup,
   submitRadioList,
+  taskHistoryList,
   currentTaskType,
 }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [radioValue, setRadioValue] = useState('');
   const [submitType, setSubmitType] = useState('');
+  const [comment, setComment] = useState('');
   const [confirmVisible, setConfirmVisible] = useState(false);
+  const [withdrawConfirmVisible, setWithdrawConfirmVisible] = useState(false);
+  const [upAttachments, setUpAttachements] = useState([]);
   const newDetailForm = React.createRef();
-  console.log('detailItem--000-->', radioValue, taskGroup);
+  console.log('currentTaskType--000-->', currentTaskType);
 
   useEffect(() => {
     if (task) {
@@ -243,6 +251,16 @@ function ProcessDetail({
     if (task) {
       dispatch({
         type: 'approvalCenter/featchTaskGroup',
+        payload: {
+          taskCode: task.taskCode,
+        },
+      });
+    }
+  }, [task]);
+  useEffect(() => {
+    if (task) {
+      dispatch({
+        type: 'approvalCenter/getApprovalTaskHistory',
         payload: {
           taskCode: task.taskCode,
         },
@@ -296,6 +314,7 @@ function ProcessDetail({
         type,
         userId: radioValue,
         epCname,
+        comment,
       },
       callback: () => {
         dispatch({
@@ -307,6 +326,28 @@ function ProcessDetail({
       },
     });
     setVisible(false);
+  }
+
+  // 撤销
+  function setTaskWithdraw() {
+    console.log('comment----', comment);
+    dispatch({
+      type: 'approvalCenter/setTaskWithdraw',
+      payload: {
+        taskCode: task.taskCode,
+        comment,
+      },
+      callback: () => {
+        dispatch({
+          type: 'approvalCenter/fetch',
+          payload: {
+            type: currentTaskType,
+            taskCode: task.taskCode,
+          },
+        });
+      },
+    });
+    setWithdrawConfirmVisible(false);
   }
 
   function getUserList() {
@@ -343,13 +384,28 @@ function ProcessDetail({
     });
   }
 
+  function handleUpAttachments(info) {
+    let fileList = [...info.fileList];
+    // limit 5 files
+    fileList = fileList.slice(-5);
+    setUpAttachements(fileList);
+  }
+
   return (
     <>
       <ConfirmModel
         title="CONFIRM"
+        content="Do you comfirm to reject this task?"
         closeModel={() => setConfirmVisible(false)}
         confirmVisible={confirmVisible}
         comfirm={() => submitOrApproveTask(submitType)}
+      />
+      <ConfirmModel
+        title="CONFIRM"
+        content="Do you comfirm to withdraw this task?"
+        closeModel={() => setWithdrawConfirmVisible(false)}
+        confirmVisible={withdrawConfirmVisible}
+        comfirm={setTaskWithdraw}
       />
       <Row className={styles['detail-container']} gutter={16}>
         <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -410,67 +466,85 @@ function ProcessDetail({
         <Col span={8}>
           <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
             <TabPane tab="Approval History" key="1">
-              <ul className={styles['comment-ul']}>
-                {alert.comments &&
-                  alert.comments.map(comment => (
-                    <AlertComment comment={comment} key={comment.time} />
-                  ))}
-              </ul>
-              <div className={styles['comment-box']}>
-                <TextArea placeholder="COMMENT" className={styles.txt} />
-                <Row
-                  className={styles['comment-commit']}
-                  type="flex"
-                  align="middle"
-                  justify="space-between"
-                >
-                  {/* <Col span={11} offset={1}>
-                  <Button type="primary">Phase</Button>
-                </Col> */}
+              <Spin spinning={loading['approvalCenter/getApprovalTaskHistory']}>
+                {taskHistoryList.length > 0 ? (
+                  <ul className={styles['comment-list']}>
+                    {taskHistoryList.map(item => (
+                      <AlertComment comment={item} key={item.id} />
+                    ))}
+                  </ul>
+                ) : (
+                  <CustomEmpty className={styles['comment-list']} />
+                )}
+              </Spin>
+              {currentTaskType !== 'his' ? (
+                <div className={styles['comment-box']}>
+                  <TextArea
+                    placeholder="COMMENT"
+                    className={styles.txt}
+                    value={comment}
+                    onChange={({ target: { value } }) => setComment(value)}
+                  />
+                  <Row
+                    className={styles['comment-commit']}
+                    type="flex"
+                    align="middle"
+                    justify="space-between"
+                  >
+                    <Col span={4}>
+                      <Phase postComment={c => setComment(`${comment}${c} `)} />
+                    </Col>
+                    <Col span={7} style={{ textAlign: 'right' }}>
+                      <IconFont
+                        type="iconicon_withdraw1"
+                        onClick={() => setWithdrawConfirmVisible(true)}
+                        className={styles['btn-icon']}
+                        style={{ marginRight: '8px' }}
+                      />
+                      <Upload
+                        showUploadList={false}
+                        fileList={upAttachments}
+                        onChange={handleUpAttachments}
+                      >
+                        <IconFont
+                          type="iconbiezhen"
+                          style={{ cursor: 'pointer', marginRight: 4 }}
+                          title="please select a file"
+                        />
+                        {upAttachments.length > 0 && upAttachments.length}
+                      </Upload>
+                    </Col>
 
-                  {detailItems.isStarter ? (
-                    <>
-                      <Col span={6}>
-                        <Button
-                          style={{ margin: '0 10px' }}
-                          type="primary"
-                          onClick={() => submitDrawer('submit')}
-                        >
-                          Submit
-                        </Button>
-                      </Col>
-                      <Col span={6} align="right">
-                        <Button style={{ margin: '0 10px' }} type="primary" onClick={saveTask}>
-                          Save
-                        </Button>
-                      </Col>
-                    </>
-                  ) : (
-                    <>
-                      <Col span={6}>
-                        <Button
-                          style={{ margin: '0 10px' }}
-                          type="primary"
-                          onClick={() => submitDrawer('pass')}
-                        >
-                          Approve
-                        </Button>
-                      </Col>
-                      <Col span={6}>
-                        <Button
-                          style={{ margin: '0 10px' }}
-                          type="primary"
-                          onClick={() => submitDrawer('reject')}
-                        >
-                          Reject
-                        </Button>
-                      </Col>
-                    </>
-                  )}
-
-                  {/* <Col span={6}>attachments</Col> */}
-                </Row>
-              </div>
+                    {detailItems.isStarter ? (
+                      <>
+                        <Col span={4}>
+                          <Button type="primary" onClick={saveTask}>
+                            Save
+                          </Button>
+                        </Col>
+                        <Col span={6} align="right">
+                          <Button type="primary" onClick={() => submitDrawer('submit')}>
+                            Submit
+                          </Button>
+                        </Col>
+                      </>
+                    ) : (
+                      <>
+                        <Col span={4}>
+                          <Button type="primary" onClick={() => submitDrawer('reject')}>
+                            Reject
+                          </Button>
+                        </Col>
+                        <Col span={6} align="right">
+                          <Button type="primary" onClick={() => submitDrawer('pass')}>
+                            Approve
+                          </Button>
+                        </Col>
+                      </>
+                    )}
+                  </Row>
+                </div>
+              ) : null}
             </TabPane>
             <TabPane className={styles['tab-content']} tab="Task Lifecycle" key="2">
               <Row gutter={[10, 10]} style={{ height: 440, overflowY: 'auto' }}>
@@ -480,15 +554,20 @@ function ProcessDetail({
           </Tabs>
         </Col>
       </Row>
+      {!!upAttachments.length && <TaskAttachments attachments={upAttachments} />}
     </>
   );
 }
 
 export default connect(
-  ({ loading, approvalCenter: { detailItems, userList, submitRadioList, taskGroup } }) => ({
+  ({
+    loading,
+    approvalCenter: { detailItems, userList, submitRadioList, taskHistoryList, taskGroup },
+  }) => ({
     detailItems,
     userList,
     submitRadioList,
+    taskHistoryList,
     taskGroup,
     loading: loading.effects,
   }),

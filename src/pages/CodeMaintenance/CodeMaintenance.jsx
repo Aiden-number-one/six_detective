@@ -114,6 +114,7 @@ class CodeMaintenance extends Component {
     updateCodeItemParams: {
       codeId: '',
       subitemId: '',
+      subitem: '',
       subitemName: '',
       sequence: '',
     },
@@ -144,6 +145,7 @@ class CodeMaintenance extends Component {
     const newUpdateCodeItemParams = {
       codeId,
       subitemId: recode.subitemId,
+      subitem: recode.subitem,
       subitemName: recode.subitemName,
       sequence: recode.sequence,
     };
@@ -158,6 +160,7 @@ class CodeMaintenance extends Component {
   deleteCodeItem = (res, recode) => {
     const updateCodeItemParams = {
       subitemId: recode.subitemId,
+      subitem: recode.subitem,
     };
     this.setState({
       deleteCodeItemVisible: true,
@@ -170,7 +173,7 @@ class CodeMaintenance extends Component {
     const params = {
       operType: 'subitemDeleteBycodeId',
       codeId: this.state.codeId,
-      subitemId: this.state.updateCodeItemParams.subitemId,
+      subitem: this.state.updateCodeItemParams.subitem,
     };
     dispatch({
       type: 'codeList/deleteCodeItem',
@@ -250,6 +253,21 @@ class CodeMaintenance extends Component {
       },
       () => {
         this.queryCodeList();
+      },
+    );
+  };
+
+  onShowItemSizeChange = (current, pageSize) => {
+    const itemPage = {
+      pageNumber: current,
+      pageSize,
+    };
+    this.setState(
+      {
+        itemPage,
+      },
+      () => {
+        this.queryCodeItemList();
       },
     );
   };
@@ -391,7 +409,7 @@ class CodeMaintenance extends Component {
             <div className={styles.content}>
               <div className={styles.tableTop}>
                 <Button onClick={this.addCode} type="primary" className="btn_usual">
-                  + Add
+                  + Add Subitem
                 </Button>
               </div>
               <Table
@@ -408,7 +426,7 @@ class CodeMaintenance extends Component {
                     (totalCountItem || 0) / itemPage.pageSize,
                   ).toString()}`
                 }
-                onShowSizeChange={this.onShowSizeChange}
+                onShowSizeChange={this.onShowItemSizeChange}
                 onChange={this.pageItemChange}
                 total={totalCountItem}
                 pageSize={itemPage.pageSize}

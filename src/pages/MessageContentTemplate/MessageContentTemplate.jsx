@@ -178,9 +178,9 @@ export default class MessageContentTemplate extends Component {
 
   queryLog = () => {
     this.searchForm.current.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+      // if (err) {
+      //   return;
+      // }
       this.setState(
         {
           searchTemplateName: values.templateName,

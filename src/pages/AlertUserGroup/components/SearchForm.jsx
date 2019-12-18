@@ -13,12 +13,17 @@ export default class SearchForm extends Component {
       <Form className="ant-advanced-search-form">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label={formatMessage({ id: 'systemManagement.userMaintenance.name' })}>
-              {getFieldDecorator('groupName', {})(
+            <Form.Item
+              label={formatMessage({ id: 'systemManagement.userMaintenance.alertGroupName' })}
+            >
+              {getFieldDecorator(
+                'groupName',
+                {},
+              )(
                 <Input
                   className={styles.inputvalue}
                   placeholder={`Please Input ${formatMessage({
-                    id: 'systemManagement.userMaintenance.name',
+                    id: 'systemManagement.userMaintenance.alertGroupName',
                   })}`}
                 />,
               )}
@@ -26,7 +31,10 @@ export default class SearchForm extends Component {
           </Col>
           <Col xs={12} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'systemManagement.userGroup.remark' })}>
-              {getFieldDecorator('groupDesc', {})(
+              {getFieldDecorator(
+                'groupDesc',
+                {},
+              )(
                 <Input
                   className={styles.inputvalue}
                   placeholder={`Please Input ${formatMessage({

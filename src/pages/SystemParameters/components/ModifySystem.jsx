@@ -7,7 +7,7 @@ import { connect } from 'dva';
 
 // import ClassifyTree from '@/components/ClassifyTree';
 
-// const { TextArea } = Input;
+const { TextArea } = Input;
 class FormUser extends Component {
   constructor() {
     super();
@@ -22,8 +22,8 @@ class FormUser extends Component {
         <Form>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.systemParameters.parameterType' })}
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 8 }}
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 10 }}
           >
             {getFieldDecorator('parameterType', {
               initialValue: paramObj && paramObj.parameterType,
@@ -31,8 +31,8 @@ class FormUser extends Component {
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.systemParameters.parameterKey' })}
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 8 }}
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 10 }}
           >
             {getFieldDecorator('parameterKey', {
               rules: [
@@ -46,8 +46,8 @@ class FormUser extends Component {
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'systemManagement.systemParameters.parameterValue' })}
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 8 }}
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 10 }}
           >
             {getFieldDecorator('parameterValue', {
               rules: [
@@ -57,12 +57,12 @@ class FormUser extends Component {
                 },
               ],
               initialValue: paramObj.parameterValue,
-            })(<Input />)}
+            })(<Input placeholder="Please input" />)}
           </Form.Item>
           <Form.Item
             label={formatMessage({ id: 'app.common.note' })}
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 8 }}
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 10 }}
           >
             {getFieldDecorator('note', {
               rules: [
@@ -72,7 +72,7 @@ class FormUser extends Component {
                 },
               ],
               initialValue: paramObj.note,
-            })(<Input />)}
+            })(<TextArea rows={8} placeholder="Please input" />)}
           </Form.Item>
         </Form>
       </Fragment>

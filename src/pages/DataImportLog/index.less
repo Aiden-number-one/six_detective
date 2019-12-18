@@ -9,24 +9,64 @@
   border-top: 1px solid #e9e9e9;
   :global {
     .ant-btn {
-      width: auto;
+      width: auto !important;
     }
   }
 }
 .container {
-  padding: 20px 0;
+  :global {
+    .ant-input {
+      height: 36px;
+    }
+  }
+  .form {
+    padding: 20px;
+    background-color: #fff;
+    :global {
+      .ant-select-selection {
+        background-color: #fff;
+        border-color: #d9d9d9;
+      }
+    }
+  }
+  .list-wrap {
+    margin-top: 16px;
+    padding: 10px 10px 0;
+    background-color: #fff;
+  }
   .no-margin {
     margin-right: 0;
   }
-  .btn-group {
-    margin: 16px 0 14px;
-  }
-  .list-container {
-    margin-top: 16px;
-  }
+
   .table-title {
     margin-bottom: 10px;
     font-weight: bold;
     font-size: 16px;
+  }
+  .btn-group {
+    margin-bottom: 10px;
+    :global {
+      .ant-btn {
+        width: auto !important;
+      }
+    }
+  }
+}
+
+.modal-form {
+  :global {
+    .ant-form-item-label {
+      line-height: 30px;
+    }
+    .ant-form-item {
+      margin-bottom: 10px;
+    }
+    .ant-form-item-with-help {
+      margin-bottom: 5px;
+    }
+    .ant-select-selection {
+      background-color: #fff;
+      border-color: #d9d9d9;
+    }
   }
 }

@@ -101,7 +101,7 @@ class ModifySystem extends Component {
   };
 
   onSave = () => {
-    const { dispatch, codeId, modifyFlag } = this.props;
+    const { dispatch, codeId, modifyFlag, updateCodeItemParams } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
       if (err) {
         return;
@@ -110,7 +110,7 @@ class ModifySystem extends Component {
         operType: modifyFlag ? 'subitemUpdateBycodeId' : 'subitemAddBycodeId',
         codeId,
         subitemId: values.subitemId,
-        subitem: values.subitemId,
+        subitem: modifyFlag ? updateCodeItemParams.subitem : values.subitemId,
         subitemName: values.subitemName,
         sequence: values.sequence,
       };

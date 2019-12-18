@@ -1,46 +1,66 @@
 import React from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Form, DatePicker, Button, Radio, Select, Row, Col } from 'antd';
+import { Form, DatePicker, Button, Checkbox, Select, Row, Col } from 'antd';
+import { yesterday, today, dateFormat } from '../constants';
 import styles from '../index.less';
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
-function MarketLogFilterForm({ form }) {
+function MarketLogFilterForm({ form, handleSearch }) {
   const { getFieldDecorator, validateFields } = form;
 
-  function handleSearch() {
+  function handleClick() {
     validateFields((err, values) => {
-      console.log(values);
-      console.log(values.tradeDate.format('YYYY-MM-DD'));
+      if (!err) {
+        const format = 'YYYYMMDD';
+        const { tradeDate, market, ...rest } = values;
+
+        let startTradeDate = '';
+        let endTadeDate = '';
+
+        if (tradeDate) {
+          const [start, end] = tradeDate;
+          startTradeDate = start && start.format(format);
+          endTadeDate = end && end.format(format);
+        }
+
+        handleSearch({
+          ...rest,
+          market: market.toString(),
+          tradeDateSt: startTradeDate,
+          tradeDateEt: endTadeDate,
+        });
+      }
     });
   }
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" className={styles.form}>
       <Row>
         <Col span={7}>
           <Form.Item label={<FormattedMessage id="data-import.market.trade-date" />}>
             {getFieldDecorator('tradeDate', {
+              initialValue: [yesterday, today],
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select trade date!',
                 },
               ],
-            })(<DatePicker />)}
+            })(<RangePicker format={dateFormat} />)}
           </Form.Item>
         </Col>
         <Col span={7} offset={1}>
           <Form.Item label={<FormattedMessage id="data-import.market.file-type" />}>
             {getFieldDecorator('fileType', {
-              initialValue: 'TP001',
               rules: [
                 {
-                  required: true,
+                  required: false,
                   message: 'Please select file type!',
                 },
               ],
             })(
-              <Select placeholder="please select file type">
+              <Select placeholder="please select file type" allowClear>
                 <Option value="TP001">TP001</Option>
                 <Option value="GREK020">GREK020</Option>
                 <Option value="OMD">OMD</Option>
@@ -50,19 +70,12 @@ function MarketLogFilterForm({ form }) {
         </Col>
         <Col span={8} offset={1}>
           <Form.Item label={<FormattedMessage id="data-import.market.market" />}>
-            {getFieldDecorator('market', {
-              initialValue: 'HKFE',
-            })(
-              <Radio.Group>
-                <Radio value="HKFE">HKFE</Radio>
-                <Radio value="EXHK">EXHK</Radio>
-              </Radio.Group>,
-            )}
+            {getFieldDecorator('market')(<Checkbox.Group options={['HKFE', 'SEHK']} />)}
           </Form.Item>
         </Col>
       </Row>
       <Row type="flex" justify="end">
-        <Button type="primary" icon="search" onClick={handleSearch} className={styles['no-margin']}>
+        <Button type="primary" icon="search" onClick={handleClick} className={styles['no-margin']}>
           <FormattedMessage id="data-import.market.search" />
         </Button>
       </Row>

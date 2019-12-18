@@ -2,10 +2,9 @@
  * @Description:
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-14 14:04:19
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-18 09:40:26
  */
-import { notification } from 'antd';
 import Service from '@/utils/Service';
 
 const { getTemplateList, updateTemplate } = Service;
@@ -27,14 +26,7 @@ const messageContentTemplate = {
           });
         }
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
     *updateTemplate({ payload, callback }, { call, put }) {
@@ -46,14 +38,7 @@ const messageContentTemplate = {
         });
         callback();
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
   },

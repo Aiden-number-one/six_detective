@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-14 18:27:41
+ * @LastEditTime: 2019-12-17 16:10:58
  */
 
 import React, { Component } from 'react';
@@ -12,27 +12,17 @@ import { Form, Modal, Table, Button, Drawer, message, Pagination } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './UserManagement.less';
-import { passWordStrength } from '@/utils/utils';
-import { timeFormat } from '@/utils/filter';
+import { timeFormat, lockedFormat } from '@/utils/filter';
 import IconFont from '@/components/IconFont';
 
 import SearchForm from './components/SearchForm';
 import NewUser from './components/NewUser';
-import AddForm from './components/AddForm';
-import ModifyForm from './components/ModifyForm';
-import PasswordForm from './components/PasswordForm';
-import ResetPasswordForm from './components/ResetPasswordForm';
 
 const NewSearchForm = Form.create({})(SearchForm);
-const NewUserForm = Form.create({})(AddForm);
-const NewUpdateForm = Form.create({})(ModifyForm);
-const NewPasswordForm = Form.create({})(PasswordForm);
-const NewResetPasswordForm = Form.create({})(ResetPasswordForm);
 
 @connect(({ userManagement, loading }) => ({
   loading: loading.effects,
   userManagementData: userManagement.data,
-  orgs: userManagement.orgs,
   modifyUserData: userManagement.updateData,
 }))
 class UserManagement extends Component {
@@ -40,12 +30,7 @@ class UserManagement extends Component {
     visible: false,
     userTitle: 'New User',
     NewFlag: true,
-    updateVisible: false,
     deleteVisible: false,
-    closingVisible: false,
-    updatePasswordVisible: false,
-    resetPasswordVisible: false,
-    customerno: null,
     searchUserId: undefined,
     searchUserName: undefined,
     userInfo: {
@@ -62,11 +47,11 @@ class UserManagement extends Component {
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
       },
-      {
-        title: formatMessage({ id: 'app.common.userId' }),
-        dataIndex: 'userId',
-        key: 'userId',
-      },
+      // {
+      //   title: formatMessage({ id: 'app.common.userId' }),
+      //   dataIndex: 'userId',
+      //   key: 'userId',
+      // },
       {
         title: formatMessage({ id: 'app.common.username' }),
         dataIndex: 'userName',
@@ -76,6 +61,11 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
         dataIndex: 'accountLock',
         key: 'accountLock',
+        render: (res, obj) => (
+          <div>
+            <span>{lockedFormat(obj.accountLock)}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
@@ -83,9 +73,9 @@ class UserManagement extends Component {
         key: 'updateTime',
         render: (res, obj) => (
           <div>
-            <span>{timeFormat(obj.updateTime).t1}</span>
+            <span>{obj.updateTime && timeFormat(obj.updateTime).t1}</span>
             <br />
-            <span>{timeFormat(obj.updateTime).t2}</span>
+            <span>{obj.updateTime && timeFormat(obj.updateTime).t2}</span>
           </div>
         ),
       },
@@ -131,7 +121,6 @@ class UserManagement extends Component {
 
   componentDidMount() {
     this.queryUserList();
-    // this.queryDepartments();
   }
 
   /**
@@ -156,30 +145,6 @@ class UserManagement extends Component {
   };
 
   /**
-   * @description: This is for query departments function.
-   * @param {type} null
-   * @return: undefined
-   */
-  queryDepartments = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'userManagement/queryOrgs',
-      params: {
-        treeLevel: '2',
-      },
-    });
-  };
-
-  /**
-   * @description: This is for get the departmentId and set value to the newDepartmentId function.
-   * @param {type} departmentId
-   * @return: undefined
-   */
-  getDepartmentId = departmentId => {
-    this.newDepartmentId = departmentId;
-  };
-
-  /**
    * @description: This is for reset form function.
    * @param {type} null
    * @return: undefined
@@ -191,11 +156,6 @@ class UserManagement extends Component {
       NewFlag: true,
       userInfo: {},
     });
-    // this.props.dispatch(
-    //   routerRedux.push({
-    //     pathname: '/system-management/user-maintenance/new-user',
-    //   }),
-    // );
   };
 
   addConfrim = () => {
@@ -227,8 +187,6 @@ class UserManagement extends Component {
    * @return: undefined
    */
   updateUser = (res, obj) => {
-    console.log('res=======', res);
-    console.log('obj============', obj);
     const userInfo = {
       userName: obj.userName,
       userId: obj.userId,
@@ -240,51 +198,6 @@ class UserManagement extends Component {
       NewFlag: false,
       userInfo,
     });
-    // this.props.dispatch(
-    //   routerRedux.push({
-    //     pathname: '/system-management/user-maintenance/modify-user',
-    //     query: {
-    //       userId: obj.userId,
-    //       userName: obj.userName,
-    //       userState: obj.userState,
-    //     },
-    //   }),
-    // );
-    // this.setState({
-    //   updateVisible: true,
-    //   userInfo,
-    //   customerno: obj.customerno,
-    // });
-  };
-
-  updateConfirm = () => {
-    const { dispatch } = this.props;
-    const { customerno } = this.state;
-    this.updateFormRef.current.validateFields((err, values) => {
-      const param = {
-        custCustomerno: customerno,
-        loginName: values.login,
-        customerName: values.name,
-        departmentId: this.newDepartmentId || this.state.userInfo.departmentId,
-        email: values.email,
-      };
-      dispatch({
-        type: 'userManagement/updateUserModelDatas',
-        payload: param,
-        callback: () => {
-          this.queryUserList();
-        },
-      });
-    });
-    this.setState({
-      updateVisible: false,
-    });
-  };
-
-  updateCancel = () => {
-    this.setState({
-      updateVisible: false,
-    });
   };
 
   /**
@@ -293,7 +206,6 @@ class UserManagement extends Component {
    * @return: undefined
    */
   deleteUser = (res, obj) => {
-    console.log('delete=', res, obj);
     const userInfo = {
       userName: obj.userName,
       userId: obj.userId,
@@ -320,10 +232,6 @@ class UserManagement extends Component {
         this.setState({
           deleteVisible: false,
         });
-        //   this.props.history.push({
-        //     pathname: '/system-management/user-maintenance',
-        //     params: values,
-        //   });
       },
     });
   };
@@ -331,119 +239,6 @@ class UserManagement extends Component {
   deleteCancel = () => {
     this.setState({
       deleteVisible: false,
-    });
-  };
-
-  /**
-   * @description: This is for closing user function.
-   * @param {type} null
-   * @return: undefined
-   */
-  closingUser = () => {
-    this.setState({
-      closingVisible: true,
-    });
-  };
-
-  closingConfirm = () => {
-    const { dispatch } = this.props;
-    const param = {
-      operationType: '3',
-    };
-    dispatch({
-      type: 'userManagement/operationUserModelDatas',
-      payload: param,
-      callback: () => {
-        this.queryUserList();
-        this.setState({
-          closingVisible: false,
-        });
-      },
-    });
-  };
-
-  closingCancel = () => {
-    this.setState({
-      closingVisible: false,
-    });
-  };
-
-  /**
-   * @description: This is for update password function.
-   * @param {type} null
-   * @return: undefined
-   */
-  updatePassword = () => {
-    this.setState({
-      updatePasswordVisible: true,
-    });
-  };
-
-  updatePasswordConfirm = () => {
-    const { dispatch } = this.props;
-    const { customerno } = this.state;
-    this.passwordFormRef.current.validateFields((err, values) => {
-      const passwordStrength = passWordStrength(values.password);
-      const param = {
-        custCustomerno: customerno,
-        operationType: '5',
-        oldPassword: window.kddes.getDes(values.oldPassword),
-        password: window.kddes.getDes(values.password),
-        passwordStrength,
-      };
-      dispatch({
-        type: 'userManagement/operationUserModelDatas',
-        payload: param,
-        callback: () => {
-          this.setState({
-            updatePasswordVisible: false,
-          });
-        },
-      });
-    });
-  };
-
-  updatePasswordCancel = () => {
-    this.setState({
-      updatePasswordVisible: false,
-    });
-  };
-
-  /**
-   * @description: This is for reset password function.
-   * @param {type} null
-   * @return: undefined
-   */
-  resetPassword = () => {
-    this.setState({
-      resetPasswordVisible: true,
-    });
-  };
-
-  resetPasswordConfirm = () => {
-    const { dispatch } = this.props;
-    this.resetPasswordFormRef.current.validateFields((err, values) => {
-      const passwordStrength = passWordStrength(values.password);
-      const param = {
-        operationType: '6',
-        password: window.kddes.getDes(values.password),
-        passwordStrength,
-      };
-      dispatch({
-        type: 'userManagement/operationUserModelDatas',
-        payload: param,
-        callback: () => {
-          this.setState({
-            resetPasswordVisible: false,
-          });
-        },
-      });
-    });
-  };
-
-  resetPasswordCancel = () => {
-    this.setState({
-      resetPasswordVisible: false,
     });
   };
 
@@ -511,14 +306,8 @@ class UserManagement extends Component {
   };
 
   render() {
-    const { loading, orgs, userManagementData } = this.props;
+    const { loading, userManagementData } = this.props;
     const { userInfo, page, userTitle, NewFlag } = this.state;
-    console.log('userManagementData.items=', userManagementData.items);
-    // const rowSelection = {
-    //   onChange: (selectedRowKeys, selectedRows) => {
-    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    //   },
-    // };
     return (
       <PageHeaderWrapper>
         <div>
@@ -530,20 +319,6 @@ class UserManagement extends Component {
             ></NewSearchForm>
           </div>
           <div>
-            <Modal
-              title="新增用户"
-              visible={false}
-              onOk={this.addConfrim}
-              onCancel={this.addCancel}
-              cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
-            >
-              <NewUserForm
-                ref={this.formRef}
-                orgs={orgs}
-                getDepartmentId={this.getDepartmentId}
-              ></NewUserForm>
-            </Modal>
             <Drawer
               closable={false}
               title={userTitle}
@@ -560,22 +335,6 @@ class UserManagement extends Component {
                 ></NewUser>
               )}
             </Drawer>
-            {/* 修改用户 */}
-            <Modal
-              title="修改用户"
-              visible={this.state.updateVisible}
-              onOk={this.updateConfirm}
-              onCancel={this.updateCancel}
-              cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
-            >
-              <NewUpdateForm
-                ref={this.updateFormRef}
-                orgs={orgs}
-                userInfo={userInfo}
-                getDepartmentId={this.getDepartmentId}
-              ></NewUpdateForm>
-            </Modal>
             {/* delete */}
             <Modal
               title={formatMessage({ id: 'app.common.confirm' })}
@@ -587,39 +346,6 @@ class UserManagement extends Component {
             >
               <span>Please confirm that you want to delete this record?</span>
             </Modal>
-            {/* 销户 */}
-            <Modal
-              title="提示"
-              visible={this.state.closingVisible}
-              onOk={this.closingConfirm}
-              onCancel={this.closingCancel}
-              cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.confirm' })}
-            >
-              <span>是否销户？</span>
-            </Modal>
-            {/* 密码修改 */}
-            <Modal
-              title="密码修改"
-              visible={this.state.updatePasswordVisible}
-              onOk={this.updatePasswordConfirm}
-              onCancel={this.updatePasswordCancel}
-              cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.confirm' })}
-            >
-              <NewPasswordForm ref={this.passwordFormRef}></NewPasswordForm>
-            </Modal>
-            {/* 密码重置 */}
-            <Modal
-              title="密码重置"
-              visible={this.state.resetPasswordVisible}
-              onOk={this.resetPasswordConfirm}
-              onCancel={this.resetPasswordCancel}
-              cancelText={formatMessage({ id: 'app.common.cancel' })}
-              okText={formatMessage({ id: 'app.common.save' })}
-            >
-              <NewResetPasswordForm ref={this.resetPasswordFormRef}></NewResetPasswordForm>
-            </Modal>
           </div>
           <div className={styles.content}>
             <div className={styles.tableTop}>
@@ -629,9 +355,6 @@ class UserManagement extends Component {
             </div>
             <Table
               loading={loading['userManagement/userManagemetDatas']}
-              // pagination={{ total: userManagementData.totalCount, pageSize: page.pageSize }}
-              // rowSelection={rowSelection}
-              // onChange={this.pageChange}
               dataSource={userManagementData.items}
               columns={this.state.columns}
               pagination={false}
