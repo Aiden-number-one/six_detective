@@ -6,7 +6,10 @@ import { Button, Row } from 'antd';
 import MarketLogFilterForm from './MarketLogFilterForm';
 import MarketLogManualModal from './MarketLogManualModal';
 import MarketLogList from './MarketLogList';
+import { yesterday, today } from '../constants';
 import styles from '../index.less';
+
+const format = 'YYYYMMDD';
 
 function MarketLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
@@ -15,6 +18,10 @@ function MarketLog({ dispatch, loading, logs, total }) {
   useEffect(() => {
     dispatch({
       type: 'market/fetch',
+      payload: {
+        tradeDateSt: yesterday.format(format),
+        tradeDateEt: today.format(format),
+      },
     });
   }, []);
 

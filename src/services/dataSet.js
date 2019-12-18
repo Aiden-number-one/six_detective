@@ -2,7 +2,7 @@
  * @Description: 数据集相关接口
  * @Author: lan
  * @Date: 2019-11-28 14:18:22
- * @LastEditTime: 2019-12-12 10:15:18
+ * @LastEditTime: 2019-12-18 14:38:14
  * @LastEditors: lan
  */
 export default {
@@ -13,4 +13,5 @@ export default {
   setSqlClassify: 'set_task_data_set_sql_classify', // 新增修改数据集分类
   deleteSqlClassify: 'set_task_data_set_sql_classify_delete', // 删除数据集分类
   operateDataSet: 'set_task_data_set_sql_management_impl', // 操作数据集
+  setDataSet: 'set_task_data_set_sql_management_impl', // 新增数据集
 };

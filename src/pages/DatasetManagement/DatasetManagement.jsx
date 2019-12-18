@@ -1,38 +1,58 @@
+/*
+ * @Description: 数据集列表页面
+ * @Author: lan
+ * @Date: 2019-11-28 11:16:36
+ * @LastEditTime: 2019-12-18 14:22:19
+ * @LastEditors: lan
+ */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import { Icon, Button, Table, Input, Drawer } from 'antd';
+import { Icon, Table, Drawer, Form, Button, Pagination } from 'antd';
+import _ from 'lodash';
 import router from 'umi/router';
 import ClassifyTree from '@/components/ClassifyTree';
+import IconFont from '@/components/IconFont';
 import styles from './DatasetManagement.less';
 import OperateTreeForm from './components/OperateTreeForm';
 import AlterDataSetName from './components/drawers/AlterDataSetName';
 import DeleteDataSetDrawer from './components/drawers/DeleteDataSetDrawer';
 import DataPerformDrawer from './components/drawers/DataPerformDrawer';
+import MoveDataSetDrawer from './components/drawers/MoveDataSetDrawer';
+import SearchForm from './components/SearchForm';
 
-const { Search } = Input;
+const NewSearchForm = Form.create({})(SearchForm);
 
 @connect(({ dataSet }) => ({
-  classifyTreeData: dataSet.classifyTreeData,
-  dataSetData: dataSet.dataSetData,
+  classifyTreeData: dataSet.classifyTreeData, // 分类树
+  dataSetData: dataSet.dataSetData, // 数据集表格
+  activeTree: dataSet.activeTree, // 选中的树节点
   column: dataSet.column, // 数据预览表头
   tableData: dataSet.tableData, // 数据预览数据
 }))
 export default class DatasetManagement extends PureComponent {
-  operateType = 'ADD';
+  operateType = 'ADD'; // 操作类型
 
-  nodeTree = {};
+  nodeTree = {}; // 树节点详细数据
 
-  record = {};
+  record = {}; // 编辑的数据集详细数据
+
+  searchForm = React.createRef(); // 查询表单
 
   state = {
     drawerTitle: '', // 抽屉标题
-    selectedRowKeys: [], // 默认选中的表格
+    // selectedRowKeys: [], // 默认选中的表格
     visible: {
       operateTree: false, // 新增数据集分类抽屉
       dataSetName: false, // 数据集属性抽屉
       deleteDataSet: false, // 删除数据集抽屉
       dataPerform: false, // 数据预览抽屉
+      move: false, // 移动数据集抽屉
+    },
+    // 分页器
+    page: {
+      pageNumber: 1,
+      pageSize: 10,
     },
   };
 
@@ -43,6 +63,30 @@ export default class DatasetManagement extends PureComponent {
       type: 'dataSet/getClassifyTree',
     });
   }
+
+  // 获取数据集列表
+  queryDataSet = value => {
+    const { dispatch, activeTree } = this.props;
+    const { page } = this.state;
+    const newPage = {
+      pageNumber: 1,
+      pageSize: page.pageSize,
+    };
+    this.setState({
+      page: newPage,
+    });
+    this.searchForm.current.validateFields((err, values) => {
+      dispatch({
+        type: 'dataSet/getDataSet',
+        payload: {
+          sqlName: values.sqlName,
+          taskId: value || activeTree,
+          isShare: 0,
+          ...newPage,
+        },
+      });
+    });
+  };
 
   // 显示隐藏抽屉
   toggleDrawer = key => {
@@ -117,13 +161,16 @@ export default class DatasetManagement extends PureComponent {
       type: 'dataSet/setActiveTree',
       payload: value,
     });
-    dispatch({
-      type: 'dataSet/getDataSet',
-      payload: {
-        taskId: value,
-        isShare: 0,
-      },
-    });
+    this.queryDataSet(value);
+    // dispatch({
+    //   type: 'dataSet/getDataSet',
+    //   payload: {
+    //     taskId: value,
+    //     isShare: 0,
+    //     pageNumber: this.state.page.pageNumber.toString(),
+    //     pageSize: this.state.page.pageSize.toString(),
+    //   },
+    // });
   };
 
   // 操作树节点
@@ -199,6 +246,42 @@ export default class DatasetManagement extends PureComponent {
     this.record = {};
   };
 
+  /**
+   * @description: This is for paging function.
+   * @param {type} null
+   * @return: undefined
+   */
+  pageChange = (pageNumber, pageSize) => {
+    const page = {
+      pageNumber,
+      pageSize,
+    };
+
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryDataSet();
+      },
+    );
+  };
+
+  onShowSizeChange = (current, pageSize) => {
+    const page = {
+      pageNumber: current,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.queryDataSet();
+      },
+    );
+  };
+
   render() {
     // 表格表头
     const columns = [
@@ -226,7 +309,6 @@ export default class DatasetManagement extends PureComponent {
         title: 'Modified by',
         dataIndex: 'lastOperator',
         key: 'lastOperator',
-        render: text => <span style={{ color: '#6ed2cb' }}>{text}</span>,
       },
       {
         title: 'Modified at',
@@ -234,12 +316,12 @@ export default class DatasetManagement extends PureComponent {
         key: 'lastupdatetime',
       },
       {
-        title: 'Action',
-        key: 'action',
+        title: 'Operation',
+        key: 'Operation',
         render: (text, record) => (
-          <>
-            <Icon
-              type="edit"
+          <span className={styles.operation}>
+            <a
+              href="#"
               onClick={() => {
                 router.push({
                   pathname: '/add-dataset',
@@ -249,16 +331,20 @@ export default class DatasetManagement extends PureComponent {
                   },
                 });
               }}
-            />
-            <Icon
-              type="copy"
+            >
+              <IconFont type="icon-edit" className={styles['btn-icon']} />
+            </a>
+            <a
+              href="#"
               onClick={() => {
                 this.toggleDrawer('dataSetName');
                 this.record = record;
               }}
-            />
-            <Icon
-              type="eye"
+            >
+              <IconFont type="icon-attr" className={styles['btn-icon']} />
+            </a>
+            <a
+              href="#"
               onClick={() => {
                 const { dispatch } = this.props;
                 dispatch({
@@ -273,37 +359,50 @@ export default class DatasetManagement extends PureComponent {
                   },
                 });
               }}
-            />
-            <Icon
-              type="delete"
+            >
+              <IconFont type="icon-prew" className={styles['btn-icon']} />
+            </a>
+            <a
+              href="#"
+              onClick={() => {
+                this.toggleDrawer('move');
+              }}
+            >
+              <IconFont type="icon-move" className={styles['btn-icon']} />
+            </a>
+            <a
+              href="#"
               onClick={() => {
                 this.toggleDrawer('deleteDataSet');
                 this.record = record;
               }}
-            />
-          </>
+            >
+              <IconFont type="icon-delete" className={styles['btn-icon']} />
+            </a>
+          </span>
         ),
       },
     ];
-    const { selectedRowKeys, drawerTitle } = this.state;
+    const { drawerTitle, page } = this.state;
     // 表格多选框
-    const rowSelection = {
-      selectedRowKeys,
-      type: 'checkbox',
-      onSelect: (record, selected, selectedRows) => {
-        const tableIds = selectedRows.map(item => item.tableId);
-        this.tableIds = tableIds.join(',');
-      },
-      onChange: selectedRowKey => {
-        this.setState({
-          selectedRowKeys: selectedRowKey,
-        });
-      },
-    };
+    // const rowSelection = {
+    //   selectedRowKeys,
+    //   type: 'checkbox',
+    //   onSelect: (record, selected, selectedRows) => {
+    //     const tableIds = selectedRows.map(item => item.tableId);
+    //     this.tableIds = tableIds.join(',');
+    //   },
+    //   onChange: selectedRowKey => {
+    //     this.setState({
+    //       selectedRowKeys: selectedRowKey,
+    //     });
+    //   },
+    // };
     const { classifyTreeData, dataSetData, column, tableData } = this.props;
+    const anotherTree = _.cloneDeep(classifyTreeData);
     return (
       <PageHeaderWrapper>
-        <div style={{ display: 'flex', minHeight: 500 }}>
+        <div style={{ display: 'flex', minHeight: 'calc(100vh - 185px)' }}>
           <div style={{ flex: '0 0 220px', background: '#fff' }}>
             {this.Title()}
             <ClassifyTree
@@ -325,7 +424,7 @@ export default class DatasetManagement extends PureComponent {
           </div>
           <div style={{ flex: 1, overflowX: 'auto' }}>
             <div style={{ height: '100%', padding: '0 0 0 15px' }}>
-              <div
+              {/* <div
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -353,24 +452,51 @@ export default class DatasetManagement extends PureComponent {
                     this.getDataSourceList(value);
                   }}
                 />
+              </div> */}
+              <NewSearchForm search={this.queryDataSet} ref={this.searchForm} />
+              <div className={styles.content}>
+                <div className={styles.tableTop}>
+                  <Button
+                    onClick={() => {
+                      router.push({
+                        pathname: '/add-dataset',
+                        query: {
+                          // connectionId: connectionId,
+                        },
+                      });
+                    }}
+                    type="primary"
+                    className="btn_usual"
+                  >
+                    + New DataSet
+                  </Button>
+                </div>
+                <Table
+                  columns={columns}
+                  dataSource={dataSetData}
+                  pagination={false}
+                  scroll={{ x: 'max-content' }}
+                />
+                <Pagination
+                  current={page.pageNumber}
+                  showSizeChanger
+                  showTotal={() =>
+                    `Page ${(dataSetData.length || 0) && page.pageNumber} of ${Math.ceil(
+                      (dataSetData.length || 0) / page.pageSize,
+                    )}`
+                  }
+                  onShowSizeChange={this.onShowSizeChange}
+                  onChange={this.pageChange}
+                  total={dataSetData.length}
+                  pageSize={page.pageSize}
+                />
               </div>
-              <Table
-                className="basicTable"
-                rowSelection={rowSelection}
-                columns={columns}
-                dataSource={dataSetData}
-                pagination={{
-                  size: 'small',
-                  showSizeChanger: true,
-                }}
-                scroll={{ x: 'max-content' }}
-              />
             </div>
           </div>
         </div>
         <Drawer
           title={drawerTitle}
-          width={350}
+          width={370}
           visible={this.state.visible.operateTree}
           onClose={() => {
             this.clearNodeTree();
@@ -393,15 +519,20 @@ export default class DatasetManagement extends PureComponent {
           record={this.record}
           handleSetDataSetName={this.handleSetDataSetName}
         />
-        <DeleteDataSetDrawer
-          handleDeleteDataSet={this.handleDeleteDataSet}
-          visible={this.state.visible.deleteDataSet}
-          toggleDrawer={this.toggleDrawer}
-        />
         <DataPerformDrawer
           column={column}
           tableData={tableData}
           visible={this.state.visible.dataPerform}
+          toggleDrawer={this.toggleDrawer}
+        />
+        <MoveDataSetDrawer
+          visible={this.state.visible.move}
+          toggleDrawer={this.toggleDrawer}
+          classifyTree={anotherTree}
+        />
+        <DeleteDataSetDrawer
+          handleDeleteDataSet={this.handleDeleteDataSet}
+          visible={this.state.visible.deleteDataSet}
           toggleDrawer={this.toggleDrawer}
         />
       </PageHeaderWrapper>

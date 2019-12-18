@@ -15,7 +15,6 @@ function MarketLogFilterForm({ form, handleSearch }) {
       if (!err) {
         const format = 'YYYYMMDD';
         const { tradeDate, market, ...rest } = values;
-
         let startTradeDate = '';
         let endTadeDate = '';
 
@@ -27,7 +26,7 @@ function MarketLogFilterForm({ form, handleSearch }) {
 
         handleSearch({
           ...rest,
-          market: market.toString(),
+          market: market && market.toString(),
           tradeDateSt: startTradeDate,
           tradeDateEt: endTadeDate,
         });

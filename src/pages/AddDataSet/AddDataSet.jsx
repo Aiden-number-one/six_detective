@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime: 2019-12-14 13:32:24
+ * @LastEditTime: 2019-12-18 14:40:04
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -65,11 +65,10 @@ class AddDataSet extends PureComponent {
     const { dispatch } = this.props;
     const {
       location: {
-        query: { connectionId, tableId },
+        query: { connectionId, record },
       },
     } = this.props;
     this.connection_id = connectionId;
-    this.tableId = tableId;
     dispatch({
       type: 'sqlDataSource/getDataSourceList',
       payload: { connectionId },
@@ -77,6 +76,33 @@ class AddDataSet extends PureComponent {
     dispatch({
       type: 'getClassifyTree/getClassifyTree',
     });
+    if (record) {
+      this.record = JSON.parse(record);
+      this.tableId = this.record.serialNo;
+      dispatch({
+        type: 'sqlKeydown/changeSql',
+        payload: this.record.sqlStatement,
+      });
+      dispatch({
+        type: 'sqlDataSource/getMetadataTablePerform',
+        payload: {
+          connectionId: this.connection_id,
+          previewStatement: this.record.sqlStatement,
+          previewNum: 20,
+        },
+      });
+      dispatch({
+        type: 'sqlDataSource/changeDataSetName',
+        payload: this.record.sqlName,
+      });
+      dispatch({
+        type: 'sqlDataSource/changeActive',
+        payload: this.record.serialNo,
+      });
+      this.setState({
+        AlterDataSetName: false,
+      });
+    }
     // dispatch({
     //   type: 'addSqlDataSet/getMetadataList',
     //   payload: {
@@ -235,13 +261,21 @@ class AddDataSet extends PureComponent {
   saveSql = fieldsValue => {
     const { dispatch, sql } = this.props;
     dispatch({
-      type: 'addSqlDataSet/addMetaData',
+      type: 'sqlDataSource/addDataSet',
       payload: {
-        tableId: this.isSaveOther ? '' : this.tableId,
-        connection_id: this.connection_id,
-        setType: 'viewSet',
-        viewSql: sql,
-        viewName: fieldsValue.sqlDataSetName,
+        basicOperation: 'save',
+        // update,del,
+        dbId: this.connection_id,
+        sqlStatement: sql,
+        sqlStatementPram: {},
+        // sqlStatementPram,
+        sqlName: fieldsValue.sqlDataSetName,
+        classId: fieldsValue.folder,
+        // tableId: this.isSaveOther ? '' : this.tableId,
+        // connection_id: this.connection_id,
+        // setType: 'viewSet',
+        // viewSql: sql,
+        // viewName: fieldsValue.sqlDataSetName,
       },
     });
   };

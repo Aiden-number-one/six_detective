@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
 import { FormattedMessage } from 'umi/locale';
-// import styles from '../index.less';
 
 const { Column } = Table;
 
@@ -10,6 +9,7 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
     <Table
       dataSource={dataSource}
       loading={loading}
+      rowKey="mdImpId"
       pagination={{
         total,
         pageSizeOptions: ['10', '20', '50', '100'],
