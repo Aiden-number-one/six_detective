@@ -6,7 +6,7 @@ import styles from './index.less';
 
 export default function() {
   const [task, setTask] = useState(null);
-  const [currentTaskType, setCurrentTaskType] = useState(null);
+  const [currentTaskType, setCurrentTaskType] = useState('all');
   // const [alertItems, setAlertItems] = useState(null);
 
   return (
