@@ -2,7 +2,7 @@
  * @Description: 删除数据集
  * @Author: lan
  * @Date: 2019-12-11 20:54:21
- * @LastEditTime: 2019-12-12 09:39:43
+ * @LastEditTime: 2019-12-18 11:07:37
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
@@ -27,7 +27,7 @@ export default class DeleteDataSetDrawer extends PureComponent {
     return (
       <Drawer
         title="Delete DataSet"
-        width={350}
+        width={370}
         visible={visible}
         onClose={() => {
           clearRecord();
