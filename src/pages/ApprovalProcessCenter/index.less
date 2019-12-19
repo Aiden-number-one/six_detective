@@ -98,11 +98,18 @@
   }
   .detail-comment {
     background-color: #fff;
-    .comment-ul {
+    .comment-list {
+      min-height: 200px;
       max-height: 300px;
       margin: 0 0 18px;
       padding: 0 18px;
       overflow-y: auto;
+    }
+    .loading-more {
+      text-align: center;
+      > button {
+        height: 30px;
+      }
     }
     .comment-box {
       padding-top: 8px;
@@ -113,6 +120,18 @@
       .comment-commit {
         height: 46px;
         background-color: #fff;
+      }
+      .up-attachments {
+        background-color: #eef1f4;
+        .file-desc {
+          padding: 4px 10px;
+          color: #3d4a59;
+        }
+        > ul {
+          margin: 0;
+          padding: 6px 16px;
+          color: #464c51;
+        }
       }
     }
   }
