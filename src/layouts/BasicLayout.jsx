@@ -35,7 +35,6 @@ const footerRender = () => (
   <footer className={styles.footerRender}>
     {/* eslint-disable-next-line global-require */}
     {/* <img src={require('@/assets/logo.png')} alt="HKEX" /> */}
-    <div />
     <div>@ 2019 Hong Kong Exchanges and Clearing Limited. All rights reserved</div>
   </footer>
 );
@@ -67,15 +66,15 @@ const BasicLayout = props => {
           // userAgent: window.navigator.userAgent,
         },
       });
-      setInterval(() => {
-        dispatch({
-          type: 'login/getLoginStatus',
-          payload: {
-            // loginName: window.localStorage.currentUser,
-            // userAgent: window.navigator.userAgent,
-          },
-        });
-      }, 25000);
+      // setInterval(() => {
+      //   dispatch({
+      //     type: 'login/getLoginStatus',
+      //     payload: {
+      //       // loginName: window.localStorage.currentUser,
+      //       // userAgent: window.navigator.userAgent,
+      //     },
+      //   });
+      // }, 25000);
     }
   }, []);
   /**

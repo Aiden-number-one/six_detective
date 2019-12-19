@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { formatMessage } from 'umi/locale';
+import IconFont from '@/components/IconFont';
 import styles from '../SystemParameters.less';
 
 export default class SearchForm extends Component {
@@ -16,7 +17,10 @@ export default class SearchForm extends Component {
             <Form.Item
               label={formatMessage({ id: 'systemManagement.systemParameter.parameterType' })}
             >
-              {getFieldDecorator('parameterType', {})(
+              {getFieldDecorator(
+                'parameterType',
+                {},
+              )(
                 <Input
                   className={styles.inputvalue}
                   placeholder={`Please Input ${formatMessage({
@@ -26,12 +30,25 @@ export default class SearchForm extends Component {
               )}
             </Form.Item>
           </Col>
-        </Row>
-        <div className="btnArea">
-          <Button type="primary" onClick={search}>
+          {/* <div className="btnArea1"> */}
+          <Button type="primary" onClick={search} style={{ marginTop: 28 }}>
+            <IconFont type="iconsousuo" style={{ color: '#fff' }} />
             {formatMessage({ id: 'app.common.search' })}
           </Button>
-        </div>
+          {/* </div> */}
+          {/* <Col xs={12} sm={12} lg={16}>
+            <Form.Item
+              label=" "
+            >
+              <div className="btnArea1">
+                <Button type="primary" onClick={search}>
+                  <IconFont type="iconsousuo" style={{ color: '#fff' }} />
+                  {formatMessage({ id: 'app.common.search' })}
+                </Button>
+              </div>
+            </Form.Item>
+          </Col> */}
+        </Row>
       </Form>
     );
   }
