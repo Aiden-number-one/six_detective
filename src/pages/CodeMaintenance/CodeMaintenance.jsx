@@ -32,6 +32,7 @@ class CodeMaintenance extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
+        align: 'center',
         render: (res, recode, index) => (
           <span>
             {(this.state.itemPage.pageNumber - 1) * this.state.itemPage.pageSize + index + 1}
@@ -42,16 +43,19 @@ class CodeMaintenance extends Component {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemId' }),
         dataIndex: 'subitemId',
         key: 'subitemId',
+        align: 'center',
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.subitemName' }),
         dataIndex: 'subitemName',
         key: 'subitemName',
+        align: 'center',
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.sequence' }),
         dataIndex: 'sequence',
         key: 'sequence',
+        align: 'center',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -86,6 +90,7 @@ class CodeMaintenance extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
+        align: 'center',
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
@@ -94,11 +99,13 @@ class CodeMaintenance extends Component {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.codeID' }),
         dataIndex: 'codeId',
         key: 'codeId',
+        align: 'center',
       },
       {
         title: formatMessage({ id: 'systemManagement.codeMaintenance.codeName' }),
         dataIndex: 'codeName',
         key: 'codeName',
+        align: 'center',
       },
     ],
     page: {
