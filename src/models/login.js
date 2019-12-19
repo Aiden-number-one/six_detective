@@ -30,7 +30,7 @@ const Model = {
       if (response.bcjson.flag === '1') {
         const item = response.bcjson.items[0];
         if (item.isNeedLock === 'Y' || item.IpOrAgentOrAlllow !== 'Allow') {
-          message.warning(response.bcjson.msg);
+          message.warning(item.info);
           yield put({
             type: 'logout',
           });
