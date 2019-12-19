@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
- * @LastEditors: iron
- * @LastEditTime: 2019-12-19 09:55:56
+ * @LastEditors  : iron
+ * @LastEditTime : 2019-12-19 13:54:28
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -193,12 +193,20 @@ export default {
       });
     },
     *assignTask({ payload }, { call, put }) {
-      const { err } = yield call(assignAlertItem, payload);
+      const { alertId, alertTypeId, ...rest } = payload;
+      const { err } = yield call(assignAlertItem, rest);
       if (err) {
         throw new Error(err);
       }
       yield put({
         type: 'fetch',
+      });
+      yield put({
+        type: 'fetchAlertItems',
+        payload: {
+          alertTypeId,
+          alertId,
+        },
       });
       yield put({
         type: 'assignUserOk',

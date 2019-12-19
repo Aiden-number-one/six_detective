@@ -135,7 +135,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos, getAlert }) {
   useEffect(() => {
     if (alerts && alerts.length > 0) {
       const [firstAlert] = alerts;
-      if (alert.alertId) {
+      if (alerts.some(item => item.alertId === alert.alertId)) {
         getAlert(alert);
         setAlert(alert);
       } else {
