@@ -8,7 +8,7 @@ import styles from './IframePage.less';
 const ref = React.createRef();
 
 const IframePage = props => {
-  const [iFrameHeight] = useState(800);
+  const [iFrameHeight] = useState(710);
 
   // useEffect(() => {
   //   const frame = ref.current;
