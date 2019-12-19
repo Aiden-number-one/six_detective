@@ -2,7 +2,7 @@
 import React from 'react';
 import router from 'umi/router'; // 这里应该使用 antd 的 404 result 组件，
 import seperate from '@/assets/icon_seperate.svg';
-import arrow from '@/assets/icon_arrow.svg';
+import arrow from '@/assets/arrow.png';
 import styles from '@/assets/css/index.less';
 // 但是还没发布，先来个简单的。
 
@@ -23,7 +23,7 @@ const Page404 = () => (
     <div className={styles.box}>
       <div>Sorry! We Lost the page, please try again later.</div>
       <span>Go To Home </span>
-      <img src={arrow} alt="" width="20" onClick={() => router.push('/')} />
+      <img src={arrow} alt="" width="14" onClick={() => router.push('/')} />
     </div>
   </div>
 );
