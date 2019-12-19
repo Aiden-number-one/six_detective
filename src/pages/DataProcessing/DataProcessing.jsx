@@ -267,6 +267,12 @@ export default class DataProcessing extends Component {
                   {dataProcessingFlag ? (
                     <div>
                       <Progress percent={50} status="active" />
+                      <p style={{ textAlign: 'left' }}>
+                        Processed：<span>1234</span> records
+                      </p>
+                      <p style={{ textAlign: 'left' }}>
+                        Pending to process：<span>1234</span> records
+                      </p>
                     </div>
                   ) : (
                     <span>There are still 10 outstanding alerts. Do you want to bypass all?</span>
