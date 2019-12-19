@@ -42,13 +42,13 @@ class AuditLog extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
-        dataIndex: 'userName',
-        key: 'userName',
+        dataIndex: 'functionName',
+        key: 'functionName',
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.tableName' }),
-        dataIndex: 'formName',
-        key: 'formName',
+        dataIndex: 'tableName',
+        key: 'tableName',
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),
@@ -62,8 +62,8 @@ class AuditLog extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
-        dataIndex: 'operateDate',
-        key: 'operateDate',
+        dataIndex: 'effectiveTime',
+        key: 'effectiveTime',
         render: (res, obj) => (
           <div>
             <span>{obj.operateDate && moment(obj.operateDate).format('DD/MM/YYYY')}</span>
@@ -72,33 +72,33 @@ class AuditLog extends Component {
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
-        dataIndex: 'ipAddress',
-        key: 'ipAddress',
+        dataIndex: 'filedUpdated',
+        key: 'filedUpdated',
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.updateType' }),
-        dataIndex: 'ipAddress',
-        key: 'ipAddress',
+        dataIndex: 'updateType',
+        key: 'updateType',
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.logDate' }),
-        dataIndex: 'operateTime',
-        key: 'operateTime',
+        dataIndex: 'logTime',
+        key: 'logTime',
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
-        dataIndex: 'operateTime',
-        key: 'operateTime',
+        dataIndex: 'updatedBy',
+        key: 'updatedBy',
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.before' }),
-        dataIndex: 'operateTime',
-        key: 'operateTime',
+        dataIndex: 'before',
+        key: 'before',
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.after' }),
-        dataIndex: 'operateTime',
-        key: 'operateTime',
+        dataIndex: 'after',
+        key: 'after',
       },
     ],
     getAuditLogList: [],
@@ -115,9 +115,9 @@ class AuditLog extends Component {
     const param = {
       pageNumber: page.pageNumber.toString(),
       pageSize: page.pageSize.toString(),
-      operatorName: functionName,
-      beginDate: logStartDate,
-      endDate: logEndDate,
+      functionName,
+      startTime: logStartDate,
+      endTime: logEndDate,
       updatedBy,
     };
     const { dispatch } = this.props;
@@ -178,6 +178,8 @@ class AuditLog extends Component {
     const { dispatch } = this.props;
     const param = {
       fileType: '1',
+      apiVersion: 'v2.0',
+      apiName: 'bayconnect.superlop.get_system_log_list',
     };
     dispatch(
       {
