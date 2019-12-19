@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors: iron
- * @LastEditTime: 2019-12-18 14:03:34
+ * @LastEditTime: 2019-12-19 09:55:56
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -197,6 +197,9 @@ export default {
       if (err) {
         throw new Error(err);
       }
+      yield put({
+        type: 'fetch',
+      });
       yield put({
         type: 'assignUserOk',
       });

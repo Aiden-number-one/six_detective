@@ -68,29 +68,19 @@ export default function({
         width="10%"
         align="center"
         dataIndex="tradeDate"
-        title={<FormattedMessage id="data-import.lop.trade-date" />}
+        title={<FormattedMessage id="data-import.trade-date" />}
         render={(text, record) => <span>{moment(record.tradeDate).format(dateFormat)}</span>}
       />
       <Column
         align="center"
         dataIndex="submitterCode"
-        title={<FormattedMessage id="data-import.lop.submitter-code" />}
+        title={<FormattedMessage id="data-import.submitter-code" />}
       />
       <Column
         align="center"
         dataIndex="submitterName"
         title={<FormattedMessage id="data-import.lop.submitter-name" />}
       />
-      {/* <Column
-        dataIndex="submissionReport"
-        title={<span title={submissionReport}>{submissionReport}</span>}
-      /> */}
-      {/* <Column
-        width="10%"
-        align="center"
-        dataIndex="submissionChannel"
-        title={<FormattedMessage id="data-import.lop.submission-channel" />}
-      /> */}
       <Column
         align="center"
         dataIndex="submissionDate"
@@ -101,19 +91,8 @@ export default function({
         width="10%"
         align="center"
         dataIndex="submissionStatus"
-        title={<FormattedMessage id="data-import.lop.submission-status" />}
+        title={<FormattedMessage id="data-import.submission-status" />}
       />
-      {/* <Column
-        width="10%"
-        align="center"
-        dataIndex="lateSubmission"
-        title={<FormattedMessage id="data-import.lop.late-submission" />}
-      /> */}
-      {/* <Column
-        align="center"
-        dataIndex="latestVersion"
-        title={<FormattedMessage id="data-import.lop.latest-version" />}
-      /> */}
       <Column
         align="center"
         dataIndex="processingStatus"
@@ -122,7 +101,7 @@ export default function({
       <Column
         align="center"
         dataIndex="download"
-        title={<FormattedMessage id="data-import.lop.download" />}
+        title={<FormattedMessage id="data-import.download" />}
         render={(text, { lopImpId }) => (
           <>
             {loading['lop/fetchReportUrl'] && lopImpId === curImpId ? (

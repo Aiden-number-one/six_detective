@@ -132,12 +132,17 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos, getAlert }) {
     });
   }, []);
 
-  // default alert
   useEffect(() => {
     if (alerts && alerts.length > 0) {
       const [firstAlert] = alerts;
-      getAlert(firstAlert);
-      setAlert(firstAlert);
+      if (alert.alertId) {
+        getAlert(alert);
+        setAlert(alert);
+      } else {
+        // default alert
+        getAlert(firstAlert);
+        setAlert(firstAlert);
+      }
     }
   }, [alerts]);
 
@@ -282,12 +287,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos, getAlert }) {
         }}
         onRow={record => ({
           onClick(e) {
-            if (
-              ![
-                'antd-pro-pages-alert-center-index-icon-btns',
-                'ant-table-selection-column',
-              ].includes(e.target.className)
-            ) {
+            if (!e.target.className) {
               getAlert(record);
               setAlert(record);
             }
@@ -337,7 +337,8 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos, getAlert }) {
           align="center"
           width="8%"
           dataIndex="action"
-          title={<FormattedMessage id="alert-center.action" />}
+          className="action"
+          title={<FormattedMessage id="alert-center.actions" />}
           render={(text, record) => (
             <Row type="flex" justify="space-around" align="middle" className={styles['icon-btns']}>
               {loading['alertCenter/claim'] && alert.alertId === record.alertId ? (

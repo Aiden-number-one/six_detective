@@ -54,10 +54,10 @@ function MarketLog({ dispatch, loading, logs, total }) {
               onClick={() => dispatch({ type: 'market/importByAuto' })}
               loading={loading['market/importByAuto']}
             >
-              <FormattedMessage id="data-import.lop.auto-import" />
+              <FormattedMessage id="data-import.execute" />
             </Button>
             <Button type="primary" className={styles['no-margin']} onClick={() => setVisible(true)}>
-              <FormattedMessage id="data-import.lop.manual-import" />
+              <FormattedMessage id="data-import.manual-import" />
             </Button>
           </Row>
           <MarketLogList

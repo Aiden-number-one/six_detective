@@ -83,7 +83,7 @@ function MarketLogManualModal({ form, visible, handleCancel, handleUpload }) {
             >
               <Button>
                 <Icon type="upload" />
-                <FormattedMessage id="data-import.lop.browse" />
+                <FormattedMessage id="data-import.browse" />
               </Button>
             </Upload>,
           )}
