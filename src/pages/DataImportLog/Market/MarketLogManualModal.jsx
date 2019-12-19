@@ -25,7 +25,7 @@ function MarketLogManualModal({ form, visible, handleCancel, handleUpload }) {
           const parseFiles = items.relativeUrl.split('/');
           const fileName = parseFiles.slice(-1)[0];
           const fileDir = parseFiles.slice(1, -1).reduce((acc, cur) => `${acc}${cur}/`, '');
-          const fileType = fileName.replace(/\d{8}_\d{1}_/, '');
+          const fileType = fileName.replace(/\d{8}_\d{1}_(.*)\.(.*)/, '$1');
           handleUpload({ fileName, fileDir, fileType, ...rest });
           form.resetFields();
         }
