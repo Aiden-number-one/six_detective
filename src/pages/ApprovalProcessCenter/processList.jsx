@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Button, Modal, Input, Radio, Drawer } from 'antd';
+import moment from 'moment';
+import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 // import { ConfirmModel } from './component/ConfirmModel';
 import { GetQueryString } from '@/utils/utils';
@@ -287,7 +289,12 @@ function ProcessList({
         <Column align="center" dataIndex="classification" title="CLASSIFICATION" />
         <Column align="center" dataIndex="submitterName" title="SUBMITTER NAME" />
         <Column align="center" dataIndex="details" title="DETAILS" />
-        <Column align="center" dataIndex="updateDate" title="UPDATE DATE" />
+        <Column
+          align="center"
+          dataIndex="updateDate"
+          title="UPDATE DATE"
+          render={(text, record) => moment(record.updateDate).format(timestampFormat)}
+        />
         <Column dataIndex="owner" title="OWNER" />
         <Column align="center" dataIndex="statusDesc" title="statusDesc" />
         <Column

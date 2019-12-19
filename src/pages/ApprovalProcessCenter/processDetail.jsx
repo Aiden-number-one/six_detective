@@ -325,6 +325,7 @@ function ProcessDetail({
             type: currentTaskType,
           },
         });
+        setUpAttachements([]);
       },
     });
     setVisible(false);

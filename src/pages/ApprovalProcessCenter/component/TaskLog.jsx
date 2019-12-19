@@ -5,11 +5,7 @@ import moment from 'moment';
 const { Paragraph } = Typography;
 
 export default function({ log: { operateTime, operateMsg } }) {
-  const time = moment(operateTime).format('YYYY-MM-DD hh:mm:ss');
-  console.log(
-    "moment(1576668588).format('YYYYMMDD')",
-    moment(1576667531641).format('YYYY-MM-DD hh:mm:ss'),
-  );
+  const time = moment(operateTime).format('DD-MMM-YYYY hh:mm:ss');
   return (
     <Row>
       <Col span={11}>{time}</Col>

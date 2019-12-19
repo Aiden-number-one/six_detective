@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Popover, Typography } from 'antd';
 import { FormattedMessage } from 'umi/locale';
+import moment from 'moment';
 import IconFont from '@/components/IconFont';
 
 const { Paragraph, Text } = Typography;
@@ -34,6 +35,7 @@ export default function({
   comment: { id, commentTime, commentContent, commentUserName, attachment },
 }) {
   let attachments = attachment ? attachment.split(',') : [];
+  const time = moment(commentTime).format('DD-MMM-YYYY hh:mm:ss');
   attachments = attachments.map(file => {
     const l = file.split('/');
     const f = l.slice(-1)[0];
@@ -46,7 +48,7 @@ export default function({
     <li key={id}>
       <Row>
         <Col span={18} style={{ color: '#0D87D4' }}>
-          {commentTime}
+          {time}
         </Col>
         <Col span={5} offset={1} align="right">
           {attachments.length > 0 && <AlertAttachmentPop attachments={attachments} />}
