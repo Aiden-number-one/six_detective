@@ -30,19 +30,21 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
       <Column
         align="center"
         dataIndex="tradeDate"
-        title={<FormattedMessage id="data-import.market.trade-date" />}
+        title={<FormattedMessage id="data-import.trade-date" />}
         render={(text, record) => moment(record.tradeDate).format(dateFormat)}
       />
       <Column
         align="center"
         dataIndex="market"
-        title={<FormattedMessage id="data-import.market.market" />}
+        title={<FormattedMessage id="data-import.market" />}
       />
       <Column dataIndex="fileType" title={<FormattedMessage id="data-import.market.file-type" />} />
       <Column
         dataIndex="uploadDate"
         title={<FormattedMessage id="data-import.market.upload-date" />}
-        render={(text, record) => moment(record.uploadDate).format(timestampFormat)}
+        render={(text, record) =>
+          moment(record.uploadDate, 'YYYYMMDDhhmmss').format(timestampFormat)
+        }
       />
       <Column
         align="center"

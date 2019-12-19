@@ -15,7 +15,7 @@ const NewSearchForm = Form.create({})(SearchForm);
 @connect(({ menuUserGroup, loading }) => ({
   loading: loading.effects,
   menuUserGroup: menuUserGroup.data,
-  updateGroup: menuUserGroup.updateUserGroup,
+  updateGroup: menuUserGroup.updateData,
 }))
 class MenuUserGroup extends Component {
   searchForm = React.createRef();
@@ -28,6 +28,7 @@ class MenuUserGroup extends Component {
       updateFlag: false,
       searchGroupName: undefined,
       searchGroupDesc: undefined,
+      delateTitle: 'Please confirm that you want to delete this record?',
       groupMenuInfo: {},
       columns: [
         {
@@ -155,9 +156,30 @@ class MenuUserGroup extends Component {
     const groupMenuInfo = {
       groupId: obj.groupId,
     };
-    this.setState({
-      deleteVisible: true,
-      groupMenuInfo,
+    const { dispatch } = this.props;
+    const params = {
+      operType: 'queryUseInGroup',
+      groupId: groupMenuInfo.groupId,
+    };
+    dispatch({
+      type: 'menuUserGroup/updateUserGroup',
+      payload: params,
+      callback: () => {
+        if (this.props.updateGroup[0].flag === '0') {
+          this.setState({
+            delateTitle:
+              'This menu has been authorized to users.Please confirm that you want to delete it!',
+          });
+        } else {
+          this.setState({
+            delateTitle: 'Please confirm that you want to delete this record?',
+          });
+        }
+        this.setState({
+          deleteVisible: true,
+          groupMenuInfo,
+        });
+      },
     });
   };
 
@@ -266,8 +288,7 @@ class MenuUserGroup extends Component {
   render() {
     const { loading, menuUserGroup } = this.props;
     const { groupTitle, deleteVisible, groupMenuInfo, updateFlag } = this.state;
-    console.log('menuUserGroup=', menuUserGroup);
-    const { columns, page, modifyVisible } = this.state;
+    const { columns, page, modifyVisible, delateTitle } = this.state;
     // const rowSelection = {
     //   onChange: (selectedRowKeys, selectedRows) => {
     //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -303,7 +324,7 @@ class MenuUserGroup extends Component {
           cancelText={formatMessage({ id: 'app.common.cancel' })}
           okText={formatMessage({ id: 'app.common.confirm' })}
         >
-          <span>Please confirm that you want to delete this record?</span>
+          <span>{delateTitle}</span>
         </Modal>
         <div className={styles.content}>
           <div className={styles.tableTop}>

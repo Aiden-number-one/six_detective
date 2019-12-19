@@ -14,7 +14,7 @@ const TaskMap = {
   303: AlertTaskOfCa,
 };
 
-function AlertTask({ dispatch, loading, alert: { alertTypeId }, alertItems, users }) {
+function AlertTask({ dispatch, loading, alert: { alertTypeId, alertId }, alertItems, users }) {
   const [visible, setVisible] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const AlertTaskType = TaskMap[+alertTypeId];
@@ -35,6 +35,8 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId }, alertItems, user
       payload: {
         userId,
         taskIds: selectedRows.map(item => item.TASK_ID),
+        alertTypeId,
+        alertId,
       },
     });
     setVisible(false);
