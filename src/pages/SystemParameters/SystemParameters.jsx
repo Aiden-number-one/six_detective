@@ -346,6 +346,7 @@ class SystemParams extends Component {
                 pagination={false}
               ></Table>
               <Pagination
+                size="small"
                 showSizeChanger
                 current={page.pageNumber}
                 showTotal={() =>
