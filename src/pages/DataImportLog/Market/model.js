@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors: iron
- * @LastEditTime: 2019-12-16 20:42:29
+ * @LastEditTime: 2019-12-18 15:03:12
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -25,7 +25,7 @@ export async function postManual(params) {
 }
 
 export async function postAuto(params) {
-  return request('set_lop_report_auto_import', { data: params });
+  return request('set_market_task_execute', { data: params });
 }
 
 export const pageSelector = ({ lop }) => lop.page;
@@ -75,7 +75,7 @@ export default {
       if (err) {
         throw new Error(err);
       }
-      message.success('upload success');
+      message.success('execute success');
       yield put({ type: 'reload' });
     },
     *reload({ payload }, { put }) {

@@ -31,7 +31,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
   }
 
   function handlePageChange(page, pageSize) {
-    dispatch({ type: 'lop/reload', payload: { page, pageSize, ...searchParams } });
+    dispatch({ type: 'market/reload', payload: { page, pageSize, ...searchParams } });
   }
 
   async function handleUpload(params) {
@@ -52,7 +52,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
             <Button
               type="primary"
               onClick={() => dispatch({ type: 'market/importByAuto' })}
-              loading={loading['lop/importByAuto']}
+              loading={loading['market/importByAuto']}
             >
               <FormattedMessage id="data-import.lop.auto-import" />
             </Button>
@@ -63,7 +63,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
           <MarketLogList
             dataSource={logs}
             total={total}
-            loading={loading['lop/fetch']}
+            loading={loading['market/fetch']}
             handlePageChange={handlePageChange}
             handlePageSizeChange={handlePageChange}
           />
