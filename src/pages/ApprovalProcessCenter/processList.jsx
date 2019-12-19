@@ -40,11 +40,19 @@ function TaskBtn({
   return (
     <Row className={styles.btns}>
       <Col span={12}>
-        <Button disabled={!selectedKeys.length} onClick={() => claimOk(selectedKeys)}>
+        <Button
+          className="btn_usual"
+          disabled={!selectedKeys.length}
+          onClick={() => claimOk(selectedKeys)}
+        >
           <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button disabled={!selectedKeys.length} onClick={() => setVisible(true)}>
+        <Button
+          className="btn_usual"
+          disabled={!selectedKeys.length}
+          onClick={() => setVisible(true)}
+        >
           <IconFont type="iconicon_assign" className={styles['btn-icon']} />
           Assign
         </Button>
@@ -300,7 +308,7 @@ function ProcessList({
         <Column
           align="center"
           dataIndex="action"
-          title={<FormattedMessage id="alert-center.action" />}
+          title={<FormattedMessage id="alert-center.actions" />}
           render={(text, record) => (
             <Row className={styles.btns}>
               <IconFont
