@@ -50,7 +50,7 @@ function LopLogFilterForm({ form, handleSearch }) {
     <Form layout="vertical" className={styles.form}>
       <Row>
         <Col span={7}>
-          <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
+          <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
             {getFieldDecorator('tradeDate', {
               initialValue: [yesterday, today],
               rules: [
@@ -81,7 +81,7 @@ function LopLogFilterForm({ form, handleSearch }) {
           </Form.Item>
         </Col>
         <Col span={7} offset={1}>
-          <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
+          <Form.Item label={<FormattedMessage id="data-import.submitter-code" />}>
             {getFieldDecorator('submitterCode', {
               rules: [
                 {
@@ -109,7 +109,7 @@ function LopLogFilterForm({ form, handleSearch }) {
       </Row>
       <Row type="flex" justify="end">
         <Button type="primary" icon="search" className={styles['no-margin']} onClick={handleCommit}>
-          <FormattedMessage id="data-import.lop.search" />
+          <FormattedMessage id="data-import.search" />
         </Button>
       </Row>
     </Form>

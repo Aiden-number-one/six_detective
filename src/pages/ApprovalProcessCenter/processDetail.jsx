@@ -1,10 +1,9 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import {
   Tabs,
-  Popover,
   Row,
   Col,
-  Typography,
   Input,
   Button,
   Form,
@@ -15,19 +14,22 @@ import {
   Upload,
   Empty,
   Spin,
+  Select,
 } from 'antd';
-import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
 import styles from './index.less';
 import Phase from './component/phase';
 import TaskAttachments from './component/TaskAttachments';
+import TaskCommentHistory from './component/TaskCommentHistory';
+import TaskLog from './component/TaskLog';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
+const { Option } = Select;
 // const { Column } = Table;
-const { Paragraph, Text } = Typography;
+// const { Paragraph, Text } = Typography;
 
 // export function TaskDes({ detailItem }) {
 //   return <div></div>;
@@ -41,20 +43,110 @@ function CustomEmpty({ className = '', style = {} }) {
 }
 function DetailForm({ form, detailItem, task }) {
   const { getFieldDecorator } = form;
-  const detailList = task ? detailItem.data || [] : [];
+  const [radioCurrentValue, setRadioCurrentValue] = useState('Yes');
+  const detailList = task ? (detailItem.data && detailItem.data.common) || [] : [];
+  const newProductList = task ? (detailItem.data && detailItem.data.newProduct) || [] : [];
+  console.log('newProductList---->', newProductList);
+  const caCodetList = task ? (detailItem.data && detailItem.data.caCode) || [] : [];
+  const alertType = detailItem && detailItem.alertType;
+  console.log('alertType---->', alertType, radioCurrentValue);
+  // if (alertType && alertType === '302') {
+  //   setRadioCurrentValue('No');
+  // } else if (alertType && alertType === '303') {
+  //   setRadioCurrentValue('Yes');
+  // }
   const isShowForm = detailItem.isStarter;
-  console.log('detailItem---->', detailItem.data);
+  const newProductDisable = detailList.concat(newProductList);
+  const caCodetDisable = detailList.concat(caCodetList);
+  useEffect(() => {
+    if (alertType && alertType === '302') {
+      setRadioCurrentValue('No');
+    } else if (alertType && alertType === '303') {
+      setRadioCurrentValue('Yes');
+    }
+  }, [alertType]);
   return (
     <>
       {isShowForm && detailList.length ? (
         <Form>
           {detailList.map(item => (
-            <Form.Item label={item.key} labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
+            <Form.Item
+              label={item.key}
+              labelCol={{ span: radioCurrentValue === 'No' ? 8 : 6 }}
+              wrapperCol={{ span: 12 }}
+            >
               {getFieldDecorator(item.key, {
                 initialValue: item.oldValue,
-              })(<Input disabled={!item.isEdit} />)}
+              })(
+                item.type === 'input' ? (
+                  <Input disabled={!item.isEdit} />
+                ) : item.type === 'radio' ? (
+                  <Radio.Group onChange={e => setRadioCurrentValue(e.target.value)}>
+                    <Radio style={{ display: 'inline' }} value="Yes">
+                      yes
+                    </Radio>
+                    <Radio style={{ display: 'inline' }} value="No">
+                      no
+                    </Radio>
+                  </Radio.Group>
+                ) : null,
+              )}
             </Form.Item>
           ))}
+          {radioCurrentValue === 'No'
+            ? newProductList.map(item => (
+                <Form.Item label={item.key} labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+                  {getFieldDecorator(item.key, {
+                    initialValue:
+                      item.type === 'selection' ? item.oldValue.split(',')[0] : item.oldValue,
+                  })(
+                    item.type === 'input' ? (
+                      <Input disabled={!item.isEdit} />
+                    ) : item.type === 'selection' ? (
+                      <Select>
+                        {item.oldValue.split(',').map(optionValue => (
+                          <Option value={optionValue}>{optionValue}</Option>
+                        ))}
+                      </Select>
+                    ) : item.type === 'radio' ? (
+                      <Radio.Group>
+                        <Radio style={{ display: 'inline' }} value="Yes">
+                          yes
+                        </Radio>
+                        <Radio style={{ display: 'inline' }} value="No">
+                          no
+                        </Radio>
+                      </Radio.Group>
+                    ) : null,
+                  )}
+                </Form.Item>
+              ))
+            : radioCurrentValue === 'Yes'
+            ? caCodetList.map(item => (
+                <Form.Item label={item.key} labelCol={{ span: 6 }} wrapperCol={{ span: 12 }}>
+                  {getFieldDecorator(item.key, {
+                    initialValue: item.type === 'selection' ? item.oldValue[0] : item.oldValue,
+                  })(
+                    item.type === 'input' ? (
+                      <Input disabled={!item.isEdit} />
+                    ) : item.type === 'selection' ? (
+                      <Select>
+                        {item.oldValue.split(',').map(optionValue => (
+                          <Option value={optionValue}>{optionValue}</Option>
+                        ))}
+                      </Select>
+                    ) : item.type === 'radio' ? (
+                      <Radio.Group>
+                        <Radio value="Yes">yes</Radio>
+                        <Radio value="No">no</Radio>
+                      </Radio.Group>
+                    ) : (
+                      <Input disabled={!item.isEdit} />
+                    ),
+                  )}
+                </Form.Item>
+              ))
+            : null}
         </Form>
       ) : (
         <div className={styles.ListBox}>
@@ -72,7 +164,13 @@ function DetailForm({ form, detailItem, task }) {
               )
             }
             bordered
-            dataSource={detailList}
+            dataSource={
+              alertType === '302'
+                ? newProductDisable
+                : alertType === '303'
+                ? caCodetDisable
+                : detailList
+            }
             renderItem={item => (
               <List.Item>
                 <div className={styles.ListItem}>
@@ -91,130 +189,6 @@ function DetailForm({ form, detailItem, task }) {
 
 const DetailList = Form.create()(DetailForm);
 
-// function AlertTaskModal({ visible, handleCancel }) {
-//   return (
-//     <Drawer
-//       title={<FormattedMessage id="alert-center.assign" />}
-//       width={320}
-//       visible={visible}
-//       onClose={handleCancel}
-//     >
-//       1323
-//     </Drawer>
-//   );
-// }
-
-// function AlertTask({ dataSource }) {
-//   const [visible, setVisible] = useState(false);
-//   const [selectedKeys, setSelectedKeys] = useState([]);
-
-//   return (
-//     <>
-//       <AlertTaskModal visible={visible} handleCancel={() => setVisible(false)} />
-//       <Button
-//         style={{ marginBottom: 10 }}
-//         disabled={!selectedKeys.length}
-//         onClick={() => setVisible(true)}
-//       >
-//         <FormattedMessage id="alert-center.assign" />
-//       </Button>
-//       <Table
-//         border
-//         dataSource={dataSource}
-//         rowKey="epCode"
-//         scroll={{ y: 320 }}
-//         rowSelection={{
-//           onChange: selectedRowKeys => {
-//             setSelectedKeys(selectedRowKeys);
-//           },
-//         }}
-//       >
-//         <Column
-//           align="center"
-//           dataIndex="market"
-//           title={<FormattedMessage id="alert-center.market" />}
-//         />
-//         <Column
-//           align="center"
-//           dataIndex="epCode"
-//           title={<FormattedMessage id="alert-center.ep-code" />}
-//         />
-//         <Column dataIndex="epName" title={<FormattedMessage id="alert-center.ep-name" />} />
-//         <Column dataIndex="owner" title={<FormattedMessage id="alert-center.owner" />} />
-//         <Column
-//           align="center"
-//           dataIndex="status"
-//           title={<FormattedMessage id="alert-center.status" />}
-//         />
-//         <Column
-//           align="center"
-//           dataIndex="action"
-//           title={<FormattedMessage id="alert-center.action" />}
-//           render={() => (
-//             <Link to="/system-management/workflow-design" style={{ fontSize: 12 }}>
-//               <FormattedMessage id="alert-center.enter-workflow" />
-//             </Link>
-//           )}
-//         />
-//       </Table>
-//     </>
-//   );
-// }
-
-function AlertAttachment({ attachments }) {
-  return (
-    <Popover
-      placement="bottomRight"
-      title={<FormattedMessage id="alert-center.attachement-list" />}
-      content={
-        <Row style={{ padding: '6px 14px', width: 240, maxHeight: 150, overflowY: 'auto' }}>
-          {attachments.map(({ name, url }, index) => (
-            <Col key={url}>
-              <Text ellipsis style={{ width: '100%' }} title={name}>
-                <a download href={`/download?filePath=${url}`} style={{ marginBottom: 20 }}>
-                  {index + 1}. {name}
-                </a>
-              </Text>
-            </Col>
-          ))}
-        </Row>
-      }
-    >
-      <IconFont type="iconbiezhen" />
-      {attachments.length}
-    </Popover>
-  );
-}
-
-function AlertComment({ comment: { time, text, attachments } }) {
-  return (
-    <li key={`${time}-${text}`}>
-      <Row>
-        <Col span={18} style={{ color: '#0D87D4' }}>
-          {time}
-        </Col>
-        <Col span={5} offset={1} align="right">
-          {attachments && <AlertAttachment attachments={attachments} />}
-        </Col>
-      </Row>
-      <Row>
-        <Paragraph ellipsis={{ rows: 3, expandable: true }}>{text}</Paragraph>
-      </Row>
-    </li>
-  );
-}
-
-function AlertLog({ log: { time, text } }) {
-  return (
-    <>
-      <Col span={9}>{time}</Col>
-      <Col span={15}>
-        <Paragraph ellipsis={{ rows: 3, expandable: true }}>{text}</Paragraph>
-      </Col>
-    </>
-  );
-}
-
 function ProcessDetail({
   dispatch,
   loading,
@@ -223,6 +197,7 @@ function ProcessDetail({
   taskGroup,
   submitRadioList,
   taskHistoryList,
+  logList,
   currentTaskType,
 }) {
   const [isFullscreen, setFullscreen] = useState(false);
@@ -234,6 +209,7 @@ function ProcessDetail({
   const [withdrawConfirmVisible, setWithdrawConfirmVisible] = useState(false);
   const [upAttachments, setUpAttachements] = useState([]);
   const newDetailForm = React.createRef();
+  const isLt5M = size => size / 1024 / 1024 < 5;
   console.log('currentTaskType--000-->', currentTaskType);
 
   useEffect(() => {
@@ -287,20 +263,52 @@ function ProcessDetail({
   }
 
   function submitOrApproveTask(type) {
-    let epCname = '';
+    let valueData = {};
+    const taskValue = {
+      taskCode: task.taskCode.toString(),
+      type,
+      userId: radioValue.toString(),
+      comment,
+      attachment: upAttachments.map(file => file.url).join(','),
+    };
     if (type === 'submit') {
       newDetailForm.current.validateFields((err, values) => {
-        epCname = [];
-        const detailData = detailItems.data;
+        const alertTypeValue = detailItems.alertType;
         if (!err) {
-          console.log('Received values of form: ', values);
+          if (alertTypeValue === '301') {
+            valueData = {
+              epCname: values['EP Name'],
+            };
+          } else if (alertTypeValue === '302') {
+            valueData = {
+              isCaCode: values['Is CA Code ?'],
+              productDesc: values['Product Description'],
+              productCategory: values['Product Category'],
+              contractNature: values['Futures or Option'],
+              productGroup: values['Product Group'],
+              ltdTmplCode: values['Template Code(Last Trade Day)'],
+              plTmplCode: values['Template Code(Position Limit)'],
+              rlTmplCode: values['Template Code(Reportable Limit)'],
+              pdCalculateFlag: values['Is Calculate PD ?'],
+              sizeFactor: values['Size Factor for Calculate PD'],
+              weightFactor: values['Weighting Factor for Calculate PD'],
+            };
+          } else if (alertTypeValue === '303') {
+            valueData = {
+              isCaCode: values['Is CA Code ?'],
+              epCname: values.remark,
+            };
+          }
+
+          Object.assign(taskValue, valueData);
+          console.log('Received values of form: ', values, valueData, taskValue);
           // eslint-disable-next-line array-callback-return
-          detailData.map(item => {
-            if (item.isEdit) {
-              epCname.push(values[item.key]);
-            }
-          });
-          epCname = epCname.join(',');
+          // detailData.map(item => {
+          //   if (item.isEdit) {
+          //     epCname.push(values[item.key]);
+          //   }
+          // });
+          // epCname = epCname.join(',');
         }
       });
     }
@@ -309,13 +317,7 @@ function ProcessDetail({
     }
     dispatch({
       type: 'approvalCenter/approveAndReject',
-      payload: {
-        taskCode: task.taskCode,
-        type,
-        userId: radioValue,
-        epCname,
-        comment,
-      },
+      payload: taskValue,
       callback: () => {
         dispatch({
           type: 'approvalCenter/fetch',
@@ -323,6 +325,7 @@ function ProcessDetail({
             type: currentTaskType,
           },
         });
+        setUpAttachements([]);
       },
     });
     setVisible(false);
@@ -361,26 +364,45 @@ function ProcessDetail({
   }
 
   function saveTask() {
+    let valueData = {};
+    const taskValue = {
+      taskCode: task.taskCode.toString(),
+    };
     newDetailForm.current.validateFields((err, values) => {
-      let epCname = [];
-      const detailData = detailItems.data;
+      const alertTypeValue = detailItems.alertType;
       if (!err) {
-        console.log('Received values of form: ', values);
-        // eslint-disable-next-line array-callback-return
-        detailData.map(item => {
-          if (item.isEdit) {
-            epCname.push(values[item.key]);
-          }
-        });
-        epCname = epCname.join(',');
+        if (alertTypeValue === '301') {
+          valueData = {
+            epCname: values['EP Name'],
+          };
+        } else if (alertTypeValue === '302') {
+          valueData = {
+            isCaCode: values['Is CA Code ?'],
+            productDesc: values['Product Description'],
+            productCategory: values['Product Category'],
+            contractNature: values['Futures or Option'],
+            productGroup: values['Product Group'],
+            ltdTmplCode: values['Template Code(Last Trade Day)'],
+            plTmplCode: values['Template Code(Position Limit)'],
+            rlTmplCode: values['Template Code(Reportable Limit)'],
+            pdCalculateFlag: values['Is Calculate PD ?'],
+            sizeFactor: values['Size Factor for Calculate PD'],
+            weightFactor: values['Weighting Factor for Calculate PD'],
+          };
+        } else if (alertTypeValue === '303') {
+          valueData = {
+            isCaCode: values['Is CA Code ?'],
+            remark: values.Remark,
+          };
+        }
+
+        Object.assign(taskValue, valueData);
+        console.log('Received values of form: ', values, valueData, taskValue);
       }
-      dispatch({
-        type: 'approvalCenter/saveTask',
-        payload: {
-          taskCode: task.taskCode,
-          epCname,
-        },
-      });
+    });
+    dispatch({
+      type: 'approvalCenter/saveTask',
+      payload: taskValue,
     });
   }
 
@@ -388,6 +410,16 @@ function ProcessDetail({
     let fileList = [...info.fileList];
     // limit 5 files
     fileList = fileList.slice(-5);
+    fileList = fileList.map(file => {
+      const { bcjson } = file.response || {};
+      const { flag, items = {} } = bcjson || {};
+
+      if (flag === '1' && items) {
+        return { url: items.relativeUrl, ...file };
+      }
+      return file;
+    });
+    console.log('fileList--->', fileList);
     setUpAttachements(fileList);
   }
 
@@ -470,7 +502,7 @@ function ProcessDetail({
                 {taskHistoryList.length > 0 ? (
                   <ul className={styles['comment-list']}>
                     {taskHistoryList.map(item => (
-                      <AlertComment comment={item} key={item.id} />
+                      <TaskCommentHistory comment={item} key={item.id} />
                     ))}
                   </ul>
                 ) : (
@@ -502,7 +534,9 @@ function ProcessDetail({
                         style={{ marginRight: '8px' }}
                       />
                       <Upload
+                        action="/upload"
                         showUploadList={false}
+                        beforeUpload={file => isLt5M(file.size)}
                         fileList={upAttachments}
                         onChange={handleUpAttachments}
                       >
@@ -543,18 +577,24 @@ function ProcessDetail({
                       </>
                     )}
                   </Row>
+                  {!!upAttachments.length && <TaskAttachments attachments={upAttachments} />}
                 </div>
               ) : null}
             </TabPane>
-            <TabPane className={styles['tab-content']} tab="Task Lifecycle" key="2">
-              <Row gutter={[10, 10]} style={{ height: 440, overflowY: 'auto' }}>
-                {alert.logs && alert.logs.map(log => <AlertLog log={log} key={log.time} />)}
-              </Row>
+            <TabPane tab="Task Lifecycle" key="2">
+              <Spin spinning={loading['approvalCenter/getApprovalTaskHistory']}>
+                <div style={{ height: 370, overflowY: 'auto', padding: '0 18px' }}>
+                  {logList.length > 0 ? (
+                    logList.map(log => <TaskLog log={log} key={log.id} />)
+                  ) : (
+                    <CustomEmpty className={styles['comment-list']} style={{ height: 370 }} />
+                  )}
+                </div>
+              </Spin>
             </TabPane>
           </Tabs>
         </Col>
       </Row>
-      {!!upAttachments.length && <TaskAttachments attachments={upAttachments} />}
     </>
   );
 }
@@ -562,12 +602,13 @@ function ProcessDetail({
 export default connect(
   ({
     loading,
-    approvalCenter: { detailItems, userList, submitRadioList, taskHistoryList, taskGroup },
+    approvalCenter: { detailItems, userList, submitRadioList, taskHistoryList, logList, taskGroup },
   }) => ({
     detailItems,
     userList,
     submitRadioList,
     taskHistoryList,
+    logList,
     taskGroup,
     loading: loading.effects,
   }),

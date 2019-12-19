@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'umi/locale';
-import styles from '@/pages/AlertCenter/index.less';
+import styles from '@/pages/ApprovalProcessCenter/index.less';
 
 export default function({ attachments }) {
   return (

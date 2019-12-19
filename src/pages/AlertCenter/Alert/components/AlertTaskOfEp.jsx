@@ -60,7 +60,7 @@ export default function({ dataSource, loading, getSelectedRows }) {
         ellipsis
         align="center"
         dataIndex="action"
-        title={<FormattedMessage id="alert-center.action" />}
+        title={<FormattedMessage id="alert-center.actions" />}
         render={(text, record) => (
           <Link
             to={`/alert-management/Approval-Process-Center?taskcode=${record.TASK_ID}`}
