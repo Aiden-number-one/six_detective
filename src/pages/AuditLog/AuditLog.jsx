@@ -175,9 +175,21 @@ class AuditLog extends Component {
   };
 
   exportDataConfirm = () => {
-    this.setState({
-      exportDataVisible: false,
-    });
+    const { dispatch } = this.props;
+    const param = {
+      fileType: '1',
+    };
+    dispatch(
+      {
+        type: 'auditLog/getDataExport',
+        payload: param,
+      },
+      () => {
+        this.setState({
+          exportDataVisible: false,
+        });
+      },
+    );
   };
 
   exportDataCancel = () => {
