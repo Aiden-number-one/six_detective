@@ -18,7 +18,7 @@ export default class SearchForm extends Component {
               {getFieldDecorator(
                 'logDate',
                 {},
-              )(<RangePicker format="YYYY-MM-DD" placeholder={['Start Date', 'End Date']} />)}
+              )(<RangePicker format="DD-MMM-YYYY" placeholder={['Start Date', 'End Date']} />)}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>
