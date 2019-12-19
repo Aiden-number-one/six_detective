@@ -91,12 +91,31 @@ class AlertUserGroup extends Component {
   };
 
   onClose = () => {
+    const groupMenuInfo = {
+      groupId: undefined,
+      groupName: undefined,
+      groupDesc: undefined,
+    };
     this.setState({
       modifyVisible: false,
+      groupMenuInfo,
     });
   };
 
-  onSave = () => {
+  onSave = updateFlag => {
+    if (!updateFlag) {
+      const groupMenuInfo = {
+        groupId: undefined,
+        groupName: undefined,
+        groupDesc: undefined,
+      };
+      this.searchForm.current.resetFields();
+      this.setState({
+        searchGroupName: undefined,
+        searchGroupDesc: undefined,
+        groupMenuInfo,
+      });
+    }
     this.setState({
       modifyVisible: false,
     });

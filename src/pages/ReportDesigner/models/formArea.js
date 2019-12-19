@@ -3,8 +3,8 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-05 09:43:41
- * @LastEditors: mus
- * @LastEditTime: 2019-12-12 14:21:56
+ * @LastEditors  : mus
+ * @LastEditTime : 2019-12-18 14:24:08
  */
 
 // import fetch from '@/utils/request.default';
@@ -19,6 +19,12 @@ export default {
   effects: {},
   reducers: {
     changeCustomSearchData(state, action) {
+      return {
+        ...state,
+        customSearchData: action.payload,
+      };
+    },
+    deleteCustomeSearchData(state, action) {
       return {
         ...state,
         customSearchData: action.payload,

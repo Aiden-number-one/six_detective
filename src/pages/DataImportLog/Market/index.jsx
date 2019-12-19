@@ -6,7 +6,10 @@ import { Button, Row } from 'antd';
 import MarketLogFilterForm from './MarketLogFilterForm';
 import MarketLogManualModal from './MarketLogManualModal';
 import MarketLogList from './MarketLogList';
+import { yesterday, today } from '../constants';
 import styles from '../index.less';
+
+const format = 'YYYYMMDD';
 
 function MarketLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
@@ -15,6 +18,10 @@ function MarketLog({ dispatch, loading, logs, total }) {
   useEffect(() => {
     dispatch({
       type: 'market/fetch',
+      payload: {
+        tradeDateSt: yesterday.format(format),
+        tradeDateEt: today.format(format),
+      },
     });
   }, []);
 
@@ -24,7 +31,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
   }
 
   function handlePageChange(page, pageSize) {
-    dispatch({ type: 'lop/reload', payload: { page, pageSize, ...searchParams } });
+    dispatch({ type: 'market/reload', payload: { page, pageSize, ...searchParams } });
   }
 
   async function handleUpload(params) {
@@ -45,18 +52,18 @@ function MarketLog({ dispatch, loading, logs, total }) {
             <Button
               type="primary"
               onClick={() => dispatch({ type: 'market/importByAuto' })}
-              loading={loading['lop/importByAuto']}
+              loading={loading['market/importByAuto']}
             >
-              <FormattedMessage id="data-import.lop.auto-import" />
+              <FormattedMessage id="data-import.execute" />
             </Button>
             <Button type="primary" className={styles['no-margin']} onClick={() => setVisible(true)}>
-              <FormattedMessage id="data-import.lop.manual-import" />
+              <FormattedMessage id="data-import.manual-import" />
             </Button>
           </Row>
           <MarketLogList
             dataSource={logs}
             total={total}
-            loading={loading['lop/fetch']}
+            loading={loading['market/fetch']}
             handlePageChange={handlePageChange}
             handlePageSizeChange={handlePageChange}
           />

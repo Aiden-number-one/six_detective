@@ -2,10 +2,9 @@
  * @Description: This is for EmailListModel asynchronization request function.
  * @Author: dailinbo
  * @Date: 2019-11-05 14:04:16
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-13 14:19:48
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-18 09:42:29
  */
-import { notification } from 'antd';
 import Service from '@/utils/Service';
 
 const { emailList, addEmail, deleteEmail, updateEmail } = Service;
@@ -29,14 +28,7 @@ const emailParameter = {
           callback();
         }
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
     *updateEmail({ payload, callback }, { call, put }) {
@@ -50,14 +42,7 @@ const emailParameter = {
           callback();
         }
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
     *addEmailDate({ payload, callback }, { call, put }) {
@@ -71,14 +56,7 @@ const emailParameter = {
           callback();
         }
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
     *deleteEmailDate({ payload, callback }, { call, put }) {
@@ -92,14 +70,7 @@ const emailParameter = {
         }
         callback();
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
   },

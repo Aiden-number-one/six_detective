@@ -2,12 +2,12 @@
  * @Description: 修改数据集名称
  * @Author: lan
  * @Date: 2019-12-11 20:54:21
- * @LastEditTime: 2019-12-12 10:18:35
+ * @LastEditTime: 2019-12-18 13:47:13
  * @LastEditors: lan
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, Button, Drawer } from 'antd';
+import { Form, Input, Button, Drawer, Radio } from 'antd';
 
 @Form.create({})
 export default class AlterDataSetName extends PureComponent {
@@ -41,7 +41,7 @@ export default class AlterDataSetName extends PureComponent {
     return (
       <Drawer
         title="DataSet Name"
-        width={350}
+        width={370}
         visible={visible}
         onClose={() => {
           clearRecord();
@@ -59,6 +59,21 @@ export default class AlterDataSetName extends PureComponent {
               ],
               initialValue: record && record.sqlName,
             })(<Input />)}
+          </Form.Item>
+          <Form.Item label="Owner" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+            {getFieldDecorator('Owner', {
+              // initialValue: record && record.sqlName,
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item label="Security policy" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+            {getFieldDecorator('policy', {
+              // initialValue: record && record.sqlName,
+            })(
+              <Radio.Group>
+                <Radio value={1}>私密(仅所有者可编辑)</Radio>
+                <Radio value={2}>协同编辑(允许所有成员编辑)</Radio>
+              </Radio.Group>,
+            )}
           </Form.Item>
           <div
             style={{
@@ -82,7 +97,7 @@ export default class AlterDataSetName extends PureComponent {
               Cancel
             </Button>
             <Button htmlType="submit" type="primary">
-              Submit
+              Save
             </Button>
           </div>
         </Form>

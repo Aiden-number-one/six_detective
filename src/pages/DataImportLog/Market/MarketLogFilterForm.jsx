@@ -15,7 +15,6 @@ function MarketLogFilterForm({ form, handleSearch }) {
       if (!err) {
         const format = 'YYYYMMDD';
         const { tradeDate, market, ...rest } = values;
-
         let startTradeDate = '';
         let endTadeDate = '';
 
@@ -27,7 +26,7 @@ function MarketLogFilterForm({ form, handleSearch }) {
 
         handleSearch({
           ...rest,
-          market: market.toString(),
+          market: market && market.toString(),
           tradeDateSt: startTradeDate,
           tradeDateEt: endTadeDate,
         });
@@ -38,7 +37,7 @@ function MarketLogFilterForm({ form, handleSearch }) {
     <Form layout="vertical" className={styles.form}>
       <Row>
         <Col span={7}>
-          <Form.Item label={<FormattedMessage id="data-import.market.trade-date" />}>
+          <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
             {getFieldDecorator('tradeDate', {
               initialValue: [yesterday, today],
               rules: [
@@ -69,14 +68,14 @@ function MarketLogFilterForm({ form, handleSearch }) {
           </Form.Item>
         </Col>
         <Col span={8} offset={1}>
-          <Form.Item label={<FormattedMessage id="data-import.market.market" />}>
+          <Form.Item label={<FormattedMessage id="data-import.market" />}>
             {getFieldDecorator('market')(<Checkbox.Group options={['HKFE', 'SEHK']} />)}
           </Form.Item>
         </Col>
       </Row>
       <Row type="flex" justify="end">
         <Button type="primary" icon="search" onClick={handleClick} className={styles['no-margin']}>
-          <FormattedMessage id="data-import.market.search" />
+          <FormattedMessage id="data-import.search" />
         </Button>
       </Row>
     </Form>

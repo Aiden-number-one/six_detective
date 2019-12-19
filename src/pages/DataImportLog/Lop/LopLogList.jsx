@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Icon } from 'antd';
+import { Table, Icon, Descriptions } from 'antd';
 import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
@@ -43,18 +43,38 @@ export default function({
           handlePageSizeChange(page, pageSize);
         },
       }}
+      expandedRowRender={record => (
+        <Descriptions column={3}>
+          <Descriptions.Item label={<FormattedMessage id="data-import.lop.submission-channel" />}>
+            {record.submissionChannel}
+          </Descriptions.Item>
+          <Descriptions.Item label={<FormattedMessage id="data-import.lop.late-submission" />}>
+            {record.lateSubmission}
+          </Descriptions.Item>
+          <Descriptions.Item label={<FormattedMessage id="data-import.lop.latest-version" />}>
+            {record.latestVersion}
+          </Descriptions.Item>
+          <Descriptions.Item label={<FormattedMessage id="data-import.lop.latest-version" />}>
+            {record.latestVersion}
+          </Descriptions.Item>
+          <Descriptions.Item label={<FormattedMessage id="data-import.lop.submission-channel" />}>
+            {record.submissionChannel}
+          </Descriptions.Item>
+          <Descriptions.Item label={submissionReport}>{record.submissionReport}</Descriptions.Item>
+        </Descriptions>
+      )}
     >
       <Column
         width="10%"
         align="center"
         dataIndex="tradeDate"
-        title={<FormattedMessage id="data-import.lop.trade-date" />}
+        title={<FormattedMessage id="data-import.trade-date" />}
         render={(text, record) => <span>{moment(record.tradeDate).format(dateFormat)}</span>}
       />
       <Column
         align="center"
         dataIndex="submitterCode"
-        title={<FormattedMessage id="data-import.lop.submitter-code" />}
+        title={<FormattedMessage id="data-import.submitter-code" />}
       />
       <Column
         align="center"
@@ -62,18 +82,6 @@ export default function({
         title={<FormattedMessage id="data-import.lop.submitter-name" />}
       />
       <Column
-        ellipsis
-        dataIndex="submissionReport"
-        title={<span title={submissionReport}>{submissionReport}</span>}
-      />
-      <Column
-        width="10%"
-        align="center"
-        dataIndex="submissionChannel"
-        title={<FormattedMessage id="data-import.lop.submission-channel" />}
-      />
-      <Column
-        width="10%"
         align="center"
         dataIndex="submissionDate"
         title={<FormattedMessage id="data-import.lop.submission-date" />}
@@ -83,21 +91,9 @@ export default function({
         width="10%"
         align="center"
         dataIndex="submissionStatus"
-        title={<FormattedMessage id="data-import.lop.submission-status" />}
+        title={<FormattedMessage id="data-import.submission-status" />}
       />
       <Column
-        width="10%"
-        align="center"
-        dataIndex="lateSubmission"
-        title={<FormattedMessage id="data-import.lop.late-submission" />}
-      />
-      <Column
-        align="center"
-        dataIndex="latestVersion"
-        title={<FormattedMessage id="data-import.lop.latest-version" />}
-      />
-      <Column
-        ellipsis
         align="center"
         dataIndex="processingStatus"
         title={<span title={processingStatus}>{processingStatus}</span>}
@@ -105,7 +101,7 @@ export default function({
       <Column
         align="center"
         dataIndex="download"
-        title={<FormattedMessage id="data-import.lop.download" />}
+        title={<FormattedMessage id="data-import.download" />}
         render={(text, { lopImpId }) => (
           <>
             {loading['lop/fetchReportUrl'] && lopImpId === curImpId ? (

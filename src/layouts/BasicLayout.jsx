@@ -19,7 +19,6 @@ import logoSamll from '../assets/logo-small.png';
 import styles from './BasicLayout.less';
 // import globalStyles from '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
-import { isProOrDev } from '@/utils/utils';
 
 /**
  * use Authorized check all menu item
@@ -68,17 +67,15 @@ const BasicLayout = props => {
           // userAgent: window.navigator.userAgent,
         },
       });
-      if (!isProOrDev) {
-        setInterval(() => {
-          dispatch({
-            type: 'login/getLoginStatus',
-            payload: {
-              // loginName: window.localStorage.currentUser,
-              // userAgent: window.navigator.userAgent,
-            },
-          });
-        }, 25000);
-      }
+      setInterval(() => {
+        dispatch({
+          type: 'login/getLoginStatus',
+          payload: {
+            // loginName: window.localStorage.currentUser,
+            // userAgent: window.navigator.userAgent,
+          },
+        });
+      }, 25000);
     }
   }, []);
   /**

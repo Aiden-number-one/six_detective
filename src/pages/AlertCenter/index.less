@@ -49,12 +49,25 @@
   }
 }
 
-.icon {
-  color: #4e5459;
-  font-size: 20px;
-  cursor: pointer;
-  &:nth-child(2) {
-    font-size: 18px;
+.icon-btns {
+  button {
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    &:disabled {
+      cursor: not-allowed;
+      .icon {
+        color: #ccc;
+      }
+    }
+    .icon {
+      color: #4e5459;
+      font-size: 20px;
+      &:nth-child(2) {
+        font-size: 18px;
+      }
+    }
   }
 }
 
@@ -80,6 +93,12 @@
   .detail-des {
     background-color: #fff;
     box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
+    :global {
+      .ant-descriptions-item-label,
+      .ant-descriptions-item-content {
+        font-size: 12px;
+      }
+    }
     .fullscreen-icon {
       margin: 14px 14px 0 0;
       font-size: 22px;

@@ -1,4 +1,10 @@
-import { notification } from 'antd';
+/*
+ * @Description: This is CodeMaintenance
+ * @Author: dailinbo
+ * @Date: 2019-11-04 12:56:45
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-18 09:43:47
+ */
 import Service from '@/utils/Service';
 
 const { getSystemCode } = Service;
@@ -22,14 +28,7 @@ const codeMaintenance = {
         }
         callback();
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
     *getCodeItemList({ payload }, { call, put }) {
@@ -42,14 +41,7 @@ const codeMaintenance = {
           });
         }
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
     *addCodeItem({ payload, callback }, { call, put }) {
@@ -63,14 +55,7 @@ const codeMaintenance = {
         }
         callback();
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
     *deleteCodeItem({ payload, callback }, { call, put }) {
@@ -84,14 +69,7 @@ const codeMaintenance = {
         }
         callback();
       } else {
-        notification.error({
-          message: 'error!!!',
-          description: response.bcjson.msg.toString(),
-          style: {
-            maxHeight: 135,
-            overflow: 'auto',
-          },
-        });
+        throw new Error(response.bcjson.msg);
       }
     },
   },

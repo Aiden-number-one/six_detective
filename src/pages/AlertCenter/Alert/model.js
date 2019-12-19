@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
- * @LastEditors: iron
- * @LastEditTime: 2019-12-17 14:33:45
+ * @LastEditors  : iron
+ * @LastEditTime : 2019-12-19 13:54:28
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -66,7 +66,7 @@ export default {
     comments: [],
     logs: [],
     users: [],
-    claimInfo: [],
+    claimInfos: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -103,11 +103,6 @@ export default {
         users: payload.users,
       };
     },
-    closeFail(state, { payload }) {
-      const { msg } = payload;
-      message.warn(msg);
-      return state;
-    },
     assignUserOk(state) {
       message.success('assign success');
       return {
@@ -117,7 +112,7 @@ export default {
     reclaim(state, { payload }) {
       return {
         ...state,
-        claimInfo: payload.claimInfo,
+        claimInfos: payload.claimInfos,
       };
     },
   },
@@ -198,10 +193,21 @@ export default {
       });
     },
     *assignTask({ payload }, { call, put }) {
-      const { err } = yield call(assignAlertItem, payload);
+      const { alertId, alertTypeId, ...rest } = payload;
+      const { err } = yield call(assignAlertItem, rest);
       if (err) {
         throw new Error(err);
       }
+      yield put({
+        type: 'fetch',
+      });
+      yield put({
+        type: 'fetchAlertItems',
+        payload: {
+          alertTypeId,
+          alertId,
+        },
+      });
       yield put({
         type: 'assignUserOk',
       });
@@ -226,17 +232,14 @@ export default {
         throw new Error(err);
       }
 
-      if (items && items.length) {
+      if (items && items.length > 0) {
         yield put({
           type: 'reclaim',
           payload: {
-            claimInfo: items,
+            claimInfos: items,
           },
         });
       } else {
-        yield put({
-          type: 'claimOk',
-        });
         yield put({
           type: 'fetch',
         });
@@ -245,22 +248,13 @@ export default {
     },
     *close({ payload }, { call, put }) {
       const { alertIds } = payload || [];
-      const { err, msg, items } = yield call(closeAlert, { alertIds });
+      const { err } = yield call(closeAlert, { alertIds });
       if (err) {
-        throw new Error(err);
+        yield Promise.reject(err);
       }
-      if (msg) {
-        yield put({
-          type: 'closeFail',
-          payload: {
-            msg,
-          },
-        });
-      } else if (items) {
-        yield put({
-          type: 'fetch',
-        });
-      }
+      yield put({
+        type: 'fetch',
+      });
     },
   },
 };

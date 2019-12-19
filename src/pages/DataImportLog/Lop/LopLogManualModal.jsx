@@ -37,7 +37,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       onClose={handleCancel}
     >
       <Form className={styles['modal-form']}>
-        <Form.Item label={<FormattedMessage id="data-import.lop.trade-date" />}>
+        <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
           {getFieldDecorator('tradeDate', {
             initialValue: yesterday,
             rules: [
@@ -48,7 +48,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             ],
           })(<DatePicker format={dateFormat} />)}
         </Form.Item>
-        <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
+        <Form.Item label={<FormattedMessage id="data-import.submitter-code" />}>
           {getFieldDecorator('submitterCode', {
             rules: [
               {
@@ -121,7 +121,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             >
               <Button>
                 <Icon type="upload" />
-                <FormattedMessage id="data-import.lop.browse" />
+                <FormattedMessage id="data-import.browse" />
               </Button>
             </Upload>,
           )}

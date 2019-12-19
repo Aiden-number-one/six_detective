@@ -1,7 +1,8 @@
 import React from 'react';
 import { Table } from 'antd';
 import { FormattedMessage } from 'umi/locale';
-// import styles from '../index.less';
+import moment from 'moment';
+import { dateFormat, timestampFormat } from '../constants';
 
 const { Column } = Table;
 
@@ -10,6 +11,7 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
     <Table
       dataSource={dataSource}
       loading={loading}
+      rowKey="mdImpId"
       pagination={{
         total,
         pageSizeOptions: ['10', '20', '50', '100'],
@@ -28,17 +30,21 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
       <Column
         align="center"
         dataIndex="tradeDate"
-        title={<FormattedMessage id="data-import.market.trade-date" />}
+        title={<FormattedMessage id="data-import.trade-date" />}
+        render={(text, record) => moment(record.tradeDate).format(dateFormat)}
       />
       <Column
         align="center"
         dataIndex="market"
-        title={<FormattedMessage id="data-import.market.market" />}
+        title={<FormattedMessage id="data-import.market" />}
       />
       <Column dataIndex="fileType" title={<FormattedMessage id="data-import.market.file-type" />} />
       <Column
         dataIndex="uploadDate"
         title={<FormattedMessage id="data-import.market.upload-date" />}
+        render={(text, record) =>
+          moment(record.uploadDate, 'YYYYMMDDhhmmss').format(timestampFormat)
+        }
       />
       <Column
         align="center"

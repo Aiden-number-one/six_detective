@@ -6,8 +6,9 @@
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
+import router from 'umi/router';
 
-const { getDataSourceList, getTableData, getMetadataTablePerform } = Service;
+const { getDataSourceList, getTableData, getMetadataTablePerform, setDataSet } = Service;
 
 export default {
   namespace: 'sqlDataSource',
@@ -25,6 +26,13 @@ export default {
   },
 
   effects: {
+    *addDataSet({ payload }, { call }) {
+      const res = yield call(setDataSet, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        message.success('success');
+        router.goBack();
+      }
+    },
     // 获取数据源数据
     *getDataSourceList({ payload }, { call, put }) {
       const { connectionId, ...param } = payload;
