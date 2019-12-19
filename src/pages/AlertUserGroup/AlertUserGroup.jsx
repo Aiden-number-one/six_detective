@@ -124,9 +124,15 @@ class AlertUserGroup extends Component {
       pageNumber: 1,
       pageSize,
     };
+    const menuInfo = {
+      groupId: undefined,
+      groupName: undefined,
+      groupDesc: undefined,
+    };
     this.setState(
       {
         page,
+        groupMenuInfo: menuInfo,
       },
       () => {
         this.queryUserList();
