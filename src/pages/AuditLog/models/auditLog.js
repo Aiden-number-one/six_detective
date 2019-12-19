@@ -7,12 +7,13 @@
  */
 import Service from '@/utils/Service';
 
-const { getAuditLog } = Service;
+const { getAuditLog, dataExport } = Service;
 
 const getAuditLogModel = {
   namespace: 'auditLog',
   state: {
     data: [],
+    dataExport: [],
   },
   effects: {
     *getAuditLogList({ payload }, { call, put }) {
@@ -28,12 +29,31 @@ const getAuditLogModel = {
         throw new Error(response.bcjson.msg);
       }
     },
+    *getDataExport({ payload }, { call, put }) {
+      const response = yield call(dataExport, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'getDataExport',
+            payload: response.bcjson,
+          });
+        }
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    getDataExport(state, action) {
+      return {
+        ...state,
+        dataExport: action.payload,
       };
     },
   },

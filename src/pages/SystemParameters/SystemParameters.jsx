@@ -223,8 +223,8 @@ class SystemParams extends Component {
 
     const param = {
       groupNo: searchParameterType,
-      pageNumber: page.pageNumber,
-      pageSize: page.pageSize,
+      pageNumber: page.pageNumber.toString() || '1',
+      pageSize: page.pageSize.toString() || '10',
     };
     dispatch({
       type: 'systemParams/getSystemParamsList',
