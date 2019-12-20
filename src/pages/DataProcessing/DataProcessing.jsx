@@ -1,9 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Row, Col, Button, Table, Pagination } from 'antd';
+import { Row, Col, Button, Table, Pagination, Select, DatePicker, Modal, Progress } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import styles from './DataProcessing.less';
+
+const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 @connect(({ dataProcessing, loading }) => ({
   loading: loading.effects,
@@ -15,6 +18,8 @@ export default class DataProcessing extends Component {
     super();
     this.state = {
       codeId: '',
+      dataProcessingVisible: false,
+      dataProcessingFlag: false,
       codeColumns: [
         {
           title: formatMessage({ id: 'app.common.number' }),
@@ -66,6 +71,12 @@ export default class DataProcessing extends Component {
           dataIndex: 'sequence',
           key: 'sequence',
         },
+      ],
+      functionNameOptions: [
+        { key: '', value: '', title: 'All' },
+        { key: '1', value: '1', title: 'Name One' },
+        { key: '2', value: '2', title: 'Name Two' },
+        { key: '3', value: '3', title: 'Name Three' },
       ],
       selectedRowKeys: [],
       page: {
@@ -142,9 +153,35 @@ export default class DataProcessing extends Component {
     this.setState({ selectedRowKeys });
   };
 
+  startProcessing = () => {
+    this.setState({
+      dataProcessingVisible: true,
+      dataProcessingFlag: true,
+    });
+  };
+
+  dataProcessingConfirm = () => {
+    this.setState({
+      dataProcessingVisible: false,
+    });
+  };
+
+  dataProcessingCancel = () => {
+    this.setState({
+      dataProcessingVisible: false,
+    });
+  };
+
   render() {
     const { loading, dataProcessingData, dataProcessingItemData } = this.props;
-    const { page, itemPage, selectedRowKeys } = this.state;
+    const {
+      page,
+      itemPage,
+      selectedRowKeys,
+      functionNameOptions,
+      dataProcessingVisible,
+      dataProcessingFlag,
+    } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -155,7 +192,7 @@ export default class DataProcessing extends Component {
         <PageHeaderWrapper>
           <div className={styles.dataProcessingWraper}>
             <Row gutter={20}>
-              <Col span={12} cassName={styles.dataTable}>
+              <Col span={14} cassName={styles.dataTable}>
                 <Button
                   type="primary"
                   onClick={this.inspectData}
@@ -188,8 +225,92 @@ export default class DataProcessing extends Component {
                   total={dataProcessingData.totalCount}
                   pageSize={page.pageSize}
                 />
+                <Row
+                  type="flex"
+                  align="middle"
+                  justify="space-between"
+                  gutter={30}
+                  style={{ marginTop: '10px' }}
+                >
+                  <Col>
+                    <span>Trade Date</span>
+                    <RangePicker
+                      format="YYYY-MM-DD"
+                      placeholder={['Start Date', 'End Date']}
+                      style={{ width: '180px' }}
+                    />
+                  </Col>
+                  <Col>
+                    <span>Market</span>
+                    <Select placeholder="Please Select" style={{ width: '120px' }}>
+                      {functionNameOptions.map(item => (
+                        <Option key={item.key} value={item.value}>
+                          {item.title}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Col>
+                  <Col>
+                    <span className={styles.startProcessingBtn} onClick={this.startProcessing}>
+                      Start Processing
+                    </span>
+                  </Col>
+                </Row>
+                <Modal
+                  title={formatMessage({ id: 'app.common.confirm' })}
+                  visible={dataProcessingVisible}
+                  onOk={this.dataProcessingConfirm}
+                  onCancel={this.dataProcessingCancel}
+                  cancelText={formatMessage({ id: 'app.common.cancel' })}
+                  okText={formatMessage({ id: 'app.common.confirm' })}
+                >
+                  {dataProcessingFlag ? (
+                    <div>
+                      <Progress percent={50} status="active" />
+                      <p style={{ textAlign: 'left' }}>
+                        Processed：<span>1234</span> records
+                      </p>
+                      <p style={{ textAlign: 'left' }}>
+                        Pending to process：<span>1234</span> records
+                      </p>
+                    </div>
+                  ) : (
+                    <span>There are still 10 outstanding alerts. Do you want to bypass all?</span>
+                  )}
+                </Modal>
+                <ul className={styles.startProcessingWraper}>
+                  <li>
+                    <span>Records Received from ECP：</span>
+                    <span>12</span>
+                  </li>
+                  <li>
+                    <span>Records Imported by user：</span>
+                    <span>10</span>
+                  </li>
+                  <li>
+                    <span>TO Records Eliminated：</span>
+                    <span>8</span>
+                  </li>
+                  <li>
+                    <span>Duplicated Records Eliminated：</span>
+                    <span>6</span>
+                  </li>
+                  <li>
+                    <span>Late Submission：</span>
+                    <span>3</span>
+                  </li>
+                  <li>
+                    <span>Adjustment of Stock Options Records for Format Conversion：</span>
+                    <span>0</span>
+                  </li>
+                </ul>
+                <ul className={styles.startProcessingWraper}>
+                  <li>
+                    <span>The last time of data processing is at 10:55 on 12/12/2019</span>
+                  </li>
+                </ul>
               </Col>
-              <Col span={12} cassName={styles.dataItemTable}>
+              <Col span={10} cassName={styles.dataItemTable}>
                 <div className={styles.tableTop}>
                   <Button
                     onClick={this.addCode}
@@ -222,6 +343,15 @@ export default class DataProcessing extends Component {
                   total={dataProcessingItemData.totalCount}
                   pageSize={itemPage.pageSize}
                 />
+                <Row
+                  type="flex"
+                  align="middle"
+                  justify="end"
+                  gutter={30}
+                  style={{ marginTop: '10px' }}
+                >
+                  <span className={styles.startProcessingBtn}>Enter Alert Center</span>
+                </Row>
               </Col>
             </Row>
           </div>

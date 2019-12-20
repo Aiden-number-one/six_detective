@@ -32,9 +32,9 @@ export async function claimTask({ taskCode }) {
   return request('set_task_claim', { data: { taskCode: taskCode.join(',') } });
 }
 
-export async function setTaskSave({ taskCode, epCname }) {
+export async function setTaskSave(data) {
   return request('set_approval_task_data_save', {
-    data: { taskCode: taskCode.toString(), epCname },
+    data,
   });
 }
 
@@ -43,9 +43,9 @@ export async function setTaskSubmit({ taskCode, userId, epCname }) {
     data: { taskCode: taskCode.toString(), userId: userId.toString(), epCname },
   });
 }
-export async function approveAndReject({ taskCode, userId, type, epCname, comment }) {
+export async function approveAndReject(data) {
   return request('set_task_approve_and_reject', {
-    data: { taskCode: taskCode.toString(), userId: userId.toString(), type, epCname, comment },
+    data,
   });
 }
 export async function setTaskWithdraw({ taskCode, comment }) {
@@ -94,6 +94,7 @@ export default {
     assignRadioList: [],
     taskGroup: '',
     taskHistoryList: [],
+    logList: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -142,10 +143,11 @@ export default {
     },
 
     saveTaskHistory(state, { payload }) {
-      const { taskHistoryList } = payload;
+      const { taskHistoryList, logList } = payload;
       return {
         ...state,
         taskHistoryList,
+        logList,
       };
     },
   },
@@ -196,8 +198,8 @@ export default {
       }
     },
     *saveTask({ payload }, { call }) {
-      const { taskCode, epCname } = payload || [];
-      const { err } = yield call(setTaskSave, { taskCode, epCname });
+      // const { taskCode, epCname } = payload || [];
+      const { err } = yield call(setTaskSave, payload);
       if (err) {
         message.error('save failure');
       } else {
@@ -214,8 +216,8 @@ export default {
       }
     },
     *approveAndReject({ payload, callback }, { call }) {
-      const { taskCode, userId, type, epCname, comment } = payload || [];
-      const { err } = yield call(approveAndReject, { taskCode, userId, type, epCname, comment });
+      // const { taskCode, userId, type, epCname, comment, attachment } = payload || [];
+      const { err } = yield call(approveAndReject, payload);
       if (err) {
         message.error('failure');
       } else {
@@ -295,6 +297,7 @@ export default {
         type: 'saveTaskHistory',
         payload: {
           taskHistoryList: items.approvalHistory,
+          logList: items.taskLifecycle,
         },
       });
     },

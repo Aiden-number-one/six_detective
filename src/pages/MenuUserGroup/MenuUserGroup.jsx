@@ -35,6 +35,7 @@ class MenuUserGroup extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          align: 'center',
           minWidth: 60,
           render: (res, recode, index) => (
             <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
@@ -44,11 +45,13 @@ class MenuUserGroup extends Component {
           title: formatMessage({ id: 'systemManagement.userMaintenance.menuGroupName' }),
           dataIndex: 'groupName',
           key: 'groupName',
+          align: 'center',
         },
         {
           title: formatMessage({ id: 'systemManagement.userGroup.remark' }),
           dataIndex: 'groupDesc',
           key: 'groupDesc',
+          align: 'center',
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),

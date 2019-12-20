@@ -42,6 +42,7 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
+        align: 'center',
         minWidth: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
@@ -56,11 +57,13 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'app.common.username' }),
         dataIndex: 'userName',
         key: 'userName',
+        align: 'center',
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
         dataIndex: 'accountLock',
         key: 'accountLock',
+        align: 'center',
         render: (res, obj) => (
           <div>
             <span>{lockedFormat(obj.accountLock)}</span>
@@ -71,6 +74,7 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
         dataIndex: 'updateTime',
         key: 'updateTime',
+        align: 'center',
         render: (res, obj) => (
           <div>
             <span>{obj.updateTime && timeFormat(obj.updateTime).t1}</span>
@@ -83,6 +87,7 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
         dataIndex: 'updateBy',
         key: 'updateBy',
+        align: 'center',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),

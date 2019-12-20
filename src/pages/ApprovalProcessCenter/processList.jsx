@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Button, Modal, Input, Radio, Drawer } from 'antd';
+import moment from 'moment';
+import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 // import { ConfirmModel } from './component/ConfirmModel';
 import { GetQueryString } from '@/utils/utils';
@@ -38,11 +40,19 @@ function TaskBtn({
   return (
     <Row className={styles.btns}>
       <Col span={12}>
-        <Button disabled={!selectedKeys.length} onClick={() => claimOk(selectedKeys)}>
+        <Button
+          className="btn_usual"
+          disabled={!selectedKeys.length}
+          onClick={() => claimOk(selectedKeys)}
+        >
           <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.claim" />
         </Button>
-        <Button disabled={!selectedKeys.length} onClick={() => setVisible(true)}>
+        <Button
+          className="btn_usual"
+          disabled={!selectedKeys.length}
+          onClick={() => setVisible(true)}
+        >
           <IconFont type="iconicon_assign" className={styles['btn-icon']} />
           Assign
         </Button>
@@ -287,13 +297,18 @@ function ProcessList({
         <Column align="center" dataIndex="classification" title="CLASSIFICATION" />
         <Column align="center" dataIndex="submitterName" title="SUBMITTER NAME" />
         <Column align="center" dataIndex="details" title="DETAILS" />
-        <Column align="center" dataIndex="updateDate" title="UPDATE DATE" />
+        <Column
+          align="center"
+          dataIndex="updateDate"
+          title="UPDATE DATE"
+          render={(text, record) => moment(record.updateDate).format(timestampFormat)}
+        />
         <Column dataIndex="owner" title="OWNER" />
         <Column align="center" dataIndex="statusDesc" title="statusDesc" />
         <Column
           align="center"
           dataIndex="action"
-          title={<FormattedMessage id="alert-center.action" />}
+          title={<FormattedMessage id="alert-center.actions" />}
           render={(text, record) => (
             <Row className={styles.btns}>
               <IconFont
