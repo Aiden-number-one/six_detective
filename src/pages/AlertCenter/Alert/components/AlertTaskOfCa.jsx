@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table /* Descriptions */ } from 'antd';
-import { FormattedMessage, formatMessage } from 'umi/locale';
-import Link from 'umi/link';
+import { FormattedMessage } from 'umi/locale';
+import { WorkflowBtn } from './AlertTaskOfEp';
 
 const { Column } = Table;
 
@@ -59,14 +59,7 @@ export default function({ dataSource, loading, getSelectedRows }) {
         align="center"
         dataIndex="action"
         title={<FormattedMessage id="alert-center.actions" />}
-        render={(text, record) => (
-          <Link
-            to={`/alert-management/Approval-Process-Center?taskcode=${record.TASK_ID}`}
-            title={formatMessage({ id: 'alert-center.enter-workflow' })}
-          >
-            <FormattedMessage id="alert-center.enter-workflow" />
-          </Link>
-        )}
+        render={(text, record) => <WorkflowBtn record={record} />}
       />
     </Table>
   );

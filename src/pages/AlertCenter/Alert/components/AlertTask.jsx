@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Button } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
+import { Icon } from 'antd';
 import styles from '@/pages/AlertCenter/index.less';
+import IconFont from '@/components/IconFont';
 import AlertTaskModal from './AlertTaskModal';
 import AlertTaskOfEp from './AlertTaskOfEp';
 import AlertTaskOfProduct from './AlertTaskOfProduct';
@@ -50,9 +51,16 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId, alertId }, alertIt
         handleCancel={() => setVisible(false)}
         assignUser={handleAssignUser}
       />
-      <Button style={{ marginBottom: 10 }} disabled={!selectedRows.length} onClick={showUsers}>
-        <FormattedMessage id="alert-center.assign" />
-      </Button>
+      <div className={styles.btns}>
+        <button type="button" disabled={!selectedRows.length} onClick={showUsers}>
+          {loading['alertCenter/fetchAssignUsers'] ? (
+            <Icon type="loading" className={styles['btn-icon']} />
+          ) : (
+            <IconFont type="iconicon_assign-copy" className={styles['btn-icon']} />
+          )}
+          <FormattedMessage id="alert-center.assign" />
+        </button>
+      </div>
       {AlertTaskType && (
         <AlertTaskType
           dataSource={alertItems}

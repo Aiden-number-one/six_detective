@@ -18,11 +18,11 @@ function CustomEmpty({ className = '', style = {} }) {
 
 function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
   const [isFullscreen, setFullscreen] = useState(false);
-  const { alertTypeId, alertId, itemsTotal } = alert;
 
   useEffect(() => {
+    const { alertTypeId, alertId, itemsTotal } = alert;
     // no items
-    if (+alertTypeId !== 101) {
+    if (+itemsTotal !== 0) {
       dispatch({
         type: 'alertCenter/fetchAlertItems',
         payload: {
@@ -44,7 +44,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
         alertId,
       },
     });
-  }, [alertTypeId, alertId]);
+  }, [alert]);
 
   async function handleCommit(comment, fileList) {
     await dispatch({
@@ -80,7 +80,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
           >
             <AlertDes alert={alert} />
           </TabPane>
-          {+itemsTotal !== 0 && (
+          {+alert.itemsTotal !== 0 && (
             <TabPane
               key="2"
               className={styles['tab-content']}

@@ -57,6 +57,15 @@ export async function assignAlertItem({ taskIds, userId }) {
 export async function closeAlert({ alertIds }) {
   return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
 }
+export async function exportAlert({ fileType }) {
+  return request('set_data_file_export', {
+    data: {
+      apiName: 'bayconnect.superlop.get_alert_center_page_list',
+      apiVersion: 'v2.0',
+      fileType,
+    },
+  });
+}
 export default {
   namespace: 'alertCenter',
   state: {
@@ -255,6 +264,12 @@ export default {
       yield put({
         type: 'fetch',
       });
+    },
+    *export({ payload }, { call }) {
+      const { err } = yield call(exportAlert, payload);
+      if (err) {
+        yield Promise.reject(err);
+      }
     },
   },
 };

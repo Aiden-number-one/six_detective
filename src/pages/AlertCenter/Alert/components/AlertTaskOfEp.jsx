@@ -5,6 +5,18 @@ import Link from 'umi/link';
 
 const { Column } = Table;
 
+export function WorkflowBtn({ record }) {
+  return (
+    <Link
+      disabled={!record.USER_NAME}
+      to="/alert-management/Approval-Process-Center"
+      title={formatMessage({ id: 'alert-center.enter-workflow' })}
+    >
+      <FormattedMessage id="alert-center.enter-workflow" />
+    </Link>
+  );
+}
+
 export default function({ dataSource, loading, getSelectedRows }) {
   return (
     <Table
@@ -25,13 +37,6 @@ export default function({ dataSource, loading, getSelectedRows }) {
           getSelectedRows(selectedRows);
         },
       }}
-      // expandedRowRender={record => (
-      //   <Descriptions column={3}>
-      //     <Descriptions.Item label={<FormattedMessage id="alert-center.task-id" />}>
-      //       {record.TASK_ID}
-      //     </Descriptions.Item>
-      //   </Descriptions>
-      // )}
     >
       <Column
         align="center"
@@ -61,14 +66,7 @@ export default function({ dataSource, loading, getSelectedRows }) {
         align="center"
         dataIndex="action"
         title={<FormattedMessage id="alert-center.actions" />}
-        render={(text, record) => (
-          <Link
-            to={`/alert-management/Approval-Process-Center?taskcode=${record.TASK_ID}`}
-            title={formatMessage({ id: 'alert-center.enter-workflow' })}
-          >
-            <FormattedMessage id="alert-center.enter-workflow" />
-          </Link>
-        )}
+        render={(text, record) => <WorkflowBtn record={record} />}
       />
     </Table>
   );
