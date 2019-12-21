@@ -132,15 +132,24 @@
     overflow: hidden;
     background-color: #fff;
   }
+  :global {
+    .ant-descriptions-item-label,
+    .ant-descriptions-item-content {
+      font-size: 12px;
+    }
+    .ant-tabs-nav .ant-tabs-tab-active {
+      color: #464c51;
+    }
+    .ant-tabs-nav .ant-tabs-tab:hover {
+      color: #464c51;
+    }
+    .ant-tabs-ink-bar {
+      background-color: #f8374c;
+    }
+  }
   .detail-des {
     background-color: #fff;
     box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
-    :global {
-      .ant-descriptions-item-label,
-      .ant-descriptions-item-content {
-        font-size: 12px;
-      }
-    }
     .fullscreen-icon {
       margin: 14px 14px 0 0;
       font-size: 22px;
