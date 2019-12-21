@@ -43,22 +43,27 @@ function TaskBtn({
   return (
     <Row className={styles.btns}>
       <Col span={12}>
-        <Button
-          className="btn_usual"
-          disabled={!selectedKeys.length}
-          onClick={() => claimOk(selectedKeys)}
-        >
-          <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
-          <FormattedMessage id="alert-center.claim" />
-        </Button>
-        <Button
-          className="btn_usual"
-          disabled={!selectedKeys.length}
-          onClick={() => setVisible(true)}
-        >
-          <IconFont type="iconicon_assign" className={styles['btn-icon']} />
-          Assign
-        </Button>
+        {selectedCurrentTask !== 'his' ? (
+          <>
+            <Button
+              className="btn_usual"
+              disabled={!selectedKeys.length}
+              onClick={() => claimOk(selectedKeys)}
+            >
+              <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
+              <FormattedMessage id="alert-center.claim" />
+            </Button>
+            <Button
+              className="btn_usual"
+              disabled={!selectedKeys.length}
+              onClick={() => setVisible(true)}
+            >
+              <IconFont type="iconicon_assign" className={styles['btn-icon']} />
+              Assign
+            </Button>
+          </>
+        ) : null}
+
         {/* <Button disabled={!selectedKeys.length} onClick={() => setTaskWithdraw(selectedKeys)}>
           <IconFont type="iconicon_withdraw1 " className={styles['btn-icon']} />
           Withdraw
@@ -306,23 +311,25 @@ function ProcessList({
         />
         <Column dataIndex="owner" title="OWNER" />
         <Column align="center" dataIndex="statusDesc" title="STATUS" />
-        <Column
-          align="center"
-          dataIndex="action"
-          title={<FormattedMessage id="alert-center.actions" />}
-          render={(text, record) => (
-            <Row className={styles.btns}>
-              <IconFont
-                type="iconqizhi"
-                className={styles.icon}
-                title={formatMessage({ id: 'alert-center.claim' })}
-                onClick={() => {
-                  claimTask([record.taskCode]);
-                }}
-              />
-            </Row>
-          )}
-        />
+        {selectedCurrentTask !== 'his' ? (
+          <Column
+            align="center"
+            dataIndex="action"
+            title={<FormattedMessage id="alert-center.actions" />}
+            render={(text, record) => (
+              <Row className={styles.btns}>
+                <IconFont
+                  type="iconqizhi"
+                  className={styles.icon}
+                  title={formatMessage({ id: 'alert-center.claim' })}
+                  onClick={() => {
+                    claimTask([record.taskCode]);
+                  }}
+                />
+              </Row>
+            )}
+          />
+        ) : null}
       </Table>
     </div>
   );
