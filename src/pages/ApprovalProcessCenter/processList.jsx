@@ -6,7 +6,7 @@ import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 // import { ConfirmModel } from './component/ConfirmModel';
-import { GetQueryString } from '@/utils/utils';
+// import { GetQueryString } from '@/utils/utils';
 import styles from './index.less';
 
 const { Column } = Table;
@@ -17,11 +17,15 @@ export const DEFAULT_PAGE_SIZE = 10;
 
 function TabBtn({ changeTab }) {
   return (
-    <Row className={styles.btns}>
+    <Row className={styles.btns} style={{ marginBottom: '15px' }}>
       <Col span={12}>
-        <Radio.Group defaultValue="all" onChange={e => changeTab(e.target.value)}>
-          <Radio.Button value="all">All Task</Radio.Button>
-          <Radio.Button value="my">My task</Radio.Button>
+        <Radio.Group
+          defaultValue="my"
+          buttonStyle="solid"
+          onChange={e => changeTab(e.target.value)}
+        >
+          <Radio.Button value="all">All Tasks</Radio.Button>
+          <Radio.Button value="my">My Tasks</Radio.Button>
           <Radio.Button value="his">History</Radio.Button>
         </Radio.Group>
       </Col>
@@ -32,7 +36,6 @@ function TaskBtn({
   selectedKeys,
   selectedCurrentTask,
   searchTask,
-  urlTaskCode,
   claimOk,
   setVisible,
   exportAlert,
@@ -68,7 +71,6 @@ function TaskBtn({
       <Col span={6}>
         <Search
           placeholder="search"
-          defaultValue={urlTaskCode}
           onSearch={value => searchTask(selectedCurrentTask, value)}
           style={{ width: 264, height: 36 }}
         />
@@ -88,18 +90,18 @@ function ProcessList({
   setCurrentTaskType,
 }) {
   const [selectedKeys, setSelectedKeys] = useState([]);
-  const [selectedCurrentTask, setSelectedTasks] = useState('all');
+  const [selectedCurrentTask, setSelectedTasks] = useState('my');
   const [currentPage, setcurrentPage] = useState('1');
   const [currentRow, setcurrentRow] = useState('1');
   const [visible, setVisible] = useState(false);
   const [radioValue, setRadioValue] = useState('');
-  const urlTaskCode = GetQueryString('taskcode');
+  // const urlTaskCode = GetQueryString('taskcode');
   console.log('selectedCurrentTask------>', selectedCurrentTask);
   useEffect(() => {
     dispatch({
       type: 'approvalCenter/fetch',
       payload: {
-        taskCode: urlTaskCode,
+        type: selectedCurrentTask,
       },
     });
     dispatch({
@@ -241,7 +243,6 @@ function ProcessList({
         selectedKeys={selectedKeys}
         selectedCurrentTask={selectedCurrentTask}
         searchTask={searchTask}
-        urlTaskCode={urlTaskCode}
         claimOk={claimOk}
         setTaskAssign={setTaskAssign}
         setVisible={setVisible}
@@ -304,7 +305,7 @@ function ProcessList({
           render={(text, record) => moment(record.updateDate).format(timestampFormat)}
         />
         <Column dataIndex="owner" title="OWNER" />
-        <Column align="center" dataIndex="statusDesc" title="statusDesc" />
+        <Column align="center" dataIndex="statusDesc" title="STATUS" />
         <Column
           align="center"
           dataIndex="action"
