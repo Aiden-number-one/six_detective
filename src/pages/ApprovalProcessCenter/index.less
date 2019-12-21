@@ -1,62 +1,72 @@
 :global {
-  .ant-table-thead tr th {
-    background-color: #fff;
-  }
-  .ant-table-tbody tr {
-    &.active {
-      color: #10416c;
-      background: rgba(242, 246, 248, 1);
-    }
-  }
-  .ant-list-bordered .ant-list-header {
-    padding: 0;
-  }
-  .ant-radio-wrapper {
-    display: block;
-  }
-  .ant-input[disabled] {
-    color: rgba(0, 0, 0, 0.25);
-    background-color: #fff;
-    border: none;
-  }
-  .ant-btn {
-    width: auto !important;
-    &:last-child {
-      margin-right: 0;
-    }
-  }
   .proLayout .ant-select-selection,
   .ant-drawer-right .ant-select-selection,
   .ant-popover-inner-content .ant-select-selection {
-    background-color: unset;
+    background-color: unset !important;
     border: 1px solid rgba(151, 154, 168, 1) !important;
     border: 1px solid transparent;
     border-radius: 1px;
   }
-  .ant-radio-button-wrapper {
-    width: 85px;
-    height: 30px;
-    color: rgba(16, 65, 108, 1);
-    font-weight: 500;
-    font-size: 9px;
-    font-family: Avenir, sans-serif;
-    text-align: center;
-    background: rgba(244, 244, 244, 1);
-    border: none;
-    border-radius: 2px;
-  }
-  .ant-radio-button-wrapper:first-child {
-    border: none;
-  }
-  .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-    background: rgba(13, 135, 212, 1);
-    border-radius: 2px;
-    box-shadow: unset;
+  .ant-radio-wrapper {
+    display: block;
   }
 }
-
 .list-container {
   padding: 0 4px;
+  :global {
+    .ant-table-thead tr th {
+      background-color: #fff;
+    }
+    .ant-table-tbody tr {
+      &.active {
+        color: #10416c;
+        background: rgba(242, 246, 248, 1);
+      }
+    }
+    .ant-list-bordered .ant-list-header {
+      padding: 0;
+    }
+    .ant-input[disabled] {
+      color: rgba(0, 0, 0, 0.25);
+      background-color: #fff;
+      border: none;
+    }
+    .ant-btn {
+      width: auto;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    .ant-radio-button-wrapper {
+      width: 85px;
+      height: 30px;
+      color: rgba(16, 65, 108, 1);
+      font-weight: 500;
+      font-size: 9px;
+      font-family: Avenir, sans-serif;
+      text-align: center;
+      background: rgba(244, 244, 244, 1);
+      border: none;
+      border-radius: 2px;
+    }
+    .ant-radio-button-wrapper:first-child {
+      border: none;
+    }
+    .ant-radio-group-solid
+      .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+      background: rgba(13, 135, 212, 1);
+      border-radius: 2px;
+      box-shadow: unset;
+    }
+    .proLayout .ant-input-disabled,
+    .ant-drawer-right .ant-input-disabled,
+    .ant-popover-inner-content .ant-input-disabled {
+      background-color: #fff !important;
+      border: none !important;
+    }
+  }
+
   .list {
     margin-bottom: 20px;
     padding: 10px;

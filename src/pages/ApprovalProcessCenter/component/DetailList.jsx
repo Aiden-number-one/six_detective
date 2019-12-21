@@ -6,11 +6,11 @@ import { Input, Form, Radio, Select } from 'antd';
 const { TextArea } = Input;
 const { Option } = Select;
 
-function NewEP({ detailData, getFieldDecorator }) {
+function NewEP({ detailData, getFieldDecorator, isShowForm }) {
   return (
     <>
       <Form.Item label="Market" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
-        {getFieldDecorator('Market', {
+        {getFieldDecorator('market', {
           initialValue: detailData.market,
         })(<Input disabled />)}
       </Form.Item>
@@ -22,7 +22,7 @@ function NewEP({ detailData, getFieldDecorator }) {
       <Form.Item label="EP Name" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('epName', {
           initialValue: detailData.epName,
-        })(<Input />)}
+        })(<Input disabled={!isShowForm} />)}
       </Form.Item>
     </>
   );
@@ -33,6 +33,7 @@ function NewProduct({
   setRadioCurrentValue,
   radioPdValue,
   setRadioPdValue,
+  isShowForm,
 }) {
   return (
     <>
@@ -50,14 +51,18 @@ function NewProduct({
         {getFieldDecorator('isCaCode', {
           initialValue: detailData.isCaCode,
         })(
-          <Radio.Group onChange={e => setRadioCurrentValue(e.target.value)}>
-            <Radio style={{ display: 'inline' }} value="Yes">
-              yes
-            </Radio>
-            <Radio style={{ display: 'inline' }} value="No">
-              no
-            </Radio>
-          </Radio.Group>,
+          isShowForm ? (
+            <Radio.Group onChange={e => setRadioCurrentValue(e.target.value)}>
+              <Radio style={{ display: 'inline' }} value="Yes">
+                yes
+              </Radio>
+              <Radio style={{ display: 'inline' }} value="No">
+                no
+              </Radio>
+            </Radio.Group>
+          ) : (
+            <Input disabled />
+          ),
         )}
       </Form.Item>
       <Form.Item label="Product code" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
@@ -68,45 +73,57 @@ function NewProduct({
       <Form.Item label="Product Description" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('productDesc', {
           initialValue: detailData.productDesc,
-        })(<Input />)}
+        })(<Input disabled={!isShowForm} />)}
       </Form.Item>
       <Form.Item label="Product Category" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('productCategory', {
           initialValue: detailData.productCategory,
         })(
-          <Select>
-            {detailData.productCategoryInit.split(',').map(item => (
-              <Option value={item} key={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>,
+          isShowForm ? (
+            <Select>
+              {detailData.productCategoryInit.split(',').map(item => (
+                <Option value={item} key={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          ) : (
+            <Input disabled />
+          ),
         )}
       </Form.Item>
       <Form.Item label="Futures or Option" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('contractNature', {
           initialValue: detailData.contractNature,
         })(
-          <Select>
-            {detailData.contractNatureInit.split(',').map(item => (
-              <Option value={item} key={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>,
+          isShowForm ? (
+            <Select>
+              {detailData.contractNatureInit.split(',').map(item => (
+                <Option value={item} key={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          ) : (
+            <Input disabled />
+          ),
         )}
       </Form.Item>
       <Form.Item label="Product Group" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('productGroup', {
           initialValue: detailData.productGroup,
         })(
-          <Select>
-            {detailData.productGroupInit.split(',').map(item => (
-              <Option value={item} key={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>,
+          isShowForm ? (
+            <Select>
+              {detailData.productGroupInit.split(',').map(item => (
+                <Option value={item} key={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          ) : (
+            <Input disabled />
+          ),
         )}
       </Form.Item>
       <Form.Item
@@ -117,13 +134,17 @@ function NewProduct({
         {getFieldDecorator('ltdTmplCode', {
           initialValue: detailData.ltdTmplCode,
         })(
-          <Select>
-            {detailData.ltdTmplCodeInit.split(',').map(item => (
-              <Option value={item} key={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>,
+          isShowForm ? (
+            <Select>
+              {detailData.ltdTmplCodeInit.split(',').map(item => (
+                <Option value={item} key={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          ) : (
+            <Input disabled />
+          ),
         )}
       </Form.Item>
       <Form.Item
@@ -134,13 +155,17 @@ function NewProduct({
         {getFieldDecorator('plTmplCode', {
           initialValue: detailData.plTmplCode,
         })(
-          <Select>
-            {detailData.plTmplCodeInit.split(',').map(item => (
-              <Option value={item} key={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>,
+          isShowForm ? (
+            <Select>
+              {detailData.plTmplCodeInit.split(',').map(item => (
+                <Option value={item} key={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          ) : (
+            <Input disabled />
+          ),
         )}
       </Form.Item>
       <Form.Item
@@ -151,27 +176,35 @@ function NewProduct({
         {getFieldDecorator('rlTmplCode', {
           initialValue: detailData.rlTmplCode,
         })(
-          <Select>
-            {detailData.rlTmplCodeInit.split(',').map(item => (
-              <Option value={item} key={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>,
+          isShowForm ? (
+            <Select>
+              {detailData.rlTmplCodeInit.split(',').map(item => (
+                <Option value={item} key={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          ) : (
+            <Input disabled />
+          ),
         )}
       </Form.Item>
       <Form.Item label="Is Calculate PD ?" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('isCalculatePd', {
           initialValue: detailData.isCalculatePd,
         })(
-          <Radio.Group onChange={e => setRadioPdValue(e.target.value)}>
-            <Radio style={{ display: 'inline' }} value="Yes">
-              yes
-            </Radio>
-            <Radio style={{ display: 'inline' }} value="No">
-              no
-            </Radio>
-          </Radio.Group>,
+          isShowForm ? (
+            <Radio.Group onChange={e => setRadioPdValue(e.target.value)} disabled={!isShowForm}>
+              <Radio style={{ display: 'inline' }} value="Yes">
+                yes
+              </Radio>
+              <Radio style={{ display: 'inline' }} value="No">
+                no
+              </Radio>
+            </Radio.Group>
+          ) : (
+            <Input disabled />
+          ),
         )}
       </Form.Item>
       {radioPdValue === 'Yes' ? (
@@ -183,7 +216,7 @@ function NewProduct({
           >
             {getFieldDecorator('sizeFactor', {
               initialValue: detailData.sizeFactor,
-            })(<Input />)}
+            })(<Input disabled={!isShowForm} />)}
           </Form.Item>
           <Form.Item
             label="Weighting Factor for Calculate PD"
@@ -192,14 +225,14 @@ function NewProduct({
           >
             {getFieldDecorator('weightFactor', {
               initialValue: detailData.weightFactor,
-            })(<Input />)}
+            })(<Input disabled={!isShowForm} />)}
           </Form.Item>
         </>
       ) : null}
     </>
   );
 }
-function CaCode({ detailData, getFieldDecorator, setRadioCurrentValue }) {
+function CaCode({ detailData, getFieldDecorator, setRadioCurrentValue, isShowForm }) {
   return (
     <>
       <Form.Item label="Market" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
@@ -216,14 +249,18 @@ function CaCode({ detailData, getFieldDecorator, setRadioCurrentValue }) {
         {getFieldDecorator('isCaCode', {
           initialValue: detailData.isCaCode,
         })(
-          <Radio.Group onChange={e => setRadioCurrentValue(e.target.value)}>
-            <Radio style={{ display: 'inline' }} value="Yes">
-              yes
-            </Radio>
-            <Radio style={{ display: 'inline' }} value="No">
-              no
-            </Radio>
-          </Radio.Group>,
+          isShowForm ? (
+            <Radio.Group onChange={e => setRadioCurrentValue(e.target.value)}>
+              <Radio style={{ display: 'inline' }} value="Yes">
+                yes
+              </Radio>
+              <Radio style={{ display: 'inline' }} value="No">
+                no
+              </Radio>
+            </Radio.Group>
+          ) : (
+            <Input disabled />
+          ),
         )}
       </Form.Item>
       <Form.Item label="Original Product code" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
@@ -244,7 +281,7 @@ function CaCode({ detailData, getFieldDecorator, setRadioCurrentValue }) {
       <Form.Item label="Remark " labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('remark', {
           initialValue: detailData.remark,
-        })(<TextArea />)}
+        })(isShowForm ? <TextArea /> : <Input disabled />)}
       </Form.Item>
     </>
   );
@@ -265,13 +302,21 @@ function DetailForm({ form, detailItem, task }) {
   console.log('radioCurrentValue---->', radioCurrentValue);
   useEffect(() => {
     setRadioCurrentValue(detailList.isCaCode);
+  }, [detailList.isCaCode]);
+  useEffect(() => {
     setRadioPdValue(detailList.isCalculatePd);
-  }, []);
+  }, [detailList.isCalculatePd]);
   return (
     <>
-      {isShowForm && detailList && (
+      {detailList && (
         <Form>
-          {alertType === '301' && <NewEP detailData={detailList} />}
+          {alertType === '301' && (
+            <NewEP
+              detailData={detailList}
+              getFieldDecorator={getFieldDecorator}
+              isShowForm={isShowForm}
+            />
+          )}
           {alertType === '302' &&
             (radioCurrentValue === 'No' ? (
               <NewProduct
@@ -280,12 +325,14 @@ function DetailForm({ form, detailItem, task }) {
                 setRadioCurrentValue={setRadioCurrentValue}
                 radioPdValue={radioPdValue}
                 setRadioPdValue={setRadioPdValue}
+                isShowForm={isShowForm}
               />
             ) : (
               <CaCode
                 detailData={detailList}
                 getFieldDecorator={getFieldDecorator}
                 setRadioCurrentValue={setRadioCurrentValue}
+                isShowForm={isShowForm}
               />
             ))}
           {alertType === '303' &&
@@ -294,6 +341,7 @@ function DetailForm({ form, detailItem, task }) {
                 detailData={detailList}
                 getFieldDecorator={getFieldDecorator}
                 setRadioCurrentValue={setRadioCurrentValue}
+                isShowForm={isShowForm}
               />
             ) : (
               <NewProduct
@@ -302,6 +350,7 @@ function DetailForm({ form, detailItem, task }) {
                 setRadioCurrentValue={setRadioCurrentValue}
                 radioPdValue={radioPdValue}
                 setRadioPdValue={setRadioPdValue}
+                isShowForm={isShowForm}
               />
             ))}
         </Form>

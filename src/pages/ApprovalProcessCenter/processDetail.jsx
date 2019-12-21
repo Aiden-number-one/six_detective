@@ -389,13 +389,17 @@ function ProcessDetail({
 
                     {detailItems[0] && detailItems[0].isStarter ? (
                       <>
-                        <Col span={4}>
-                          <Button type="primary" onClick={saveTask}>
+                        <Col span={6}>
+                          <Button style={{ width: '80px' }} type="primary" onClick={saveTask}>
                             Save
                           </Button>
                         </Col>
                         <Col span={6} align="right">
-                          <Button type="primary" onClick={() => submitDrawer('submit')}>
+                          <Button
+                            style={{ width: '80px' }}
+                            type="primary"
+                            onClick={() => submitDrawer('submit')}
+                          >
                             Submit
                           </Button>
                         </Col>
