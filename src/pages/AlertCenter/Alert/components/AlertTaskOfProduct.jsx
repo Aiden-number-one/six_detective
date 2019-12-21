@@ -1,11 +1,10 @@
 import React from 'react';
 import { Table } from 'antd';
 import { FormattedMessage } from 'umi/locale';
-import { WorkflowBtn } from './AlertTaskOfEp';
 
 const { Column } = Table;
 
-export default function({ dataSource, loading, getSelectedRows }) {
+export default function({ dataSource, loading, getSelectedRows, renderAction }) {
   return (
     <Table
       border
@@ -54,13 +53,7 @@ export default function({ dataSource, loading, getSelectedRows }) {
         dataIndex="TASK_STATUS_DESC"
         title={<FormattedMessage id="alert-center.status" />}
       />
-      <Column
-        ellipsis
-        align="center"
-        dataIndex="action"
-        title={<FormattedMessage id="alert-center.actions" />}
-        render={(text, record) => <WorkflowBtn record={record} />}
-      />
+      {renderAction()}
     </Table>
   );
 }

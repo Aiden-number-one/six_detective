@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { FormattedMessage } from 'umi/locale';
+import { FormattedMessage, formatMessage } from 'umi/locale';
+import Link from 'umi/link';
 import { connect } from 'dva';
-import { Icon } from 'antd';
+import { Icon, Table } from 'antd';
 import styles from '@/pages/AlertCenter/index.less';
 import IconFont from '@/components/IconFont';
 import AlertTaskModal from './AlertTaskModal';
@@ -66,6 +67,23 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId, alertId }, alertIt
           dataSource={alertItems}
           loading={loading}
           getSelectedRows={rows => setSelectedRows(rows)}
+          renderAction={() => (
+            <Table.Column
+              width="15%"
+              align="center"
+              dataIndex="action"
+              title={<FormattedMessage id="alert-center.actions" />}
+              render={(text, record) => (
+                <Link
+                  disabled={!record.USER_NAME}
+                  to="/homepage/Approval-Process-Center"
+                  title={formatMessage({ id: 'alert-center.enter-workflow' })}
+                >
+                  <FormattedMessage id="alert-center.enter-workflow" />
+                </Link>
+              )}
+            />
+          )}
         />
       )}
     </div>
