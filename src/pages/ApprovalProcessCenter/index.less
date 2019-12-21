@@ -1,3 +1,16 @@
+:global {
+  .proLayout .ant-select-selection,
+  .ant-drawer-right .ant-select-selection,
+  .ant-popover-inner-content .ant-select-selection {
+    background-color: unset !important;
+    border: 1px solid rgba(151, 154, 168, 1) !important;
+    border: 1px solid transparent;
+    border-radius: 1px;
+  }
+  .ant-radio-wrapper {
+    display: block;
+  }
+}
 .list-container {
   padding: 0 4px;
   :global {
@@ -13,9 +26,6 @@
     .ant-list-bordered .ant-list-header {
       padding: 0;
     }
-    .ant-radio-wrapper {
-      display: block;
-    }
     .ant-input[disabled] {
       color: rgba(0, 0, 0, 0.25);
       background-color: #fff;
@@ -27,14 +37,7 @@
         margin-right: 0;
       }
     }
-    .proLayout .ant-select-selection,
-    .ant-drawer-right .ant-select-selection,
-    .ant-popover-inner-content .ant-select-selection {
-      background-color: unset;
-      border: 1px solid rgba(151, 154, 168, 1) !important;
-      border: 1px solid transparent;
-      border-radius: 1px;
-    }
+
     .ant-radio-button-wrapper {
       width: 85px;
       height: 30px;
