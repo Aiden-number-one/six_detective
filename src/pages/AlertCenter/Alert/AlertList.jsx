@@ -16,6 +16,8 @@ const { Column } = Table;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
+const allColumns = ['alertId', 'alertType', 'tradeDate', 'alertTime', 'itemsTotal', 'userName'];
+let conditions = [];
 function Title({ dispatch, loading, filterItems, tableColumn, id }) {
   function handleFilterItems() {
     dispatch({
@@ -28,19 +30,27 @@ function Title({ dispatch, loading, filterItems, tableColumn, id }) {
   }
 
   async function handleCommit(condition) {
+    const curCondition = conditions.find(item => item.column === condition.column);
+    if (curCondition) {
+      conditions = conditions.map(item => ({ ...item, ...condition }));
+    } else {
+      conditions.push(condition);
+    }
+
     dispatch({
       type: 'alertCenter/fetch',
       payload: {
         currentColumn: tableColumn,
-        conditions: [condition],
+        conditions,
       },
     });
   }
   return (
     <ColumnTitle
       isNum={tableColumn === 'itemsTotal'}
-      tableColumn={tableColumn}
-      loading={loading}
+      allColumns={allColumns}
+      curColumn={tableColumn}
+      loading={loading['global/fetchTableFilterItems']}
       filterItems={filterItems}
       getFilterItems={handleFilterItems}
       handleCommit={handleCommit}
@@ -50,8 +60,8 @@ function Title({ dispatch, loading, filterItems, tableColumn, id }) {
   );
 }
 
-const WrapTitle = connect(({ global: { filterItems } }) => ({
-  loading: false,
+const WrapTitle = connect(({ loading, global: { filterItems } }) => ({
+  loading: loading.effects,
   filterItems,
 }))(Title);
 
@@ -123,22 +133,26 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
       const curAlert = alert && alerts.find(item => item.alertId === alert.alertId);
       // should be latest alert,owner and status has been changed
       setAlert(curAlert || firstAlert);
+    } else {
+      setAlert(null);
     }
   }, [alerts]);
 
   // check latest claim state
   useEffect(() => {
-    claimInfos.forEach(item => {
-      if (item.userName) {
-        const text = isBatchAction ? (
-          <div>some alerts has been claimed</div>
-        ) : (
-          <div>this alert has been claimed by {item.userName}</div>
-        );
-        setClaimContent(text);
-        setClaimVisible(true);
-      }
-    });
+    if (claimInfos && claimInfos.length > 0) {
+      claimInfos.forEach(item => {
+        if (item.userName) {
+          const text = isBatchAction ? (
+            <div>some alerts has been claimed</div>
+          ) : (
+            <div>this alert has been claimed by {item.userName}</div>
+          );
+          setClaimContent(text);
+          setClaimVisible(true);
+        }
+      });
+    }
   }, [claimInfos]);
 
   function handlePageChange(page, pageSize) {
