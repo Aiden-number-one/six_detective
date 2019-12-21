@@ -197,7 +197,7 @@ function ProcessList({
     <div className={styles.list}>
       <ConfirmModel
         title="CONFIRM"
-        content={`This task has been claimed by [${detailItems[0].ownerId}]
+        content={`This task has been claimed by [${detailItems[0] && detailItems[0].ownerId}]
         Do you confirm to re-claim`}
         closeModel={() => setConfirmVisible(false)}
         confirmVisible={confirmVisible}
