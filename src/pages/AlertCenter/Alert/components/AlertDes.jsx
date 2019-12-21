@@ -31,7 +31,7 @@ export default function({
         {moment(tradeDate).format(dateFormat)}
       </Descriptions.Item>
       <Descriptions.Item label={<FormattedMessage id="alert-center.alert-timestamp" />}>
-        {moment(alertTime).format(timestampFormat)}
+        {moment(alertTime, timestampFormat).format(timestampFormat)}
       </Descriptions.Item>
       {submissionTime && (
         <Descriptions.Item label={<FormattedMessage id="alert-center.submission-time" />}>
