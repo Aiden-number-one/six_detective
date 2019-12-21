@@ -315,7 +315,9 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             align="center"
             dataIndex="alertTime"
             title={<WrapTitle tableColumn="alertTime" id="alert-timestamp" />}
-            render={(text, record) => moment(record.alertTime).format(timestampFormat)}
+            render={(text, record) =>
+              moment(record.alertTime, timestampFormat).format(timestampFormat)
+            }
           />
           <Column
             align="center"
