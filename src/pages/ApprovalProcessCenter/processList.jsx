@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Col, Button, Modal, Input, Radio, Drawer } from 'antd';
+import { Table, Row, Col, Button, Input, Radio, Drawer } from 'antd';
 import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
-// import { ConfirmModel } from './component/ConfirmModel';
+import { ConfirmModel } from './component/ConfirmModel';
 // import { GetQueryString } from '@/utils/utils';
 import styles from './index.less';
 
@@ -100,6 +100,8 @@ function ProcessList({
   const [currentRow, setcurrentRow] = useState('1');
   const [visible, setVisible] = useState(false);
   const [radioValue, setRadioValue] = useState('');
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [clickCurrentTaskCode, setClickTaskCode] = useState('');
   // const urlTaskCode = GetQueryString('taskcode');
   console.log('selectedCurrentTask------>', selectedCurrentTask);
   useEffect(() => {
@@ -135,17 +137,9 @@ function ProcessList({
       },
     });
     // console.log('taskIds--->', taskCode);
-    if (detailItems.ownerId) {
-      Modal.confirm({
-        title: 'Confirm',
-        content: `This task has been claimed by [${detailItems.ownerId}]
-      Do you confirm to re-claim`,
-        okText: 'Sure',
-        cancelText: 'Cancel',
-        onOk: () => {
-          claimOk(taskCode);
-        },
-      });
+    if (detailItems[0].ownerId) {
+      setClickTaskCode(taskCode);
+      setConfirmVisible(true);
     } else {
       claimOk(taskCode);
     }
@@ -158,6 +152,7 @@ function ProcessList({
         taskCode,
       },
       callback: () => {
+        setConfirmVisible(false);
         dispatch({
           type: 'approvalCenter/fetch',
           payload: {
@@ -200,6 +195,14 @@ function ProcessList({
 
   return (
     <div className={styles.list}>
+      <ConfirmModel
+        title="CONFIRM"
+        content={`This task has been claimed by [${detailItems[0].ownerId}]
+        Do you confirm to re-claim`}
+        closeModel={() => setConfirmVisible(false)}
+        confirmVisible={confirmVisible}
+        comfirm={() => claimOk(clickCurrentTaskCode)}
+      />
       <Drawer
         title="Assign to"
         width={500}
