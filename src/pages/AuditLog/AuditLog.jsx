@@ -151,20 +151,25 @@ class AuditLog extends Component {
       if (err) {
         return;
       }
+      console.log('values===', values);
       const { logDate } = values;
       let logStartDate;
       let logEndDate;
       if (logDate && logDate.length > 0) {
-        logStartDate = moment(logDate[0]).format('YYYY-MM-DD');
-        logEndDate = moment(logDate[1]).format('YYYY-MM-DD');
+        logStartDate = `${moment(logDate[0]).format('YYYY-MM-DD')} 00:00:00`;
+        logEndDate = `${moment(logDate[1]).format('YYYY-MM-DD')} 23:59:59`;
       }
-      this.setState({
-        logStartDate,
-        logEndDate,
-        functionName: values.functionName,
-        updatedBy: values.updatedBy,
-      });
-      this.getAuditLog();
+      this.setState(
+        {
+          logStartDate,
+          logEndDate,
+          functionName: values.functionName,
+          updatedBy: values.updatedBy,
+        },
+        () => {
+          this.getAuditLog();
+        },
+      );
     });
   };
 
