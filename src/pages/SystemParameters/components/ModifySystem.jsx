@@ -53,22 +53,22 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'parameterValue couldn’t be null',
+                  message: 'Parameter Value couldn’t be null',
                 },
               ],
               initialValue: paramObj.parameterValue,
             })(<Input placeholder="Please input" />)}
           </Form.Item>
           <Form.Item
-            label={formatMessage({ id: 'app.common.note' })}
+            label={formatMessage({ id: 'app.common.remark' })}
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 10 }}
           >
-            {getFieldDecorator('note', {
+            {getFieldDecorator('Remark', {
               rules: [
                 {
                   required: true,
-                  message: 'Note couldn’t be null',
+                  message: 'Remark couldn’t be null',
                 },
               ],
               initialValue: paramObj.note,

@@ -152,7 +152,7 @@ class SystemParams extends Component {
           align: 'center',
         },
         {
-          title: formatMessage({ id: 'app.common.note' }),
+          title: formatMessage({ id: 'app.common.remark' }),
           dataIndex: 'note',
           key: 'note',
         },
