@@ -82,19 +82,20 @@ export default class MessageContentTemplate extends Component {
           dataIndex: 'content',
           key: 'content',
           ellipsis: true,
-          width: 200,
+          width: 180,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.keyword' }),
           dataIndex: 'keyWord',
           key: 'keyWord',
           ellipsis: true,
-          width: 200,
+          width: 180,
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),
           dataIndex: 'operation',
           key: 'operation',
+          width: 100,
           align: 'center',
           render: (res, obj) => (
             <span className={styles.operation}>
