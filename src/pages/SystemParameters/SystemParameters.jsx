@@ -128,6 +128,7 @@ class SystemParams extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          align: 'center',
           render: (res, recode, index) => (
             <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
           ),
@@ -136,16 +137,19 @@ class SystemParams extends Component {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterType' }),
           dataIndex: 'parameterType',
           key: 'parameterType',
+          align: 'center',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterKey' }),
           dataIndex: 'parameterKey',
           key: 'parameterKey',
+          align: 'center',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterValue' }),
           dataIndex: 'parameterValue',
           key: 'parameterValue',
+          align: 'center',
         },
         {
           title: formatMessage({ id: 'app.common.note' }),
@@ -346,7 +350,6 @@ class SystemParams extends Component {
                 pagination={false}
               ></Table>
               <Pagination
-                size="small"
                 showSizeChanger
                 current={page.pageNumber}
                 showTotal={() =>
