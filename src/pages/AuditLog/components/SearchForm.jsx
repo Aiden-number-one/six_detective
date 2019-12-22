@@ -37,12 +37,7 @@ export default class SearchForm extends Component {
               <IconFont type="iconsousuo" style={{ color: '#fff' }} />
               {formatMessage({ id: 'app.common.search' })}
             </Button>
-            <Button
-              type="primary"
-              onClick={exportData}
-              className="btn_usual"
-              style={{ height: '36px' }}
-            >
+            <Button type="primary" onClick={exportData} className="btn_usual" icon="export">
               {formatMessage({ id: 'app.common.export' })}
             </Button>
           </Col>
