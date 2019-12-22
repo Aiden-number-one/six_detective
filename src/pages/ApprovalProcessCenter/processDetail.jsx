@@ -1,21 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
-import {
-  Tabs,
-  Row,
-  Col,
-  Input,
-  Button,
-  Form,
-  List,
-  Drawer,
-  Radio,
-  message,
-  Upload,
-  Empty,
-  Spin,
-  Select,
-} from 'antd';
+import { Tabs, Row, Col, Input, Button, Drawer, Radio, message, Upload, Empty, Spin } from 'antd';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
@@ -24,10 +9,10 @@ import Phase from './component/phase';
 import TaskAttachments from './component/TaskAttachments';
 import TaskCommentHistory from './component/TaskCommentHistory';
 import TaskLog from './component/TaskLog';
+import DetailList from './component/DetailList';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
-const { Option } = Select;
 // const { Column } = Table;
 // const { Paragraph, Text } = Typography;
 
@@ -41,153 +26,6 @@ function CustomEmpty({ className = '', style = {} }) {
     </Row>
   );
 }
-function DetailForm({ form, detailItem, task }) {
-  const { getFieldDecorator } = form;
-  const [radioCurrentValue, setRadioCurrentValue] = useState('Yes');
-  const detailList = task ? (detailItem.data && detailItem.data.common) || [] : [];
-  const newProductList = task ? (detailItem.data && detailItem.data.newProduct) || [] : [];
-  console.log('newProductList---->', newProductList);
-  const caCodetList = task ? (detailItem.data && detailItem.data.caCode) || [] : [];
-  const alertType = detailItem && detailItem.alertType;
-  console.log('alertType---->', alertType, radioCurrentValue);
-  // if (alertType && alertType === '302') {
-  //   setRadioCurrentValue('No');
-  // } else if (alertType && alertType === '303') {
-  //   setRadioCurrentValue('Yes');
-  // }
-  const isShowForm = detailItem.isStarter;
-  const newProductDisable = detailList.concat(newProductList);
-  const caCodetDisable = detailList.concat(caCodetList);
-  useEffect(() => {
-    if (alertType && alertType === '302') {
-      setRadioCurrentValue('No');
-    } else if (alertType && alertType === '303') {
-      setRadioCurrentValue('Yes');
-    }
-  }, [alertType]);
-  return (
-    <>
-      {isShowForm && detailList.length ? (
-        <Form>
-          {detailList.map(item => (
-            <Form.Item
-              label={item.key}
-              labelCol={{ span: radioCurrentValue === 'No' ? 8 : 6 }}
-              wrapperCol={{ span: 12 }}
-            >
-              {getFieldDecorator(item.key, {
-                initialValue: item.oldValue,
-              })(
-                item.type === 'input' ? (
-                  <Input disabled={!item.isEdit} />
-                ) : item.type === 'radio' ? (
-                  <Radio.Group onChange={e => setRadioCurrentValue(e.target.value)}>
-                    <Radio style={{ display: 'inline' }} value="Yes">
-                      yes
-                    </Radio>
-                    <Radio style={{ display: 'inline' }} value="No">
-                      no
-                    </Radio>
-                  </Radio.Group>
-                ) : null,
-              )}
-            </Form.Item>
-          ))}
-          {radioCurrentValue === 'No'
-            ? newProductList.map(item => (
-                <Form.Item label={item.key} labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
-                  {getFieldDecorator(item.key, {
-                    initialValue:
-                      item.type === 'selection' ? item.oldValue.split(',')[0] : item.oldValue,
-                  })(
-                    item.type === 'input' ? (
-                      <Input disabled={!item.isEdit} />
-                    ) : item.type === 'selection' ? (
-                      <Select>
-                        {item.oldValue.split(',').map(optionValue => (
-                          <Option value={optionValue}>{optionValue}</Option>
-                        ))}
-                      </Select>
-                    ) : item.type === 'radio' ? (
-                      <Radio.Group>
-                        <Radio style={{ display: 'inline' }} value="Yes">
-                          yes
-                        </Radio>
-                        <Radio style={{ display: 'inline' }} value="No">
-                          no
-                        </Radio>
-                      </Radio.Group>
-                    ) : null,
-                  )}
-                </Form.Item>
-              ))
-            : radioCurrentValue === 'Yes'
-            ? caCodetList.map(item => (
-                <Form.Item label={item.key} labelCol={{ span: 6 }} wrapperCol={{ span: 12 }}>
-                  {getFieldDecorator(item.key, {
-                    initialValue: item.type === 'selection' ? item.oldValue[0] : item.oldValue,
-                  })(
-                    item.type === 'input' ? (
-                      <Input disabled={!item.isEdit} />
-                    ) : item.type === 'selection' ? (
-                      <Select>
-                        {item.oldValue.split(',').map(optionValue => (
-                          <Option value={optionValue}>{optionValue}</Option>
-                        ))}
-                      </Select>
-                    ) : item.type === 'radio' ? (
-                      <Radio.Group>
-                        <Radio value="Yes">yes</Radio>
-                        <Radio value="No">no</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input disabled={!item.isEdit} />
-                    ),
-                  )}
-                </Form.Item>
-              ))
-            : null}
-        </Form>
-      ) : (
-        <div className={styles.ListBox}>
-          <List
-            header={
-              task &&
-              detailList.length > 0 && (
-                <List.Item>
-                  <div className={styles.ListItem}>
-                    <p></p>
-                    <p>New INFO</p>
-                    <p>Old INFO</p>
-                  </div>
-                </List.Item>
-              )
-            }
-            bordered
-            dataSource={
-              alertType === '302'
-                ? newProductDisable
-                : alertType === '303'
-                ? caCodetDisable
-                : detailList
-            }
-            renderItem={item => (
-              <List.Item>
-                <div className={styles.ListItem}>
-                  <p>{item.key}</p>
-                  <p>{item.newValue}</p>
-                  <p>{item.oldValue}</p>
-                </div>
-              </List.Item>
-            )}
-          />
-        </div>
-      )}
-    </>
-  );
-}
-
-const DetailList = Form.create()(DetailForm);
 
 function ProcessDetail({
   dispatch,
@@ -273,30 +111,30 @@ function ProcessDetail({
     };
     if (type === 'submit') {
       newDetailForm.current.validateFields((err, values) => {
-        const alertTypeValue = detailItems.alertType;
+        const alertTypeValue = detailItems[0].alertType;
         if (!err) {
           if (alertTypeValue === '301') {
             valueData = {
-              epCname: values['EP Name'],
+              epCname: values.epName,
             };
           } else if (alertTypeValue === '302') {
             valueData = {
-              isCaCode: values['Is CA Code ?'],
-              productDesc: values['Product Description'],
-              productCategory: values['Product Category'],
-              contractNature: values['Futures or Option'],
-              productGroup: values['Product Group'],
-              ltdTmplCode: values['Template Code(Last Trade Day)'],
-              plTmplCode: values['Template Code(Position Limit)'],
-              rlTmplCode: values['Template Code(Reportable Limit)'],
-              pdCalculateFlag: values['Is Calculate PD ?'],
-              sizeFactor: values['Size Factor for Calculate PD'],
-              weightFactor: values['Weighting Factor for Calculate PD'],
+              isCaCode: values.isCaCode,
+              productDesc: values.productDesc,
+              productCategory: values.productCategory,
+              contractNature: values.contractNature,
+              productGroup: values.productGroup,
+              ltdTmplCode: values.ltdTmplCode,
+              plTmplCode: values.plTmplCode,
+              rlTmplCode: values.rlTmplCode,
+              pdCalculateFlag: values.isCalculatePd,
+              sizeFactor: values.sizeFactor.toString(),
+              weightFactor: values.weightFactor.toString(),
             };
           } else if (alertTypeValue === '303') {
             valueData = {
-              isCaCode: values['Is CA Code ?'],
-              epCname: values.remark,
+              isCaCode: values.isCaCode,
+              remark: values.remark,
             };
           }
 
@@ -369,30 +207,30 @@ function ProcessDetail({
       taskCode: task.taskCode.toString(),
     };
     newDetailForm.current.validateFields((err, values) => {
-      const alertTypeValue = detailItems.alertType;
+      const alertTypeValue = detailItems[0].alertType;
       if (!err) {
         if (alertTypeValue === '301') {
           valueData = {
-            epCname: values['EP Name'],
+            epCname: values.epName,
           };
         } else if (alertTypeValue === '302') {
           valueData = {
-            isCaCode: values['Is CA Code ?'],
-            productDesc: values['Product Description'],
-            productCategory: values['Product Category'],
-            contractNature: values['Futures or Option'],
-            productGroup: values['Product Group'],
-            ltdTmplCode: values['Template Code(Last Trade Day)'],
-            plTmplCode: values['Template Code(Position Limit)'],
-            rlTmplCode: values['Template Code(Reportable Limit)'],
-            pdCalculateFlag: values['Is Calculate PD ?'],
-            sizeFactor: values['Size Factor for Calculate PD'],
-            weightFactor: values['Weighting Factor for Calculate PD'],
+            isCaCode: values.isCaCode,
+            productDesc: values.productDesc,
+            productCategory: values.productCategory,
+            contractNature: values.contractNature,
+            productGroup: values.productGroup,
+            ltdTmplCode: values.ltdTmplCode,
+            plTmplCode: values.plTmplCode,
+            rlTmplCode: values.rlTmplCode,
+            pdCalculateFlag: values.isCalculatePd,
+            sizeFactor: values.sizeFactor.toString(),
+            weightFactor: values.weightFactor.toString(),
           };
         } else if (alertTypeValue === '303') {
           valueData = {
-            isCaCode: values['Is CA Code ?'],
-            remark: values.Remark,
+            isCaCode: values.isCaCode,
+            remark: values.remark,
           };
         }
 
@@ -549,15 +387,19 @@ function ProcessDetail({
                       </Upload>
                     </Col>
 
-                    {detailItems.isStarter ? (
+                    {detailItems[0] && detailItems[0].isStarter ? (
                       <>
-                        <Col span={4}>
-                          <Button type="primary" onClick={saveTask}>
+                        <Col span={6}>
+                          <Button style={{ width: '80px' }} type="primary" onClick={saveTask}>
                             Save
                           </Button>
                         </Col>
                         <Col span={6} align="right">
-                          <Button type="primary" onClick={() => submitDrawer('submit')}>
+                          <Button
+                            style={{ width: '80px' }}
+                            type="primary"
+                            onClick={() => submitDrawer('submit')}
+                          >
                             Submit
                           </Button>
                         </Col>

@@ -14,10 +14,10 @@ export default function({ dataSource, loading, getInfomation }) {
     <div className={styles.list}>
       <Row className={styles.btns}>
         <Col span={18}>
-          <Button disabled={!selectedKeys.length}>
-            <IconFont type="iconbatch-export" className={styles['btn-icon']} />
+          <button type="button" disabled={!selectedKeys.length}>
+            <IconFont type="iconexport" className={styles['btn-icon']} />
             <FormattedMessage id="alert-center.export" />
-          </Button>
+          </button>
         </Col>
         <Col span={6} align="right">
           <Button type="link">
@@ -65,12 +65,12 @@ export default function({ dataSource, loading, getInfomation }) {
         <Column
           align="center"
           dataIndex="submitterCode"
-          title={<FormattedMessage id="data-import.lop.submitter-code" />}
+          title={<FormattedMessage id="alert-center.submitter-code" />}
         />
         <Column
           align="center"
           dataIndex="submitterName"
-          title={<FormattedMessage id="data-import.lop.submitter-name" />}
+          title={<FormattedMessage id="alert-center.submitter-name" />}
         />
       </Table>
     </div>

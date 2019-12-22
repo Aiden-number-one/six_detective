@@ -17,7 +17,7 @@ export default function() {
           setCurrentTaskType={item => setCurrentTaskType(item)}
           // getAlertItems={items => setAlertItems(items)}
         />
-        <ProcessDetail task={task} currentTaskType={currentTaskType} />
+        {task && <ProcessDetail task={task} currentTaskType={currentTaskType} />}
       </div>
     </PageHeaderWrapper>
   );

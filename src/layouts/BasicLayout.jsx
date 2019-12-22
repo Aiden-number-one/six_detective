@@ -66,15 +66,15 @@ const BasicLayout = props => {
           // userAgent: window.navigator.userAgent,
         },
       });
-      // setInterval(() => {
-      //   dispatch({
-      //     type: 'login/getLoginStatus',
-      //     payload: {
-      //       // loginName: window.localStorage.currentUser,
-      //       // userAgent: window.navigator.userAgent,
-      //     },
-      //   });
-      // }, 25000);
+      setInterval(() => {
+        dispatch({
+          type: 'login/getLoginStatus',
+          payload: {
+            // loginName: window.localStorage.currentUser,
+            // userAgent: window.navigator.userAgent,
+          },
+        });
+      }, 25000);
     }
   }, []);
   /**
