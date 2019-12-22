@@ -225,19 +225,21 @@ class AuditLog extends Component {
             pagination={false}
             columns={this.state.columns}
           />
-          <Pagination
-            showSizeChanger
-            current={page.pageNumber}
-            showTotal={() =>
-              `Page ${(totalCount || 0) && page.pageNumber.toString()} of ${Math.ceil(
-                (totalCount || 0) / page.pageSize,
-              ).toString()}`
-            }
-            onShowSizeChange={this.onShowSizeChange}
-            onChange={this.pageChange}
-            total={totalCount}
-            pageSize={page.pageSize}
-          />
+          {getAuditLogList && getAuditLogList.length > 0 && (
+            <Pagination
+              showSizeChanger
+              current={page.pageNumber}
+              showTotal={() =>
+                `Page ${(totalCount || 0) && page.pageNumber.toString()} of ${Math.ceil(
+                  (totalCount || 0) / page.pageSize,
+                ).toString()}`
+              }
+              onShowSizeChange={this.onShowSizeChange}
+              onChange={this.pageChange}
+              total={totalCount}
+              pageSize={page.pageSize}
+            />
+          )}
         </div>
         <Modal
           title="Select export format"

@@ -365,19 +365,21 @@ class CodeMaintenance extends Component {
                   }, // 点击行
                 })}
               ></Table>
-              <Pagination
-                showSizeChanger
-                current={page.pageNumber}
-                showTotal={() =>
-                  `Page ${(totalCount || 0) && page.pageNumber} of ${Math.ceil(
-                    (totalCount || 0) / page.pageSize,
-                  ).toString()}`
-                }
-                onShowSizeChange={this.onShowSizeChange}
-                onChange={this.pageChange}
-                total={totalCount}
-                pageSize={page.pageSize}
-              />
+              {codeListData && codeListData.length > 0 && (
+                <Pagination
+                  showSizeChanger
+                  current={page.pageNumber}
+                  showTotal={() =>
+                    `Page ${(totalCount || 0) && page.pageNumber} of ${Math.ceil(
+                      (totalCount || 0) / page.pageSize,
+                    ).toString()}`
+                  }
+                  onShowSizeChange={this.onShowSizeChange}
+                  onChange={this.pageChange}
+                  total={totalCount}
+                  pageSize={page.pageSize}
+                />
+              )}
             </div>
           </div>
           <div>
@@ -425,19 +427,21 @@ class CodeMaintenance extends Component {
                 pagination={false}
                 columns={this.state.columns}
               ></Table>
-              <Pagination
-                showSizeChanger
-                current={itemPage.pageNumber}
-                showTotal={() =>
-                  `Page ${(totalCountItem || 0) && itemPage.pageNumber} of ${Math.ceil(
-                    (totalCountItem || 0) / itemPage.pageSize,
-                  ).toString()}`
-                }
-                onShowSizeChange={this.onShowItemSizeChange}
-                onChange={this.pageItemChange}
-                total={totalCountItem}
-                pageSize={itemPage.pageSize}
-              />
+              {codeItemListData && codeItemListData.length > 0 && (
+                <Pagination
+                  showSizeChanger
+                  current={itemPage.pageNumber}
+                  showTotal={() =>
+                    `Page ${(totalCountItem || 0) && itemPage.pageNumber} of ${Math.ceil(
+                      (totalCountItem || 0) / itemPage.pageSize,
+                    ).toString()}`
+                  }
+                  onShowSizeChange={this.onShowItemSizeChange}
+                  onChange={this.pageItemChange}
+                  total={totalCountItem}
+                  pageSize={itemPage.pageSize}
+                />
+              )}
             </div>
           </div>
         </Fragment>

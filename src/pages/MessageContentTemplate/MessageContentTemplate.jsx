@@ -304,20 +304,22 @@ export default class MessageContentTemplate extends Component {
             columns={columns}
             pagination={false}
           ></Table>
-          <Pagination
-            showSizeChanger
-            current={page.pageNumber}
-            showTotal={() =>
-              `Page ${(messageTemplate.totalCount || 0) &&
-                page.pageNumber.toString()} of ${Math.ceil(
-                (messageTemplate.totalCount || 0) / page.pageSize,
-              ).toString()}`
-            }
-            onShowSizeChange={this.onShowSizeChange}
-            onChange={this.pageChange}
-            total={messageTemplate.totalCount}
-            pageSize={page.pageSize}
-          />
+          {messageTemplate.items && messageTemplate.items.length > 0 && (
+            <Pagination
+              showSizeChanger
+              current={page.pageNumber}
+              showTotal={() =>
+                `Page ${(messageTemplate.totalCount || 0) &&
+                  page.pageNumber.toString()} of ${Math.ceil(
+                  (messageTemplate.totalCount || 0) / page.pageSize,
+                ).toString()}`
+              }
+              onShowSizeChange={this.onShowSizeChange}
+              onChange={this.pageChange}
+              total={messageTemplate.totalCount}
+              pageSize={page.pageSize}
+            />
+          )}
         </div>
       </PageHeaderWrapper>
     );

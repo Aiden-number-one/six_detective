@@ -344,19 +344,21 @@ class MenuUserGroup extends Component {
             columns={columns}
             pagination={false}
           ></Table>
-          <Pagination
-            showSizeChanger
-            current={page.pageNumber}
-            showTotal={() =>
-              `Page ${(menuUserGroup.totalCount || 0) && page.pageNumber} of ${Math.ceil(
-                (menuUserGroup.totalCount || 0) / page.pageSize,
-              )}`
-            }
-            onShowSizeChange={this.onShowSizeChange}
-            onChange={this.pageChange}
-            total={menuUserGroup.totalCount}
-            pageSize={page.pageSize}
-          />
+          {menuUserGroup.items && menuUserGroup.items.length > 0 && (
+            <Pagination
+              showSizeChanger
+              current={page.pageNumber}
+              showTotal={() =>
+                `Page ${(menuUserGroup.totalCount || 0) && page.pageNumber} of ${Math.ceil(
+                  (menuUserGroup.totalCount || 0) / page.pageSize,
+                )}`
+              }
+              onShowSizeChange={this.onShowSizeChange}
+              onChange={this.pageChange}
+              total={menuUserGroup.totalCount}
+              pageSize={page.pageSize}
+            />
+          )}
         </div>
       </PageHeaderWrapper>
     );

@@ -367,19 +367,21 @@ class UserManagement extends Component {
               columns={this.state.columns}
               pagination={false}
             ></Table>
-            <Pagination
-              current={page.pageNumber}
-              showSizeChanger
-              showTotal={() =>
-                `Page ${(userManagementData.totalCount || 0) && page.pageNumber} of ${Math.ceil(
-                  (userManagementData.totalCount || 0) / page.pageSize,
-                )}`
-              }
-              onShowSizeChange={this.onShowSizeChange}
-              onChange={this.pageChange}
-              total={userManagementData.totalCount}
-              pageSize={page.pageSize}
-            />
+            {userManagementData.items && userManagementData.items.length > 0 && (
+              <Pagination
+                current={page.pageNumber}
+                showSizeChanger
+                showTotal={() =>
+                  `Page ${(userManagementData.totalCount || 0) && page.pageNumber} of ${Math.ceil(
+                    (userManagementData.totalCount || 0) / page.pageSize,
+                  )}`
+                }
+                onShowSizeChange={this.onShowSizeChange}
+                onChange={this.pageChange}
+                total={userManagementData.totalCount}
+                pageSize={page.pageSize}
+              />
+            )}
           </div>
         </div>
       </PageHeaderWrapper>

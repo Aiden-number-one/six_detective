@@ -349,20 +349,22 @@ class SystemParams extends Component {
                 columns={this.state.columns}
                 pagination={false}
               ></Table>
-              <Pagination
-                showSizeChanger
-                current={page.pageNumber}
-                showTotal={() =>
-                  `Page ${(getSystemParamsListData.totalCount || 0) &&
-                    page.pageNumber.toString()} of ${Math.ceil(
-                    (getSystemParamsListData.totalCount || 0) / page.pageSize,
-                  ).toString()}`
-                }
-                onShowSizeChange={this.onShowSizeChange}
-                onChange={this.pageChange}
-                total={getSystemParamsListData.totalCount}
-                pageSize={page.pageSize}
-              />
+              {getSystemParamsListData.items && getSystemParamsListData.items.length > 0 && (
+                <Pagination
+                  showSizeChanger
+                  current={page.pageNumber}
+                  showTotal={() =>
+                    `Page ${(getSystemParamsListData.totalCount || 0) &&
+                      page.pageNumber.toString()} of ${Math.ceil(
+                      (getSystemParamsListData.totalCount || 0) / page.pageSize,
+                    ).toString()}`
+                  }
+                  onShowSizeChange={this.onShowSizeChange}
+                  onChange={this.pageChange}
+                  total={getSystemParamsListData.totalCount}
+                  pageSize={page.pageSize}
+                />
+              )}
             </div>
           </div>
         </Fragment>
