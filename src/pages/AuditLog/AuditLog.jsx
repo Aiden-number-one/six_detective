@@ -5,6 +5,7 @@ import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
 import styles from './AuditLog.less';
+import { timeFormat } from '@/utils/filter';
 import SearchForm from './components/SearchForm';
 
 const NewSearchForm = Form.create({})(SearchForm);
@@ -84,6 +85,14 @@ class AuditLog extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.logDate' }),
         dataIndex: 'logTime',
         key: 'logTime',
+        align: 'center',
+        render: (res, obj) => (
+          <div>
+            <span>{obj.logTime && timeFormat(obj.logTime).t1}</span>
+            <br />
+            <span>{obj.logTime && timeFormat(obj.logTime).t2}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
