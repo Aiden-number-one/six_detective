@@ -82,19 +82,20 @@ export default class MessageContentTemplate extends Component {
           dataIndex: 'content',
           key: 'content',
           ellipsis: true,
-          width: 200,
+          width: 180,
         },
         {
           title: formatMessage({ id: 'systemManagement.template.keyword' }),
           dataIndex: 'keyWord',
           key: 'keyWord',
           ellipsis: true,
-          width: 200,
+          width: 180,
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),
           dataIndex: 'operation',
           key: 'operation',
+          width: 100,
           align: 'center',
           render: (res, obj) => (
             <span className={styles.operation}>
@@ -304,20 +305,22 @@ export default class MessageContentTemplate extends Component {
             columns={columns}
             pagination={false}
           ></Table>
-          <Pagination
-            showSizeChanger
-            current={page.pageNumber}
-            showTotal={() =>
-              `Page ${(messageTemplate.totalCount || 0) &&
-                page.pageNumber.toString()} of ${Math.ceil(
-                (messageTemplate.totalCount || 0) / page.pageSize,
-              ).toString()}`
-            }
-            onShowSizeChange={this.onShowSizeChange}
-            onChange={this.pageChange}
-            total={messageTemplate.totalCount}
-            pageSize={page.pageSize}
-          />
+          {messageTemplate.items && messageTemplate.items.length > 0 && (
+            <Pagination
+              showSizeChanger
+              current={page.pageNumber}
+              showTotal={() =>
+                `Page ${(messageTemplate.totalCount || 0) &&
+                  page.pageNumber.toString()} of ${Math.ceil(
+                  (messageTemplate.totalCount || 0) / page.pageSize,
+                ).toString()}`
+              }
+              onShowSizeChange={this.onShowSizeChange}
+              onChange={this.pageChange}
+              total={messageTemplate.totalCount}
+              pageSize={page.pageSize}
+            />
+          )}
         </div>
       </PageHeaderWrapper>
     );

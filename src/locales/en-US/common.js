@@ -2,8 +2,8 @@
  * @Description: This is a English i18n for common module.
  * @Author: dailinbo
  * @Date: 2019-11-21 17:50:23
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-16 11:00:51
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-22 20:20:00
  */
 export default {
   'app.common.userId': 'User ID',
@@ -23,4 +23,5 @@ export default {
   'app.common.dateTo': 'Date to',
   'app.common.number': 'No.',
   'app.common.note': 'Note',
+  'app.common.remark': 'Remark',
 };

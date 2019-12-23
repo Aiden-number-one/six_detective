@@ -5,6 +5,7 @@ import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
 import styles from './AuditLog.less';
+import { timeFormat } from '@/utils/filter';
 import SearchForm from './components/SearchForm';
 
 const NewSearchForm = Form.create({})(SearchForm);
@@ -84,6 +85,14 @@ class AuditLog extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.logDate' }),
         dataIndex: 'logTime',
         key: 'logTime',
+        align: 'center',
+        render: (res, obj) => (
+          <div>
+            <span>{obj.logTime && timeFormat(obj.logTime).t1}</span>
+            <br />
+            <span>{obj.logTime && timeFormat(obj.logTime).t2}</span>
+          </div>
+        ),
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
@@ -151,20 +160,25 @@ class AuditLog extends Component {
       if (err) {
         return;
       }
+      console.log('values===', values);
       const { logDate } = values;
       let logStartDate;
       let logEndDate;
       if (logDate && logDate.length > 0) {
-        logStartDate = moment(logDate[0]).format('YYYY-MM-DD');
-        logEndDate = moment(logDate[1]).format('YYYY-MM-DD');
+        logStartDate = `${moment(logDate[0]).format('YYYY-MM-DD')} 00:00:00`;
+        logEndDate = `${moment(logDate[1]).format('YYYY-MM-DD')} 23:59:59`;
       }
-      this.setState({
-        logStartDate,
-        logEndDate,
-        functionName: values.functionName,
-        updatedBy: values.updatedBy,
-      });
-      this.getAuditLog();
+      this.setState(
+        {
+          logStartDate,
+          logEndDate,
+          functionName: values.functionName,
+          updatedBy: values.updatedBy,
+        },
+        () => {
+          this.getAuditLog();
+        },
+      );
     });
   };
 
@@ -225,19 +239,21 @@ class AuditLog extends Component {
             pagination={false}
             columns={this.state.columns}
           />
-          <Pagination
-            showSizeChanger
-            current={page.pageNumber}
-            showTotal={() =>
-              `Page ${(totalCount || 0) && page.pageNumber.toString()} of ${Math.ceil(
-                (totalCount || 0) / page.pageSize,
-              ).toString()}`
-            }
-            onShowSizeChange={this.onShowSizeChange}
-            onChange={this.pageChange}
-            total={totalCount}
-            pageSize={page.pageSize}
-          />
+          {getAuditLogList && getAuditLogList.length > 0 && (
+            <Pagination
+              showSizeChanger
+              current={page.pageNumber}
+              showTotal={() =>
+                `Page ${(totalCount || 0) && page.pageNumber.toString()} of ${Math.ceil(
+                  (totalCount || 0) / page.pageSize,
+                ).toString()}`
+              }
+              onShowSizeChange={this.onShowSizeChange}
+              onChange={this.pageChange}
+              total={totalCount}
+              pageSize={page.pageSize}
+            />
+          )}
         </div>
         <Modal
           title="Select export format"

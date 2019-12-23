@@ -13,6 +13,7 @@ export default function({ postComment }) {
   return (
     <Popover
       visible={phaseVisible}
+      onVisibleChange={v => setPhaseVisible(v)}
       placement="topRight"
       trigger="click"
       content={

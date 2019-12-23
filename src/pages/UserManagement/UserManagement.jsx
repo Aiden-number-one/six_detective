@@ -2,8 +2,8 @@
  * @Description: This is for userManagement page.
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
- * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-18 20:35:07
+ * @LastEditors  : iron
+ * @LastEditTime : 2019-12-20 17:13:03
  */
 
 import React, { Component } from 'react';
@@ -367,19 +367,21 @@ class UserManagement extends Component {
               columns={this.state.columns}
               pagination={false}
             ></Table>
-            <Pagination
-              current={page.pageNumber}
-              showSizeChanger
-              showTotal={() =>
-                `Page ${(userManagementData.totalCount || 0) && page.pageNumber} of ${Math.ceil(
-                  (userManagementData.totalCount || 0) / page.pageSize,
-                )}`
-              }
-              onShowSizeChange={this.onShowSizeChange}
-              onChange={this.pageChange}
-              total={userManagementData.totalCount}
-              pageSize={page.pageSize}
-            />
+            {userManagementData.items && userManagementData.items.length > 0 && (
+              <Pagination
+                current={page.pageNumber}
+                showSizeChanger
+                showTotal={() =>
+                  `Page ${(userManagementData.totalCount || 0) && page.pageNumber} of ${Math.ceil(
+                    (userManagementData.totalCount || 0) / page.pageSize,
+                  )}`
+                }
+                onShowSizeChange={this.onShowSizeChange}
+                onChange={this.pageChange}
+                total={userManagementData.totalCount}
+                pageSize={page.pageSize}
+              />
+            )}
           </div>
         </div>
       </PageHeaderWrapper>

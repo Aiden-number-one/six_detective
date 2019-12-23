@@ -44,6 +44,11 @@ export default [
             component: './AlertCenter/Information',
             hideInMenu: true,
           },
+          {
+            path: '/homepage/Approval-Process-Center',
+            name: 'ApprovalProcessCenter',
+            component: './ApprovalProcessCenter/index',
+          },
         ],
       },
       // Report
@@ -452,18 +457,6 @@ export default [
             path: '/system-management/scheduling',
             name: 'scheduling',
             component: './Scheduling/Scheduling',
-          },
-        ],
-      },
-      {
-        path: '/alert-management',
-        name: 'alertManagement',
-        icon: 'icon-jinggao',
-        routes: [
-          {
-            path: '/alert-management/Approval-Process-Center',
-            name: 'ApprovalProcessCenter',
-            component: './ApprovalProcessCenter/index',
           },
         ],
       },

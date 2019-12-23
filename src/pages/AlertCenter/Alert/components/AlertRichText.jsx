@@ -34,6 +34,10 @@ export default function({ loading, onCommit }) {
     setUpAttachements(fileList);
   }
 
+  function handleRemove(file) {
+    setUpAttachements(upAttachments.filter(item => item.uid !== file.uid));
+  }
+
   return (
     <div className={styles['comment-box']}>
       <TextArea
@@ -55,12 +59,10 @@ export default function({ loading, onCommit }) {
             fileList={upAttachments}
             onChange={handleUpAttachments}
           >
-            <IconFont
-              type="iconbiezhen"
-              style={{ cursor: 'pointer', marginRight: 4 }}
-              title="please select a file"
-            />
-            {upAttachments.length > 0 && upAttachments.length}
+            <span className={styles['up-icon']} title="please select a file">
+              <IconFont type="iconbiezhen" />
+              {upAttachments.length > 0 && upAttachments.length}
+            </span>
           </Upload>
         </Col>
         <Col span={6} align="right">
@@ -74,7 +76,13 @@ export default function({ loading, onCommit }) {
           </Button>
         </Col>
       </Row>
-      {!!upAttachments.length && <AlertAttachments attachments={upAttachments} />}
+      {!!upAttachments.length && (
+        <AlertAttachments
+          attachments={upAttachments}
+          onRemove={handleRemove}
+          onRemoveAll={() => setUpAttachements([])}
+        />
+      )}
     </div>
   );
 }

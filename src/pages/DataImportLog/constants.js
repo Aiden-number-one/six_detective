@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 18:53:34
- * @LastEditors: iron
- * @LastEditTime: 2019-12-18 20:27:43
+ * @LastEditors  : iron
+ * @LastEditTime : 2019-12-20 09:12:22
  */
 import moment from 'moment';
 
@@ -27,7 +27,7 @@ export const SUBMISSION_REPORT = [
 ];
 
 export const dateFormat = 'DD-MMM-YYYY';
-export const timeFormat = 'hh:mm:ss';
+export const timeFormat = 'HH:mm:ss';
 export const timestampFormat = `${dateFormat} ${timeFormat}`;
 
 export const yesterday = moment().subtract(1, 'days');
