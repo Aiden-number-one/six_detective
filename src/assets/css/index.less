@@ -411,6 +411,9 @@
       border-color: #464c51;
       border-right-width: 1px !important;
     }
+    .ant-select-selection:active {
+      box-shadow: none;
+    }
     .ant-select-arrow {
       color: #557597;
     }
@@ -462,10 +465,16 @@
       .ant-select-dropdown-menu-item-selected,
       .ant-select-dropdown-menu-item-active:not(.ant-select-dropdown-menu-item-disabled) {
         color: #464c51;
-        background-color: #f3f6f9;
+        background-color: #f3f6f9 !important;
       }
       .ant-select-dropdown-menu-item-selected {
         font-weight: normal;
+      }
+      .ant-select-dropdown-menu-item:hover:not(.ant-select-dropdown-menu-item-disabled) {
+        background-color: #f3f6f9 !important;
+      }
+      .ant-select-dropdown-menu-item-active:not(.ant-select-dropdown-menu-item-disabled) {
+        background-color: #f3f6f9 !important;
       }
     }
 

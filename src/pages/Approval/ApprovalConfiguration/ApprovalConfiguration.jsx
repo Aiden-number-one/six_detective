@@ -5,6 +5,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Button, Table, Row, Col, Drawer, Select } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
+import IconFont from '@/components/IconFont';
 // import classNames from 'classnames';
 import styles from './ApprovalConfiguration.less';
 
@@ -166,12 +167,12 @@ class ApprovalConfiguration extends PureComponent {
       {
         title: 'Function ID',
         dataIndex: 'functionId',
-        align: 'center',
+        align: 'left',
       },
       {
         title: formatMessage({ id: 'systemManagement.flowConfig.flowName' }),
         dataIndex: 'flowName',
-        align: 'center',
+        align: 'left',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -180,7 +181,7 @@ class ApprovalConfiguration extends PureComponent {
         render: (text, record) => (
           <span>
             <a href="#" onClick={() => this.showModel(record)}>
-              {formatMessage({ id: 'app.common.modify' })}
+              <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
           </span>
         ),
