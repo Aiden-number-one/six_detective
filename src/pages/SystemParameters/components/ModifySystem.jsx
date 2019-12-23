@@ -119,7 +119,10 @@ class ModifySystem extends Component {
         type: 'systemParams/systemParamsUpdate',
         payload: params,
         callback: () => {
-          message.success('success');
+          message.success({
+            content: 'modify success',
+            duration: 2,
+          });
           this.props.onSave();
         },
       });

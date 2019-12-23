@@ -167,7 +167,10 @@ class EmailParameter extends Component {
       type: 'getEmail/updateEmail',
       payload: params,
       callback: () => {
-        message.success('success');
+        message.success({
+          content: 'modify success',
+          duration: 2,
+        });
         this.setState({
           visible: false,
         });
