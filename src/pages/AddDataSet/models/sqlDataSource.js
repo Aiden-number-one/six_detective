@@ -5,10 +5,16 @@
  * @Last Modified time: 2019-06-25 14:00:43
  */
 import { message } from 'antd';
-import Service from '@/utils/Service';
 import router from 'umi/router';
+import Service from '@/utils/Service';
 
-const { getDataSourceList, getTableData, getMetadataTablePerform, setDataSet } = Service;
+const {
+  getDataSourceList,
+  getTableData,
+  getMetadataTablePerform,
+  getColumn,
+  operateDataSet,
+} = Service;
 
 export default {
   namespace: 'sqlDataSource',
@@ -23,13 +29,14 @@ export default {
     tableData: [], //
     column: [], // table的column
     defaultPageSize: 5, // tableData一页默认展示
+    columnData: [],
   },
 
   effects: {
     *addDataSet({ payload }, { call }) {
-      const res = yield call(setDataSet, { param: payload });
+      const res = yield call(operateDataSet, { param: payload });
       if (res && res.bcjson.flag === '1') {
-        message.success('success');
+        message.success(res.bcjson.msg);
         router.goBack();
       }
     },
@@ -85,6 +92,16 @@ export default {
         });
       } else {
         message.error(res.bcjson.msg.substring(0, 1000));
+      }
+    },
+    // 获取表列
+    *getColumn({ payload }, { call, put }) {
+      const res = yield call(getColumn, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        yield put({
+          type: 'changeColumnData',
+          payload: res.bcjson.items,
+        });
       }
     },
     // 获取表数据
@@ -176,6 +193,13 @@ export default {
       return {
         ...state,
         defaultPageSize: payload,
+      };
+    },
+    // 列数据
+    changeColumnData(state, action) {
+      return {
+        ...state,
+        columnData: action.payload,
       };
     },
   },

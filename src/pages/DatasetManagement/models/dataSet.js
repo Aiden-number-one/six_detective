@@ -2,8 +2,8 @@
  * @Description: 获取数据集列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime: 2019-12-12 10:29:07
- * @LastEditors: lan
+ * @LastEditTime : 2019-12-23 10:33:00
+ * @LastEditors  : lan
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -25,6 +25,7 @@ export default {
     column: [], // 数据预览表头
     tableData: [], // 数据预览数据
     activeTree: '', // 选中的树
+    activeFolderId: '',
   },
   effects: {
     // 获取数据集分类树
@@ -41,8 +42,7 @@ export default {
           yield put({
             type: 'getDataSet',
             payload: {
-              taskId: response.bcjson.items[0].classId,
-              isShare: 0,
+              folderId: response.bcjson.items[0].classId,
             },
           });
           if (callback) callback(response);
@@ -116,8 +116,7 @@ export default {
         yield put({
           type: 'getDataSet',
           payload: {
-            taskId: classId,
-            isShare: 0,
+            folderId: classId,
           },
         });
       } else {
@@ -154,6 +153,12 @@ export default {
       return {
         ...state,
         activeTree: action.payload,
+      };
+    },
+    saveFolderId(state, action) {
+      return {
+        ...state,
+        activeFolderId: action.payload,
       };
     },
   },
