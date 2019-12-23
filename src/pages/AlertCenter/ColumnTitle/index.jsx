@@ -11,6 +11,8 @@ import {
 } from './FilterContent';
 import styles from './index.less';
 
+let conditions = [];
+
 export default function ColumnTitle({
   children,
   isNum,
@@ -18,12 +20,12 @@ export default function ColumnTitle({
   curColumn,
   filterItems,
   getFilterItems,
-  handleCommit,
+  onCommit,
 }) {
-  // const [isFiltered, setFiltered] = useState(false);
+  const [isFiltered, setFiltered] = useState(false);
   const [visible, setVisible] = useState(false);
   const [filterType, setFilterType] = useState(isNum ? 1 : 7);
-  const [checkedList, setcheckedList] = useState([]);
+  const [checkedList, setCheckedList] = useState([]);
   const isFilterSelect = [1, 3, 4, 5, 6].includes(filterType);
 
   function handleVisibleChange(v) {
@@ -39,13 +41,25 @@ export default function ColumnTitle({
       value: checkedList.toString(),
       condition: filterType.toString(),
     };
-
-    await handleCommit(condition);
+    const curCondition = conditions.find(item => item.column === curColumn);
+    if (curCondition) {
+      conditions = conditions.map(item => {
+        if (item.column === curColumn) {
+          return Object.assign(item, condition);
+        }
+        return item;
+      });
+    } else {
+      conditions.push(condition);
+    }
+    // filter icon change
+    setFiltered(checkedList.toString() !== filterItems.toString());
+    await onCommit(conditions);
     setVisible(false);
   }
 
   function handleCheckList(cList) {
-    setcheckedList(cList);
+    setCheckedList(cList);
   }
   return (
     <Popover
@@ -66,16 +80,27 @@ export default function ColumnTitle({
               <FilterCheckbox
                 loading={loading}
                 filterList={filterItems}
-                getCheckList={handleCheckList}
+                curColumn={curColumn}
+                conditions={conditions}
+                onCheckedList={handleCheckList}
               />
             )}
-            <FilterFooter onCancel={() => setVisible(false)} onOk={handleOk} />
+            <FilterFooter
+              disabled={!checkedList.length}
+              onCancel={() => setVisible(false)}
+              onOk={handleOk}
+            />
           </div>
         </>
       }
     >
       <div>
-        <IconFont type="iconfilter1" className={classNames(styles.icon, styles['filter-icon'])} />
+        <IconFont
+          type="iconfilter1"
+          className={classNames(styles.icon, styles['filter-icon'], {
+            [styles.active]: isFiltered,
+          })}
+        />
         {children}
       </div>
     </Popover>
