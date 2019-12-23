@@ -21,6 +21,7 @@ function NewEP({ detailData, getFieldDecorator, isShowForm }) {
       </Form.Item>
       <Form.Item label="EP Name" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('epName', {
+          rules: [{ required: !!isShowForm, message: 'Please input epName!' }],
           initialValue: detailData.epName,
         })(<Input disabled={!isShowForm} />)}
       </Form.Item>
@@ -44,11 +45,12 @@ function NewProduct({
       </Form.Item>
       <Form.Item label="HKEX DCASS Code" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('HKEX DCASS Code', {
-          initialValue: detailData.originalProductCode,
+          initialValue: detailData.hkexDcassCode,
         })(<Input disabled />)}
       </Form.Item>
       <Form.Item label="Is CA Code ?" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('isCaCode', {
+          rules: [{ required: !!isShowForm }],
           initialValue: detailData.isCaCode,
         })(
           isShowForm ? (
@@ -72,11 +74,13 @@ function NewProduct({
       </Form.Item>
       <Form.Item label="Product Description" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('productDesc', {
+          rules: [{ required: !!isShowForm, message: 'Please input Product Description!' }],
           initialValue: detailData.productDesc,
         })(<Input disabled={!isShowForm} />)}
       </Form.Item>
       <Form.Item label="Product Category" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('productCategory', {
+          rules: [{ required: !!isShowForm, message: 'Please select your Product Category!' }],
           initialValue: detailData.productCategory,
         })(
           isShowForm ? (
@@ -94,6 +98,7 @@ function NewProduct({
       </Form.Item>
       <Form.Item label="Futures or Option" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('contractNature', {
+          rules: [{ required: !!isShowForm, message: 'Please select Futures or Option!' }],
           initialValue: detailData.contractNature,
         })(
           isShowForm ? (
@@ -111,6 +116,7 @@ function NewProduct({
       </Form.Item>
       <Form.Item label="Product Group" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('productGroup', {
+          rules: [{ required: !!isShowForm, message: 'Please select Product Group!' }],
           initialValue: detailData.productGroup,
         })(
           isShowForm ? (
@@ -132,6 +138,9 @@ function NewProduct({
         wrapperCol={{ span: 12 }}
       >
         {getFieldDecorator('ltdTmplCode', {
+          rules: [
+            { required: !!isShowForm, message: 'Please select Template Code(Last Trade Day)' },
+          ],
           initialValue: detailData.ltdTmplCode,
         })(
           isShowForm ? (
@@ -153,6 +162,9 @@ function NewProduct({
         wrapperCol={{ span: 12 }}
       >
         {getFieldDecorator('plTmplCode', {
+          rules: [
+            { required: !!isShowForm, message: 'Please select Template Code(Position Limit)!' },
+          ],
           initialValue: detailData.plTmplCode,
         })(
           isShowForm ? (
@@ -174,6 +186,9 @@ function NewProduct({
         wrapperCol={{ span: 12 }}
       >
         {getFieldDecorator('rlTmplCode', {
+          rules: [
+            { required: !!isShowForm, message: 'Please select Template Code(Reportable Limit)!' },
+          ],
           initialValue: detailData.rlTmplCode,
         })(
           isShowForm ? (
@@ -191,6 +206,7 @@ function NewProduct({
       </Form.Item>
       <Form.Item label="Is Calculate PD ?" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('isCalculatePd', {
+          rules: [{ required: !!isShowForm }],
           initialValue: detailData.isCalculatePd,
         })(
           isShowForm ? (
@@ -215,8 +231,11 @@ function NewProduct({
             wrapperCol={{ span: 12 }}
           >
             {getFieldDecorator('sizeFactor', {
+              rules: [
+                { required: !!isShowForm, message: 'Please input Size Factor for Calculate PD!' },
+              ],
               initialValue: detailData.sizeFactor,
-            })(<Input disabled={!isShowForm} />)}
+            })(<Input type="number" disabled={!isShowForm} />)}
           </Form.Item>
           <Form.Item
             label="Weighting Factor for Calculate PD"
@@ -224,8 +243,14 @@ function NewProduct({
             wrapperCol={{ span: 12 }}
           >
             {getFieldDecorator('weightFactor', {
+              rules: [
+                {
+                  required: !!isShowForm,
+                  message: 'Please input Weighting Factor for Calculate PD!',
+                },
+              ],
               initialValue: detailData.weightFactor,
-            })(<Input disabled={!isShowForm} />)}
+            })(<Input type="number" disabled={!isShowForm} />)}
           </Form.Item>
         </>
       ) : null}
@@ -280,6 +305,7 @@ function CaCode({ detailData, getFieldDecorator, setRadioCurrentValue, isShowFor
       </Form.Item>
       <Form.Item label="Remark " labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('remark', {
+          rules: [{ required: !!isShowForm, message: 'Please input Remark!' }],
           initialValue: detailData.remark,
         })(isShowForm ? <TextArea /> : <Input disabled />)}
       </Form.Item>
@@ -291,9 +317,6 @@ function DetailForm({ form, detailItem, task }) {
   const [radioCurrentValue, setRadioCurrentValue] = useState('No');
   const [radioPdValue, setRadioPdValue] = useState('Yes');
   const detailList = task ? (detailItem && detailItem[0]) || {} : {};
-  //   const newProductList = task ? (detailItem.data && detailItem.data.newProduct) || [] : [];
-  //   console.log('newProductList---->', newProductList);
-  //   const caCodetList = task ? (detailItem.data && detailItem.data.caCode) || [] : [];
   const alertType = detailList && detailList.alertType;
 
   const isShowForm = detailList && detailList.isStarter;
