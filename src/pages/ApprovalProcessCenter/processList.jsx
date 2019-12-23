@@ -8,6 +8,7 @@ import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
 // import { GetQueryString } from '@/utils/utils';
 import styles from './index.less';
+import alertStyle from '@/pages/AlertCenter/index.less';
 
 const { Column } = Table;
 const { Search } = Input;
@@ -41,37 +42,33 @@ function TaskBtn({
   exportAlert,
 }) {
   return (
-    <Row className={styles.btns}>
+    <Row className={alertStyle.btns}>
       <Col span={12}>
-        {selectedCurrentTask !== 'his' ? (
+        {selectedCurrentTask !== 'his' && (
           <>
-            <Button
-              className="btn_usual"
+            <button
+              type="button"
               disabled={!selectedKeys.length}
               onClick={() => claimOk(selectedKeys)}
             >
-              <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
+              <IconFont type="iconqizhi" className={alertStyle['btn-icon']} />
               <FormattedMessage id="alert-center.claim" />
-            </Button>
-            <Button
-              className="btn_usual"
-              disabled={!selectedKeys.length}
-              onClick={() => setVisible(true)}
-            >
-              <IconFont type="iconicon_assign" className={styles['btn-icon']} />
+            </button>
+            <button type="button" disabled={!selectedKeys.length} onClick={() => setVisible(true)}>
+              <IconFont type="iconicon_assign-copy" className={alertStyle['btn-icon']} />
               Assign
-            </Button>
+            </button>
           </>
-        ) : null}
+        )}
 
         {/* <Button disabled={!selectedKeys.length} onClick={() => setTaskWithdraw(selectedKeys)}>
           <IconFont type="iconicon_withdraw1 " className={styles['btn-icon']} />
           Withdraw
         </Button> */}
-        <Button disabled={!selectedKeys.length} onClick={exportAlert}>
-          <IconFont type="iconicon_export" className={styles['btn-icon']} />
+        <button type="button" disabled={!selectedKeys.length} onClick={exportAlert}>
+          <IconFont type="iconexport" className={alertStyle['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
-        </Button>
+        </button>
       </Col>
       <Col span={6}>
         <Search

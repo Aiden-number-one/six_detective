@@ -93,7 +93,11 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
       </Col>
       <Col span={8}>
         <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
-          <TabPane key="1" tab={<FormattedMessage id="alert-center.comment-history" />}>
+          <TabPane
+            key="1"
+            tab={<FormattedMessage id="alert-center.comment-history" />}
+            className={styles['tab-content']}
+          >
             <Spin spinning={loading['alertCenter/fetchComments']}>
               {comments.length > 0 ? (
                 <ul className={styles['comment-list']}>
@@ -107,9 +111,13 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
             </Spin>
             <AlertRichText loading={loading['alertCenter/postComment']} onCommit={handleCommit} />
           </TabPane>
-          <TabPane key="2" tab={<FormattedMessage id="alert-center.alert-lifecycle" />}>
+          <TabPane
+            key="2"
+            tab={<FormattedMessage id="alert-center.alert-lifecycle" />}
+            className={styles['tab-content']}
+          >
             <Spin spinning={loading['alertCenter/fetchLogs']}>
-              <div style={{ height: 370, overflowY: 'auto', padding: '0 18px' }}>
+              <div style={{ height: 370, overflowY: 'auto' }}>
                 {logs.length > 0 ? (
                   logs.map(log => <AlertLog log={log} key={log.id} />)
                 ) : (
