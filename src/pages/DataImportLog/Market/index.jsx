@@ -44,6 +44,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
         <MarketLogFilterForm handleSearch={handleSearch} />
         <MarketLogManualModal
           visible={visible}
+          loading={loading['market/importByManual']}
           handleCancel={() => setVisible(false)}
           handleUpload={handleUpload}
         />

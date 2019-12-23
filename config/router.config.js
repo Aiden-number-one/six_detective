@@ -154,7 +154,7 @@ export default [
           {
             path: '/account-module/data-import',
             name: 'Data Import',
-            component: './Page404',
+            component: './DataImportLog/NewAccount',
           },
           {
             path: '/account-module/account-information',
