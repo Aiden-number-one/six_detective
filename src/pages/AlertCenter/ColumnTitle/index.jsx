@@ -15,8 +15,8 @@ export default function ColumnTitle({
   children,
   isNum,
   loading,
-  tableColumn,
-  filterItems = [],
+  curColumn,
+  filterItems,
   getFilterItems,
   handleCommit,
 }) {
@@ -25,20 +25,21 @@ export default function ColumnTitle({
   const [filterType, setFilterType] = useState(isNum ? 1 : 7);
   const [checkedList, setcheckedList] = useState([]);
   const isFilterSelect = [1, 3, 4, 5, 6].includes(filterType);
-  // const [conditions, setConditions] = useState([]);
 
-  function hanldeFilterItems() {
-    if (!visible) {
+  function handleVisibleChange(v) {
+    setVisible(v);
+    if (v) {
       getFilterItems();
     }
   }
 
   async function handleOk() {
     const condition = {
-      column: tableColumn,
+      column: curColumn,
       value: checkedList.toString(),
       condition: filterType.toString(),
     };
+
     await handleCommit(condition);
     setVisible(false);
   }
@@ -51,7 +52,7 @@ export default function ColumnTitle({
       placement="bottomLeft"
       trigger="click"
       visible={visible}
-      onVisibleChange={v => setVisible(v)}
+      onVisibleChange={handleVisibleChange}
       overlayClassName={styles.container}
       overlayStyle={{ width: 260 }}
       content={
@@ -60,11 +61,11 @@ export default function ColumnTitle({
           <div className={styles.content}>
             <FilterType isNum={isNum} handleTypeChange={type => setFilterType(type)} />
             {isFilterSelect ? (
-              <FilterSelect filterItems={filterItems} />
+              <FilterSelect filterList={filterItems} />
             ) : (
               <FilterCheckbox
                 loading={loading}
-                filterItems={filterItems}
+                filterList={filterItems}
                 getCheckList={handleCheckList}
               />
             )}
@@ -73,7 +74,7 @@ export default function ColumnTitle({
         </>
       }
     >
-      <div onClick={hanldeFilterItems}>
+      <div>
         <IconFont type="iconfilter1" className={classNames(styles.icon, styles['filter-icon'])} />
         {children}
       </div>

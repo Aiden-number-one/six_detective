@@ -22,6 +22,7 @@ export default [
         path: '/',
         name: 'Homepage',
         component: './Monitor/Monitor',
+        // component: './HomePage/HomePage',
       },
       {
         path: '/homepage',
@@ -42,6 +43,11 @@ export default [
             name: 'Information Center',
             component: './AlertCenter/Information',
             hideInMenu: true,
+          },
+          {
+            path: '/homepage/Approval-Process-Center',
+            name: 'ApprovalProcessCenter',
+            component: './ApprovalProcessCenter/index',
           },
         ],
       },
@@ -451,18 +457,6 @@ export default [
             path: '/system-management/scheduling',
             name: 'scheduling',
             component: './Scheduling/Scheduling',
-          },
-        ],
-      },
-      {
-        path: '/alert-management',
-        name: 'alertManagement',
-        icon: 'icon-jinggao',
-        routes: [
-          {
-            path: '/alert-management/Approval-Process-Center',
-            name: 'ApprovalProcessCenter',
-            component: './ApprovalProcessCenter/index',
           },
         ],
       },

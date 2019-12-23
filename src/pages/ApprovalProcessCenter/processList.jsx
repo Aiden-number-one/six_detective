@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Col, Button, Modal, Input, Radio, Drawer } from 'antd';
+import { Table, Row, Col, Button, Input, Radio, Drawer } from 'antd';
 import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
-// import { ConfirmModel } from './component/ConfirmModel';
-import { GetQueryString } from '@/utils/utils';
+import { ConfirmModel } from './component/ConfirmModel';
+// import { GetQueryString } from '@/utils/utils';
 import styles from './index.less';
 
 const { Column } = Table;
@@ -17,11 +17,15 @@ export const DEFAULT_PAGE_SIZE = 10;
 
 function TabBtn({ changeTab }) {
   return (
-    <Row className={styles.btns}>
+    <Row className={styles.btns} style={{ marginBottom: '15px' }}>
       <Col span={12}>
-        <Radio.Group defaultValue="all" onChange={e => changeTab(e.target.value)}>
-          <Radio.Button value="all">All Task</Radio.Button>
-          <Radio.Button value="my">My task</Radio.Button>
+        <Radio.Group
+          defaultValue="my"
+          buttonStyle="solid"
+          onChange={e => changeTab(e.target.value)}
+        >
+          <Radio.Button value="all">All Tasks</Radio.Button>
+          <Radio.Button value="my">My Tasks</Radio.Button>
           <Radio.Button value="his">History</Radio.Button>
         </Radio.Group>
       </Col>
@@ -32,7 +36,6 @@ function TaskBtn({
   selectedKeys,
   selectedCurrentTask,
   searchTask,
-  urlTaskCode,
   claimOk,
   setVisible,
   exportAlert,
@@ -40,22 +43,27 @@ function TaskBtn({
   return (
     <Row className={styles.btns}>
       <Col span={12}>
-        <Button
-          className="btn_usual"
-          disabled={!selectedKeys.length}
-          onClick={() => claimOk(selectedKeys)}
-        >
-          <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
-          <FormattedMessage id="alert-center.claim" />
-        </Button>
-        <Button
-          className="btn_usual"
-          disabled={!selectedKeys.length}
-          onClick={() => setVisible(true)}
-        >
-          <IconFont type="iconicon_assign" className={styles['btn-icon']} />
-          Assign
-        </Button>
+        {selectedCurrentTask !== 'his' ? (
+          <>
+            <Button
+              className="btn_usual"
+              disabled={!selectedKeys.length}
+              onClick={() => claimOk(selectedKeys)}
+            >
+              <IconFont type="iconicon_Claim" className={styles['btn-icon']} />
+              <FormattedMessage id="alert-center.claim" />
+            </Button>
+            <Button
+              className="btn_usual"
+              disabled={!selectedKeys.length}
+              onClick={() => setVisible(true)}
+            >
+              <IconFont type="iconicon_assign" className={styles['btn-icon']} />
+              Assign
+            </Button>
+          </>
+        ) : null}
+
         {/* <Button disabled={!selectedKeys.length} onClick={() => setTaskWithdraw(selectedKeys)}>
           <IconFont type="iconicon_withdraw1 " className={styles['btn-icon']} />
           Withdraw
@@ -68,7 +76,6 @@ function TaskBtn({
       <Col span={6}>
         <Search
           placeholder="search"
-          defaultValue={urlTaskCode}
           onSearch={value => searchTask(selectedCurrentTask, value)}
           style={{ width: 264, height: 36 }}
         />
@@ -88,18 +95,20 @@ function ProcessList({
   setCurrentTaskType,
 }) {
   const [selectedKeys, setSelectedKeys] = useState([]);
-  const [selectedCurrentTask, setSelectedTasks] = useState('all');
+  const [selectedCurrentTask, setSelectedTasks] = useState('my');
   const [currentPage, setcurrentPage] = useState('1');
   const [currentRow, setcurrentRow] = useState('1');
   const [visible, setVisible] = useState(false);
   const [radioValue, setRadioValue] = useState('');
-  const urlTaskCode = GetQueryString('taskcode');
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [clickCurrentTaskCode, setClickTaskCode] = useState('');
+  // const urlTaskCode = GetQueryString('taskcode');
   console.log('selectedCurrentTask------>', selectedCurrentTask);
   useEffect(() => {
     dispatch({
       type: 'approvalCenter/fetch',
       payload: {
-        taskCode: urlTaskCode,
+        type: selectedCurrentTask,
       },
     });
     dispatch({
@@ -128,17 +137,9 @@ function ProcessList({
       },
     });
     // console.log('taskIds--->', taskCode);
-    if (detailItems.ownerId) {
-      Modal.confirm({
-        title: 'Confirm',
-        content: `This task has been claimed by [${detailItems.ownerId}]
-      Do you confirm to re-claim`,
-        okText: 'Sure',
-        cancelText: 'Cancel',
-        onOk: () => {
-          claimOk(taskCode);
-        },
-      });
+    if (detailItems[0].ownerId) {
+      setClickTaskCode(taskCode);
+      setConfirmVisible(true);
     } else {
       claimOk(taskCode);
     }
@@ -151,6 +152,7 @@ function ProcessList({
         taskCode,
       },
       callback: () => {
+        setConfirmVisible(false);
         dispatch({
           type: 'approvalCenter/fetch',
           payload: {
@@ -193,6 +195,14 @@ function ProcessList({
 
   return (
     <div className={styles.list}>
+      <ConfirmModel
+        title="CONFIRM"
+        content={`This task has been claimed by [${detailItems[0] && detailItems[0].ownerId}]
+        Do you confirm to re-claim`}
+        closeModel={() => setConfirmVisible(false)}
+        confirmVisible={confirmVisible}
+        comfirm={() => claimOk(clickCurrentTaskCode)}
+      />
       <Drawer
         title="Assign to"
         width={500}
@@ -241,7 +251,6 @@ function ProcessList({
         selectedKeys={selectedKeys}
         selectedCurrentTask={selectedCurrentTask}
         searchTask={searchTask}
-        urlTaskCode={urlTaskCode}
         claimOk={claimOk}
         setTaskAssign={setTaskAssign}
         setVisible={setVisible}
@@ -304,24 +313,26 @@ function ProcessList({
           render={(text, record) => moment(record.updateDate).format(timestampFormat)}
         />
         <Column dataIndex="owner" title="OWNER" />
-        <Column align="center" dataIndex="statusDesc" title="statusDesc" />
-        <Column
-          align="center"
-          dataIndex="action"
-          title={<FormattedMessage id="alert-center.actions" />}
-          render={(text, record) => (
-            <Row className={styles.btns}>
-              <IconFont
-                type="iconqizhi"
-                className={styles.icon}
-                title={formatMessage({ id: 'alert-center.claim' })}
-                onClick={() => {
-                  claimTask([record.taskCode]);
-                }}
-              />
-            </Row>
-          )}
-        />
+        <Column align="center" dataIndex="statusDesc" title="STATUS" />
+        {selectedCurrentTask !== 'his' ? (
+          <Column
+            align="center"
+            dataIndex="action"
+            title={<FormattedMessage id="alert-center.actions" />}
+            render={(text, record) => (
+              <Row className={styles.btns}>
+                <IconFont
+                  type="iconqizhi"
+                  className={styles.icon}
+                  title={formatMessage({ id: 'alert-center.claim' })}
+                  onClick={() => {
+                    claimTask([record.taskCode]);
+                  }}
+                />
+              </Row>
+            )}
+          />
+        ) : null}
       </Table>
     </div>
   );

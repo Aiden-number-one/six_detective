@@ -54,7 +54,6 @@ export function FilterType({ isNum, loading, handleTypeChange }) {
       <span>{isNum ? 'NUM' : 'TEXT'}</span>
       <Select
         ellipsis
-        allowClear
         loading={loading}
         className={styles.type}
         defaultValue={isNum ? 1 : 7}
@@ -70,7 +69,8 @@ export function FilterType({ isNum, loading, handleTypeChange }) {
   );
 }
 
-export function FilterSelect({ filterItems }) {
+// type = [not] equal
+export function FilterSelect({ filterList }) {
   function onSearch(val) {
     console.log('search:', val);
   }
@@ -83,6 +83,7 @@ export function FilterSelect({ filterItems }) {
       <div className={styles.des}>Description</div>
       <Select
         showSearch
+        allowClear
         placeholder="Select a item"
         className={styles.select}
         optionFilterProp="children"
@@ -92,7 +93,7 @@ export function FilterSelect({ filterItems }) {
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
       >
-        {filterItems.map(item => (
+        {filterList.map(item => (
           <Option value={item} key={item}>
             {item}
           </Option>
@@ -102,36 +103,36 @@ export function FilterSelect({ filterItems }) {
   );
 }
 
-export function FilterCheckbox({ loading, filterItems, getCheckList }) {
-  const [searchList, setSearchList] = useState([]);
+// type = contain
+export function FilterCheckbox({ loading, filterList, getCheckList }) {
+  // const [searchList, setSearchList] = useState([]);
+  const [isCheckAll, setCheckAll] = useState(true);
+  const [indeterminate, setIndeterminate] = useState(false);
+  const [checkedList, setcheckedList] = useState([]);
 
   useEffect(() => {
-    setSearchList(filterItems);
-  }, [filterItems]);
-
-  const [isCheckAll, setCheckAll] = useState(false);
-  const [indeterminate, setIndeterminate] = useState(false);
-  const [checkedList, setcheckedList] = useState(searchList);
+    setcheckedList(filterList);
+  }, [filterList]);
 
   function handleChange(cList) {
     setcheckedList(cList);
-    setIndeterminate(!!cList.length && cList.length < searchList.length);
-    setCheckAll(cList.length === searchList.length);
+    setIndeterminate(!!cList.length && cList.length < filterList.length);
+    setCheckAll(cList.length === filterList.length);
     getCheckList(cList);
   }
 
   function handleCheckAllChange(e) {
     const { checked } = e.target;
-    setcheckedList(checked ? searchList : []);
+    setcheckedList(checked ? filterList : []);
     setIndeterminate(false);
     setCheckAll(checked);
-    getCheckList(filterItems);
+    getCheckList(filterList);
   }
 
   function handleSearch(value) {
     console.log('value', value);
-    const sList = searchList.filter(item => item.toLowerCase() === value.toLowerCase());
-    setSearchList(sList || filterItems);
+    // const sList = filterList.filter(item => item.toLowerCase() === value.toLowerCase());
+    // setSearchList(sList || filterItems);
   }
 
   return (
@@ -143,7 +144,7 @@ export function FilterCheckbox({ loading, filterItems, getCheckList }) {
       />
       <div className={styles.des}>Description</div>
       <Spin spinning={loading}>
-        {searchList.length > 0 ? (
+        {filterList.length > 0 ? (
           <div className={styles['check-content']}>
             <Row>
               <Checkbox
@@ -156,11 +157,10 @@ export function FilterCheckbox({ loading, filterItems, getCheckList }) {
             </Row>
             <Checkbox.Group
               className={styles['scroll-container']}
-              defaultValue={checkedList}
               value={checkedList}
               onChange={handleChange}
             >
-              {searchList.map(item => (
+              {filterList.map(item => (
                 <Row key={item}>
                   <Checkbox value={item} defaultChecked>
                     {item}

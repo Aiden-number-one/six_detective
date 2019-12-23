@@ -35,7 +35,7 @@ export default function({
   comment: { id, commentTime, commentContent, commentUserName, attachment },
 }) {
   let attachments = attachment ? attachment.split(',') : [];
-  const time = moment(commentTime).format('DD-MMM-YYYY hh:mm:ss');
+  const time = moment(commentTime).format('DD-MMM-YYYY HH:mm:ss');
   attachments = attachments.map(file => {
     const l = file.split('/');
     const f = l.slice(-1)[0];

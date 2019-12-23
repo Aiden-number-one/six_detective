@@ -11,8 +11,8 @@ export default class SearchForm extends Component {
     const { getFieldDecorator } = this.props.form;
     const { search } = this.props;
     return (
-      <Form className="ant-advanced-search-form">
-        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
+      <Form className="ant-advanced-search-form search-wraper">
+        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }} align="middle" type="flex">
           <Col xs={12} sm={12} lg={8}>
             <Form.Item
               label={formatMessage({ id: 'systemManagement.systemParameter.parameterType' })}
@@ -30,11 +30,17 @@ export default class SearchForm extends Component {
               )}
             </Form.Item>
           </Col>
+          <Col xs={12} sm={12} lg={8}>
+            <Button type="primary" onClick={search}>
+              <IconFont type="iconsousuo" style={{ color: '#fff' }} />
+              {formatMessage({ id: 'app.common.search' })}
+            </Button>
+          </Col>
           {/* <div className="btnArea1"> */}
-          <Button type="primary" onClick={search} style={{ marginTop: 28 }}>
+          {/* <Button type="primary" onClick={search} style={{ marginTop: 28 }}>
             <IconFont type="iconsousuo" style={{ color: '#fff' }} />
             {formatMessage({ id: 'app.common.search' })}
-          </Button>
+          </Button> */}
           {/* </div> */}
           {/* <Col xs={12} sm={12} lg={16}>
             <Form.Item

@@ -345,21 +345,22 @@
       border-radius: 0;
     }
     .ant-input:hover {
-      border-color: #464c51;
+      // border-color: #464c51;
+      border-color: #10416c;
     }
     .ant-input:focus {
       box-shadow: none;
     }
-    .ant-form-item-required::before {
-      content: '';
-    }
+    // .ant-form-item-required::before {
+    //   content: '';
+    // }
     .ant-form-item {
       margin-bottom: 10px;
     }
-    .ant-form-item-required::after,
-    .ant-form-item-label > label::after {
-      content: '';
-    }
+    // .ant-form-item-required::after,
+    // .ant-form-item-label > label::after {
+    //   content: '';
+    // }
     .has-error .ant-input,
     .has-error .ant-input:hover {
       color: red;
@@ -613,7 +614,7 @@
       font-size: 13px;
     }
     .ant-table-thead > tr > th {
-      background-color: #fff;
+      background-color: #fafafa;
     }
     .ant-table-tbody > tr > td,
     .ant-table-thead > tr > th {
@@ -743,6 +744,7 @@
     // pagination
     .ant-pagination {
       display: flex;
+      align-items: center;
       justify-content: flex-end;
       margin-top: 20px;
       // & li:first-child {
@@ -777,5 +779,46 @@
     height: 100%;
     background-color: #f8374c;
     content: '';
+  }
+
+  // Tabs
+  .ant-tabs {
+    .ant-tabs-bar {
+      margin: 0;
+      border-bottom: 0;
+      .ant-tabs-nav {
+        .ant-tabs-tab {
+          margin: 0 0 0 12px;
+          padding: 12px 14px;
+          color: rgba(16, 65, 108, 0.3);
+          font-size: 12px;
+          font-family: AvenirHeavy, sans-serif;
+        }
+        .ant-tabs-tab + .ant-tabs-tab {
+          margin-left: 0;
+        }
+        .ant-tabs-tab:hover {
+          color: #10416c;
+        }
+        .ant-tabs-tab-active {
+          color: #10416c;
+        }
+        .ant-tabs-ink-bar {
+          background-color: #f4374c;
+        }
+      }
+    }
+  }
+  .ant-tabs-content {
+    .ant-tabs-tabpane {
+      background-color: #fff;
+    }
+  }
+  .search-wraper {
+    padding: 24px 38px !important;
+  }
+  // 去除表格最下面线条
+  .ant-table-content .ant-table-placeholder {
+    border-bottom: none;
   }
 }

@@ -128,6 +128,7 @@ class SystemParams extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          align: 'center',
           render: (res, recode, index) => (
             <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
           ),
@@ -136,19 +137,22 @@ class SystemParams extends Component {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterType' }),
           dataIndex: 'parameterType',
           key: 'parameterType',
+          align: 'center',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterKey' }),
           dataIndex: 'parameterKey',
           key: 'parameterKey',
+          align: 'center',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterValue' }),
           dataIndex: 'parameterValue',
           key: 'parameterValue',
+          align: 'center',
         },
         {
-          title: formatMessage({ id: 'app.common.note' }),
+          title: formatMessage({ id: 'app.common.remark' }),
           dataIndex: 'note',
           key: 'note',
         },
@@ -345,21 +349,22 @@ class SystemParams extends Component {
                 columns={this.state.columns}
                 pagination={false}
               ></Table>
-              <Pagination
-                size="small"
-                showSizeChanger
-                current={page.pageNumber}
-                showTotal={() =>
-                  `Page ${(getSystemParamsListData.totalCount || 0) &&
-                    page.pageNumber.toString()} of ${Math.ceil(
-                    (getSystemParamsListData.totalCount || 0) / page.pageSize,
-                  ).toString()}`
-                }
-                onShowSizeChange={this.onShowSizeChange}
-                onChange={this.pageChange}
-                total={getSystemParamsListData.totalCount}
-                pageSize={page.pageSize}
-              />
+              {getSystemParamsListData.items && getSystemParamsListData.items.length > 0 && (
+                <Pagination
+                  showSizeChanger
+                  current={page.pageNumber}
+                  showTotal={() =>
+                    `Page ${(getSystemParamsListData.totalCount || 0) &&
+                      page.pageNumber.toString()} of ${Math.ceil(
+                      (getSystemParamsListData.totalCount || 0) / page.pageSize,
+                    ).toString()}`
+                  }
+                  onShowSizeChange={this.onShowSizeChange}
+                  onChange={this.pageChange}
+                  total={getSystemParamsListData.totalCount}
+                  pageSize={page.pageSize}
+                />
+              )}
             </div>
           </div>
         </Fragment>

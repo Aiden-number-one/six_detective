@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Button } from 'antd';
-import { FormattedMessage } from 'umi/locale';
+import { FormattedMessage, formatMessage } from 'umi/locale';
+import Link from 'umi/link';
 import { connect } from 'dva';
+import { Icon, Table } from 'antd';
 import styles from '@/pages/AlertCenter/index.less';
+import IconFont from '@/components/IconFont';
 import AlertTaskModal from './AlertTaskModal';
 import AlertTaskOfEp from './AlertTaskOfEp';
 import AlertTaskOfProduct from './AlertTaskOfProduct';
@@ -50,14 +52,38 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId, alertId }, alertIt
         handleCancel={() => setVisible(false)}
         assignUser={handleAssignUser}
       />
-      <Button style={{ marginBottom: 10 }} disabled={!selectedRows.length} onClick={showUsers}>
-        <FormattedMessage id="alert-center.assign" />
-      </Button>
+      <div className={styles.btns}>
+        <button type="button" disabled={!selectedRows.length} onClick={showUsers}>
+          {loading['alertCenter/fetchAssignUsers'] ? (
+            <Icon type="loading" className={styles['btn-icon']} />
+          ) : (
+            <IconFont type="iconicon_assign-copy" className={styles['btn-icon']} />
+          )}
+          <FormattedMessage id="alert-center.assign" />
+        </button>
+      </div>
       {AlertTaskType && (
         <AlertTaskType
           dataSource={alertItems}
           loading={loading}
           getSelectedRows={rows => setSelectedRows(rows)}
+          renderAction={() => (
+            <Table.Column
+              width="15%"
+              align="center"
+              dataIndex="action"
+              title={<FormattedMessage id="alert-center.actions" />}
+              render={(text, record) => (
+                <Link
+                  disabled={!record.USER_NAME}
+                  to="/homepage/Approval-Process-Center"
+                  title={formatMessage({ id: 'alert-center.enter-workflow' })}
+                >
+                  <FormattedMessage id="alert-center.enter-workflow" />
+                </Link>
+              )}
+            />
+          )}
         />
       )}
     </div>
