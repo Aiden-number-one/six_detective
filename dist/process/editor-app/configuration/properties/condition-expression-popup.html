@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <div class="detail-group clearfix">
                     <div class="form-group clearfix">
-                        <label class="col-xs-2" style="text-align: right;">类型</label>
+                        <label class="col-xs-2" style="text-align: right;">type</label>
                         <div class="col-md-10">
                             <div class="radio-list">
                                 <label class="radio-inline">
@@ -16,7 +16,7 @@
                                         <span>
                                             <input type="radio" name="flow_type" ng-model="conditionExpression.type" value="approve_percent">
                                         </span>
-                                        百分比
+                                        percent
                                     </div>
                                 </label>
                                 <label class="radio-inline">
@@ -24,7 +24,7 @@
                                         <span>
                                             <input type="radio" name="flow_type" ng-model="conditionExpression.type" value="condition">
                                         </span>
-                                        条件表达式
+                                        condition formula
                                     </div>
                                 </label>
                             </div>
@@ -53,8 +53,8 @@
                             </div>
                             <div class="col-xs-4">
                                 <select class="form-control" ng-model="conditionExpression.approve_percent.approve">
-                                    <option value="1">通过</option>
-                                    <option value="0">不通过</option>
+                                    <option value="1">pass</option>
+                                    <option value="0">not pass</option>
                                 </select>
                             </div>
                         </div>
