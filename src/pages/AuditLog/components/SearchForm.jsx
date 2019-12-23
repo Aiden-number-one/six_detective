@@ -13,7 +13,7 @@ export default class SearchForm extends Component {
     const { search, exportData } = this.props;
     return (
       <Form className="ant-advanced-search-form search-wraper">
-        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }} align="middle" type="flex">
+        <Row gutter={20} align="middle" type="flex">
           <Col xs={24} sm={12} xl={8} xxl={6}>
             <Form.Item label={formatMessage({ id: 'systemManagement.auditLog.logDate' })}>
               {getFieldDecorator(
