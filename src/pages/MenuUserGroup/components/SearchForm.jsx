@@ -12,8 +12,8 @@ export default class SearchForm extends Component {
     const { search } = this.props;
     return (
       <Form className="ant-advanced-search-form search-wraper">
-        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }} align="middle" type="flex">
-          <Col xs={12} sm={12} lg={8}>
+        <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="middle" type="flex">
+          <Col xs={24} sm={12} xl={7} xxl={5}>
             <Form.Item
               label={formatMessage({ id: 'systemManagement.userMaintenance.menuGroupName' })}
             >
@@ -30,7 +30,7 @@ export default class SearchForm extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col xs={12} sm={12} lg={8}>
+          <Col xs={24} sm={12} xl={7} xxl={5}>
             <Form.Item label={formatMessage({ id: 'systemManagement.userGroup.remark' })}>
               {getFieldDecorator(
                 'groupDesc',
@@ -45,7 +45,7 @@ export default class SearchForm extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col xs={12} sm={12} lg={8}>
+          <Col xs={24} sm={12} xl={7} xxl={5}>
             <Button type="primary" onClick={search}>
               <IconFont type="iconsousuo" style={{ color: '#fff' }} />
               {formatMessage({ id: 'app.common.search' })}

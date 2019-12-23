@@ -13,8 +13,8 @@ export default class SearchForm extends Component {
     const { search, exportData } = this.props;
     return (
       <Form className="ant-advanced-search-form search-wraper">
-        <Row gutter={20} align="middle" type="flex">
-          <Col xs={24} sm={12} xl={8} xxl={6}>
+        <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="middle" type="flex">
+          <Col xs={24} sm={12} xl={10} xxl={8}>
             <Form.Item label={formatMessage({ id: 'systemManagement.auditLog.logDate' })}>
               {getFieldDecorator(
                 'logDate',
@@ -22,12 +22,12 @@ export default class SearchForm extends Component {
               )(<RangePicker format="DD-MMM-YYYY" placeholder={['Start Date', 'End Date']} />)}
             </Form.Item>
           </Col>
-          <Col xs={24} sm={12} xl={8} xxl={6}>
+          <Col xs={24} sm={12} xl={7} xxl={5}>
             <Form.Item label={formatMessage({ id: 'systemManagement.auditLog.updatedBy' })}>
               {getFieldDecorator('updatedBy', {})(<Input placeholder="Please input" />)}
             </Form.Item>
           </Col>
-          <Col xs={24} sm={12} xl={8} xxl={6}>
+          <Col xs={24} sm={12} xl={7} xxl={5}>
             <Form.Item label={formatMessage({ id: 'systemManagement.auditLog.functionName' })}>
               {getFieldDecorator('functionName', {})(<Input placeholder="Please input" />)}
             </Form.Item>
