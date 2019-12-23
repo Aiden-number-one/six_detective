@@ -6,7 +6,7 @@ import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
-// import { GetQueryString } from '@/utils/utils';
+import { GetQueryString } from '@/utils/utils';
 import styles from './index.less';
 import alertStyle from '@/pages/AlertCenter/index.less';
 
@@ -39,6 +39,7 @@ function TaskBtn({
   searchTask,
   claimOk,
   setVisible,
+  urlTaskCode,
   exportAlert,
 }) {
   return (
@@ -73,6 +74,7 @@ function TaskBtn({
       <Col span={6}>
         <Search
           placeholder="search"
+          defaultValue={urlTaskCode}
           onSearch={value => searchTask(selectedCurrentTask, value)}
           style={{ width: 264, height: 36 }}
         />
@@ -99,13 +101,13 @@ function ProcessList({
   const [radioValue, setRadioValue] = useState('');
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [clickCurrentTaskCode, setClickTaskCode] = useState('');
-  // const urlTaskCode = GetQueryString('taskcode');
-  console.log('selectedCurrentTask------>', selectedCurrentTask);
+  const urlTaskCode = GetQueryString('taskCode');
   useEffect(() => {
     dispatch({
       type: 'approvalCenter/fetch',
       payload: {
         type: selectedCurrentTask,
+        taskCode: urlTaskCode,
       },
     });
     dispatch({
@@ -251,6 +253,7 @@ function ProcessList({
         claimOk={claimOk}
         setTaskAssign={setTaskAssign}
         setVisible={setVisible}
+        urlTaskCode={urlTaskCode}
       />
       <Table
         border

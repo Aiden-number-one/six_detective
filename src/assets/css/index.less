@@ -228,7 +228,7 @@
       color: #464c51;
       font-size: 10px;
       line-height: 30px;
-      background: rgba(217, 233, 248, 1);
+      // background: rgba(217, 233, 248, 1);
     }
     .ant-breadcrumb a {
       color: #464c51;
@@ -357,10 +357,10 @@
     .ant-form-item {
       margin-bottom: 10px !important;
     }
-    // .ant-form-item-required::after,
-    // .ant-form-item-label > label::after {
-    //   content: '';
-    // }
+    .ant-form-item-required::after,
+    .ant-form-item-label > label::after {
+      content: '';
+    }
     .has-error .ant-input,
     .has-error .ant-input:hover {
       color: red;
@@ -397,10 +397,14 @@
     .ant-select-selection__rendered {
       height: 30px;
       line-height: 30px;
+      // border: 1px solid #d9d9d9;
     }
     .ant-select-selection {
-      background-color: #f1f5f6;
-      border: 1px solid transparent;
+      // padding: 1px;
+      // background-color: #f1f5f6;
+      background-color: #fff;
+      // border: 1px solid transparent;
+      // border: 1px solid #d9d9d9;
       border-radius: 0;
     }
     .ant-select-selection:hover {
@@ -760,11 +764,12 @@
   }
   // modal头部
   .ant-modal-content .ant-modal-header {
-    position: relative !important;
-    background-color: #10416c !important;
+    // position: relative !important;
+    // background-color: #10416c !important;
   }
   .ant-modal-content .ant-modal-title {
-    color: #fff !important;
+    // color: #fff !important;
+    color: #464c51;
   }
   .ant-modal-content .ant-modal-body {
     color: #000;
@@ -774,7 +779,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    display: inline-block;
+    display: none;
     width: 4px;
     height: 100%;
     background-color: #f8374c;

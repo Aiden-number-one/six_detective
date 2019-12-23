@@ -2,8 +2,8 @@
  * @Description: 数据预览
  * @Author: lan
  * @Date: 2019-12-11 20:54:21
- * @LastEditTime: 2019-12-12 10:06:45
- * @LastEditors: lan
+ * @LastEditTime : 2019-12-23 11:16:31
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -24,8 +24,32 @@ export default class DeleteDataSetDrawer extends PureComponent {
     toggleDrawer: () => {},
   };
 
+  perfectColumn = () => {
+    const { column } = this.props;
+    return (
+      column &&
+      column.map(valueV => {
+        const { value, type } = valueV;
+        return {
+          title: value,
+          dataIndex: value,
+          key: value,
+          align: type === 'dimension' ? 'left' : 'right',
+          render: text => {
+            // eslint-disable-next-line no-restricted-globals
+            if (!isNaN(Number(text))) {
+              return <span>{text && text.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')}</span>;
+            }
+            return <span>{text}</span>;
+          },
+        };
+      })
+    );
+  };
+
   render() {
-    const { toggleDrawer, visible, column, tableData } = this.props;
+    const { toggleDrawer, visible, tableData } = this.props;
+    const renderColumn = this.perfectColumn();
     return (
       <Drawer
         title="Data Perform"
@@ -36,7 +60,7 @@ export default class DeleteDataSetDrawer extends PureComponent {
         }}
         destroyOnClose
       >
-        <Table columns={column} dataSource={tableData} />
+        <Table columns={renderColumn} dataSource={tableData} scroll={{ x: 'max-content' }} />
         <div
           style={{
             position: 'absolute',
