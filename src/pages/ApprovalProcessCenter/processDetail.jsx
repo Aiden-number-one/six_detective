@@ -48,7 +48,6 @@ function ProcessDetail({
   const [upAttachments, setUpAttachements] = useState([]);
   const newDetailForm = React.createRef();
   const isLt5M = size => size / 1024 / 1024 < 5;
-  console.log('currentTaskType--000-->', currentTaskType);
 
   useEffect(() => {
     if (task) {
@@ -88,6 +87,13 @@ function ProcessDetail({
       setConfirmVisible(true);
       return;
     }
+    if (type === 'submit') {
+      let isErr = true;
+      newDetailForm.current.validateFields(err => {
+        isErr = !err;
+      });
+      if (!isErr) return;
+    }
     if (taskGroup && !taskGroup.nextRelateNo) {
       submitOrApproveTask(type);
       return;
@@ -102,6 +108,7 @@ function ProcessDetail({
 
   function submitOrApproveTask(type) {
     let valueData = {};
+    let isErr = true;
     const taskValue = {
       taskCode: task.taskCode.toString(),
       type,
@@ -112,6 +119,7 @@ function ProcessDetail({
     if (type === 'submit') {
       newDetailForm.current.validateFields((err, values) => {
         const alertTypeValue = detailItems[0].alertType;
+        isErr = !err;
         if (!err) {
           if (alertTypeValue === '301') {
             valueData = {
@@ -153,19 +161,21 @@ function ProcessDetail({
     if (type === 'reject') {
       setConfirmVisible(false);
     }
-    dispatch({
-      type: 'approvalCenter/approveAndReject',
-      payload: taskValue,
-      callback: () => {
-        dispatch({
-          type: 'approvalCenter/fetch',
-          payload: {
-            type: currentTaskType,
-          },
-        });
-        setUpAttachements([]);
-      },
-    });
+    if (isErr) {
+      dispatch({
+        type: 'approvalCenter/approveAndReject',
+        payload: taskValue,
+        callback: () => {
+          dispatch({
+            type: 'approvalCenter/fetch',
+            payload: {
+              type: currentTaskType,
+            },
+          });
+          setUpAttachements([]);
+        },
+      });
+    }
     setVisible(false);
   }
 
@@ -203,11 +213,13 @@ function ProcessDetail({
 
   function saveTask() {
     let valueData = {};
+    let isErr = true;
     const taskValue = {
       taskCode: task.taskCode.toString(),
     };
     newDetailForm.current.validateFields((err, values) => {
       const alertTypeValue = detailItems[0].alertType;
+      isErr = !err;
       if (!err) {
         if (alertTypeValue === '301') {
           valueData = {
@@ -238,10 +250,12 @@ function ProcessDetail({
         console.log('Received values of form: ', values, valueData, taskValue);
       }
     });
-    dispatch({
-      type: 'approvalCenter/saveTask',
-      payload: taskValue,
-    });
+    if (isErr) {
+      dispatch({
+        type: 'approvalCenter/saveTask',
+        payload: taskValue,
+      });
+    }
   }
 
   function handleUpAttachments(info) {
@@ -259,6 +273,10 @@ function ProcessDetail({
     });
     console.log('fileList--->', fileList);
     setUpAttachements(fileList);
+  }
+
+  function handleRemove(file) {
+    setUpAttachements(upAttachments.filter(item => item.uid !== file.uid));
   }
 
   return (
@@ -419,7 +437,13 @@ function ProcessDetail({
                       </>
                     )}
                   </Row>
-                  {!!upAttachments.length && <TaskAttachments attachments={upAttachments} />}
+                  {!!upAttachments.length && (
+                    <TaskAttachments
+                      attachments={upAttachments}
+                      onRemove={handleRemove}
+                      onRemoveAll={() => setUpAttachements([])}
+                    />
+                  )}
                 </div>
               ) : null}
             </TabPane>

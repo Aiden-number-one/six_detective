@@ -2,8 +2,8 @@
  * @Description: This is for userManagement page.
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
- * @LastEditors  : mus
- * @LastEditTime : 2019-12-23 11:07:54
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-23 13:47:43
  */
 
 import React, { Component } from 'react';
@@ -235,7 +235,10 @@ class UserManagement extends Component {
       type: 'userManagement/updateUserModelDatas',
       payload: params,
       callback: () => {
-        message.success('delete success');
+        message.success({
+          content: 'delete success',
+          duration: 2,
+        });
         this.queryUserList();
         this.setState({
           deleteVisible: false,
