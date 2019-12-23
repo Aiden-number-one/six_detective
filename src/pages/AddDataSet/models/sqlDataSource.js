@@ -36,7 +36,7 @@ export default {
 
   effects: {
     // 获取单个数据集
-    *getDataSetDetail({ payload }, { call, put }) {
+    *getDataSetDetail({ payload, callback }, { call, put }) {
       const res = yield call(getDataSetDetail, { param: payload });
       if (res && res.bcjson.flag === '1') {
         // 保存数据集
@@ -44,6 +44,7 @@ export default {
           type: 'saveDataSet',
           payload: res.bcjson.items[0],
         });
+        if (callback) callback(res.bcjson.items[0]);
       }
     },
     *addDataSet({ payload }, { call }) {
