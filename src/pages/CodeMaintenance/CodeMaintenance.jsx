@@ -138,13 +138,28 @@ class CodeMaintenance extends Component {
   };
 
   codeConfirm = () => {
-    this.setState({ codeVisible: false }, () => {
+    const updateCodeItemParams = {
+      codeId: '',
+      subitemId: '',
+      subitem: '',
+      subitemName: '',
+      sequence: '',
+    };
+    this.setState({ codeVisible: false, updateCodeItemParams }, () => {
       this.queryCodeItemList();
     });
   };
 
   codeCancel = () => {
-    this.setState({ codeVisible: false });
+    const updateCodeItemParams = {
+      codeId: '',
+      subitemId: '',
+      subitem: '',
+      subitemName: '',
+      sequence: '',
+    };
+
+    this.setState({ codeVisible: false, updateCodeItemParams });
   };
 
   updateCode = (res, recode) => {

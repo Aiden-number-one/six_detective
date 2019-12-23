@@ -15,4 +15,5 @@ export default {
   operateDataSet: 'set_dataset_content_edit', // 操作数据集
   // setDataSet: 'set_task_data_set_sql_management_impl', // 新增数据集
   getColumn: 'get_report_template_dataset_field_list', // 获取列数据
+  getDataSetDetail: 'get_dataset_content_query', // 获取单个数据集
 };

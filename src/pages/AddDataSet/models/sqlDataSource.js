@@ -14,6 +14,7 @@ const {
   getMetadataTablePerform,
   getColumn,
   operateDataSet,
+  getDataSetDetail, // 获取单个数据集详情
 } = Service;
 
 export default {
@@ -30,9 +31,22 @@ export default {
     column: [], // table的column
     defaultPageSize: 5, // tableData一页默认展示
     columnData: [],
+    dataSet: {},
   },
 
   effects: {
+    // 获取单个数据集
+    *getDataSetDetail({ payload, callback }, { call, put }) {
+      const res = yield call(getDataSetDetail, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        // 保存数据集
+        yield put({
+          type: 'saveDataSet',
+          payload: res.bcjson.items[0],
+        });
+        if (callback) callback(res.bcjson.items[0]);
+      }
+    },
     *addDataSet({ payload }, { call }) {
       const res = yield call(operateDataSet, { param: payload });
       if (res && res.bcjson.flag === '1') {
@@ -200,6 +214,13 @@ export default {
       return {
         ...state,
         columnData: action.payload,
+      };
+    },
+    // 数据集详情
+    saveDataSet(state, action) {
+      return {
+        ...state,
+        dataSet: action.payload,
       };
     },
   },

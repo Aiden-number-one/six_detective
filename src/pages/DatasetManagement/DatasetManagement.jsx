@@ -357,6 +357,8 @@ export default class DatasetManagement extends PureComponent {
                   pathname: '/add-dataset',
                   query: {
                     connectionId: record.datasourceId,
+                    connectionName: record.datasourceName,
+                    datasetId: record.datasetId,
                   },
                 });
               }}
@@ -433,7 +435,7 @@ export default class DatasetManagement extends PureComponent {
     return (
       <PageHeaderWrapper>
         <div style={{ display: 'flex', minHeight: 'calc(100vh - 185px)' }}>
-          <div style={{ flex: '0 0 220px', background: '#fff' }}>
+          <div style={{ flex: '0 0 220px', background: '#fff', zIndex: 1 }}>
             {this.Title()}
             <ClassifyTree
               add
