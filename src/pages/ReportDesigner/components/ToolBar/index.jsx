@@ -1,24 +1,40 @@
 /* eslint-disable max-len */
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import { connect } from 'dva';
 import styles from './index.less';
 import IconFont from '@/components/IconFont';
 import StartMenu from './StartMenu';
 import InsertMenu from './InsertMenu';
 
+@connect(({ reportDesigner }) => ({ reportName: reportDesigner.reportName }))
 export default class ToolBar extends Component {
   state = {
     tabActive: 'Start',
+    reportNameType: 'span',
   };
 
+  inpuRef = React.createRef();
+
+  // 修改Tab Active的状态
   setTabActive = tabActive => {
     this.setState({
       tabActive,
     });
   };
 
+  // 修改report Input Name
+  reportOnChange = e => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/changeReportName',
+      payload: e.target.value,
+    });
+  };
+
   render() {
-    const { tabActive } = this.state;
+    const { tabActive, reportNameType } = this.state;
+    const { reportName } = this.props;
     return (
       <>
         <div className={classNames(styles.switchTabs)}>
@@ -26,7 +42,38 @@ export default class ToolBar extends Component {
           <div className={styles.middleBlock}>
             <div className={styles.nameSpace}>
               <IconFont type="iconcengji-copy" />
-              <span className={styles.inputName}>Untitled</span>
+              {/* span */}
+              {reportNameType === 'span' && (
+                <span
+                  className={styles.inputName}
+                  onClick={() => {
+                    this.setState(
+                      {
+                        reportNameType: 'input',
+                      },
+                      () => {
+                        this.inpuRef.current.focus();
+                      },
+                    );
+                  }}
+                >
+                  {reportName}
+                </span>
+              )}
+              {/* input */}
+              {reportNameType === 'input' && (
+                <input
+                  value={reportName}
+                  ref={this.inpuRef}
+                  className={styles.inputName}
+                  onBlur={() => {
+                    this.setState({
+                      reportNameType: 'span',
+                    });
+                  }}
+                  onChange={this.reportOnChange}
+                />
+              )}
             </div>
             <div className={styles.tabsName}>
               <div

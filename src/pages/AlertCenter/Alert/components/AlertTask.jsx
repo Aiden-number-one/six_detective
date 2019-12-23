@@ -76,7 +76,7 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId, alertId }, alertIt
               render={(text, record) => (
                 <Link
                   disabled={!record.USER_NAME}
-                  to="/homepage/Approval-Process-Center"
+                  to={`/homepage/Approval-Process-Center?taskCode=${record.TASK_ID}`}
                   title={formatMessage({ id: 'alert-center.enter-workflow' })}
                 >
                   <FormattedMessage id="alert-center.enter-workflow" />

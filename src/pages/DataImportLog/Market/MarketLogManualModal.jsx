@@ -47,6 +47,7 @@ function MarketLogManualModal({ form, visible, handleCancel, handleUpload }) {
           {getFieldDecorator('uploadFiles', {
             rules: [
               {
+                required: true,
                 validator: (rule, value, callback) => {
                   if (!value) {
                     return callback('Please select a file!');

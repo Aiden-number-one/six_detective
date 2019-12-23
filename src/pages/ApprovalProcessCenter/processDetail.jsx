@@ -48,7 +48,6 @@ function ProcessDetail({
   const [upAttachments, setUpAttachements] = useState([]);
   const newDetailForm = React.createRef();
   const isLt5M = size => size / 1024 / 1024 < 5;
-  console.log('currentTaskType--000-->', currentTaskType);
 
   useEffect(() => {
     if (task) {
@@ -88,6 +87,13 @@ function ProcessDetail({
       setConfirmVisible(true);
       return;
     }
+    if (type === 'submit') {
+      let isErr = true;
+      newDetailForm.current.validateFields(err => {
+        isErr = !err;
+      });
+      if (!isErr) return;
+    }
     if (taskGroup && !taskGroup.nextRelateNo) {
       submitOrApproveTask(type);
       return;
@@ -102,6 +108,7 @@ function ProcessDetail({
 
   function submitOrApproveTask(type) {
     let valueData = {};
+    let isErr = true;
     const taskValue = {
       taskCode: task.taskCode.toString(),
       type,
@@ -112,6 +119,7 @@ function ProcessDetail({
     if (type === 'submit') {
       newDetailForm.current.validateFields((err, values) => {
         const alertTypeValue = detailItems[0].alertType;
+        isErr = !err;
         if (!err) {
           if (alertTypeValue === '301') {
             valueData = {
@@ -153,19 +161,21 @@ function ProcessDetail({
     if (type === 'reject') {
       setConfirmVisible(false);
     }
-    dispatch({
-      type: 'approvalCenter/approveAndReject',
-      payload: taskValue,
-      callback: () => {
-        dispatch({
-          type: 'approvalCenter/fetch',
-          payload: {
-            type: currentTaskType,
-          },
-        });
-        setUpAttachements([]);
-      },
-    });
+    if (isErr) {
+      dispatch({
+        type: 'approvalCenter/approveAndReject',
+        payload: taskValue,
+        callback: () => {
+          dispatch({
+            type: 'approvalCenter/fetch',
+            payload: {
+              type: currentTaskType,
+            },
+          });
+          setUpAttachements([]);
+        },
+      });
+    }
     setVisible(false);
   }
 
@@ -203,45 +213,72 @@ function ProcessDetail({
 
   function saveTask() {
     let valueData = {};
+    let isErr = true;
     const taskValue = {
       taskCode: task.taskCode.toString(),
     };
     newDetailForm.current.validateFields((err, values) => {
       const alertTypeValue = detailItems[0].alertType;
+      isErr = !err;
       if (!err) {
         if (alertTypeValue === '301') {
           valueData = {
             epCname: values.epName,
           };
         } else if (alertTypeValue === '302') {
-          valueData = {
-            isCaCode: values.isCaCode,
-            productDesc: values.productDesc,
-            productCategory: values.productCategory,
-            contractNature: values.contractNature,
-            productGroup: values.productGroup,
-            ltdTmplCode: values.ltdTmplCode,
-            plTmplCode: values.plTmplCode,
-            rlTmplCode: values.rlTmplCode,
-            pdCalculateFlag: values.isCalculatePd,
-            sizeFactor: values.sizeFactor.toString(),
-            weightFactor: values.weightFactor.toString(),
-          };
+          if (values.isCaCode === 'No') {
+            valueData = {
+              isCaCode: values.isCaCode,
+              productDesc: values.productDesc,
+              productCategory: values.productCategory,
+              contractNature: values.contractNature,
+              productGroup: values.productGroup,
+              ltdTmplCode: values.ltdTmplCode,
+              plTmplCode: values.plTmplCode,
+              rlTmplCode: values.rlTmplCode,
+              pdCalculateFlag: values.isCalculatePd,
+              sizeFactor: values.isCalculatePd === 'Yes' ? values.sizeFactor.toString() : '',
+              weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
+            };
+          } else {
+            valueData = {
+              isCaCode: values.isCaCode,
+              remark: values.remark,
+            };
+          }
         } else if (alertTypeValue === '303') {
-          valueData = {
-            isCaCode: values.isCaCode,
-            remark: values.remark,
-          };
+          if (values.isCaCode === 'Yes') {
+            valueData = {
+              isCaCode: values.isCaCode,
+              remark: values.remark,
+            };
+          } else {
+            valueData = {
+              isCaCode: values.isCaCode,
+              productDesc: values.productDesc,
+              productCategory: values.productCategory,
+              contractNature: values.contractNature,
+              productGroup: values.productGroup,
+              ltdTmplCode: values.ltdTmplCode,
+              plTmplCode: values.plTmplCode,
+              rlTmplCode: values.rlTmplCode,
+              pdCalculateFlag: values.isCalculatePd,
+              sizeFactor: values.isCalculatePd === 'Yes' ? values.sizeFactor.toString() : '',
+              weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
+            };
+          }
         }
 
         Object.assign(taskValue, valueData);
         console.log('Received values of form: ', values, valueData, taskValue);
       }
     });
-    dispatch({
-      type: 'approvalCenter/saveTask',
-      payload: taskValue,
-    });
+    if (isErr) {
+      dispatch({
+        type: 'approvalCenter/saveTask',
+        payload: taskValue,
+      });
+    }
   }
 
   function handleUpAttachments(info) {
@@ -259,6 +296,10 @@ function ProcessDetail({
     });
     console.log('fileList--->', fileList);
     setUpAttachements(fileList);
+  }
+
+  function handleRemove(file) {
+    setUpAttachements(upAttachments.filter(item => item.uid !== file.uid));
   }
 
   return (
@@ -364,7 +405,7 @@ function ProcessDetail({
                     <Col span={4}>
                       <Phase postComment={c => setComment(`${comment}${c} `)} />
                     </Col>
-                    <Col span={7} style={{ textAlign: 'right' }}>
+                    <Col span={20} align="right">
                       <IconFont
                         type="iconicon_withdraw1"
                         onClick={() => setWithdrawConfirmVisible(true)}
@@ -385,41 +426,34 @@ function ProcessDetail({
                         />
                         {upAttachments.length > 0 && upAttachments.length}
                       </Upload>
-                    </Col>
-
-                    {detailItems[0] && detailItems[0].isStarter ? (
-                      <>
-                        <Col span={6}>
-                          <Button style={{ width: '80px' }} type="primary" onClick={saveTask}>
+                      {detailItems[0] && detailItems[0].isStarter ? (
+                        <>
+                          <Button type="primary" onClick={saveTask}>
                             Save
                           </Button>
-                        </Col>
-                        <Col span={6} align="right">
-                          <Button
-                            style={{ width: '80px' }}
-                            type="primary"
-                            onClick={() => submitDrawer('submit')}
-                          >
+                          <Button type="primary" onClick={() => submitDrawer('submit')}>
                             Submit
                           </Button>
-                        </Col>
-                      </>
-                    ) : (
-                      <>
-                        <Col span={4}>
+                        </>
+                      ) : (
+                        <>
                           <Button type="primary" onClick={() => submitDrawer('reject')}>
                             Reject
                           </Button>
-                        </Col>
-                        <Col span={6} align="right">
                           <Button type="primary" onClick={() => submitDrawer('pass')}>
                             Approve
                           </Button>
-                        </Col>
-                      </>
-                    )}
+                        </>
+                      )}
+                    </Col>
                   </Row>
-                  {!!upAttachments.length && <TaskAttachments attachments={upAttachments} />}
+                  {!!upAttachments.length && (
+                    <TaskAttachments
+                      attachments={upAttachments}
+                      onRemove={handleRemove}
+                      onRemoveAll={() => setUpAttachements([])}
+                    />
+                  )}
                 </div>
               ) : null}
             </TabPane>

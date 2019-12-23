@@ -36,7 +36,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       visible={visible}
       onClose={handleCancel}
     >
-      <Form className={styles['modal-form']}>
+      <Form layout="vertical">
         <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
           {getFieldDecorator('tradeDate', {
             initialValue: yesterday,
@@ -88,6 +88,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
           {getFieldDecorator('uploadFiles', {
             rules: [
               {
+                required: true,
                 validator: (rule, value, callback) => {
                   if (!value) {
                     return callback('Please select a file!');

@@ -4,28 +4,48 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-18 14:22:14
+ * @LastEditTime : 2019-12-21 17:24:13
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 // import { Icon } from 'antd';
 import { DropTarget } from 'react-dnd';
 import RGL, { WidthProvider } from 'react-grid-layout';
+import IconFont from '@/components/IconFont';
 import styles from './index.less';
 
 const ResponsiveReactGridLayout = WidthProvider(RGL);
 
+const iconMap = {
+  text: 'iconTx',
+  number: 'iconx',
+  year: 'iconicon_calenderx',
+  yearmonth: 'iconicon_calenderx',
+  yearmonthday: 'iconicon_calenderx',
+  dropSingle: 'iconxialadanxuanx',
+  dropMultiple: 'iconxialaduoxuanx',
+  radio: 'icondanxuanx',
+  checkbox: 'iconduoxuanx',
+};
+
 class CustomSearchArea extends PureComponent {
   static defaultProps = {
-    rowHeight: 25,
+    rowHeight: 35,
   };
 
   generateDOM = () => {
     const { customSearchData } = this.props;
     return customSearchData.map(el => (
       <div key={el.i}>
-        <div className={styles.bulk}></div>
-        {/* <Input /> */}
+        <div className={styles.bulk}>
+          <div className={styles.left}>Name</div>
+          <div className={styles.rigth}>
+            <IconFont type={iconMap[el.type]} />
+            {el.type === 'year' && <span>dd</span>}
+            {el.type === 'yearmonth' && <span>dd-mm</span>}
+            {el.type === 'yearmonthday' && <span>dd-mm-yy</span>}
+          </div>
+        </div>
       </div>
     ));
   };
@@ -83,9 +103,9 @@ const targetSpec = {
       initialValue: undefined, // 初始值
       // grid-layout相关
       i: customSearchData.length.toString(),
-      x: 0,
-      y: 0,
-      w: 1,
+      x: (customSearchData.length * 2) % 12,
+      y: Infinity,
+      w: 2,
       h: 1,
     };
     dispatch({

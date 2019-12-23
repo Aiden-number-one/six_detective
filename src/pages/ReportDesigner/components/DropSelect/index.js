@@ -3,11 +3,10 @@ import { Icon, Spin } from 'antd';
 import classNames from 'classnames';
 import { FormattedMessage } from 'umi/locale';
 import styles from './index.less';
+import { dataSetTransform } from '../../utils';
 
 export default class DropSelect extends Component {
-  state = {
-    id: '',
-  };
+  state = {};
 
   input = React.createRef();
 
@@ -23,11 +22,11 @@ export default class DropSelect extends Component {
     document.body.removeEventListener('click', () => {});
   }
 
-  onClick = id => {
-    this.setState({
-      id,
-      visible: false,
-    });
+  onClick = item => {
+    const { privateData, setPrivateList } = this.props;
+    // 是否是私有数据集（datasetPrivate === '1'），若不是，则需要转为私有数据集
+    const { dataset_private: datasetPrivate } = item;
+    setPrivateList([...privateData, datasetPrivate === '1' ? item : dataSetTransform(privateData)]);
   };
 
   onSearch = (/* v  */) => {};
@@ -40,13 +39,14 @@ export default class DropSelect extends Component {
 
   render() {
     let { data = [] } = this.props;
-    const { loading, addon, getDataSet, value } = this.props;
-    const { id, visible, keyWord } = this.state;
-    let arr = data.filter(item => (id || value) === item.taskId);
-    arr = arr.length > 0 ? arr : data;
-    const text = arr.length > 0 ? arr[0].sqlName : '';
+    const { privateData = [] } = this.props;
+    const { loading, addon, getPublicDataSet } = this.props;
+    const { visible, keyWord } = this.state;
+    // TODO
+    const text = '';
+    // 关键词搜索数据集
     if (keyWord) {
-      data = data.filter(item => item.sqlName.includes(keyWord)); // 关键字搜索
+      data = data.filter(item => item.dataset_name.includes(keyWord)); // 关键字搜索
     }
     return (
       <div className={styles.edit}>
@@ -74,26 +74,40 @@ export default class DropSelect extends Component {
             </div>
             <div className={styles.dropSelectBtns} onClick={this.trigger}>
               <span onClick={() => {}}>
-                + <FormattedMessage id="report-designer.adddataset" />
+                <Icon type="plus" style={{ fontSize: 12 }} />
+                &nbsp;
+                <FormattedMessage id="report-designer.adddataset" />
               </span>
-              <Icon className={styles.hover} type="reload" onClick={getDataSet} />
+              <Icon className={styles.hover} type="reload" onClick={getPublicDataSet} />
             </div>
             <Spin size="small" spinning={loading}>
               <div className={styles.items}>
                 {data.length > 0 ? (
-                  data.map(item => (
-                    <div
-                      className={classNames(styles.item)}
-                      key={item.taskId}
-                      onClick={() => {
-                        this.onClick(item.taskId);
-                        // onChange(item.taskId);
-                      }}
-                      title={item.sqlName}
-                    >
-                      {item.sqlName}
-                    </div>
-                  ))
+                  data.map(item => {
+                    // 是否是私有数据集（目前是通过名字去判断，需要沟通！）
+                    const active = privateData
+                      .map(activeItem => activeItem.dataset_name)
+                      .includes(item.dataset_name);
+                    return (
+                      <div
+                        className={classNames(styles.item)}
+                        key={item.taskId}
+                        onClick={() => {
+                          if (!active) {
+                            this.onClick(item);
+                          }
+                          this.trigger();
+                        }}
+                        title={item.datasetName}
+                      >
+                        <Icon
+                          style={{ fontSize: 12, color: active ? '#0d87d4' : 'transparent' }}
+                          type="check"
+                        />
+                        &nbsp;{item.datasetName}
+                      </div>
+                    );
+                  })
                 ) : (
                   <div className={styles.noData}>
                     <FormattedMessage id="report-designer.nodata" />

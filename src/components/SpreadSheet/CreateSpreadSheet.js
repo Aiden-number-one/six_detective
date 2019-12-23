@@ -2,8 +2,8 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime: 2019-12-13 17:23:46
- * @LastEditors: mus
+ * @LastEditTime : 2019-12-20 16:56:01
+ * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -49,7 +49,7 @@ export default WrapperComponent =>
       const { data = {} } = this.props;
       const xsOptions = {
         showGrid: true, // 是否显示默认网格
-        showToolbar: true, // 是否显示工具栏
+        showToolbar: false, // 是否显示工具栏
         showContextmenu: true, // 是否显示右键菜单
         showAddCol: false, // 是否显示添加列按钮
         showAddRow: false, // 是否显示添加行按钮

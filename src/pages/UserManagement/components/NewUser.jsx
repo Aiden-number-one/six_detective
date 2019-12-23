@@ -283,7 +283,10 @@ export default class NewUser extends Component {
           type: 'userManagement/newUser',
           payload: params,
           callback: () => {
-            message.success('save success');
+            message.success({
+              content: 'save success',
+              duration: 2,
+            });
             this.props.onSave(true);
             //   this.props.history.push({
             //     pathname: '/system-management/user-maintenance',
@@ -304,7 +307,10 @@ export default class NewUser extends Component {
           type: 'userManagement/updateUserModelDatas',
           payload: params,
           callback: () => {
-            message.success('save success');
+            message.success({
+              content: 'save success',
+              duration: 2,
+            });
             this.props.onSave(false);
             //   this.props.history.push({
             //     pathname: '/system-management/user-maintenance',

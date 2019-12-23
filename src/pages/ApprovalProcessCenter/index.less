@@ -162,8 +162,16 @@
       .up-attachments {
         background-color: #eef1f4;
         .file-desc {
+          display: flex;
+          justify-content: space-between;
           padding: 4px 10px;
           color: #3d4a59;
+          span:last-child {
+            cursor: pointer;
+            &:hover {
+              color: #1e416c;
+            }
+          }
         }
         > ul {
           margin: 0;

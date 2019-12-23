@@ -113,7 +113,10 @@ class NewUser extends Component {
           type: 'menuUserGroup/newUserGroup',
           payload: param,
           callback: () => {
-            message.success('success');
+            message.success({
+              content: 'save success',
+              duration: 2,
+            });
             //   this.props.history.push({
             //     pathname: '/system-management/menu-user-group',
             //     params: values,
