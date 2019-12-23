@@ -123,27 +123,50 @@ function ProcessDetail({
         if (!err) {
           if (alertTypeValue === '301') {
             valueData = {
-              epCname: values.epName,
+              epName: values.epName,
             };
           } else if (alertTypeValue === '302') {
-            valueData = {
-              isCaCode: values.isCaCode,
-              productDesc: values.productDesc,
-              productCategory: values.productCategory,
-              contractNature: values.contractNature,
-              productGroup: values.productGroup,
-              ltdTmplCode: values.ltdTmplCode,
-              plTmplCode: values.plTmplCode,
-              rlTmplCode: values.rlTmplCode,
-              pdCalculateFlag: values.isCalculatePd,
-              sizeFactor: values.sizeFactor.toString(),
-              weightFactor: values.weightFactor.toString(),
-            };
+            if (values.isCaCode === 'No') {
+              valueData = {
+                isCaCode: values.isCaCode,
+                productDesc: values.productDesc,
+                productCategory: values.productCategory,
+                contractNature: values.contractNature,
+                productGroup: values.productGroup,
+                ltdTmplCode: values.ltdTmplCode,
+                plTmplCode: values.plTmplCode,
+                rlTmplCode: values.rlTmplCode,
+                pdCalculateFlag: values.isCalculatePd,
+                sizeFactor: values.isCalculatePd === 'Yes' ? values.sizeFactor.toString() : '',
+                weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
+              };
+            } else {
+              valueData = {
+                isCaCode: values.isCaCode,
+                remark: values.remark,
+              };
+            }
           } else if (alertTypeValue === '303') {
-            valueData = {
-              isCaCode: values.isCaCode,
-              remark: values.remark,
-            };
+            if (values.isCaCode === 'Yes') {
+              valueData = {
+                isCaCode: values.isCaCode,
+                remark: values.remark,
+              };
+            } else {
+              valueData = {
+                isCaCode: values.isCaCode,
+                productDesc: values.productDesc,
+                productCategory: values.productCategory,
+                contractNature: values.contractNature,
+                productGroup: values.productGroup,
+                ltdTmplCode: values.ltdTmplCode,
+                plTmplCode: values.plTmplCode,
+                rlTmplCode: values.rlTmplCode,
+                pdCalculateFlag: values.isCalculatePd,
+                sizeFactor: values.isCalculatePd === 'Yes' ? values.sizeFactor.toString() : '',
+                weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
+              };
+            }
           }
 
           Object.assign(taskValue, valueData);
@@ -223,7 +246,7 @@ function ProcessDetail({
       if (!err) {
         if (alertTypeValue === '301') {
           valueData = {
-            epCname: values.epName,
+            epName: values.epName,
           };
         } else if (alertTypeValue === '302') {
           if (values.isCaCode === 'No') {
