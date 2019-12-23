@@ -13,7 +13,7 @@ export default class SearchForm extends Component {
     const { getFieldDecorator } = this.props.form;
     const { typeOptions, search } = this.props;
     return (
-      <Form className="ant-advanced-search-form search-wraper">
+      <Form className="ant-advanced-search-form search-wraper" layout="vertical">
         <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="middle" type="flex">
           <Col xs={12} sm={12} lg={7} xxl={5}>
             <Form.Item label={formatMessage({ id: 'systemManagement.template.templateName' })}>
