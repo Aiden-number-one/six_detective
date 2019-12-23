@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Table, Pagination, Modal, Radio } from 'antd';
+import { Form, Table, Pagination, Modal, Checkbox } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -268,12 +268,12 @@ class AuditLog extends Component {
           okText={formatMessage({ id: 'app.common.save' })}
         >
           <div>
-            <Radio.Group name="radiogroup" defaultValue={2}>
-              <Radio value={1}>csv</Radio>
-              <Radio value={2}>xlsx</Radio>
-              <Radio value={3}>docx</Radio>
-              <Radio value={4}>pdf</Radio>
-            </Radio.Group>
+            <Checkbox.Group>
+              <Checkbox value={1}>csv</Checkbox>
+              <Checkbox value={2}>xlsx</Checkbox>
+              <Checkbox value={3}>docx</Checkbox>
+              <Checkbox value={4}>pdf</Checkbox>
+            </Checkbox.Group>
           </div>
         </Modal>
       </PageHeaderWrapper>
