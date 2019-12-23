@@ -54,6 +54,7 @@ class AuditLog extends Component {
         key: 'tableName',
         ellipsis: true,
         width: 120,
+        colSpan: 1,
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),

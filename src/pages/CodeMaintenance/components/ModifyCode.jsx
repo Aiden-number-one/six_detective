@@ -41,7 +41,7 @@ class FormUser extends Component {
                   message: 'Subitem ID should not be empty',
                 },
               ],
-              initialValue: updateCodeItemParams.subitemId || undefined,
+              initialValue: (updateCodeItemParams && updateCodeItemParams.subitemId) || undefined,
             })(<Input placeholder="Please input"></Input>)}
           </Form.Item>
           <Form.Item
@@ -56,7 +56,7 @@ class FormUser extends Component {
                   message: 'Subitem Name should not be empty',
                 },
               ],
-              initialValue: updateCodeItemParams.subitemName || undefined,
+              initialValue: (updateCodeItemParams && updateCodeItemParams.subitemName) || undefined,
             })(<Input placeholder="Please input"></Input>)}
           </Form.Item>
           <Form.Item
@@ -71,7 +71,7 @@ class FormUser extends Component {
                   message: 'Sequence should not be empty',
                 },
               ],
-              initialValue: updateCodeItemParams.sequence || undefined,
+              initialValue: (updateCodeItemParams && updateCodeItemParams.sequence) || undefined,
             })(<Input placeholder="Please input"></Input>)}
           </Form.Item>
         </Form>
