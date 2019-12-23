@@ -16,7 +16,7 @@ class SearchForm extends PureComponent {
     const { search } = this.props;
     return (
       <Form className="ant-advanced-search-form search-wraper">
-        <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="middle" type="flex">
+        <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="bottom" type="flex">
           <Col xs={12} sm={12} lg={7} xxl={5}>
             <Form.Item label="Function ID" colon={false}>
               {getFieldDecorator('functionId')(<Input />)}
@@ -28,9 +28,11 @@ class SearchForm extends PureComponent {
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8} xxl={6}>
-            <Button type="primary" onClick={search}>
-              Search
-            </Button>
+            <Form.Item>
+              <Button type="primary" onClick={search}>
+                Search
+              </Button>
+            </Form.Item>
           </Col>
         </Row>
         {/* <div className="btnArea">
