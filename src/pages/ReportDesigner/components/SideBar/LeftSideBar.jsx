@@ -1,105 +1,150 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
-import { Icon } from 'antd';
+import { Icon, Tree } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 import DropSelect from '../DropSelect/index';
 import styles from './index.less';
+import { dataSetTree } from '../../utils';
+
+const { TreeNode } = Tree;
 
 @connect(({ reportDesigner, loading }) => ({
-  reportDesigner,
-  loading: loading.effects['reportDesigner/getDataSet'],
+  dataSetPublicList: reportDesigner.dataSetPublicList, // 公共数据集
+  dataSetPrivateList: reportDesigner.dataSetPrivateList, // 私人数据集
+  loading: loading.effects['reportDesigner/getPublicDataSet'],
 }))
 export default class LeftSideBar extends PureComponent {
   state = {};
 
   componentDidMount() {
-    this.getDataSet();
+    this.getPublicDataSet();
   }
 
   // 获取数据集
-  getDataSet = () => {
+  getPublicDataSet = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'reportDesigner/getDataSet',
+      type: 'reportDesigner/getPublicDataSet',
       payload: {
         sqlName: '',
       },
     });
   };
 
-  // 根据数据集的选择，来渲染出数据集的列与SqlParams
-  onChangeDataSet = dataSetId => {
+  // 设置私有数据集
+  setPrivateList = dataSetPrivateList => {
     const { dispatch } = this.props;
-    // 获取列
     dispatch({
-      type: 'reportDesigner/getDataSetColumn',
-      payload: { dataSetId },
-    });
-
-    // 获取SqlParams
-    dispatch({
-      type: 'reportDesigner/getDataSetSqlParams',
-      payload: { dataSetId },
+      type: 'reportDesigner/setDataSetPrivateList',
+      payload: dataSetPrivateList,
     });
   };
 
+  // 渲染树结构
+  generateTree = treeData =>
+    treeData.map(item => {
+      if (item.children) {
+        return (
+          <TreeNode key={item.key} title={<Title title={item.title} />}>
+            {this.generateTree(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode key={item.key} title={<Title title={item.title} />} isLeaf />;
+    });
+
+  // 根据数据集的选择，来渲染出数据集的列与SqlParams
+  // onChangeDataSet = dataSetId => {
+  //   // const { dispatch } = this.props;
+  // };
+
   render() {
-    const {
-      dataSetList = [],
-      dataSetListColumn = [],
-      dataSetListSqlParams = [],
-    } = this.props.reportDesigner;
-    const { loading } = this.props;
+    const { dataSetPublicList = [], dataSetPrivateList = [] } = this.props;
+    const { loading, leftSideCollapse, changeLeftSideBar } = this.props;
+    // 给予DropSelect的Props
     const dropSelectProps = {
       loading, // dropSelect的loading
-      data: dataSetList, // 数据集列表
-      getDataSet: this.getDataSet, // 刷新庶几集
+      data: dataSetPublicList, // 公共数据集列表
+      privateData: dataSetPrivateList, // 私有数据集
+      getPublicDataSet: this.getPublicDataSet, // 刷新公有数据集
+      setPrivateList: this.setPrivateList, // 设置私有数据集
     };
+    const dataSetPrivateListTree = dataSetTree(dataSetPrivateList);
     return (
       <div className={classNames(styles.layout, styles.sideBar, styles.left)}>
         <div className={styles.topList}>
           <div className={styles.header}>
-            <div className={styles.title}>{<FormattedMessage id="report-designer.dataset" />}</div>
-          </div>
-          <DropSelect
-            {...dropSelectProps}
-            addon={() => (
-              <div className={styles.addon}>
-                <Icon type="form" />
+            {leftSideCollapse && (
+              <div className={styles.title}>
+                {<FormattedMessage id="report-designer.dataset" />}
               </div>
             )}
-          />
-          <ul className={styles.list}>
-            {dataSetListColumn.map(() => (
-              <ListItem color="blue" />
-            ))}
-          </ul>
-        </div>
-        <div className={styles.divider} />
-        <div className={styles.bottomList}>
-          <div className={styles.treeParent}>
-            <Icon type="caret-right" />
-            <IconFont type="iconwenjianjia" className={styles.iconwenjianjia} />
-            SQL Param
+            <IconFont
+              type={leftSideCollapse ? 'iconleft' : 'iconright'}
+              onClick={() => {
+                changeLeftSideBar(!leftSideCollapse);
+              }}
+            />
           </div>
-          <ul className={styles.list}>
-            {dataSetListSqlParams.map(() => (
-              <ListItem color="orange" />
-            ))}
-          </ul>
+          {leftSideCollapse && (
+            <>
+              <DropSelect
+                {...dropSelectProps}
+                addon={() => (
+                  <div className={styles.addon}>
+                    <Icon type="form" />
+                  </div>
+                )}
+              />
+              <div className={styles.tree}>
+                <Tree>{this.generateTree(dataSetPrivateListTree)}</Tree>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );
   }
 }
 
-function ListItem({ color }) {
+function Title({ title, isLeaf }) {
+  const [hoverState, hoverAction] = useState(false);
   return (
-    <li className={styles[color]}>
-      <IconFont type="iconicon-str" className={classNames(styles.icon, styles[color])} />
-      <span>Type</span>
-    </li>
+    <div
+      className={styles.treeTitle}
+      onMouseEnter={e => {
+        e.stopPropagation();
+        hoverAction(true);
+      }}
+      onMouseLeave={e => {
+        e.stopPropagation();
+        hoverAction(false);
+      }}
+    >
+      <div className={styles.hoverArea} />
+      {hoverState && <div className={styles.hoverBlock} />}
+      <span className={styles.title}>
+        {/* 非叶子不展示文件夹标志 */}
+        {!isLeaf && (
+          <>
+            <span className="folder">
+              <Icon type="folder" />
+            </span>
+            <span className="folderOpen">
+              <Icon type="folder-open" />
+            </span>
+          </>
+        )}
+        <span style={{ marginLeft: '3.5px' }}>{title}</span>
+      </span>
+      {hoverState && (
+        <div className={styles.operationArea}>
+          <IconFont type="icon-edit" />
+          <IconFont type="icon-delete" style={{ marginLeft: 3 }} />
+        </div>
+      )}
+    </div>
   );
 }

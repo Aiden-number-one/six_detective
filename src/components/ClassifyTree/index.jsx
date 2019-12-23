@@ -2,8 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
- * @LastEditors: dailinbo
- * @LastEditTime: 2019-12-09 20:54:25
+ * @LastEditors  : mus
+ * @LastEditTime : 2019-12-19 10:53:56
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -114,7 +114,7 @@ class TitleMessage extends Component {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <span>{title}</span>
+          <span className={styles.mainText}>{title}</span>
           {operaterTree && (
             <HoverText
               nodeKeys={nodeKeys}

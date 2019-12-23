@@ -4,23 +4,19 @@
     height: 100%;
   }
   .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 35px;
-    background-color: #f6f8fb;
+    padding: 0 8px;
     .title {
-      float: left;
-      width: 270px;
-      height: 100%;
-      padding-left: 8px;
       color: #10416c;
       font-weight: 700;
       font-size: 12px;
-      line-height: 35px;
     }
-    .icon {
-      float: left;
-      width: 30px;
-      height: 100%;
-      border-left: 1px #d6e2ec solid;
+    i {
+      color: #0599e8ff;
+      cursor: pointer;
     }
   }
   .content {
@@ -86,15 +82,12 @@
     border-left: 1px #d6e2ec solid;
   }
   .topList {
-    height: 60%;
+    height: 100%;
   }
   .divider {
     height: 1px;
     margin: 0 6px;
     background-color: #ddd;
-  }
-  .bottomList {
-    height: 39%;
   }
   &.left {
     background-color: #f6f8fb;
@@ -149,7 +142,6 @@
   height: 28px;
   padding: 3px 8px;
   border: 1px solid #ddd;
-  border-bottom: 0;
   border-left: 0;
   cursor: pointer;
 }
@@ -164,4 +156,71 @@
   position: relative;
   top: 2px;
   font-size: 20px;
+}
+
+.tree {
+  :global {
+    .ant-tree li {
+      padding: 0;
+    }
+    .ant-tree-child-tree > li:first-child {
+      padding: 0;
+    }
+    .ant-tree-switcher {
+      z-index: 100;
+    }
+    .ant-tree li .ant-tree-node-content-wrapper:hover {
+      background-color: transparent;
+    }
+    .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected {
+      background-color: transparent;
+    }
+    .ant-tree-node-content-wrapper {
+      width: calc(100% - 25px);
+    }
+    // 树打开
+    .ant-tree-node-content-wrapper-open {
+      .folder {
+        display: none;
+      }
+      .folderOpen {
+        display: inline-block;
+      }
+    }
+    // 树关闭
+    .ant-tree-node-content-wrapper-close {
+      .folder {
+        display: inline-block;
+      }
+      .folderOpen {
+        display: none;
+      }
+    }
+  }
+}
+
+.treeTitle {
+  position: relative;
+  .title {
+    position: relative;
+  }
+  .hoverArea {
+    position: absolute;
+    left: -1000px;
+    width: 2000px;
+    height: 100%;
+  }
+  .hoverBlock {
+    position: absolute;
+    left: -1000px;
+    width: 2000px;
+    height: 100%;
+    background-color: #e6f3faff;
+    border: 1px solid #ccddecff;
+  }
+  .operationArea {
+    position: absolute;
+    top: 0;
+    right: 13.5px;
+  }
 }
