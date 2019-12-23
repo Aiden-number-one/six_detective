@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Layout, Form } from 'antd';
 import classNames from 'classnames';
 import { FormattedMessage } from 'umi/locale';
+import IconFont from '@/components/IconFont';
 import WidgetControl from './WidgetControl';
 import CellProperty from './CellProperty';
 import styles from './index.less';
@@ -16,7 +17,7 @@ export default class RigthSideBar extends PureComponent {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { cellPosition } = this.props;
+    const { cellPosition, rightSideCollapse, changeRightSideBar } = this.props;
     const formProps = {
       getFieldDecorator,
     };
@@ -28,14 +29,25 @@ export default class RigthSideBar extends PureComponent {
     return (
       <Layout className={classNames(styles.layout, styles.sideBar)}>
         <div className={styles.header}>
-          <div className={styles.title}>{<FormattedMessage id={`report-designer.${type}`} />}</div>
-          <div className={styles.icon}></div>
+          {rightSideCollapse && (
+            <div className={styles.title}>
+              {<FormattedMessage id={`report-designer.${type}`} />}
+            </div>
+          )}
+          <IconFont
+            type={rightSideCollapse ? 'iconright' : 'iconleft'}
+            onClick={() => {
+              changeRightSideBar(!rightSideCollapse);
+            }}
+          />
         </div>
-        <Layout>
-          {type === 'widgetcontrol' && <WidgetControl {...formProps} />}
-          {type === 'cellproperty' && <CellProperty {...formProps} {...cellProps} />}
-          <Sider width={30} className={styles.sider} />
-        </Layout>
+        {rightSideCollapse && (
+          <Layout>
+            {type === 'widgetcontrol' && <WidgetControl {...formProps} />}
+            {type === 'cellproperty' && <CellProperty {...formProps} {...cellProps} />}
+            <Sider width={30} className={styles.sider} />
+          </Layout>
+        )}
       </Layout>
     );
   }

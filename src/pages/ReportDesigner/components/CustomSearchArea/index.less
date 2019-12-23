@@ -1,13 +1,31 @@
 .customSearchArea {
   position: relative;
   height: 111px;
-  // overflow: auto;
+  overflow: auto;
   background-color: #fff;
 }
 
 .bulk {
+  display: flex;
   height: 100%;
-  background-color: #ffa;
+  font-size: 12px;
+  border: 1px dashed #000;
+  .left {
+    display: flex;
+    flex: 4;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #000;
+  }
+  .rigth {
+    display: flex;
+    flex: 6;
+    align-items: center;
+    margin-left: 5px;
+    span {
+      margin-left: 5px;
+    }
+  }
 }
 
 .widgetArea {

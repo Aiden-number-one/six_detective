@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import classNames from 'classnames';
 import { setLocale } from 'umi/locale';
 import { DndProvider } from 'react-dnd';
+import { Layout } from 'antd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import SpreadSheet from '@/components/SpreadSheet';
 import CustomSearchArea from './components/CustomSearchArea/index';
@@ -11,11 +12,14 @@ import RigthSideBar from './components/SideBar/RigthSideBar';
 import LeftSideBar from './components/SideBar/LeftSideBar';
 import styles from './ReportDesigner.less';
 
+const { Sider, Content } = Layout;
 @connect(({ reportDesigner }) => ({ reportDesigner }))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
   state = {
     display: false,
+    leftSideCollapse: false, // 左边sideBar展开收起
+    rightSideCollapse: false, // 右边sideBar展开收起
   };
 
   componentWillMount() {
@@ -24,14 +28,16 @@ export default class ReportDesigner extends PureComponent {
 
   componentDidMount() {
     const { initSheet } = this.props;
-    const leftWidth = document.getElementById('leftSideBar').offsetWidth;
-    const rigthWidth = document.getElementById('rigthSideBar').offsetWidth;
+    const { leftSideCollapse } = this.state;
+    // const leftWidth = document.getElementById('leftSideBar').offsetWidth;
+    // const rigthWidth = document.getElementById('rigthSideBar').offsetWidth;
+    const leftWidth = leftSideCollapse ? 300 : 30;
     initSheet(
       {
         view: {
           // sheet的宽高
           height: () => window.innerHeight - 104 - 111,
-          width: () => window.innerWidth - leftWidth - rigthWidth,
+          width: () => window.innerWidth - leftWidth,
         },
       },
       {
@@ -73,8 +79,22 @@ export default class ReportDesigner extends PureComponent {
     insertDeleteRowColumn(type, opera);
   };
 
+  // 展开或收起左边SideBar
+  changeLeftSideBar = leftSideCollapse => {
+    this.setState({
+      leftSideCollapse,
+    });
+  };
+
+  // 展示或收起右边SideBar
+  changeRightSideBar = rightSideCollapse => {
+    this.setState({
+      rightSideCollapse,
+    });
+  };
+
   render() {
-    const { display } = this.state;
+    const { display, leftSideCollapse, rightSideCollapse } = this.state;
     const { setCellCallback, dispatch, setCellType } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
@@ -89,20 +109,31 @@ export default class ReportDesigner extends PureComponent {
         <Fragment>
           <ToolBar {...toolBarProps} />
           <div className={styles.container} style={{ height: `${window.innerHeight - 104}px` }}>
-            <div className={classNames(styles.main, styles.col)}>
-              {display && <CustomSearchArea />}
-              <div>
-                <SpreadSheet />
-              </div>
-            </div>
-            <div id="leftSideBar" className={classNames(styles.left, styles.col)}>
-              <LeftSideBar />
-            </div>
+            <Layout>
+              <Sider width={leftSideCollapse ? 300 : 30}>
+                <LeftSideBar
+                  changeLeftSideBar={this.changeLeftSideBar}
+                  leftSideCollapse={leftSideCollapse}
+                />
+              </Sider>
+              <Content>
+                <div className={classNames(styles.main)}>
+                  {display && <CustomSearchArea />}
+                  <div>
+                    <SpreadSheet />
+                  </div>
+                </div>
+              </Content>
+            </Layout>
             <div
               id="rigthSideBar"
-              className={classNames(styles.right, styles.col, styles.rigthSideBar)}
+              className={classNames(styles.right)}
+              style={{ width: rightSideCollapse ? '300px' : '30px' }}
             >
-              <RigthSideBar />
+              <RigthSideBar
+                rightSideCollapse={rightSideCollapse}
+                changeRightSideBar={this.changeRightSideBar}
+              />
             </div>
           </div>
         </Fragment>

@@ -4,8 +4,9 @@
 }
 
 .container {
-  padding-right: 300px;
-  padding-left: 300px;
+  position: relative;
+  // padding-right: 300px;
+  // padding-left: 300px;
 }
 
 .main {
@@ -24,9 +25,11 @@
 }
 
 .right {
-  width: 300px;
+  position: absolute;
+  top: 0;
+  right: 0;
   height: 100%;
-  margin-right: -300px;
   overflow-y: auto;
   background-color: #fff;
+  transition: all 0.2s;
 }

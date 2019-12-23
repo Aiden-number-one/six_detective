@@ -74,7 +74,7 @@ const BasicLayout = props => {
             // userAgent: window.navigator.userAgent,
           },
         });
-      }, 25000);
+      }, 60000);
     }
   }, []);
   /**
