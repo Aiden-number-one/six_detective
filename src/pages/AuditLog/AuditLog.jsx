@@ -45,11 +45,15 @@ class AuditLog extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
         dataIndex: 'functionName',
         key: 'functionName',
+        ellipsis: true,
+        width: 120,
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.tableName' }),
         dataIndex: 'tableName',
         key: 'tableName',
+        ellipsis: true,
+        width: 120,
       },
       {
         title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),
