@@ -357,6 +357,8 @@ export default class DatasetManagement extends PureComponent {
                   pathname: '/add-dataset',
                   query: {
                     connectionId: record.datasourceId,
+                    connectionName: record.datasourceName,
+                    datasetId: record.datasetId,
                   },
                 });
               }}

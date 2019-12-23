@@ -23,13 +23,13 @@
 
 var KisBpmMultiInstanceCtrl = [ '$scope', function($scope) {
     $scope.items = [{
-        "name" : "无",
+        "name" : "none",
         "value" : "None"
     }, {
-        "name" : "并行",
+        "name" : "paiallel",
         "value" : "Parallel"
     }, {
-        "name" : "串行",
+        "name" : "serial",
         "value" : "Sequential"
     }];
     // 默认

@@ -35,6 +35,7 @@ const { Option } = Select;
   sqlDataSetName: sqlDataSource.sqlDataSetName,
   defaultPageSize: sqlDataSource.defaultPageSize,
   columnData: sqlDataSource.columnData,
+  dataSet: sqlDataSource.dataSet,
 }))
 class AddDataSet extends PureComponent {
   components = {
@@ -66,11 +67,12 @@ class AddDataSet extends PureComponent {
     const { dispatch } = this.props;
     const {
       location: {
-        query: { connectionId, record, connectionName },
+        query: { connectionId, connectionName, datasetId },
       },
     } = this.props;
     this.connection_id = connectionId;
     this.connection_name = connectionName;
+    this.datasetId = datasetId;
     dispatch({
       type: 'sqlDataSource/getDataSourceList',
       payload: { connectionId },
@@ -78,29 +80,25 @@ class AddDataSet extends PureComponent {
     dispatch({
       type: 'getClassifyTree/getClassifyTree',
     });
-    if (record) {
-      this.record = JSON.parse(record);
-      this.tableId = this.record.serialNo;
+    if (datasetId) {
       dispatch({
-        type: 'sqlKeydown/changeSql',
-        payload: this.record.sqlStatement,
-      });
-      dispatch({
-        type: 'sqlDataSource/getMetadataTablePerform',
+        type: 'sqlDataSource/getDataSetDetail',
         payload: {
-          connectionId: this.connection_id,
-          previewStatement: this.record.sqlStatement,
-          previewNum: 20,
+          datasetId,
         },
       });
-      dispatch({
-        type: 'sqlDataSource/changeDataSetName',
-        payload: this.record.sqlName,
-      });
-      dispatch({
-        type: 'sqlDataSource/changeActive',
-        payload: this.record.serialNo,
-      });
+      // dispatch({
+      //   type: 'sqlKeydown/changeSql',
+      //   payload: this.record.sqlStatement,
+      // });
+      // dispatch({
+      //   type: 'sqlDataSource/changeDataSetName',
+      //   payload: this.record.sqlName,
+      // });
+      // dispatch({
+      //   type: 'sqlDataSource/changeActive',
+      //   payload: this.record.serialNo,
+      // });
       this.setState({
         AlterDataSetName: false,
       });
@@ -269,8 +267,8 @@ class AddDataSet extends PureComponent {
         datasourceId: this.connection_id,
         datasourceName: this.connection_name,
         commandText: sql,
-        datasetParams: '{}',
-        datasetFields: '{}',
+        datasetParams: JSON.stringify([]),
+        datasetFields: JSON.stringify([]),
         datasetType: 'SQL',
         // sqlStatementPram,
         datasetIsDict: 'N',
