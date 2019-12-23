@@ -36,8 +36,8 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       visible={visible}
       onClose={handleCancel}
     >
-      <Form className={styles['modal-form']}>
-        <Form.Item label={<FormattedMessage id="data-import.trade-date" />} colon={false}>
+      <Form layout="vertical">
+        <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
           {getFieldDecorator('tradeDate', {
             initialValue: yesterday,
             rules: [
@@ -48,7 +48,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             ],
           })(<DatePicker format={dateFormat} />)}
         </Form.Item>
-        <Form.Item label={<FormattedMessage id="data-import.submitter-code" />} colon={false}>
+        <Form.Item label={<FormattedMessage id="data-import.submitter-code" />}>
           {getFieldDecorator('submitterCode', {
             rules: [
               {
@@ -58,7 +58,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             ],
           })(<Input placeholder="please input submitter code" />)}
         </Form.Item>
-        <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />} colon={false}>
+        <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
           {getFieldDecorator('submitterName', {
             rules: [
               {
@@ -68,10 +68,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             ],
           })(<Input placeholder="please input submmitter name" />)}
         </Form.Item>
-        <Form.Item
-          label={<FormattedMessage id="data-import.lop.submission-report" />}
-          colon={false}
-        >
+        <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
           {getFieldDecorator('submissionReport', {
             rules: [
               {
@@ -87,10 +84,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             </Select>,
           )}
         </Form.Item>
-        <Form.Item
-          label={<FormattedMessage id="data-import.lop.submission-report" />}
-          colon={false}
-        >
+        <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
               {

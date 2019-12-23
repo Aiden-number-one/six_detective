@@ -48,7 +48,7 @@ function LopLogFilterForm({ form, handleSearch }) {
 
   return (
     <Form layout="vertical" className="ant-advanced-search-form search-wraper">
-      <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="middle" type="flex">
+      <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="bottom" type="flex">
         <Col xs={24} sm={12} xl={10} xxl={8}>
           <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
             {getFieldDecorator('tradeDate', {
@@ -105,14 +105,16 @@ function LopLogFilterForm({ form, handleSearch }) {
           </Form.Item>
         </Col>
         <Col xs={24} sm={12} xl={8} xxl={6}>
-          <Button
-            type="primary"
-            icon="search"
-            className={styles['no-margin']}
-            onClick={handleCommit}
-          >
-            <FormattedMessage id="data-import.search" />
-          </Button>
+          <Form.Item>
+            <Button
+              type="primary"
+              icon="search"
+              className={styles['no-margin']}
+              onClick={handleCommit}
+            >
+              <FormattedMessage id="data-import.search" />
+            </Button>
+          </Form.Item>
         </Col>
       </Row>
     </Form>

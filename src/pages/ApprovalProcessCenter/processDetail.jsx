@@ -226,24 +226,47 @@ function ProcessDetail({
             epCname: values.epName,
           };
         } else if (alertTypeValue === '302') {
-          valueData = {
-            isCaCode: values.isCaCode,
-            productDesc: values.productDesc,
-            productCategory: values.productCategory,
-            contractNature: values.contractNature,
-            productGroup: values.productGroup,
-            ltdTmplCode: values.ltdTmplCode,
-            plTmplCode: values.plTmplCode,
-            rlTmplCode: values.rlTmplCode,
-            pdCalculateFlag: values.isCalculatePd,
-            sizeFactor: values.sizeFactor.toString(),
-            weightFactor: values.weightFactor.toString(),
-          };
+          if (values.isCaCode === 'No') {
+            valueData = {
+              isCaCode: values.isCaCode,
+              productDesc: values.productDesc,
+              productCategory: values.productCategory,
+              contractNature: values.contractNature,
+              productGroup: values.productGroup,
+              ltdTmplCode: values.ltdTmplCode,
+              plTmplCode: values.plTmplCode,
+              rlTmplCode: values.rlTmplCode,
+              pdCalculateFlag: values.isCalculatePd,
+              sizeFactor: values.isCalculatePd === 'Yes' ? values.sizeFactor.toString() : '',
+              weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
+            };
+          } else {
+            valueData = {
+              isCaCode: values.isCaCode,
+              remark: values.remark,
+            };
+          }
         } else if (alertTypeValue === '303') {
-          valueData = {
-            isCaCode: values.isCaCode,
-            remark: values.remark,
-          };
+          if (values.isCaCode === 'Yes') {
+            valueData = {
+              isCaCode: values.isCaCode,
+              remark: values.remark,
+            };
+          } else {
+            valueData = {
+              isCaCode: values.isCaCode,
+              productDesc: values.productDesc,
+              productCategory: values.productCategory,
+              contractNature: values.contractNature,
+              productGroup: values.productGroup,
+              ltdTmplCode: values.ltdTmplCode,
+              plTmplCode: values.plTmplCode,
+              rlTmplCode: values.rlTmplCode,
+              pdCalculateFlag: values.isCalculatePd,
+              sizeFactor: values.isCalculatePd === 'Yes' ? values.sizeFactor.toString() : '',
+              weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
+            };
+          }
         }
 
         Object.assign(taskValue, valueData);
@@ -382,7 +405,7 @@ function ProcessDetail({
                     <Col span={4}>
                       <Phase postComment={c => setComment(`${comment}${c} `)} />
                     </Col>
-                    <Col span={7} style={{ textAlign: 'right' }}>
+                    <Col span={20} align="right">
                       <IconFont
                         type="iconicon_withdraw1"
                         onClick={() => setWithdrawConfirmVisible(true)}
@@ -403,39 +426,26 @@ function ProcessDetail({
                         />
                         {upAttachments.length > 0 && upAttachments.length}
                       </Upload>
-                    </Col>
-
-                    {detailItems[0] && detailItems[0].isStarter ? (
-                      <>
-                        <Col span={6}>
-                          <Button style={{ width: '80px' }} type="primary" onClick={saveTask}>
+                      {detailItems[0] && detailItems[0].isStarter ? (
+                        <>
+                          <Button type="primary" onClick={saveTask}>
                             Save
                           </Button>
-                        </Col>
-                        <Col span={6} align="right">
-                          <Button
-                            style={{ width: '80px' }}
-                            type="primary"
-                            onClick={() => submitDrawer('submit')}
-                          >
+                          <Button type="primary" onClick={() => submitDrawer('submit')}>
                             Submit
                           </Button>
-                        </Col>
-                      </>
-                    ) : (
-                      <>
-                        <Col span={4}>
+                        </>
+                      ) : (
+                        <>
                           <Button type="primary" onClick={() => submitDrawer('reject')}>
                             Reject
                           </Button>
-                        </Col>
-                        <Col span={6} align="right">
                           <Button type="primary" onClick={() => submitDrawer('pass')}>
                             Approve
                           </Button>
-                        </Col>
-                      </>
-                    )}
+                        </>
+                      )}
+                    </Col>
                   </Row>
                   {!!upAttachments.length && (
                     <TaskAttachments
