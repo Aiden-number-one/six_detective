@@ -57,7 +57,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
     });
   }
   return (
-    <Row className={styles['detail-container']} gutter={16}>
+    <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
         <Tabs
           hideAdd

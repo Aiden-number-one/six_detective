@@ -34,13 +34,13 @@ export function FilterHeader() {
   );
 }
 
-export function FilterFooter({ onCancel, onOk }) {
+export function FilterFooter({ disabled, onCancel, onOk }) {
   return (
     <div className={styles['bottom-btns']}>
       <Button size="small" onClick={onCancel}>
         Cancel
       </Button>
-      <Button type="primary" onClick={onOk}>
+      <Button type="primary" disabled={disabled} onClick={onOk}>
         Commit
       </Button>
     </div>
@@ -69,7 +69,7 @@ export function FilterType({ isNum, loading, handleTypeChange }) {
   );
 }
 
-// type = [not] equal
+// type = [greater / less than] equal
 export function FilterSelect({ filterList }) {
   function onSearch(val) {
     console.log('search:', val);
@@ -104,29 +104,34 @@ export function FilterSelect({ filterList }) {
 }
 
 // type = contain
-export function FilterCheckbox({ loading, filterList, getCheckList }) {
-  // const [searchList, setSearchList] = useState([]);
+export function FilterCheckbox({ loading, filterList, curColumn, conditions, onCheckedList }) {
   const [isCheckAll, setCheckAll] = useState(true);
   const [indeterminate, setIndeterminate] = useState(false);
-  const [checkedList, setcheckedList] = useState([]);
+  const [checkedList, setCheckedList] = useState([]);
 
   useEffect(() => {
-    setcheckedList(filterList);
-  }, [filterList]);
+    const curFilters = conditions.find(item => item.column === curColumn);
+    if (curFilters) {
+      setCheckedList(curFilters.value.split(','));
+    } else {
+      setCheckedList(filterList);
+    }
+  }, [filterList, curColumn, conditions]);
 
   function handleChange(cList) {
-    setcheckedList(cList);
-    setIndeterminate(!!cList.length && cList.length < filterList.length);
+    setCheckedList(cList);
+    onCheckedList(cList);
+    setIndeterminate(cList.length && cList.length < filterList.length);
     setCheckAll(cList.length === filterList.length);
-    getCheckList(cList);
   }
 
   function handleCheckAllChange(e) {
     const { checked } = e.target;
-    setcheckedList(checked ? filterList : []);
+    const cList = checked ? filterList : [];
+    setCheckedList(cList);
+    onCheckedList(cList);
     setIndeterminate(false);
     setCheckAll(checked);
-    getCheckList(filterList);
   }
 
   function handleSearch(value) {
@@ -162,9 +167,7 @@ export function FilterCheckbox({ loading, filterList, getCheckList }) {
             >
               {filterList.map(item => (
                 <Row key={item}>
-                  <Checkbox value={item} defaultChecked>
-                    {item}
-                  </Checkbox>
+                  <Checkbox value={item}>{item}</Checkbox>
                 </Row>
               ))}
             </Checkbox.Group>
