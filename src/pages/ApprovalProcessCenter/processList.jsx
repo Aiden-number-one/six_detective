@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import router from 'umi/router';
 import { Table, Row, Col, Button, Input, Radio, Drawer } from 'antd';
 import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
@@ -16,12 +17,13 @@ const { Search } = Input;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
-function TabBtn({ changeTab }) {
+function TabBtn({ changeTab, selectedCurrentTask }) {
   return (
     <Row className={styles.btns} style={{ marginBottom: '15px' }}>
       <Col span={12}>
         <Radio.Group
-          defaultValue="my"
+          key={selectedCurrentTask}
+          defaultValue={selectedCurrentTask}
           buttonStyle="solid"
           onChange={e => changeTab(e.target.value)}
         >
@@ -73,6 +75,7 @@ function TaskBtn({
       </Col>
       <Col span={6}>
         <Search
+          key={urlTaskCode}
           placeholder="search"
           defaultValue={urlTaskCode}
           onSearch={value => searchTask(selectedCurrentTask, value)}
@@ -101,12 +104,22 @@ function ProcessList({
   const [radioValue, setRadioValue] = useState('');
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [clickCurrentTaskCode, setClickTaskCode] = useState('');
+  const [urlCode, setUrlCode] = useState('');
   const urlTaskCode = GetQueryString('taskCode');
+  const urlIsEnd = GetQueryString('isEnd');
+
   useEffect(() => {
+    setUrlCode(urlTaskCode);
+    if (urlIsEnd) {
+      setSelectedTasks('his');
+    }
+    router.push({
+      pathname: '/homepage/Approval-Process-Center',
+    });
     dispatch({
       type: 'approvalCenter/fetch',
       payload: {
-        type: selectedCurrentTask,
+        type: urlIsEnd ? 'his' : selectedCurrentTask,
         taskCode: urlTaskCode,
       },
     });
@@ -236,6 +249,7 @@ function ProcessList({
       </Drawer>
       <TabBtn
         changeTab={selectedTasks => {
+          setUrlCode('');
           setSelectedTasks(selectedTasks);
           setCurrentTaskType(selectedTasks);
           dispatch({
@@ -245,6 +259,7 @@ function ProcessList({
             },
           });
         }}
+        selectedCurrentTask={selectedCurrentTask}
       />
       <TaskBtn
         selectedKeys={selectedKeys}
@@ -253,7 +268,7 @@ function ProcessList({
         claimOk={claimOk}
         setTaskAssign={setTaskAssign}
         setVisible={setVisible}
-        urlTaskCode={urlTaskCode}
+        urlTaskCode={urlCode}
       />
       <Table
         border

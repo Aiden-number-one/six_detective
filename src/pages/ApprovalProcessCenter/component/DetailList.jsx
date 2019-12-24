@@ -312,6 +312,38 @@ function CaCode({ detailData, getFieldDecorator, setRadioCurrentValue, isShowFor
     </>
   );
 }
+
+// function kk({detailData}) {
+//   return (
+//     <div className={styles.ListBox}>
+//       <List
+//         header={
+//           detailData && (
+//             <List.Item>
+//               <div className={styles.ListItem}>
+//                 <p></p>
+//                 <p>New INFO</p>
+//                 <p>Old INFO</p>
+//               </div>
+//             </List.Item>
+//           )
+//         }
+//         bordered
+//         dataSource={detailData}
+//         renderItem={item => (
+//           <List.Item>
+//             <div className={styles.ListItem}>
+//               <p>{item.key}</p>
+//               <p>{item.newValue}</p>
+//               <p>{item.oldValue}</p>
+//             </div>
+//           </List.Item>
+//         )}
+//       />
+//     </div>
+//   );
+// }
+
 function DetailForm({ form, detailItem, task }) {
   const { getFieldDecorator } = form;
   const [radioCurrentValue, setRadioCurrentValue] = useState('No');
@@ -321,8 +353,6 @@ function DetailForm({ form, detailItem, task }) {
 
   const isShowForm = detailList && detailList.isStarter;
   console.log('alertType---->', alertType, detailList, isShowForm);
-
-  console.log('radioCurrentValue---->', radioCurrentValue);
   useEffect(() => {
     setRadioCurrentValue(detailList.isCaCode);
   }, [detailList.isCaCode]);
