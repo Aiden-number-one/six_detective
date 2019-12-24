@@ -50,7 +50,7 @@ export default class SearchForm extends Component {
               {getFieldDecorator('type', {
                 initialValue: '',
               })(
-                <Select className={styles.inputvalue} placeholder="Please Select">
+                <Select className={styles.inputvalue} placeholder="Please Select" allowClear>
                   {typeOptions.map(item => (
                     <Option key={item.key} value={item.value}>
                       {item.title}
