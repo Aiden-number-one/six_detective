@@ -24,6 +24,9 @@ class CodeMaintenance extends Component {
   state = {
     codeVisible: false,
     deleteCodeItemVisible: false,
+    editIconActive: false,
+    deleteIconActive: false,
+    activeIndex: undefined,
     codeName: '',
     // eslint-disable-next-line react/no-unused-state
     itemNameValue: '',
@@ -69,16 +72,35 @@ class CodeMaintenance extends Component {
               onClick={() => {
                 this.updateCode(res, recode, index, active);
               }}
+              onMouseEnter={() => this.editMouseEnter(index)}
+              onMouseLeave={this.editMouseLeave}
             >
-              <IconFont type="icon-edit" className={styles['btn-icon']} />
+              <IconFont
+                type={
+                  this.state.editIconActive && this.state.activeIndex === index
+                    ? 'icon-edit-hover'
+                    : 'icon-edit'
+                }
+                className={styles['btn-icon']}
+              />
             </a>
+            <span className="interval-padding"></span>
             <a
               href="#"
               onClick={() => {
                 this.deleteCodeItem(res, recode);
               }}
+              onMouseEnter={() => this.deleteMouseEnter(index)}
+              onMouseLeave={this.deleteMouseLeave}
             >
-              <IconFont type="icon-delete" className={styles['btn-icon']} />
+              <IconFont
+                type={
+                  this.state.deleteIconActive && this.state.activeIndex === index
+                    ? 'icon-delete-hover'
+                    : 'icon-delete'
+                }
+                className={styles['btn-icon']}
+              />
             </a>
           </span>
         ),
@@ -132,6 +154,32 @@ class CodeMaintenance extends Component {
   componentDidMount() {
     this.queryCodeList();
   }
+
+  editMouseEnter = index => {
+    this.setState({
+      editIconActive: true,
+      activeIndex: index,
+    });
+  };
+
+  editMouseLeave = () => {
+    this.setState({
+      editIconActive: false,
+    });
+  };
+
+  deleteMouseEnter = index => {
+    this.setState({
+      deleteIconActive: true,
+      activeIndex: index,
+    });
+  };
+
+  deleteMouseLeave = () => {
+    this.setState({
+      deleteIconActive: false,
+    });
+  };
 
   addCode = () => {
     this.setState({ codeVisible: true, modifyFlag: false });

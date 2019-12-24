@@ -28,6 +28,9 @@ class MenuUserGroup extends Component {
       updateFlag: false,
       searchGroupName: undefined,
       searchGroupDesc: undefined,
+      editIconActive: false,
+      deleteIconActive: false,
+      activeIndex: undefined,
       delateTitle: 'Please confirm that you want to delete this record?',
       groupMenuInfo: {},
       columns: [
@@ -58,13 +61,38 @@ class MenuUserGroup extends Component {
           dataIndex: 'operation',
           key: 'operation',
           align: 'center',
-          render: (res, obj) => (
+          render: (res, obj, index) => (
             <span className={styles.operation}>
-              <a href="#" onClick={() => this.updateUser(res, obj)}>
-                <IconFont type="icon-edit" className={styles['btn-icon']} />
+              <a
+                href="#"
+                onClick={() => this.updateUser(res, obj)}
+                onMouseEnter={() => this.editMouseEnter(index)}
+                onMouseLeave={this.editMouseLeave}
+              >
+                <IconFont
+                  type={
+                    this.state.editIconActive && this.state.activeIndex === index
+                      ? 'icon-edit-hover'
+                      : 'icon-edit'
+                  }
+                  className={styles['btn-icon']}
+                />
               </a>
-              <a href="#" onClick={() => this.deleteUser(res, obj)}>
-                <IconFont type="icon-delete" className={styles['btn-icon']} />
+              <span className="interval-padding"></span>
+              <a
+                href="#"
+                onClick={() => this.deleteUser(res, obj)}
+                onMouseEnter={() => this.deleteMouseEnter(index)}
+                onMouseLeave={this.deleteMouseLeave}
+              >
+                <IconFont
+                  type={
+                    this.state.deleteIconActive && this.state.activeIndex === index
+                      ? 'icon-delete-hover'
+                      : 'icon-delete'
+                  }
+                  className={styles['btn-icon']}
+                />
               </a>
             </span>
           ),
@@ -80,6 +108,34 @@ class MenuUserGroup extends Component {
   componentDidMount() {
     this.queryUserList();
   }
+
+  editMouseEnter = index => {
+    console.log('enter');
+    this.setState({
+      editIconActive: true,
+      activeIndex: index,
+    });
+  };
+
+  editMouseLeave = () => {
+    console.log('outer');
+    this.setState({
+      editIconActive: false,
+    });
+  };
+
+  deleteMouseEnter = index => {
+    this.setState({
+      deleteIconActive: true,
+      activeIndex: index,
+    });
+  };
+
+  deleteMouseLeave = () => {
+    this.setState({
+      deleteIconActive: false,
+    });
+  };
 
   newUser = () => {
     // this.props.dispatch(

@@ -64,7 +64,7 @@ class FormUser extends Component {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 10 }}
           >
-            {getFieldDecorator('Remark', {
+            {getFieldDecorator('remark', {
               rules: [
                 {
                   required: true,
@@ -113,7 +113,7 @@ class ModifySystem extends Component {
         parameterType: values.parameterType,
         parameterKey: values.parameterKey,
         parameterValue: values.parameterValue,
-        note: values.note,
+        note: values.remark,
       };
       dispatch({
         type: 'systemParams/systemParamsUpdate',
