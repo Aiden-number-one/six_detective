@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-24 16:43:24
+ * @LastEditTime : 2019-12-24 18:48:12
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -16,7 +16,7 @@ import { md5 } from 'md5js';
 import { message } from 'antd';
 import { getRandowNVPS, isProOrDev } from './utils';
 
-const API_PREFFIX = '/mockapi';
+const API_PREFFIX = '/api';
 const VERSION = 'v2.0';
 const BUSINESS_PREFFIX = 'bayconnect.superlop';
 const DEFAULT_PARAM = { bcLangType: 'ENUS' };

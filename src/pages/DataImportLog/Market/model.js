@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
- * @LastEditors: iron
- * @LastEditTime: 2019-12-18 15:03:12
+ * @LastEditors  : iron
+ * @LastEditTime : 2019-12-24 20:47:33
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -68,7 +68,7 @@ export default {
         throw new Error(err);
       }
       message.success('upload success');
-      yield put({ type: 'reload' });
+      yield put({ type: 'reload', payload });
     },
     *importByAuto({ payload }, { call, put }) {
       const { err } = yield call(postAuto, payload);
@@ -76,7 +76,7 @@ export default {
         throw new Error(err);
       }
       message.success('execute success');
-      yield put({ type: 'reload' });
+      yield put({ type: 'reload', payload });
     },
     *reload({ payload }, { put }) {
       yield put({ type: 'fetch', payload });

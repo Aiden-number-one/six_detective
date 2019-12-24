@@ -52,7 +52,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
           <Row className={styles['btn-group']}>
             <Button
               type="primary"
-              onClick={() => dispatch({ type: 'market/importByAuto' })}
+              onClick={() => dispatch({ type: 'market/importByAuto', payload: searchParams })}
               loading={loading['market/importByAuto']}
             >
               <FormattedMessage id="data-import.execute" />

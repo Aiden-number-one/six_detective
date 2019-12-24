@@ -52,6 +52,7 @@ function MarketLogFilterForm({ form, handleSearch }) {
         <Col xs={24} sm={12} xl={7} xxl={5}>
           <Form.Item label={<FormattedMessage id="data-import.market.file-type" />}>
             {getFieldDecorator('fileType', {
+              initialValue: '',
               rules: [
                 {
                   required: false,
@@ -60,6 +61,7 @@ function MarketLogFilterForm({ form, handleSearch }) {
               ],
             })(
               <Select placeholder="please select file type" allowClear>
+                <Option value="">All</Option>
                 <Option value="TP001">TP001</Option>
                 <Option value="GREK020">GREK020</Option>
                 <Option value="OMD">OMD</Option>
@@ -69,7 +71,9 @@ function MarketLogFilterForm({ form, handleSearch }) {
         </Col>
         <Col xs={24} sm={12} xl={7} xxl={5}>
           <Form.Item label={<FormattedMessage id="data-import.market" />}>
-            {getFieldDecorator('market')(<Checkbox.Group options={['HKFE', 'SEHK']} />)}
+            {getFieldDecorator('market', {
+              initialValue: ['HKFE', 'SEHK'],
+            })(<Checkbox.Group options={['HKFE', 'SEHK']} />)}
           </Form.Item>
         </Col>
         <Col xs={24} sm={12} xl={8} xxl={6}>

@@ -1,33 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Drawer, Form, Upload, Icon, Button } from 'antd';
+import { Drawer, Form, Upload, Icon, Button, Input } from 'antd';
 import styles from '../index.less';
 
 const isLt5M = size => size / 1024 / 1024 < 5;
+// file name format: 20191314_tp001_0.csv
+const fileReg = /(\d{8})_\d_(.*)_(.)\.(.*)/;
 
 function MarketLogManualModal({ form, visible, loading, handleCancel, handleUpload }) {
+  const [upFile, setUpFile] = useState({});
   const { getFieldDecorator, validateFields } = form;
 
   function handleBeforeUpload(file) {
-    return isLt5M(file.size) && /^\d{8}_\d{1}_/.test(file.name);
+    return isLt5M(file.size) && fileReg.test(file.name);
+  }
+
+  function handleClose() {
+    form.resetFields();
+    setUpFile({});
+    handleCancel();
   }
 
   function handleCommit() {
     validateFields((err, values) => {
       if (!err) {
-        const { uploadFiles, ...rest } = values;
+        const { uploadFiles } = values;
 
         const { bcjson } = (uploadFiles && uploadFiles.length && uploadFiles[0].response) || {};
         const { flag, items = {} } = bcjson || {};
 
         if (flag === '1' && items) {
-          // file name format: 20191314_tp001_0.csv
           const parseFiles = items.relativeUrl.split('/');
           const fileName = parseFiles.slice(-1)[0];
-          const fileDir = parseFiles.slice(1, -1).reduce((acc, cur) => `${acc}${cur}/`, '');
-          const fileType = fileName.replace(/\d{8}_\d{1}_(.*)\.(.*)/, '$1');
-          handleUpload({ fileName, fileDir, fileType, ...rest });
+          const fileDir = parseFiles.slice(1, -1).reduce((acc, cur) => `${acc}/${cur}`, '');
+          const fileType = fileName.replace(fileReg, '$2_$3');
+          handleUpload({ fileName, fileDir, fileType });
           form.resetFields();
+          setUpFile({});
         }
       }
     });
@@ -40,9 +49,9 @@ function MarketLogManualModal({ form, visible, loading, handleCancel, handleUplo
       closable={false}
       bodyStyle={{ paddingBottom: 80 }}
       visible={visible}
-      onClose={handleCancel}
+      onClose={handleClose}
     >
-      <Form layout="inline">
+      <Form layout="vertical">
         <Form.Item label={<FormattedMessage id="data-import.market.file" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
@@ -57,12 +66,31 @@ function MarketLogManualModal({ form, visible, loading, handleCancel, handleUplo
                     if (!isLt5M(file.size)) {
                       return callback('file size must less than 5M');
                     }
-                    if (!/^\d{8}_\d{1}_/.test(file.name)) {
-                      return callback('file name error');
-                    }
                     if (file.error) {
                       return callback(file.error.message);
                     }
+                    const fileFormat = file.name.match(fileReg);
+
+                    if (!fileFormat) {
+                      return callback('The format is wrong. Please check the file ');
+                    }
+
+                    const tradeDate = fileFormat[1];
+                    const fileType = fileFormat[2];
+                    const market = fileFormat[3];
+                    let marketMap = '';
+                    if (market.toLocaleLowerCase() === 'o') {
+                      marketMap = 'SEHK';
+                    }
+                    if (market.toLocaleLowerCase() === 'f') {
+                      marketMap = 'HKFE';
+                    }
+
+                    setUpFile({
+                      tradeDate,
+                      fileType,
+                      market: marketMap,
+                    });
                   }
                   return callback();
                 },
@@ -81,6 +109,7 @@ function MarketLogManualModal({ form, visible, loading, handleCancel, handleUplo
               accept=".xlsm,.csv,.xls,.xlsx,.pdf,application/msexcel"
               action="/upload?fileClass=MARKET"
               beforeUpload={handleBeforeUpload}
+              onRemove={() => setUpFile({})}
             >
               <Button>
                 <Icon type="upload" />
@@ -88,6 +117,21 @@ function MarketLogManualModal({ form, visible, loading, handleCancel, handleUplo
               </Button>
             </Upload>,
           )}
+        </Form.Item>
+        <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
+          {getFieldDecorator('tradeDate', {
+            initialValue: upFile.tradeDate,
+          })(<Input disabled placeholder="trade date" />)}
+        </Form.Item>
+        <Form.Item label={<FormattedMessage id="data-import.market" />}>
+          {getFieldDecorator('market', {
+            initialValue: upFile.market,
+          })(<Input disabled placeholder="market" />)}
+        </Form.Item>
+        <Form.Item label={<FormattedMessage id="data-import.market.file-type" />}>
+          {getFieldDecorator('fileType', {
+            initialValue: upFile.fileType,
+          })(<Input disabled placeholder="file type" />)}
         </Form.Item>
       </Form>
       <div className={styles['bottom-btns']}>

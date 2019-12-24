@@ -4,7 +4,31 @@ import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
 import styles from '@/pages/AlertCenter/index.less';
-import { AlertDes, AlertTask, AlertComment, AlertLog, AlertRichText } from './components';
+import {
+  AlertDes,
+  AlertTask,
+  AlertComment,
+  AlertLog,
+  AlertRichText,
+  EpTaskItem,
+  ProductTaskItem,
+  CaCodeTaskItem,
+  epColumns,
+  proudctColumns,
+  caCodeColumns,
+} from './components';
+
+const taskColumnsMap = {
+  301: epColumns,
+  302: proudctColumns,
+  303: caCodeColumns,
+};
+
+const TaskItemMap = {
+  301: EpTaskItem,
+  302: ProductTaskItem,
+  303: CaCodeTaskItem,
+};
 
 const { TabPane } = Tabs;
 
@@ -19,6 +43,8 @@ function CustomEmpty({ className = '', style = {} }) {
 function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
+  const taskColumns = taskColumnsMap[+alert.alertTypeId];
+  const TaskItem = TaskItemMap[+alert.alertTypeId];
 
   useEffect(() => {
     const { alertTypeId, alertId, itemsTotal } = alert;
@@ -92,13 +118,13 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
           >
             <AlertDes alert={alert} />
           </TabPane>
-          {+alert.itemsTotal !== 0 && (
+          {+alert.itemsTotal !== 0 && taskColumns && (
             <TabPane
               key="2"
               className={styles['tab-content']}
               tab={<FormattedMessage id="alert-center.alert-item-list" />}
             >
-              <AlertTask alert={alert} onTaskRow={handleTaskRow} />
+              <AlertTask alert={alert} onTaskRow={handleTaskRow} taskColumns={taskColumns} />
             </TabPane>
           )}
           {+alert.itemsTotal !== 0 &&
@@ -117,7 +143,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
                   </Row>
                 }
               >
-                {pane.ALERT_ITEM_ID}
+                <TaskItem task={pane} />
               </TabPane>
             ))}
         </Tabs>
