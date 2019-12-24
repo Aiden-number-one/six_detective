@@ -27,7 +27,7 @@ const { Option } = Select;
 
 @connect(({ sqlDataSource, getClassifyTree }) => ({
   // sql: sqlKeydown.sql, // sql查询语句
-  connectionId: sqlDataSource.connectionId,
+  connectionId: sqlDataSource.connectionId, // 选中的数据源ID
   classifyTree: getClassifyTree.classifyTree, // 分类树
   dataSourceList: sqlDataSource.dataSourceList, // 数据源选择框
   totalCount: sqlDataSource.totalCount, // 数据源下表的总数
@@ -126,6 +126,7 @@ class AddDataSet extends PureComponent {
   }
 
   componentWillUnmount() {
+    // 离开页面时初始化数据
     const { dispatch } = this.props;
     dispatch({
       type: 'sqlKeydown/clear',
@@ -344,6 +345,7 @@ class AddDataSet extends PureComponent {
         datasetId: this.isSaveOther ? '' : this.datasetId,
       },
     });
+    // 保存后跳转页面初始化
     this.pageNumber = 1;
     this.isSaveOther = false;
     this.connection_id = '';
@@ -358,6 +360,7 @@ class AddDataSet extends PureComponent {
     });
   };
 
+  // 修改sql语句
   alterInputSql = value => {
     this.setState({
       sql: value,
@@ -378,8 +381,9 @@ class AddDataSet extends PureComponent {
       location: {
         query: { datasetType }, // 存储过程或者sql
       },
-      variableList,
+      variableList, // 参数列表
     } = this.props;
+    // 预览列表头
     const column = [
       {
         title: 'Column Name',
@@ -520,10 +524,12 @@ class AddDataSet extends PureComponent {
                         this.pageNumber = 1;
                         this.connection_id = val;
                         this.connection_name = a.props.children;
+                        // 清空数据源表list
                         dispatch({
                           type: 'sqlDataSource/clear',
                           payload: [],
                         });
+                        // 重新渲染
                         dispatch({
                           type: 'sqlDataSource/getMetadataList',
                           payload: {
@@ -532,6 +538,7 @@ class AddDataSet extends PureComponent {
                             pageSize: '30',
                           },
                         });
+                        // 保存当前选中的数据源ID
                         dispatch({
                           type: 'sqlDataSource/saveConnectionId',
                           payload: {
@@ -583,6 +590,7 @@ class AddDataSet extends PureComponent {
                         style={{ marginRight: 10 }}
                         onClick={() => {
                           if (this.state.sql) {
+                            // 存在参数设置则弹出参数设置弹框,否则直接预览数据
                             if (variableList.length > 0) {
                               this.toggleModal('valueSetting');
                             } else {

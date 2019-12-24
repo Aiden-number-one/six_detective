@@ -2,14 +2,15 @@
  * @Description: 获取数据集分类树
  * @Author: lan
  * @Date: 2019-12-10 11:18:33
- * @LastEditTime: 2019-12-10 17:23:13
- * @LastEditors: lan
+ * @LastEditTime : 2019-12-24 20:21:37
+ * @LastEditors  : lan
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
 
 const { getClassifyTree } = Service;
 
+// 树转换
 const TreeFolderTrans = value => {
   const dataList = [];
   value.forEach(item => {

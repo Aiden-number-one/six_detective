@@ -9,12 +9,12 @@ import { message } from 'antd';
 import Service from '@/utils/Service';
 
 const {
-  getClassifyTree,
-  getDataSet,
-  setSqlClassify,
-  deleteSqlClassify,
-  getMetadataTablePerform,
-  operateDataSet,
+  getClassifyTree, // 获取数据集分类文件夹
+  getDataSet, // 获取数据集列表
+  setSqlClassify, // 新增修改数据集分类文件夹
+  deleteSqlClassify, // 删除数据集分类文件夹
+  getMetadataTablePerform, // 数据预览
+  operateDataSet, // 删除移动数据集
 } = Service;
 
 export default {
@@ -25,7 +25,7 @@ export default {
     column: [], // 数据预览表头
     tableData: [], // 数据预览数据
     activeTree: '', // 选中的树
-    activeFolderId: '',
+    activeFolderId: '', // 移动文件夹选中的树
   },
   effects: {
     // 获取数据集分类树
@@ -92,6 +92,7 @@ export default {
           // eslint-disable-next-line no-restricted-globals
           type: isNaN(tableHead[value]) ? 'dimension' : 'measure',
         }));
+        // 处理数据生成表头
         yield put({
           type: 'changeColumn',
           payload: column,
@@ -113,6 +114,7 @@ export default {
       const classId = yield select(({ dataSet }) => dataSet.activeTree);
       const res = yield call(operateDataSet, { param: payload });
       if (res && res.bcjson.flag === '1') {
+        // 重新获取数据集
         yield put({
           type: 'getDataSet',
           payload: {
@@ -125,42 +127,49 @@ export default {
     },
   },
   reducers: {
+    // 保存数据集分类文件夹
     setClassifyTreeData(state, action) {
       return {
         ...state,
         classifyTreeData: action.payload,
       };
     },
+    // 保存数据集列表
     saveDataSetData(state, action) {
       return {
         ...state,
         dataSetData: action.payload,
       };
     },
+    // 保存数据预览表格表头
     changeColumn(state, action) {
       return {
         ...state,
         column: action.payload,
       };
     },
+    // 保存数据预览表格数据
     addMetadataTablePerform(state, action) {
       return {
         ...state,
         tableData: action.payload,
       };
     },
+    // 选中左侧的树
     setActiveTree(state, action) {
       return {
         ...state,
         activeTree: action.payload,
       };
     },
+    // 选中移动文件夹的树
     saveFolderId(state, action) {
       return {
         ...state,
         activeFolderId: action.payload,
       };
     },
+    // 清空数据预览数据
     clear(state) {
       return {
         ...state,
