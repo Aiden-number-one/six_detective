@@ -198,6 +198,7 @@ class AuditLog extends Component {
     const param = {
       fileType: '1',
       apiVersion: 'v2.0',
+      isPage: false,
       apiName: 'bayconnect.superlop.get_system_log_list',
     };
     dispatch(
