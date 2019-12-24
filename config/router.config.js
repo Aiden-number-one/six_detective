@@ -63,8 +63,7 @@ export default [
               {
                 path: '/report/report-designer/report-designer',
                 name: 'Report Designer',
-                // component: './ReportDesigner/ReportDesigner',
-                component: './Page404',
+                component: './DatasetManagement/ReportDesignerList',
               },
               {
                 path: '/report/report-designer/dataset-mamagement',
