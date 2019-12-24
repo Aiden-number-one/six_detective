@@ -1,6 +1,7 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Table, Pagination, Modal, Checkbox } from 'antd';
+import { Form, Table, Pagination, Modal, Checkbox, Row, Col } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -20,6 +21,7 @@ class AuditLog extends Component {
       pageNumber: 1,
       pageSize: 10,
     },
+    customizeVisible: false,
     logStartDate: undefined,
     logEndDate: undefined,
     functionName: undefined,
@@ -30,6 +32,71 @@ class AuditLog extends Component {
       { key: '1', value: '1', title: 'Name One' },
       { key: '2', value: '2', title: 'Name Two' },
       { key: '3', value: '3', title: 'Name Three' },
+    ],
+    options: [
+      { label: 'functionName', value: 'functionName' },
+      { label: 'tableName', value: 'tableName' },
+      { label: 'biToCode', value: 'biToCode' },
+      { label: 'productCode', value: 'productCode' },
+      { label: 'effectiveTime', value: 'effectiveTime' },
+      { label: 'filedUpdated', value: 'filedUpdated' },
+      { label: 'updateType', value: 'updateType' },
+      { label: 'logTime', value: 'logTime' },
+      { label: 'updatedBy', value: 'updatedBy' },
+      { label: 'before', value: 'before' },
+      { label: 'after', value: 'after' },
+    ],
+    checkedValues: [],
+    tempColumns: [],
+    cuscomizeColumns: [
+      {
+        key: 'index',
+        visible: true,
+      },
+      {
+        key: 'functionName',
+        visible: true,
+      },
+      {
+        key: 'tableName',
+        visible: true,
+      },
+      {
+        key: 'biToCode',
+        visible: false,
+      },
+      {
+        key: 'productCode',
+        visible: true,
+      },
+      {
+        key: 'effectiveTime',
+        visible: true,
+      },
+      {
+        key: 'filedUpdated',
+        visible: false,
+      },
+      {
+        key: 'updateType',
+        visible: false,
+      },
+      {
+        key: 'logTime',
+        visible: true,
+      },
+      {
+        key: 'updatedBy',
+        visible: true,
+      },
+      {
+        key: 'before',
+        visible: false,
+      },
+      {
+        key: 'after',
+        visible: false,
+      },
     ],
     columns: [
       {
@@ -121,8 +188,41 @@ class AuditLog extends Component {
   auditLogForm = React.createRef();
 
   componentDidMount() {
+    this.filterColumns();
     this.getAuditLog();
   }
+
+  filterColumns = () => {
+    const { columns, cuscomizeColumns } = this.state;
+    const newColumns = columns.map(item => {
+      const newItem = Object.assign({}, item);
+      cuscomizeColumns.filter(element => {
+        if (element.key === item.key) {
+          newItem.visible = element.visible;
+        }
+      });
+      return newItem;
+    });
+    const arrVisible = [];
+    const checkedValues = [];
+    const tempColumns = [];
+    newColumns.forEach((element, index) => {
+      if (!element.visible) {
+        arrVisible.push(index);
+      } else {
+        checkedValues.push(element.key);
+      }
+    });
+    arrVisible.forEach((element, index) => {
+      newColumns.splice(element - index, 1);
+      tempColumns.push(newColumns[element - index]);
+    });
+    this.setState({
+      columns: newColumns,
+      checkedValues,
+      tempColumns,
+    });
+  };
 
   getAuditLog = () => {
     const { logStartDate, logEndDate, functionName, updatedBy, page } = this.state;
@@ -138,6 +238,17 @@ class AuditLog extends Component {
     dispatch({
       type: 'auditLog/getAuditLogList',
       payload: param,
+      callback: () => {
+        // const newColumns = columns.map(item => {
+        //   const newItem = Object.assign({}, item);
+        //   const filterColumns = cuscomizeColumns.filter(element => element.key === item.key);
+        //   newItem.colSpan = filterColumns.colSpan;
+        //   return newItem;
+        // });
+        // this.setState({
+        //   columns: newColumns,
+        // });
+      },
     });
   };
 
@@ -220,6 +331,35 @@ class AuditLog extends Component {
     });
   };
 
+  customizeDisplay = () => {
+    this.filterColumns();
+    this.setState({
+      customizeVisible: true,
+    });
+  };
+
+  customizeConfirm = () => {
+    const { checkedValues, tempColumns, columns } = this.state;
+    this.setState({
+      customizeVisible: false,
+      // checkedValues: tempCheckedValues,
+    });
+    console.log('checkedValues, tempColumns, columns===', checkedValues, tempColumns, columns);
+  };
+
+  customizeCancel = () => {
+    this.setState({
+      customizeVisible: false,
+    });
+  };
+
+  onChangeCheckbox = checkedValues => {
+    console.log('checkedValues===', checkedValues);
+    this.setState({
+      checkedValues,
+    });
+  };
+
   operatorReset = () => {
     this.auditLogForm.current.resetFields();
   };
@@ -227,7 +367,7 @@ class AuditLog extends Component {
   render() {
     const { loading } = this.props;
     let { getAuditLogList } = this.state;
-    const { page, functionNameOptions, exportDataVisible } = this.state;
+    const { page, functionNameOptions, exportDataVisible, options, checkedValues } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     return (
@@ -239,6 +379,13 @@ class AuditLog extends Component {
           functionNameOptions={functionNameOptions}
         />
         <div className={styles.content}>
+          <Row type="flex" justify="end">
+            <Col>
+              <span className={styles.customizeDisplay} onClick={this.customizeDisplay}>
+                Customize Display
+              </span>
+            </Col>
+          </Row>
           <Table
             loading={loading['auditLog/getAuditLogList']}
             dataSource={getAuditLogList}
@@ -262,7 +409,23 @@ class AuditLog extends Component {
           )}
         </div>
         <Modal
-          title="Select export format"
+          title={formatMessage({ id: 'app.common.confirm' })}
+          visible={this.state.customizeVisible}
+          onOk={this.customizeConfirm}
+          onCancel={this.customizeCancel}
+          cancelText={formatMessage({ id: 'app.common.cancel' })}
+          okText={formatMessage({ id: 'app.common.confirm' })}
+        >
+          <div>
+            <Checkbox.Group
+              options={options}
+              value={checkedValues}
+              onChange={this.onChangeCheckbox}
+            />
+          </div>
+        </Modal>
+        <Modal
+          title="Select Export Format"
           visible={exportDataVisible}
           onOk={this.exportDataConfirm}
           onCancel={this.exportDataCancel}
