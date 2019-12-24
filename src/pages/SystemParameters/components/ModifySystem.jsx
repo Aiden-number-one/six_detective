@@ -120,7 +120,7 @@ class ModifySystem extends Component {
         payload: params,
         callback: () => {
           message.success({
-            content: 'modify success',
+            content: 'save success',
             duration: 2,
           });
           this.props.onSave();
