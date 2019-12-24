@@ -25,8 +25,8 @@ export default class DropSelect extends Component {
   onClick = item => {
     const { privateData, setPrivateList } = this.props;
     // 是否是私有数据集（datasetPrivate === '1'），若不是，则需要转为私有数据集
-    const { dataset_private: datasetPrivate } = item;
-    setPrivateList([...privateData, datasetPrivate === '1' ? item : dataSetTransform(privateData)]);
+    // const { dataset_private: datasetPrivate } = item;
+    setPrivateList([...privateData, dataSetTransform(item)]);
   };
 
   onSearch = (/* v  */) => {};
@@ -86,16 +86,14 @@ export default class DropSelect extends Component {
                   data.map(item => {
                     // 是否是私有数据集（目前是通过名字去判断，需要沟通！）
                     const active = privateData
-                      .map(activeItem => activeItem.dataset_name)
-                      .includes(item.dataset_name);
+                      .map(activeItem => activeItem.origin_datasetId)
+                      .includes(item.datasetId);
                     return (
                       <div
                         className={classNames(styles.item)}
                         key={item.taskId}
                         onClick={() => {
-                          if (!active) {
-                            this.onClick(item);
-                          }
+                          this.onClick(item);
                           this.trigger();
                         }}
                         title={item.datasetName}

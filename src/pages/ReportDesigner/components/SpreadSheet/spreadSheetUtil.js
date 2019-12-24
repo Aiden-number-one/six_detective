@@ -1,4 +1,38 @@
-const generateJson = (spreedSheetData, saveCallback) => {
+import { stringToNum } from '@/utils/utils';
+
+/**
+ * @description: 处理合并单元格相关
+ * @param {array}  merges 合并单元格的原始数据
+ * @return {array} 合并单元格的数组
+ * @Author: mus
+ * @Date: 2019-12-23 20:29:27
+ */
+export function mergeCell(merges) {
+  const mergeMap = {};
+  merges.forEach(merge => {
+    const [start, end] = merge.split(':');
+    const startCol = stringToNum(start.match(/([A-Z]+)([0-9]+)/)[1]) - 1;
+    const startRow = start.match(/([A-Z]+)([0-9]+)/)[2] - 1;
+    const endCol = stringToNum(end.match(/([A-Z]+)([0-9]+)/)[1]) - 1;
+    const endRow = end.match(/([A-Z]+)([0-9]+)/)[2] - 1;
+    mergeMap[startRow.toString() + startCol.toString()] = {
+      currentCol: startCol,
+      currentRow: startRow,
+      colSpan: endCol - startCol + 1,
+      rowSpan: endRow - startRow + 1,
+    };
+  });
+  return mergeMap;
+}
+
+/**
+ * @description: spreadSheetJSON转换
+ * @param {object} spreadSheetData spreadsheet的原数据
+ * @return {object} 转换后的sheet数据
+ * @Author: mus
+ * @Date: 2019-12-23 20:24:27
+ */
+export function generateJson(spreadSheetData) {
   // 默认cellProps
   const defaultCellProps = {
     F: '1',
@@ -8,9 +42,12 @@ const generateJson = (spreedSheetData, saveCallback) => {
     sy: '0',
   };
   // rows: 所有行,
-  const { rows, cols } = spreedSheetData;
+  const { rows, cols, merges } = spreadSheetData;
   const rowLength = rows.len;
   const colLength = cols.len;
+
+  // 获取处理后的合并单元格数据
+  const processedMerges = mergeCell(merges);
 
   // 生成JSON所需的单元格数据
   const data = new Array(rowLength).fill([]).map(() => new Array(colLength).fill(''));
@@ -31,8 +68,17 @@ const generateJson = (spreedSheetData, saveCallback) => {
       // 把spreadShett单元格的数据赋值给后台表格的单元格中
       data[rowIndex][cellIndex] = cellContent.text;
 
+      // TODO：设置宽度、高度
+
       // 后台表格单元格属性
       const currentCellProps = cellAttrs[rowIndex][cellIndex];
+
+      // 设置colSpan、rowSpan
+      const processedMerge = processedMerges[rowIndex.toString() + cellIndex.toString()];
+
+      // 若改单元格不存在合并，则rowSpan为1，同理colSpan为1
+      currentCellProps.rowSpan = processedMerge ? processedMerge.rowSpan : '1';
+      currentCellProps.colSpan = processedMerge ? processedMerge.colSpan : '1';
 
       // 对样式进行处理
       if (cellContent.style) {
@@ -121,7 +167,5 @@ const generateJson = (spreedSheetData, saveCallback) => {
     data,
     cellAttrs,
   });
-  saveCallback(JSON.stringify(sheet));
-};
-
-export { generateJson };
+  return sheet;
+}

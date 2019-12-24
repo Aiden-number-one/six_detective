@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2019-12-23 14:32:41
+ * @LastEditTime : 2019-12-23 15:15:41
  * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
@@ -23,9 +23,9 @@ import SearchForm from './components/SearchForm';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
-@connect(({ dataSet }) => ({
+@connect(({ dataSet, reportList }) => ({
   classifyTreeData: dataSet.classifyTreeData, // 分类树
-  dataSetData: dataSet.dataSetData, // 数据集表格
+  reportList: reportList.reportList, // 报表设计器列表的List
   activeTree: dataSet.activeTree, // 选中的树节点
   column: dataSet.column, // 数据预览表头
   tableData: dataSet.tableData, // 数据预览数据
@@ -58,14 +58,22 @@ export default class DatasetManagement extends PureComponent {
 
   // 生命周期函数, 获取数据集分类树
   componentDidMount() {
+    const { page } = this.state;
     const { dispatch } = this.props;
     dispatch({
       type: 'dataSet/getClassifyTree',
     });
+    dispatch({
+      type: 'reportList/getReportList',
+      payload: {
+        pageNumber: page.pageNumber.toString(),
+        pageSize: page.pageSize.toString(),
+      },
+    });
   }
 
   // 获取数据集列表
-  queryDataSet = value => {
+  queryReportTemplate = value => {
     const { dispatch, activeTree } = this.props;
     const { page } = this.state;
     const newPage = {
@@ -161,7 +169,7 @@ export default class DatasetManagement extends PureComponent {
       type: 'dataSet/setActiveTree',
       payload: value,
     });
-    this.queryDataSet(value);
+    this.queryReportTemplate(value);
     // dispatch({
     //   type: 'dataSet/getDataSet',
     //   payload: {
@@ -262,7 +270,7 @@ export default class DatasetManagement extends PureComponent {
         page,
       },
       () => {
-        this.queryDataSet();
+        this.queryReportTemplate();
       },
     );
   };
@@ -277,7 +285,7 @@ export default class DatasetManagement extends PureComponent {
         page,
       },
       () => {
-        this.queryDataSet();
+        this.queryReportTemplate();
       },
     );
   };
@@ -287,33 +295,23 @@ export default class DatasetManagement extends PureComponent {
     const columns = [
       {
         title: 'Name',
-        dataIndex: 'sqlName',
-        key: 'sqlName',
+        dataIndex: 'reportName',
+        key: 'reportName',
       },
       {
-        title: 'Type',
-        dataIndex: 'mdType',
-        key: 'mdType',
+        title: 'Created By',
+        dataIndex: 'createBy',
+        key: 'createBy',
       },
       {
-        title: 'Data Source',
-        dataIndex: 'tableCat',
-        key: 'tableCat',
-      },
-      {
-        title: 'Creat by',
-        dataIndex: 'schemName',
-        key: 'schemName',
-      },
-      {
-        title: 'Modified by',
-        dataIndex: 'lastOperator',
-        key: 'lastOperator',
+        title: 'Modified By',
+        dataIndex: 'updateBy',
+        key: 'updateBy',
       },
       {
         title: 'Modified at',
-        dataIndex: 'lastupdatetime',
-        key: 'lastupdatetime',
+        dataIndex: 'updateDatetime',
+        key: 'updateDatetime',
       },
       {
         title: 'Operation',
@@ -324,10 +322,9 @@ export default class DatasetManagement extends PureComponent {
               href="#"
               onClick={() => {
                 router.push({
-                  pathname: '/add-dataset',
+                  pathname: '/report-designer',
                   query: {
-                    connectionId: record.dbId,
-                    record: JSON.stringify(record),
+                    reportId: record.reportId,
                   },
                 });
               }}
@@ -384,21 +381,7 @@ export default class DatasetManagement extends PureComponent {
       },
     ];
     const { drawerTitle, page } = this.state;
-    // 表格多选框
-    // const rowSelection = {
-    //   selectedRowKeys,
-    //   type: 'checkbox',
-    //   onSelect: (record, selected, selectedRows) => {
-    //     const tableIds = selectedRows.map(item => item.tableId);
-    //     this.tableIds = tableIds.join(',');
-    //   },
-    //   onChange: selectedRowKey => {
-    //     this.setState({
-    //       selectedRowKeys: selectedRowKey,
-    //     });
-    //   },
-    // };
-    const { classifyTreeData, dataSetData, column, tableData } = this.props;
+    const { classifyTreeData, reportList, column, tableData } = this.props;
     const anotherTree = _.cloneDeep(classifyTreeData);
     return (
       <PageHeaderWrapper>
@@ -426,56 +409,24 @@ export default class DatasetManagement extends PureComponent {
             <div
               style={{ height: '100%', borderLeft: '1px solid #e0e0e0', backgroundColor: '#fff' }}
             >
-              {/* <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  padding: '10px 5px 0',
-                  backgroundColor: '#fff',
-                }}
-              >
-                <Button
-                  style={{ width: 120 }}
-                  type="primary"
-                  onClick={() => {
-                    router.push({
-                      pathname: '/add-dataset',
-                      query: {
-                        // connectionId: connectionId,
-                      },
-                    });
-                  }}
-                >
-                  Creat DataSet
-                </Button>
-                <Search
-                  style={{ width: 220 }}
-                  onSearch={value => {
-                    this.getDataSourceList(value);
-                  }}
-                />
-              </div> */}
-              <NewSearchForm search={this.queryDataSet} ref={this.searchForm} />
+              <NewSearchForm search={this.queryReportTemplate} ref={this.searchForm} />
               <div className={styles.content}>
                 <div className={styles.tableTop}>
                   <Button
                     onClick={() => {
                       router.push({
-                        pathname: '/add-dataset',
-                        query: {
-                          // connectionId: connectionId,
-                        },
+                        pathname: '/report-designer',
                       });
                     }}
                     type="primary"
                     className="btn_usual"
                   >
-                    + New DataSet
+                    + New Report Template
                   </Button>
                 </div>
                 <Table
                   columns={columns}
-                  dataSource={dataSetData}
+                  dataSource={reportList}
                   pagination={false}
                   scroll={{ x: 'max-content' }}
                 />
@@ -483,13 +434,13 @@ export default class DatasetManagement extends PureComponent {
                   current={page.pageNumber}
                   showSizeChanger
                   showTotal={() =>
-                    `Page ${(dataSetData.length || 0) && page.pageNumber} of ${Math.ceil(
-                      (dataSetData.length || 0) / page.pageSize,
+                    `Page ${(reportList.length || 0) && page.pageNumber} of ${Math.ceil(
+                      (reportList.length || 0) / page.pageSize,
                     )}`
                   }
                   onShowSizeChange={this.onShowSizeChange}
                   onChange={this.pageChange}
-                  total={dataSetData.length}
+                  total={reportList.length}
                   pageSize={page.pageSize}
                 />
               </div>

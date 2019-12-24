@@ -2,13 +2,13 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2019-12-20 16:56:01
+ * @LastEditTime : 2019-12-23 20:26:03
  * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
-// import _ from 'lodash';
 import { generateJson } from './spreadSheetUtil';
+import { getTemplateArea } from '../../utils';
 
 const styleKeyMap = {
   'font-bold': 'bold',
@@ -243,12 +243,11 @@ export default WrapperComponent =>
         .spreadsheet('#x-spreadsheet', xsOptions)
         .loadData(data)
         .change(changeData => {
-          generateJson(changeData, contentDetail => {
-            const { dispatch } = this.props;
-            dispatch({
-              type: 'reportDesigner/saveContentDetail',
-              payload: contentDetail,
-            });
+          const { dispatch } = this.props;
+          const contentDetail = generateJson(changeData);
+          dispatch({
+            type: 'reportDesigner/setTemplateArea',
+            payload: getTemplateArea(contentDetail),
           });
         });
     };

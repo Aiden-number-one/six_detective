@@ -10,7 +10,7 @@ export default class SearchForm extends Component {
     const { search } = this.props;
     return (
       <Form className="ant-advanced-search-form">
-        <Row gutter={{ xs: 48, sm: 48 }}>
+        <Row gutter={{ xs: 20, sm: 20 }}>
           <Col xs={24} sm={12} lg={8}>
             <Form.Item label={formatMessage({ id: 'systemManagement.userMaintenance.name' })}>
               {getFieldDecorator('sqlName', {})(<Input placeholder="Please input" />)}

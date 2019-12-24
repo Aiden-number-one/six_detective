@@ -4,8 +4,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-12-14 19:50:27
- * @LastEditors: mus
+ * @LastEditTime : 2019-12-24 10:29:49
+ * @LastEditors  : mus
  */
 
 import { components, menuIcons, iframe } from '@/utils/common';
@@ -241,6 +241,22 @@ export function createCellPos(n) {
     n = Math.floor(n / len) - 1;
   }
   return s;
+}
+
+export function stringToNum(a) {
+  const str = a.toLowerCase().split('');
+  const al = str.length;
+  function getCharNumber(charx) {
+    return charx.charCodeAt() - 96;
+  }
+  let numout = 0;
+  let charnum = 0;
+  for (let i = 0; i < al; i += 1) {
+    charnum = getCharNumber(str[i]);
+    const factor = 26 ** (al - i - 1);
+    numout += charnum * factor;
+  }
+  return numout;
 }
 
 export { isProOrDev, isUrl, geneMenuData, getRandowNVPS, passWordStrength };
