@@ -37,6 +37,7 @@ const { Option } = Select;
   defaultPageSize: sqlDataSource.defaultPageSize, // 默认一页行数
   columnData: sqlDataSource.columnData, // 列数据
   dataSet: sqlDataSource.dataSet, // 数据集详情
+  variableList: sqlDataSource.variableList, // 参数设置
 }))
 class AddDataSet extends PureComponent {
   // 可拖动的表格
@@ -128,6 +129,26 @@ class AddDataSet extends PureComponent {
       type: 'sqlDataSource/clearAll',
     });
   }
+
+  // 获取参数设置
+  getVariableList = () => {
+    const { dispatch, sql } = this.props;
+    dispatch({
+      type: 'sqlDataSource/getVariableList',
+      payload: {
+        scriptContent: sql,
+      },
+    });
+  };
+
+  // 修改参数设置
+  saveDatasetParams = datasetParams => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'sqlDataSource/setVariableList',
+      payload: datasetParams,
+    });
+  };
 
   // 刷新数据源表列表
   loadMore = () => {
@@ -272,6 +293,7 @@ class AddDataSet extends PureComponent {
       location: {
         query: { datasetType },
       },
+      variableList,
     } = this.props;
     dispatch({
       type: 'sqlDataSource/addDataSet',
@@ -279,7 +301,7 @@ class AddDataSet extends PureComponent {
         datasourceId: this.connection_id,
         datasourceName: this.connection_name,
         commandText: sql,
-        datasetParams: JSON.stringify([]),
+        datasetParams: JSON.stringify(variableList),
         datasetFields: JSON.stringify([]),
         datasetType: dataSet.datasetType || datasetType,
         // sqlStatementPram,
@@ -321,6 +343,7 @@ class AddDataSet extends PureComponent {
       location: {
         query: { datasetType }, // 存储过程或者sql
       },
+      variableList,
     } = this.props;
     const column = [
       {
@@ -684,7 +707,13 @@ class AddDataSet extends PureComponent {
             </Layout>
             {/* </Spin> */}
           </Content>
-          <ParamSetting visible={this.state.visible.paramSetting} toggleModal={this.toggleModal} />
+          <ParamSetting
+            visible={this.state.visible.paramSetting}
+            toggleModal={this.toggleModal}
+            variableList={variableList}
+            getVariableList={this.getVariableList}
+            saveDatasetParams={this.saveDatasetParams}
+          />
           <Save
             dataSet={dataSet}
             saveSql={this.saveSql}

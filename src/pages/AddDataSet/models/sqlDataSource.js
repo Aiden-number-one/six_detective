@@ -15,6 +15,7 @@ const {
   getColumn,
   operateDataSet,
   getDataSetDetail, // 获取单个数据集详情
+  getVariableList, // 获取参数
 } = Service;
 
 export default {
@@ -32,9 +33,21 @@ export default {
     defaultPageSize: 5, // tableData一页默认展示
     columnData: [],
     dataSet: {},
+    variableList: [],
   },
 
   effects: {
+    // 获取参数
+    *getVariableList({ payload }, { call, put }) {
+      const res = yield call(getVariableList, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        // 参数列表
+        yield put({
+          type: 'setVariableList',
+          payload: res.bcjson.items,
+        });
+      }
+    },
     // 获取单个数据集
     *getDataSetDetail({ payload, callback }, { call, put }) {
       const res = yield call(getDataSetDetail, { param: payload });
@@ -147,6 +160,12 @@ export default {
   },
 
   reducers: {
+    setVariableList(state, action) {
+      return {
+        ...state,
+        variableList: action.payload,
+      };
+    },
     changeActive(state, action) {
       return {
         ...state,
@@ -237,6 +256,7 @@ export default {
         defaultPageSize: 5, // tableData一页默认展示
         columnData: [],
         dataSet: {},
+        variableList: [],
       };
     },
   },
