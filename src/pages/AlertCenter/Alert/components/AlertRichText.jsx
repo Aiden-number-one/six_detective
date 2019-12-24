@@ -3,7 +3,7 @@ import { Row, Col, Input, Button, Upload } from 'antd';
 import IconFont from '@/components/IconFont';
 import styles from '@/pages/AlertCenter/index.less';
 import AlertAttachments from './AlertAttachments';
-import AlertPhase from './AlertPhase';
+import AlertPhrase from './AlertPhrase';
 
 const { TextArea } = Input;
 const isLt5M = size => size / 1024 / 1024 < 5;
@@ -48,7 +48,7 @@ export default function({ loading, onCommit }) {
       />
       <Row className={styles['comment-commit']} type="flex" align="middle" justify="space-between">
         <Col span={11} offset={1}>
-          <AlertPhase postComment={c => setComment(`${comment}${c} `)} />
+          <AlertPhrase postComment={c => setComment(`${comment}${c} `)} />
         </Col>
         <Col span={6} align="right">
           <Upload

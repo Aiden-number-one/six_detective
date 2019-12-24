@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Row, Col, Empty, Spin } from 'antd';
+import { Tabs, Row, Col, Empty, Spin, Icon } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
@@ -18,9 +18,12 @@ function CustomEmpty({ className = '', style = {} }) {
 
 function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
   const [isFullscreen, setFullscreen] = useState(false);
+  const [panes, setPanes] = useState([]);
 
   useEffect(() => {
     const { alertTypeId, alertId, itemsTotal } = alert;
+    // clear task item
+    setPanes([]);
     // no items
     if (+itemsTotal !== 0) {
       dispatch({
@@ -56,11 +59,22 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
       },
     });
   }
+
+  function handleTaskRow(row) {
+    if (panes.some(item => item.ALERT_ITEM_ID === row.ALERT_ITEM_ID)) {
+      setPanes(panes.map(item => ({ item, row })));
+    } else {
+      setPanes([...panes, row]);
+    }
+  }
+
+  function hanleRemoveItem(pane) {
+    setPanes(panes.filter(m => pane.ALERT_ITEM_ID !== m.ALERT_ITEM_ID));
+  }
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
         <Tabs
-          hideAdd
           className={styles['detail-des']}
           defaultActiveKey="1"
           tabBarExtraContent={
@@ -74,7 +88,6 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
           <TabPane
             key="1"
             className={styles['tab-content']}
-            closable={false}
             tab={<FormattedMessage id="alert-center.alert-detail" />}
           >
             <AlertDes alert={alert} />
@@ -83,21 +96,35 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
             <TabPane
               key="2"
               className={styles['tab-content']}
-              closable={false}
               tab={<FormattedMessage id="alert-center.alert-item-list" />}
             >
-              <AlertTask alert={alert} />
+              <AlertTask alert={alert} onTaskRow={handleTaskRow} />
             </TabPane>
           )}
+          {+alert.itemsTotal !== 0 &&
+            panes.map(pane => (
+              <TabPane
+                className={styles['tab-content']}
+                key={pane.ALERT_ITEM_ID}
+                tab={
+                  <Row type="flex" justify="space-between" align="middle">
+                    <span>Alert Item </span>
+                    <Icon
+                      type="close"
+                      style={{ marginLeft: 12, fontSize: 12 }}
+                      onClick={() => hanleRemoveItem(pane)}
+                    />
+                  </Row>
+                }
+              >
+                {pane.ALERT_ITEM_ID}
+              </TabPane>
+            ))}
         </Tabs>
       </Col>
       <Col span={8}>
         <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
-          <TabPane
-            key="1"
-            tab={<FormattedMessage id="alert-center.comment-history" />}
-            className={styles['tab-content']}
-          >
+          <TabPane key="1" tab={<FormattedMessage id="alert-center.comment-history" />}>
             <Spin spinning={loading['alertCenter/fetchComments']}>
               {comments.length > 0 ? (
                 <ul className={styles['comment-list']}>

@@ -7,7 +7,7 @@
  * @LastEditTime : 2019-12-21 13:35:00
  */
 
-export const PHASES = [
+export const PHRASES = [
   'All the data is problematic.',
   'Data correct,can be turned off.',
   'Remember to download all the attachments.',
