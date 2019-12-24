@@ -229,11 +229,15 @@ export default class DatasetManagement extends PureComponent {
     params.datasetId = this.record.datasetId;
     params.commandText = this.record.commandText;
     if (values) {
-      params.parameters = JSON.stringify([
-        {
-          ...values,
-        },
-      ]);
+      const datasetParams = JSON.parse(this.record.datasetParams);
+      datasetParams.forEach(item => {
+        Object.keys(values).forEach(i => {
+          if (i === item.parameter_name) {
+            item.parameter_value = values[i];
+          }
+        });
+      });
+      params.parameters = JSON.stringify(datasetParams);
     }
     dispatch({
       type: 'dataSet/getMetadataTablePerform',

@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import { Drawer, Row, Col, Input, Select, Icon, Button } from 'antd';
+import _ from 'lodash';
 import styles from '../../AddDataSet.less';
 
 const { Option } = Select;
-
-const conditionData = [{}, {}, {}, {}];
 
 export default class ParamSetting extends PureComponent {
   state = {};
 
   render() {
-    const { visible, toggleModal } = this.props;
+    const { visible, toggleModal, variableList, getVariableList, saveDatasetParams } = this.props;
+    const datasetParams = _.cloneDeep(variableList);
     return (
       <Drawer
         visible={visible}
@@ -21,28 +21,42 @@ export default class ParamSetting extends PureComponent {
         width={600}
         className={styles.paramsDrawer}
       >
-        <Button type="primary">
+        <Button
+          type="primary"
+          onClick={() => {
+            getVariableList();
+          }}
+        >
           <Icon type="download" />
-          快速提取
+          Extraction
         </Button>
         <ul style={{ padding: 0, marginTop: 10 }}>
           <li>
             <Row style={{ lineHeigh: '50px' }}>
-              <Col span={12}>变量名</Col>
-              <Col span={12}>变量类型</Col>
+              <Col span={12}>Variable Name</Col>
+              <Col span={12}>Variable Type</Col>
             </Row>
           </li>
-          {conditionData.map(() => (
+          {datasetParams.map((item, index) => (
             <li>
               <Row style={{ lineHeigh: '50px' }}>
                 <Col span={12}>
-                  <Input disabled style={{ width: '90%' }} />
+                  <Input disabled style={{ width: '90%' }} value={item.parameter_name} />
                 </Col>
                 <Col span={12}>
-                  <Select defaultValue="lucy" style={{ width: '90%' }}>
-                    <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="Yiminghe">yiminghe</Option>
+                  <Select
+                    defaultValue={item.parameter_type}
+                    style={{ width: '90%' }}
+                    onSelect={e => {
+                      datasetParams.forEach((v, i) => {
+                        if (i === index) {
+                          v.parameter_type = e;
+                        }
+                      });
+                    }}
+                  >
+                    <Option value="STRING">STRING</Option>
+                    <Option value="NUMBER">NUMBER</Option>
                   </Select>
                 </Col>
               </Row>
@@ -68,7 +82,12 @@ export default class ParamSetting extends PureComponent {
             >
               Cancel
             </Button>
-            <Button htmlType="submit" type="primary">
+            <Button
+              onClick={() => {
+                saveDatasetParams([...datasetParams]);
+              }}
+              type="primary"
+            >
               Submit
             </Button>
           </div>

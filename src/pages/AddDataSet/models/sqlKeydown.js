@@ -6,7 +6,7 @@
  */
 import Service from '@/utils/Service';
 
-const { getMetadataTablePerform, getSqlParserInfo, getQryStatement } = Service;
+const { sqlFormated, getQryStatement } = Service;
 
 export default {
   namespace: 'sqlKeydown',
@@ -19,36 +19,25 @@ export default {
 
   effects: {
     // sql美化
-    *formatedSql({ payload }, { call, put }) {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      const { connection_id, ...param } = payload;
-      const res = yield call(getSqlParserInfo, { param });
+    *sqlFormated({ payload }, { call, put }) {
+      const res = yield call(sqlFormated, { param: payload });
       if (res && res.bcjson.flag === '1') {
         yield put({
           type: 'changeSql',
-          payload: res.bcjson.items[0].formatedSql,
-        });
-      }
-    },
-    *getMetadataTablePerform({ payload }, { call, put }) {
-      // const sql = yield select(({ sqlKeydown }) => sqlKeydown.sql);
-      const data = yield call(getMetadataTablePerform, { param: payload });
-      if (data && data.bcjson.flag === '1') {
-        yield put({
-          type: 'changeSql',
-          payload: data.bcjson.items[0].viewSql,
+          payload: res.bcjson.items[0].formatedContent,
         });
       }
     },
     // 获取sql语句
-    *querySql({ payload }, { call, put, select }) {
-      const sql = yield select(({ sqlKeydown }) => sqlKeydown.sql);
+    *querySql({ payload, callback }, { call }) {
+      // const sql = yield select(({ sqlKeydown }) => sqlKeydown.sql);
       const data = yield call(getQryStatement, { param: payload });
       if (data && data.bcjson.flag === '1') {
-        yield put({
-          type: 'changeSql',
-          payload: sql + data.bcjson.items[0].qryStatement,
-        });
+        callback(data.bcjson.items[0].qryStatement);
+        // yield put({
+        //   type: 'changeSql',
+        //   payload: sql + data.bcjson.items[0].qryStatement,
+        // });
         // yield put({
         //   type: 'sqlDataSource/clearMetadata',
         // })
