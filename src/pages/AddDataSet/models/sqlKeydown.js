@@ -75,5 +75,12 @@ export default {
         sqlItem: action.payload,
       };
     },
+    clear() {
+      return {
+        sql: '',
+        visible: false,
+        sqlItem: {},
+      };
+    },
   },
 };
