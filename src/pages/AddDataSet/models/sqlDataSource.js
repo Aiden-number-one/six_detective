@@ -38,7 +38,7 @@ export default {
 
   effects: {
     // 获取参数
-    *getVariableList({ payload }, { call, put }) {
+    *getVariableList({ payload, callback }, { call, put }) {
       const res = yield call(getVariableList, { param: payload });
       if (res && res.bcjson.flag === '1') {
         // 参数列表
@@ -46,6 +46,7 @@ export default {
           type: 'setVariableList',
           payload: res.bcjson.items,
         });
+        if (callback) callback(res.bcjson.items);
       }
     },
     // 获取单个数据集
@@ -77,6 +78,14 @@ export default {
           type: 'setDataSourceList',
           payload: res.bcjson.items,
         });
+        if (!connectionId) {
+          yield put({
+            type: 'saveConnectionId',
+            payload: {
+              connectionId,
+            },
+          });
+        }
 
         yield put({
           type: 'clear',

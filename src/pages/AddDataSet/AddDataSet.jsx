@@ -19,14 +19,15 @@ import ConnList from './components/ConnList';
 import CodeMirrorComponent from './components/CodeMirror';
 import ParamSetting from './components/drawers/ParamSetting';
 import Save from './components/drawers/Save';
-// import ValueSetting from './components/drawers/ValueSetting';
+import ValueSetting from './components/drawers/ValueSetting';
 import ResizeableTitle from './components/ResizeableTitle';
 
 const { Sider, Content, Header } = Layout;
 const { Option } = Select;
 
-@connect(({ sqlDataSource, getClassifyTree, sqlKeydown }) => ({
-  sql: sqlKeydown.sql, // sql查询语句
+@connect(({ sqlDataSource, getClassifyTree }) => ({
+  // sql: sqlKeydown.sql, // sql查询语句
+  connectionId: sqlDataSource.connectionId,
   classifyTree: getClassifyTree.classifyTree, // 分类树
   dataSourceList: sqlDataSource.dataSourceList, // 数据源选择框
   totalCount: sqlDataSource.totalCount, // 数据源下表的总数
@@ -65,6 +66,7 @@ class AddDataSet extends PureComponent {
     AlterDataSetName: true, // 操作数据集名称
     tableView: 'data', // 切换预览数据或查看列数据
     pageNumber: '1', // 表格分页
+    sql: '', // sql语句
   };
 
   componentDidMount() {
@@ -100,6 +102,9 @@ class AddDataSet extends PureComponent {
             type: 'sqlKeydown/changeSql',
             payload: items.commandText,
           });
+          this.setState({
+            sql: items.commandText,
+          });
           // 数据集名称回显
           dispatch({
             type: 'sqlDataSource/changeDataSetName',
@@ -131,13 +136,14 @@ class AddDataSet extends PureComponent {
   }
 
   // 获取参数设置
-  getVariableList = () => {
-    const { dispatch, sql } = this.props;
+  getVariableList = callback => {
+    const { dispatch } = this.props;
     dispatch({
       type: 'sqlDataSource/getVariableList',
       payload: {
-        scriptContent: sql,
+        scriptContent: this.state.sql,
       },
+      callback,
     });
   };
 
@@ -284,11 +290,39 @@ class AddDataSet extends PureComponent {
     });
   };
 
+  // 数据预览
+  handlePreview = values => {
+    const { dispatch, variableList, dataSourceList } = this.props;
+    const params = {};
+    if (values) {
+      const datasetParams = _.cloneDeep(variableList);
+      datasetParams.forEach(item => {
+        Object.keys(values).forEach(i => {
+          if (i === item.parameter_name) {
+            item.parameter_value = values[i];
+          }
+        });
+      });
+      params.parameters = JSON.stringify(datasetParams);
+    }
+    params.datasourceId =
+      this.connection_id || (dataSourceList && dataSourceList[0] && dataSourceList[0].connectionId);
+    params.commandText = this.state.sql;
+    params.previewNum = 20;
+    dispatch({
+      type: 'sqlDataSource/getMetadataTablePerform',
+      payload: params,
+    });
+    dispatch({
+      type: 'sqlDataSource/getColumn',
+      payload: params,
+    });
+  };
+
   // 保存操作
   saveSql = fieldsValue => {
     const {
       dispatch,
-      sql,
       dataSet,
       location: {
         query: { datasetType },
@@ -300,19 +334,14 @@ class AddDataSet extends PureComponent {
       payload: {
         datasourceId: this.connection_id,
         datasourceName: this.connection_name,
-        commandText: sql,
+        commandText: this.state.sql,
         datasetParams: JSON.stringify(variableList),
         datasetFields: JSON.stringify([]),
         datasetType: dataSet.datasetType || datasetType,
-        // sqlStatementPram,
         datasetIsDict: 'N',
         datasetName: fieldsValue.sqlDataSetName,
         folderId: fieldsValue.folder,
         datasetId: this.isSaveOther ? '' : this.datasetId,
-        // connection_id: this.connection_id,
-        // setType: 'viewSet',
-        // viewSql: sql,
-        // viewName: fieldsValue.sqlDataSetName,
       },
     });
     this.pageNumber = 1;
@@ -326,6 +355,12 @@ class AddDataSet extends PureComponent {
   pageChange = pageNumber => {
     this.setState({
       pageNumber,
+    });
+  };
+
+  alterInputSql = value => {
+    this.setState({
+      sql: value,
     });
   };
 
@@ -547,24 +582,18 @@ class AddDataSet extends PureComponent {
                         type="primary"
                         style={{ marginRight: 10 }}
                         onClick={() => {
-                          if (this.props.sql) {
-                            // if (this.props)
-                            dispatch({
-                              type: 'sqlDataSource/getMetadataTablePerform',
-                              payload: {
-                                datasourceId: this.connection_id,
-                                commandText: this.props.sql,
-                                previewNum: 20,
-                              },
-                            });
-                            dispatch({
-                              type: 'sqlDataSource/getColumn',
-                              payload: {
-                                datasourceId: this.connection_id,
-                                commandText: this.props.sql,
-                                previewNum: 20,
-                              },
-                            });
+                          if (this.state.sql) {
+                            if (variableList.length > 0) {
+                              this.toggleModal('valueSetting');
+                            } else {
+                              this.getVariableList(values => {
+                                if (values.length > 0) {
+                                  this.toggleModal('valueSetting');
+                                } else {
+                                  this.handlePreview();
+                                }
+                              });
+                            }
                           }
                         }}
                       >
@@ -579,11 +608,26 @@ class AddDataSet extends PureComponent {
                       >
                         Variable Setting
                       </Button>
-                      <Button type="primary" style={{ marginRight: 10 }} onClick={() => {}}>
+                      <Button
+                        type="primary"
+                        style={{ marginRight: 10 }}
+                        onClick={() => {
+                          dispatch({
+                            type: 'sqlKeydown/sqlFormated',
+                            payload: {
+                              scriptContent: this.state.sql,
+                            },
+                          });
+                        }}
+                      >
                         SQL Beautifier
                       </Button>
                     </div>
-                    <CodeMirrorComponent datasetType={datasetType || dataSet.datasetType} />
+                    <CodeMirrorComponent
+                      datasetType={datasetType || dataSet.datasetType}
+                      inputSql={this.state.sql}
+                      alterInputSql={this.alterInputSql}
+                    />
                   </div>
                   <div className={styles.searchBox}>
                     <Button
@@ -614,29 +658,6 @@ class AddDataSet extends PureComponent {
                     >
                       <IconFont type="iconorderedlist" />
                     </Button>
-                    {/* <span
-                      onClick={() => {
-                        if (this.props.sql) {
-                          dispatch({
-                            type: 'addSqlDataSet/getSqlParserInfo',
-                            payload: {
-                              connection_id: this.connection_id,
-                              sqlStatement: this.props.sql,
-                            },
-                          });
-                          dispatch({
-                            type: 'addSqlDataSet/getMetadataTablePerform',
-                            payload: {
-                              connection_id: this.connection_id,
-                              querySql: this.props.sql,
-                            },
-                          });
-                        }
-                      }}
-                      style={{ marginLeft: 5, cursor: 'pointer' }}
-                    >
-                      刷新
-                    </span> */}
                     <div style={{ float: 'right', marginRight: 10 }}>
                       {/* <Checkbox>显示隐藏字段</Checkbox>
                       <Checkbox>显示别名</Checkbox> */}
@@ -722,6 +743,12 @@ class AddDataSet extends PureComponent {
             visible={this.state.visible.save}
             toggleModal={this.toggleModal}
             classifyTree={classifyTree}
+          />
+          <ValueSetting
+            toggleModal={this.toggleModal}
+            visible={this.state.visible.valueSetting}
+            variableList={variableList}
+            handlePreview={this.handlePreview}
           />
         </Layout>
       </DndProvider>

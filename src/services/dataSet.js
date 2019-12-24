@@ -17,4 +17,5 @@ export default {
   getColumn: 'get_report_template_dataset_field_list', // 获取列数据
   getDataSetDetail: 'get_dataset_content_query', // 获取单个数据集
   getVariableList: 'get_dataset_script_parsed_variable_list', // SQL参数
+  sqlFormated: 'get_database_formated_script', // sql美化
 };

@@ -12,49 +12,43 @@ import { Form, Input, Button, Drawer } from 'antd';
 @Form.create({})
 export default class ValueSetting extends PureComponent {
   static propTypes = {
-    record: PropTypes.object,
-    handleParamSetting: PropTypes.func,
-    toggleDrawer: PropTypes.func,
-    clearRecord: PropTypes.func,
+    variableList: PropTypes.array,
+    handlePreview: PropTypes.func,
+    toggleModal: PropTypes.func,
   };
 
   static defaultProps = {
-    record: {},
-    handleParamSetting: () => {},
-    toggleDrawer: () => {},
-    clearRecord: () => {},
+    variableList: [],
+    handlePreview: () => {},
+    toggleModal: () => {},
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    const { handleParamSetting, form } = this.props;
+    const { handlePreview, form, toggleModal } = this.props;
     form.validateFieldsAndScroll((errors, values) => {
       if (errors) return;
-      handleParamSetting(values);
+      toggleModal('valueSetting');
+      handlePreview(values);
       form.resetFields();
     });
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { toggleDrawer, visible, clearRecord, record } = this.props;
-    let datasetParams = [];
-    if (record.datasetParams) {
-      datasetParams = JSON.parse(record.datasetParams);
-    }
+    const { toggleModal, visible, variableList } = this.props;
     return (
       <Drawer
         title="Params"
         width={500}
         visible={visible}
         onClose={() => {
-          clearRecord();
-          toggleDrawer('paramSetting');
+          toggleModal('valueSetting');
         }}
         destroyOnClose
       >
         <Form onSubmit={this.handleSubmit}>
-          {datasetParams.map(item => (
+          {variableList.map(item => (
             <Form.Item label={item.parameter_name} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
               {getFieldDecorator(item.parameter_name, {
                 rules: [
@@ -79,8 +73,7 @@ export default class ValueSetting extends PureComponent {
           >
             <Button
               onClick={() => {
-                clearRecord();
-                toggleDrawer('paramSetting');
+                toggleModal('valueSetting');
               }}
               style={{ marginRight: 8 }}
             >
