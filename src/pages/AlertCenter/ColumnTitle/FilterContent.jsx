@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import { Row, Col, Select, Input, Checkbox, Button, Empty, Spin } from 'antd';
 import IconFont from '@/components/IconFont';
 import styles from './index.less';
@@ -16,16 +17,18 @@ const CONDITIONS = [
   { id: 7, name: 'CONTAIN' },
 ];
 
-export function FilterHeader() {
-  function handleClear() {}
+export function FilterHeader({ disabled, onSort, onClear }) {
   return (
     <Row className={styles.title}>
-      <Col span={12} align="left">
-        <IconFont type="iconsort-asc" className={styles.icon} />
-        <IconFont type="iconsort-desc" className={styles.icon} />
+      <Col span={6}>
+        <IconFont type="iconsort-asc" className={styles.icon} onClick={() => onSort('1')} />
+        <IconFont type="iconsort-desc" className={styles.icon} onClick={() => onSort('0')} />
       </Col>
-      <Col span={12} align="right">
-        <span className={styles.clear} onClick={handleClear}>
+      <Col span={6} offset={12}>
+        <span
+          className={classNames(styles.clear, { [styles.disabled]: disabled })}
+          onClick={onClear}
+        >
           <IconFont type="icondelete" className={styles.icon} />
           <span className={styles.text}>CLEAR</span>
         </span>
@@ -70,12 +73,26 @@ export function FilterType({ isNum, loading, handleTypeChange }) {
 }
 
 // type = [greater / less than] equal
-export function FilterSelect({ filterList }) {
+export function FilterSelect({ filterList, curColumn, conditions, onSelect }) {
+  const [curOption, setCurOption] = useState('');
+  useEffect(() => {
+    const curFilters = conditions.find(item => item.column === curColumn);
+    if (curFilters) {
+      const l = curFilters.value.split(',');
+      setCurOption(l.find(item => item === curOption));
+    } else {
+      // reset
+      setCurOption('');
+    }
+  }, [filterList, curColumn, conditions]);
+
   function onSearch(val) {
     console.log('search:', val);
   }
+
   function onChange(value) {
-    console.log(`selected ${value}`);
+    onSelect(value);
+    setCurOption(value);
   }
 
   return (
@@ -87,6 +104,7 @@ export function FilterSelect({ filterList }) {
         placeholder="Select a item"
         className={styles.select}
         optionFilterProp="children"
+        value={curOption}
         onChange={onChange}
         onSearch={onSearch}
         filterOption={(input, option) =>
@@ -104,17 +122,22 @@ export function FilterSelect({ filterList }) {
 }
 
 // type = contain
-export function FilterCheckbox({ loading, filterList, curColumn, conditions, onCheckedList }) {
+export function FilterCheckbox({ loading, filterList, onCheckedList, curColumn, conditions }) {
   const [isCheckAll, setCheckAll] = useState(true);
   const [indeterminate, setIndeterminate] = useState(false);
   const [checkedList, setCheckedList] = useState([]);
+  const [searchList, setSearchList] = useState(filterList);
 
   useEffect(() => {
     const curFilters = conditions.find(item => item.column === curColumn);
     if (curFilters) {
       setCheckedList(curFilters.value.split(','));
     } else {
-      setCheckedList(filterList);
+      // reset
+      setCheckedList(filterList || []);
+      setSearchList(filterList || []);
+      setIndeterminate(false);
+      setCheckAll(true);
     }
   }, [filterList, curColumn, conditions]);
 
@@ -135,9 +158,8 @@ export function FilterCheckbox({ loading, filterList, curColumn, conditions, onC
   }
 
   function handleSearch(value) {
-    console.log('value', value);
-    // const sList = filterList.filter(item => item.toLowerCase() === value.toLowerCase());
-    // setSearchList(sList || filterItems);
+    const sList = filterList.filter(item => item.toLowerCase() === value.toLowerCase());
+    setSearchList(sList);
   }
 
   return (
@@ -149,7 +171,7 @@ export function FilterCheckbox({ loading, filterList, curColumn, conditions, onC
       />
       <div className={styles.des}>Description</div>
       <Spin spinning={loading}>
-        {filterList.length > 0 ? (
+        {searchList.length > 0 ? (
           <div className={styles['check-content']}>
             <Row>
               <Checkbox
@@ -165,7 +187,7 @@ export function FilterCheckbox({ loading, filterList, curColumn, conditions, onC
               value={checkedList}
               onChange={handleChange}
             >
-              {filterList.map(item => (
+              {searchList.map(item => (
                 <Row key={item}>
                   <Checkbox value={item}>{item}</Checkbox>
                 </Row>

@@ -4,22 +4,31 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-23 10:17:06
+ * @LastEditTime : 2019-12-24 10:32:05
  */
 
 import Service from '@/utils/Service';
 
-const { getDataSet, setTaskGridContent } = Service;
+const { getDataSet, getReportTemplateContent } = Service;
+// setReportTemplateContent
 
 export default {
   namespace: 'reportDesigner',
   state: {
     reportName: 'Untitled', // 当前报表设计器的名字
     reportTemplateContent: '', // 报表设计器的JSON
+    teamplateAreaJson: '', // 报表设计器表格区域的相关JSON串
     dataSetPublicList: [], // 公共数据集列表
     dataSetPrivateList: [], // 私有数据集
   },
   reducers: {
+    // 设置报表模板的JSON串
+    setReportTemplateContent(state, action) {
+      return {
+        ...state,
+        reportTemplateContent: action.payload,
+      };
+    },
     // 设置报表设计器的名字
     changeReportName(state, action) {
       return {
@@ -55,20 +64,19 @@ export default {
         dataSetListSqlParams: action.payload,
       };
     },
+    // 设置json串
+    setTemplateArea(state, action) {
+      return {
+        ...state,
+        teamplateAreaJson: action.payload,
+      };
+    },
   },
   effects: {
     // 组装reportTemplateContent
-    *getReportTemplateContent(_, { select }) {
+    *packageTemplate(_, { select }) {
       const reportName = yield select(({ reportDesigner }) => reportDesigner.reportTemplateContent);
       console.log(reportName);
-    },
-    // 获取数据集的列
-    *getDataSetColumn() {
-      //
-    },
-    // 获取数据集的Sql Params
-    *getDataSetSqlParams() {
-      //
     },
     // 获取公共数据集
     *getPublicDataSet({ payload }, { call, put }) {
@@ -83,18 +91,15 @@ export default {
         payload: dataSetList,
       });
     },
-    // 新建表格任务
-    *saveTaskGridContent(_, { call, select }) {
-      const contentDetail = yield select(({ reportDesigner }) => reportDesigner.contentDetail);
-      const param = {
-        addSheetFormula: '',
-        contentDetail,
-        taskName: '新建表格',
-        groupName: '新建表格',
-        sheetInfo: '"[{"sheetName":"表格","sheetType":"0"}]"',
-        isAllSave: '1',
-      };
-      yield call(setTaskGridContent, { param });
+    // 查询报表模板
+    *getReportTemplateContent({ payload }, { call, put }) {
+      const response = yield call(getReportTemplateContent, { param: payload });
+      if (response.bcjson.flag === '1' && response.bcjson.items[0]) {
+        yield put({
+          type: 'setReportTemplateContent',
+          payload: JSON.stringify(response.bcjson.items[0].reportTemplateContent),
+        });
+      }
     },
   },
 };

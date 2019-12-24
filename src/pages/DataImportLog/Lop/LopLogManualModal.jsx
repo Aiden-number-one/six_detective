@@ -8,7 +8,7 @@ const { Option } = Select;
 
 const isLt5M = size => size / 1024 / 1024 < 5;
 
-function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
+function LopLogManualModal({ form, visible, loading, handleCancel, handleUpload }) {
   const { getFieldDecorator, validateFields } = form;
 
   function handleCommit() {
@@ -130,7 +130,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       </Form>
       <div className={styles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button type="primary" onClick={handleCommit}>
+        <Button type="primary" loading={loading} onClick={handleCommit}>
           Commit
         </Button>
       </div>

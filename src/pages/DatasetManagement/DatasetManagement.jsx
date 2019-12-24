@@ -493,7 +493,9 @@ export default class DatasetManagement extends PureComponent {
             />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ height: '100%', padding: '0 0 0 5px' }}>
+            <div
+              style={{ height: '100%', borderLeft: '1px solid #e0e0e0', backgroundColor: '#fff' }}
+            >
               {/* <div
                 style={{
                   display: 'flex',

@@ -5,7 +5,7 @@ import { setLocale } from 'umi/locale';
 import { DndProvider } from 'react-dnd';
 import { Layout } from 'antd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import SpreadSheet from '@/components/SpreadSheet';
+import SpreadSheet from './components/SpreadSheet';
 import CustomSearchArea from './components/CustomSearchArea/index';
 import ToolBar from './components/ToolBar/index';
 import RigthSideBar from './components/SideBar/RigthSideBar';
@@ -44,10 +44,24 @@ export default class ReportDesigner extends PureComponent {
         afterSelection: this.afterSelection,
       },
     );
+    // 保证查询条件区域grid-layout的正常显示
     setTimeout(() => {
       this.setState({
         display: true,
       });
+    });
+    // 若有reportId，则调用接口查询报表设计器相关信息
+    const {
+      dispatch,
+      location: {
+        query: { reportId },
+      },
+    } = this.props;
+    dispatch({
+      type: 'reportDesigner/getReportTemplateContent',
+      payload: {
+        reportId,
+      },
     });
   }
 
