@@ -4,7 +4,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-24 14:16:58
+ * @LastEditTime : 2019-12-24 16:00:49
  */
 
 import React, { Component } from 'react';
@@ -158,7 +158,6 @@ class UserManagement extends Component {
   }
 
   editMouseEnter = index => {
-    console.log('enter');
     this.setState({
       editIconActive: true,
       activeIndex: index,
@@ -166,7 +165,6 @@ class UserManagement extends Component {
   };
 
   editMouseLeave = () => {
-    console.log('outer');
     this.setState({
       editIconActive: false,
     });
