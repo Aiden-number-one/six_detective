@@ -16,8 +16,6 @@ const { Column } = Table;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
-const allColumns = ['alertId', 'alertType', 'tradeDate', 'alertTime', 'itemsTotal', 'userName'];
-let conditions = [];
 function Title({ dispatch, loading, filterItems, tableColumn, id }) {
   function handleFilterItems() {
     dispatch({
@@ -29,14 +27,7 @@ function Title({ dispatch, loading, filterItems, tableColumn, id }) {
     });
   }
 
-  async function handleCommit(condition) {
-    const curCondition = conditions.find(item => item.column === condition.column);
-    if (curCondition) {
-      conditions = conditions.map(item => ({ ...item, ...condition }));
-    } else {
-      conditions.push(condition);
-    }
-
+  async function handleCommit(conditions) {
     dispatch({
       type: 'alertCenter/fetch',
       payload: {
@@ -45,15 +36,26 @@ function Title({ dispatch, loading, filterItems, tableColumn, id }) {
       },
     });
   }
+  async function handleSort(conditions, sort) {
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        currentColumn: tableColumn,
+        conditions,
+        sort,
+      },
+    });
+  }
+
   return (
     <ColumnTitle
       isNum={tableColumn === 'itemsTotal'}
-      allColumns={allColumns}
       curColumn={tableColumn}
       loading={loading['global/fetchTableFilterItems']}
       filterItems={filterItems}
-      getFilterItems={handleFilterItems}
-      handleCommit={handleCommit}
+      onFilters={handleFilterItems}
+      onSort={handleSort}
+      onCommit={handleCommit}
     >
       <FormattedMessage id={`alert-center.${id}`} />
     </ColumnTitle>

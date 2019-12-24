@@ -131,7 +131,10 @@ export default class ModifyUser extends Component {
   onSave = () => {
     this.newUserRef.current.validateFields((err, values) => {
       console.log('values==', values);
-      message.success('save success');
+      message.success({
+        content: 'modify success',
+        duration: 2,
+      });
       this.props.history.push({
         pathname: '/system-management/user-maintenance',
         params: values,

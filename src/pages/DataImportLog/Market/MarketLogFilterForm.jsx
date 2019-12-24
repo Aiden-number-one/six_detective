@@ -34,9 +34,9 @@ function MarketLogFilterForm({ form, handleSearch }) {
     });
   }
   return (
-    <Form layout="vertical" className={styles.form}>
-      <Row>
-        <Col span={7}>
+    <Form layout="vertical" className="ant-advanced-search-form search-wraper">
+      <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="bottom" type="flex">
+        <Col xs={24} sm={12} xl={10} xxl={8}>
           <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
             {getFieldDecorator('tradeDate', {
               initialValue: [yesterday, today],
@@ -49,7 +49,7 @@ function MarketLogFilterForm({ form, handleSearch }) {
             })(<RangePicker format={dateFormat} />)}
           </Form.Item>
         </Col>
-        <Col span={7} offset={1}>
+        <Col xs={24} sm={12} xl={7} xxl={5}>
           <Form.Item label={<FormattedMessage id="data-import.market.file-type" />}>
             {getFieldDecorator('fileType', {
               rules: [
@@ -67,16 +67,23 @@ function MarketLogFilterForm({ form, handleSearch }) {
             )}
           </Form.Item>
         </Col>
-        <Col span={8} offset={1}>
+        <Col xs={24} sm={12} xl={7} xxl={5}>
           <Form.Item label={<FormattedMessage id="data-import.market" />}>
             {getFieldDecorator('market')(<Checkbox.Group options={['HKFE', 'SEHK']} />)}
           </Form.Item>
         </Col>
-      </Row>
-      <Row type="flex" justify="end">
-        <Button type="primary" icon="search" onClick={handleClick} className={styles['no-margin']}>
-          <FormattedMessage id="data-import.search" />
-        </Button>
+        <Col xs={24} sm={12} xl={8} xxl={6}>
+          <Form.Item>
+            <Button
+              type="primary"
+              icon="search"
+              onClick={handleClick}
+              className={styles['no-margin']}
+            >
+              <FormattedMessage id="data-import.search" />
+            </Button>
+          </Form.Item>
+        </Col>
       </Row>
     </Form>
   );

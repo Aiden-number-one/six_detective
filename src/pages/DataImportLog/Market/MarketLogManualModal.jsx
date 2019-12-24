@@ -5,7 +5,7 @@ import styles from '../index.less';
 
 const isLt5M = size => size / 1024 / 1024 < 5;
 
-function MarketLogManualModal({ form, visible, handleCancel, handleUpload }) {
+function MarketLogManualModal({ form, visible, loading, handleCancel, handleUpload }) {
   const { getFieldDecorator, validateFields } = form;
 
   function handleBeforeUpload(file) {
@@ -47,6 +47,7 @@ function MarketLogManualModal({ form, visible, handleCancel, handleUpload }) {
           {getFieldDecorator('uploadFiles', {
             rules: [
               {
+                required: true,
                 validator: (rule, value, callback) => {
                   if (!value) {
                     return callback('Please select a file!');
@@ -91,7 +92,7 @@ function MarketLogManualModal({ form, visible, handleCancel, handleUpload }) {
       </Form>
       <div className={styles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button type="primary" onClick={handleCommit}>
+        <Button type="primary" loading={loading} onClick={handleCommit}>
           Commit
         </Button>
       </div>

@@ -31,12 +31,12 @@ function NewAccountLogList({ dispatch, loading, logs, total, reportUrl }) {
     handleDownload(id);
   }
   function handlePageChange(page, pageSize) {
-    dispatch({ type: 'market/reload', payload: { page, pageSize } });
+    dispatch({ type: 'new_account/reload', payload: { page, pageSize } });
   }
   return (
     <Table
       dataSource={logs}
-      loading={loading}
+      loading={loading['new_account/fetch']}
       rowKey="mdImpId"
       pagination={{
         total,
@@ -65,7 +65,7 @@ function NewAccountLogList({ dispatch, loading, logs, total, reportUrl }) {
       />
       <Column
         dataIndex="fileName"
-        title={<FormattedMessage id="data-import.account.file-name" />}
+        title={<FormattedMessage id="data-import.new-account.file-name" />}
       />
       <Column
         align="center"

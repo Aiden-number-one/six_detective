@@ -5,6 +5,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Input, Button, Table, Row, Col, Drawer, Select } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
+import IconFont from '@/components/IconFont';
 // import classNames from 'classnames';
 import styles from './ApprovalConfiguration.less';
 
@@ -15,24 +16,31 @@ class SearchForm extends PureComponent {
     const { getFieldDecorator } = this.props.form;
     const { search } = this.props;
     return (
-      <Form className="ant-advanced-search-form">
-        <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }}>
-          <Col xs={12} sm={12} lg={8}>
+      <Form className="ant-advanced-search-form search-wraper">
+        <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="bottom" type="flex">
+          <Col xs={12} sm={12} lg={7} xxl={5}>
             <Form.Item label="Function ID" colon={false}>
               {getFieldDecorator('functionId')(<Input />)}
             </Form.Item>
           </Col>
-          <Col xs={12} sm={12} lg={8}>
+          <Col xs={12} sm={12} lg={7} xxl={5}>
             <Form.Item label="Flow Name" colon={false}>
               {getFieldDecorator('flowName')(<Input />)}
             </Form.Item>
           </Col>
+          <Col xs={12} sm={12} lg={8} xxl={6}>
+            <Form.Item>
+              <Button type="primary" onClick={search}>
+                Search
+              </Button>
+            </Form.Item>
+          </Col>
         </Row>
-        <div className="btnArea">
+        {/* <div className="btnArea">
           <Button type="primary" onClick={search}>
             Search
           </Button>
-        </div>
+        </div> */}
       </Form>
     );
   }
@@ -159,12 +167,12 @@ class ApprovalConfiguration extends PureComponent {
       {
         title: 'Function ID',
         dataIndex: 'functionId',
-        align: 'center',
+        align: 'left',
       },
       {
         title: formatMessage({ id: 'systemManagement.flowConfig.flowName' }),
         dataIndex: 'flowName',
-        align: 'center',
+        align: 'left',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),
@@ -173,7 +181,7 @@ class ApprovalConfiguration extends PureComponent {
         render: (text, record) => (
           <span>
             <a href="#" onClick={() => this.showModel(record)}>
-              {formatMessage({ id: 'app.common.modify' })}
+              <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
           </span>
         ),

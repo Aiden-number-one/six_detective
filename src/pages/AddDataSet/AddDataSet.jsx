@@ -2,8 +2,8 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime: 2019-12-18 14:40:04
- * @LastEditors: lan
+ * @LastEditTime : 2019-12-23 14:21:23
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import { Icon, Input, Select, Button, Layout, Table, Row, Col, Checkbox, InputNumber } from 'antd';
@@ -25,50 +25,55 @@ const { Sider, Content, Header } = Layout;
 const { Option } = Select;
 
 @connect(({ sqlDataSource, getClassifyTree, sqlKeydown }) => ({
-  sql: sqlKeydown.sql,
-  classifyTree: getClassifyTree.classifyTree,
-  dataSourceList: sqlDataSource.dataSourceList,
-  totalCount: sqlDataSource.totalCount,
-  metaDataTableList: sqlDataSource.metaDataTableList,
-  tableData: sqlDataSource.tableData,
-  column: sqlDataSource.column,
-  sqlDataSetName: sqlDataSource.sqlDataSetName,
-  defaultPageSize: sqlDataSource.defaultPageSize,
+  sql: sqlKeydown.sql, // sql查询语句
+  classifyTree: getClassifyTree.classifyTree, // 分类树
+  dataSourceList: sqlDataSource.dataSourceList, // 数据源选择框
+  totalCount: sqlDataSource.totalCount, // 数据源下表的总数
+  metaDataTableList: sqlDataSource.metaDataTableList, // 数据源下的表
+  tableData: sqlDataSource.tableData, // 数据预览的表数据
+  column: sqlDataSource.column, // 数据预览表头
+  sqlDataSetName: sqlDataSource.sqlDataSetName, // 数据集名称
+  defaultPageSize: sqlDataSource.defaultPageSize, // 默认一页行数
+  columnData: sqlDataSource.columnData, // 列数据
+  dataSet: sqlDataSource.dataSet, // 数据集详情
 }))
 class AddDataSet extends PureComponent {
+  // 可拖动的表格
   components = {
     header: {
       cell: ResizeableTitle,
     },
   };
 
-  pageNumber = 1;
+  pageNumber = 1; // 左侧数据源表滚动加载相关
 
-  isSaveOther = false;
+  isSaveOther = false; // 是否另存为
 
   constructor(props) {
     super(props);
-    this.inputRef = React.createRef();
+    this.inputRef = React.createRef(); // 数据集名称
   }
 
   state = {
     visible: {
-      paramSetting: false,
-      save: false,
+      paramSetting: false, // 控制参数设置抽屉
+      save: false, // 控制保存数据集抽屉
     },
-    AlterDataSetName: true,
-    tableView: 'data',
-    pageNumber: '1',
+    AlterDataSetName: true, // 操作数据集名称
+    tableView: 'data', // 切换预览数据或查看列数据
+    pageNumber: '1', // 表格分页
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
     const {
       location: {
-        query: { connectionId, record },
+        query: { connectionId, connectionName, datasetId },
       },
     } = this.props;
     this.connection_id = connectionId;
+    this.connection_name = connectionName;
+    this.datasetId = datasetId;
     dispatch({
       type: 'sqlDataSource/getDataSourceList',
       payload: { connectionId },
@@ -76,31 +81,25 @@ class AddDataSet extends PureComponent {
     dispatch({
       type: 'getClassifyTree/getClassifyTree',
     });
-    if (record) {
-      this.record = JSON.parse(record);
-      this.tableId = this.record.serialNo;
+    if (datasetId) {
       dispatch({
-        type: 'sqlKeydown/changeSql',
-        payload: this.record.sqlStatement,
-      });
-      dispatch({
-        type: 'sqlDataSource/getMetadataTablePerform',
+        type: 'sqlDataSource/getDataSetDetail',
         payload: {
-          connectionId: this.connection_id,
-          previewStatement: this.record.sqlStatement,
-          previewNum: 20,
+          datasetId,
         },
-      });
-      dispatch({
-        type: 'sqlDataSource/changeDataSetName',
-        payload: this.record.sqlName,
-      });
-      dispatch({
-        type: 'sqlDataSource/changeActive',
-        payload: this.record.serialNo,
-      });
-      this.setState({
-        AlterDataSetName: false,
+        callback: items => {
+          dispatch({
+            type: 'sqlKeydown/changeSql',
+            payload: items.commandText,
+          });
+          dispatch({
+            type: 'sqlDataSource/changeDataSetName',
+            payload: items.datasetName,
+          });
+          this.setState({
+            AlterDataSetName: false,
+          });
+        },
       });
     }
     // dispatch({
@@ -263,14 +262,17 @@ class AddDataSet extends PureComponent {
     dispatch({
       type: 'sqlDataSource/addDataSet',
       payload: {
-        basicOperation: 'save',
         // update,del,
-        dbId: this.connection_id,
-        sqlStatement: sql,
-        sqlStatementPram: {},
+        datasourceId: this.connection_id,
+        datasourceName: this.connection_name,
+        commandText: sql,
+        datasetParams: JSON.stringify([]),
+        datasetFields: JSON.stringify([]),
+        datasetType: 'SQL',
         // sqlStatementPram,
-        sqlName: fieldsValue.sqlDataSetName,
-        classId: fieldsValue.folder,
+        datasetIsDict: 'N',
+        datasetName: fieldsValue.sqlDataSetName,
+        folderId: fieldsValue.folder,
         // tableId: this.isSaveOther ? '' : this.tableId,
         // connection_id: this.connection_id,
         // setType: 'viewSet',
@@ -296,10 +298,28 @@ class AddDataSet extends PureComponent {
       classifyTree,
       defaultPageSize,
       sqlDataSetName,
+      columnData,
       // tableData2,
       // targetObj,
       // column2,
     } = this.props;
+    const column = [
+      {
+        title: 'Column Name',
+        dataIndex: 'field_data_name',
+        key: 'field_data_name',
+      },
+      {
+        title: 'Column Count',
+        dataIndex: 'column_no',
+        key: 'column_no',
+      },
+      {
+        title: 'Column Type',
+        dataIndex: 'field_data_type',
+        key: 'field_data_type',
+      },
+    ];
     const { AlterDataSetName, pageNumber } = this.state;
     const renderColumn = this.perfectColumn();
     return (
@@ -369,7 +389,7 @@ class AddDataSet extends PureComponent {
                   />
                 )}
               </Col>
-              <Col span={12} style={{ paddingTop: 4, paddingRight: 22 }}>
+              <Col span={12} style={{ paddingTop: 6, paddingRight: 22 }}>
                 <Button
                   style={{ float: 'right' }}
                   className={styles.searchBoxButton}
@@ -415,9 +435,10 @@ class AddDataSet extends PureComponent {
                       defaultValue={
                         this.props.location.query.connectionId || dataSourceList[0].connectionId
                       }
-                      onChange={val => {
+                      onChange={(val, a) => {
                         this.pageNumber = 1;
                         this.connection_id = val;
+                        this.connection_name = a.props.children;
                         dispatch({
                           type: 'sqlDataSource/clear',
                           payload: [],
@@ -484,8 +505,16 @@ class AddDataSet extends PureComponent {
                             dispatch({
                               type: 'sqlDataSource/getMetadataTablePerform',
                               payload: {
-                                connectionId: this.connection_id,
-                                previewStatement: this.props.sql,
+                                datasourceId: this.connection_id,
+                                commandText: this.props.sql,
+                                previewNum: 20,
+                              },
+                            });
+                            dispatch({
+                              type: 'sqlDataSource/getColumn',
+                              payload: {
+                                datasourceId: this.connection_id,
+                                commandText: this.props.sql,
                                 previewNum: 20,
                               },
                             });
@@ -584,7 +613,7 @@ class AddDataSet extends PureComponent {
                   {this.state.tableView === 'data' && (
                     <Table
                       scroll={{ x: 'max-content' }}
-                      className={styles.editDataSetTable}
+                      // className={styles.editDataSetTable}
                       components={this.components}
                       bordered
                       columns={renderColumn}
@@ -595,11 +624,11 @@ class AddDataSet extends PureComponent {
                           tableData[0] &&
                           (() =>
                             `Page ${pageNumber.toString()} of ${Math.ceil(
-                              20 / defaultPageSize,
+                              tableData.length / defaultPageSize,
                             ).toString()}`),
 
                         current: tableData[0] && pageNumber,
-                        total: tableData[0] && 20,
+                        total: tableData[0] && tableData.length,
                         onChange: tableData[0] && this.pageChange,
                         size: 'small',
                       }}
@@ -608,13 +637,23 @@ class AddDataSet extends PureComponent {
                   )}
                   {this.state.tableView === 'attr' && (
                     <Table
-                      className={styles.editDataSetTable}
-                      // view={this.state.view}
-                      // tableData2={tableData2}
-                      // dispatch={dispatch}
-                      // tableJoin={tableJoin}
-                      // defaultPageSize={defaultPageSize}
-                      // column2={column2}
+                      // className={styles.editDataSetTable}
+                      dataSource={columnData}
+                      columns={column}
+                      pagination={{
+                        pageSize: columnData[0] && defaultPageSize,
+                        showTotal:
+                          columnData[0] &&
+                          (() =>
+                            `Page ${pageNumber.toString()} of ${Math.ceil(
+                              columnData.length / defaultPageSize,
+                            ).toString()}`),
+
+                        current: columnData[0] && pageNumber,
+                        total: columnData[0] && columnData.length,
+                        onChange: columnData[0] && this.pageChange,
+                        size: 'small',
+                      }}
                     />
                   )}
                 </div>

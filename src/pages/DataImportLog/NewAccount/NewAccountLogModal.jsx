@@ -26,7 +26,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
 
   return (
     <Drawer
-      title={<FormattedMessage id="data-import.lop.manual-import-lop-report" />}
+      title={<FormattedMessage id="data-import.market.manual-upload" />}
       width={320}
       closable={false}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
@@ -34,7 +34,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       onClose={handleCancel}
     >
       <Form className={styles['modal-form']}>
-        <Form.Item label={<FormattedMessage id="data-import.lop.submitter-code" />}>
+        <Form.Item label={<FormattedMessage id="data-import.submitter-code" />}>
           {getFieldDecorator('submitterCode', {
             rules: [
               {
@@ -48,6 +48,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
           {getFieldDecorator('uploadFiles', {
             rules: [
               {
+                required: true,
                 validator: (rule, value, callback) => {
                   if (!value) {
                     return callback('Please select a file!');
@@ -81,7 +82,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             >
               <Button>
                 <Icon type="upload" />
-                <FormattedMessage id="data-import.lop.browse" />
+                <FormattedMessage id="data-import.browse" />
               </Button>
             </Upload>,
           )}

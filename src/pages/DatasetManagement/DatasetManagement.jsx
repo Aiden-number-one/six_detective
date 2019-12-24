@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2019-12-23 14:32:41
- * @LastEditors  : mus
+ * @LastEditTime : 2019-12-23 09:44:15
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -15,7 +15,7 @@ import ClassifyTree from '@/components/ClassifyTree';
 import IconFont from '@/components/IconFont';
 import styles from './DatasetManagement.less';
 import OperateTreeForm from './components/OperateTreeForm';
-import AlterDataSetName from './components/drawers/AlterDataSetName';
+// import AlterDataSetName from './components/drawers/AlterDataSetName';
 import DeleteDataSetDrawer from './components/drawers/DeleteDataSetDrawer';
 import DataPerformDrawer from './components/drawers/DataPerformDrawer';
 import MoveDataSetDrawer from './components/drawers/MoveDataSetDrawer';
@@ -29,6 +29,7 @@ const NewSearchForm = Form.create({})(SearchForm);
   activeTree: dataSet.activeTree, // 选中的树节点
   column: dataSet.column, // 数据预览表头
   tableData: dataSet.tableData, // 数据预览数据
+  activeFolderId: dataSet.activeFolderId, // 移动文件夹的FolderId
 }))
 export default class DatasetManagement extends PureComponent {
   operateType = 'ADD'; // 操作类型
@@ -44,7 +45,7 @@ export default class DatasetManagement extends PureComponent {
     // selectedRowKeys: [], // 默认选中的表格
     visible: {
       operateTree: false, // 新增数据集分类抽屉
-      dataSetName: false, // 数据集属性抽屉
+      // dataSetName: false, // 数据集属性抽屉
       deleteDataSet: false, // 删除数据集抽屉
       dataPerform: false, // 数据预览抽屉
       move: false, // 移动数据集抽屉
@@ -57,7 +58,7 @@ export default class DatasetManagement extends PureComponent {
   };
 
   // 生命周期函数, 获取数据集分类树
-  componentDidMount() {
+  componentWillMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'dataSet/getClassifyTree',
@@ -65,12 +66,12 @@ export default class DatasetManagement extends PureComponent {
   }
 
   // 获取数据集列表
-  queryDataSet = value => {
+  queryDataSet = () => {
     const { dispatch, activeTree } = this.props;
     const { page } = this.state;
     const newPage = {
-      pageNumber: 1,
-      pageSize: page.pageSize,
+      pageNumber: '1',
+      pageSize: page.pageSize.toString(),
     };
     this.setState({
       page: newPage,
@@ -80,8 +81,7 @@ export default class DatasetManagement extends PureComponent {
         type: 'dataSet/getDataSet',
         payload: {
           sqlName: values.sqlName,
-          taskId: value || activeTree,
-          isShare: 0,
+          folderId: activeTree,
           ...newPage,
         },
       });
@@ -161,12 +161,11 @@ export default class DatasetManagement extends PureComponent {
       type: 'dataSet/setActiveTree',
       payload: value,
     });
-    this.queryDataSet(value);
+    this.queryDataSet();
     // dispatch({
     //   type: 'dataSet/getDataSet',
     //   payload: {
-    //     taskId: value,
-    //     isShare: 0,
+    //     folderId: value,
     //     pageNumber: this.state.page.pageNumber.toString(),
     //     pageSize: this.state.page.pageSize.toString(),
     //   },
@@ -220,15 +219,46 @@ export default class DatasetManagement extends PureComponent {
   };
 
   // 修改数据集属性
-  handleSetDataSetName = values => {
+  // handleSetDataSetName = values => {
+  //   const { dispatch } = this.props;
+  //   const param = { ...this.record, ...values };
+  //   param.basicOperation = 'update';
+  //   dispatch({
+  //     type: 'dataSet/operateDataSet',
+  //     payload: param,
+  //   });
+  //   this.toggleDrawer('dataSetName');
+  //   this.record = {};
+  // };
+
+  // 移动文件夹选中树操作
+  changeActiveFolderId = value => {
     const { dispatch } = this.props;
-    const param = { ...this.record, ...values };
-    param.basicOperation = 'update';
+    dispatch({
+      type: 'dataSet/saveFolderId',
+      payload: value,
+    });
+  };
+
+  // 移动数据集
+  handleMove = () => {
+    const { dispatch, activeFolderId } = this.props;
+    const param = {};
+    param.datasetId = this.record.datasetId;
+    param.datasetName = this.record.datasetName;
+    param.datasourceId = this.record.datasourceId;
+    param.datasourceName = this.record.datasourceName;
+    param.commandText = this.record.commandText;
+    param.datasetParams = this.record.datasetParams;
+    param.datasetFields = this.record.datasetFields;
+    param.datasetType = this.record.datasetType;
+    param.datasetIsDict = this.record.datasetIsDict;
+    param.folderId = activeFolderId;
     dispatch({
       type: 'dataSet/operateDataSet',
       payload: param,
     });
-    this.toggleDrawer('dataSetName');
+    this.toggleDrawer('move');
     this.record = {};
   };
 
@@ -236,8 +266,8 @@ export default class DatasetManagement extends PureComponent {
   handleDeleteDataSet = () => {
     const { dispatch } = this.props;
     const param = {};
-    param.serialNo = this.record.serialNo;
-    param.basicOperation = 'del';
+    param.datasetId = this.record.datasetId;
+    param.actionType = 'DELETE';
     dispatch({
       type: 'dataSet/operateDataSet',
       payload: param,
@@ -253,8 +283,8 @@ export default class DatasetManagement extends PureComponent {
    */
   pageChange = (pageNumber, pageSize) => {
     const page = {
-      pageNumber,
-      pageSize,
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
     };
 
     this.setState(
@@ -269,8 +299,8 @@ export default class DatasetManagement extends PureComponent {
 
   onShowSizeChange = (current, pageSize) => {
     const page = {
-      pageNumber: current,
-      pageSize,
+      pageNumber: current.toString(),
+      pageSize: pageSize.toString(),
     };
     this.setState(
       {
@@ -286,34 +316,34 @@ export default class DatasetManagement extends PureComponent {
     // 表格表头
     const columns = [
       {
-        title: 'Name',
-        dataIndex: 'sqlName',
-        key: 'sqlName',
+        title: 'DataSet Name',
+        dataIndex: 'datasetName',
+        key: 'datasetName',
       },
       {
         title: 'Type',
-        dataIndex: 'mdType',
-        key: 'mdType',
+        dataIndex: 'datasetType',
+        key: 'datasetType',
       },
       {
         title: 'Data Source',
-        dataIndex: 'tableCat',
-        key: 'tableCat',
+        dataIndex: 'datasourceName',
+        key: 'datasourceName',
       },
       {
         title: 'Creat by',
-        dataIndex: 'schemName',
-        key: 'schemName',
+        dataIndex: 'createBy',
+        key: 'createBy',
       },
       {
         title: 'Modified by',
-        dataIndex: 'lastOperator',
-        key: 'lastOperator',
+        dataIndex: 'updateBy',
+        key: 'updateBy',
       },
       {
         title: 'Modified at',
-        dataIndex: 'lastupdatetime',
-        key: 'lastupdatetime',
+        dataIndex: 'updateDatetime',
+        key: 'updateDatetime',
       },
       {
         title: 'Operation',
@@ -326,15 +356,16 @@ export default class DatasetManagement extends PureComponent {
                 router.push({
                   pathname: '/add-dataset',
                   query: {
-                    connectionId: record.dbId,
-                    record: JSON.stringify(record),
+                    connectionId: record.datasourceId,
+                    connectionName: record.datasourceName,
+                    datasetId: record.datasetId,
                   },
                 });
               }}
             >
               <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
-            <a
+            {/* <a
               href="#"
               onClick={() => {
                 this.toggleDrawer('dataSetName');
@@ -342,7 +373,7 @@ export default class DatasetManagement extends PureComponent {
               }}
             >
               <IconFont type="icon-attr" className={styles['btn-icon']} />
-            </a>
+            </a> */}
             <a
               href="#"
               onClick={() => {
@@ -350,9 +381,9 @@ export default class DatasetManagement extends PureComponent {
                 dispatch({
                   type: 'dataSet/getMetadataTablePerform',
                   payload: {
-                    connectionId: record.dbId,
-                    previewStatement: record.sqlStatement,
-                    previewNum: 10,
+                    datasetId: record.datasetId,
+                    commandText: record.commandText,
+                    parameters: '',
                   },
                   callback: () => {
                     this.toggleDrawer('dataPerform');
@@ -366,6 +397,7 @@ export default class DatasetManagement extends PureComponent {
               href="#"
               onClick={() => {
                 this.toggleDrawer('move');
+                this.record = record;
               }}
             >
               <IconFont type="icon-move" className={styles['btn-icon']} />
@@ -398,12 +430,12 @@ export default class DatasetManagement extends PureComponent {
     //     });
     //   },
     // };
-    const { classifyTreeData, dataSetData, column, tableData } = this.props;
+    const { classifyTreeData, dataSetData, column, tableData, activeFolderId } = this.props;
     const anotherTree = _.cloneDeep(classifyTreeData);
     return (
       <PageHeaderWrapper>
         <div style={{ display: 'flex', minHeight: 'calc(100vh - 185px)' }}>
-          <div style={{ flex: '0 0 220px', background: '#fff' }}>
+          <div style={{ flex: '0 0 220px', background: '#fff', zIndex: 1 }}>
             {this.Title()}
             <ClassifyTree
               add
@@ -422,7 +454,7 @@ export default class DatasetManagement extends PureComponent {
               showSearch={false}
             />
           </div>
-          <div style={{ flex: 1, overflowX: 'auto' }}>
+          <div style={{ flex: 1 }}>
             <div
               style={{ height: '100%', borderLeft: '1px solid #e0e0e0', backgroundColor: '#fff' }}
             >
@@ -477,7 +509,7 @@ export default class DatasetManagement extends PureComponent {
                   columns={columns}
                   dataSource={dataSetData}
                   pagination={false}
-                  scroll={{ x: 'max-content' }}
+                  // scroll={{ x: 'max-content' }}
                 />
                 <Pagination
                   current={page.pageNumber}
@@ -491,6 +523,7 @@ export default class DatasetManagement extends PureComponent {
                   onChange={this.pageChange}
                   total={dataSetData.length}
                   pageSize={page.pageSize}
+                  size="small"
                 />
               </div>
             </div>
@@ -514,13 +547,13 @@ export default class DatasetManagement extends PureComponent {
             operateType={this.operateType}
           />
         </Drawer>
-        <AlterDataSetName
+        {/* <AlterDataSetName
           toggleDrawer={this.toggleDrawer}
           visible={this.state.visible.dataSetName}
           clearRecord={this.clearRecord}
           record={this.record}
           handleSetDataSetName={this.handleSetDataSetName}
-        />
+        /> */}
         <DataPerformDrawer
           column={column}
           tableData={tableData}
@@ -531,6 +564,9 @@ export default class DatasetManagement extends PureComponent {
           visible={this.state.visible.move}
           toggleDrawer={this.toggleDrawer}
           classifyTree={anotherTree}
+          handleMove={this.handleMove}
+          activeFolderId={activeFolderId}
+          changeActiveFolderId={this.changeActiveFolderId}
         />
         <DeleteDataSetDrawer
           handleDeleteDataSet={this.handleDeleteDataSet}

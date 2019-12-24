@@ -8,7 +8,7 @@ const { Option } = Select;
 
 const isLt5M = size => size / 1024 / 1024 < 5;
 
-function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
+function LopLogManualModal({ form, visible, loading, handleCancel, handleUpload }) {
   const { getFieldDecorator, validateFields } = form;
 
   function handleCommit() {
@@ -36,7 +36,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       visible={visible}
       onClose={handleCancel}
     >
-      <Form className={styles['modal-form']}>
+      <Form layout="vertical">
         <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
           {getFieldDecorator('tradeDate', {
             initialValue: yesterday,
@@ -88,6 +88,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
           {getFieldDecorator('uploadFiles', {
             rules: [
               {
+                required: true,
                 validator: (rule, value, callback) => {
                   if (!value) {
                     return callback('Please select a file!');
@@ -129,7 +130,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       </Form>
       <div className={styles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button type="primary" onClick={handleCommit}>
+        <Button type="primary" loading={loading} onClick={handleCommit}>
           Commit
         </Button>
       </div>

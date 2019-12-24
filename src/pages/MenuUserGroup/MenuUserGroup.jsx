@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Form, Table, Pagination, Button, Drawer, Modal } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
@@ -170,8 +170,13 @@ class MenuUserGroup extends Component {
       callback: () => {
         if (this.props.updateGroup[0].flag === '0') {
           this.setState({
-            delateTitle:
-              'This menu has been authorized to users.Please confirm that you want to delete it!',
+            delateTitle: (
+              <Fragment>
+                <span>This menu has been authorized to users.</span>
+                <br />
+                <span>Please confirm that you want to delete it!</span>
+              </Fragment>
+            ),
           });
         } else {
           this.setState({
