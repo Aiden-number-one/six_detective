@@ -19,6 +19,7 @@ import ConnList from './components/ConnList';
 import CodeMirrorComponent from './components/CodeMirror';
 import ParamSetting from './components/drawers/ParamSetting';
 import Save from './components/drawers/Save';
+// import ValueSetting from './components/drawers/ValueSetting';
 import ResizeableTitle from './components/ResizeableTitle';
 
 const { Sider, Content, Header } = Layout;
@@ -56,6 +57,7 @@ class AddDataSet extends PureComponent {
 
   state = {
     visible: {
+      valueSetting: false, // 设置参数值抽屉
       paramSetting: false, // 控制参数设置抽屉
       save: false, // 控制保存数据集抽屉
     },
@@ -74,48 +76,37 @@ class AddDataSet extends PureComponent {
     this.connection_id = connectionId;
     this.connection_name = connectionName;
     this.datasetId = datasetId;
+    // 获取数据源
     dispatch({
       type: 'sqlDataSource/getDataSourceList',
       payload: { connectionId },
     });
+    // 获取数据集分类树
     dispatch({
       type: 'getClassifyTree/getClassifyTree',
     });
+    // 如果是修改数据集
     if (datasetId) {
+      // 获取数据集详情
       dispatch({
         type: 'sqlDataSource/getDataSetDetail',
         payload: {
           datasetId,
         },
         callback: items => {
+          // SQL或存储过程回显
           dispatch({
             type: 'sqlKeydown/changeSql',
             payload: items.commandText,
           });
+          // 数据集名称回显
           dispatch({
             type: 'sqlDataSource/changeDataSetName',
             payload: items.datasetName,
           });
-          this.setState({
-            AlterDataSetName: false,
-          });
         },
       });
     }
-    // dispatch({
-    //   type: 'addSqlDataSet/getMetadataList',
-    //   payload: {
-    //     connection_id: connectionId,
-    //     pageNumber: '1',
-    //     pageSize: '10',
-    //   },
-    // });
-    // dispatch({
-    //   type: 'sqlDataSource/saveConnectionId',
-    //   payload: {
-    //     connectionId,
-    //   },
-    // });
   }
 
   componentDidUpdate() {
@@ -128,7 +119,17 @@ class AddDataSet extends PureComponent {
     // }
   }
 
-  // 刷新列表
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'sqlKeydown/clear',
+    });
+    dispatch({
+      type: 'sqlDataSource/clearAll',
+    });
+  }
+
+  // 刷新数据源表列表
   loadMore = () => {
     const { dispatch, totalCount } = this.props;
     // eslint-disable-next-line no-plusplus
@@ -136,6 +137,7 @@ class AddDataSet extends PureComponent {
       return false;
     }
     dispatch({
+      // 获取数据源表
       type: 'sqlDataSource/getMetadataList',
       payload: {
         connection_id: this.connection_id,
@@ -150,6 +152,7 @@ class AddDataSet extends PureComponent {
   checkBoxChange = checkedValues => {
     const { dispatch, dataSourceList } = this.props;
     if (checkedValues.length === 2) {
+      // 清空列表
       dispatch({
         type: 'sqlDataSource/clear',
         payload: [],
@@ -192,6 +195,7 @@ class AddDataSet extends PureComponent {
     }
   };
 
+  // 数据预览表头
   perfectColumn = () => {
     const { column } = this.props;
     return (
@@ -230,6 +234,7 @@ class AddDataSet extends PureComponent {
     );
   };
 
+  // 伸缩表格
   handleResize = index => (e, { size }) => {
     if (size.width < 70) {
       return false;
@@ -247,6 +252,7 @@ class AddDataSet extends PureComponent {
     return true;
   };
 
+  // 显示关闭抽屉
   toggleModal = key => {
     const { visible } = this.state;
     this.setState({
@@ -257,29 +263,41 @@ class AddDataSet extends PureComponent {
     });
   };
 
+  // 保存操作
   saveSql = fieldsValue => {
-    const { dispatch, sql } = this.props;
+    const {
+      dispatch,
+      sql,
+      dataSet,
+      location: {
+        query: { datasetType },
+      },
+    } = this.props;
     dispatch({
       type: 'sqlDataSource/addDataSet',
       payload: {
-        // update,del,
         datasourceId: this.connection_id,
         datasourceName: this.connection_name,
         commandText: sql,
         datasetParams: JSON.stringify([]),
         datasetFields: JSON.stringify([]),
-        datasetType: 'SQL',
+        datasetType: dataSet.datasetType || datasetType,
         // sqlStatementPram,
         datasetIsDict: 'N',
         datasetName: fieldsValue.sqlDataSetName,
         folderId: fieldsValue.folder,
-        // tableId: this.isSaveOther ? '' : this.tableId,
+        datasetId: this.isSaveOther ? '' : this.datasetId,
         // connection_id: this.connection_id,
         // setType: 'viewSet',
         // viewSql: sql,
         // viewName: fieldsValue.sqlDataSetName,
       },
     });
+    this.pageNumber = 1;
+    this.isSaveOther = false;
+    this.connection_id = '';
+    this.connection_name = '';
+    this.datasetId = '';
   };
 
   // 表格分页
@@ -291,17 +309,18 @@ class AddDataSet extends PureComponent {
 
   render() {
     const {
-      dataSourceList,
-      metaDataTableList,
+      dataSourceList, // 数据源
+      metaDataTableList, // 数据源表
       dispatch,
-      tableData,
-      classifyTree,
-      defaultPageSize,
-      sqlDataSetName,
-      columnData,
-      // tableData2,
-      // targetObj,
-      // column2,
+      tableData, // 数据预览数据
+      classifyTree, // 数据集分类树
+      defaultPageSize, // 表格默认一页展示数
+      sqlDataSetName, // 数据集名称
+      columnData, // 列数据
+      dataSet, // 修改数据集时的数据集详情
+      location: {
+        query: { datasetType }, // 存储过程或者sql
+      },
     } = this.props;
     const column = [
       {
@@ -320,11 +339,11 @@ class AddDataSet extends PureComponent {
         key: 'field_data_type',
       },
     ];
-    const { AlterDataSetName, pageNumber } = this.state;
+    const { AlterDataSetName, pageNumber } = this.state; // 修改数据集名称切换, 表格分页器
     const renderColumn = this.perfectColumn();
     return (
       <DndProvider backend={HTML5Backend}>
-        <Layout className={styles.addDataSet}>
+        <Layout className={classNames(styles.addDataSet, 'proLayout')}>
           <Header className={styles.header}>
             <Row>
               <Col span={12}>
@@ -333,6 +352,7 @@ class AddDataSet extends PureComponent {
                     router.goBack();
                   }}
                   className={styles.backBtn}
+                  title="BACK"
                 >
                   <Icon type="left" style={{ color: '#fff' }} />
                 </Button>
@@ -367,6 +387,7 @@ class AddDataSet extends PureComponent {
                     type="text"
                     value={sqlDataSetName}
                     onBlur={e => {
+                      // 修改数据集名称
                       dispatch({
                         type: 'sqlDataSource/changeDataSetName',
                         payload: e.target.value,
@@ -376,6 +397,7 @@ class AddDataSet extends PureComponent {
                       });
                     }}
                     onChange={e => {
+                      // 修改数据集名称
                       dispatch({
                         type: 'sqlDataSource/changeDataSetName',
                         payload: e.target.value,
@@ -392,9 +414,9 @@ class AddDataSet extends PureComponent {
               <Col span={12} style={{ paddingTop: 6, paddingRight: 22 }}>
                 <Button
                   style={{ float: 'right' }}
-                  className={styles.searchBoxButton}
                   type="primary"
                   onClick={() => {
+                    // 打开保存弹框
                     this.isSaveOther = false;
                     this.toggleModal('save');
                   }}
@@ -403,10 +425,10 @@ class AddDataSet extends PureComponent {
                 </Button>
                 <Button
                   style={{ float: 'right' }}
-                  // ghost
-                  className={styles.searchBoxButton}
+                  className="btn_usual"
                   type="primary"
                   onClick={() => {
+                    // 打开另存为弹框
                     this.isSaveOther = true;
                     this.toggleModal('save');
                   }}
@@ -424,7 +446,7 @@ class AddDataSet extends PureComponent {
             <Layout>
               <Sider width={230} style={{ background: '#fff' }}>
                 <div className={styles.title}>
-                  <span>数据连接</span>
+                  <span>DataSource Connected</span>
                   <IconFont type="icon-DataSource" />
                 </div>
                 <div className={styles.toolsBox}>
@@ -436,6 +458,7 @@ class AddDataSet extends PureComponent {
                         this.props.location.query.connectionId || dataSourceList[0].connectionId
                       }
                       onChange={(val, a) => {
+                        // 切换数据源获取数据源表
                         this.pageNumber = 1;
                         this.connection_id = val;
                         this.connection_name = a.props.children;
@@ -502,6 +525,7 @@ class AddDataSet extends PureComponent {
                         style={{ marginRight: 10 }}
                         onClick={() => {
                           if (this.props.sql) {
+                            // if (this.props)
                             dispatch({
                               type: 'sqlDataSource/getMetadataTablePerform',
                               payload: {
@@ -536,7 +560,7 @@ class AddDataSet extends PureComponent {
                         SQL Beautifier
                       </Button>
                     </div>
-                    <CodeMirrorComponent />
+                    <CodeMirrorComponent datasetType={datasetType || dataSet.datasetType} />
                   </div>
                   <div className={styles.searchBox}>
                     <Button
@@ -549,7 +573,7 @@ class AddDataSet extends PureComponent {
                         styles.icon,
                         this.state.tableView === 'data' ? styles.tableActive : '',
                       )}
-                      title="表数据"
+                      title="Table Data"
                     >
                       <IconFont type="iconbianjiqi_charubiaoge" />
                     </Button>
@@ -563,7 +587,7 @@ class AddDataSet extends PureComponent {
                         styles.icon,
                         this.state.tableView === 'attr' ? styles.tableActive : '',
                       )}
-                      title="表属性"
+                      title="Table Attribute"
                     >
                       <IconFont type="iconorderedlist" />
                     </Button>
@@ -606,16 +630,15 @@ class AddDataSet extends PureComponent {
                           max={100}
                           defaultValue={5}
                         />
-                        行
+                        Rows
                       </span>
                     </div>
                   </div>
                   {this.state.tableView === 'data' && (
                     <Table
                       scroll={{ x: 'max-content' }}
-                      // className={styles.editDataSetTable}
+                      className={styles.editDataSetTable}
                       components={this.components}
-                      bordered
                       columns={renderColumn}
                       dataSource={tableData}
                       pagination={{
@@ -637,7 +660,7 @@ class AddDataSet extends PureComponent {
                   )}
                   {this.state.tableView === 'attr' && (
                     <Table
-                      // className={styles.editDataSetTable}
+                      className={styles.editDataSetTable}
                       dataSource={columnData}
                       columns={column}
                       pagination={{
@@ -663,6 +686,7 @@ class AddDataSet extends PureComponent {
           </Content>
           <ParamSetting visible={this.state.visible.paramSetting} toggleModal={this.toggleModal} />
           <Save
+            dataSet={dataSet}
             saveSql={this.saveSql}
             sqlDataSetName={sqlDataSetName}
             isSaveOther={this.isSaveOther}

@@ -18,7 +18,7 @@ const options = {
 
 class CodeMirrorComponent extends Component {
   render() {
-    const { sql, dispatch, connectDropTarget, visible, sqlItem } = this.props;
+    const { sql, dispatch, connectDropTarget, visible, sqlItem, datasetType } = this.props;
     const menu = (
       <Menu
         onClick={e => {
@@ -70,7 +70,7 @@ class CodeMirrorComponent extends Component {
               fontSize: 14,
             }}
           >
-            请从此处开始编写SQL
+            Please Input {datasetType}
           </span>
         )}
         <Dropdown overlay={menu} onVisibleChange={() => {}} visible={visible}>

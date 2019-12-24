@@ -223,5 +223,21 @@ export default {
         dataSet: action.payload,
       };
     },
+    // 初始化
+    clearAll() {
+      return {
+        sqlDataSetName: '', // sql数据集名称,
+        activeKey: '', // 数据表列表active
+        totalCount: 0, // 数据表列表数量
+        metaDataTableList: [], // 数据表列表
+        dataSourceList: [], // 数据源配置列表
+        connectionId: '', //
+        tableData: [], //
+        column: [], // table的column
+        defaultPageSize: 5, // tableData一页默认展示
+        columnData: [],
+        dataSet: {},
+      };
+    },
   },
 };

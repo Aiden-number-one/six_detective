@@ -14,8 +14,8 @@ export default class SearchForm extends Component {
       <Form className="ant-advanced-search-form search-wraper">
         <Row gutter={{ xs: 24, sm: 48, md: 144, lg: 48, xl: 96 }} align="middle" type="flex">
           <Col xs={12} sm={12} lg={8}>
-            <Form.Item label={formatMessage({ id: 'systemManagement.userMaintenance.name' })}>
-              {getFieldDecorator('sqlName', {})(<Input placeholder="Please input" />)}
+            <Form.Item label="DataSet Name">
+              {getFieldDecorator('datasetName', {})(<Input placeholder="Please input" />)}
             </Form.Item>
           </Col>
           <Col xs={12} sm={12} lg={8}>

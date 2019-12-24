@@ -2,13 +2,13 @@
  * @Description: 111
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime: 2019-12-18 14:45:20
- * @LastEditors: lan
+ * @LastEditTime : 2019-12-24 15:05:35
+ * @LastEditors  : lan
  */
 import React from 'react';
 import { Drawer, Form, Input, TreeSelect, Button } from 'antd';
 import { formatMessage } from 'umi/locale';
-// 上传文件弹出框
+
 export default React.memo(
   Form.create()(
     class extends React.Component {
@@ -31,6 +31,7 @@ export default React.memo(
           sqlDataSetName,
           isSaveOther,
           classifyTree,
+          dataSet,
         } = this.props;
         const { getFieldDecorator } = form;
         const Layout = {
@@ -53,21 +54,15 @@ export default React.memo(
             <Form onSubmit={this.handleSubmit}>
               <Form.Item {...Layout} label="DataSet Name">
                 {getFieldDecorator('sqlDataSetName', {
-                  rules: [{ required: true, message: formatMessage({ id: 'index.inputName' }) }],
-                  initialValue: isSaveOther ? `${sqlDataSetName}_副本` : sqlDataSetName,
+                  rules: [{ required: true, message: 'Please Input' }],
+                  initialValue: isSaveOther ? `${sqlDataSetName}_copy` : sqlDataSetName,
                 })(<Input placeholder={formatMessage({ id: 'index.inputName' })} />)}
               </Form.Item>
               <Form.Item {...Layout} label="Folder">
                 {getFieldDecorator('folder', {
-                  rules: [{ required: true, message: formatMessage({ id: 'index.inputName' }) }],
-                  // initialValue: isSaveOther ? `${sqlTableName}_副本` : sqlTableName,
-                })(
-                  <TreeSelect
-                    treeData={classifyTree}
-                    placeholder="Please select"
-                    // treeDefaultExpandAll
-                  />,
-                )}
+                  rules: [{ required: true, message: 'Please select' }],
+                  initialValue: dataSet ? dataSet.folderId : undefined,
+                })(<TreeSelect treeData={classifyTree} placeholder="Please select" />)}
               </Form.Item>
               <div
                 style={{

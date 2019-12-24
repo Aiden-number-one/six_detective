@@ -56,6 +56,10 @@ export default class DeleteDataSetDrawer extends PureComponent {
         width={800}
         visible={visible}
         onClose={() => {
+          const { dispatch } = this.props;
+          dispatch({
+            type: 'dataSet/clear',
+          });
           toggleDrawer('dataPerform');
         }}
         destroyOnClose
@@ -75,6 +79,10 @@ export default class DeleteDataSetDrawer extends PureComponent {
         >
           <Button
             onClick={() => {
+              const { dispatch } = this.props;
+              dispatch({
+                type: 'dataSet/clear',
+              });
               toggleDrawer('dataPerform');
             }}
             type="primary"
