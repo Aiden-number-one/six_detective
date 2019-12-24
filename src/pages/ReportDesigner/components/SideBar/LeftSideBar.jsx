@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Icon, Tree } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
-import DropSelect from '../DropSelect/index';
+import DropSelect from '../DropSelect';
 import styles from './index.less';
 import { dataSetTree } from '../../utils';
 
@@ -47,12 +47,12 @@ export default class LeftSideBar extends PureComponent {
     treeData.map(item => {
       if (item.children) {
         return (
-          <TreeNode key={item.key} title={<Title title={item.title} />}>
+          <TreeNode key={item.key} title={<Title title={item.title} isLeaf={item.isLeaf} />}>
             {this.generateTree(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode key={item.key} title={<Title title={item.title} />} isLeaf />;
+      return <TreeNode key={item.key} title={<Title title={item.title} isLeaf={item.isLeaf} />} />;
     });
 
   // 根据数据集的选择，来渲染出数据集的列与SqlParams
@@ -126,7 +126,7 @@ function Title({ title, isLeaf }) {
       <div className={styles.hoverArea} />
       {hoverState && <div className={styles.hoverBlock} />}
       <span className={styles.title}>
-        {/* 非叶子不展示文件夹标志 */}
+        {/* 叶子不展示文件夹标志 */}
         {!isLeaf && (
           <>
             <span className="folder">

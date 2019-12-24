@@ -36,7 +36,7 @@ export default {
 
   effects: {
     // 获取单个数据集
-    *getDataSetDetail({ payload }, { call, put }) {
+    *getDataSetDetail({ payload, callback }, { call, put }) {
       const res = yield call(getDataSetDetail, { param: payload });
       if (res && res.bcjson.flag === '1') {
         // 保存数据集
@@ -44,6 +44,7 @@ export default {
           type: 'saveDataSet',
           payload: res.bcjson.items[0],
         });
+        if (callback) callback(res.bcjson.items[0]);
       }
     },
     *addDataSet({ payload }, { call }) {
@@ -220,6 +221,22 @@ export default {
       return {
         ...state,
         dataSet: action.payload,
+      };
+    },
+    // 初始化
+    clearAll() {
+      return {
+        sqlDataSetName: '', // sql数据集名称,
+        activeKey: '', // 数据表列表active
+        totalCount: 0, // 数据表列表数量
+        metaDataTableList: [], // 数据表列表
+        dataSourceList: [], // 数据源配置列表
+        connectionId: '', //
+        tableData: [], //
+        column: [], // table的column
+        defaultPageSize: 5, // tableData一页默认展示
+        columnData: [],
+        dataSet: {},
       };
     },
   },

@@ -161,5 +161,12 @@ export default {
         activeFolderId: action.payload,
       };
     },
+    clear(state) {
+      return {
+        ...state,
+        column: [], // 数据预览表头
+        tableData: [], // 数据预览数据
+      };
+    },
   },
 };

@@ -63,8 +63,7 @@ export default [
               {
                 path: '/report/report-designer/report-designer',
                 name: 'Report Designer',
-                // component: './ReportDesigner/ReportDesigner',
-                component: './Page404',
+                component: './DatasetManagement/ReportDesignerList',
               },
               {
                 path: '/report/report-designer/dataset-mamagement',
@@ -154,7 +153,7 @@ export default [
           {
             path: '/account-module/data-import',
             name: 'Data Import',
-            component: './Page404',
+            component: './DataImportLog/NewAccount',
           },
           {
             path: '/account-module/account-information',
@@ -257,42 +256,42 @@ export default [
           {
             path: '/system-management/user-maintenance',
             name: 'User Maintenance',
-            component: './UserManagement/UserManagement',
+            component: './SystemManagement/UserManagement/UserManagement',
           },
           {
             path: '/system-management/menu-user-group',
             name: 'Menu User Group',
-            component: './MenuUserGroup/MenuUserGroup',
+            component: './SystemManagement/MenuUserGroup/MenuUserGroup',
           },
           {
             path: '/system-management/alert-user-group',
             name: 'Alert User Group',
-            component: './AlertUserGroup/AlertUserGroup',
+            component: './SystemManagement/AlertUserGroup/AlertUserGroup',
           },
           {
             path: '/system-management/email-parameter',
             name: 'Email Parameter',
-            component: './EmailParameter/EmailParameter',
+            component: './SystemManagement/EmailParameter/EmailParameter',
           },
           {
             path: '/system-management/message-content-template',
             name: 'Message Content Template',
-            component: './MessageContentTemplate/MessageContentTemplate',
+            component: './SystemManagement/MessageContentTemplate/MessageContentTemplate',
           },
           {
             path: '/system-management/audit-trail-logging',
             name: 'Audit Trail Logging',
-            component: './AuditLog/AuditLog',
+            component: './SystemManagement/AuditLog/AuditLog',
           },
           {
             path: '/system-management/code-maintenance',
             name: 'Code Maintenance',
-            component: './CodeMaintenance/CodeMaintenance',
+            component: './SystemManagement/CodeMaintenance/CodeMaintenance',
           },
           {
             path: '/system-management/system-parameters',
             name: 'System Parameters',
-            component: './SystemParameters/SystemParameters',
+            component: './SystemManagement/SystemParameters/SystemParameters',
           },
         ],
       },
@@ -374,89 +373,6 @@ export default [
             path: '/analysis/investor-segment-analysis',
             name: 'investorSegmentAnalysis',
             component: './Page404',
-          },
-        ],
-      },
-      {
-        path: '/system-management',
-        name: 'systemManagement',
-        icon: 'icon-diannao',
-        Routes: ['src/pages/Authorized'],
-        routes: [
-          {
-            path: '/system-management/user-maintenance',
-            name: 'userMaintenance',
-            component: './UserManagement/UserManagement',
-          },
-          {
-            path: '/system-management/menu-user-group',
-            name: 'menuUserGroup',
-            component: './MenuUserGroup/MenuUserGroup',
-          },
-          {
-            path: '/system-management/alert-user-group',
-            name: 'menuUserGroup',
-            component: './AlertUserGroup/AlertUserGroup',
-          },
-          {
-            path: '/system-management/user-maintenance/new-user',
-            name: 'newUser',
-            component: './NewUser/NewUser',
-            hideInMenu: true,
-          },
-          {
-            path: '/system-management/user-maintenance/new-menu-user',
-            name: 'newMenuUserGroup',
-            component: './NewMenuUserGroup/NewMenuUserGroup',
-            hideInMenu: true,
-          },
-          {
-            path: '/system-management/user-maintenance/modify-menu-user',
-            name: 'modifyMenuUserGroup',
-            component: './ModifyMenuUserGroup/ModifyMenuUserGroup',
-            hideInMenu: true,
-          },
-          {
-            path: '/system-management/user-maintenance/modify-user',
-            name: 'modifyUser',
-            component: './ModifyUser/ModifyUser',
-            hideInMenu: true,
-          },
-          {
-            path: '/system-management/user-maintenance/modify-user',
-            name: 'modifyUser',
-            component: './ModifyUser/ModifyUser',
-            hideInMenu: true,
-          },
-          {
-            path: '/system-management/message-content-template',
-            name: 'messageContentTemplate',
-            component: './MessageContentTemplate/MessageContentTemplate',
-          },
-          {
-            path: '/system-management/email-parameter',
-            name: 'emailParameter',
-            component: './EmailParameter/EmailParameter',
-          },
-          {
-            path: '/system-management/system-parameters',
-            name: 'systemParameters',
-            component: './SystemParameters/SystemParameters',
-          },
-          {
-            path: '/system-management/code-maintenance',
-            name: 'codeMaintenance',
-            component: './CodeMaintenance/CodeMaintenance',
-          },
-          {
-            path: '/system-management/audit-trail-logging',
-            name: 'auditTrailLogging',
-            component: './AuditLog/AuditLog',
-          },
-          {
-            path: '/system-management/scheduling',
-            name: 'scheduling',
-            component: './Scheduling/Scheduling',
           },
         ],
       },

@@ -19,7 +19,8 @@ export default function ColumnTitle({
   loading,
   curColumn,
   filterItems,
-  getFilterItems,
+  onFilters,
+  onSort,
   onCommit,
 }) {
   const [isFiltered, setFiltered] = useState(false);
@@ -31,8 +32,21 @@ export default function ColumnTitle({
   function handleVisibleChange(v) {
     setVisible(v);
     if (v) {
-      getFilterItems();
+      onFilters();
     }
+  }
+
+  async function handleClear() {
+    conditions = conditions.filter(item => item.column !== curColumn);
+    await onCommit(conditions);
+    setCheckedList(filterItems);
+    setFiltered(false);
+    setVisible(false);
+  }
+
+  async function handleSort(sort) {
+    await onSort(conditions, sort);
+    setVisible(false);
   }
 
   async function handleOk() {
@@ -58,9 +72,8 @@ export default function ColumnTitle({
     setVisible(false);
   }
 
-  function handleCheckList(cList) {
-    setCheckedList(cList);
-  }
+  function handleSelect() {}
+
   return (
     <Popover
       placement="bottomLeft"
@@ -71,18 +84,28 @@ export default function ColumnTitle({
       overlayStyle={{ width: 260 }}
       content={
         <>
-          <FilterHeader />
+          <FilterHeader
+            disabled={checkedList.length === filterItems.length}
+            onClear={handleClear}
+            onSort={handleSort}
+          />
           <div className={styles.content}>
             <FilterType isNum={isNum} handleTypeChange={type => setFilterType(type)} />
             {isFilterSelect ? (
-              <FilterSelect filterList={filterItems} />
+              <FilterSelect
+                loading={loading}
+                filterList={filterItems}
+                curColumn={curColumn}
+                conditions={conditions}
+                onSelect={handleSelect}
+              />
             ) : (
               <FilterCheckbox
                 loading={loading}
                 filterList={filterItems}
                 curColumn={curColumn}
                 conditions={conditions}
-                onCheckedList={handleCheckList}
+                onCheckedList={c => setCheckedList(c)}
               />
             )}
             <FilterFooter
@@ -97,7 +120,7 @@ export default function ColumnTitle({
       <div>
         <IconFont
           type="iconfilter1"
-          className={classNames(styles.icon, styles['filter-icon'], {
+          className={classNames(styles['filter-icon'], {
             [styles.active]: isFiltered,
           })}
         />

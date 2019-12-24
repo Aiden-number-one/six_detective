@@ -36,13 +36,25 @@ function Title({ dispatch, loading, filterItems, tableColumn, id }) {
       },
     });
   }
+  async function handleSort(conditions, sort) {
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        currentColumn: tableColumn,
+        conditions,
+        sort,
+      },
+    });
+  }
+
   return (
     <ColumnTitle
       isNum={tableColumn === 'itemsTotal'}
       curColumn={tableColumn}
       loading={loading['global/fetchTableFilterItems']}
       filterItems={filterItems}
-      getFilterItems={handleFilterItems}
+      onFilters={handleFilterItems}
+      onSort={handleSort}
       onCommit={handleCommit}
     >
       <FormattedMessage id={`alert-center.${id}`} />

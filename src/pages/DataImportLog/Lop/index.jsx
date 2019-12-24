@@ -56,6 +56,7 @@ export function LopLog({ dispatch, loading, logs, total, reportUrl }) {
         <LopLogFilterForm handleSearch={handleSearch} />
         <LopLogManualModal
           visible={visible}
+          loading={loading['lop/importByManual']}
           handleCancel={() => setVisible(false)}
           handleUpload={handleUpload}
         />
