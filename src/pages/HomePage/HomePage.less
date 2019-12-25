@@ -1,132 +1,289 @@
+@import '~@/assets/css/utils.less';
 @font-face {
   font-family: 'AvenirHeavy';
   src: url('@/assets/AvenirHeavy.otf');
 }
-.homepageContent {
-  display: flex;
-  margin: 5px !important;
-  // 左侧
-  .leftSide {
-    display: flex;
-    flex: 7;
-    flex-direction: column;
-    margin-right: 5px;
-    // 统计模块
-    .statisticalModule {
-      // 头部
-      .tabsHeader {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 13px 0 20px;
-        // 切换按钮
-        .buttonGround {
-          margin-left: 12px;
-          .switchButton {
-            display: inline-block;
-            width: 85px;
-            height: 30px;
-            padding: 0 10px;
-            color: #10416c;
-            font-weight: 500;
-            font-size: 12px;
-            font-family: 'Avenir', sans-serif;
-            line-height: 30px;
-            text-align: center;
-            background-color: #f4f4f4;
-            cursor: pointer;
-            transition: all 0.5s;
-          }
-          .switchButton:hover {
-            color: #fff;
-            background-color: #0d87d4;
-            transition: all 0.5s;
-          }
-          .buttonActive {
-            color: #fff;
-            background-color: #0d87d4;
-          }
-        }
-        // 日期
-        .timepicker {
-          display: flex;
-          align-items: center;
-          margin-right: 12px;
-          .text {
-            margin-right: 14px;
-            color: #ced3df;
-            font-size: 12px;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.5s;
-          }
-          .text:hover {
-            color: #818e9a;
-          }
-          .textActive {
-            color: #818e9a;
-          }
-        }
+.homepage {
+  margin: 0 5px !important;
+  :global {
+    .ant-tabs-content {
+      .ant-tabs-tabpane {
+        background-color: transparent;
       }
-      // 统计Box
-      .statisticalBox {
-        display: flex;
-        justify-content: space-between;
-        margin: 0 7px 15px;
-        color: #fff;
-        font-size: 12px;
-        font-family: 'AvenirHeavy', sans-serif;
-        .redBox,
-        .blackBox {
-          display: flex;
-          width: 220px;
-          height: 90px;
-          margin: 0 5px;
-          padding: 12px;
-          background-color: #f4374c;
-          .leftBlock,
-          .rightBlock {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            .title {
-              margin-top: 7px;
-            }
-            .value {
-              margin-top: 7px;
-              font-size: 16px;
-            }
-          }
-        }
-        .redBox {
-          .leftBlock {
-            flex: 2;
-            border-right: 1px solid rgba(255, 255, 255, 0.5);
-          }
-          .rightBlock {
-            flex: 3;
-          }
-        }
-        .blackBox {
-          background-color: #10416c;
-          .leftBlock {
-            flex: 3;
-          }
-          .rightBlock {
-            flex: 2;
-          }
-        }
-      }
-    }
-    // 待处理任务
-    .pendingTasks {
-      margin: 5px 0;
     }
   }
-  // 右侧
-  .rightSide {
+  .groupTitle {
+    margin: 0;
+    padding: 8px 5px 0;
+    color: #464c51;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  .groupTitle::before {
+    display: inline-block;
+    width: 4px;
+    height: 12px;
+    margin-right: 5px;
+    color: #f4374c;
+    background-color: #f4374c;
+    border: none;
+    content: '';
+  }
+  .homepageContent {
     display: flex;
-    flex: 3;
-    flex-direction: column;
+    // 左侧
+    .leftSide {
+      display: flex;
+      flex: 7 0;
+      flex-direction: column;
+      margin-right: 5px;
+      // 统计模块
+      .statisticalModule {
+        background-color: #fff;
+        // 头部
+        .tabsHeader {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin: 13px 0 20px;
+          // 切换按钮
+          .buttonGround {
+            margin-left: 12px;
+            .switchButton {
+              display: inline-block;
+              width: 85px;
+              height: 30px;
+              padding: 0 10px;
+              color: #10416c;
+              font-weight: 500;
+              font-size: 12px;
+              font-family: 'Avenir', sans-serif;
+              line-height: 30px;
+              text-align: center;
+              background-color: #f4f4f4;
+              cursor: pointer;
+              transition: all 0.5s;
+            }
+            .switchButton:hover {
+              color: #fff;
+              background-color: #0d87d4;
+              transition: all 0.5s;
+            }
+            .buttonActive {
+              color: #fff;
+              background-color: #0d87d4;
+            }
+          }
+          // 日期
+          .timepicker {
+            display: flex;
+            align-items: center;
+            margin-right: 12px;
+            .text {
+              margin-right: 14px;
+              color: #ced3df;
+              font-size: 12px;
+              white-space: nowrap;
+              cursor: pointer;
+              transition: all 0.5s;
+            }
+            .text:hover {
+              color: #818e9a;
+            }
+            .textActive {
+              color: #818e9a;
+            }
+          }
+        }
+        // 统计Box
+        .statisticalBox {
+          display: flex;
+          justify-content: space-between;
+          margin: 0 7px 15px;
+          color: #fff;
+          font-size: 12px;
+          font-family: 'AvenirHeavy', sans-serif;
+          .redBox,
+          .blackBox {
+            display: flex;
+            width: 220px;
+            height: 90px;
+            margin: 0 5px;
+            padding: 12px;
+            background-color: #f4374c;
+            .leftBlock,
+            .rightBlock {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              .title {
+                margin-top: 7px;
+              }
+              .value {
+                margin-top: 7px;
+                font-size: 16px;
+              }
+            }
+          }
+          .redBox {
+            .leftBlock {
+              flex: 2;
+              border-right: 1px solid rgba(255, 255, 255, 0.5);
+            }
+            .rightBlock {
+              flex: 3;
+            }
+          }
+          .blackBox {
+            background-color: #10416c;
+            .leftBlock {
+              flex: 3;
+            }
+            .rightBlock {
+              flex: 2;
+            }
+          }
+        }
+      }
+      // 待处理任务
+      .pendingTasks {
+        margin: 5px 0;
+        background-color: #fff;
+        :global {
+          .ant-tabs {
+            .ant-tabs-bar {
+              border-bottom: 1px solid #f6f8fb;
+            }
+          }
+        }
+        .more {
+          margin-right: 20px;
+          color: #0d87d4;
+          border-bottom: 1px solid #0d87d4;
+          cursor: pointer;
+        }
+        .infoList {
+          :global {
+            .ant-list-item {
+              justify-content: space-between;
+              color: #464c51;
+              font-size: 12px;
+            }
+          }
+          .description {
+            width: 400px;
+            margin-left: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            .textOverflow();
+          }
+          .date {
+            width: 100px;
+            font-weight: 600;
+          }
+          .user {
+            width: 20px;
+            height: 20px;
+            margin-right: 60px;
+            color: #fff;
+            font-family: 'AvenirHeavy', sans-serif;
+            line-height: 20px;
+            text-align: center;
+            border-radius: 50%;
+          }
+          .yellow {
+            background-color: #fec642;
+          }
+          .blue {
+            background-color: #0d87d4;
+          }
+          .green {
+            background-color: #36bb3d;
+          }
+        }
+      }
+    }
+    // 右侧
+    .rightSide {
+      display: flex;
+      flex: 3 0;
+      flex-direction: column;
+      .quickMenu {
+        min-width: 310px;
+        padding: 5px;
+        background-color: #fff;
+        .menuItem {
+          display: flex;
+          align-items: center;
+          min-width: 140px;
+          height: 45px;
+          margin: 5px;
+          padding: 0 15px;
+          color: #464c51;
+          font-size: 12px;
+          font-family: 'AvenirHeavy', sans-serif;
+          background-color: #f6f8fb;
+          cursor: pointer;
+          .icon {
+            margin-right: 3px;
+            color: #0d87d4;
+          }
+          span {
+            line-height: 12px;
+          }
+        }
+      }
+      .information {
+        margin-top: 5px;
+        padding: 5px;
+        color: #464c51;
+        font-size: 12px;
+        background-color: #fff;
+        :global {
+          .ant-list-item {
+            justify-content: space-between;
+            padding: 10px 0;
+            color: #464c51;
+            font-size: 12px;
+          }
+        }
+        .icon {
+          width: 20px;
+          padding-left: 5px;
+        }
+        .description {
+          position: relative;
+          width: 180px;
+          max-height: 31px;
+          margin-right: -1em;
+          padding-right: 1em;
+          overflow: hidden;
+          line-height: 13px;
+          text-align: justify;
+          cursor: pointer;
+          &::before {
+            position: absolute;
+            right: 12px;
+            bottom: 0;
+            padding: 0 1px;
+            background: #fff;
+            content: '...';
+          }
+          &::after {
+            position: absolute;
+            right: 14px;
+            width: 1em;
+            height: 1em;
+            margin-top: 0.2em;
+            background: white;
+            content: '';
+          }
+        }
+        .date {
+          width: 100px;
+          color: #7f91a4;
+        }
+      }
+    }
   }
 }
