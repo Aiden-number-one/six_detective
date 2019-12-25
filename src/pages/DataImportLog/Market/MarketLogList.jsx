@@ -6,11 +6,18 @@ import { dateFormat, timestampFormat } from '../constants';
 
 const { Column } = Table;
 
+const channelMap = {
+  A: 'Auto Import',
+  M: 'Manual Import',
+};
+
+const IconStatus = ({ type, color, des }) => (
+  <Icon type={type} style={{ color, fontSize: 16 }} title={des} />
+);
 const statusMap = {
-  0: '',
-  1: '',
-  2: () => <Icon type="check-circle" style={{ color: '#3b803e', fontSize: 16 }} />,
-  9: () => <Icon type="close-circle" style={{ color: '#e6344a', fontSize: 16 }} />,
+  1: ({ des }) => <IconStatus type="loading" color="#3b803e" des={des} />,
+  2: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
+  9: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
 };
 
 export default function({ dataSource, loading, total, handlePageChange, handlePageSizeChange }) {
@@ -38,37 +45,41 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
         align="center"
         dataIndex="tradeDate"
         title={<FormattedMessage id="data-import.trade-date" />}
-        render={(text, record) => moment(record.tradeDate).format(dateFormat)}
+        render={text => moment(text).format(dateFormat)}
       />
       <Column
         align="center"
         dataIndex="market"
         title={<FormattedMessage id="data-import.market" />}
       />
-      <Column dataIndex="fileType" title={<FormattedMessage id="data-import.market.file-type" />} />
+      <Column
+        align="center"
+        dataIndex="fileType"
+        title={<FormattedMessage id="data-import.market.file-type" />}
+      />
       <Column
         align="center"
         dataIndex="uploadDate"
         title={<FormattedMessage id="data-import.market.upload-date" />}
-        render={(text, record) =>
-          moment(record.uploadDate, 'YYYYMMDDhhmmss').format(timestampFormat)
-        }
+        render={text => moment(text, 'YYYYMMDDhhmmss').format(timestampFormat)}
       />
       <Column
         align="center"
         dataIndex="uploadChannel"
         title={<FormattedMessage id="data-import.market.upload-channel" />}
+        render={text => channelMap[text]}
       />
       <Column
         align="center"
         dataIndex="status"
         title={<FormattedMessage id="data-import.market.status" />}
         render={(text, record) => {
-          if (record.status === '2' || record.status === '9') {
-            const Status = statusMap[record.status];
-            return <Status />;
+          const des = record.statusMark;
+          if ([1, 2, 9].includes(+text)) {
+            const Status = statusMap[+text];
+            return <Status des={des} />;
           }
-          return record.statusMark;
+          return des;
         }}
       />
       <Column

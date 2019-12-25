@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Drawer, Form, Upload, Icon, Button, Input } from 'antd';
+import moment from 'moment';
+import { dateFormat } from '../constants';
 import styles from '../index.less';
 
 const isLt5M = size => size / 1024 / 1024 < 5;
@@ -64,14 +66,17 @@ function MarketLogManualModal({ form, visible, loading, handleCancel, handleUplo
                   if (value && value.length) {
                     const file = value[0];
                     if (!isLt5M(file.size)) {
+                      setUpFile({});
                       return callback('file size must less than 5M');
                     }
                     if (file.error) {
+                      setUpFile({});
                       return callback(file.error.message);
                     }
                     const fileFormat = file.name.match(fileReg);
 
                     if (!fileFormat) {
+                      setUpFile({});
                       return callback('The format is wrong. Please check the file ');
                     }
 
@@ -87,8 +92,8 @@ function MarketLogManualModal({ form, visible, loading, handleCancel, handleUplo
                     }
 
                     setUpFile({
-                      tradeDate,
                       fileType,
+                      tradeDate: moment(tradeDate).format(dateFormat),
                       market: marketMap,
                     });
                   }

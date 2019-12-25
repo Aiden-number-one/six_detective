@@ -2,33 +2,25 @@ import React from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Form, DatePicker, Button, Checkbox, Select, Row, Col } from 'antd';
 import { yesterday, today, dateFormat } from '../constants';
-import styles from '../index.less';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-function MarketLogFilterForm({ form, handleSearch }) {
+export const defaultTradeDate = [yesterday, today];
+export const defaultMarket = ['HKFE', 'SEHK'];
+
+function MarketLogFilterForm({ form, renderAuto, handleSearch }) {
   const { getFieldDecorator, validateFields } = form;
 
-  function handleClick() {
+  function handleClickSearch() {
     validateFields((err, values) => {
       if (!err) {
-        const format = 'YYYYMMDD';
-        const { tradeDate, market, ...rest } = values;
-        let startTradeDate = '';
-        let endTadeDate = '';
-
-        if (tradeDate) {
-          const [start, end] = tradeDate;
-          startTradeDate = start && start.format(format);
-          endTadeDate = end && end.format(format);
-        }
+        const { tradeDate, ...rest } = values;
 
         handleSearch({
           ...rest,
-          market: market && market.toString(),
-          tradeDateSt: startTradeDate,
-          tradeDateEt: endTadeDate,
+          tradeDateSt: tradeDate[0],
+          tradeDateEt: tradeDate[1],
         });
       }
     });
@@ -39,7 +31,7 @@ function MarketLogFilterForm({ form, handleSearch }) {
         <Col xs={24} sm={12} xl={10} xxl={8}>
           <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
             {getFieldDecorator('tradeDate', {
-              initialValue: [yesterday, today],
+              initialValue: defaultTradeDate,
               rules: [
                 {
                   required: false,
@@ -72,20 +64,16 @@ function MarketLogFilterForm({ form, handleSearch }) {
         <Col xs={24} sm={12} xl={7} xxl={5}>
           <Form.Item label={<FormattedMessage id="data-import.market" />}>
             {getFieldDecorator('market', {
-              initialValue: ['HKFE', 'SEHK'],
+              initialValue: defaultMarket,
             })(<Checkbox.Group options={['HKFE', 'SEHK']} />)}
           </Form.Item>
         </Col>
         <Col xs={24} sm={12} xl={8} xxl={6}>
           <Form.Item>
-            <Button
-              type="primary"
-              icon="search"
-              onClick={handleClick}
-              className={styles['no-margin']}
-            >
+            <Button type="primary" icon="search" onClick={handleClickSearch}>
               <FormattedMessage id="data-import.search" />
             </Button>
+            {renderAuto()}
           </Form.Item>
         </Col>
       </Row>
