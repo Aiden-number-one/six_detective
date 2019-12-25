@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-23 10:17:57
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-23 17:42:17
+ * @LastEditTime : 2019-12-25 09:37:29
  */
 /*
  * @Des: 报表设计器的
@@ -124,11 +124,13 @@ export function dataSetTree(dataSets) {
 /**
  * @description: 转换报表内设置的JSON串
  * @param {object} contentDetail 表格相关信息
+ * @param {object} originContentDetail 源数据
  * @return {object} 报表JSON串中的temaplateArea相关
  * @Author: mus
  * @Date: 2019-12-23 16:41:39
  */
 export function getTemplateArea(contentDetail) {
+  // originContentDetail
   const spreadSheetData = contentDetail[0].data;
   const spreadSheetStyle = contentDetail[0].cellAttrs;
   const needRowsCols = spreadSheetData.map((colsValue, colsIndex) =>
@@ -157,5 +159,6 @@ export function getTemplateArea(contentDetail) {
     max_row: '', // reserved
     max_column: '', // reserved
     rows: needRowsCols,
+    // originContentDetail,
   };
 }

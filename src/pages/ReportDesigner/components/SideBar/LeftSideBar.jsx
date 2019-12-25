@@ -43,17 +43,27 @@ export default class LeftSideBar extends PureComponent {
   };
 
   // 渲染树结构
-  generateTree = treeData =>
-    treeData.map(item => {
+  generateTree = treeData => {
+    const { displayDraw } = this.props;
+    return treeData.map(item => {
       if (item.children) {
         return (
-          <TreeNode key={item.key} title={<Title title={item.title} isLeaf={item.isLeaf} />}>
+          <TreeNode
+            key={item.key}
+            title={<Title title={item.title} isLeaf={item.isLeaf} displayDraw={displayDraw} />}
+          >
             {this.generateTree(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode key={item.key} title={<Title title={item.title} isLeaf={item.isLeaf} />} />;
+      return (
+        <TreeNode
+          key={item.key}
+          title={<Title title={item.title} isLeaf={item.isLeaf} displayDraw={displayDraw} />}
+        />
+      );
     });
+  };
 
   // 根据数据集的选择，来渲染出数据集的列与SqlParams
   // onChangeDataSet = dataSetId => {
@@ -109,7 +119,7 @@ export default class LeftSideBar extends PureComponent {
   }
 }
 
-function Title({ title, isLeaf }) {
+function Title({ title, isLeaf, displayDraw }) {
   const [hoverState, hoverAction] = useState(false);
   return (
     <div
@@ -141,7 +151,12 @@ function Title({ title, isLeaf }) {
       </span>
       {hoverState && (
         <div className={styles.operationArea}>
-          <IconFont type="icon-edit" />
+          <IconFont
+            type="icon-edit"
+            onClick={() => {
+              displayDraw();
+            }}
+          />
           <IconFont type="icon-delete" style={{ marginLeft: 3 }} />
         </div>
       )}
