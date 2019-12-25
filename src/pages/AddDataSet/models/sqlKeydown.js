@@ -12,8 +12,8 @@ export default {
   namespace: 'sqlKeydown',
 
   state: {
-    sql: '',
-    visible: false,
+    sql: '', // sql语句
+    visible: false, // 是否显示select 和 Name
     sqlItem: {},
   },
 
@@ -46,12 +46,14 @@ export default {
   },
 
   reducers: {
+    // 修改sql
     changeSql(state, action) {
       return {
         ...state,
         sql: action.payload,
       };
     },
+    // 显示隐藏Select/Name
     changeSqlDropDown(state, action) {
       return {
         ...state,
@@ -64,6 +66,7 @@ export default {
         sqlItem: action.payload,
       };
     },
+    // 初始化数据
     clear() {
       return {
         sql: '',

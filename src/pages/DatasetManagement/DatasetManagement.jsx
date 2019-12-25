@@ -165,14 +165,6 @@ export default class DatasetManagement extends PureComponent {
       payload: value,
     });
     this.queryDataSet();
-    // dispatch({
-    //   type: 'dataSet/getDataSet',
-    //   payload: {
-    //     folderId: value,
-    //     pageNumber: this.state.page.pageNumber.toString(),
-    //     pageSize: this.state.page.pageSize.toString(),
-    //   },
-    // });
   };
 
   // 操作树节点
@@ -228,6 +220,7 @@ export default class DatasetManagement extends PureComponent {
     const params = {};
     params.datasetId = this.record.datasetId;
     params.commandText = this.record.commandText;
+    // 如果存在参数设置 做数据处理
     if (values) {
       const datasetParams = JSON.parse(this.record.datasetParams);
       datasetParams.forEach(item => {
@@ -383,15 +376,6 @@ export default class DatasetManagement extends PureComponent {
             >
               <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
-            {/* <a
-              href="#"
-              onClick={() => {
-                this.toggleDrawer('dataSetName');
-                this.record = record;
-              }}
-            >
-              <IconFont type="icon-attr" className={styles['btn-icon']} />
-            </a> */}
             <a
               onClick={() => {
                 this.record = record;
@@ -458,20 +442,6 @@ export default class DatasetManagement extends PureComponent {
       </Menu>
     );
     const { drawerTitle, page } = this.state;
-    // 表格多选框
-    // const rowSelection = {
-    //   selectedRowKeys,
-    //   type: 'checkbox',
-    //   onSelect: (record, selected, selectedRows) => {
-    //     const tableIds = selectedRows.map(item => item.tableId);
-    //     this.tableIds = tableIds.join(',');
-    //   },
-    //   onChange: selectedRowKey => {
-    //     this.setState({
-    //       selectedRowKeys: selectedRowKey,
-    //     });
-    //   },
-    // };
     const { classifyTreeData, dataSetData, column, tableData, activeFolderId } = this.props;
     const anotherTree = _.cloneDeep(classifyTreeData);
     return (
@@ -500,35 +470,6 @@ export default class DatasetManagement extends PureComponent {
             <div
               style={{ height: '100%', borderLeft: '1px solid #e0e0e0', backgroundColor: '#fff' }}
             >
-              {/* <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  padding: '10px 5px 0',
-                  backgroundColor: '#fff',
-                }}
-              >
-                <Button
-                  style={{ width: 120 }}
-                  type="primary"
-                  onClick={() => {
-                    router.push({
-                      pathname: '/add-dataset',
-                      query: {
-                        // connectionId: connectionId,
-                      },
-                    });
-                  }}
-                >
-                  Creat DataSet
-                </Button>
-                <Search
-                  style={{ width: 220 }}
-                  onSearch={value => {
-                    this.getDataSourceList(value);
-                  }}
-                />
-              </div> */}
               <NewSearchForm search={this.queryDataSet} ref={this.searchForm} />
               <div className={styles.content}>
                 <div className={styles.tableTop}>
@@ -537,20 +478,6 @@ export default class DatasetManagement extends PureComponent {
                       + New DataSet
                     </Button>
                   </Dropdown>
-                  {/* <Button
-                    onClick={() => {
-                      router.push({
-                        pathname: '/add-dataset',
-                        query: {
-                          // connectionId: connectionId,
-                        },
-                      });
-                    }}
-                    type="primary"
-                    className="btn_usual"
-                  >
-                    + New DataSet
-                  </Button> */}
                 </div>
                 <Table
                   columns={columns}
