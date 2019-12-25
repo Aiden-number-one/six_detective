@@ -1,6 +1,5 @@
 import React from 'react';
 import { Descriptions, Typography } from 'antd';
-import { FormattedMessage } from 'umi/locale';
 import moment from 'moment';
 import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
 
@@ -8,9 +7,9 @@ const { Paragraph } = Typography;
 
 export default function({
   alert: {
-    alertId,
+    alertNo,
     alertType,
-    alertStatusDesc,
+    alertName,
     alertTime,
     alertDesc,
     tradeDate,
@@ -21,37 +20,27 @@ export default function({
 }) {
   return (
     <Descriptions column={1}>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.alert-id" />}>
-        {alertId}
-      </Descriptions.Item>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.alert-type" />}>
-        {alertType}
-      </Descriptions.Item>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.trade-date" />}>
-        {moment(tradeDate).format(dateFormat)}
-      </Descriptions.Item>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.alert-timestamp" />}>
+      <Descriptions.Item label="Alert ID">{alertNo}</Descriptions.Item>
+      <Descriptions.Item label="Alert Name">{alertName}</Descriptions.Item>
+      <Descriptions.Item label="Alert Type">{alertType}</Descriptions.Item>
+      {tradeDate && (
+        <Descriptions.Item label="Trade Date">
+          {moment(tradeDate).format(dateFormat)}
+        </Descriptions.Item>
+      )}
+      <Descriptions.Item label="Alert Timestamp">
         {moment(alertTime, timestampFormat).format(timestampFormat)}
       </Descriptions.Item>
       {submissionTime && (
-        <Descriptions.Item label={<FormattedMessage id="alert-center.submission-time" />}>
+        <Descriptions.Item label="Submission Time">
           {moment(submissionTime).format(timestampFormat)}
         </Descriptions.Item>
       )}
-      {submitter && (
-        <Descriptions.Item label={<FormattedMessage id="alert-center.submitter" />}>
-          {submitter}
-        </Descriptions.Item>
-      )}
-      <Descriptions.Item label={<FormattedMessage id="alert-center.description" />}>
+      {submitter && <Descriptions.Item label="Submitter">{submitter}</Descriptions.Item>}
+      <Descriptions.Item label="Alert Description">
         <Paragraph ellipsis={{ rows: 3, expandable: true }}>{alertDesc}</Paragraph>
       </Descriptions.Item>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.owner" />}>
-        {userName}
-      </Descriptions.Item>
-      <Descriptions.Item label={<FormattedMessage id="alert-center.status" />}>
-        {alertStatusDesc}
-      </Descriptions.Item>
+      <Descriptions.Item label="Alert Owner">{userName}</Descriptions.Item>
     </Descriptions>
   );
 }

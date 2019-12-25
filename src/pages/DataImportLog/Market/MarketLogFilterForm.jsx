@@ -9,7 +9,7 @@ const { RangePicker } = DatePicker;
 export const defaultTradeDate = [yesterday, today];
 export const defaultMarket = ['HKFE', 'SEHK'];
 
-function MarketLogFilterForm({ form, loading, handleParams }) {
+function MarketLogFilterForm({ form, loading, onParams }) {
   const { getFieldDecorator, validateFields } = form;
 
   function getParams(type) {
@@ -17,7 +17,7 @@ function MarketLogFilterForm({ form, loading, handleParams }) {
       if (!err) {
         const { tradeDate, ...rest } = values;
 
-        handleParams(type, {
+        onParams(type, {
           ...rest,
           tradeDateSt: tradeDate[0],
           tradeDateEt: tradeDate[1],

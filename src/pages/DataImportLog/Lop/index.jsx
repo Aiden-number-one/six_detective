@@ -3,34 +3,31 @@ import { connect } from 'dva';
 import { Button, Row } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormattedMessage } from 'umi/locale';
-import { yesterday, today } from '../constants';
-import LopLogFilterForm from './LopLogFilterForm';
+import LopLogFilterForm, { defaultTradeDate } from './LopLogFilterForm';
 import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
 import styles from '../index.less';
-
-const format = 'YYYYMMDD';
 
 const aLink = document.createElement('a');
 aLink.download = true;
 
 export function LopLog({ dispatch, loading, logs, total, reportUrl }) {
   const [visible, setVisible] = useState(false);
-  const [searchParams, setSearchParams] = useState({});
+  const [searchParams, setSearchParams] = useState({
+    startTradeDate: defaultTradeDate[0],
+    endTradeDate: defaultTradeDate[1],
+  });
 
   useEffect(() => {
     dispatch({
       type: 'lop/fetch',
-      payload: {
-        startTradeDate: yesterday.format(format),
-        endTradeDate: today.format(format),
-      },
+      payload: searchParams,
     });
   }, []);
 
-  function handleSearch(params) {
+  function handleParams(type, params) {
     setSearchParams(params);
-    dispatch({ type: 'lop/reload', payload: params });
+    dispatch({ type, payload: params });
   }
 
   function handlePageChange(page, pageSize) {
@@ -47,28 +44,27 @@ export function LopLog({ dispatch, loading, logs, total, reportUrl }) {
         lopImpId,
       },
     });
-    aLink.href = `/download?filePath=${reportUrl}`;
-    aLink.click();
   }
+
+  useEffect(() => {
+    if (reportUrl) {
+      aLink.href = `/download?filePath=${reportUrl}`;
+      aLink.click();
+    }
+  }, [reportUrl]);
+
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <LopLogFilterForm handleSearch={handleSearch} />
+        <LopLogFilterForm loading={loading} onParams={handleParams} />
         <LopLogManualModal
           visible={visible}
           loading={loading['lop/importByManual']}
-          handleCancel={() => setVisible(false)}
-          handleUpload={handleUpload}
+          onCancel={() => setVisible(false)}
+          onUpload={handleUpload}
         />
         <div className={styles['list-wrap']}>
           <Row className={styles['btn-group']}>
-            <Button
-              type="primary"
-              onClick={() => dispatch({ type: 'lop/importByAuto' })}
-              loading={loading['lop/importByAuto']}
-            >
-              <FormattedMessage id="data-import.execute" />
-            </Button>
             <Button type="primary" className={styles['no-margin']} onClick={() => setVisible(true)}>
               <FormattedMessage id="data-import.manual-import" />
             </Button>
@@ -78,9 +74,9 @@ export function LopLog({ dispatch, loading, logs, total, reportUrl }) {
             dataSource={logs}
             loading={loading}
             reportUrl={reportUrl}
-            handlePageChange={handlePageChange}
-            handlePageSizeChange={handlePageChange}
-            handleDownload={handleDownload}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageChange}
+            onDownload={handleDownload}
           />
         </div>
       </div>

@@ -43,6 +43,7 @@ function CustomEmpty({ className = '', style = {} }) {
 function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
+  const [activeKey, setActiveKey] = useState('1');
   const taskColumns = taskColumnsMap[+alert.alertTypeId];
   const TaskItem = TaskItemMap[+alert.alertTypeId];
 
@@ -86,23 +87,46 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
     });
   }
 
-  function handleTaskRow(row) {
-    if (panes.some(item => item.ALERT_ITEM_ID === row.ALERT_ITEM_ID)) {
-      setPanes(panes.map(item => ({ item, row })));
+  function handleAddItem(pane) {
+    const isEqual = item => item.ALERT_ITEM_ID === pane.ALERT_ITEM_ID;
+    if (panes.find(isEqual)) {
+      // update item
+      setPanes(panes.map(p => (isEqual(p) ? pane : p)));
     } else {
-      setPanes([...panes, row]);
+      // add pane
+      setPanes([...panes, pane]);
     }
+    setActiveKey(pane.ALERT_ITEM_ID.toString());
   }
 
-  function hanleRemoveItem(pane) {
-    setPanes(panes.filter(m => pane.ALERT_ITEM_ID !== m.ALERT_ITEM_ID));
+  function handleRemoveItem(pane) {
+    let lastIndex;
+    let curActiveKey = activeKey;
+    const targetKey = pane.ALERT_ITEM_ID;
+    panes.forEach((item, i) => {
+      if (item.ALERT_ITEM_ID === targetKey) {
+        lastIndex = i - 1;
+      }
+    });
+
+    setPanes(panes.filter(item => item.ALERT_ITEM_ID !== targetKey));
+
+    if (panes.length && activeKey === targetKey.toString()) {
+      if (lastIndex >= 0) {
+        curActiveKey = panes[lastIndex].ALERT_ITEM_ID.toString();
+      } else {
+        curActiveKey = '2';
+      }
+    }
+    setActiveKey(curActiveKey);
   }
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
         <Tabs
           className={styles['detail-des']}
-          defaultActiveKey="1"
+          activeKey={activeKey}
+          onChange={key => setActiveKey(key)}
           tabBarExtraContent={
             <IconFont
               type={isFullscreen ? 'iconfullscreen-exit' : 'iconfull-screen'}
@@ -124,21 +148,22 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
               className={styles['tab-content']}
               tab={<FormattedMessage id="alert-center.alert-item-list" />}
             >
-              <AlertTask alert={alert} onTaskRow={handleTaskRow} taskColumns={taskColumns} />
+              <AlertTask alert={alert} onTaskRow={handleAddItem} taskColumns={taskColumns} />
             </TabPane>
           )}
           {+alert.itemsTotal !== 0 &&
             panes.map(pane => (
               <TabPane
                 className={styles['tab-content']}
-                key={pane.ALERT_ITEM_ID}
+                style={{ minHeight: 350 }}
+                key={pane.ALERT_ITEM_ID.toString()}
                 tab={
                   <Row type="flex" justify="space-between" align="middle">
                     <span>Alert Item </span>
                     <Icon
                       type="close"
                       style={{ marginLeft: 12, fontSize: 12 }}
-                      onClick={() => hanleRemoveItem(pane)}
+                      onClick={() => handleRemoveItem(pane)}
                     />
                   </Row>
                 }

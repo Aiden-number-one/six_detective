@@ -40,12 +40,12 @@ function MarketLog({ dispatch, loading, logs, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <MarketLogFilterForm loading={loading} handleParams={handleParams} />
+        <MarketLogFilterForm loading={loading} onParams={handleParams} />
         <MarketLogManualModal
           visible={visible}
           loading={loading['market/importByManual']}
-          handleCancel={() => setVisible(false)}
-          handleUpload={handleUpload}
+          onCancel={() => setVisible(false)}
+          onUpload={handleUpload}
         />
         <div className={styles['list-wrap']}>
           <Row className={styles['btn-group']}>
@@ -57,8 +57,8 @@ function MarketLog({ dispatch, loading, logs, total }) {
             dataSource={logs}
             total={total}
             loading={loading['market/fetch']}
-            handlePageChange={handlePageChange}
-            handlePageSizeChange={handlePageChange}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageChange}
           />
         </div>
       </div>

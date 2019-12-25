@@ -9,7 +9,7 @@ const isLt5M = size => size / 1024 / 1024 < 5;
 // file name format: 20191314_tp001_0.csv
 const fileReg = /(\d{8})_\d_(.*)_(.)\.(.*)/;
 
-function MarketLogManualModal({ form, visible, loading, handleCancel, handleUpload }) {
+function MarketLogManualModal({ form, visible, loading, onCancel, onUpload }) {
   const [upFile, setUpFile] = useState({});
   const { getFieldDecorator, validateFields } = form;
 
@@ -20,7 +20,7 @@ function MarketLogManualModal({ form, visible, loading, handleCancel, handleUplo
   function handleClose() {
     form.resetFields();
     setUpFile({});
-    handleCancel();
+    onCancel();
   }
 
   function handleCommit() {
@@ -36,7 +36,7 @@ function MarketLogManualModal({ form, visible, loading, handleCancel, handleUplo
           const fileName = parseFiles.slice(-1)[0];
           const fileDir = parseFiles.slice(1, -1).reduce((acc, cur) => `${acc}/${cur}`, '');
           const fileType = fileName.replace(fileReg, '$2_$3');
-          handleUpload({ fileName, fileDir, fileType });
+          onUpload({ fileName, fileDir, fileType });
           form.resetFields();
           setUpFile({});
         }
@@ -140,7 +140,7 @@ function MarketLogManualModal({ form, visible, loading, handleCancel, handleUplo
         </Form.Item>
       </Form>
       <div className={styles['bottom-btns']}>
-        <Button onClick={handleCancel}>Cancel</Button>
+        <Button onClick={handleClose}>Cancel</Button>
         <Button type="primary" loading={loading} onClick={handleCommit}>
           Commit
         </Button>

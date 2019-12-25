@@ -98,6 +98,7 @@ function AlertTask({
             title: formatMessage({ id: 'alert-center.status' }),
           },
           {
+            align: 'center',
             dataIndex: 'action',
             title: <FormattedMessage id="alert-center.actions" />,
             render: (text, record) => {

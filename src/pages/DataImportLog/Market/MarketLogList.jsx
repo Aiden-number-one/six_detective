@@ -21,7 +21,7 @@ const statusMap = {
   9: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
 };
 
-export default function({ dataSource, loading, total, handlePageChange, handlePageSizeChange }) {
+export default function({ dataSource, loading, total, onPageChange, onPageSizeChange }) {
   return (
     <Table
       dataSource={dataSource}
@@ -35,10 +35,10 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
           return `Total ${count} items`;
         },
         onChange(page, pageSize) {
-          handlePageChange(page, pageSize);
+          onPageChange(page, pageSize);
         },
         onShowSizeChange(page, pageSize) {
-          handlePageSizeChange(page, pageSize);
+          onPageSizeChange(page, pageSize);
         },
       }}
     >
