@@ -15,7 +15,7 @@ import ClassifyTree from '@/components/ClassifyTree';
 import IconFont from '@/components/IconFont';
 import styles from './DatasetManagement.less';
 import OperateTreeForm from './components/OperateTreeForm';
-import AlterDataSetName from './components/drawers/AlterDataSetName';
+// import AlterDataSetName from './components/drawers/AlterDataSetName';
 import DeleteDataSetDrawer from './components/drawers/DeleteDataSetDrawer';
 import DataPerformDrawer from './components/drawers/DataPerformDrawer';
 import MoveDataSetDrawer from './components/drawers/MoveDataSetDrawer';
@@ -465,13 +465,13 @@ export default class DatasetManagement extends PureComponent {
             operateType={this.operateType}
           />
         </Drawer>
-        <AlterDataSetName
+        {/* <AlterDataSetName
           toggleDrawer={this.toggleDrawer}
           visible={this.state.visible.dataSetName}
           clearRecord={this.clearRecord}
           record={this.record}
           handleSetDataSetName={this.handleSetDataSetName}
-        />
+        /> */}
         <DataPerformDrawer
           column={column}
           tableData={tableData}

@@ -9,12 +9,13 @@ import router from 'umi/router';
 import Service from '@/utils/Service';
 
 const {
-  getDataSourceList,
-  getTableData,
-  getMetadataTablePerform,
-  getColumn,
-  operateDataSet,
+  getDataSourceList, // 获取数据源数据
+  getTableData, // 获取数据源表数据
+  getMetadataTablePerform, // 数据预览
+  getColumn, // 获取列数据
+  operateDataSet, // 新增修改数据集
   getDataSetDetail, // 获取单个数据集详情
+  getVariableList, // 获取参数
 } = Service;
 
 export default {
@@ -26,15 +27,28 @@ export default {
     totalCount: 0, // 数据表列表数量
     metaDataTableList: [], // 数据表列表
     dataSourceList: [], // 数据源配置列表
-    connectionId: '', //
-    tableData: [], //
-    column: [], // table的column
+    connectionId: '', // 选中的数据源ID
+    tableData: [], // 数据预览的表格数据
+    column: [], // 数据预览的表头
     defaultPageSize: 5, // tableData一页默认展示
-    columnData: [],
-    dataSet: {},
+    columnData: [], // 列数据
+    dataSet: {}, // 数据集详情
+    variableList: [], // 参数设置列表
   },
 
   effects: {
+    // 获取参数
+    *getVariableList({ payload, callback }, { call, put }) {
+      const res = yield call(getVariableList, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        // 参数列表
+        yield put({
+          type: 'setVariableList',
+          payload: res.bcjson.items,
+        });
+        if (callback) callback(res.bcjson.items);
+      }
+    },
     // 获取单个数据集
     *getDataSetDetail({ payload, callback }, { call, put }) {
       const res = yield call(getDataSetDetail, { param: payload });
@@ -47,6 +61,7 @@ export default {
         if (callback) callback(res.bcjson.items[0]);
       }
     },
+    // 新增修改数据集
     *addDataSet({ payload }, { call }) {
       const res = yield call(operateDataSet, { param: payload });
       if (res && res.bcjson.flag === '1') {
@@ -64,11 +79,21 @@ export default {
           type: 'setDataSourceList',
           payload: res.bcjson.items,
         });
-
+        if (!connectionId) {
+          // 修改时选中修改的数据源
+          yield put({
+            type: 'saveConnectionId',
+            payload: {
+              connectionId,
+            },
+          });
+        }
+        // 清空数据
         yield put({
           type: 'clear',
           payload: [],
         });
+        // 获取数据源表
         yield put({
           type: 'getMetadataList',
           payload: {
@@ -89,6 +114,7 @@ export default {
       );
       const res = yield call(getTableData, { param: payload });
       if (res && res.bcjson.flag === '1') {
+        // 懒加载
         yield put({
           type: 'setDataTableList',
           payload: {
@@ -129,10 +155,12 @@ export default {
           type: isNaN(tableHead[value]) ? 'dimension' : 'measure',
           width: 150,
         }));
+        // 保存表头
         yield put({
           type: 'changeColumn',
           payload: column,
         });
+        // 保存表数据
         yield put({
           type: 'addMetadataTablePerform',
           payload: res.bcjson.items,
@@ -147,18 +175,28 @@ export default {
   },
 
   reducers: {
+    // 保存参数list
+    setVariableList(state, action) {
+      return {
+        ...state,
+        variableList: action.payload,
+      };
+    },
+    // 修改选中的数据源表
     changeActive(state, action) {
       return {
         ...state,
         activeKey: action.payload,
       };
     },
+    // 清空数据源表
     clear(state) {
       return {
         ...state,
         metaDataTableList: [],
       };
     },
+    // 数据源表
     setDataTableList(state, { payload: { list, totalCount } }) {
       return {
         ...state,
@@ -166,30 +204,35 @@ export default {
         totalCount,
       };
     },
+    // 数据源列表
     setDataSourceList(state, action) {
       return {
         ...state,
         dataSourceList: action.payload,
       };
     },
+    // 保存选中的数据源ID
     saveConnectionId(state, action) {
       return {
         ...state,
         connectionId: action.payload.connectionId,
       };
     },
+    // 数据预览表头
     changeColumn(state, action) {
       return {
         ...state,
         column: action.payload,
       };
     },
+    // 数据预览表格数据
     addMetadataTablePerform(state, action) {
       return {
         ...state,
         tableData: action.payload,
       };
     },
+    // 清空数据预览数据
     clearMetadata(state) {
       return {
         ...state,
@@ -197,12 +240,14 @@ export default {
         column: [],
       };
     },
+    // 数据集名称
     changeDataSetName(state, action) {
       return {
         ...state,
         sqlDataSetName: action.payload,
       };
     },
+    // 改变默认一页显示行数
     changeDefaultPageSize(state, { payload }) {
       return {
         ...state,
@@ -221,6 +266,23 @@ export default {
       return {
         ...state,
         dataSet: action.payload,
+      };
+    },
+    // 初始化
+    clearAll() {
+      return {
+        sqlDataSetName: '', // sql数据集名称,
+        activeKey: '', // 数据表列表active
+        totalCount: 0, // 数据表列表数量
+        metaDataTableList: [], // 数据表列表
+        dataSourceList: [], // 数据源配置列表
+        connectionId: '', //
+        tableData: [], //
+        column: [], // table的column
+        defaultPageSize: 5, // tableData一页默认展示
+        columnData: [],
+        dataSet: {},
+        variableList: [],
       };
     },
   },

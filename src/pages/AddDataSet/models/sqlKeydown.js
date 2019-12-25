@@ -6,49 +6,38 @@
  */
 import Service from '@/utils/Service';
 
-const { getMetadataTablePerform, getSqlParserInfo, getQryStatement } = Service;
+const { sqlFormated, getQryStatement } = Service;
 
 export default {
   namespace: 'sqlKeydown',
 
   state: {
-    sql: '',
-    visible: false,
+    sql: '', // sql语句
+    visible: false, // 是否显示select 和 Name
     sqlItem: {},
   },
 
   effects: {
     // sql美化
-    *formatedSql({ payload }, { call, put }) {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      const { connection_id, ...param } = payload;
-      const res = yield call(getSqlParserInfo, { param });
+    *sqlFormated({ payload }, { call, put }) {
+      const res = yield call(sqlFormated, { param: payload });
       if (res && res.bcjson.flag === '1') {
         yield put({
           type: 'changeSql',
-          payload: res.bcjson.items[0].formatedSql,
-        });
-      }
-    },
-    *getMetadataTablePerform({ payload }, { call, put }) {
-      // const sql = yield select(({ sqlKeydown }) => sqlKeydown.sql);
-      const data = yield call(getMetadataTablePerform, { param: payload });
-      if (data && data.bcjson.flag === '1') {
-        yield put({
-          type: 'changeSql',
-          payload: data.bcjson.items[0].viewSql,
+          payload: res.bcjson.items[0].formatedContent,
         });
       }
     },
     // 获取sql语句
-    *querySql({ payload }, { call, put, select }) {
-      const sql = yield select(({ sqlKeydown }) => sqlKeydown.sql);
+    *querySql({ payload, callback }, { call }) {
+      // const sql = yield select(({ sqlKeydown }) => sqlKeydown.sql);
       const data = yield call(getQryStatement, { param: payload });
       if (data && data.bcjson.flag === '1') {
-        yield put({
-          type: 'changeSql',
-          payload: sql + data.bcjson.items[0].qryStatement,
-        });
+        callback(data.bcjson.items[0].qryStatement);
+        // yield put({
+        //   type: 'changeSql',
+        //   payload: sql + data.bcjson.items[0].qryStatement,
+        // });
         // yield put({
         //   type: 'sqlDataSource/clearMetadata',
         // })
@@ -57,12 +46,14 @@ export default {
   },
 
   reducers: {
+    // 修改sql
     changeSql(state, action) {
       return {
         ...state,
         sql: action.payload,
       };
     },
+    // 显示隐藏Select/Name
     changeSqlDropDown(state, action) {
       return {
         ...state,
@@ -73,6 +64,14 @@ export default {
       return {
         ...state,
         sqlItem: action.payload,
+      };
+    },
+    // 初始化数据
+    clear() {
+      return {
+        sql: '',
+        visible: false,
+        sqlItem: {},
       };
     },
   },

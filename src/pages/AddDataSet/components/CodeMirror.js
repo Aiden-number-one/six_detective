@@ -18,7 +18,16 @@ const options = {
 
 class CodeMirrorComponent extends Component {
   render() {
-    const { sql, dispatch, connectDropTarget, visible, sqlItem } = this.props;
+    const {
+      sql,
+      dispatch,
+      connectDropTarget,
+      visible,
+      sqlItem,
+      datasetType,
+      inputSql,
+      alterInputSql,
+    } = this.props;
     const menu = (
       <Menu
         onClick={e => {
@@ -27,13 +36,21 @@ class CodeMirrorComponent extends Component {
             insertSql = sqlItem.name;
             dispatch({
               type: 'sqlKeydown/changeSql',
-              payload: sql + insertSql,
+              payload: inputSql + insertSql,
             });
+            alterInputSql(inputSql + insertSql);
           } else {
             dispatch({
               type: 'sqlKeydown/querySql',
               payload: {
                 tableId: sqlItem.id,
+              },
+              callback: value => {
+                dispatch({
+                  type: 'sqlKeydown/changeSql',
+                  payload: inputSql + value,
+                });
+                alterInputSql(inputSql + value);
               },
             });
           }
@@ -59,7 +76,7 @@ class CodeMirrorComponent extends Component {
           }
         }}
       >
-        {!sql && (
+        {(!inputSql || !sql) && (
           <span
             style={{
               position: 'absolute',
@@ -70,7 +87,7 @@ class CodeMirrorComponent extends Component {
               fontSize: 14,
             }}
           >
-            请从此处开始编写SQL
+            Please Input {datasetType}
           </span>
         )}
         <Dropdown overlay={menu} onVisibleChange={() => {}} visible={visible}>
@@ -80,10 +97,11 @@ class CodeMirrorComponent extends Component {
           value={sql}
           options={options}
           onChange={(editor, data, value) => {
-            dispatch({
-              type: 'sqlKeydown/changeSql',
-              payload: value,
-            });
+            alterInputSql(value);
+            // dispatch({
+            //   type: 'sqlKeydown/changeSql',
+            //   payload: value,
+            // });
           }}
         />
       </div>,
