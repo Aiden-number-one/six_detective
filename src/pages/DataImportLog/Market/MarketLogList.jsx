@@ -14,8 +14,9 @@ const channelMap = {
 const IconStatus = ({ type, color, des }) => (
   <Icon type={type} style={{ color, fontSize: 16 }} title={des} />
 );
+
 const statusMap = {
-  1: ({ des }) => <IconStatus type="loading" color="#3b803e" des={des} />,
+  1: ({ des }) => <IconStatus type="loading" color="#009cff" des={des} />,
   2: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
   9: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
 };

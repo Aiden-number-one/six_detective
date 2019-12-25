@@ -71,10 +71,14 @@ function MarketLogFilterForm({ form, loading, handleParams }) {
         </Col>
         <Col xs={24} sm={12} xl={8} xxl={6}>
           <Form.Item>
-            <Button type="primary" icon="search" onClick={() => getParams(1)}>
+            <Button type="primary" icon="search" onClick={() => getParams('market/reload')}>
               <FormattedMessage id="data-import.search" />
             </Button>
-            <Button type="primary" onClick={() => getParams(2)} loading={loading}>
+            <Button
+              type="primary"
+              loading={loading['market/importByAuto']}
+              onClick={() => getParams('market/importByAuto')}
+            >
               <FormattedMessage id="data-import.execute" />
             </Button>
           </Form.Item>
