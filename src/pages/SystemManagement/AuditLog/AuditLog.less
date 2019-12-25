@@ -11,7 +11,32 @@
   .tableTop {
     padding: 10px 0;
   }
+  .btn-icon {
+    margin-left: 10px;
+    font-size: 14px !important;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .btn-icon:hover {
+    color: #0d87d4;
+  }
 }
 .columnsnone {
   display: none;
+}
+.customizeDisplayModal {
+  :global {
+    .ant-modal-content .ant-modal-body {
+      text-align: left !important;
+    }
+    .ant-checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      & > .ant-checkbox-group-item {
+        flex: 0 0 33%;
+        margin-right: 0;
+        margin-bottom: 8px;
+      }
+    }
+  }
 }

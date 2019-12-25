@@ -8,6 +8,7 @@ import moment from 'moment';
 import styles from './AuditLog.less';
 import { timeFormat } from '@/utils/filter';
 import SearchForm from './components/SearchForm';
+import IconFont from '@/components/IconFont';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
@@ -387,7 +388,14 @@ class AuditLog extends Component {
   render() {
     const { loading } = this.props;
     let { getAuditLogList } = this.state;
-    const { page, functionNameOptions, exportDataVisible, options, checkedValues } = this.state;
+    const {
+      page,
+      functionNameOptions,
+      exportDataVisible,
+      options,
+      checkedValues,
+      tempColumns,
+    } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     return (
@@ -404,6 +412,7 @@ class AuditLog extends Component {
               <span className={styles.customizeDisplay} onClick={this.customizeDisplay}>
                 Customize Display
               </span>
+              <IconFont type="icon-setting" className={styles['btn-icon']} />
             </Col>
           </Row>
           <Table
@@ -430,14 +439,20 @@ class AuditLog extends Component {
           )}
         </div>
         <Modal
-          title={formatMessage({ id: 'app.common.confirm' })}
+          closable={false}
+          wrapClassName={styles.customizeDisplayModal}
+          title="Customize Display"
           visible={this.state.customizeVisible}
           onOk={this.customizeConfirm}
           onCancel={this.customizeCancel}
           cancelText={formatMessage({ id: 'app.common.cancel' })}
-          okText={formatMessage({ id: 'app.common.confirm' })}
+          okText={formatMessage({ id: 'app.common.submit' })}
         >
           <div>
+            <p>
+              Alter the display of the orders table by selecting up to{' '}
+              <font style={{ color: '#0D87D4' }}>{tempColumns.length - 1}</font> Cloumns
+            </p>
             <Checkbox.Group
               options={options}
               value={checkedValues}
@@ -446,6 +461,7 @@ class AuditLog extends Component {
           </div>
         </Modal>
         <Modal
+          closable={false}
           title="Select Export Format"
           visible={exportDataVisible}
           onOk={this.exportDataConfirm}
