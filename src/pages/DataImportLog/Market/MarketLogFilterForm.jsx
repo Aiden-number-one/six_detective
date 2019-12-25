@@ -9,15 +9,15 @@ const { RangePicker } = DatePicker;
 export const defaultTradeDate = [yesterday, today];
 export const defaultMarket = ['HKFE', 'SEHK'];
 
-function MarketLogFilterForm({ form, renderAuto, handleSearch }) {
+function MarketLogFilterForm({ form, loading, handleParams }) {
   const { getFieldDecorator, validateFields } = form;
 
-  function handleClickSearch() {
+  function getParams(type) {
     validateFields((err, values) => {
       if (!err) {
         const { tradeDate, ...rest } = values;
 
-        handleSearch({
+        handleParams(type, {
           ...rest,
           tradeDateSt: tradeDate[0],
           tradeDateEt: tradeDate[1],
@@ -25,6 +25,7 @@ function MarketLogFilterForm({ form, renderAuto, handleSearch }) {
       }
     });
   }
+
   return (
     <Form layout="vertical" className="ant-advanced-search-form search-wraper">
       <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="bottom" type="flex">
@@ -70,10 +71,12 @@ function MarketLogFilterForm({ form, renderAuto, handleSearch }) {
         </Col>
         <Col xs={24} sm={12} xl={8} xxl={6}>
           <Form.Item>
-            <Button type="primary" icon="search" onClick={handleClickSearch}>
+            <Button type="primary" icon="search" onClick={() => getParams(1)}>
               <FormattedMessage id="data-import.search" />
             </Button>
-            {renderAuto()}
+            <Button type="primary" onClick={() => getParams(2)} loading={loading}>
+              <FormattedMessage id="data-import.execute" />
+            </Button>
           </Form.Item>
         </Col>
       </Row>

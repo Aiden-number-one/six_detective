@@ -24,9 +24,14 @@ function MarketLog({ dispatch, loading, logs, total }) {
     });
   }, []);
 
-  function handleSearch(params) {
+  function handleParams(type, params) {
     setSearchParams(params);
-    dispatch({ type: 'market/reload', payload: params });
+    if (type === 1) {
+      dispatch({ type: 'market/reload', payload: params });
+    }
+    if (type === 2) {
+      dispatch({ type: 'market/importByAuto', payload: params });
+    }
   }
 
   function handlePageChange(page, pageSize) {
@@ -40,18 +45,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <MarketLogFilterForm
-          handleSearch={handleSearch}
-          renderAuto={() => (
-            <Button
-              type="primary"
-              onClick={() => dispatch({ type: 'market/importByAuto', payload: searchParams })}
-              loading={loading['market/importByAuto']}
-            >
-              <FormattedMessage id="data-import.execute" />
-            </Button>
-          )}
-        />
+        <MarketLogFilterForm loading={loading['market/importByAuto']} handleParams={handleParams} />
         <MarketLogManualModal
           visible={visible}
           loading={loading['market/importByManual']}
