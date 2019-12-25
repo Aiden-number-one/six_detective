@@ -258,7 +258,7 @@ export default class ToolBar extends Component {
   };
 
   render() {
-    const { setCellStyle, setCellType } = this.props;
+    const { setCellStyle, setCellType, changeDisplaySearchArea, displayArea } = this.props;
     const { btnActiveStatus, backgroundColor, fontColor, cellType, paintformatActive } = this.state;
     const popoverProps = {
       placement: 'bottom',
@@ -288,7 +288,10 @@ export default class ToolBar extends Component {
                   <p>Import</p>
                 </div>
               </Button>
-              <Button className={classNames('btn', 'btn2Report', 'mr6')}>
+              <Button
+                className={classNames('btn', 'btn2Report', 'mr6', displayArea && 'active')}
+                onClick={changeDisplaySearchArea}
+              >
                 <div className={styles.topBottom}>
                   <IconFont type="iconfilesearch" />
                   <p>Search</p>

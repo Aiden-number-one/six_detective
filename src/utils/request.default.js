@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors  : iron
- * @LastEditTime : 2019-12-23 20:53:19
+ * @LastEditors  : mus
+ * @LastEditTime : 2019-12-24 21:27:28
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -77,10 +77,11 @@ request.interceptors.request.use((url, opts) => {
     P: cryptoParams,
     S: timestamp,
   };
-
+  // 将来去掉，目前只为方便现在调试方便
+  const longJson = url === '/api/v2.0/bayconnect.superlop.set_report_template_content_edit.json';
   const options = {
     ...opts,
-    params: isProOrDev() ? opts.data : {},
+    params: isProOrDev() && !longJson ? opts.data : {},
     data: {
       bcp: cryptoParams,
       s: timestamp,

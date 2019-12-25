@@ -4,20 +4,19 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-24 10:32:05
+ * @LastEditTime : 2019-12-25 09:16:59
  */
-
+import { message } from 'antd';
 import Service from '@/utils/Service';
 
-const { getDataSet, getReportTemplateContent } = Service;
-// setReportTemplateContent
+const { getDataSet, getReportTemplateContent, setReportTemplateContent } = Service;
 
 export default {
   namespace: 'reportDesigner',
   state: {
     reportName: 'Untitled', // 当前报表设计器的名字
     reportTemplateContent: '', // 报表设计器的JSON
-    teamplateAreaJson: '', // 报表设计器表格区域的相关JSON串
+    teamplateAreaObj: '', // 报表设计器表格区域的相关Object对象
     dataSetPublicList: [], // 公共数据集列表
     dataSetPrivateList: [], // 私有数据集
   },
@@ -64,19 +63,49 @@ export default {
         dataSetListSqlParams: action.payload,
       };
     },
-    // 设置json串
+    // 设置模板区域的Object
     setTemplateArea(state, action) {
       return {
         ...state,
-        teamplateAreaJson: action.payload,
+        teamplateAreaObj: action.payload,
       };
     },
   },
   effects: {
     // 组装reportTemplateContent
-    *packageTemplate(_, { select }) {
-      const reportName = yield select(({ reportDesigner }) => reportDesigner.reportTemplateContent);
-      console.log(reportName);
+    *packageTemplate(_, { select, call }) {
+      // 报表名
+      const reportName = yield select(({ reportDesigner }) => reportDesigner.reportName);
+      // 私有数据集
+      const dataSetPrivateList = yield select(
+        ({ reportDesigner }) => reportDesigner.dataSetPrivateList,
+      );
+      // 关于模板区域的Object
+      const teamplateAreaObj = yield select(
+        ({ reportDesigner }) => reportDesigner.teamplateAreaObj,
+      );
+      const reportTemplateContentObj = {
+        report_id: '', // 新建为空
+        report_name: reportName,
+        report_description: '', // 暂无
+        report_version: 'v1.0', // 默认1.0
+        report_style: {}, // 暂无
+        datasets: dataSetPrivateList, // 数据集相关
+        paramsList: [], // 参数相关即查询条件相关
+        queryArea: {}, // 查询条件相关
+        templateArea: teamplateAreaObj,
+      };
+      const response = yield call(setReportTemplateContent, {
+        param: {
+          report_id: '',
+          reportTemplateContent: JSON.stringify(reportTemplateContentObj),
+        },
+      });
+      if (response.bcjson.flag === '1') {
+        message.info(response.bcjson.msg);
+      } else {
+        message.warn(response.bcjson.msg);
+      }
     },
     // 获取公共数据集
     *getPublicDataSet({ payload }, { call, put }) {
@@ -92,13 +121,13 @@ export default {
       });
     },
     // 查询报表模板
-    *getReportTemplateContent({ payload }, { call, put }) {
+    *getReportTemplateContent({ payload }, { call }) {
       const response = yield call(getReportTemplateContent, { param: payload });
       if (response.bcjson.flag === '1' && response.bcjson.items[0]) {
-        yield put({
-          type: 'setReportTemplateContent',
-          payload: JSON.stringify(response.bcjson.items[0].reportTemplateContent),
-        });
+        // yield put({
+        //   type: 'setTemplateArea',
+        //   payload: JSON.stringify(response.bcjson.items[0].reportTemplateContent),
+        // });
       }
     },
   },

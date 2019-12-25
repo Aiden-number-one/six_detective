@@ -13,9 +13,15 @@ const formLayout = {
 };
 
 export default props => {
+  const { getFieldDecorator, cellPosition, dataSetPrivateList } = props;
+  // 单元格类型
   const [cellType, changeCellType] = useState('0');
-
-  const { getFieldDecorator, cellPosition } = props;
+  // 当前被选择的数据集
+  const [dataset, changeDataset] = useState(undefined);
+  // 根据被选择的数据集得到想对应的列
+  // TODO: 如果，树那边的数据集被删掉，则右边已经设置的单元格怎么办？
+  const currentDatasetObj = dataSetPrivateList.find(value => value.dataset_id === dataset);
+  const currentColumn = currentDatasetObj ? currentDatasetObj.fields : [];
   return (
     <Content className={styles.content}>
       {/* 控件设置基本信息 */}
@@ -38,18 +44,17 @@ export default props => {
               label={<FormattedMessage id="report-designer.insertelement" />}
               {...formLayout}
             >
-              {getFieldDecorator(
-                'roleName',
-                {},
-              )(
+              {getFieldDecorator('roleName', {
+                initialValue: '0',
+              })(
                 <Select
                   onChange={e => {
                     changeCellType(e);
                   }}
                 >
-                  <Option value="0">插入文本(T)</Option>
-                  <Option value="1">插入公式(F)</Option>
-                  <Option value="2">插入列(D)</Option>
+                  <Option value="0">Text</Option>
+                  <Option value="1">Formula</Option>
+                  <Option value="2">Data Column</Option>
                 </Select>,
               )}
             </Form.Item>
@@ -57,15 +62,15 @@ export default props => {
             {/* 文本 */}
             {cellType === '0' && (
               <Form.Item label=" " {...formLayout}>
-                {getFieldDecorator('cell', {})(<Input />)}
+                {getFieldDecorator('text', {})(<Input />)}
               </Form.Item>
             )}
 
             {/* 插入公式 */}
-            {/* 文本 */}
+            {/* 公式 */}
             {cellType === '1' && (
               <Form.Item label=" " {...formLayout}>
-                {getFieldDecorator('cell', {})(<Input />)}
+                {getFieldDecorator('formula', {})(<Input />)}
               </Form.Item>
             )}
 
@@ -77,14 +82,37 @@ export default props => {
                   label={<FormattedMessage id="report-designer.dataset" />}
                   {...formLayout}
                 >
-                  {getFieldDecorator('roleName', {})(<Select />)}
+                  {getFieldDecorator(
+                    'dataset',
+                    {},
+                  )(
+                    <Select
+                      placeholder="Please Select"
+                      onChange={datasetValue => {
+                        changeDataset(datasetValue);
+                      }}
+                    >
+                      {dataSetPrivateList.map(value => (
+                        <Option value={value.dataset_id}>{value.dataset_name}</Option>
+                      ))}
+                    </Select>,
+                  )}
                 </Form.Item>
                 {/* 数据列 */}
                 <Form.Item
                   label={<FormattedMessage id="report-designer.datacolumn" />}
                   {...formLayout}
                 >
-                  {getFieldDecorator('roleName', {})(<Select />)}
+                  {getFieldDecorator(
+                    'datacolumn',
+                    {},
+                  )(
+                    <Select placeholder="Please Select">
+                      {currentColumn.map(value => (
+                        <Option value={value.field_data_name}>{value.field_data_name}</Option>
+                      ))}
+                    </Select>,
+                  )}
                 </Form.Item>
                 {/* 数据设置1 */}
                 <Form.Item

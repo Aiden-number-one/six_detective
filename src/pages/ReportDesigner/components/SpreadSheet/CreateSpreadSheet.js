@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2019-12-23 20:26:03
+ * @LastEditTime : 2019-12-24 20:29:45
  * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
@@ -247,7 +247,7 @@ export default WrapperComponent =>
           const contentDetail = generateJson(changeData);
           dispatch({
             type: 'reportDesigner/setTemplateArea',
-            payload: getTemplateArea(contentDetail),
+            payload: getTemplateArea(contentDetail, changeData),
           });
         });
     };
