@@ -6,21 +6,9 @@ import styles from './index.less';
 import { dataSetTransform } from '../../utils';
 
 export default class DropSelect extends Component {
-  state = {};
-
   input = React.createRef();
 
-  componentDidMount() {
-    document.body.addEventListener('click', () => {
-      this.setState({
-        visible: false,
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    document.body.removeEventListener('click', () => {});
-  }
+  state = {};
 
   onClick = item => {
     const { privateData, setPrivateList } = this.props;
@@ -29,24 +17,22 @@ export default class DropSelect extends Component {
     setPrivateList([...privateData, dataSetTransform(item)]);
   };
 
-  onSearch = (/* v  */) => {};
-
-  trigger = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
   render() {
     let { data = [] } = this.props;
-    const { privateData = [] } = this.props;
-    const { loading, addon, getPublicDataSet } = this.props;
-    const { visible, keyWord } = this.state;
+    const {
+      loading,
+      addon,
+      getPublicDataSet,
+      privateData = [],
+      displayDropSelect,
+      changedisplayDropSelect,
+    } = this.props;
+    const { keyWord } = this.state;
     // TODO
     const text = '';
     // 关键词搜索数据集
     if (keyWord) {
-      data = data.filter(item => item.dataset_name.includes(keyWord)); // 关键字搜索
+      data = data.filter(item => item.datasetName.includes(keyWord)); // 关键字搜索
     }
     return (
       <div className={styles.edit}>
@@ -57,11 +43,21 @@ export default class DropSelect extends Component {
             right: addon ? '30px' : '0px',
           }}
         >
-          <div className={styles.valueBox} onClick={this.trigger} title={text}>
-            {text} <Icon type="caret-down" />
+          <div
+            className={styles.valueBox}
+            onClick={e => {
+              e.stopPropagation();
+              changedisplayDropSelect(!displayDropSelect);
+            }}
+            title={text}
+          >
+            {text} {displayDropSelect ? <Icon type="caret-up" /> : <Icon type="caret-down" />}
           </div>
-          <div className={styles.dropSelectMenu} style={{ display: visible ? 'block' : 'none' }}>
-            <div className={styles.search} onClick={this.trigger}>
+          <div
+            className={styles.dropSelectMenu}
+            style={{ display: displayDropSelect ? 'block' : 'none' }}
+          >
+            <div className={styles.search}>
               <Icon type="search" />
               <input
                 placeholder="Please input keywords"
@@ -72,7 +68,7 @@ export default class DropSelect extends Component {
                 }}
               />
             </div>
-            <div className={styles.dropSelectBtns} onClick={this.trigger}>
+            <div className={styles.dropSelectBtns}>
               <span onClick={() => {}}>
                 <Icon type="plus" style={{ fontSize: 12 }} />
                 &nbsp;
@@ -92,9 +88,9 @@ export default class DropSelect extends Component {
                       <div
                         className={classNames(styles.item)}
                         key={item.taskId}
-                        onClick={() => {
+                        onClick={e => {
+                          e.stopPropagation();
                           this.onClick(item);
-                          this.trigger();
                         }}
                         title={item.datasetName}
                       >
