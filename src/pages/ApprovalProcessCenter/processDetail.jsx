@@ -436,7 +436,7 @@ function ProcessDetail({
                         style={{ marginRight: '8px' }}
                       />
                       <Upload
-                        action="/upload"
+                        action="/upload?fileClass=WORKFLOW"
                         showUploadList={false}
                         beforeUpload={file => isLt5M(file.size)}
                         fileList={upAttachments}

@@ -282,7 +282,10 @@ class ApprovalDesign extends PureComponent {
                   >
                     {formatMessage({ id: 'systemManagement.flowDesign.flowExport' })}
                   </Button>
-                  <Upload onChange={info => this.importFileStatus(info)} action="/upload">
+                  <Upload
+                    onChange={info => this.importFileStatus(info)}
+                    action="/upload?fileClass=WORKFLOW"
+                  >
                     <Button className="btn_usual" type="primary" icon="import">
                       {formatMessage({ id: 'systemManagement.flowDesign.flowImport' })}
                     </Button>
