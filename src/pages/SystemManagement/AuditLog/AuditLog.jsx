@@ -72,6 +72,7 @@ class AuditLog extends Component {
       {
         key: 'effectiveTime',
         visible: true,
+        className: 'columnsnone',
       },
       {
         key: 'filedUpdated',

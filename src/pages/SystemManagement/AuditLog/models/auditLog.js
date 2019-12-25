@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 10:40:21
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-18 09:45:02
+ * @LastEditTime : 2019-12-24 20:18:41
  */
 import Service from '@/utils/Service';
 
@@ -16,7 +16,7 @@ const getAuditLogModel = {
     dataExport: [],
   },
   effects: {
-    *getAuditLogList({ payload }, { call, put }) {
+    *getAuditLogList({ payload, callback }, { call, put }) {
       const response = yield call(getAuditLog, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -24,6 +24,7 @@ const getAuditLogModel = {
             type: 'getDatas',
             payload: response.bcjson,
           });
+          callback();
         }
       } else {
         throw new Error(response.bcjson.msg);
