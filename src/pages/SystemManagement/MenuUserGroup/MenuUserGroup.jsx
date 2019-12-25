@@ -48,13 +48,11 @@ class MenuUserGroup extends Component {
           title: formatMessage({ id: 'systemManagement.userMaintenance.menuGroupName' }),
           dataIndex: 'groupName',
           key: 'groupName',
-          align: 'center',
         },
         {
           title: formatMessage({ id: 'systemManagement.userGroup.remark' }),
           dataIndex: 'groupDesc',
           key: 'groupDesc',
-          align: 'center',
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),

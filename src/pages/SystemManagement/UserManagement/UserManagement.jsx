@@ -3,8 +3,8 @@
  * @Description: This is for userManagement page.
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
- * @LastEditors  : mus
- * @LastEditTime : 2019-12-25 09:38:39
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-25 14:44:51
  */
 
 import React, { Component } from 'react';
@@ -61,7 +61,6 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'app.common.username' }),
         dataIndex: 'userName',
         key: 'userName',
-        align: 'center',
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
@@ -91,7 +90,6 @@ class UserManagement extends Component {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
         dataIndex: 'updateBy',
         key: 'updateBy',
-        align: 'center',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),

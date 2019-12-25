@@ -139,19 +139,16 @@ class SystemParams extends Component {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterType' }),
           dataIndex: 'parameterType',
           key: 'parameterType',
-          align: 'center',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterKey' }),
           dataIndex: 'parameterKey',
           key: 'parameterKey',
-          align: 'center',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterValue' }),
           dataIndex: 'parameterValue',
           key: 'parameterValue',
-          align: 'center',
         },
         {
           title: formatMessage({ id: 'app.common.remark' }),
