@@ -409,10 +409,10 @@ class AuditLog extends Component {
         <div className={styles.content}>
           <Row type="flex" justify="end">
             <Col>
-              <span className={styles.customizeDisplay} onClick={this.customizeDisplay}>
-                Customize Display
+              <span onClick={this.customizeDisplay}>
+                <span className={styles.customizeDisplay}>Customize Display</span>
+                <IconFont type="icon-setting" className={styles['btn-icon']} />
               </span>
-              <IconFont type="icon-setting" className={styles['btn-icon']} />
             </Col>
           </Row>
           <Table
