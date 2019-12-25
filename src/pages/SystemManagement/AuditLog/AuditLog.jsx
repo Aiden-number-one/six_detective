@@ -47,6 +47,7 @@ class AuditLog extends Component {
       { label: 'after', value: 'after' },
     ],
     checkedValues: [],
+    tempCheckedValues: [],
     tempColumns: [],
     cuscomizeColumns: [
       {
@@ -101,6 +102,7 @@ class AuditLog extends Component {
     ],
     columns: [
       {
+        index: 0,
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
@@ -110,6 +112,7 @@ class AuditLog extends Component {
         ),
       },
       {
+        index: 1,
         title: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
         dataIndex: 'functionName',
         key: 'functionName',
@@ -117,6 +120,7 @@ class AuditLog extends Component {
         width: 120,
       },
       {
+        index: 2,
         title: formatMessage({ id: 'systemManagement.auditLog.tableName' }),
         dataIndex: 'tableName',
         key: 'tableName',
@@ -125,16 +129,19 @@ class AuditLog extends Component {
         colSpan: 1,
       },
       {
+        index: 3,
         title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),
         dataIndex: 'biToCode',
         key: 'biToCode',
       },
       {
+        index: 4,
         title: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
         dataIndex: 'productCode',
         key: 'productCode',
       },
       {
+        index: 5,
         title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         dataIndex: 'effectiveTime',
         key: 'effectiveTime',
@@ -145,16 +152,19 @@ class AuditLog extends Component {
         ),
       },
       {
+        index: 6,
         title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
         dataIndex: 'filedUpdated',
         key: 'filedUpdated',
       },
       {
+        index: 7,
         title: formatMessage({ id: 'systemManagement.auditLog.updateType' }),
         dataIndex: 'updateType',
         key: 'updateType',
       },
       {
+        index: 8,
         title: formatMessage({ id: 'systemManagement.auditLog.logDate' }),
         dataIndex: 'logTime',
         key: 'logTime',
@@ -168,16 +178,19 @@ class AuditLog extends Component {
         ),
       },
       {
+        index: 9,
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
       },
       {
+        index: 10,
         title: formatMessage({ id: 'systemManagement.auditLog.before' }),
         dataIndex: 'before',
         key: 'before',
       },
       {
+        index: 11,
         title: formatMessage({ id: 'systemManagement.auditLog.after' }),
         dataIndex: 'after',
         key: 'after',
@@ -215,13 +228,13 @@ class AuditLog extends Component {
       }
     });
     arrVisible.forEach((element, index) => {
-      newColumns.splice(element - index, 1);
       tempColumns.push(newColumns[element - index]);
+      newColumns.splice(element - index, 1);
     });
     this.setState({
       columns: newColumns,
-      checkedValues,
       tempColumns,
+      checkedValues,
     });
   };
 
@@ -239,17 +252,7 @@ class AuditLog extends Component {
     dispatch({
       type: 'auditLog/getAuditLogList',
       payload: param,
-      callback: () => {
-        // const newColumns = columns.map(item => {
-        //   const newItem = Object.assign({}, item);
-        //   const filterColumns = cuscomizeColumns.filter(element => element.key === item.key);
-        //   newItem.colSpan = filterColumns.colSpan;
-        //   return newItem;
-        // });
-        // this.setState({
-        //   columns: newColumns,
-        // });
-      },
+      callback: () => {},
     });
   };
 
@@ -333,31 +336,60 @@ class AuditLog extends Component {
   };
 
   customizeDisplay = () => {
-    this.filterColumns();
+    // this.filterColumns(true);
     this.setState({
       customizeVisible: true,
     });
   };
 
   customizeConfirm = () => {
-    const { checkedValues, tempColumns, columns } = this.state;
+    const { tempColumns, columns, checkedValues } = this.state;
     this.setState({
       customizeVisible: false,
-      // checkedValues: tempCheckedValues,
     });
-    console.log('checkedValues, tempColumns, columns===', checkedValues, tempColumns, columns);
+    const columnsValues = columns.map(element => element.key);
+    const newColumns = Object.assign([], columns);
+    checkedValues.map(element => {
+      if (!columnsValues.includes(element)) {
+        newColumns.push(tempColumns.filter(item => item.key === element)[0]);
+      }
+    });
+
+    // columnsValues.map(element => {
+    //   if(!checkedValues.includes(element)){
+    //   }
+    // })
+
+    for (let i = 0; i < newColumns.length; i += 1) {
+      for (let j = 0; j < newColumns.length - 1 - i; j += 1) {
+        if (newColumns[j].index > newColumns[j + 1].index) {
+          const temp = newColumns[j];
+          newColumns[j] = newColumns[j + 1];
+          newColumns[j + 1] = temp;
+        }
+      }
+    }
+    this.setState({
+      columns: newColumns,
+      checkedValues,
+    });
   };
 
   customizeCancel = () => {
+    const { tempCheckedValues } = this.state;
     this.setState({
       customizeVisible: false,
+      checkedValues: tempCheckedValues,
     });
   };
 
-  onChangeCheckbox = checkedValues => {
-    console.log('checkedValues===', checkedValues);
+  onChangeCheckbox = newCheckedValues => {
+    console.log('checkedValues===', newCheckedValues);
+    const { checkedValues } = this.state;
+    const tempCheckedValues = Object.assign([], checkedValues);
     this.setState({
-      checkedValues,
+      checkedValues: newCheckedValues,
+      tempCheckedValues,
     });
   };
 
