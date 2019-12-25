@@ -2,18 +2,20 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2019-12-23 15:15:41
+ * @LastEditTime : 2019-12-25 14:19:11
  * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import { Icon, Table, Drawer, Form, Button, Pagination } from 'antd';
+import { Icon, Table, Drawer, Form, Button, Pagination, Modal } from 'antd';
+import { formatMessage } from 'umi/locale';
 import _ from 'lodash';
 import router from 'umi/router';
 import ClassifyTree from '@/components/ClassifyTree';
 import IconFont from '@/components/IconFont';
 import styles from './DatasetManagement.less';
+import { timeFormat } from '@/utils/filter';
 import OperateTreeForm from './components/OperateTreeForm';
 // import AlterDataSetName from './components/drawers/AlterDataSetName';
 import DeleteDataSetDrawer from './components/drawers/DeleteDataSetDrawer';
@@ -23,12 +25,13 @@ import SearchForm from './components/SearchForm';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
-@connect(({ dataSet, reportList }) => ({
+@connect(({ dataSet, reportList, loading }) => ({
   classifyTreeData: dataSet.classifyTreeData, // 分类树
   reportList: reportList.reportList, // 报表设计器列表的List
   activeTree: dataSet.activeTree, // 选中的树节点
   column: dataSet.column, // 数据预览表头
   tableData: dataSet.tableData, // 数据预览数据
+  loading: loading.effects['reportList/getReportList'] || loading.effects['reportList/delete'],
 }))
 export default class DatasetManagement extends PureComponent {
   operateType = 'ADD'; // 操作类型
@@ -45,7 +48,7 @@ export default class DatasetManagement extends PureComponent {
     visible: {
       operateTree: false, // 新增数据集分类抽屉
       dataSetName: false, // 数据集属性抽屉
-      deleteDataSet: false, // 删除数据集抽屉
+      deleteReport: false, // 删除报表模板
       dataPerform: false, // 数据预览抽屉
       move: false, // 移动数据集抽屉
     },
@@ -93,6 +96,27 @@ export default class DatasetManagement extends PureComponent {
           ...newPage,
         },
       });
+    });
+  };
+
+  // 删除数据集列表中的一项
+  deleteReportList = async () => {
+    const { dispatch } = this.props;
+    const { page } = this.state;
+    await dispatch({
+      type: 'reportList/delete',
+      payload: {
+        reportId: this.record.reportId,
+        actionType: 'DELETE',
+      },
+    });
+    this.toggleDrawer('deleteReport');
+    dispatch({
+      type: 'reportList/getReportList',
+      payload: {
+        pageNumber: page.pageNumber.toString(),
+        pageSize: page.pageSize.toString(),
+      },
     });
   };
 
@@ -312,10 +336,19 @@ export default class DatasetManagement extends PureComponent {
         title: 'Modified at',
         dataIndex: 'updateDatetime',
         key: 'updateDatetime',
+        align: 'center',
+        render: (res, obj) => (
+          <div>
+            <span>{obj.updateDatetime && timeFormat(obj.updateDatetime).t1}</span>
+            <br />
+            <span>{obj.updateDatetime && timeFormat(obj.updateDatetime).t2}</span>
+          </div>
+        ),
       },
       {
         title: 'Operation',
         key: 'Operation',
+        align: 'center',
         render: (text, record) => (
           <span className={styles.operation}>
             <a
@@ -331,32 +364,7 @@ export default class DatasetManagement extends PureComponent {
             >
               <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
-            <a
-              href="#"
-              onClick={() => {
-                this.toggleDrawer('dataSetName');
-                this.record = record;
-              }}
-            >
-              <IconFont type="icon-attr" className={styles['btn-icon']} />
-            </a>
-            <a
-              href="#"
-              onClick={() => {
-                const { dispatch } = this.props;
-                dispatch({
-                  type: 'dataSet/getMetadataTablePerform',
-                  payload: {
-                    connectionId: record.dbId,
-                    previewStatement: record.sqlStatement,
-                    previewNum: 10,
-                  },
-                  callback: () => {
-                    this.toggleDrawer('dataPerform');
-                  },
-                });
-              }}
-            >
+            <a href="#" onClick={() => {}}>
               <IconFont type="icon-prew" className={styles['btn-icon']} />
             </a>
             <a
@@ -370,7 +378,7 @@ export default class DatasetManagement extends PureComponent {
             <a
               href="#"
               onClick={() => {
-                this.toggleDrawer('deleteDataSet');
+                this.toggleDrawer('deleteReport');
                 this.record = record;
               }}
             >
@@ -381,7 +389,7 @@ export default class DatasetManagement extends PureComponent {
       },
     ];
     const { drawerTitle, page } = this.state;
-    const { classifyTreeData, reportList, column, tableData } = this.props;
+    const { classifyTreeData, reportList, column, tableData, loading } = this.props;
     const anotherTree = _.cloneDeep(classifyTreeData);
     return (
       <PageHeaderWrapper>
@@ -425,6 +433,7 @@ export default class DatasetManagement extends PureComponent {
                   </Button>
                 </div>
                 <Table
+                  loading={loading}
                   columns={columns}
                   dataSource={reportList}
                   pagination={false}
@@ -465,13 +474,6 @@ export default class DatasetManagement extends PureComponent {
             operateType={this.operateType}
           />
         </Drawer>
-        {/* <AlterDataSetName
-          toggleDrawer={this.toggleDrawer}
-          visible={this.state.visible.dataSetName}
-          clearRecord={this.clearRecord}
-          record={this.record}
-          handleSetDataSetName={this.handleSetDataSetName}
-        /> */}
         <DataPerformDrawer
           column={column}
           tableData={tableData}
@@ -488,6 +490,19 @@ export default class DatasetManagement extends PureComponent {
           visible={this.state.visible.deleteDataSet}
           toggleDrawer={this.toggleDrawer}
         />
+        {/* 删除 */}
+        <Modal
+          title={formatMessage({ id: 'app.common.confirm' })}
+          visible={this.state.visible.deleteReport}
+          onOk={this.deleteReportList}
+          onCancel={() => {
+            this.toggleDrawer('deleteReport');
+          }}
+          cancelText={formatMessage({ id: 'app.common.cancel' })}
+          okText={formatMessage({ id: 'app.common.confirm' })}
+        >
+          <span>Please confirm that you want to delete this record?</span>
+        </Modal>
       </PageHeaderWrapper>
     );
   }

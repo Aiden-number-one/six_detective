@@ -8,6 +8,7 @@ import moment from 'moment';
 import styles from './AuditLog.less';
 import { timeFormat } from '@/utils/filter';
 import SearchForm from './components/SearchForm';
+import IconFont from '@/components/IconFont';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
@@ -101,15 +102,17 @@ class AuditLog extends Component {
     ],
     columns: [
       {
+        index: 0,
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
-        minWidth: 60,
+        width: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
       },
       {
+        index: 1,
         title: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
         dataIndex: 'functionName',
         key: 'functionName',
@@ -117,6 +120,7 @@ class AuditLog extends Component {
         width: 120,
       },
       {
+        index: 2,
         title: formatMessage({ id: 'systemManagement.auditLog.tableName' }),
         dataIndex: 'tableName',
         key: 'tableName',
@@ -125,16 +129,19 @@ class AuditLog extends Component {
         colSpan: 1,
       },
       {
+        index: 3,
         title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),
         dataIndex: 'biToCode',
         key: 'biToCode',
       },
       {
+        index: 4,
         title: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
         dataIndex: 'productCode',
         key: 'productCode',
       },
       {
+        index: 5,
         title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         dataIndex: 'effectiveTime',
         key: 'effectiveTime',
@@ -145,16 +152,19 @@ class AuditLog extends Component {
         ),
       },
       {
+        index: 6,
         title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
         dataIndex: 'filedUpdated',
         key: 'filedUpdated',
       },
       {
+        index: 7,
         title: formatMessage({ id: 'systemManagement.auditLog.updateType' }),
         dataIndex: 'updateType',
         key: 'updateType',
       },
       {
+        index: 8,
         title: formatMessage({ id: 'systemManagement.auditLog.logDate' }),
         dataIndex: 'logTime',
         key: 'logTime',
@@ -168,16 +178,19 @@ class AuditLog extends Component {
         ),
       },
       {
+        index: 9,
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
       },
       {
+        index: 10,
         title: formatMessage({ id: 'systemManagement.auditLog.before' }),
         dataIndex: 'before',
         key: 'before',
       },
       {
+        index: 11,
         title: formatMessage({ id: 'systemManagement.auditLog.after' }),
         dataIndex: 'after',
         key: 'after',
@@ -206,7 +219,6 @@ class AuditLog extends Component {
     });
     const arrVisible = [];
     const checkedValues = [];
-    const tempColumns = [];
     newColumns.forEach((element, index) => {
       if (!element.visible) {
         arrVisible.push(index);
@@ -216,12 +228,11 @@ class AuditLog extends Component {
     });
     arrVisible.forEach((element, index) => {
       newColumns.splice(element - index, 1);
-      tempColumns.push(newColumns[element - index]);
     });
     this.setState({
+      tempColumns: columns,
       columns: newColumns,
       checkedValues,
-      tempColumns,
     });
   };
 
@@ -239,17 +250,7 @@ class AuditLog extends Component {
     dispatch({
       type: 'auditLog/getAuditLogList',
       payload: param,
-      callback: () => {
-        // const newColumns = columns.map(item => {
-        //   const newItem = Object.assign({}, item);
-        //   const filterColumns = cuscomizeColumns.filter(element => element.key === item.key);
-        //   newItem.colSpan = filterColumns.colSpan;
-        //   return newItem;
-        // });
-        // this.setState({
-        //   columns: newColumns,
-        // });
-      },
+      callback: () => {},
     });
   };
 
@@ -277,7 +278,6 @@ class AuditLog extends Component {
       if (err) {
         return;
       }
-      console.log('values===', values);
       const { logDate } = values;
       let logStartDate;
       let logEndDate;
@@ -333,31 +333,51 @@ class AuditLog extends Component {
   };
 
   customizeDisplay = () => {
-    this.filterColumns();
     this.setState({
       customizeVisible: true,
     });
   };
 
   customizeConfirm = () => {
-    const { checkedValues, tempColumns, columns } = this.state;
+    const { tempColumns, columns, checkedValues } = this.state;
     this.setState({
       customizeVisible: false,
-      // checkedValues: tempCheckedValues,
     });
-    console.log('checkedValues, tempColumns, columns===', checkedValues, tempColumns, columns);
+    const columnsValues = columns.map(element => element.key);
+    const newColumns = Object.assign([], columns);
+    checkedValues.map(element => {
+      if (!columnsValues.includes(element)) {
+        newColumns.push(tempColumns.filter(item => item.key === element)[0]);
+      }
+    });
+
+    columnsValues.map(element => {
+      if (element && !checkedValues.includes(element) && element !== 'index') {
+        newColumns.splice(
+          newColumns.indexOf(newColumns.filter(item => item.key === element)[0]),
+          1,
+        );
+      }
+    });
+    newColumns.sort((o1, o2) => o1.index - o2.index);
+    this.setState({
+      columns: newColumns,
+      checkedValues,
+    });
   };
 
   customizeCancel = () => {
+    const { columns } = this.state;
+    const columnsValues = columns.map(element => element.key);
     this.setState({
       customizeVisible: false,
+      checkedValues: columnsValues,
     });
   };
 
-  onChangeCheckbox = checkedValues => {
-    console.log('checkedValues===', checkedValues);
+  onChangeCheckbox = newCheckedValues => {
     this.setState({
-      checkedValues,
+      checkedValues: newCheckedValues,
     });
   };
 
@@ -368,7 +388,14 @@ class AuditLog extends Component {
   render() {
     const { loading } = this.props;
     let { getAuditLogList } = this.state;
-    const { page, functionNameOptions, exportDataVisible, options, checkedValues } = this.state;
+    const {
+      page,
+      functionNameOptions,
+      exportDataVisible,
+      options,
+      checkedValues,
+      tempColumns,
+    } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     return (
@@ -382,8 +409,9 @@ class AuditLog extends Component {
         <div className={styles.content}>
           <Row type="flex" justify="end">
             <Col>
-              <span className={styles.customizeDisplay} onClick={this.customizeDisplay}>
-                Customize Display
+              <span onClick={this.customizeDisplay}>
+                <span className={styles.customizeDisplay}>Customize Display</span>
+                <IconFont type="icon-setting" className={styles['btn-icon']} />
               </span>
             </Col>
           </Row>
@@ -392,6 +420,7 @@ class AuditLog extends Component {
             dataSource={getAuditLogList}
             pagination={false}
             columns={this.state.columns}
+            rowKey={Math.random().toString()}
           />
           {getAuditLogList && getAuditLogList.length > 0 && (
             <Pagination
@@ -410,14 +439,20 @@ class AuditLog extends Component {
           )}
         </div>
         <Modal
-          title={formatMessage({ id: 'app.common.confirm' })}
+          closable={false}
+          wrapClassName={styles.customizeDisplayModal}
+          title="Customize Display"
           visible={this.state.customizeVisible}
           onOk={this.customizeConfirm}
           onCancel={this.customizeCancel}
           cancelText={formatMessage({ id: 'app.common.cancel' })}
-          okText={formatMessage({ id: 'app.common.confirm' })}
+          okText={formatMessage({ id: 'app.common.submit' })}
         >
           <div>
+            <p>
+              Alter the display of the orders table by selecting up to{' '}
+              <font style={{ color: '#0D87D4' }}>{tempColumns.length - 1}</font> Cloumns
+            </p>
             <Checkbox.Group
               options={options}
               value={checkedValues}
@@ -426,6 +461,7 @@ class AuditLog extends Component {
           </div>
         </Modal>
         <Modal
+          closable={false}
           title="Select Export Format"
           visible={exportDataVisible}
           onOk={this.exportDataConfirm}
