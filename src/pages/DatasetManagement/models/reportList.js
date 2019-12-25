@@ -2,12 +2,13 @@
  * @Description: 获取报表列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime : 2019-12-23 13:33:41
+ * @LastEditTime : 2019-12-25 14:03:06
  * @LastEditors  : mus
  */
+import { message } from 'antd';
 import Service from '@/utils/Service';
 
-const { getReportTemplateList } = Service;
+const { getReportTemplateList, setReportTemplateContent } = Service;
 
 export default {
   namespace: 'reportList',
@@ -24,6 +25,15 @@ export default {
           type: 'setReportList',
           payload: response.bcjson.items,
         });
+      }
+    },
+    // 删除数据集
+    *delete({ payload }, { call }) {
+      const response = yield call(setReportTemplateContent, { param: payload });
+      if (response.bcjson.flag === '1') {
+        message.success(response.bcjson.msg);
+      } else {
+        message.warning(response.bcjson.msg);
       }
     },
   },

@@ -4,9 +4,10 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-25 09:16:59
+ * @LastEditTime : 2019-12-25 14:15:24
  */
 import { message } from 'antd';
+import router from 'umi/router';
 import Service from '@/utils/Service';
 
 const { getDataSet, getReportTemplateContent, setReportTemplateContent } = Service;
@@ -103,6 +104,7 @@ export default {
       });
       if (response.bcjson.flag === '1') {
         message.info(response.bcjson.msg);
+        router.goBack();
       } else {
         message.warn(response.bcjson.msg);
       }
@@ -121,13 +123,15 @@ export default {
       });
     },
     // 查询报表模板
-    *getReportTemplateContent({ payload }, { call }) {
+    *getReportTemplateContent({ payload }, { call, put }) {
       const response = yield call(getReportTemplateContent, { param: payload });
       if (response.bcjson.flag === '1' && response.bcjson.items[0]) {
-        // yield put({
-        //   type: 'setTemplateArea',
-        //   payload: JSON.stringify(response.bcjson.items[0].reportTemplateContent),
-        // });
+        // 处理私有数据集
+        yield put({
+          type: 'setDataSetPrivateList',
+          // payload:
+        });
+        // 处理报表模板
       }
     },
   },
