@@ -2,8 +2,8 @@
  * @Description: 菜单
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime: 2019-11-28 11:00:49
- * @LastEditors: lan
+ * @LastEditTime : 2019-12-25 13:19:04
+ * @LastEditors  : lan
  */
 export default {
   'menu.welcome': '欢迎',
@@ -75,7 +75,7 @@ export default {
   'menu.formItem': '表单控件',
   'menu.more-blocks': '更多区块',
   'menu.home': '首页',
-  'menu.login': '登录',
+  'menu.login': 'Login',
   'menu.register': '注册',
   'menu.register.result': '注册结果',
   'menu.dashboard': 'Dashboard',
