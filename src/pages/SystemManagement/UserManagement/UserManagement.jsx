@@ -4,7 +4,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-25 14:44:51
+ * @LastEditTime : 2019-12-25 19:22:03
  */
 
 import React, { Component } from 'react';
@@ -34,9 +34,6 @@ class UserManagement extends Component {
     deleteVisible: false,
     searchUserId: undefined,
     searchUserName: undefined,
-    editIconActive: false,
-    deleteIconActive: false,
-    activeIndex: undefined,
     userInfo: {
       userId: '',
       userName: '',
@@ -96,38 +93,14 @@ class UserManagement extends Component {
         dataIndex: 'operation',
         key: 'operation',
         align: 'center',
-        render: (res, obj, index) => (
+        render: (res, obj) => (
           <span className={styles.operation}>
-            <a
-              href="#"
-              onClick={() => this.updateUser(res, obj)}
-              onMouseEnter={() => this.editMouseEnter(index)}
-              onMouseLeave={this.editMouseLeave}
-            >
-              <IconFont
-                type={
-                  this.state.editIconActive && this.state.activeIndex === index
-                    ? 'icon-edit-hover'
-                    : 'icon-edit'
-                }
-                className={styles['btn-icon']}
-              />
+            <a href="#" onClick={() => this.updateUser(res, obj)}>
+              <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
             <span className="interval-padding"></span>
-            <a
-              href="#"
-              onClick={() => this.deleteUser(res, obj)}
-              onMouseEnter={() => this.deleteMouseEnter(index)}
-              onMouseLeave={this.deleteMouseLeave}
-            >
-              <IconFont
-                type={
-                  this.state.deleteIconActive && this.state.activeIndex === index
-                    ? 'icon-delete-hover'
-                    : 'icon-delete'
-                }
-                className={styles['btn-icon']}
-              />
+            <a href="#" onClick={() => this.deleteUser(res, obj)}>
+              <IconFont type="icon-delete" className={styles['btn-icon']} />
             </a>
           </span>
         ),
@@ -154,32 +127,6 @@ class UserManagement extends Component {
   componentDidMount() {
     this.queryUserList();
   }
-
-  editMouseEnter = index => {
-    this.setState({
-      editIconActive: true,
-      activeIndex: index,
-    });
-  };
-
-  editMouseLeave = () => {
-    this.setState({
-      editIconActive: false,
-    });
-  };
-
-  deleteMouseEnter = index => {
-    this.setState({
-      deleteIconActive: true,
-      activeIndex: index,
-    });
-  };
-
-  deleteMouseLeave = () => {
-    this.setState({
-      deleteIconActive: false,
-    });
-  };
 
   /**
    * @description: This is for query user list function.

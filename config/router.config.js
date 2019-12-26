@@ -210,6 +210,11 @@ export default [
             component: './IframePage/IframePage',
           },
           {
+            path: '/etl-center/database-import',
+            name: 'Database Import',
+            component: './IframePage/IframePage',
+          },
+          {
             path: '/etl-center/monitoring-management',
             name: 'Monitoring Management',
             routes: [
