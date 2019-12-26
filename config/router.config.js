@@ -318,11 +318,6 @@ export default [
             name: 'dataProcessing',
             component: './RulesEngine/RulesEngine',
           },
-          {
-            path: '/data-management/task-switch',
-            name: 'taskSwitch',
-            component: './TaskSwitch/TaskSwitch',
-          },
         ],
       },
       {
