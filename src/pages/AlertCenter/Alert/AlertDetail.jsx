@@ -74,6 +74,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
         alertId,
       },
     });
+    setActiveKey('1');
   }, [alert]);
 
   async function handleCommit(comment, fileList) {
