@@ -4,6 +4,7 @@ import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 import { dateFormat, timestampFormat } from '../constants';
+import styles from '../index.less';
 
 const { Column } = Table;
 
@@ -114,8 +115,8 @@ export default function({
             ) : (
               <IconFont
                 type="icondownload"
+                className={styles['icon-download']}
                 onClick={() => handleClick(lopImpId)}
-                style={{ fontSize: 24, cursor: 'pointer' }}
               />
             )}
           </>

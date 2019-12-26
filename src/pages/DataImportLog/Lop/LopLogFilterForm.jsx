@@ -88,7 +88,12 @@ function LopLogFilterForm({ form, loading, onParams }) {
         </Col>
         <Col xs={24} sm={12} xl={8} xxl={6}>
           <Form.Item>
-            <Button type="primary" icon="search" onClick={() => getParams('lop/reload')}>
+            <Button
+              type="primary"
+              icon="search"
+              style={{ marginRight: 10 }}
+              onClick={() => getParams('lop/reload')}
+            >
               <FormattedMessage id="data-import.search" />
             </Button>
             <Button

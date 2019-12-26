@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Drawer, Button, Radio, Empty, Spin } from 'antd';
 import { FormattedMessage } from 'umi/locale';
-import styles from '@/pages/AlertCenter/index.less';
+import btnStyles from '@/pages/DataImportLog/index.less';
 
 const radioStyle = {
   display: 'block',
@@ -38,7 +38,7 @@ export default function AlertTaskModal({ loading, visible, users, handleCancel, 
           <Empty />
         )}
       </Spin>
-      <div className={styles['bottom-btns']}>
+      <div className={btnStyles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
         <Button
           type="primary"

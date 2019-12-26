@@ -140,7 +140,9 @@ function MarketLogManualModal({ form, visible, loading, onCancel, onUpload }) {
         </Form.Item>
       </Form>
       <div className={styles['bottom-btns']}>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button style={{ marginRight: 10 }} onClick={handleClose}>
+          Cancel
+        </Button>
         <Button type="primary" loading={loading} onClick={handleCommit}>
           Commit
         </Button>
