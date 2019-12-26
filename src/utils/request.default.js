@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors  : mus
- * @LastEditTime : 2019-12-24 21:27:28
+ * @LastEditors  : iron
+ * @LastEditTime : 2019-12-26 14:21:28
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -117,7 +117,7 @@ request.interceptors.response.use(async (response, opts) => {
     return result;
   }
 
-  return +flag === 1 ? { items, ...others } : { err: msg || 'response data error' };
+  return +flag === 1 ? { items, msg, ...others } : { err: msg || 'response data error' };
 });
 
 export default url => async (params = {}) => request(url, { data: params });
