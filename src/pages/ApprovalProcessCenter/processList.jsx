@@ -39,8 +39,8 @@ function TaskBtn({
   selectedKeys,
   selectedCurrentTask,
   searchTask,
-  claimOk,
-  setVisible,
+  checkOwner,
+  checkAssign,
   urlTaskCode,
   exportAlert,
 }) {
@@ -52,12 +52,16 @@ function TaskBtn({
             <button
               type="button"
               disabled={!selectedKeys.length}
-              onClick={() => claimOk(selectedKeys)}
+              onClick={() => checkOwner(selectedKeys)}
             >
               <IconFont type="iconqizhi" className={alertStyle['btn-icon']} />
               <FormattedMessage id="alert-center.claim" />
             </button>
-            <button type="button" disabled={!selectedKeys.length} onClick={() => setVisible(true)}>
+            <button
+              type="button"
+              disabled={!selectedKeys.length}
+              onClick={() => checkAssign(selectedKeys)}
+            >
               <IconFont type="iconicon_assign-copy" className={alertStyle['btn-icon']} />
               Assign
             </button>
@@ -90,8 +94,7 @@ function ProcessList({
   dispatch,
   loading,
   tasks,
-  detailItems,
-  assignRadioList,
+  currentUsers,
   total,
   getTask,
   setCurrentTaskType,
@@ -104,10 +107,11 @@ function ProcessList({
   const [radioValue, setRadioValue] = useState('');
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [clickCurrentTaskCode, setClickTaskCode] = useState('');
+  const [claimContent, setClaimContent] = useState('');
   const [urlCode, setUrlCode] = useState('');
+  const [isBatch, setIsBatch] = useState(false);
   const urlTaskCode = GetQueryString('taskCode');
   const urlIsEnd = GetQueryString('isEnd');
-
   useEffect(() => {
     setUrlCode(urlTaskCode);
     if (urlIsEnd) {
@@ -122,10 +126,6 @@ function ProcessList({
         type: urlIsEnd ? 'his' : selectedCurrentTask,
         taskCode: urlTaskCode,
       },
-    });
-    dispatch({
-      type: 'approvalCenter/getUserListByUserId',
-      payload: {},
     });
   }, []);
 
@@ -143,18 +143,42 @@ function ProcessList({
 
   async function claimTask(taskCode) {
     await dispatch({
-      type: 'approvalCenter/fetchTaskDetail',
+      type: 'approvalCenter/fetchJudgeDetail',
       payload: {
         taskCode,
       },
+      callback: items => {
+        if (items[0].ownerId) {
+          setIsBatch(false);
+          setClickTaskCode(taskCode);
+          setClaimContent(`This task has been claimed by [${items[0].ownerId}]
+          Do you confirm to re-claim?`);
+          setConfirmVisible(true);
+        } else {
+          claimOk(taskCode);
+        }
+      },
     });
-    // console.log('taskIds--->', taskCode);
-    if (detailItems[0].ownerId) {
-      setClickTaskCode(taskCode);
-      setConfirmVisible(true);
-    } else {
-      claimOk(taskCode);
-    }
+  }
+
+  async function checkOwner(taskCode) {
+    await dispatch({
+      type: 'approvalCenter/fetchJudgeDetail',
+      payload: {
+        taskCode,
+      },
+      callback: items => {
+        const someNoClaim = items.find(item => item.ownerId);
+        if (someNoClaim) {
+          setIsBatch(true);
+          setClaimContent(`some alerts has been claimed,
+      Do you confirm to re-claim?`);
+          setConfirmVisible(true);
+        } else {
+          claimOk(taskCode);
+        }
+      },
+    });
   }
 
   function claimOk(taskCode) {
@@ -171,6 +195,24 @@ function ProcessList({
             type: selectedCurrentTask,
           },
         });
+      },
+    });
+  }
+
+  async function checkAssign(taskCode) {
+    const loginName = localStorage.getItem('loginName');
+    await dispatch({
+      type: 'approvalCenter/fetchJudgeDetail',
+      payload: {
+        taskCode,
+      },
+      callback: items => {
+        const someNoClaim = items.find(item => item.ownerId !== loginName);
+        if (someNoClaim) {
+          throw new Error("Can't assign task without claim!");
+        } else {
+          setVisible(true);
+        }
       },
     });
   }
@@ -209,11 +251,10 @@ function ProcessList({
     <div className={styles.list}>
       <ConfirmModel
         title="CONFIRM"
-        content={`This task has been claimed by [${detailItems[0] && detailItems[0].ownerId}]
-        Do you confirm to re-claim`}
+        content={claimContent}
         closeModel={() => setConfirmVisible(false)}
         confirmVisible={confirmVisible}
-        comfirm={() => claimOk(clickCurrentTaskCode)}
+        comfirm={() => claimOk(isBatch ? selectedKeys : clickCurrentTaskCode)}
       />
       <Drawer
         title="Assign to"
@@ -223,7 +264,7 @@ function ProcessList({
         bodyStyle={{ paddingBottom: 80 }}
       >
         <Radio.Group
-          options={assignRadioList}
+          options={currentUsers}
           onChange={e => setRadioValue(e.target.value)}
           value={radioValue}
         ></Radio.Group>
@@ -250,6 +291,7 @@ function ProcessList({
       <TabBtn
         changeTab={selectedTasks => {
           setUrlCode('');
+          setSelectedKeys([]);
           setSelectedTasks(selectedTasks);
           setCurrentTaskType(selectedTasks);
           dispatch({
@@ -266,7 +308,9 @@ function ProcessList({
         selectedCurrentTask={selectedCurrentTask}
         searchTask={searchTask}
         claimOk={claimOk}
+        checkOwner={checkOwner}
         setTaskAssign={setTaskAssign}
+        checkAssign={checkAssign}
         setVisible={setVisible}
         urlTaskCode={urlCode}
       />
@@ -277,6 +321,7 @@ function ProcessList({
         loading={loading['approvalCenter/fetch']}
         rowClassName={record => (record.taskCode === currentRow.taskCode ? 'active' : '')}
         rowSelection={{
+          selectedRowKeys: selectedKeys,
           onChange: selectedRowKeys => {
             setSelectedKeys(selectedRowKeys);
           },
@@ -353,13 +398,10 @@ function ProcessList({
   );
 }
 
-export default connect(
-  ({ loading, approvalCenter: { tasks, detailItems, assignRadioList, page, total } }) => ({
-    tasks,
-    page,
-    total,
-    detailItems,
-    assignRadioList,
-    loading: loading.effects,
-  }),
-)(ProcessList);
+export default connect(({ loading, approvalCenter: { tasks, currentUsers, page, total } }) => ({
+  tasks,
+  page,
+  total,
+  currentUsers,
+  loading: loading.effects,
+}))(ProcessList);

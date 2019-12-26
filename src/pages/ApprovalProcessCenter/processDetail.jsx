@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
-import { Tabs, Row, Col, Input, Button, Drawer, Radio, message, Upload, Empty, Spin } from 'antd';
+import { Tabs, Row, Col, Input, Button, Drawer, Radio, Upload, Empty, Spin } from 'antd';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
@@ -32,8 +32,7 @@ function ProcessDetail({
   loading,
   task,
   detailItems,
-  taskGroup,
-  submitRadioList,
+  nextUsers,
   taskHistoryList,
   logList,
   currentTaskType,
@@ -46,9 +45,9 @@ function ProcessDetail({
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [withdrawConfirmVisible, setWithdrawConfirmVisible] = useState(false);
   const [upAttachments, setUpAttachements] = useState([]);
+  const [currentOwner, setIsCurrentOwner] = useState(true);
   const newDetailForm = React.createRef();
   const isLt5M = size => size / 1024 / 1024 < 5;
-
   useEffect(() => {
     if (task) {
       dispatch({
@@ -61,7 +60,17 @@ function ProcessDetail({
   }, [task]);
 
   useEffect(() => {
-    if (task) {
+    const loginName = localStorage.getItem('loginName');
+    const ownerId = detailItems && detailItems[0] && detailItems[0].ownerId;
+    if (ownerId === loginName) {
+      setIsCurrentOwner(true);
+    } else {
+      setIsCurrentOwner(false);
+    }
+  }, [detailItems]);
+
+  useEffect(() => {
+    if (task && currentTaskType !== 'his') {
       dispatch({
         type: 'approvalCenter/featchTaskGroup',
         payload: {
@@ -94,16 +103,12 @@ function ProcessDetail({
       });
       if (!isErr) return;
     }
-    if (taskGroup && !taskGroup.nextRelateNo) {
+    console.log('(nextUsers.length--->', nextUsers);
+    if (nextUsers.length < 1) {
       submitOrApproveTask(type);
-      return;
-    }
-    if (taskGroup) {
+    } else {
       setVisible(true);
-      getUserList();
-      return;
     }
-    message.error('submit failure');
   }
 
   function submitOrApproveTask(type) {
@@ -222,16 +227,6 @@ function ProcessDetail({
       },
     });
     setWithdrawConfirmVisible(false);
-  }
-
-  function getUserList() {
-    dispatch({
-      type: 'approvalCenter/fetchUserList',
-      payload: {
-        operType: 'queryByAlertGroupId',
-        groupId: taskGroup.nextRelateNo,
-      },
-    });
   }
 
   function saveTask() {
@@ -370,7 +365,7 @@ function ProcessDetail({
                 bodyStyle={{ paddingBottom: 80 }}
               >
                 <Radio.Group
-                  options={submitRadioList}
+                  options={nextUsers}
                   onChange={e => setRadioValue(e.target.value)}
                   value={radioValue}
                 ></Radio.Group>
@@ -411,7 +406,7 @@ function ProcessDetail({
                   <CustomEmpty className={styles['comment-list']} />
                 )}
               </Spin>
-              {currentTaskType !== 'his' ? (
+              {currentTaskType !== 'his' && currentOwner ? (
                 <div className={styles['comment-box']}>
                   <TextArea
                     placeholder="COMMENT"
@@ -501,14 +496,13 @@ function ProcessDetail({
 export default connect(
   ({
     loading,
-    approvalCenter: { detailItems, userList, submitRadioList, taskHistoryList, logList, taskGroup },
+    approvalCenter: { detailItems, userList, taskHistoryList, logList, nextUsers },
   }) => ({
     detailItems,
     userList,
-    submitRadioList,
     taskHistoryList,
     logList,
-    taskGroup,
+    nextUsers,
     loading: loading.effects,
   }),
 )(ProcessDetail);
