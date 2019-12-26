@@ -4,9 +4,15 @@ export default [
     component: '../layouts/UserLayout',
     routes: [{ path: '/login', name: 'login', component: './User/Login' }],
   },
+  // 报表设计器页面
   {
     path: '/report-designer',
     component: './ReportDesigner/ReportDesigner',
+  },
+  // 预览页面
+  {
+    path: '/report-designer-preview',
+    component: './ReportDesigner/ReportDesignerPreview',
   },
   {
     path: '/add-dataset',

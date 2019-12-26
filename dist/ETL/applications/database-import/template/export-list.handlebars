@@ -1,0 +1,25 @@
+{{#if flag}}
+	<tr><td colspan="10" class="text-center">No Data</td></tr>
+{{else}}
+{{#each this}}
+    <tr>
+        {{!-- <td class="width40">
+            <input type="checkbox" name="check" data-obj='{{obj2StrHelper this}}'/> </td>
+        <td class="width40"> {{ROWNUM_}}</td> --}}
+        <td class="t-l"> {{fileName}} </td>
+        <td class="t-c"> <span style="color: {{exportStatusColorFormatS importFlag}}">●</span> {{importFlagName}} </td>
+        {{!-- <td class="t-c"> {{dateTimeFormatHelper createTime}} </td> --}}
+        <td class="t-c"> {{dateTimeFormatHelper createTime}} </td>
+        <td class="t-c"> {{dateTimeFormatHelper endTime}} </td>
+        <td class="t-c">
+        	<a name="del" logId="{{logId}}">DELETE</a>
+        	{{#equal importFlag "3"}}<a name="download" filePath={{filePath}}>下载文件</a>{{/equal}}
+        	{{#equal importFlag "2"}}{{else}}<a name="checklog" content="{{remark}}" filename="LOG-{{formatFileName fileName}}">下载日志</a>{{/equal}}
+             {{#equal operateType "E"}}<a logId="{{logId}}" objectName="{{fileName}}" name="reExport">重新导出</a><div style="display:inline-block;cursor:pointer;position: relative;top:-2px">
+                <a title="根据已选定的历史配置信息生成新的下载文件" style="margin-left: 3px"><i class="fa fa-question-circle" style="font-size:12px;color:#F1C40F;"></i></a>
+                    </div>
+                    {{else}}{{/equal}}
+        </td>
+    </tr>
+{{/each}}
+{{/if}}

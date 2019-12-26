@@ -14,7 +14,7 @@ import DatasetModify from './components/DatasetModify';
 import styles from './ReportDesigner.less';
 
 const { Sider, Content } = Layout;
-@connect(({ reportDesigner }) => ({ reportDesigner }))
+@connect(() => ({}))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
   state = {
