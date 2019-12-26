@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Icon, Tree } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
-import DropSelect from '../DropSelect/index';
+import DropSelect from '../DropSelect';
 import styles from './index.less';
 import { dataSetTree } from '../../utils';
 
@@ -43,17 +43,27 @@ export default class LeftSideBar extends PureComponent {
   };
 
   // 渲染树结构
-  generateTree = treeData =>
-    treeData.map(item => {
+  generateTree = treeData => {
+    const { displayDraw } = this.props;
+    return treeData.map(item => {
       if (item.children) {
         return (
-          <TreeNode key={item.key} title={<Title title={item.title} />}>
+          <TreeNode
+            key={item.key}
+            title={<Title title={item.title} isLeaf={item.isLeaf} displayDraw={displayDraw} />}
+          >
             {this.generateTree(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode key={item.key} title={<Title title={item.title} />} isLeaf />;
+      return (
+        <TreeNode
+          key={item.key}
+          title={<Title title={item.title} isLeaf={item.isLeaf} displayDraw={displayDraw} />}
+        />
+      );
     });
+  };
 
   // 根据数据集的选择，来渲染出数据集的列与SqlParams
   // onChangeDataSet = dataSetId => {
@@ -61,8 +71,15 @@ export default class LeftSideBar extends PureComponent {
   // };
 
   render() {
-    const { dataSetPublicList = [], dataSetPrivateList = [] } = this.props;
-    const { loading, leftSideCollapse, changeLeftSideBar } = this.props;
+    const {
+      dataSetPublicList = [],
+      dataSetPrivateList = [],
+      loading,
+      leftSideCollapse,
+      changeLeftSideBar,
+      displayDropSelect,
+      changedisplayDropSelect,
+    } = this.props;
     // 给予DropSelect的Props
     const dropSelectProps = {
       loading, // dropSelect的loading
@@ -70,6 +87,8 @@ export default class LeftSideBar extends PureComponent {
       privateData: dataSetPrivateList, // 私有数据集
       getPublicDataSet: this.getPublicDataSet, // 刷新公有数据集
       setPrivateList: this.setPrivateList, // 设置私有数据集
+      displayDropSelect, // 是否显示drop select
+      changedisplayDropSelect, // 显示drop select
     };
     const dataSetPrivateListTree = dataSetTree(dataSetPrivateList);
     return (
@@ -109,7 +128,7 @@ export default class LeftSideBar extends PureComponent {
   }
 }
 
-function Title({ title, isLeaf }) {
+function Title({ title, isLeaf, displayDraw }) {
   const [hoverState, hoverAction] = useState(false);
   return (
     <div
@@ -126,7 +145,7 @@ function Title({ title, isLeaf }) {
       <div className={styles.hoverArea} />
       {hoverState && <div className={styles.hoverBlock} />}
       <span className={styles.title}>
-        {/* 非叶子不展示文件夹标志 */}
+        {/* 叶子不展示文件夹标志 */}
         {!isLeaf && (
           <>
             <span className="folder">
@@ -141,7 +160,12 @@ function Title({ title, isLeaf }) {
       </span>
       {hoverState && (
         <div className={styles.operationArea}>
-          <IconFont type="icon-edit" />
+          <IconFont
+            type="icon-edit"
+            onClick={() => {
+              displayDraw();
+            }}
+          />
           <IconFont type="icon-delete" style={{ marginLeft: 3 }} />
         </div>
       )}

@@ -10,19 +10,24 @@ import styles from './index.less';
 
 const { Sider } = Layout;
 
-@connect(({ formArea }) => ({ cellPosition: formArea.cellPosition }))
+@connect(({ formArea, reportDesigner }) => ({
+  cellPosition: formArea.cellPosition,
+  dataSetPrivateList: reportDesigner.dataSetPrivateList,
+}))
 @Form.create()
 export default class RigthSideBar extends PureComponent {
   state = {};
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { cellPosition, rightSideCollapse, changeRightSideBar } = this.props;
+    const { cellPosition, rightSideCollapse, changeRightSideBar, dataSetPrivateList } = this.props;
     const formProps = {
       getFieldDecorator,
     };
+    // 单元格的props
     const cellProps = {
-      cellPosition,
+      cellPosition, // 单元格位置
+      dataSetPrivateList, // 私有数据集
     };
     const typeArray = ['cellproperty', 'widgetcontrol'];
     const type = typeArray[0];

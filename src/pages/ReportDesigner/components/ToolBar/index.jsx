@@ -34,7 +34,7 @@ export default class ToolBar extends Component {
 
   render() {
     const { tabActive, reportNameType } = this.state;
-    const { reportName } = this.props;
+    const { reportName, saveReportTemplate } = this.props;
     return (
       <>
         <div className={classNames(styles.switchTabs)}>
@@ -102,7 +102,8 @@ export default class ToolBar extends Component {
                 <IconFont type="iconicon_previrew" />
                 <span>Share</span>
               </div>
-              <div className={styles.actionButt}>
+              {/* 进行模板保存 */}
+              <div className={styles.actionButt} onClick={saveReportTemplate}>
                 <IconFont type="iconicon_previrew" />
                 <span>Save</span>
               </div>

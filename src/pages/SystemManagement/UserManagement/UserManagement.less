@@ -1,0 +1,83 @@
+.clearfix::after {
+  display: block; /* 将文本转为块级元素 */
+  clear: both; /* 清除浮动 */
+  height: 0; /* 高度为0 */
+  line-height: 0; /* 行高为0 */
+  visibility: hidden; /* 将元素隐藏 */
+  content: ''; /* 设置内容为空 */
+}
+.clearfix {
+  zoom: 1;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.formWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  :global {
+    .ant-form-item-label {
+      width: 80px;
+      text-align: left;
+    }
+  }
+}
+.login-name {
+  width: 200px;
+}
+.header li {
+  right: 20px;
+}
+.header li:last-child {
+  right: 0;
+}
+.inputValue {
+  width: 300px;
+}
+
+.content {
+  // margin-top: 10px;
+  padding: 10px;
+  background: #fff;
+  .tableTop {
+    padding: 10px 0;
+  }
+}
+.userGroup {
+  margin-top: 40px;
+  color: #464c51;
+  .groupTitle {
+    margin: 0;
+    padding-bottom: 14px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .groupTitle::before {
+    display: inline-block;
+    width: 4px;
+    height: 15px;
+    margin-right: 5px;
+    color: #f8374c;
+    background-color: #f8374c;
+    border: none;
+    content: '';
+  }
+}
+.btn-icon {
+  // color: #464c51 !important;
+  font-size: 14px !important;
+  vertical-align: middle;
+}
+.btn-icon:hover {
+  color: #0d87d4 !important;
+  cursor: pointer;
+}
+.modifyBtn {
+  cursor: pointer;
+}

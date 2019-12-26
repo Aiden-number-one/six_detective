@@ -104,6 +104,8 @@ const iframe = {
   '/etl-center/monitoring-management/monitoring': 'index.html#perform-monitoring',
   // 执行日志
   '/etl-center/monitoring-management/log-monitoring': 'index.html#log-query',
+  // 资料库导入导出
+  '/etl-center/database-import': 'index.html#database-import',
   // 数据源监控
   '/data-management/data-enquiry': 'index.html#datasource-change',
 };

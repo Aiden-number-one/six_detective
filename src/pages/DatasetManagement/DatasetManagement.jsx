@@ -8,14 +8,15 @@
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import { Icon, Table, Drawer, Form, Button, Pagination } from 'antd';
+import { Icon, Table, Drawer, Form, Button, Pagination, Menu, Dropdown } from 'antd';
 import _ from 'lodash';
 import router from 'umi/router';
 import ClassifyTree from '@/components/ClassifyTree';
 import IconFont from '@/components/IconFont';
+import { formatTimeString } from '@/utils/utils';
 import styles from './DatasetManagement.less';
 import OperateTreeForm from './components/OperateTreeForm';
-// import AlterDataSetName from './components/drawers/AlterDataSetName';
+import ParamSetting from './components/drawers/ParamSetting';
 import DeleteDataSetDrawer from './components/drawers/DeleteDataSetDrawer';
 import DataPerformDrawer from './components/drawers/DataPerformDrawer';
 import MoveDataSetDrawer from './components/drawers/MoveDataSetDrawer';
@@ -47,6 +48,7 @@ export default class DatasetManagement extends PureComponent {
       operateTree: false, // 新增数据集分类抽屉
       // dataSetName: false, // 数据集属性抽屉
       deleteDataSet: false, // 删除数据集抽屉
+      paramSetting: false, // 设置参数值抽屉
       dataPerform: false, // 数据预览抽屉
       move: false, // 移动数据集抽屉
     },
@@ -80,7 +82,7 @@ export default class DatasetManagement extends PureComponent {
       dispatch({
         type: 'dataSet/getDataSet',
         payload: {
-          sqlName: values.sqlName,
+          datasetName: values.datasetName,
           folderId: activeTree,
           ...newPage,
         },
@@ -105,6 +107,7 @@ export default class DatasetManagement extends PureComponent {
       <span>DataSet Classify</span>
       <Icon
         type="plus"
+        title="Add Classify"
         onClick={() => {
           this.handleAddTree();
         }}
@@ -162,14 +165,6 @@ export default class DatasetManagement extends PureComponent {
       payload: value,
     });
     this.queryDataSet();
-    // dispatch({
-    //   type: 'dataSet/getDataSet',
-    //   payload: {
-    //     folderId: value,
-    //     pageNumber: this.state.page.pageNumber.toString(),
-    //     pageSize: this.state.page.pageSize.toString(),
-    //   },
-    // });
   };
 
   // 操作树节点
@@ -218,18 +213,33 @@ export default class DatasetManagement extends PureComponent {
     this.nodeTree = {};
   };
 
-  // 修改数据集属性
-  // handleSetDataSetName = values => {
-  //   const { dispatch } = this.props;
-  //   const param = { ...this.record, ...values };
-  //   param.basicOperation = 'update';
-  //   dispatch({
-  //     type: 'dataSet/operateDataSet',
-  //     payload: param,
-  //   });
-  //   this.toggleDrawer('dataSetName');
-  //   this.record = {};
-  // };
+  // 设置参数值
+  handleParamSetting = values => {
+    this.toggleDrawer('dataPerform');
+    const { dispatch } = this.props;
+    const params = {};
+    params.datasetId = this.record.datasetId;
+    params.commandText = this.record.commandText;
+    // 如果存在参数设置 做数据处理
+    if (values) {
+      const datasetParams = JSON.parse(this.record.datasetParams);
+      datasetParams.forEach(item => {
+        Object.keys(values).forEach(i => {
+          if (i === item.parameter_name) {
+            item.parameter_value = values[i];
+          }
+        });
+      });
+      params.parameters = JSON.stringify(datasetParams);
+    }
+    dispatch({
+      type: 'dataSet/getMetadataTablePerform',
+      payload: params,
+      callback: () => {
+        this.record = {};
+      },
+    });
+  };
 
   // 移动文件夹选中树操作
   changeActiveFolderId = value => {
@@ -344,6 +354,7 @@ export default class DatasetManagement extends PureComponent {
         title: 'Modified at',
         dataIndex: 'updateDatetime',
         key: 'updateDatetime',
+        render: text => <span>{formatTimeString(text)}</span>,
       },
       {
         title: 'Operation',
@@ -351,7 +362,6 @@ export default class DatasetManagement extends PureComponent {
         render: (text, record) => (
           <span className={styles.operation}>
             <a
-              href="#"
               onClick={() => {
                 router.push({
                   pathname: '/add-dataset',
@@ -362,52 +372,38 @@ export default class DatasetManagement extends PureComponent {
                   },
                 });
               }}
+              title="EDIT"
             >
               <IconFont type="icon-edit" className={styles['btn-icon']} />
             </a>
-            {/* <a
-              href="#"
-              onClick={() => {
-                this.toggleDrawer('dataSetName');
-                this.record = record;
-              }}
-            >
-              <IconFont type="icon-attr" className={styles['btn-icon']} />
-            </a> */}
             <a
-              href="#"
               onClick={() => {
-                const { dispatch } = this.props;
-                dispatch({
-                  type: 'dataSet/getMetadataTablePerform',
-                  payload: {
-                    datasetId: record.datasetId,
-                    commandText: record.commandText,
-                    parameters: '',
-                  },
-                  callback: () => {
-                    this.toggleDrawer('dataPerform');
-                  },
-                });
+                this.record = record;
+                if (record.datasetParams && JSON.parse(record.datasetParams).length > 0) {
+                  this.toggleDrawer('paramSetting');
+                } else {
+                  this.handleParamSetting();
+                }
               }}
+              title="PREVIEW"
             >
               <IconFont type="icon-prew" className={styles['btn-icon']} />
             </a>
             <a
-              href="#"
               onClick={() => {
                 this.toggleDrawer('move');
                 this.record = record;
               }}
+              title="MOVE TO"
             >
               <IconFont type="icon-move" className={styles['btn-icon']} />
             </a>
             <a
-              href="#"
               onClick={() => {
                 this.toggleDrawer('deleteDataSet');
                 this.record = record;
               }}
+              title="DELETE"
             >
               <IconFont type="icon-delete" className={styles['btn-icon']} />
             </a>
@@ -415,21 +411,37 @@ export default class DatasetManagement extends PureComponent {
         ),
       },
     ];
+    const menu = (
+      <Menu>
+        <Menu.Item
+          key="1"
+          onClick={() => {
+            router.push({
+              pathname: '/add-dataset',
+              query: {
+                datasetType: 'SQL',
+              },
+            });
+          }}
+        >
+          SQL
+        </Menu.Item>
+        <Menu.Item
+          key="2"
+          onClick={() => {
+            router.push({
+              pathname: '/add-dataset',
+              query: {
+                datasetType: 'PROCEDURE',
+              },
+            });
+          }}
+        >
+          Stored Procedure (SP)
+        </Menu.Item>
+      </Menu>
+    );
     const { drawerTitle, page } = this.state;
-    // 表格多选框
-    // const rowSelection = {
-    //   selectedRowKeys,
-    //   type: 'checkbox',
-    //   onSelect: (record, selected, selectedRows) => {
-    //     const tableIds = selectedRows.map(item => item.tableId);
-    //     this.tableIds = tableIds.join(',');
-    //   },
-    //   onChange: selectedRowKey => {
-    //     this.setState({
-    //       selectedRowKeys: selectedRowKey,
-    //     });
-    //   },
-    // };
     const { classifyTreeData, dataSetData, column, tableData, activeFolderId } = this.props;
     const anotherTree = _.cloneDeep(classifyTreeData);
     return (
@@ -455,53 +467,17 @@ export default class DatasetManagement extends PureComponent {
             />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ height: '100%', padding: '0 0 0 5px' }}>
-              {/* <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  padding: '10px 5px 0',
-                  backgroundColor: '#fff',
-                }}
-              >
-                <Button
-                  style={{ width: 120 }}
-                  type="primary"
-                  onClick={() => {
-                    router.push({
-                      pathname: '/add-dataset',
-                      query: {
-                        // connectionId: connectionId,
-                      },
-                    });
-                  }}
-                >
-                  Creat DataSet
-                </Button>
-                <Search
-                  style={{ width: 220 }}
-                  onSearch={value => {
-                    this.getDataSourceList(value);
-                  }}
-                />
-              </div> */}
+            <div
+              style={{ height: '100%', borderLeft: '1px solid #e0e0e0', backgroundColor: '#fff' }}
+            >
               <NewSearchForm search={this.queryDataSet} ref={this.searchForm} />
               <div className={styles.content}>
                 <div className={styles.tableTop}>
-                  <Button
-                    onClick={() => {
-                      router.push({
-                        pathname: '/add-dataset',
-                        query: {
-                          // connectionId: connectionId,
-                        },
-                      });
-                    }}
-                    type="primary"
-                    className="btn_usual"
-                  >
-                    + New DataSet
-                  </Button>
+                  <Dropdown overlay={menu}>
+                    <Button className="btn_usual" type="primary">
+                      + New DataSet
+                    </Button>
+                  </Dropdown>
                 </div>
                 <Table
                   columns={columns}
@@ -545,18 +521,19 @@ export default class DatasetManagement extends PureComponent {
             operateType={this.operateType}
           />
         </Drawer>
-        {/* <AlterDataSetName
+        <ParamSetting
           toggleDrawer={this.toggleDrawer}
-          visible={this.state.visible.dataSetName}
+          visible={this.state.visible.paramSetting}
           clearRecord={this.clearRecord}
           record={this.record}
-          handleSetDataSetName={this.handleSetDataSetName}
-        /> */}
+          handleParamSetting={this.handleParamSetting}
+        />
         <DataPerformDrawer
           column={column}
           tableData={tableData}
           visible={this.state.visible.dataPerform}
           toggleDrawer={this.toggleDrawer}
+          dispatch={this.props.dispatch}
         />
         <MoveDataSetDrawer
           visible={this.state.visible.move}

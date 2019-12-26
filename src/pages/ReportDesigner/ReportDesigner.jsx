@@ -1,15 +1,16 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import { setLocale } from 'umi/locale';
 import { DndProvider } from 'react-dnd';
-import { Layout } from 'antd';
+import { Layout, Drawer } from 'antd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import SpreadSheet from '@/components/SpreadSheet';
+import SpreadSheet from './components/SpreadSheet';
 import CustomSearchArea from './components/CustomSearchArea/index';
 import ToolBar from './components/ToolBar/index';
 import RigthSideBar from './components/SideBar/RigthSideBar';
 import LeftSideBar from './components/SideBar/LeftSideBar';
+import DatasetModify from './components/DatasetModify';
 import styles from './ReportDesigner.less';
 
 const { Sider, Content } = Layout;
@@ -17,9 +18,11 @@ const { Sider, Content } = Layout;
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
   state = {
-    display: false,
+    display: false, // 查询区域是否显示
     leftSideCollapse: false, // 左边sideBar展开收起
     rightSideCollapse: false, // 右边sideBar展开收起
+    displayDraw: false, // 是否显示抽屉
+    displayDropSelect: false, // 是否显示DropSelect
   };
 
   componentWillMount() {
@@ -44,10 +47,18 @@ export default class ReportDesigner extends PureComponent {
         afterSelection: this.afterSelection,
       },
     );
-    setTimeout(() => {
-      this.setState({
-        display: true,
-      });
+    // 若有reportId，则调用接口查询报表设计器相关信息
+    const {
+      dispatch,
+      location: {
+        query: { reportId },
+      },
+    } = this.props;
+    dispatch({
+      type: 'reportDesigner/getReportTemplateContent',
+      payload: {
+        reportId,
+      },
     });
   }
 
@@ -93,29 +104,87 @@ export default class ReportDesigner extends PureComponent {
     });
   };
 
+  // 改变属否显示查询条件区域
+  changeDisplaySearchArea = () => {
+    this.setState(preState => ({
+      display: !preState.display,
+    }));
+  };
+
+  // 改变是否显示抽屉
+  displayDraw = () => {
+    this.setState(preState => ({
+      displayDraw: !preState.displayDraw,
+    }));
+  };
+
+  // 改变是否显示dropSelect
+  changedisplayDropSelect = displayDropSelect => {
+    this.setState({
+      displayDropSelect,
+    });
+  };
+
+  // 保存模板
+  saveReportTemplate = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/packageTemplate',
+    });
+  };
+
   render() {
-    const { display, leftSideCollapse, rightSideCollapse } = this.state;
+    const { display, leftSideCollapse, rightSideCollapse, displayDropSelect } = this.state;
     const { setCellCallback, dispatch, setCellType } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
+      saveReportTemplate: this.saveReportTemplate, // 保存报表模板
+      displayArea: display, // 是否显示查询区域
+      changeDisplaySearchArea: this.changeDisplaySearchArea, // 改变属否显示查询条件区域
       setCellStyle: this.setCellStyle, // 设置单元格样式
       editRowColumn: this.editRowColumn, // 编辑行与列
       setCellType, // 设置单元格的数据类型
       setCellCallback,
       dispatch,
     };
+    // leftTree的相关Props
+    const leftSideBarProps = {
+      changeLeftSideBar: this.changeLeftSideBar, // 展开或收起树
+      leftSideCollapse, // 是否展开树
+      displayDraw: this.displayDraw, // 是否显示抽屉
+      displayDropSelect, // 是否显示drop select
+      changedisplayDropSelect: this.changedisplayDropSelect, // 显示drop select
+    };
     return (
       <DndProvider backend={HTML5Backend}>
-        <Fragment>
+        <div
+          onClick={() => {
+            this.changedisplayDropSelect(false);
+          }}
+        >
+          {/* 抽屉区域 */}
+          <Drawer
+            closable={false}
+            title="Dataset Modify"
+            width={900}
+            onClose={() => {
+              this.setState({
+                displayDraw: false,
+              });
+            }}
+            visible={this.state.displayDraw}
+          >
+            <DatasetModify />
+          </Drawer>
+          {/* 头部菜单栏 */}
           <ToolBar {...toolBarProps} />
           <div className={styles.container} style={{ height: `${window.innerHeight - 104}px` }}>
-            <Layout>
+            <Layout className={classNames(styles.layout)}>
+              {/* 数据集区域 */}
               <Sider width={leftSideCollapse ? 300 : 30}>
-                <LeftSideBar
-                  changeLeftSideBar={this.changeLeftSideBar}
-                  leftSideCollapse={leftSideCollapse}
-                />
+                <LeftSideBar {...leftSideBarProps} />
               </Sider>
+              {/* 报表区域 */}
               <Content>
                 <div className={classNames(styles.main)}>
                   {display && <CustomSearchArea />}
@@ -125,18 +194,16 @@ export default class ReportDesigner extends PureComponent {
                 </div>
               </Content>
             </Layout>
+            {/* 右侧区域 */}
             <div
               id="rigthSideBar"
               className={classNames(styles.right)}
               style={{ width: rightSideCollapse ? '300px' : '30px' }}
             >
-              <RigthSideBar
-                rightSideCollapse={rightSideCollapse}
-                changeRightSideBar={this.changeRightSideBar}
-              />
+              <RigthSideBar />
             </div>
           </div>
-        </Fragment>
+        </div>
       </DndProvider>
     );
   }
