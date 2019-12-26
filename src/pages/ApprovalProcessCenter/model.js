@@ -38,11 +38,11 @@ export async function setTaskSave(data) {
   });
 }
 
-export async function setTaskSubmit({ taskCode, userId, epCname }) {
-  return request('set_task_submit', {
-    data: { taskCode: taskCode.toString(), userId: userId.toString(), epCname },
-  });
-}
+// export async function setTaskSubmit({ taskCode, userId, epCname }) {
+//   return request('set_task_submit', {
+//     data: { taskCode: taskCode.toString(), userId: userId.toString(), epCname },
+//   });
+// }
 export async function approveAndReject(data) {
   return request('set_task_approve_and_reject', {
     data,
@@ -64,16 +64,16 @@ export async function getTaskGroup({ taskCode }) {
   });
 }
 
-export async function getUserList({ operType, groupId }) {
-  return request('get_user_list_information', {
-    data: { operType, groupId },
-  });
-}
-export async function getUserListByUserId() {
-  return request('get_user_list_by_user_id', {
-    data: {},
-  });
-}
+// export async function getUserList({ operType, groupId }) {
+//   return request('get_user_list_information', {
+//     data: { operType, groupId },
+//   });
+// }
+// export async function getUserListByUserId() {
+//   return request('get_user_list_by_user_id', {
+//     data: {},
+//   });
+// }
 export async function getApprovalTaskHistory({ taskCode }) {
   return request('get_approval_task_history', {
     data: { taskCode: taskCode.toString() },
@@ -85,14 +85,12 @@ export default {
   state: {
     tasks: [],
     alertItems: [],
-    detailItems: {},
+    detailItems: [],
+    judgeItems: [],
     total: 0,
     alertOwner: '',
-    userList: [],
-    submitRadioList: [],
-    currentUserList: [],
-    assignRadioList: [],
-    taskGroup: '',
+    currentUsers: [],
+    nextUsers: [],
     taskHistoryList: [],
     logList: [],
   },
@@ -113,32 +111,33 @@ export default {
         detailItems,
       };
     },
+    saveJudgeItems(state, { payload }) {
+      const { detailItems } = payload;
+      return {
+        ...state,
+        judgeItems: detailItems,
+      };
+    },
     saveTaskGroup(state, { payload }) {
       const { taskGroup } = payload;
+      const assignRadioList =
+        taskGroup &&
+        taskGroup[0].currentUsers &&
+        taskGroup[0].currentUsers.map(item => ({
+          label: item.userId,
+          value: item.userId,
+        }));
+      const submitOrPassRadioList =
+        taskGroup &&
+        taskGroup[1].nextUsers &&
+        taskGroup[1].nextUsers.map(item => ({
+          label: item.userId,
+          value: item.userId,
+        }));
       return {
         ...state,
-        taskGroup,
-      };
-    },
-    saveUserList(state, { payload }) {
-      const { userList } = payload;
-      const submitRadioList = userList.map(item => ({ label: item.userName, value: item.userId }));
-      return {
-        ...state,
-        userList,
-        submitRadioList,
-      };
-    },
-    saveCurrentUserList(state, { payload }) {
-      const { currentUserList } = payload;
-      const assignRadioList = currentUserList.map(item => ({
-        label: item.userName,
-        value: item.userId,
-      }));
-      return {
-        ...state,
-        currentUserList,
-        assignRadioList,
+        currentUsers: assignRadioList,
+        nextUsers: submitOrPassRadioList,
       };
     },
 
@@ -187,69 +186,69 @@ export default {
         },
       });
     },
+    *fetchJudgeDetail({ payload, callback }, { call, put }) {
+      const { taskCode } = payload || {};
+      const { items, err } = yield call(getTaskDetail, { taskCode });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveJudgeItems',
+        payload: {
+          detailItems: items,
+        },
+      });
+      callback(items);
+    },
     *claim({ payload, callback }, { call }) {
       const { taskCode } = payload || [];
-      const { err } = yield call(claimTask, { taskCode });
+      const { msg, err } = yield call(claimTask, { taskCode });
       if (err) {
-        message.error('claim failure');
-      } else {
-        message.success('claim success');
-        callback();
+        throw new Error(err);
       }
+      message.success(msg);
+      callback();
     },
     *saveTask({ payload }, { call }) {
       // const { taskCode, epCname } = payload || [];
-      const { err } = yield call(setTaskSave, payload);
+      const { msg, err } = yield call(setTaskSave, payload);
       if (err) {
-        message.error('save failure');
-      } else {
-        message.success('save success');
+        throw new Error(err);
       }
-    },
-    *submitTask({ payload }, { call }) {
-      const { taskCode, userId, epCname } = payload || [];
-      const { err } = yield call(setTaskSubmit, { taskCode, userId, epCname });
-      if (err) {
-        message.error('submit failure');
-      } else {
-        message.success('submit success');
-      }
+      message.success(msg);
     },
     *approveAndReject({ payload, callback }, { call }) {
       // const { taskCode, userId, type, epCname, comment, attachment } = payload || [];
-      const { err } = yield call(approveAndReject, payload);
+      const { msg, err } = yield call(approveAndReject, payload);
       if (err) {
-        message.error('failure');
-      } else {
-        message.success('success');
-        callback();
+        throw new Error(err);
       }
+      message.success(msg);
+      callback();
     },
     *setTaskWithdraw({ payload, callback }, { call }) {
       const { taskCode, comment } = payload || [];
-      const { err } = yield call(setTaskWithdraw, { taskCode, comment });
+      const { msg, err } = yield call(setTaskWithdraw, { taskCode, comment });
       if (err) {
-        message.error('Withdraw failure');
-      } else {
-        message.success('Withdraw success');
-        callback();
+        throw new Error(err);
       }
+      message.success(msg);
+      callback();
     },
     *setTaskAssign({ payload, callback }, { call }) {
       const { taskCode, userId } = payload || [];
-      const { err } = yield call(setTaskAssign, { taskCode, userId });
+      const { msg, err } = yield call(setTaskAssign, { taskCode, userId });
       if (err) {
-        message.error('Assign failure');
-      } else {
-        message.success('Assign success');
-        callback();
+        throw new Error(err);
       }
+      message.success(msg);
+      callback();
     },
     *featchTaskGroup({ payload }, { call, put }) {
-      const { taskCode } = payload || [];
-      const { items, err } = yield call(getTaskGroup, { taskCode });
+      const { taskCode, type } = payload || [];
+      const { items, err } = yield call(getTaskGroup, { taskCode, type });
       if (err) {
-        message.error('getTaskGroup failure');
+        throw new Error(err);
       }
       yield put({
         type: 'saveTaskGroup',
@@ -258,40 +257,39 @@ export default {
         },
       });
     },
-    *fetchUserList({ payload }, { call, put }) {
-      const { operType, groupId } = payload || [];
-      const { items, err } = yield call(getUserList, { operType, groupId });
-      if (err) {
-        // message.error('getUserList failure');
-        return;
-      }
-      yield put({
-        type: 'saveUserList',
-        payload: {
-          userList: items,
-        },
-      });
-    },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    *getUserListByUserId({ payload }, { call, put }) {
-      const { items, err } = yield call(getUserListByUserId);
-      if (err) {
-        // message.error('getUserList failure');
-        return;
-      }
-      yield put({
-        type: 'saveCurrentUserList',
-        payload: {
-          currentUserList: items,
-        },
-      });
-    },
+    // *fetchUserList({ payload }, { call, put }) {
+    //   const { operType, groupId } = payload || [];
+    //   const { items, err } = yield call(getUserList, { operType, groupId });
+    //   if (err) {
+    //     // message.error('getUserList failure');
+    //     return;
+    //   }
+    //   yield put({
+    //     type: 'saveUserList',
+    //     payload: {
+    //       userList: items,
+    //     },
+    //   });
+    // },
+    // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // *getUserListByUserId({ payload }, { call, put }) {
+    //   const { items, err } = yield call(getUserListByUserId);
+    //   if (err) {
+    //     // message.error('getUserList failure');
+    //     return;
+    //   }
+    //   yield put({
+    //     type: 'saveCurrentUserList',
+    //     payload: {
+    //       currentUserList: items,
+    //     },
+    //   });
+    // },
     *getApprovalTaskHistory({ payload }, { call, put }) {
       const { taskCode } = payload || [];
       const { items, err } = yield call(getApprovalTaskHistory, { taskCode });
       if (err) {
-        // message.error('getUserList failure');
-        return;
+        throw new Error(err);
       }
       yield put({
         type: 'saveTaskHistory',
