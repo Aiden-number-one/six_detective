@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2019-12-25 14:19:11
+ * @LastEditTime : 2019-12-26 11:18:48
  * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
@@ -11,13 +11,11 @@ import { connect } from 'dva';
 import { Icon, Table, Drawer, Form, Button, Pagination, Modal } from 'antd';
 import { formatMessage } from 'umi/locale';
 import _ from 'lodash';
-import router from 'umi/router';
 import ClassifyTree from '@/components/ClassifyTree';
 import IconFont from '@/components/IconFont';
 import styles from './DatasetManagement.less';
 import { timeFormat } from '@/utils/filter';
 import OperateTreeForm from './components/OperateTreeForm';
-// import AlterDataSetName from './components/drawers/AlterDataSetName';
 import DeleteDataSetDrawer from './components/drawers/DeleteDataSetDrawer';
 import DataPerformDrawer from './components/drawers/DataPerformDrawer';
 import MoveDataSetDrawer from './components/drawers/MoveDataSetDrawer';
@@ -354,12 +352,7 @@ export default class DatasetManagement extends PureComponent {
             <a
               href="#"
               onClick={() => {
-                router.push({
-                  pathname: '/report-designer',
-                  query: {
-                    reportId: record.reportId,
-                  },
-                });
+                window.open(`/report-designer?reportId=${record.reportId}`);
               }}
             >
               <IconFont type="icon-edit" className={styles['btn-icon']} />
@@ -417,14 +410,16 @@ export default class DatasetManagement extends PureComponent {
             <div
               style={{ height: '100%', borderLeft: '1px solid #e0e0e0', backgroundColor: '#fff' }}
             >
-              <NewSearchForm search={this.queryReportTemplate} ref={this.searchForm} />
+              <NewSearchForm
+                search={this.queryReportTemplate}
+                ref={this.searchForm}
+                inputName="Report Template Name"
+              />
               <div className={styles.content}>
                 <div className={styles.tableTop}>
                   <Button
                     onClick={() => {
-                      router.push({
-                        pathname: '/report-designer',
-                      });
+                      window.open('/report-designer');
                     }}
                     type="primary"
                     className="btn_usual"
