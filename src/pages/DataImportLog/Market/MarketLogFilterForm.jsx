@@ -2,44 +2,37 @@ import React from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Form, DatePicker, Button, Checkbox, Select, Row, Col } from 'antd';
 import { yesterday, today, dateFormat } from '../constants';
-import styles from '../index.less';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-function MarketLogFilterForm({ form, handleSearch }) {
+export const defaultTradeDate = [yesterday, today];
+export const defaultMarket = ['HKFE', 'SEHK'];
+
+function MarketLogFilterForm({ form, loading, onParams }) {
   const { getFieldDecorator, validateFields } = form;
 
-  function handleClick() {
+  function getParams(type) {
     validateFields((err, values) => {
       if (!err) {
-        const format = 'YYYYMMDD';
-        const { tradeDate, market, ...rest } = values;
-        let startTradeDate = '';
-        let endTadeDate = '';
+        const { tradeDate, ...rest } = values;
 
-        if (tradeDate) {
-          const [start, end] = tradeDate;
-          startTradeDate = start && start.format(format);
-          endTadeDate = end && end.format(format);
-        }
-
-        handleSearch({
+        onParams(type, {
           ...rest,
-          market: market && market.toString(),
-          tradeDateSt: startTradeDate,
-          tradeDateEt: endTadeDate,
+          tradeDateSt: tradeDate[0],
+          tradeDateEt: tradeDate[1],
         });
       }
     });
   }
+
   return (
     <Form layout="vertical" className="ant-advanced-search-form search-wraper">
       <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="bottom" type="flex">
         <Col xs={24} sm={12} xl={10} xxl={8}>
           <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
             {getFieldDecorator('tradeDate', {
-              initialValue: [yesterday, today],
+              initialValue: defaultTradeDate,
               rules: [
                 {
                   required: false,
@@ -52,6 +45,7 @@ function MarketLogFilterForm({ form, handleSearch }) {
         <Col xs={24} sm={12} xl={7} xxl={5}>
           <Form.Item label={<FormattedMessage id="data-import.market.file-type" />}>
             {getFieldDecorator('fileType', {
+              initialValue: '',
               rules: [
                 {
                   required: false,
@@ -60,6 +54,7 @@ function MarketLogFilterForm({ form, handleSearch }) {
               ],
             })(
               <Select placeholder="please select file type" allowClear>
+                <Option value="">All</Option>
                 <Option value="TP001">TP001</Option>
                 <Option value="GREK020">GREK020</Option>
                 <Option value="OMD">OMD</Option>
@@ -69,7 +64,9 @@ function MarketLogFilterForm({ form, handleSearch }) {
         </Col>
         <Col xs={24} sm={12} xl={7} xxl={5}>
           <Form.Item label={<FormattedMessage id="data-import.market" />}>
-            {getFieldDecorator('market')(<Checkbox.Group options={['HKFE', 'SEHK']} />)}
+            {getFieldDecorator('market', {
+              initialValue: defaultMarket,
+            })(<Checkbox.Group options={['HKFE', 'SEHK']} />)}
           </Form.Item>
         </Col>
         <Col xs={24} sm={12} xl={8} xxl={6}>
@@ -77,10 +74,17 @@ function MarketLogFilterForm({ form, handleSearch }) {
             <Button
               type="primary"
               icon="search"
-              onClick={handleClick}
-              className={styles['no-margin']}
+              style={{ marginRight: 10 }}
+              onClick={() => getParams('market/reload')}
             >
               <FormattedMessage id="data-import.search" />
+            </Button>
+            <Button
+              type="primary"
+              loading={loading['market/importByAuto']}
+              onClick={() => getParams('market/importByAuto')}
+            >
+              <FormattedMessage id="data-import.execute" />
             </Button>
           </Form.Item>
         </Col>

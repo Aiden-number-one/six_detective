@@ -4,20 +4,21 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-19 13:54:28
+ * @LastEditTime : 2019-12-26 14:26:36
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
 // just for unit test
 // `fetch` high order function return anonymous func
 export async function getAlerts({ page = 1, pageSize = 10, sort, currentColumn, conditions }) {
-  return request('get_alert_center_page_list', {
+  return request('get_table_page_list', {
     data: {
       sort,
       currentColumn,
       conditions: conditions && JSON.stringify(conditions),
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
+      dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
     },
   });
 }
@@ -112,12 +113,6 @@ export default {
         users: payload.users,
       };
     },
-    assignUserOk(state) {
-      message.success('assign success');
-      return {
-        ...state,
-      };
-    },
     reclaim(state, { payload }) {
       return {
         ...state,
@@ -203,7 +198,7 @@ export default {
     },
     *assignTask({ payload }, { call, put }) {
       const { alertId, alertTypeId, ...rest } = payload;
-      const { err } = yield call(assignAlertItem, rest);
+      const { msg, err } = yield call(assignAlertItem, rest);
       if (err) {
         throw new Error(err);
       }
@@ -217,9 +212,7 @@ export default {
           alertId,
         },
       });
-      yield put({
-        type: 'assignUserOk',
-      });
+      message.success(msg);
     },
     *postComment({ payload }, { call, put }) {
       const { alertId, content, fileList } = payload;
@@ -236,7 +229,7 @@ export default {
     },
     *claim({ payload }, { call, put }) {
       const { alertIds, isCoverClaim } = payload || [];
-      const { err, items } = yield call(claimAlert, { alertIds, isCoverClaim });
+      const { err, msg, items } = yield call(claimAlert, { alertIds, isCoverClaim });
       if (err) {
         throw new Error(err);
       }
@@ -252,7 +245,7 @@ export default {
         yield put({
           type: 'fetch',
         });
-        message.success('claim success');
+        message.success(msg);
       }
     },
     *close({ payload }, { call, put }) {

@@ -4,25 +4,31 @@ import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 import { dateFormat, timestampFormat } from '../constants';
+import styles from '../index.less';
 
 const { Column } = Table;
 
 const submissionReport = formatMessage({ id: 'data-import.lop.submission-report' });
 const processingStatus = formatMessage({ id: 'data-import.lop.processing-status' });
 
+const submissionChannelMap = {
+  A: 'ECP',
+  M: 'USER',
+};
+
 export default function({
   dataSource,
   loading,
   total,
-  handlePageChange,
-  handlePageSizeChange,
-  handleDownload,
+  onPageChange,
+  onPageSizeChange,
+  onDownload,
 }) {
   const [curImpId, setImpId] = useState('');
 
   function handleClick(id) {
     setImpId(id);
-    handleDownload(id);
+    onDownload(id);
   }
   return (
     <Table
@@ -37,16 +43,16 @@ export default function({
           return `Total ${count} items`;
         },
         onChange(page, pageSize) {
-          handlePageChange(page, pageSize);
+          onPageChange(page, pageSize);
         },
         onShowSizeChange(page, pageSize) {
-          handlePageSizeChange(page, pageSize);
+          onPageSizeChange(page, pageSize);
         },
       }}
       expandedRowRender={record => (
         <Descriptions column={3}>
           <Descriptions.Item label={<FormattedMessage id="data-import.lop.submission-channel" />}>
-            {record.submissionChannel}
+            {submissionChannelMap[record.submissionChannel]}
           </Descriptions.Item>
           <Descriptions.Item label={<FormattedMessage id="data-import.lop.late-submission" />}>
             {record.lateSubmission}
@@ -90,12 +96,12 @@ export default function({
       <Column
         width="10%"
         align="center"
-        dataIndex="submissionStatus"
+        dataIndex="submissionStatusDesc"
         title={<FormattedMessage id="data-import.submission-status" />}
       />
       <Column
         align="center"
-        dataIndex="processingStatus"
+        dataIndex="processingStatusDesc"
         title={<span title={processingStatus}>{processingStatus}</span>}
       />
       <Column
@@ -109,8 +115,8 @@ export default function({
             ) : (
               <IconFont
                 type="icondownload"
+                className={styles['icon-download']}
                 onClick={() => handleClick(lopImpId)}
-                style={{ fontSize: 24, cursor: 'pointer' }}
               />
             )}
           </>

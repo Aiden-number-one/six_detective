@@ -312,14 +312,14 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
         >
           <Column
             align="center"
-            dataIndex="alertId"
+            dataIndex="alertNo"
             title={<WrapTitle tableColumn="alertId" id="alert-id" />}
           />
           <Column
             width="15%"
             align="center"
-            dataIndex="alertType"
-            title={<WrapTitle tableColumn="alertType" id="alert-type" />}
+            dataIndex="alertName"
+            title={<WrapTitle tableColumn="alertType" id="alert-name" />}
           />
           <Column
             align="center"

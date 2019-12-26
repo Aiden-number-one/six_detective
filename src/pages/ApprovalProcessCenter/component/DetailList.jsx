@@ -9,17 +9,17 @@ const { Option } = Select;
 function NewEP({ detailData, getFieldDecorator, isShowForm }) {
   return (
     <>
-      <Form.Item label="Market" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Market" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('market', {
           initialValue: detailData.market,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="EP Code" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="EP Code" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('epCode', {
           initialValue: detailData.epCode,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="EP Name" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="EP Name" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('epName', {
           rules: [{ required: !!isShowForm, message: 'Please input epName!' }],
           initialValue: detailData.epName,
@@ -38,17 +38,17 @@ function NewProduct({
 }) {
   return (
     <>
-      <Form.Item label="Market" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Market" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('market', {
           initialValue: detailData.market,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="HKEX DCASS Code" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="HKEX DCASS Code" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('HKEX DCASS Code', {
           initialValue: detailData.hkexDcassCode,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="Is CA Code ?" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Is CA Code ?" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('isCaCode', {
           rules: [{ required: !!isShowForm }],
           initialValue: detailData.isCaCode,
@@ -67,18 +67,18 @@ function NewProduct({
           ),
         )}
       </Form.Item>
-      <Form.Item label="Product code" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Product code" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('Product code', {
           initialValue: detailData.productCode,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="Product Description" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Product Description" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('productDesc', {
           rules: [{ required: !!isShowForm, message: 'Please input Product Description!' }],
           initialValue: detailData.productDesc,
         })(<Input disabled={!isShowForm} />)}
       </Form.Item>
-      <Form.Item label="Product Category" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Product Category" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('productCategory', {
           rules: [{ required: !!isShowForm, message: 'Please select your Product Category!' }],
           initialValue: detailData.productCategory,
@@ -96,7 +96,7 @@ function NewProduct({
           ),
         )}
       </Form.Item>
-      <Form.Item label="Futures or Option" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Futures or Option" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('contractNature', {
           rules: [{ required: !!isShowForm, message: 'Please select Futures or Option!' }],
           initialValue: detailData.contractNature,
@@ -114,7 +114,7 @@ function NewProduct({
           ),
         )}
       </Form.Item>
-      <Form.Item label="Product Group" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Product Group" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('productGroup', {
           rules: [{ required: !!isShowForm, message: 'Please select Product Group!' }],
           initialValue: detailData.productGroup,
@@ -134,7 +134,7 @@ function NewProduct({
       </Form.Item>
       <Form.Item
         label="Template Code(Last Trade Day)"
-        labelCol={{ span: 8 }}
+        labelCol={{ span: 9 }}
         wrapperCol={{ span: 12 }}
       >
         {getFieldDecorator('ltdTmplCode', {
@@ -158,7 +158,7 @@ function NewProduct({
       </Form.Item>
       <Form.Item
         label="Template Code(Position Limit)"
-        labelCol={{ span: 8 }}
+        labelCol={{ span: 9 }}
         wrapperCol={{ span: 12 }}
       >
         {getFieldDecorator('plTmplCode', {
@@ -182,7 +182,7 @@ function NewProduct({
       </Form.Item>
       <Form.Item
         label="Template Code(Reportable Limit)"
-        labelCol={{ span: 8 }}
+        labelCol={{ span: 9 }}
         wrapperCol={{ span: 12 }}
       >
         {getFieldDecorator('rlTmplCode', {
@@ -204,7 +204,7 @@ function NewProduct({
           ),
         )}
       </Form.Item>
-      <Form.Item label="Is Calculate PD ?" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Is Calculate PD ?" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('isCalculatePd', {
           rules: [{ required: !!isShowForm }],
           initialValue: detailData.isCalculatePd,
@@ -227,7 +227,7 @@ function NewProduct({
         <>
           <Form.Item
             label="Size Factor for Calculate PD"
-            labelCol={{ span: 8 }}
+            labelCol={{ span: 9 }}
             wrapperCol={{ span: 12 }}
           >
             {getFieldDecorator('sizeFactor', {
@@ -239,7 +239,7 @@ function NewProduct({
           </Form.Item>
           <Form.Item
             label="Weighting Factor for Calculate PD"
-            labelCol={{ span: 8 }}
+            labelCol={{ span: 9 }}
             wrapperCol={{ span: 12 }}
           >
             {getFieldDecorator('weightFactor', {
@@ -260,17 +260,17 @@ function NewProduct({
 function CaCode({ detailData, getFieldDecorator, setRadioCurrentValue, isShowForm }) {
   return (
     <>
-      <Form.Item label="Market" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Market" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('market', {
           initialValue: detailData.market,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="HKEX DCASS Code" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="HKEX DCASS Code" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('hkexDcassCode', {
           initialValue: detailData.hkexDcassCode,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="Is CA Code ?" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Is CA Code ?" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('isCaCode', {
           initialValue: detailData.isCaCode,
         })(
@@ -288,22 +288,22 @@ function CaCode({ detailData, getFieldDecorator, setRadioCurrentValue, isShowFor
           ),
         )}
       </Form.Item>
-      <Form.Item label="Original Product code" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Original Product code" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('originalProductCode', {
           initialValue: detailData.originalProductCode,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="Effective Date" labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Effective Date" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('effectiveDate', {
           initialValue: detailData.effectiveDate,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="Expiry Date " labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Expiry Date " labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('expiryDate', {
           initialValue: detailData.expiryDate,
         })(<Input disabled />)}
       </Form.Item>
-      <Form.Item label="Remark " labelCol={{ span: 8 }} wrapperCol={{ span: 12 }}>
+      <Form.Item label="Remark " labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('remark', {
           rules: [{ required: !!isShowForm, message: 'Please input Remark!' }],
           initialValue: detailData.remark,

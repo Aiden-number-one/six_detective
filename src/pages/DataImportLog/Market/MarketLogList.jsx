@@ -1,12 +1,27 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table, Icon } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import moment from 'moment';
 import { dateFormat, timestampFormat } from '../constants';
 
 const { Column } = Table;
 
-export default function({ dataSource, loading, total, handlePageChange, handlePageSizeChange }) {
+const channelMap = {
+  A: 'Auto Import',
+  M: 'Manual Import',
+};
+
+const IconStatus = ({ type, color, des }) => (
+  <Icon type={type} style={{ color, fontSize: 16 }} title={des} />
+);
+
+const statusMap = {
+  1: ({ des }) => <IconStatus type="loading" color="#009cff" des={des} />,
+  2: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
+  9: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
+};
+
+export default function({ dataSource, loading, total, onPageChange, onPageSizeChange }) {
   return (
     <Table
       dataSource={dataSource}
@@ -20,10 +35,10 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
           return `Total ${count} items`;
         },
         onChange(page, pageSize) {
-          handlePageChange(page, pageSize);
+          onPageChange(page, pageSize);
         },
         onShowSizeChange(page, pageSize) {
-          handlePageSizeChange(page, pageSize);
+          onPageSizeChange(page, pageSize);
         },
       }}
     >
@@ -31,27 +46,43 @@ export default function({ dataSource, loading, total, handlePageChange, handlePa
         align="center"
         dataIndex="tradeDate"
         title={<FormattedMessage id="data-import.trade-date" />}
-        render={(text, record) => moment(record.tradeDate).format(dateFormat)}
+        render={text => moment(text).format(dateFormat)}
       />
       <Column
         align="center"
         dataIndex="market"
         title={<FormattedMessage id="data-import.market" />}
       />
-      <Column dataIndex="fileType" title={<FormattedMessage id="data-import.market.file-type" />} />
       <Column
+        align="center"
+        dataIndex="fileType"
+        title={<FormattedMessage id="data-import.market.file-type" />}
+      />
+      <Column
+        align="center"
         dataIndex="uploadDate"
         title={<FormattedMessage id="data-import.market.upload-date" />}
-        render={(text, record) =>
-          moment(record.uploadDate, 'YYYYMMDDhhmmss').format(timestampFormat)
-        }
+        render={text => moment(text, 'YYYYMMDDhhmmss').format(timestampFormat)}
       />
       <Column
         align="center"
         dataIndex="uploadChannel"
         title={<FormattedMessage id="data-import.market.upload-channel" />}
+        render={text => channelMap[text]}
       />
-      <Column dataIndex="statusMark" title={<FormattedMessage id="data-import.market.status" />} />
+      <Column
+        align="center"
+        dataIndex="status"
+        title={<FormattedMessage id="data-import.market.status" />}
+        render={(text, record) => {
+          const des = record.statusMark;
+          if ([1, 2, 9].includes(+text)) {
+            const Status = statusMap[+text];
+            return <Status des={des} />;
+          }
+          return des;
+        }}
+      />
       <Column
         dataIndex="description"
         title={<FormattedMessage id="data-import.market.description" />}

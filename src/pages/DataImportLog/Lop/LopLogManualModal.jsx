@@ -8,8 +8,13 @@ const { Option } = Select;
 
 const isLt5M = size => size / 1024 / 1024 < 5;
 
-function LopLogManualModal({ form, visible, loading, handleCancel, handleUpload }) {
+function LopLogManualModal({ form, visible, loading, onCancel, onUpload }) {
   const { getFieldDecorator, validateFields } = form;
+
+  function handleClose() {
+    form.resetFields();
+    onCancel();
+  }
 
   function handleCommit() {
     validateFields(async (err, values) => {
@@ -20,7 +25,7 @@ function LopLogManualModal({ form, visible, loading, handleCancel, handleUpload 
 
         if (flag === '1' && items) {
           const filename = items.relativeUrl;
-          await handleUpload({ tradeDate: tradeDate.format('YYYYMMDD'), filename, ...rest });
+          await onUpload({ tradeDate: tradeDate.format('YYYYMMDD'), filename, ...rest });
           form.resetFields();
         }
       }
@@ -34,7 +39,7 @@ function LopLogManualModal({ form, visible, loading, handleCancel, handleUpload 
       closable={false}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
       visible={visible}
-      onClose={handleCancel}
+      onClose={handleClose}
     >
       <Form layout="vertical">
         <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
@@ -117,7 +122,7 @@ function LopLogManualModal({ form, visible, loading, handleCancel, handleUpload 
           })(
             <Upload
               accept=".xlsm,.xls,.xlsx,.pdf,application/msexcel"
-              action="/upload"
+              action="/upload?fileClass=ECP"
               beforeUpload={file => isLt5M(file.size)}
             >
               <Button>
@@ -129,7 +134,7 @@ function LopLogManualModal({ form, visible, loading, handleCancel, handleUpload 
         </Form.Item>
       </Form>
       <div className={styles['bottom-btns']}>
-        <Button onClick={handleCancel}>Cancel</Button>
+        <Button onClick={handleClose}>Cancel</Button>
         <Button type="primary" loading={loading} onClick={handleCommit}>
           Commit
         </Button>
