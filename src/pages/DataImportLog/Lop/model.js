@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-25 19:55:35
+ * @LastEditTime : 2019-12-26 13:25:20
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -98,7 +98,7 @@ export default {
       message.success('execute success');
       yield put({ type: 'reload', payload });
     },
-    *fetchReportUrl({ payload }, { call, put }) {
+    *fetchReportUrl({ payload }, { call, put, select }) {
       const { err, items } = yield call(getReportUrl, payload);
       if (err) {
         throw new Error(err);
@@ -109,6 +109,9 @@ export default {
           reportUrl: items,
         },
       });
+
+      // it will return to component
+      return yield select(state => state.lop.reportUrl);
     },
     *reload({ payload }, { put }) {
       yield put({ type: 'fetch', payload });

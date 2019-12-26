@@ -11,7 +11,7 @@ import styles from '../index.less';
 const aLink = document.createElement('a');
 aLink.download = true;
 
-export function LopLog({ dispatch, loading, logs, total, reportUrl }) {
+export function LopLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     startTradeDate: defaultTradeDate[0],
@@ -38,20 +38,17 @@ export function LopLog({ dispatch, loading, logs, total, reportUrl }) {
     setVisible(false);
   }
   async function handleDownload(lopImpId) {
-    await dispatch({
+    const reportUrl = await dispatch({
       type: 'lop/fetchReportUrl',
       payload: {
         lopImpId,
       },
     });
-  }
-
-  useEffect(() => {
     if (reportUrl) {
       aLink.href = `/download?filePath=${reportUrl}`;
       aLink.click();
     }
-  }, [reportUrl]);
+  }
 
   return (
     <PageHeaderWrapper>
@@ -73,7 +70,6 @@ export function LopLog({ dispatch, loading, logs, total, reportUrl }) {
             total={total}
             dataSource={logs}
             loading={loading}
-            reportUrl={reportUrl}
             onPageChange={handlePageChange}
             onPageSizeChange={handlePageChange}
             onDownload={handleDownload}
@@ -84,10 +80,9 @@ export function LopLog({ dispatch, loading, logs, total, reportUrl }) {
   );
 }
 
-export default connect(({ loading, lop: { logs, page, total, reportUrl } }) => ({
+export default connect(({ loading, lop: { logs, page, total } }) => ({
   loading: loading.effects,
   logs,
   page,
   total,
-  reportUrl,
 }))(LopLog);
