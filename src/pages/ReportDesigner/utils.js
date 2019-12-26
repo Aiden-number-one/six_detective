@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-23 10:17:57
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-26 10:32:29
+ * @LastEditTime : 2019-12-26 16:33:49
  */
 /*
  * @Des: 报表设计器的
@@ -132,8 +132,8 @@ export function dataSetTree(dataSets) {
 export function getTemplateArea(contentDetail, originContentDetail) {
   const spreadSheetData = contentDetail[0].data;
   const spreadSheetStyle = contentDetail[0].cellAttrs;
-  const needRowsCols = spreadSheetData.map((colsValue, colsIndex) =>
-    colsValue.map((rowsValue, rowsIndex) => {
+  const needRowsCols = spreadSheetData.map((colsValue, colsIndex) => ({
+    cols: colsValue.map((rowsValue, rowsIndex) => {
       const cellText = rowsValue;
       return {
         cell_expression: '', // 公式相关
@@ -151,7 +151,7 @@ export function getTemplateArea(contentDetail, originContentDetail) {
         cell_style: spreadSheetStyle[colsIndex][rowsIndex].style,
       };
     }),
-  );
+  }));
   return {
     page_order: '', // reserved
     page_size: '', // reserved

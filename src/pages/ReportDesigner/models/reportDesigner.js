@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-26 11:30:05
+ * @LastEditTime : 2019-12-26 16:52:32
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -133,7 +133,7 @@ export default {
       const response = yield call(getReportTemplateContent, { param: payload });
       yield put({
         type: 'setReportId',
-        payload,
+        payload: payload.reportId,
       });
       if (response.bcjson.flag === '1' && response.bcjson.items[0]) {
         // TODO: 需要优化
