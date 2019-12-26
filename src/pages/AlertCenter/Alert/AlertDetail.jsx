@@ -100,7 +100,8 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
     setActiveKey(pane.ALERT_ITEM_ID.toString());
   }
 
-  function handleRemoveItem(pane) {
+  function handleRemoveItem(e, pane) {
+    e.stopPropagation();
     let lastIndex;
     let curActiveKey = activeKey;
     const targetKey = pane.ALERT_ITEM_ID;
@@ -121,6 +122,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
     }
     setActiveKey(curActiveKey);
   }
+
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -164,7 +166,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
                     <Icon
                       type="close"
                       style={{ marginLeft: 12, fontSize: 12 }}
-                      onClick={() => handleRemoveItem(pane)}
+                      onClick={e => handleRemoveItem(e, pane)}
                     />
                   </Row>
                 }

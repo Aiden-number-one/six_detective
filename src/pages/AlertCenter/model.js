@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-26 20:08:01
+ * @LastEditTime : 2019-12-26 20:28:29
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -18,7 +18,6 @@ export async function getAlerts({
   conditions,
   dataTable,
 } = {}) {
-  console.log(dataTable);
   return request('get_table_page_list', {
     data: {
       sort,
