@@ -4,9 +4,15 @@ export default [
     component: '../layouts/UserLayout',
     routes: [{ path: '/login', name: 'login', component: './User/Login' }],
   },
+  // 报表设计器页面
   {
     path: '/report-designer',
     component: './ReportDesigner/ReportDesigner',
+  },
+  // 预览页面
+  {
+    path: '/report-designer-preview',
+    component: './ReportDesigner/ReportDesignerPreview',
   },
   {
     path: '/add-dataset',
@@ -204,6 +210,11 @@ export default [
             component: './IframePage/IframePage',
           },
           {
+            path: '/etl-center/database-import',
+            name: 'Database Import',
+            component: './IframePage/IframePage',
+          },
+          {
             path: '/etl-center/monitoring-management',
             name: 'Monitoring Management',
             routes: [
@@ -306,11 +317,6 @@ export default [
             path: '/data-management/data-processing',
             name: 'dataProcessing',
             component: './RulesEngine/RulesEngine',
-          },
-          {
-            path: '/data-management/task-switch',
-            name: 'taskSwitch',
-            component: './TaskSwitch/TaskSwitch',
           },
         ],
       },

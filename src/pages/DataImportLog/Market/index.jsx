@@ -3,31 +3,30 @@ import { connect } from 'dva';
 import { FormattedMessage } from 'umi/locale';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Row } from 'antd';
-import MarketLogFilterForm from './MarketLogFilterForm';
+import MarketLogFilterForm, { defaultTradeDate, defaultMarket } from './MarketLogFilterForm';
 import MarketLogManualModal from './MarketLogManualModal';
 import MarketLogList from './MarketLogList';
-import { yesterday, today } from '../constants';
-import styles from '../index.less';
 
-const format = 'YYYYMMDD';
+import styles from '../index.less';
 
 function MarketLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
-  const [searchParams, setSearchParams] = useState({});
+  const [searchParams, setSearchParams] = useState({
+    market: defaultMarket,
+    tradeDateSt: defaultTradeDate[0],
+    tradeDateEt: defaultTradeDate[1],
+  });
 
   useEffect(() => {
     dispatch({
       type: 'market/fetch',
-      payload: {
-        tradeDateSt: yesterday.format(format),
-        tradeDateEt: today.format(format),
-      },
+      payload: searchParams,
     });
   }, []);
 
-  function handleSearch(params) {
+  function handleParams(type, params) {
     setSearchParams(params);
-    dispatch({ type: 'market/reload', payload: params });
+    dispatch({ type, payload: params });
   }
 
   function handlePageChange(page, pageSize) {
@@ -41,22 +40,15 @@ function MarketLog({ dispatch, loading, logs, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <MarketLogFilterForm handleSearch={handleSearch} />
+        <MarketLogFilterForm loading={loading} onParams={handleParams} />
         <MarketLogManualModal
           visible={visible}
           loading={loading['market/importByManual']}
-          handleCancel={() => setVisible(false)}
-          handleUpload={handleUpload}
+          onCancel={() => setVisible(false)}
+          onUpload={handleUpload}
         />
         <div className={styles['list-wrap']}>
           <Row className={styles['btn-group']}>
-            <Button
-              type="primary"
-              onClick={() => dispatch({ type: 'market/importByAuto' })}
-              loading={loading['market/importByAuto']}
-            >
-              <FormattedMessage id="data-import.execute" />
-            </Button>
             <Button type="primary" className={styles['no-margin']} onClick={() => setVisible(true)}>
               <FormattedMessage id="data-import.manual-import" />
             </Button>
@@ -65,8 +57,8 @@ function MarketLog({ dispatch, loading, logs, total }) {
             dataSource={logs}
             total={total}
             loading={loading['market/fetch']}
-            handlePageChange={handlePageChange}
-            handlePageSizeChange={handlePageChange}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageChange}
           />
         </div>
       </div>

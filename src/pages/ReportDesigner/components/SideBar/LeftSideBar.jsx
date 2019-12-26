@@ -71,8 +71,15 @@ export default class LeftSideBar extends PureComponent {
   // };
 
   render() {
-    const { dataSetPublicList = [], dataSetPrivateList = [] } = this.props;
-    const { loading, leftSideCollapse, changeLeftSideBar } = this.props;
+    const {
+      dataSetPublicList = [],
+      dataSetPrivateList = [],
+      loading,
+      leftSideCollapse,
+      changeLeftSideBar,
+      displayDropSelect,
+      changedisplayDropSelect,
+    } = this.props;
     // 给予DropSelect的Props
     const dropSelectProps = {
       loading, // dropSelect的loading
@@ -80,6 +87,8 @@ export default class LeftSideBar extends PureComponent {
       privateData: dataSetPrivateList, // 私有数据集
       getPublicDataSet: this.getPublicDataSet, // 刷新公有数据集
       setPrivateList: this.setPrivateList, // 设置私有数据集
+      displayDropSelect, // 是否显示drop select
+      changedisplayDropSelect, // 显示drop select
     };
     const dataSetPrivateListTree = dataSetTree(dataSetPrivateList);
     return (

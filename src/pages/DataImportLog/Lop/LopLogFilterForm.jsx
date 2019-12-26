@@ -3,44 +3,24 @@ import React from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Form, Row, Button, DatePicker, Select, Col, Input } from 'antd';
 import { SUBMISSION_REPORT, yesterday, today, dateFormat } from '../constants';
-import styles from '../index.less';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-function LopLogFilterForm({ form, handleSearch }) {
+export const defaultTradeDate = [yesterday, today];
+
+function LopLogFilterForm({ form, loading, onParams }) {
   const { getFieldDecorator, validateFields } = form;
 
-  function handleCommit() {
+  function getParams(type) {
     validateFields((err, values) => {
       if (!err) {
-        const format = 'YYYYMMDD';
-        const { tradeDate, submissionDate, ...rest } = values;
+        const { tradeDate, ...rest } = values;
 
-        let startSubmissionDate = '';
-        let endSubmissionDate = '';
-
-        let startTradeDate = '';
-        let endTadeDate = '';
-
-        if (tradeDate) {
-          const [start, end] = tradeDate;
-          startTradeDate = start && start.format(format);
-          endTadeDate = end && end.format(format);
-        }
-
-        if (submissionDate) {
-          const [start, end] = submissionDate;
-          startSubmissionDate = start && start.format(format);
-          endSubmissionDate = end && end.format(format);
-        }
-
-        handleSearch({
+        onParams(type, {
           ...rest,
-          startTradeDate,
-          endTadeDate,
-          startSubmissionDate,
-          endSubmissionDate,
+          startTradeDate: tradeDate[0],
+          endTradeDate: tradeDate[1],
         });
       }
     });
@@ -52,7 +32,7 @@ function LopLogFilterForm({ form, handleSearch }) {
         <Col xs={24} sm={12} xl={10} xxl={8}>
           <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
             {getFieldDecorator('tradeDate', {
-              initialValue: [yesterday, today],
+              initialValue: defaultTradeDate,
               rules: [
                 {
                   required: false,
@@ -65,6 +45,7 @@ function LopLogFilterForm({ form, handleSearch }) {
         <Col xs={24} sm={12} xl={7} xxl={5}>
           <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
             {getFieldDecorator('submissionReport', {
+              initialValue: '',
               rules: [
                 {
                   required: false,
@@ -73,6 +54,7 @@ function LopLogFilterForm({ form, handleSearch }) {
               ],
             })(
               <Select placeholder="please select submission report" allowClear>
+                <Option value="">All</Option>
                 {SUBMISSION_REPORT.map(report => (
                   <Option key={report}>{report}</Option>
                 ))}
@@ -109,10 +91,17 @@ function LopLogFilterForm({ form, handleSearch }) {
             <Button
               type="primary"
               icon="search"
-              className={styles['no-margin']}
-              onClick={handleCommit}
+              style={{ marginRight: 10 }}
+              onClick={() => getParams('lop/reload')}
             >
               <FormattedMessage id="data-import.search" />
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => getParams('lop/importByAuto')}
+              loading={loading['lop/importByAuto']}
+            >
+              <FormattedMessage id="data-import.execute" />
             </Button>
           </Form.Item>
         </Col>

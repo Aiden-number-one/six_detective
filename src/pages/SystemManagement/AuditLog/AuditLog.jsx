@@ -8,6 +8,7 @@ import moment from 'moment';
 import styles from './AuditLog.less';
 import { timeFormat } from '@/utils/filter';
 import SearchForm from './components/SearchForm';
+import IconFont from '@/components/IconFont';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
@@ -47,7 +48,6 @@ class AuditLog extends Component {
       { label: 'after', value: 'after' },
     ],
     checkedValues: [],
-    tempCheckedValues: [],
     tempColumns: [],
     cuscomizeColumns: [
       {
@@ -106,7 +106,7 @@ class AuditLog extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
-        minWidth: 60,
+        width: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
@@ -219,7 +219,6 @@ class AuditLog extends Component {
     });
     const arrVisible = [];
     const checkedValues = [];
-    const tempColumns = [];
     newColumns.forEach((element, index) => {
       if (!element.visible) {
         arrVisible.push(index);
@@ -228,12 +227,11 @@ class AuditLog extends Component {
       }
     });
     arrVisible.forEach((element, index) => {
-      tempColumns.push(newColumns[element - index]);
       newColumns.splice(element - index, 1);
     });
     this.setState({
+      tempColumns: columns,
       columns: newColumns,
-      tempColumns,
       checkedValues,
     });
   };
@@ -280,7 +278,6 @@ class AuditLog extends Component {
       if (err) {
         return;
       }
-      console.log('values===', values);
       const { logDate } = values;
       let logStartDate;
       let logEndDate;
@@ -336,7 +333,6 @@ class AuditLog extends Component {
   };
 
   customizeDisplay = () => {
-    // this.filterColumns(true);
     this.setState({
       customizeVisible: true,
     });
@@ -355,20 +351,15 @@ class AuditLog extends Component {
       }
     });
 
-    // columnsValues.map(element => {
-    //   if(!checkedValues.includes(element)){
-    //   }
-    // })
-
-    for (let i = 0; i < newColumns.length; i += 1) {
-      for (let j = 0; j < newColumns.length - 1 - i; j += 1) {
-        if (newColumns[j].index > newColumns[j + 1].index) {
-          const temp = newColumns[j];
-          newColumns[j] = newColumns[j + 1];
-          newColumns[j + 1] = temp;
-        }
+    columnsValues.map(element => {
+      if (element && !checkedValues.includes(element) && element !== 'index') {
+        newColumns.splice(
+          newColumns.indexOf(newColumns.filter(item => item.key === element)[0]),
+          1,
+        );
       }
-    }
+    });
+    newColumns.sort((o1, o2) => o1.index - o2.index);
     this.setState({
       columns: newColumns,
       checkedValues,
@@ -376,20 +367,17 @@ class AuditLog extends Component {
   };
 
   customizeCancel = () => {
-    const { tempCheckedValues } = this.state;
+    const { columns } = this.state;
+    const columnsValues = columns.map(element => element.key);
     this.setState({
       customizeVisible: false,
-      checkedValues: tempCheckedValues,
+      checkedValues: columnsValues,
     });
   };
 
   onChangeCheckbox = newCheckedValues => {
-    console.log('checkedValues===', newCheckedValues);
-    const { checkedValues } = this.state;
-    const tempCheckedValues = Object.assign([], checkedValues);
     this.setState({
       checkedValues: newCheckedValues,
-      tempCheckedValues,
     });
   };
 
@@ -400,7 +388,14 @@ class AuditLog extends Component {
   render() {
     const { loading } = this.props;
     let { getAuditLogList } = this.state;
-    const { page, functionNameOptions, exportDataVisible, options, checkedValues } = this.state;
+    const {
+      page,
+      functionNameOptions,
+      exportDataVisible,
+      options,
+      checkedValues,
+      tempColumns,
+    } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
     return (
@@ -414,8 +409,9 @@ class AuditLog extends Component {
         <div className={styles.content}>
           <Row type="flex" justify="end">
             <Col>
-              <span className={styles.customizeDisplay} onClick={this.customizeDisplay}>
-                Customize Display
+              <span onClick={this.customizeDisplay}>
+                <span className={styles.customizeDisplay}>Customize Display</span>
+                <IconFont type="icon-setting" className={styles['btn-icon']} />
               </span>
             </Col>
           </Row>
@@ -424,6 +420,7 @@ class AuditLog extends Component {
             dataSource={getAuditLogList}
             pagination={false}
             columns={this.state.columns}
+            rowKey={Math.random().toString()}
           />
           {getAuditLogList && getAuditLogList.length > 0 && (
             <Pagination
@@ -442,14 +439,20 @@ class AuditLog extends Component {
           )}
         </div>
         <Modal
-          title={formatMessage({ id: 'app.common.confirm' })}
+          closable={false}
+          wrapClassName={styles.customizeDisplayModal}
+          title="Customize Display"
           visible={this.state.customizeVisible}
           onOk={this.customizeConfirm}
           onCancel={this.customizeCancel}
           cancelText={formatMessage({ id: 'app.common.cancel' })}
-          okText={formatMessage({ id: 'app.common.confirm' })}
+          okText={formatMessage({ id: 'app.common.submit' })}
         >
           <div>
+            <p>
+              Alter the display of the orders table by selecting up to{' '}
+              <font style={{ color: '#0D87D4' }}>{tempColumns.length - 1}</font> Cloumns
+            </p>
             <Checkbox.Group
               options={options}
               value={checkedValues}
@@ -458,6 +461,7 @@ class AuditLog extends Component {
           </div>
         </Modal>
         <Modal
+          closable={false}
           title="Select Export Format"
           visible={exportDataVisible}
           onOk={this.exportDataConfirm}

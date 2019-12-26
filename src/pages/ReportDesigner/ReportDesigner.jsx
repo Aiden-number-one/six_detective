@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import { setLocale } from 'umi/locale';
@@ -14,7 +14,7 @@ import DatasetModify from './components/DatasetModify';
 import styles from './ReportDesigner.less';
 
 const { Sider, Content } = Layout;
-@connect(({ reportDesigner }) => ({ reportDesigner }))
+@connect(() => ({}))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
   state = {
@@ -22,6 +22,7 @@ export default class ReportDesigner extends PureComponent {
     leftSideCollapse: false, // 左边sideBar展开收起
     rightSideCollapse: false, // 右边sideBar展开收起
     displayDraw: false, // 是否显示抽屉
+    displayDropSelect: false, // 是否显示DropSelect
   };
 
   componentWillMount() {
@@ -117,6 +118,13 @@ export default class ReportDesigner extends PureComponent {
     }));
   };
 
+  // 改变是否显示dropSelect
+  changedisplayDropSelect = displayDropSelect => {
+    this.setState({
+      displayDropSelect,
+    });
+  };
+
   // 保存模板
   saveReportTemplate = () => {
     const { dispatch } = this.props;
@@ -126,7 +134,7 @@ export default class ReportDesigner extends PureComponent {
   };
 
   render() {
-    const { display, leftSideCollapse, rightSideCollapse } = this.state;
+    const { display, leftSideCollapse, rightSideCollapse, displayDropSelect } = this.state;
     const { setCellCallback, dispatch, setCellType } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
@@ -144,10 +152,16 @@ export default class ReportDesigner extends PureComponent {
       changeLeftSideBar: this.changeLeftSideBar, // 展开或收起树
       leftSideCollapse, // 是否展开树
       displayDraw: this.displayDraw, // 是否显示抽屉
+      displayDropSelect, // 是否显示drop select
+      changedisplayDropSelect: this.changedisplayDropSelect, // 显示drop select
     };
     return (
       <DndProvider backend={HTML5Backend}>
-        <Fragment>
+        <div
+          onClick={() => {
+            this.changedisplayDropSelect(false);
+          }}
+        >
           {/* 抽屉区域 */}
           <Drawer
             closable={false}
@@ -189,7 +203,7 @@ export default class ReportDesigner extends PureComponent {
               <RigthSideBar />
             </div>
           </div>
-        </Fragment>
+        </div>
       </DndProvider>
     );
   }

@@ -6,20 +6,18 @@ import { Icon, Table } from 'antd';
 import styles from '@/pages/AlertCenter/index.less';
 import IconFont from '@/components/IconFont';
 import AlertTaskModal from './AlertTaskModal';
-import AlertTaskOfEp from './AlertTaskOfEp';
-import AlertTaskOfProduct from './AlertTaskOfProduct';
-import AlertTaskOfCa from './AlertTaskOfCa';
 
-const TaskMap = {
-  301: AlertTaskOfEp,
-  302: AlertTaskOfProduct,
-  303: AlertTaskOfCa,
-};
-
-function AlertTask({ dispatch, loading, alert: { alertTypeId, alertId }, alertItems, users }) {
+function AlertTask({
+  dispatch,
+  loading,
+  alertItems,
+  users,
+  taskColumns,
+  onTaskRow,
+  alert: { alertTypeId, alertId },
+}) {
   const [visible, setVisible] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
-  const AlertTaskType = TaskMap[+alertTypeId];
 
   async function showUsers() {
     await dispatch({
@@ -62,30 +60,62 @@ function AlertTask({ dispatch, loading, alert: { alertTypeId, alertId }, alertIt
           <FormattedMessage id="alert-center.assign" />
         </button>
       </div>
-      {AlertTaskType && (
-        <AlertTaskType
-          dataSource={alertItems}
-          loading={loading}
-          getSelectedRows={rows => setSelectedRows(rows)}
-          renderAction={() => (
-            <Table.Column
-              width="15%"
-              align="center"
-              dataIndex="action"
-              title={<FormattedMessage id="alert-center.actions" />}
-              render={(text, record) => (
+      <Table
+        border
+        dataSource={alertItems}
+        rowKey="ALERT_ITEM_ID"
+        scroll={{ y: 320 }}
+        loading={loading['alertCenter/fetchAlertItems']}
+        pagination={{
+          showSizeChanger: true,
+          showTotal(count) {
+            return `Total ${count} items`;
+          },
+        }}
+        rowSelection={{
+          columnWidth: 40,
+          onChange: (selectedRowKeys, rows) => {
+            setSelectedRows(rows);
+          },
+        }}
+        onRow={record => ({
+          onClick() {
+            onTaskRow(record);
+          },
+        })}
+        columns={[
+          {
+            dataIndex: 'MARKET',
+            title: formatMessage({ id: 'alert-center.market' }),
+          },
+          ...taskColumns,
+          {
+            dataIndex: 'USER_NAME',
+            title: formatMessage({ id: 'alert-center.owner' }),
+          },
+          {
+            dataIndex: 'TASK_STATUS_DESC',
+            title: formatMessage({ id: 'alert-center.status' }),
+          },
+          {
+            align: 'center',
+            dataIndex: 'action',
+            title: <FormattedMessage id="alert-center.actions" />,
+            render: (text, record) => {
+              const isEnd = 0;
+              return (
                 <Link
                   disabled={!record.USER_NAME}
-                  to={`/homepage/Approval-Process-Center?taskCode=${record.TASK_ID}`}
+                  to={`/homepage/Approval-Process-Center?taskCode=${record.TASK_ID}&isEnd=${isEnd}`}
                   title={formatMessage({ id: 'alert-center.enter-workflow' })}
                 >
                   <FormattedMessage id="alert-center.enter-workflow" />
                 </Link>
-              )}
-            />
-          )}
-        />
-      )}
+              );
+            },
+          },
+        ]}
+      />
     </div>
   );
 }

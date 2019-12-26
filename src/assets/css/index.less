@@ -57,6 +57,7 @@
 
 :global {
   .proLayout,
+  .ant-modal,
   .ant-drawer-right,
   .ant-popover-inner-content {
     // 基础表单
@@ -78,7 +79,7 @@
     .ant-btn {
       // width: 100px;
       height: 30px;
-      margin-right: 14px;
+      // margin-right: 14px;
       color: #464c51;
       font-size: 13px;
       background-color: #fff;
@@ -281,8 +282,14 @@
       // margin-right: 10px;
       color: #464c51;
     }
+    .ant-checkbox-wrapper:hover {
+      border-color: #009cff;
+    }
     .ant-checkbox {
       margin-right: 6px;
+    }
+    .ant-checkbox:hover {
+      border-color: #009cff;
     }
     .ant-checkbox + span {
       padding: 0;
@@ -308,9 +315,33 @@
     // .ant-checkbox-checked .ant-checkbox-inner::after {
     //   border-color: #fff;
     // }
-    // .ant-checkbox-checked .ant-checkbox-inner {
-    //   background-color: #104164;
-    // }
+    .ant-checkbox-checked::after {
+      border: 1px solid #0d87d4;
+    }
+    .ant-checkbox-checked .ant-checkbox-inner {
+      background-color: #0d87d4;
+      border-color: #0d87d4;
+    }
+    .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+    .ant-checkbox:hover .ant-checkbox-inner,
+    .ant-checkbox-input:focus + .ant-checkbox-inner {
+      border-color: #0d87d4;
+    }
+    .ant-tree-checkbox-checked .ant-tree-checkbox-inner {
+      background-color: #0d87d4;
+      border-color: #0d87d4;
+    }
+    .ant-tree-checkbox-wrapper:hover .ant-tree-checkbox-inner,
+    .ant-tree-checkbox:hover .ant-tree-checkbox-inner,
+    .ant-tree-checkbox-input:focus + .ant-tree-checkbox-inner {
+      border-color: #0d87d4;
+    }
+    .ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner::after {
+      background-color: #0d87d4;
+    }
+    .ant-tree-checkbox-checked::after {
+      border: 1px solid #0d87d4;
+    }
     // .ant-checkbox-disabled .ant-checkbox-inner::after {
     //   border-color: #a9b3bb;
     // }
@@ -332,7 +363,7 @@
     }
     textarea.ant-input:focus,
     textarea.ant-input:hover {
-      border: 1px solid #10416c;
+      border: 1px solid #009cff;
       box-shadow: none;
     }
 
@@ -346,7 +377,8 @@
     }
     .ant-input:hover {
       // border-color: #464c51;
-      border-color: #10416c;
+      // border-color: #10416c;
+      border-color: #009cff !important;
     }
     .ant-input:focus {
       box-shadow: none;
@@ -772,6 +804,11 @@
       }
     }
   }
+  .ant-modal {
+    .ant-btn {
+      margin-right: 0;
+    }
+  }
   // modal头部
   .ant-modal-content .ant-modal-header {
     // position: relative !important;
@@ -782,7 +819,7 @@
     color: #464c51;
   }
   .ant-modal-content .ant-modal-body {
-    color: #000;
+    color: #464c51;
     text-align: center;
   }
   .ant-modal-header::before {

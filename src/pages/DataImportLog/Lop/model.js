@@ -3,18 +3,22 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
- * @LastEditors: iron
- * @LastEditTime: 2019-12-18 16:28:02
+ * @LastEditors  : iron
+ * @LastEditTime : 2019-12-26 13:38:08
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
 
+const format = 'YYYYMMDD';
+
 export async function getLogs(params = {}) {
-  const { page = 1, pageSize = 10, ...rest } = params;
+  const { page = 1, pageSize = 10, startTradeDate, endTradeDate, ...rest } = params;
   return request('get_lop_proc_progress_list_page', {
     data: {
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
+      startTradeDate: startTradeDate && startTradeDate.format(format),
+      endTradeDate: endTradeDate && endTradeDate.format(format),
       ...rest,
     },
   });
@@ -24,8 +28,8 @@ export async function postManual(params) {
   return request('set_lop_report_manual_import', { data: params });
 }
 
-export async function postAuto(params) {
-  return request('set_lop_report_auto_import', { data: params });
+export async function postAuto() {
+  return request('set_lop_report_auto_import');
 }
 
 export async function getReportUrl({ lopImpId }) {
@@ -87,14 +91,14 @@ export default {
       yield put({ type: 'reload' });
     },
     *importByAuto({ payload }, { call, put }) {
-      const { err } = yield call(postAuto, payload);
+      const { err } = yield call(postAuto);
       if (err) {
         throw new Error(err);
       }
       message.success('execute success');
-      yield put({ type: 'reload' });
+      yield put({ type: 'reload', payload });
     },
-    *fetchReportUrl({ payload }, { call, put }) {
+    *fetchReportUrl({ payload }, { call, put, select }) {
       const { err, items } = yield call(getReportUrl, payload);
       if (err) {
         throw new Error(err);
@@ -105,6 +109,9 @@ export default {
           reportUrl: items,
         },
       });
+
+      // it will return to component
+      return yield select(state => state.lop.reportUrl);
     },
     *reload({ payload }, { put }) {
       yield put({ type: 'fetch', payload });

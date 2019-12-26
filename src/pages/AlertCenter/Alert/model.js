@@ -4,20 +4,21 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-19 13:54:28
+ * @LastEditTime : 2019-12-26 13:21:13
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
 // just for unit test
 // `fetch` high order function return anonymous func
 export async function getAlerts({ page = 1, pageSize = 10, sort, currentColumn, conditions }) {
-  return request('get_alert_center_page_list', {
+  return request('get_table_page_list', {
     data: {
       sort,
       currentColumn,
       conditions: conditions && JSON.stringify(conditions),
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
+      dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
     },
   });
 }

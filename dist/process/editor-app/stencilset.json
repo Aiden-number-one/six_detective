@@ -62,7 +62,7 @@
         {
           "id": "process_author",
           "type": "String",
-          "title": "创建人",
+          "title": "creator",
           "value": "",
           "description": "Author of the process definition.",
           "popular": true

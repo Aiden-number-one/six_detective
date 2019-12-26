@@ -158,6 +158,7 @@ class ModifyTemplate extends Component {
           title: values.title,
           content: values.content,
           type: values.type,
+          keyWord: values.keyWord,
         };
         // debugger
         dispatch({
@@ -179,6 +180,7 @@ class ModifyTemplate extends Component {
           type: values.type,
           title: values.title,
           content: values.content,
+          keyWord: values.keyWord,
         };
         dispatch({
           type: 'messageContentTemplate/updateTemplate',
