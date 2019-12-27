@@ -78,7 +78,6 @@ export function CaCodeTaskItem({
     REMARK,
   },
 }) {
-  console.log(EXTERNAL_PRODUCT_CODE);
   return (
     <Descriptions column={1}>
       <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
