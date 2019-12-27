@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-26 13:16:27
+ * @LastEditTime : 2019-12-26 15:44:45
  */
 import Service from '@/utils/Service';
 
@@ -26,12 +26,9 @@ export default {
   },
   effects: {
     // 查询报表预览
-    *getReportTemplateDataQuery(_, { call, put, select }) {
-      const reportId = yield select(({ reportDesigner }) => reportDesigner.reportId);
+    *getReportTemplateDataQuery({ payload }, { call, put }) {
       const response = yield call(getReportTemplateDataQuery, {
-        param: {
-          reportId,
-        },
+        param: payload,
       });
       yield put({
         type: 'savePreviewData',

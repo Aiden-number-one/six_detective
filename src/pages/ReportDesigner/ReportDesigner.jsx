@@ -54,12 +54,14 @@ export default class ReportDesigner extends PureComponent {
         query: { reportId },
       },
     } = this.props;
-    dispatch({
-      type: 'reportDesigner/getReportTemplateContent',
-      payload: {
-        reportId,
-      },
-    });
+    if (reportId) {
+      dispatch({
+        type: 'reportDesigner/getReportTemplateContent',
+        payload: {
+          reportId,
+        },
+      });
+    }
   }
 
   // 单元格选择后
@@ -135,7 +137,14 @@ export default class ReportDesigner extends PureComponent {
 
   render() {
     const { display, leftSideCollapse, rightSideCollapse, displayDropSelect } = this.state;
-    const { setCellCallback, dispatch, setCellType } = this.props;
+    const {
+      setCellCallback,
+      dispatch,
+      setCellType,
+      location: {
+        query: { reportId },
+      },
+    } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
       saveReportTemplate: this.saveReportTemplate, // 保存报表模板
@@ -146,6 +155,7 @@ export default class ReportDesigner extends PureComponent {
       setCellType, // 设置单元格的数据类型
       setCellCallback,
       dispatch,
+      reportId,
     };
     // leftTree的相关Props
     const leftSideBarProps = {

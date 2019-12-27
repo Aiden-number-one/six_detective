@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import React, { PureComponent } from 'react';
 import { Row, Col, Button, Form, Input } from 'antd';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
@@ -63,10 +64,27 @@ export default class DatasetModify extends PureComponent {
                 // });
               }}
             />
-            <div className={styles.tips}></div>
+            <div className={styles.tips}>
+              <span className={styles.desSpan}>
+                {
+                  'Input ${abc} as a parameter, abc is a parameter name. For example: select * from table where id = ${abc}'
+                }
+              </span>
+              <div className={styles.buttCollection}>
+                <button type="button">Parameter Setting</button>
+                <button type="button">Format</button>
+              </div>
+            </div>
           </Form.Item>
         </Form>
-
+        {/* 编辑数据集相关 */}
+        <Form.Item label=" " labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
+          <div className={styles.inputCollection}>
+            <Input className={styles.valueName} />
+            <Input className={styles.valueType} />
+            <Input className={styles.value} />
+          </div>
+        </Form.Item>
         <Row
           type="flex"
           justify="end"

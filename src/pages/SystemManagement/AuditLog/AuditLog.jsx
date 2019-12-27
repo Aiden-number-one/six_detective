@@ -360,10 +360,28 @@ class AuditLog extends Component {
       }
     });
     newColumns.sort((o1, o2) => o1.index - o2.index);
+    newColumns.forEach((element, index) => {
+      if (index < 2) {
+        Object.defineProperty(element, 'fixed', {
+          value: 'left',
+          configurable: true,
+          writable: true,
+        });
+        // element.fixed = 'left';
+      }
+      if (index === newColumns.length - 1) {
+        Object.defineProperty(element, 'fixed', {
+          value: 'right',
+          configurable: true,
+          writable: true,
+        });
+      }
+    });
     this.setState({
       columns: newColumns,
       checkedValues,
     });
+    console.log('newColumns===', newColumns);
   };
 
   customizeCancel = () => {
@@ -421,6 +439,7 @@ class AuditLog extends Component {
             pagination={false}
             columns={this.state.columns}
             rowKey={Math.random().toString()}
+            scroll={{ x: 1300 }}
           />
           {getAuditLogList && getAuditLogList.length > 0 && (
             <Pagination
