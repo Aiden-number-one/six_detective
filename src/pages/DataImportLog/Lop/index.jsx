@@ -3,19 +3,17 @@ import { connect } from 'dva';
 import { Button, Row } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormattedMessage } from 'umi/locale';
-import LopLogFilterForm, { defaultTradeDate } from './LopLogFilterForm';
+import { defaultDateRange, downloadFile } from '../constants';
+import LopLogFilterForm from './LopLogFilterForm';
 import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
 import styles from '../index.less';
 
-const aLink = document.createElement('a');
-aLink.download = true;
-
 export function LopLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
-    startTradeDate: defaultTradeDate[0],
-    endTradeDate: defaultTradeDate[1],
+    startTradeDate: defaultDateRange[0],
+    endTradeDate: defaultDateRange[1],
   });
 
   useEffect(() => {
@@ -45,8 +43,7 @@ export function LopLog({ dispatch, loading, logs, total }) {
       },
     });
     if (reportUrl) {
-      aLink.href = `/download?filePath=${reportUrl}`;
-      aLink.click();
+      downloadFile(reportUrl);
     }
   }
 

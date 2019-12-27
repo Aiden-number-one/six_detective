@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 18:53:34
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-20 09:12:22
+ * @LastEditTime : 2019-12-27 13:33:28
  */
 import moment from 'moment';
 
@@ -30,5 +30,15 @@ export const dateFormat = 'DD-MMM-YYYY';
 export const timeFormat = 'HH:mm:ss';
 export const timestampFormat = `${dateFormat} ${timeFormat}`;
 
-export const yesterday = moment().subtract(1, 'days');
-export const today = moment();
+const yesterday = moment().subtract(1, 'days');
+const today = moment();
+
+export const defaultDateRange = [yesterday, today];
+export const defaultMarket = ['HKFE', 'SEHK'];
+
+export function downloadFile(url) {
+  const aLink = document.createElement('a');
+  aLink.download = true;
+  aLink.href = `/download?filePath=${url}`;
+  aLink.click();
+}

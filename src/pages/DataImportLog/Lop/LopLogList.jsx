@@ -90,7 +90,7 @@ export default function({
       <Column
         align="center"
         dataIndex="submissionDate"
-        title={<FormattedMessage id="data-import.lop.submission-date" />}
+        title={<FormattedMessage id="data-import.submission-date" />}
         render={(text, record) => moment(record.submissionDate).format(timestampFormat)}
       />
       <Column

@@ -4,17 +4,21 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-19 10:33:58
+ * @LastEditTime : 2019-12-27 12:24:39
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
 
+const format = 'YYYYMMDD';
+
 export async function getLogs(params = {}) {
-  const { page = 1, pageSize = 10, ...rest } = params;
-  return request('get_md_proc_progress', {
+  const { page = 1, pageSize = 10, startTradeDate, endTradeDate, ...rest } = params;
+  return request('get_new_acc_lop_proc_progress', {
     data: {
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
+      startTradeDate: startTradeDate && startTradeDate.format(format),
+      endTradeDate: endTradeDate && endTradeDate.format(format),
       ...rest,
     },
   });
@@ -24,10 +28,10 @@ export async function postManual(params) {
   return request('set_imp_his_add', { data: params });
 }
 
-export const pageSelector = ({ lop }) => lop.page;
+export const pageSelector = ({ newAccount }) => newAccount.page;
 
 export default {
-  namespace: 'new_account',
+  namespace: 'newAccount',
   state: {
     logs: [],
     total: 0,

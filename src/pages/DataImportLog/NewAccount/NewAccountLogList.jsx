@@ -1,41 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'dva';
+import React, { useState } from 'react';
 import { Table, Icon } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 
 const { Column } = Table;
 
-const aLink = document.createElement('a');
-aLink.download = true;
-
-function NewAccountLogList({ dispatch, loading, logs, total, reportUrl }) {
+export default function NewAccountLogList({
+  dataSource,
+  loading,
+  total,
+  onPageChange,
+  onPageSizeChange,
+  onDownload,
+}) {
   const [curImpId, setImpId] = useState('');
-  useEffect(() => {
-    dispatch({
-      type: 'new_account/fetch',
-    });
-  }, []);
-  async function handleDownload(lopImpId) {
-    await dispatch({
-      type: 'new_account/fetchReportUrl',
-      payload: {
-        lopImpId,
-      },
-    });
-    aLink.href = `/download?filePath=${reportUrl}`;
-    aLink.click();
-  }
+
   function handleClick(id) {
     setImpId(id);
-    handleDownload(id);
-  }
-  function handlePageChange(page, pageSize) {
-    dispatch({ type: 'new_account/reload', payload: { page, pageSize } });
+    onDownload(id);
   }
   return (
     <Table
-      dataSource={logs}
+      dataSource={dataSource}
       loading={loading['new_account/fetch']}
       rowKey="mdImpId"
       pagination={{
@@ -46,10 +32,10 @@ function NewAccountLogList({ dispatch, loading, logs, total, reportUrl }) {
           return `Total ${count} items`;
         },
         onChange(page, pageSize) {
-          handlePageChange(page, pageSize);
+          onPageChange(page, pageSize);
         },
         onShowSizeChange(page, pageSize) {
-          handlePageChange(page, pageSize);
+          onPageSizeChange(page, pageSize);
         },
       }}
     >
@@ -93,10 +79,3 @@ function NewAccountLogList({ dispatch, loading, logs, total, reportUrl }) {
     </Table>
   );
 }
-export default connect(({ loading, new_account: { logs, page, total, reportUrl } }) => ({
-  loading: loading.effects,
-  logs,
-  page,
-  total,
-  reportUrl,
-}))(NewAccountLogList);

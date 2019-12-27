@@ -1,13 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Form, DatePicker, Button, Checkbox, Select, Row, Col } from 'antd';
-import { yesterday, today, dateFormat } from '../constants';
+import { defaultDateRange, dateFormat, defaultMarket } from '../constants';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-
-export const defaultTradeDate = [yesterday, today];
-export const defaultMarket = ['HKFE', 'SEHK'];
 
 function MarketLogFilterForm({ form, loading, onParams }) {
   const { getFieldDecorator, validateFields } = form;
@@ -32,13 +29,7 @@ function MarketLogFilterForm({ form, loading, onParams }) {
         <Col xs={24} sm={12} xl={10} xxl={8}>
           <Form.Item label={<FormattedMessage id="data-import.trade-date" />}>
             {getFieldDecorator('tradeDate', {
-              initialValue: defaultTradeDate,
-              rules: [
-                {
-                  required: false,
-                  message: 'Please select trade date!',
-                },
-              ],
+              initialValue: defaultDateRange,
             })(<RangePicker format={dateFormat} />)}
           </Form.Item>
         </Col>
@@ -46,12 +37,6 @@ function MarketLogFilterForm({ form, loading, onParams }) {
           <Form.Item label={<FormattedMessage id="data-import.market.file-type" />}>
             {getFieldDecorator('fileType', {
               initialValue: '',
-              rules: [
-                {
-                  required: false,
-                  message: 'Please select file type!',
-                },
-              ],
             })(
               <Select placeholder="please select file type" allowClear>
                 <Option value="">All</Option>
