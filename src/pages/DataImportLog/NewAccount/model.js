@@ -4,21 +4,21 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 12:24:39
+ * @LastEditTime : 2019-12-27 17:14:46
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-
-const format = 'YYYYMMDD';
+import { reqFormat as format } from '../constants';
 
 export async function getLogs(params = {}) {
-  const { page = 1, pageSize = 10, startTradeDate, endTradeDate, ...rest } = params;
+  const { page = 1, pageSize = 10, market, startDate, endDate, ...rest } = params;
   return request('get_new_acc_lop_proc_progress', {
     data: {
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
-      startTradeDate: startTradeDate && startTradeDate.format(format),
-      endTradeDate: endTradeDate && endTradeDate.format(format),
+      market: market && market.toString(),
+      startTradeDate: startDate && startDate.format(format),
+      endTradeDate: endDate && endDate.format(format),
       ...rest,
     },
   });

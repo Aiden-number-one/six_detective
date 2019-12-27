@@ -4,7 +4,7 @@ import { Button, Row } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormattedMessage } from 'umi/locale';
 import { defaultDateRange, downloadFile } from '../constants';
-import LopLogFilterForm from './LopLogFilterForm';
+import FilterForm from '../FilterForm';
 import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
 import styles from '../index.less';
@@ -12,8 +12,8 @@ import styles from '../index.less';
 export function LopLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
-    startTradeDate: defaultDateRange[0],
-    endTradeDate: defaultDateRange[1],
+    startDate: defaultDateRange[0],
+    endDate: defaultDateRange[1],
   });
 
   useEffect(() => {
@@ -50,7 +50,8 @@ export function LopLog({ dispatch, loading, logs, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <LopLogFilterForm loading={loading} onParams={handleParams} />
+        <FilterForm formType={0} loading={loading} onParams={handleParams} />
+        {/* <LopLogFilterForm loading={loading} onParams={handleParams} /> */}
         <LopLogManualModal
           visible={visible}
           loading={loading['lop/importByManual']}

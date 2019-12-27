@@ -4,8 +4,8 @@ import { FormattedMessage } from 'umi/locale';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Row } from 'antd';
 import { defaultDateRange, defaultMarket, downloadFile } from '../constants';
+import FilterForm from '../FilterForm';
 import NewAccountLogModal from './NewAccountLogModal';
-import NewAccountLogFilterForm from './NewAccountLogFilterForm';
 import NewAccountLogList from './NewAccountLogList';
 import styles from '../index.less';
 
@@ -13,8 +13,8 @@ function NewAccountLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     market: defaultMarket,
-    startTradeDate: defaultDateRange[0],
-    endTradeDate: defaultDateRange[1],
+    startDate: defaultDateRange[0],
+    endDate: defaultDateRange[1],
   });
 
   useEffect(() => {
@@ -50,7 +50,8 @@ function NewAccountLog({ dispatch, loading, logs, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <NewAccountLogFilterForm loading={loading} onParams={handleParams} />
+        <FilterForm formType={2} loading={loading} onParams={handleParams} />
+        {/* <NewAccountLogFilterForm loading={loading} onParams={handleParams} /> */}
         <NewAccountLogModal
           visible={visible}
           loading={loading}

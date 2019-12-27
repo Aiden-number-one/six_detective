@@ -1,5 +1,5 @@
 import React from 'react';
-import { formateMessage, FormattedMessage } from 'umi/locale';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, DatePicker, Button, Checkbox, Select, Row, Col, Input } from 'antd';
 import { defaultDateRange, dateFormat, defaultMarket, SUBMISSION_REPORT } from './constants';
 
@@ -11,8 +11,9 @@ const formTypeMap = {
   1: 'market',
   2: 'newAccount',
 };
-const tradeDateLabel = formateMessage({ id: 'data-import.trade-date' });
-const submissionDateLabel = formateMessage({ id: 'data-import.submission-date' });
+
+const tradeDateLabel = formatMessage({ id: 'data-import.trade-date' });
+const submissionDateLabel = formatMessage({ id: 'data-import.submission-date' });
 
 const DateRangeFormItem = ({ getFieldDecorator, formType }) => (
   <Form.Item label={formType === 2 ? submissionDateLabel : tradeDateLabel}>
@@ -82,8 +83,8 @@ function FilterForm({ formType, form, loading, onParams }) {
 
         onParams(type, {
           ...rest,
-          tradeDateSt: dateRange[0],
-          tradeDateEt: dateRange[1],
+          startDate: dateRange[0],
+          endDate: dateRange[1],
         });
       }
     });
@@ -93,7 +94,7 @@ function FilterForm({ formType, form, loading, onParams }) {
     <Form layout="vertical" className="ant-advanced-search-form search-wraper">
       <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="bottom" type="flex">
         <Col xs={24} sm={12} xl={10} xxl={8}>
-          <DateRangeFormItem getFieldDecorator={getFieldDecorator} />
+          <DateRangeFormItem formType={formType} getFieldDecorator={getFieldDecorator} />
         </Col>
         <Col xs={24} sm={12} xl={7} xxl={5}>
           {formType === 0 && <SubmissionReportFormItem getFieldDecorator={getFieldDecorator} />}
@@ -101,10 +102,10 @@ function FilterForm({ formType, form, loading, onParams }) {
           {formType === 2 && <SubmitterCodeFormItem getFieldDecorator={getFieldDecorator} />}
         </Col>
         <Col xs={24} sm={12} xl={7} xxl={5}>
-          {[0, 2].inclues(formType) && <MarketFormItem getFieldDecorator={getFieldDecorator} />}
-          {formType === 2 && <SubmitterCodeFormItem getFieldDecorator={getFieldDecorator} />}
+          {formType === 0 && <SubmitterCodeFormItem getFieldDecorator={getFieldDecorator} />}
+          {[1, 2].includes(formType) && <MarketFormItem getFieldDecorator={getFieldDecorator} />}
         </Col>
-        {formType === 1 && (
+        {formType === 0 && (
           <Col xs={24} sm={12} xl={7} xxl={5}>
             <SubmitterNameFormItem getFieldDecorator={getFieldDecorator} />
           </Col>
@@ -121,7 +122,7 @@ function FilterForm({ formType, form, loading, onParams }) {
             </Button>
             <Button
               type="primary"
-              loading={loading}
+              loading={loading[`${formTypeMap[formType]}/importByAuto`]}
               onClick={() => getParams(`${formTypeMap[formType]}/importByAuto`)}
             >
               <FormattedMessage id="data-import.execute" />

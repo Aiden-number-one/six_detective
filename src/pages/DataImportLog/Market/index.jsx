@@ -15,8 +15,8 @@ function MarketLog({ dispatch, loading, logs, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     market: defaultMarket,
-    tradeDateSt: defaultDateRange[0],
-    tradeDateEt: defaultDateRange[1],
+    startDate: defaultDateRange[0],
+    endDate: defaultDateRange[1],
   });
 
   useEffect(() => {
