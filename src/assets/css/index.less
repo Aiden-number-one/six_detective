@@ -1,5 +1,6 @@
 @import '~@/assets/css/utils.less';
 @import '~@/assets/css/variable.less';
+@import '~@/assets/css/common.less';
 
 @font-face {
   font-family: 'AvenirHeavy';
@@ -657,7 +658,7 @@
       font-weight: 600;
     }
     .ant-table-header-column .ant-table-column-title {
-      font-size: 13px;
+      font-size: 12px;
     }
     .ant-table-thead > tr > th {
       background-color: #fafcfd;
@@ -685,6 +686,36 @@
     }
     .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
       background: #f2f6f8;
+    }
+    // pagination
+    .ant-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 10px;
+      font-size: 12px;
+      // & li:first-child {
+      //   // flex: 1;
+      //   text-align: left;
+      // }
+      .ant-pagination-item {
+        border-radius: 0;
+      }
+      .ant-pagination-total-text {
+        // float: left;
+        flex: 1;
+        text-align: left;
+      }
+      .ant-pagination-prev,
+      .ant-pagination-next,
+      .ant-pagination-jump-prev,
+      .ant-pagination-jump-next {
+        border-radius: 0;
+      }
+      .ant-pagination-prev .ant-pagination-item-link,
+      .ant-pagination-next .ant-pagination-item-link {
+        border-radius: 0;
+      }
     }
     .ant-pagination.mini {
       // padding-left: 15px;
@@ -790,22 +821,6 @@
     .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected {
       background-color: #f1f5f6;
     }
-    // pagination
-    .ant-pagination {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      margin-top: 20px;
-      // & li:first-child {
-      //   // flex: 1;
-      //   text-align: left;
-      // }
-      .ant-pagination-total-text {
-        // float: left;
-        flex: 1;
-        text-align: left;
-      }
-    }
   }
   .ant-modal {
     .ant-btn {
@@ -868,16 +883,6 @@
     .ant-tabs-tabpane {
       background-color: #fff;
     }
-  }
-  .search-wraper {
-    padding: 10px !important;
-  }
-  .conten-wraper {
-    padding: 10px !important;
-    background-color: #fff !important;
-  }
-  .interval-padding {
-    padding: 0 10px;
   }
   // 去除表格最下面线条
   .ant-table-content .ant-table-placeholder {

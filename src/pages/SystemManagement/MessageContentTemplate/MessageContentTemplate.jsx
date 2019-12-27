@@ -30,8 +30,6 @@ export default class MessageContentTemplate extends Component {
       searchTemplateName: undefined,
       searchTemplateId: undefined,
       searchType: undefined,
-      editIconActive: false,
-      activeIndex: undefined,
       groupMenuInfo: {},
       typeOptions: [
         { key: '', value: '', title: 'All' },
@@ -100,22 +98,10 @@ export default class MessageContentTemplate extends Component {
           key: 'operation',
           width: 100,
           align: 'center',
-          render: (res, obj, index) => (
+          render: (res, obj) => (
             <span className={styles.operation}>
-              <a
-                href="#"
-                onClick={() => this.updateUser(res, obj)}
-                onMouseEnter={() => this.editMouseEnter(index)}
-                onMouseLeave={this.editMouseLeave}
-              >
-                <IconFont
-                  type={
-                    this.state.editIconActive && this.state.activeIndex === index
-                      ? 'icon-edit-hover'
-                      : 'icon-edit'
-                  }
-                  className={styles['btn-icon']}
-                />
+              <a href="#" onClick={() => this.updateUser(res, obj)}>
+                <IconFont type="icon-edit" className="operation-icon" />
               </a>
             </span>
           ),
@@ -131,21 +117,6 @@ export default class MessageContentTemplate extends Component {
   componentDidMount() {
     this.queryUserList();
   }
-
-  editMouseEnter = index => {
-    console.log('enter');
-    this.setState({
-      editIconActive: true,
-      activeIndex: index,
-    });
-  };
-
-  editMouseLeave = () => {
-    console.log('outer');
-    this.setState({
-      editIconActive: false,
-    });
-  };
 
   onClose = () => {
     this.setState({
@@ -339,12 +310,7 @@ export default class MessageContentTemplate extends Component {
             <Pagination
               showSizeChanger
               current={page.pageNumber}
-              showTotal={() =>
-                `Page ${(messageTemplate.totalCount || 0) &&
-                  page.pageNumber.toString()} of ${Math.ceil(
-                  (messageTemplate.totalCount || 0) / page.pageSize,
-                ).toString()}`
-              }
+              showTotal={() => `Total ${messageTemplate.totalCount} items`}
               onShowSizeChange={this.onShowSizeChange}
               onChange={this.pageChange}
               total={messageTemplate.totalCount}

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 10:54:40
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-23 16:22:21
+ * @LastEditTime : 2019-12-27 12:26:29
  */
 export default {
   // common
@@ -17,10 +17,8 @@ export default {
   'data-import.market': 'Market',
   'data-import.trade-date': 'Trade Date',
   'data-import.submitter-code': 'Submitter Code',
+  'data-import.submission-date': 'Submission Date',
   // lop
-
-  'data-import.lop.submission-date': 'Submission Date',
-
   'data-import.lop.submitter-name': 'Submitter Name',
   'data-import.lop.submission-report': 'Submission Report',
   'data-import.lop.processing-status': 'Processing Status',

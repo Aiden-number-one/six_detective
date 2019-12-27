@@ -13,9 +13,6 @@ import styles from '../index.less';
 
 const { Column } = Table;
 
-export const DEFAULT_PAGE = 1;
-export const DEFAULT_PAGE_SIZE = 10;
-
 function Title({ dispatch, loading, filterItems, tableColumn, id }) {
   function handleFilterItems() {
     dispatch({

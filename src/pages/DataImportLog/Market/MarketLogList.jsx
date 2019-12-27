@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Icon } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import moment from 'moment';
-import { dateFormat, timestampFormat } from '../constants';
+import { dateFormat, timestampFormat, pageSizeOptions } from '../constants';
 
 const { Column } = Table;
 
@@ -21,7 +21,14 @@ const statusMap = {
   9: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
 };
 
-export default function({ dataSource, loading, total, onPageChange, onPageSizeChange }) {
+export default function({
+  dataSource,
+  loading,
+  page: current,
+  total,
+  onPageChange,
+  onPageSizeChange,
+}) {
   return (
     <Table
       dataSource={dataSource}
@@ -29,7 +36,8 @@ export default function({ dataSource, loading, total, onPageChange, onPageSizeCh
       rowKey="mdImpId"
       pagination={{
         total,
-        pageSizeOptions: ['10', '20', '50', '100'],
+        current,
+        pageSizeOptions,
         showSizeChanger: true,
         showTotal(count) {
           return `Total ${count} items`;
