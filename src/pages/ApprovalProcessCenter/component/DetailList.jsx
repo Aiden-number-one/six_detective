@@ -352,6 +352,7 @@ function DetailForm({ form, detailItem, task }) {
   const alertType = detailList && detailList.alertType;
 
   const isShowForm = detailList && detailList.isStarter;
+  const isEditing = detailList && detailList.isEditing;
   console.log('alertType---->', alertType, detailList, isShowForm);
   useEffect(() => {
     setRadioCurrentValue(detailList.isCaCode);
@@ -367,7 +368,7 @@ function DetailForm({ form, detailItem, task }) {
             <NewEP
               detailData={detailList}
               getFieldDecorator={getFieldDecorator}
-              isShowForm={isShowForm}
+              isShowForm={isEditing}
             />
           )}
           {alertType === '302' &&
@@ -378,14 +379,14 @@ function DetailForm({ form, detailItem, task }) {
                 setRadioCurrentValue={setRadioCurrentValue}
                 radioPdValue={radioPdValue}
                 setRadioPdValue={setRadioPdValue}
-                isShowForm={isShowForm}
+                isShowForm={isEditing}
               />
             ) : (
               <CaCode
                 detailData={detailList}
                 getFieldDecorator={getFieldDecorator}
                 setRadioCurrentValue={setRadioCurrentValue}
-                isShowForm={isShowForm}
+                isShowForm={isEditing}
               />
             ))}
           {alertType === '303' &&
@@ -394,7 +395,7 @@ function DetailForm({ form, detailItem, task }) {
                 detailData={detailList}
                 getFieldDecorator={getFieldDecorator}
                 setRadioCurrentValue={setRadioCurrentValue}
-                isShowForm={isShowForm}
+                isShowForm={isEditing}
               />
             ) : (
               <NewProduct
@@ -403,7 +404,7 @@ function DetailForm({ form, detailItem, task }) {
                 setRadioCurrentValue={setRadioCurrentValue}
                 radioPdValue={radioPdValue}
                 setRadioPdValue={setRadioPdValue}
-                isShowForm={isShowForm}
+                isShowForm={isEditing}
               />
             ))}
         </Form>
