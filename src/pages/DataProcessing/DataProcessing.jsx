@@ -215,11 +215,7 @@ export default class DataProcessing extends Component {
                 <Pagination
                   showSizeChanger
                   current={page.pageNumber}
-                  showTotal={() =>
-                    `Page ${(dataProcessingData.totalCount || 0) && page.pageNumber} of ${Math.ceil(
-                      (dataProcessingData.totalCount || 0) / page.pageSize,
-                    ).toString()}`
-                  }
+                  showTotal={() => `Total ${dataProcessingData.totalCount} items`}
                   onShowSizeChange={this.onShowSizeChange}
                   onChange={this.pageChange}
                   total={dataProcessingData.totalCount}
@@ -332,12 +328,7 @@ export default class DataProcessing extends Component {
                 <Pagination
                   showSizeChanger
                   current={itemPage.pageNumber}
-                  showTotal={() =>
-                    `Page ${(dataProcessingItemData.totalCount || 0) &&
-                      itemPage.pageNumber} of ${Math.ceil(
-                      (dataProcessingItemData.totalCount || 0) / itemPage.pageSize,
-                    ).toString()}`
-                  }
+                  showTotal={() => `Total ${dataProcessingItemData.totalCount} items`}
                   onShowSizeChange={this.onShowItemSizeChange}
                   onChange={this.pageItemChange}
                   total={dataProcessingItemData.totalCount}
