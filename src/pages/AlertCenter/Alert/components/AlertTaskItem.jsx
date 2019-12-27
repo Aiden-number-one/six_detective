@@ -27,6 +27,7 @@ export function EpTaskItem({ task: { MARKET, ALERT_ITEM_ID, EP_CODE, EP_NAME } }
 export function ProductTaskItem({
   task: {
     MARKET,
+    EXTERNAL_PRODUCT_CODE,
     IS_CA_CODE,
     PRODUCT_CODE,
     PRODUCT_DESC,
@@ -44,7 +45,7 @@ export function ProductTaskItem({
   return (
     <Descriptions column={1}>
       <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
-      <Descriptions.Item label="HKEX DCASS Code *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="HKEX DCASS Code *">{EXTERNAL_PRODUCT_CODE}</Descriptions.Item>
       <Descriptions.Item label="Is CA Code? *">{isCACodeMap[+IS_CA_CODE]}</Descriptions.Item>
       <Descriptions.Item label="Product Description *">{PRODUCT_DESC}</Descriptions.Item>
       <Descriptions.Item label="Product Category *">{PRODUCT_CATEGROY}</Descriptions.Item>
@@ -67,19 +68,25 @@ export function ProductTaskItem({
   );
 }
 export function CaCodeTaskItem({
-  task: { MARKET, IS_CA_CODE, EFFECTIVE_DATE, CA_PRODUCT_CODE, EXPIRY_DATE, REMARK },
+  task: {
+    MARKET,
+    IS_CA_CODE,
+    EXTERNAL_PRODUCT_CODE,
+    EFFECTIVE_DATE,
+    CA_PRODUCT_CODE,
+    EXPIRY_DATE,
+    REMARK,
+  },
 }) {
   return (
     <Descriptions column={1}>
-      <Descriptions column={1}>
-        <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
-        <Descriptions.Item label="HKEX DCASS Code *">{EFFECTIVE_DATE}</Descriptions.Item>
-        <Descriptions.Item label="Is CA Code? *">{isCACodeMap[+IS_CA_CODE]}</Descriptions.Item>
-        <Descriptions.Item label="Original Product Code *">{CA_PRODUCT_CODE}</Descriptions.Item>
-        <Descriptions.Item label="Effective Date *">{EFFECTIVE_DATE}</Descriptions.Item>
-        <Descriptions.Item label="Expiry Date *">{EXPIRY_DATE}</Descriptions.Item>
-        <Descriptions.Item label="Remark *">{REMARK}</Descriptions.Item>
-      </Descriptions>
+      <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="HKEX DCASS Code *">{EXTERNAL_PRODUCT_CODE}</Descriptions.Item>
+      <Descriptions.Item label="Is CA Code? *">{isCACodeMap[+IS_CA_CODE]}</Descriptions.Item>
+      <Descriptions.Item label="Original Product Code *">{CA_PRODUCT_CODE}</Descriptions.Item>
+      <Descriptions.Item label="Effective Date *">{EFFECTIVE_DATE}</Descriptions.Item>
+      <Descriptions.Item label="Expiry Date *">{EXPIRY_DATE}</Descriptions.Item>
+      <Descriptions.Item label="Remark *">{REMARK}</Descriptions.Item>
     </Descriptions>
   );
 }

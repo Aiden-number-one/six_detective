@@ -5,11 +5,13 @@ import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
 import styles from './index.less';
-import Phase from './component/phase';
+import Phase from '@/pages/AlertCenter/Alert/components/AlertPhrase';
 import TaskAttachments from './component/TaskAttachments';
 import TaskCommentHistory from './component/TaskCommentHistory';
 import TaskLog from './component/TaskLog';
 import DetailList from './component/DetailList';
+
+import btnStyles from '@/pages/DataImportLog/index.less';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -369,18 +371,7 @@ function ProcessDetail({
                   onChange={e => setRadioValue(e.target.value)}
                   value={radioValue}
                 ></Radio.Group>
-                <div
-                  style={{
-                    position: 'absolute',
-                    right: 0,
-                    bottom: 0,
-                    width: '100%',
-                    borderTop: '1px solid #e9e9e9',
-                    padding: '10px 16px',
-                    background: '#fff',
-                    textAlign: 'right',
-                  }}
-                >
+                <div className={btnStyles['bottom-btns']}>
                   <Button onClick={() => submitOrApproveTask(submitType)} type="primary">
                     Save
                   </Button>
@@ -446,7 +437,7 @@ function ProcessDetail({
                       </Upload>
                       {detailItems[0] && detailItems[0].isStarter ? (
                         <>
-                          <Button type="primary" onClick={saveTask}>
+                          <Button style={{ marginRight: '10px' }} type="primary" onClick={saveTask}>
                             Save
                           </Button>
                           <Button type="primary" onClick={() => submitDrawer('submit')}>
@@ -455,7 +446,11 @@ function ProcessDetail({
                         </>
                       ) : (
                         <>
-                          <Button type="primary" onClick={() => submitDrawer('reject')}>
+                          <Button
+                            style={{ marginRight: '10px' }}
+                            type="primary"
+                            onClick={() => submitDrawer('reject')}
+                          >
                             Reject
                           </Button>
                           <Button type="primary" onClick={() => submitDrawer('pass')}>

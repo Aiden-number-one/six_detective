@@ -325,21 +325,19 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             align="center"
             dataIndex="tradeDate"
             title={<WrapTitle tableColumn="tradeDate" id="trade-date" />}
-            render={(text, record) => moment(record.tradeDate).format(dateFormat)}
+            render={text => moment(text).format(dateFormat)}
           />
           <Column
             align="center"
             dataIndex="alertTime"
             title={<WrapTitle tableColumn="alertTime" id="alert-timestamp" />}
-            render={(text, record) =>
-              moment(record.alertTime, timestampFormat).format(timestampFormat)
-            }
+            render={text => moment(text, timestampFormat).format(timestampFormat)}
           />
           <Column
             align="center"
             dataIndex="itemsTotal"
             title={<WrapTitle tableColumn="itemsTotal" id="items-total" />}
-            render={(text, record) => +record.itemsTotal}
+            render={text => +text}
           />
           <Column
             align="center"
@@ -402,11 +400,10 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
 
 const mapStateToProps = ({
   loading,
-  alertCenter: { alerts, alertItems, page, total, claimInfos },
+  alertCenter: { alerts, alertItems, alertTotal, claimInfos },
 }) => ({
   alerts,
-  page,
-  total,
+  total: alertTotal,
   alertItems,
   claimInfos,
   loading: loading.effects,
