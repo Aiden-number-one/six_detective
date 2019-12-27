@@ -51,7 +51,6 @@ export function LopLog({ dispatch, loading, logs, total }) {
     <PageHeaderWrapper>
       <div className={styles.container}>
         <FilterForm formType={0} loading={loading} onParams={handleParams} />
-        {/* <LopLogFilterForm loading={loading} onParams={handleParams} /> */}
         <LopLogManualModal
           visible={visible}
           loading={loading['lop/importByManual']}

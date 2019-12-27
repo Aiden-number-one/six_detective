@@ -4,7 +4,6 @@ import { FormattedMessage } from 'umi/locale';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Row } from 'antd';
 import { defaultDateRange, defaultMarket } from '../constants';
-// import MarketLogFilterForm from './MarketLogFilterForm';
 import MarketLogManualModal from './MarketLogManualModal';
 import FilterForm from '../FilterForm';
 import MarketLogList from './MarketLogList';
@@ -42,7 +41,6 @@ function MarketLog({ dispatch, loading, logs, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        {/* <MarketLogFilterForm loading={loading} onParams={handleParams} /> */}
         <FilterForm formType={1} loading={loading} onParams={handleParams} />
         <MarketLogManualModal
           visible={visible}
