@@ -10,6 +10,7 @@ import { ConfirmModel } from './component/ConfirmModel';
 import { GetQueryString } from '@/utils/utils';
 import styles from './index.less';
 import alertStyle from '@/pages/AlertCenter/index.less';
+import btnStyles from '@/pages/DataImportLog/index.less';
 
 const { Column } = Table;
 const { Search } = Input;
@@ -189,6 +190,7 @@ function ProcessList({
       },
       callback: () => {
         setConfirmVisible(false);
+        setcurrentPage(DEFAULT_PAGE);
         dispatch({
           type: 'approvalCenter/fetch',
           payload: {
@@ -209,7 +211,10 @@ function ProcessList({
       callback: items => {
         const someNoClaim = items.find(item => item.ownerId !== loginName);
         if (someNoClaim) {
-          throw new Error("Can't assign task without claim!");
+          if (items.length > 1) {
+            throw new Error('Some tasks have not been claimed, please claim them and try again');
+          }
+          throw new Error('The task have not been claimed, please claim it and try again');
         } else {
           setVisible(true);
         }
@@ -245,6 +250,7 @@ function ProcessList({
         type: taskType,
       },
     });
+    setcurrentPage(DEFAULT_PAGE);
   }
 
   return (
@@ -268,18 +274,7 @@ function ProcessList({
           onChange={e => setRadioValue(e.target.value)}
           value={radioValue}
         ></Radio.Group>
-        <div
-          style={{
-            position: 'absolute',
-            right: 0,
-            bottom: 0,
-            width: '100%',
-            borderTop: '1px solid #e9e9e9',
-            padding: '10px 16px',
-            background: '#fff',
-            textAlign: 'right',
-          }}
-        >
+        <div className={btnStyles['bottom-btns']}>
           <Button onClick={() => setTaskAssign(selectedKeys)} type="primary">
             Save
           </Button>
@@ -329,6 +324,7 @@ function ProcessList({
         pagination={{
           total,
           showSizeChanger: true,
+          current: currentPage,
           showTotal(count) {
             return `Page ${currentPage} of ${Math.ceil(count / 10).toString()}`;
           },
