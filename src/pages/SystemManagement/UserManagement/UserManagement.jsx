@@ -4,7 +4,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-27 13:27:32
+ * @LastEditTime : 2019-12-27 17:45:53
  */
 
 import React, { Component } from 'react';
@@ -96,11 +96,10 @@ class UserManagement extends Component {
         render: (res, obj) => (
           <span className={styles.operation}>
             <a href="#" onClick={() => this.updateUser(res, obj)}>
-              <IconFont type="icon-edit" className={styles['btn-icon']} />
+              <IconFont type="icon-edit" className="operation-icon" />
             </a>
-            <span className="interval-padding"></span>
             <a href="#" onClick={() => this.deleteUser(res, obj)}>
-              <IconFont type="icon-delete" className={styles['btn-icon']} />
+              <IconFont type="icon-delete" className="operation-icon" />
             </a>
           </span>
         ),

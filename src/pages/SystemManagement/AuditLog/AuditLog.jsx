@@ -100,6 +100,7 @@ class AuditLog extends Component {
       {
         key: 'after',
         visible: false,
+        fixed: 'right',
       },
     ],
     columns: [
@@ -364,20 +365,13 @@ class AuditLog extends Component {
     });
     newColumns.sort((o1, o2) => o1.index - o2.index);
     newColumns.forEach((element, index) => {
+      if (Object.hasOwnProperty(element.fixed)) {
+        delete element.fixed;
+      }
       if (index < 2) {
-        // Object.defineProperty(element, 'fixed', {
-        //   value: 'left',
-        //   configurable: true,
-        //   writable: true,
-        // });
         element.fixed = 'left';
       }
       if (index === newColumns.length - 1) {
-        // Object.defineProperty(element, 'fixed', {
-        //   value: 'right',
-        //   configurable: true,
-        //   writable: true,
-        // });
         element.fixed = 'right';
       }
     });
