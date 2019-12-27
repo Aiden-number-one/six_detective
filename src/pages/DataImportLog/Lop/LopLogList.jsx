@@ -3,7 +3,7 @@ import { Table, Icon, Descriptions } from 'antd';
 import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
-import { dateFormat, timestampFormat } from '../constants';
+import { dateFormat, timestampFormat, pageSizeOptions } from '../constants';
 import styles from '../index.less';
 
 const { Column } = Table;
@@ -19,6 +19,7 @@ const submissionChannelMap = {
 export default function({
   dataSource,
   loading,
+  page: current,
   total,
   onPageChange,
   onPageSizeChange,
@@ -37,7 +38,8 @@ export default function({
       loading={loading['lop/fetch']}
       pagination={{
         total,
-        pageSizeOptions: ['10', '20', '50', '100'],
+        current,
+        pageSizeOptions,
         showSizeChanger: true,
         showTotal(count) {
           return `Total ${count} items`;

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 16:07:02
+ * @LastEditTime : 2019-12-27 19:45:28
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -38,14 +38,16 @@ export default {
   namespace: 'market',
   state: {
     logs: [],
+    page: 1,
     total: 0,
   },
   reducers: {
     save(state, { payload }) {
-      const { logs, total } = payload;
+      const { logs, page = 1, total } = payload;
       return {
         ...state,
         logs,
+        page,
         total,
       };
     },
@@ -62,6 +64,7 @@ export default {
         type: 'save',
         payload: {
           logs: items,
+          page: payload.page,
           total: totalCount,
         },
       });
@@ -79,9 +82,6 @@ export default {
         throw new Error(err);
       }
       message.success(msg);
-      yield put({ type: 'reload', payload });
-    },
-    *reload({ payload }, { put }) {
       yield put({ type: 'fetch', payload });
     },
   },

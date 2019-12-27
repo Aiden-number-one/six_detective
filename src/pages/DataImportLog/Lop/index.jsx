@@ -9,7 +9,7 @@ import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
 import styles from '../index.less';
 
-export function LopLog({ dispatch, loading, logs, total }) {
+export function LopLog({ dispatch, loading, page: current, logs, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     startDate: defaultDateRange[0],
@@ -29,7 +29,7 @@ export function LopLog({ dispatch, loading, logs, total }) {
   }
 
   function handlePageChange(page, pageSize) {
-    dispatch({ type: 'lop/reload', payload: { page, pageSize, ...searchParams } });
+    dispatch({ type: 'lop/fetch', payload: { page, pageSize, ...searchParams } });
   }
   async function handleUpload(params) {
     await dispatch({ type: 'lop/importByManual', payload: params });
@@ -42,6 +42,7 @@ export function LopLog({ dispatch, loading, logs, total }) {
         lopImpId,
       },
     });
+
     if (reportUrl) {
       downloadFile(reportUrl);
     }
@@ -64,8 +65,9 @@ export function LopLog({ dispatch, loading, logs, total }) {
             </Button>
           </Row>
           <LopLogList
-            total={total}
             dataSource={logs}
+            page={current}
+            total={total}
             loading={loading}
             onPageChange={handlePageChange}
             onPageSizeChange={handlePageChange}

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Table, Icon } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
+import { pageSizeOptions } from '../constants';
 
 const { Column } = Table;
 
 export default function NewAccountLogList({
   dataSource,
   loading,
+  page: current,
   total,
   onPageChange,
   onPageSizeChange,
@@ -25,8 +27,9 @@ export default function NewAccountLogList({
       loading={loading['new_account/fetch']}
       rowKey="mdImpId"
       pagination={{
+        current,
         total,
-        pageSizeOptions: ['10', '20', '50', '100'],
+        pageSizeOptions,
         showSizeChanger: true,
         showTotal(count) {
           return `Total ${count} items`;

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 18:53:34
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 16:06:21
+ * @LastEditTime : 2019-12-27 19:49:40
  */
 import moment from 'moment';
 
@@ -25,6 +25,9 @@ export const SUBMISSION_REPORT = [
   'SOLTO',
   'EXCESS POSITION LIMIT FOR ETF MARKET MAKERS REPORTING',
 ];
+
+export const pageSizeOptions = ['10', '20', '50', '100'];
+
 export const reqFormat = 'YYYYMMDD';
 export const dateFormat = 'DD-MMM-YYYY';
 export const timeFormat = 'HH:mm:ss';

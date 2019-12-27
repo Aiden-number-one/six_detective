@@ -10,7 +10,7 @@ import MarketLogList from './MarketLogList';
 
 import styles from '../index.less';
 
-function MarketLog({ dispatch, loading, logs, total }) {
+function MarketLog({ dispatch, loading, logs, page: current, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     market: defaultMarket,
@@ -56,6 +56,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
           </Row>
           <MarketLogList
             dataSource={logs}
+            page={current}
             total={total}
             loading={loading['market/fetch']}
             onPageChange={handlePageChange}

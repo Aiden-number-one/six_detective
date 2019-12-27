@@ -9,7 +9,7 @@ import NewAccountLogModal from './NewAccountLogModal';
 import NewAccountLogList from './NewAccountLogList';
 import styles from '../index.less';
 
-function NewAccountLog({ dispatch, loading, logs, total }) {
+function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     market: defaultMarket,
@@ -65,6 +65,7 @@ function NewAccountLog({ dispatch, loading, logs, total }) {
             </Button>
           </Row>
           <NewAccountLogList
+            page={current}
             total={total}
             dataSource={logs}
             loading={loading}
@@ -78,8 +79,9 @@ function NewAccountLog({ dispatch, loading, logs, total }) {
   );
 }
 
-export default connect(({ loading, newAccount: { logs, total } }) => ({
+export default connect(({ loading, newAccount: { logs, page, total } }) => ({
   loading: loading.effects,
   logs,
+  page,
   total,
 }))(NewAccountLog);

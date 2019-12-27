@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 16:07:09
+ * @LastEditTime : 2019-12-27 19:37:05
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -45,23 +45,17 @@ export default {
   namespace: 'lop',
   state: {
     logs: [],
+    page: 1,
     total: 0,
-    reportUrl: '',
   },
   reducers: {
     save(state, { payload }) {
-      const { logs, total } = payload;
+      const { logs, page = 1, total } = payload;
       return {
         ...state,
+        page,
         logs,
         total,
-      };
-    },
-    saveReportUrl(state, { payload }) {
-      const { reportUrl } = payload;
-      return {
-        ...state,
-        reportUrl,
       };
     },
   },
@@ -77,17 +71,17 @@ export default {
         type: 'save',
         payload: {
           logs: items,
+          page: payload.page,
           total: totalCount,
         },
       });
     },
-    *importByManual({ payload }, { call, put }) {
+    *importByManual({ payload }, { call }) {
       const { err, msg } = yield call(postManual, payload);
       if (err) {
         throw new Error(err);
       }
       message.success(msg);
-      yield put({ type: 'reload' });
     },
     *importByAuto({ payload }, { call, put }) {
       const { err, msg } = yield call(postAuto);
@@ -95,25 +89,21 @@ export default {
         throw new Error(err);
       }
       message.success(msg);
-      yield put({ type: 'reload', payload });
+      yield put({ type: 'fetch', payload });
     },
-    *fetchReportUrl({ payload }, { call, put, select }) {
-      const { err, items } = yield call(getReportUrl, payload);
+    *fetchReportUrl({ payload }, { call, put }) {
+      const { err, items: reportUrl } = yield call(getReportUrl, payload);
       if (err) {
         throw new Error(err);
       }
       yield put({
         type: 'saveReportUrl',
         payload: {
-          reportUrl: items,
+          reportUrl,
         },
       });
 
-      // it will return to component
-      return yield select(state => state.lop.reportUrl);
-    },
-    *reload({ payload }, { put }) {
-      yield put({ type: 'fetch', payload });
+      return reportUrl;
     },
   },
 };

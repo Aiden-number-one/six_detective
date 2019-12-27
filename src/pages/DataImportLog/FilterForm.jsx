@@ -116,7 +116,7 @@ function FilterForm({ formType, form, loading, onParams }) {
               type="primary"
               icon="search"
               style={{ marginRight: 10 }}
-              onClick={() => getParams(`${formTypeMap[formType]}/reload`)}
+              onClick={() => getParams(`${formTypeMap[formType]}/fetch`)}
             >
               <FormattedMessage id="data-import.search" />
             </Button>
