@@ -339,12 +339,7 @@ export default class MessageContentTemplate extends Component {
             <Pagination
               showSizeChanger
               current={page.pageNumber}
-              showTotal={() =>
-                `Page ${(messageTemplate.totalCount || 0) &&
-                  page.pageNumber.toString()} of ${Math.ceil(
-                  (messageTemplate.totalCount || 0) / page.pageSize,
-                ).toString()}`
-              }
+              showTotal={() => `Total ${messageTemplate.totalCount} items`}
               onShowSizeChange={this.onShowSizeChange}
               onChange={this.pageChange}
               total={messageTemplate.totalCount}

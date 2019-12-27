@@ -432,11 +432,7 @@ class CodeMaintenance extends Component {
                 <Pagination
                   showSizeChanger
                   current={page.pageNumber}
-                  showTotal={() =>
-                    `Page ${(totalCount || 0) && page.pageNumber} of ${Math.ceil(
-                      (totalCount || 0) / page.pageSize,
-                    ).toString()}`
-                  }
+                  showTotal={() => `Total ${totalCount} items`}
                   onShowSizeChange={this.onShowSizeChange}
                   onChange={this.pageChange}
                   total={totalCount}
@@ -494,11 +490,7 @@ class CodeMaintenance extends Component {
                 <Pagination
                   showSizeChanger
                   current={itemPage.pageNumber}
-                  showTotal={() =>
-                    `Page ${(totalCountItem || 0) && itemPage.pageNumber} of ${Math.ceil(
-                      (totalCountItem || 0) / itemPage.pageSize,
-                    ).toString()}`
-                  }
+                  showTotal={() => `Total ${totalCountItem} items`}
                   onShowSizeChange={this.onShowItemSizeChange}
                   onChange={this.pageItemChange}
                   total={totalCountItem}

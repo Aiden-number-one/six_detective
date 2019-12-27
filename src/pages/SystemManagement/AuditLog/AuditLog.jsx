@@ -53,10 +53,12 @@ class AuditLog extends Component {
       {
         key: 'index',
         visible: true,
+        fixed: 'left',
       },
       {
         key: 'functionName',
         visible: true,
+        fixed: 'left',
       },
       {
         key: 'tableName',
@@ -194,6 +196,7 @@ class AuditLog extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.after' }),
         dataIndex: 'after',
         key: 'after',
+        width: 100,
       },
     ],
     getAuditLogList: [],
@@ -362,19 +365,20 @@ class AuditLog extends Component {
     newColumns.sort((o1, o2) => o1.index - o2.index);
     newColumns.forEach((element, index) => {
       if (index < 2) {
-        Object.defineProperty(element, 'fixed', {
-          value: 'left',
-          configurable: true,
-          writable: true,
-        });
-        // element.fixed = 'left';
+        // Object.defineProperty(element, 'fixed', {
+        //   value: 'left',
+        //   configurable: true,
+        //   writable: true,
+        // });
+        element.fixed = 'left';
       }
       if (index === newColumns.length - 1) {
-        Object.defineProperty(element, 'fixed', {
-          value: 'right',
-          configurable: true,
-          writable: true,
-        });
+        // Object.defineProperty(element, 'fixed', {
+        //   value: 'right',
+        //   configurable: true,
+        //   writable: true,
+        // });
+        element.fixed = 'right';
       }
     });
     this.setState({
@@ -445,11 +449,7 @@ class AuditLog extends Component {
             <Pagination
               showSizeChanger
               current={page.pageNumber}
-              showTotal={() =>
-                `Page ${(totalCount || 0) && page.pageNumber.toString()} of ${Math.ceil(
-                  (totalCount || 0) / page.pageSize,
-                ).toString()}`
-              }
+              showTotal={() => `Total ${totalCount} items`}
               onShowSizeChange={this.onShowSizeChange}
               onChange={this.pageChange}
               total={totalCount}
