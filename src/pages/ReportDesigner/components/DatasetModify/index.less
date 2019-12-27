@@ -2,23 +2,7 @@
   :global {
     .CodeMirror-hints {
       z-index: 999999;
-
-      // li {
-      //   padding: 5px 10px;
-      //   color: #10416c;
-      //   font-size: 12px;
-      // }
-
-      // li.CodeMirror-hint-active {
-      //   color: #10416c;
-      //   background-color: #efefef;
-      // }
     }
-
-    // pre.CodeMirror-line {
-    //   padding-top: 5px;
-    //   padding-left: 10px;
-    // }
   }
 }
 
@@ -29,7 +13,46 @@
     }
   }
   .tips {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 55px;
+    padding: 0 13px;
     border-top: 1px solid #d9d9d9;
+    .desSpan {
+      line-height: 1.5;
+    }
+    .buttCollection {
+      display: flex;
+      justify-content: flex-end;
+      button {
+        width: 120px;
+        height: 30px;
+        font-size: 12px;
+        line-height: 28px;
+        background-color: transparent;
+        border: 1px solid rgba(151, 154, 168, 1);
+        border-radius: 1px;
+        & + button {
+          margin-left: 7px;
+        }
+      }
+    }
   }
+}
+
+.inputCollection {
+  display: flex;
+}
+
+.valueName {
+  width: 210px;
+}
+
+.valueType {
+  width: 210px;
+}
+
+.value {
+  flex: 1;
 }

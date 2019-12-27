@@ -4,13 +4,20 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-26 14:26:36
+ * @LastEditTime : 2019-12-26 20:28:29
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
 // just for unit test
 // `fetch` high order function return anonymous func
-export async function getAlerts({ page = 1, pageSize = 10, sort, currentColumn, conditions }) {
+export async function getAlerts({
+  page = 1,
+  pageSize = 10,
+  sort,
+  currentColumn,
+  conditions,
+  dataTable,
+} = {}) {
   return request('get_table_page_list', {
     data: {
       sort,
@@ -18,11 +25,14 @@ export async function getAlerts({ page = 1, pageSize = 10, sort, currentColumn, 
       conditions: conditions && JSON.stringify(conditions),
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
-      dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
+      dataTable,
     },
   });
 }
 
+// export async function getInfos({ page = 1, pageSize = 10, sort, currentColumn, conditions }) {
+//   return getAlerts({ page = 1, pageSize = 10, sort, currentColumn, conditions },);
+// }
 export async function getAlertItems({ alertId, alertTypeId }) {
   return request('get_alert_item_list', { data: { alertTypeId, alertId } });
 }
@@ -70,9 +80,11 @@ export async function exportAlert({ fileType }) {
 export default {
   namespace: 'alertCenter',
   state: {
+    infos: [],
+    infoTotal: 0,
     alerts: [],
+    alertTotal: 0,
     alertItems: [],
-    total: 0,
     comments: [],
     logs: [],
     users: [],
@@ -80,12 +92,19 @@ export default {
   },
   reducers: {
     save(state, { payload }) {
-      const { alerts, page, total } = payload;
+      const { alerts, alertTotal } = payload;
       return {
         ...state,
         alerts,
-        page,
-        total,
+        alertTotal,
+      };
+    },
+    saveInfos(state, { payload }) {
+      const { infos, infoTotal } = payload;
+      return {
+        ...state,
+        infos,
+        infoTotal,
       };
     },
     saveAlertItems(state, { payload }) {
@@ -122,13 +141,9 @@ export default {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const { page, pageSize, currentColumn, sort, conditions } = payload || {};
       const { items, totalCount, err } = yield call(getAlerts, {
-        page,
-        pageSize,
-        sort,
-        currentColumn,
-        conditions,
+        ...payload,
+        dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
       });
 
       if (err) {
@@ -139,14 +154,30 @@ export default {
         type: 'save',
         payload: {
           alerts: items,
-          page,
-          total: totalCount,
+          alertTotal: totalCount,
+        },
+      });
+    },
+    *fetchInfos({ payload }, { call, put }) {
+      const { items, totalCount, err } = yield call(getAlerts, {
+        ...payload,
+        dataTable: 'SLOP_BIZ.V_INFO',
+      });
+
+      if (err) {
+        throw new Error(err);
+      }
+
+      yield put({
+        type: 'saveInfos',
+        payload: {
+          infos: items,
+          infoTotal: totalCount,
         },
       });
     },
     *fetchAlertItems({ payload }, { call, put }) {
-      const { alertTypeId, alertId } = payload || {};
-      const { items, err } = yield call(getAlertItems, { alertTypeId, alertId });
+      const { items, err } = yield call(getAlertItems, payload);
       if (err) {
         throw new Error(err);
       }

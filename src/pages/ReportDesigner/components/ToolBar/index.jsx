@@ -34,7 +34,7 @@ export default class ToolBar extends Component {
 
   render() {
     const { tabActive, reportNameType } = this.state;
-    const { reportName, saveReportTemplate } = this.props;
+    const { reportName, saveReportTemplate, reportId } = this.props;
     return (
       <>
         <div className={classNames(styles.switchTabs)}>
@@ -94,7 +94,12 @@ export default class ToolBar extends Component {
               </div>
             </div>
             <div className={styles.tabsAreaAction}>
-              <div className={styles.actionButt}>
+              <div
+                className={styles.actionButt}
+                onClick={() => {
+                  window.open(`/report-designer-preview?reportId=${reportId}`);
+                }}
+              >
                 <IconFont type="iconicon_previrew" />
                 <span>Preview</span>
               </div>
