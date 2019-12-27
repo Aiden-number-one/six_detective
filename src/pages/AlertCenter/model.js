@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 10:48:19
+ * @LastEditTime : 2019-12-27 20:20:54
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -30,9 +30,6 @@ export async function getAlerts({
   });
 }
 
-// export async function getInfos({ page = 1, pageSize = 10, sort, currentColumn, conditions }) {
-//   return getAlerts({ page = 1, pageSize = 10, sort, currentColumn, conditions },);
-// }
 export async function getAlertItems({ alertId, alertTypeId }) {
   return request('get_alert_item_list', { data: { alertTypeId, alertId } });
 }
@@ -287,7 +284,7 @@ export default {
     *close({ payload }, { call, put }) {
       const { err } = yield call(closeAlert, payload);
       if (err) {
-        yield Promise.reject(err);
+        throw new Error(err);
       }
       yield put({
         type: 'fetch',
@@ -296,7 +293,7 @@ export default {
     *export({ payload }, { call }) {
       const { err } = yield call(exportAlert, payload);
       if (err) {
-        yield Promise.reject(err);
+        throw new Error(err);
       }
     },
   },
