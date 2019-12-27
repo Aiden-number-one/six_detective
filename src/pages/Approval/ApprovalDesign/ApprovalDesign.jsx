@@ -6,6 +6,7 @@ import { Form, Input, Button, Modal, Upload, message, Drawer, Icon } from 'antd'
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import List from '@/components/List';
+import btnStyles from '@/pages/DataImportLog/index.less';
 // import classNames from 'classnames';
 import styles from './ApprovalDesign.less';
 
@@ -302,18 +303,7 @@ class ApprovalDesign extends PureComponent {
               bodyStyle={{ paddingBottom: 80 }}
             >
               <AddFlowChartForm ref={this.newFlowChartForm} />
-              <div
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  bottom: 0,
-                  width: '100%',
-                  borderTop: '1px solid #e9e9e9',
-                  padding: '10px 16px',
-                  background: '#fff',
-                  textAlign: 'right',
-                }}
-              >
+              <div className={btnStyles['bottom-btns']}>
                 <Button onClick={this.AddNewFlowChart} type="primary">
                   Save
                 </Button>

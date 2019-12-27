@@ -42,7 +42,7 @@ var KisBpmPageCtrlPopupCtrl = ['$scope', '$modal', function($scope, $modal) {
             pageSize: "6"
         }; // 参数
         const S = new Date().getTime(); // 时间戳
-        var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S },false);
+        var dataAndHeader = KISBPM.URL.getParams({ N:N, V:V, P:P, S:S },false);
       //   debugger;
       const params = dataAndHeader.param;
       const header = dataAndHeader.header;
@@ -192,7 +192,7 @@ var KisBpmeventauditPropertyCtrl = ['$scope', '$modal', function($scope, $modal)
             pageSize: "6"
         }; // 参数
         const S = new Date().getTime(); // 时间戳
-        var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S },false);
+        var dataAndHeader = KISBPM.URL.getParams({ N:N, V:V, P:P, S:S },false);
       //   debugger;
       const params = dataAndHeader.param;
       const header = dataAndHeader.header;

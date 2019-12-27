@@ -8,6 +8,7 @@ import { formatMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 // import classNames from 'classnames';
 import styles from './ApprovalConfiguration.less';
+import btnStyles from '@/pages/DataImportLog/index.less';
 
 const { Option } = Select;
 
@@ -217,18 +218,7 @@ class ApprovalConfiguration extends PureComponent {
                     configItem={configItem}
                     ref={this.newModifyForm}
                   />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      right: 0,
-                      bottom: 0,
-                      width: '100%',
-                      borderTop: '1px solid #e9e9e9',
-                      padding: '10px 16px',
-                      background: '#fff',
-                      textAlign: 'right',
-                    }}
-                  >
+                  <div className={btnStyles['bottom-btns']}>
                     <Button onClick={this.handelSave} style={{ marginRight: 12 }} type="primary">
                       Save
                     </Button>
