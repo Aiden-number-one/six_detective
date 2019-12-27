@@ -94,6 +94,7 @@ function AlertTask({
             title: formatMessage({ id: 'alert-center.owner' }),
           },
           {
+            align: 'center',
             dataIndex: 'TASK_STATUS_DESC',
             title: formatMessage({ id: 'alert-center.status' }),
           },
@@ -102,14 +103,14 @@ function AlertTask({
             dataIndex: 'action',
             title: <FormattedMessage id="alert-center.actions" />,
             render: (text, record) => {
-              const isEnd = 0;
+              const isEnd = record.TASK_STATUS === 'A' ? 1 : 0;
               return (
                 <Link
                   disabled={!record.USER_NAME}
                   to={`/homepage/Approval-Process-Center?taskCode=${record.TASK_ID}&isEnd=${isEnd}`}
-                  title={formatMessage({ id: 'alert-center.enter-workflow' })}
+                  title={formatMessage({ id: 'alert-center.enter-approval' })}
                 >
-                  <FormattedMessage id="alert-center.enter-workflow" />
+                  <FormattedMessage id="alert-center.enter-approval" />
                 </Link>
               );
             },

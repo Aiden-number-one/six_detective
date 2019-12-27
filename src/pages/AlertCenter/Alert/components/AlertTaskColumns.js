@@ -4,9 +4,11 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-24 16:04:36
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-24 16:32:17
+ * @LastEditTime : 2019-12-27 09:49:19
  */
 import { formatMessage } from 'umi/locale';
+import moment from 'moment';
+import { dateFormat } from '@/pages/DataImportLog/constants';
 
 export const epColumns = [
   {
@@ -34,6 +36,7 @@ export const caCodeColumns = [
   {
     dataIndex: 'EFFECTIVE_DATE',
     title: formatMessage({ id: 'alert-center.effective-date' }),
+    render: text => moment(text).format(dateFormat),
   },
   {
     dataIndex: 'CA_PRODUCT_CODE',

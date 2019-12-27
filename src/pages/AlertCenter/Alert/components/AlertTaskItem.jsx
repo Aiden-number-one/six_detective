@@ -1,8 +1,8 @@
 import React from 'react';
 import { Descriptions } from 'antd';
 // import { FormattedMessage } from 'umi/locale';
-// import moment from 'moment';
-// import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
+import moment from 'moment';
+import { dateFormat } from '@/pages/DataImportLog/constants';
 
 const isCACodeMap = {
   0: 'No',
@@ -70,10 +70,10 @@ export function ProductTaskItem({
 export function CaCodeTaskItem({
   task: {
     MARKET,
-    IS_CA_CODE,
     EXTERNAL_PRODUCT_CODE,
-    EFFECTIVE_DATE,
+    IS_CA_CODE,
     CA_PRODUCT_CODE,
+    EFFECTIVE_DATE,
     EXPIRY_DATE,
     REMARK,
   },
@@ -84,8 +84,12 @@ export function CaCodeTaskItem({
       <Descriptions.Item label="HKEX DCASS Code *">{EXTERNAL_PRODUCT_CODE}</Descriptions.Item>
       <Descriptions.Item label="Is CA Code? *">{isCACodeMap[+IS_CA_CODE]}</Descriptions.Item>
       <Descriptions.Item label="Original Product Code *">{CA_PRODUCT_CODE}</Descriptions.Item>
-      <Descriptions.Item label="Effective Date *">{EFFECTIVE_DATE}</Descriptions.Item>
-      <Descriptions.Item label="Expiry Date *">{EXPIRY_DATE}</Descriptions.Item>
+      <Descriptions.Item label="Effective Date *">
+        {moment(EFFECTIVE_DATE).format(dateFormat)}
+      </Descriptions.Item>
+      <Descriptions.Item label="Expiry Date *">
+        {moment(EXPIRY_DATE).format(dateFormat)}
+      </Descriptions.Item>
       <Descriptions.Item label="Remark *">{REMARK}</Descriptions.Item>
     </Descriptions>
   );
