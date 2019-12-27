@@ -51,6 +51,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
     const { alertTypeId, alertId, itemsTotal } = alert;
     // clear task item
     setPanes([]);
+    setActiveKey('1');
     // no items
     if (+itemsTotal !== 0) {
       dispatch({
@@ -74,7 +75,6 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
         alertId,
       },
     });
-    setActiveKey('1');
   }, [alert]);
 
   async function handleCommit(comment, fileList) {

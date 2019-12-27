@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-26 20:28:29
+ * @LastEditTime : 2019-12-27 10:48:19
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -65,7 +65,7 @@ export async function getAssignUsers({ alertItemIds }) {
 export async function assignAlertItem({ taskIds, userId }) {
   return request('set_alert_item_owner', { data: { taskIds: taskIds.join(','), userId } });
 }
-export async function closeAlert({ alertIds }) {
+export async function closeAlert({ alertIds = [] }) {
   return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
 }
 export async function exportAlert({ fileType }) {
@@ -257,10 +257,15 @@ export default {
           alertId,
         },
       });
+      yield put({
+        type: 'fetchLogs',
+        payload: {
+          alertId,
+        },
+      });
     },
     *claim({ payload }, { call, put }) {
-      const { alertIds, isCoverClaim } = payload || [];
-      const { err, msg, items } = yield call(claimAlert, { alertIds, isCoverClaim });
+      const { err, msg, items } = yield call(claimAlert, payload);
       if (err) {
         throw new Error(err);
       }
@@ -280,8 +285,7 @@ export default {
       }
     },
     *close({ payload }, { call, put }) {
-      const { alertIds } = payload || [];
-      const { err } = yield call(closeAlert, { alertIds });
+      const { err } = yield call(closeAlert, payload);
       if (err) {
         yield Promise.reject(err);
       }
