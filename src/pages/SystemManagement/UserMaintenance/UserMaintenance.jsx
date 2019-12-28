@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 /*
- * @Description: This is for userManagement page.
+ * @Description: This is for userMaintenance page.
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-27 17:45:53
+ * @LastEditTime : 2019-12-28 10:33:07
  */
 
 import React, { Component } from 'react';
@@ -12,21 +12,21 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, Table, Button, Drawer, message, Pagination } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import styles from './UserManagement.less';
+import styles from './UserMaintenance.less';
 import { timeFormat, lockedFormat } from '@/utils/filter';
 import IconFont from '@/components/IconFont';
 
 import SearchForm from './components/SearchForm';
-import NewUser from './components/NewUser';
+import ModifyUser from './components/ModifyUser';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
-@connect(({ userManagement, loading }) => ({
+@connect(({ userMaintenance, loading }) => ({
   loading: loading.effects,
-  userManagementData: userManagement.data,
-  modifyUserData: userManagement.updateData,
+  userMaintenanceData: userMaintenance.data,
+  modifyUserData: userMaintenance.updateData,
 }))
-class UserManagement extends Component {
+class UserMaintenance extends Component {
   state = {
     visible: false,
     userTitle: 'New User',
@@ -143,7 +143,7 @@ class UserManagement extends Component {
       pageSize: this.state.page.pageSize.toString(),
     };
     dispatch({
-      type: 'userManagement/userManagemetDatas',
+      type: 'userMaintenance/userManagemetDatas',
       payload: params,
     });
   };
@@ -194,7 +194,6 @@ class UserManagement extends Component {
    * @return: undefined
    */
   updateUser = (res, obj) => {
-    console.log('res, obj===', res, obj);
     const userInfo = {
       userName: obj.userName,
       userId: obj.userId,
@@ -232,7 +231,7 @@ class UserManagement extends Component {
       userId: this.state.userInfo.userId,
     };
     dispatch({
-      type: 'userManagement/updateUserModelDatas',
+      type: 'userMaintenance/updateUserModelDatas',
       payload: params,
       callback: () => {
         message.success({
@@ -317,7 +316,7 @@ class UserManagement extends Component {
   };
 
   render() {
-    const { loading, userManagementData } = this.props;
+    const { loading, userMaintenanceData } = this.props;
     const { userInfo, page, userTitle, NewFlag } = this.state;
     return (
       <PageHeaderWrapper>
@@ -338,12 +337,12 @@ class UserManagement extends Component {
               visible={this.state.visible}
             >
               {this.state.visible && (
-                <NewUser
+                <ModifyUser
                   onCancel={this.addCancel}
                   onSave={this.addConfrim}
                   NewFlag={NewFlag}
                   userInfo={userInfo}
-                ></NewUser>
+                ></ModifyUser>
               )}
             </Drawer>
             {/* delete */}
@@ -365,19 +364,19 @@ class UserManagement extends Component {
               </Button>
             </div>
             <Table
-              loading={loading['userManagement/userManagemetDatas']}
-              dataSource={userManagementData.items}
+              loading={loading['userMaintenance/userManagemetDatas']}
+              dataSource={userMaintenanceData.items}
               columns={this.state.columns}
               pagination={false}
             ></Table>
-            {userManagementData.items && userManagementData.items.length > 0 && (
+            {userMaintenanceData.items && userMaintenanceData.items.length > 0 && (
               <Pagination
                 current={page.pageNumber}
                 showSizeChanger
-                showTotal={() => `Total ${userManagementData.totalCount} items`}
+                showTotal={() => `Total ${userMaintenanceData.totalCount} items`}
                 onShowSizeChange={this.onShowSizeChange}
                 onChange={this.pageChange}
-                total={userManagementData.totalCount}
+                total={userMaintenanceData.totalCount}
                 pageSize={page.pageSize}
               />
             )}
@@ -388,4 +387,4 @@ class UserManagement extends Component {
   }
 }
 
-export default UserManagement;
+export default UserMaintenance;

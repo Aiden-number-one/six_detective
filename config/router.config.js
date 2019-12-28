@@ -267,7 +267,7 @@ export default [
           {
             path: '/system-management/user-maintenance',
             name: 'User Maintenance',
-            component: './SystemManagement/UserManagement/UserManagement',
+            component: './SystemManagement/UserMaintenance/UserMaintenance',
           },
           {
             path: '/system-management/menu-user-group',

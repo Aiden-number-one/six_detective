@@ -3,7 +3,7 @@ import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
-import styles from '../UserManagement.less';
+import styles from '../UserMaintenance.less';
 // import { passWordStrength } from '@/utils/utils';
 
 class FormUser extends Component {
@@ -122,14 +122,14 @@ class FormUser extends Component {
 
 const NewFormUser = Form.create()(FormUser);
 
-@connect(({ userManagement, loading }) => ({
+@connect(({ userMaintenance, loading }) => ({
   loading: loading.effects,
-  newUserData: userManagement.saveUser,
-  menuUserGroup: userManagement.menuData,
-  alertUserGroups: userManagement.alertData,
-  modifyUserData: userManagement.updateData,
+  newUserData: userMaintenance.saveUser,
+  menuUserGroup: userMaintenance.menuData,
+  alertUserGroups: userMaintenance.alertData,
+  modifyUserData: userMaintenance.updateData,
 }))
-export default class NewUser extends Component {
+export default class ModifyUser extends Component {
   newUserRef = React.createRef();
 
   constructor(props) {
@@ -162,7 +162,7 @@ export default class NewUser extends Component {
     const { dispatch } = this.props;
     const params = {};
     dispatch({
-      type: 'userManagement/getMenuUserGroup',
+      type: 'userMaintenance/getMenuUserGroup',
       payload: params,
     });
   };
@@ -171,7 +171,7 @@ export default class NewUser extends Component {
     const { dispatch } = this.props;
     const params = {};
     dispatch({
-      type: 'userManagement/getAlertUserGroup',
+      type: 'userMaintenance/getAlertUserGroup',
       payload: params,
     });
   };
@@ -184,7 +184,7 @@ export default class NewUser extends Component {
     };
     // const _self = this
     dispatch({
-      type: 'userManagement/updateUserModelDatas',
+      type: 'userMaintenance/updateUserModelDatas',
       payload: params,
       callback: () => {
         const groupIds = this.props.modifyUserData.map(element => {
@@ -280,7 +280,7 @@ export default class NewUser extends Component {
           accountLock,
         };
         dispatch({
-          type: 'userManagement/newUser',
+          type: 'userMaintenance/newUser',
           payload: params,
           callback: () => {
             message.success({
@@ -304,7 +304,7 @@ export default class NewUser extends Component {
           accountLock,
         };
         dispatch({
-          type: 'userManagement/updateUserModelDatas',
+          type: 'userMaintenance/updateUserModelDatas',
           payload: params,
           callback: () => {
             message.success({
