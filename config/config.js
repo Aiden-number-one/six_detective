@@ -2,8 +2,8 @@
  * @Description: app global config
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2019-12-25 20:10:31
- * @LastEditors  : iron
+ * @LastEditTime : 2019-12-28 16:11:05
+ * @LastEditors  : dailinbo
  * @Description: umi 配置文件
  */
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -12,7 +12,21 @@ import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 import router from './router.config';
 import webpackPlugin from './plugin.config';
 
-const { pwa, primaryColor } = defaultSettings;
+const {
+  pwa,
+  primaryColor,
+  linkColor,
+  fontSizeBase,
+  headingColor,
+  textColor,
+  textColorSecondary,
+  successColor,
+  warningColor,
+  errorColor,
+  borderRadiusBase,
+  borderColorBase,
+  boxShadowBase,
+} = defaultSettings;
 // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
@@ -93,6 +107,17 @@ export default {
   routes: router,
   theme: {
     'primary-color': primaryColor,
+    'link-color': linkColor,
+    'font-size-base': fontSizeBase,
+    'heading-color': headingColor,
+    'text-color': textColor,
+    'border-radius-base': borderRadiusBase,
+    'border-color-base':  borderColorBase,
+    'success-color': successColor,
+    'warning-color': warningColor,
+    'error-color': errorColor,
+    'box-shadow-base': boxShadowBase,
+    'text-color-secondary': textColorSecondary
   },
   define: {
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:

@@ -487,7 +487,7 @@ class AddDataSet extends PureComponent {
                 </Button>
                 <Button
                   style={{ float: 'right' }}
-                  className="btn_usual"
+                  className="btn-usual"
                   type="primary"
                   onClick={() => {
                     // 打开另存为弹框

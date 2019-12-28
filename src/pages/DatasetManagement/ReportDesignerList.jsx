@@ -422,7 +422,7 @@ export default class DatasetManagement extends PureComponent {
                       window.open('/report-designer');
                     }}
                     type="primary"
-                    className="btn_usual"
+                    className="btn-usual"
                   >
                     + New Report Template
                   </Button>

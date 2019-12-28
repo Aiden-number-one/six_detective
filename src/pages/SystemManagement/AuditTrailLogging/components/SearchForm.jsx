@@ -42,7 +42,7 @@ export default class SearchForm extends Component {
                 style={{ marginLeft: '10px' }}
                 type="primary"
                 onClick={exportData}
-                className="btn_usual"
+                className="btn-usual"
                 icon="export"
               >
                 {formatMessage({ id: 'app.common.export' })}
@@ -54,7 +54,7 @@ export default class SearchForm extends Component {
           <Button
             type="primary"
             onClick={exportData}
-            className="btn_usual"
+            className="btn-usual"
             style={{ height: '36px' }}
           >
             {formatMessage({ id: 'app.common.export' })}

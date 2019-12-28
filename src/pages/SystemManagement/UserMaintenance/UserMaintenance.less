@@ -1,3 +1,4 @@
+@import '~@/assets/css/variable.less';
 .clearfix::after {
   display: block; /* 将文本转为块级元素 */
   clear: both; /* 清除浮动 */
@@ -51,7 +52,7 @@
 }
 .userGroup {
   margin-top: 40px;
-  color: #464c51;
+  color: @textColor;
   .groupTitle {
     margin: 0;
     padding-bottom: 14px;
@@ -63,8 +64,8 @@
     width: 4px;
     height: 15px;
     margin-right: 5px;
-    color: #f8374c;
-    background-color: #f8374c;
+    color: @errorColor;
+    background-color: @errorColor;
     border: none;
     content: '';
   }
