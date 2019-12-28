@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-26 15:44:45
+ * @LastEditTime : 2019-12-28 17:03:03
  */
 import Service from '@/utils/Service';
 
@@ -32,7 +32,7 @@ export default {
       });
       yield put({
         type: 'savePreviewData',
-        payload: response,
+        payload: response.bcjson.items[0].tableData,
       });
     },
   },

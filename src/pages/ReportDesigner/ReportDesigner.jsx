@@ -160,14 +160,7 @@ export default class ReportDesigner extends PureComponent {
 
   render() {
     const { display, leftSideCollapse, rightSideCollapse, displayDropSelect } = this.state;
-    const {
-      setCellCallback,
-      dispatch,
-      setCellType,
-      location: {
-        query: { reportId },
-      },
-    } = this.props;
+    const { setCellCallback, dispatch, setCellType } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
       saveReportTemplate: this.saveReportTemplate, // 保存报表模板
@@ -178,7 +171,6 @@ export default class ReportDesigner extends PureComponent {
       setCellType, // 设置单元格的数据类型
       setCellCallback,
       dispatch,
-      reportId,
     };
     // leftTree的相关Props
     const leftSideBarProps = {
@@ -237,7 +229,10 @@ export default class ReportDesigner extends PureComponent {
               className={classNames(styles.right)}
               style={{ width: rightSideCollapse ? '300px' : '30px' }}
             >
-              <RigthSideBar />
+              <RigthSideBar
+                rightSideCollapse={rightSideCollapse}
+                changeRightSideBar={this.changeRightSideBar}
+              />
             </div>
           </div>
         </div>

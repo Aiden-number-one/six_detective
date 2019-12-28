@@ -2,12 +2,16 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { connect } from 'dva';
+import { message } from 'antd';
 import styles from './index.less';
 import IconFont from '@/components/IconFont';
 import StartMenu from './StartMenu';
 import InsertMenu from './InsertMenu';
 
-@connect(({ reportDesigner }) => ({ reportName: reportDesigner.reportName }))
+@connect(({ reportDesigner }) => ({
+  reportName: reportDesigner.reportName,
+  reportId: reportDesigner.reportId,
+}))
 export default class ToolBar extends Component {
   state = {
     tabActive: 'Start',
@@ -97,6 +101,10 @@ export default class ToolBar extends Component {
               <div
                 className={styles.actionButt}
                 onClick={() => {
+                  if (!reportId) {
+                    message.warn('Please save the report template.');
+                    return;
+                  }
                   window.open(`/report-designer-preview?reportId=${reportId}`);
                 }}
               >

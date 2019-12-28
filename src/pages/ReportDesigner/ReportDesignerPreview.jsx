@@ -23,6 +23,8 @@ export default class ReportDesignerPreview extends Component {
   }
 
   render() {
-    return <div></div>;
+    const { previewData } = this.props;
+    // eslint-disable-next-line react/no-danger
+    return <div dangerouslySetInnerHTML={{ __html: previewData }}></div>;
   }
 }
