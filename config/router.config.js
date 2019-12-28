@@ -302,7 +302,7 @@ export default [
           {
             path: '/system-management/system-parameters',
             name: 'System Parameters',
-            component: './SystemManagement/SystemParameters/SystemParameters',
+            component: './SystemManagement/SystemParameter/SystemParameter',
           },
         ],
       },

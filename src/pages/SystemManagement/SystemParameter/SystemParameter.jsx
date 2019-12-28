@@ -4,7 +4,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
-import styles from './SystemParameters.less';
+import styles from './SystemParameter.less';
 
 import SearchForm from './components/SearchForm';
 import ModifySystem from './components/ModifySystem';
