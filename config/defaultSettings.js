@@ -2,12 +2,23 @@
  * @Description: Theme
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime: 2019-12-06 10:48:34
- * @LastEditors: mus
+ * @LastEditTime : 2019-12-28 16:21:55
+ * @LastEditors  : dailinbo
  */
 export default {
   navTheme: 'dark',
-  primaryColor: '#10416c',
+  primaryColor: '#0D87D4',
+  linkColor: '#0D87D4',
+  fontSizeBase: '14px',
+  headingColor: '#464C51',
+  textColor: '#464C51',
+  textColorSecondary: '#464C51',
+  borderRadiusBase: '0',
+  borderColorBase: '#979AA8',
+  successColor: '#24803D',
+  warningColor: '#FFB81C',
+  errorColor: '#F4374C',
+  boxShadowBase: 'none',
   layout: 'sidemenu',
   contentWidth: 'Fluid',
   fixedHeader: false,

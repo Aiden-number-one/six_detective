@@ -196,7 +196,7 @@ export default class DataProcessing extends Component {
                 <Button
                   type="primary"
                   onClick={this.inspectData}
-                  className="btn_usual"
+                  className="btn-usual"
                   style={{ height: '36px' }}
                 >
                   {formatMessage({ id: 'systemManagement.dataProcessing.inspectData' })}
@@ -311,7 +311,7 @@ export default class DataProcessing extends Component {
                   <Button
                     onClick={this.addCode}
                     type="primary"
-                    className="btn_usual"
+                    className="btn-usual"
                     style={{ height: '36px' }}
                     disabled={!hasSelected}
                   >

@@ -428,7 +428,7 @@ class CodeMaintenance extends Component {
             </div>
             <div className={styles.content} style={{ paddingTop: '0px' }}>
               <div className={styles.tableTop}>
-                <Button onClick={this.addCode} type="primary" className="btn_usual">
+                <Button onClick={this.addCode} type="primary" className="btn-usual">
                   + Add Subitem
                 </Button>
               </div>

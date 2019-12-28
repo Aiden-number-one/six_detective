@@ -474,7 +474,7 @@ export default class DatasetManagement extends PureComponent {
               <div className={styles.content}>
                 <div className={styles.tableTop}>
                   <Dropdown overlay={menu}>
-                    <Button className="btn_usual" type="primary">
+                    <Button className="btn-usual" type="primary">
                       + New DataSet
                     </Button>
                   </Dropdown>

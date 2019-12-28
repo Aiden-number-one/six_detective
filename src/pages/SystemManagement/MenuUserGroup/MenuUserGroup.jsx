@@ -334,7 +334,7 @@ class MenuUserGroup extends Component {
         </Modal>
         <div className={styles.content}>
           <div className={styles.tableTop}>
-            <Button onClick={this.newUser} type="primary" className="btn_usual">
+            <Button onClick={this.newUser} type="primary" className="btn-usual">
               + New Menu Group
             </Button>
           </div>

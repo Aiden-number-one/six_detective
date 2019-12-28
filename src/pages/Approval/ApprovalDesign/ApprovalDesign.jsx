@@ -252,7 +252,7 @@ class ApprovalDesign extends PureComponent {
               <div className={styles.rightBox}>
                 <div>
                   <Button
-                    className="btn_usual"
+                    className="btn-usual"
                     onClick={this.deployModel}
                     type="primary"
                     icon="deployment-unit"
@@ -260,7 +260,7 @@ class ApprovalDesign extends PureComponent {
                     {formatMessage({ id: 'systemManagement.flowDesign.flowRelease' })}
                   </Button>
                   <Button
-                    className="btn_usual"
+                    className="btn-usual"
                     onClick={this.goProcessPage}
                     type="primary"
                     icon="edit"
@@ -268,7 +268,7 @@ class ApprovalDesign extends PureComponent {
                     {formatMessage({ id: 'systemManagement.flowDesign.flowModify' })}
                   </Button>
                   <Button
-                    className="btn_usual"
+                    className="btn-usual"
                     type="primary"
                     icon="delete"
                     onClick={this.deleteOpenModel}
@@ -276,7 +276,7 @@ class ApprovalDesign extends PureComponent {
                     {formatMessage({ id: 'systemManagement.flowDesign.flowDelete' })}
                   </Button>
                   <Button
-                    className="btn_usual"
+                    className="btn-usual"
                     onClick={this.exportModel}
                     type="primary"
                     icon="export"
@@ -287,7 +287,7 @@ class ApprovalDesign extends PureComponent {
                     onChange={info => this.importFileStatus(info)}
                     action="/upload?fileClass=WORKFLOW"
                   >
-                    <Button className="btn_usual" type="primary" icon="import">
+                    <Button className="btn-usual" type="primary" icon="import">
                       {formatMessage({ id: 'systemManagement.flowDesign.flowImport' })}
                     </Button>
                   </Upload>
