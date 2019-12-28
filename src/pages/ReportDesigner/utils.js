@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-23 10:17:57
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-26 16:33:49
+ * @LastEditTime : 2019-12-27 18:34:17
  */
 /*
  * @Des: 报表设计器的
@@ -94,14 +94,21 @@ export function dataSetTree(dataSets) {
   return dataSets.map(dataSet => ({
     title: dataSet.dataset_name,
     key: dataSet.dataset_id,
+    otherInfo: {
+      datasourceId: dataSet.query.datasource_id, // 数据源ID
+      commandText: dataSet.query.command_text, // SQL串
+      datasetType: dataSet.dataset_type, // 数据集类型
+      datasetName: dataSet.dataset_name, // 数据集名字
+    },
     children: [
       // 字段
       {
         title: 'Fields',
         key: `${dataSet.dataset_id}Fields`,
         children: dataSet.fields.map(field => ({
-          title: field.field_text_name,
+          title: field.field_data_name,
           key: `${dataSet.dataset_id}${field.field_data_name}`,
+          dragInfo: `${dataSet.dataset_name}.${field.field_data_name}`,
           isLeaf: true,
         })),
         isLeaf: dataSet.fields.length === 0,

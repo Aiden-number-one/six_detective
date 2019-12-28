@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2019-12-24 20:29:45
+ * @LastEditTime : 2019-12-27 18:03:29
  * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
@@ -135,6 +135,10 @@ export default WrapperComponent =>
           },
         ],
         hooks: {
+          afterDrop(params) {
+            // 拖拽放置后的回调
+            callbackProps.afterDrop(params);
+          },
           beforeChangeFile(cellProps, row, col, index) {
             console.log(`row:${row} col:${col} index:${index}`);
           },

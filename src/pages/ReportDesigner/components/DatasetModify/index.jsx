@@ -1,6 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { PureComponent } from 'react';
 import { Row, Col, Button, Form, Input } from 'antd';
+import { connect } from 'dva';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import styles from './index.less';
 import 'codemirror/lib/codemirror.css';
@@ -17,23 +18,32 @@ const options = {
 };
 
 @Form.create()
+@connect(() => ({}))
 export default class DatasetModify extends PureComponent {
+  onSave = () => {
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: ''
+    // });
+  };
+
   render() {
     const {
       form: { getFieldDecorator },
+      currentSelectDataSetOtherInfo = {},
     } = this.props;
     return (
       <div className={styles.modifyDataSet}>
         <Form>
           <Form.Item label="Name of Data Set" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
-            {getFieldDecorator('userName', {
+            {getFieldDecorator('datasetName', {
               rules: [
                 {
                   required: true,
                   message: 'Name of Data Set should not be empty',
                 },
               ],
-              initialValue: undefined,
+              initialValue: currentSelectDataSetOtherInfo.datasetName,
             })(<Input placeholder="Please Input Name of Data Set" />)}
           </Form.Item>
           <Form.Item label="Type of Data Set" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
@@ -44,7 +54,7 @@ export default class DatasetModify extends PureComponent {
                   message: 'Name of Data Set should not be empty',
                 },
               ],
-              initialValue: undefined,
+              initialValue: currentSelectDataSetOtherInfo.datasetType,
             })(<Input placeholder="Please Input Name of Data Set" />)}
           </Form.Item>
           <Form.Item
@@ -54,14 +64,10 @@ export default class DatasetModify extends PureComponent {
             className={styles.codeMirrorStyle}
           >
             <CodeMirror
-              value="select * from aaaaaa"
+              value={currentSelectDataSetOtherInfo.commandText}
               options={options}
               onChange={(editor, data, value) => {
                 this.sql = value;
-                // dispatch({
-                //   type: 'sqlKeydown/changeSql',
-                //   payload: value,
-                // });
               }}
             />
             <div className={styles.tips}>
@@ -79,6 +85,11 @@ export default class DatasetModify extends PureComponent {
         </Form>
         {/* 编辑数据集相关 */}
         <Form.Item label=" " labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
+          <div className={styles.inputCollection}>
+            <span className={styles.valueName}>Variable Name</span>
+            <span className={styles.valueType}>Variable Type</span>
+            <span className={styles.value}>Value</span>
+          </div>
           <div className={styles.inputCollection}>
             <Input className={styles.valueName} />
             <Input className={styles.valueType} />
