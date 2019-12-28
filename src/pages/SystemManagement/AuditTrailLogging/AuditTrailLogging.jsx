@@ -5,7 +5,7 @@ import { Form, Table, Pagination, Modal, Checkbox, Row, Col } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
-import styles from './AuditLog.less';
+import styles from './AuditTrailLogging.less';
 import { timeFormat } from '@/utils/filter';
 import SearchForm from './components/SearchForm';
 import IconFont from '@/components/IconFont';
@@ -16,7 +16,7 @@ const NewSearchForm = Form.create({})(SearchForm);
   loading: loading.effects,
   getAuditLogListData: auditLog.data,
 }))
-class AuditLog extends Component {
+class AuditTrailLogging extends Component {
   state = {
     page: {
       pageNumber: 1,
@@ -496,4 +496,4 @@ class AuditLog extends Component {
   }
 }
 
-export default AuditLog;
+export default AuditTrailLogging;

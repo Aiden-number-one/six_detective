@@ -3,13 +3,13 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 10:40:21
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-24 20:18:41
+ * @LastEditTime : 2019-12-28 13:53:39
  */
 import Service from '@/utils/Service';
 
 const { getAuditLog, dataExport } = Service;
 
-const getAuditLogModel = {
+const auditTrailLogging = {
   namespace: 'auditLog',
   state: {
     data: [],
@@ -60,4 +60,4 @@ const getAuditLogModel = {
   },
 };
 
-export default getAuditLogModel;
+export default auditTrailLogging;
