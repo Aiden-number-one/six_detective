@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Form, Radio, Select } from 'antd';
+import moment from 'moment';
 
 // import styles from '../index.less';
 
@@ -295,12 +296,15 @@ function CaCode({ detailData, getFieldDecorator, setRadioCurrentValue, isShowFor
       </Form.Item>
       <Form.Item label="Effective Date" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('effectiveDate', {
-          initialValue: detailData.effectiveDate,
+          initialValue:
+            detailData.effectiveDate &&
+            moment(detailData.effectiveDate).format('DD-MMM-YYYY HH:mm:ss'),
         })(<Input disabled />)}
       </Form.Item>
       <Form.Item label="Expiry Date " labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
         {getFieldDecorator('expiryDate', {
-          initialValue: detailData.expiryDate,
+          initialValue:
+            detailData.expiryDate && moment(detailData.expiryDate).format('DD-MMM-YYYY HH:mm:ss'),
         })(<Input disabled />)}
       </Form.Item>
       <Form.Item label="Remark " labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>

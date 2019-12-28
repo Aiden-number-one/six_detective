@@ -55,19 +55,19 @@ export default {
     *createModel({ payload, callback }, { call }) {
       const response = yield call(createModel, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('New success');
+        message.success(response.bcjson.msg);
         callback('1', '10');
       } else {
-        message.error('New failure');
+        throw new Error(response.bcjson.msg);
       }
     },
     *deleteModel({ payload, callback }, { call }) {
       const response = yield call(deleteModel, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('Delete successful');
+        message.success(response.bcjson.msg);
         callback('1', '10');
       } else {
-        message.error('Delete failed');
+        throw new Error(response.bcjson.msg);
       }
     },
     *importModel({ payload, callback }, { call }) {
@@ -76,7 +76,7 @@ export default {
         message.success('Successful import');
         callback('1', '10');
       } else {
-        message.error('Import failed');
+        throw new Error(response.bcjson.msg);
       }
     },
     *exportModel({ payload, callback }, { call }) {
@@ -84,15 +84,15 @@ export default {
       if (response.bcjson.flag === '1') {
         callback(response.bcjson.items);
       } else {
-        message.error('Export failure');
+        throw new Error(response.bcjson.msg);
       }
     },
     *deployModel({ payload }, { call }) {
       const response = yield call(deployModel, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('Deployment success');
+        message.success(response.bcjson.msg);
       } else {
-        message.error('Deployment failure');
+        throw new Error(response.bcjson.msg);
       }
     },
   },

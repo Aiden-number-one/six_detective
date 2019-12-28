@@ -4,23 +4,22 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-26 14:49:26
+ * @LastEditTime : 2019-12-27 19:45:28
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-
-const format = 'YYYYMMDD';
+import { reqFormat as format } from '../constants';
 
 export async function getLogs(params = {}) {
-  const { page = 1, pageSize = 10, market, tradeDateSt, tradeDateEt, fileType } = params;
+  const { page = 1, pageSize = 10, market, startDate, endDate, fileType } = params;
   return request('get_md_proc_progress', {
     data: {
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
       market: market && market.toString(),
       fileType,
-      tradeDateSt: tradeDateSt && tradeDateSt.format(format),
-      tradeDateEt: tradeDateEt && tradeDateEt.format(format),
+      tradeDateSt: startDate && startDate.format(format),
+      tradeDateEt: endDate && endDate.format(format),
     },
   });
 }
@@ -39,14 +38,16 @@ export default {
   namespace: 'market',
   state: {
     logs: [],
+    page: 1,
     total: 0,
   },
   reducers: {
     save(state, { payload }) {
-      const { logs, total } = payload;
+      const { logs, page = 1, total } = payload;
       return {
         ...state,
         logs,
+        page,
         total,
       };
     },
@@ -63,6 +64,7 @@ export default {
         type: 'save',
         payload: {
           logs: items,
+          page: payload.page,
           total: totalCount,
         },
       });
@@ -80,9 +82,6 @@ export default {
         throw new Error(err);
       }
       message.success(msg);
-      yield put({ type: 'reload', payload });
-    },
-    *reload({ payload }, { put }) {
       yield put({ type: 'fetch', payload });
     },
   },

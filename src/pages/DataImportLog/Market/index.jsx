@@ -3,18 +3,19 @@ import { connect } from 'dva';
 import { FormattedMessage } from 'umi/locale';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Row } from 'antd';
-import MarketLogFilterForm, { defaultTradeDate, defaultMarket } from './MarketLogFilterForm';
+import { defaultDateRange, defaultMarket } from '../constants';
 import MarketLogManualModal from './MarketLogManualModal';
+import FilterForm from '../FilterForm';
 import MarketLogList from './MarketLogList';
 
 import styles from '../index.less';
 
-function MarketLog({ dispatch, loading, logs, total }) {
+function MarketLog({ dispatch, loading, logs, page: current, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     market: defaultMarket,
-    tradeDateSt: defaultTradeDate[0],
-    tradeDateEt: defaultTradeDate[1],
+    startDate: defaultDateRange[0],
+    endDate: defaultDateRange[1],
   });
 
   useEffect(() => {
@@ -40,7 +41,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <MarketLogFilterForm loading={loading} onParams={handleParams} />
+        <FilterForm formType={1} loading={loading} onParams={handleParams} />
         <MarketLogManualModal
           visible={visible}
           loading={loading['market/importByManual']}
@@ -55,6 +56,7 @@ function MarketLog({ dispatch, loading, logs, total }) {
           </Row>
           <MarketLogList
             dataSource={logs}
+            page={current}
             total={total}
             loading={loading['market/fetch']}
             onPageChange={handlePageChange}

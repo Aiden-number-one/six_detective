@@ -115,7 +115,7 @@ function ProcessList({
   const urlIsEnd = GetQueryString('isEnd');
   useEffect(() => {
     setUrlCode(urlTaskCode);
-    if (urlIsEnd) {
+    if (urlIsEnd === '1') {
       setSelectedTasks('his');
     }
     router.push({
@@ -124,7 +124,7 @@ function ProcessList({
     dispatch({
       type: 'approvalCenter/fetch',
       payload: {
-        type: urlIsEnd ? 'his' : selectedCurrentTask,
+        type: urlIsEnd === '1' ? 'his' : selectedCurrentTask,
         taskCode: urlTaskCode,
       },
     });
@@ -276,7 +276,7 @@ function ProcessList({
         ></Radio.Group>
         <div className={btnStyles['bottom-btns']}>
           <Button onClick={() => setTaskAssign(selectedKeys)} type="primary">
-            Save
+            Confirm
           </Button>
           <Button onClick={() => setVisible(false)} style={{ marginRight: 12 }}>
             Cancel

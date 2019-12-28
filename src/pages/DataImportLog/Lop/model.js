@@ -4,21 +4,20 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-26 14:48:55
+ * @LastEditTime : 2019-12-27 19:37:05
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-
-const format = 'YYYYMMDD';
+import { reqFormat as format } from '../constants';
 
 export async function getLogs(params = {}) {
-  const { page = 1, pageSize = 10, startTradeDate, endTradeDate, ...rest } = params;
+  const { page = 1, pageSize = 10, startDate, endDate, ...rest } = params;
   return request('get_lop_proc_progress_list_page', {
     data: {
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
-      startTradeDate: startTradeDate && startTradeDate.format(format),
-      endTradeDate: endTradeDate && endTradeDate.format(format),
+      startTradeDate: startDate && startDate.format(format),
+      endTradeDate: endDate && endDate.format(format),
       ...rest,
     },
   });
@@ -46,23 +45,17 @@ export default {
   namespace: 'lop',
   state: {
     logs: [],
+    page: 1,
     total: 0,
-    reportUrl: '',
   },
   reducers: {
     save(state, { payload }) {
-      const { logs, total } = payload;
+      const { logs, page = 1, total } = payload;
       return {
         ...state,
+        page,
         logs,
         total,
-      };
-    },
-    saveReportUrl(state, { payload }) {
-      const { reportUrl } = payload;
-      return {
-        ...state,
-        reportUrl,
       };
     },
   },
@@ -78,17 +71,17 @@ export default {
         type: 'save',
         payload: {
           logs: items,
+          page: payload.page,
           total: totalCount,
         },
       });
     },
-    *importByManual({ payload }, { call, put }) {
+    *importByManual({ payload }, { call }) {
       const { err, msg } = yield call(postManual, payload);
       if (err) {
         throw new Error(err);
       }
       message.success(msg);
-      yield put({ type: 'reload' });
     },
     *importByAuto({ payload }, { call, put }) {
       const { err, msg } = yield call(postAuto);
@@ -96,25 +89,21 @@ export default {
         throw new Error(err);
       }
       message.success(msg);
-      yield put({ type: 'reload', payload });
+      yield put({ type: 'fetch', payload });
     },
-    *fetchReportUrl({ payload }, { call, put, select }) {
-      const { err, items } = yield call(getReportUrl, payload);
+    *fetchReportUrl({ payload }, { call, put }) {
+      const { err, items: reportUrl } = yield call(getReportUrl, payload);
       if (err) {
         throw new Error(err);
       }
       yield put({
         type: 'saveReportUrl',
         payload: {
-          reportUrl: items,
+          reportUrl,
         },
       });
 
-      // it will return to component
-      return yield select(state => state.lop.reportUrl);
-    },
-    *reload({ payload }, { put }) {
-      yield put({ type: 'fetch', payload });
+      return reportUrl;
     },
   },
 };
