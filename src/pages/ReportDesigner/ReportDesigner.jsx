@@ -85,11 +85,16 @@ export default class ReportDesigner extends PureComponent {
 
   // react-dnd的拖拽区域
   afterDrop = dragInfo => {
+    // const { setCellType } = this.props;
     // 被拖动元素的
     const { ri, ci } = this.dropPosition;
-    // 进行赋值
+    // 设置值
     // eslint-disable-next-line no-underscore-dangle
     window.xsObj._setCellText({ ri: Number(ri), ci: Number(ci), text: dragInfo });
+    window.xsObj.instanceArray[0].sheet.toolbar.change();
+    // setCellType('cellType', {
+    //   cellType: 'dataSet',
+    // });
   };
 
   // 设置单元格样式

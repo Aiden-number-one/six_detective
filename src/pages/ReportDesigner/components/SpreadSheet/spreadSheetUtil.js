@@ -33,14 +33,6 @@ export function mergeCell(merges) {
  * @Date: 2019-12-23 20:24:27
  */
 export function generateJson(spreadSheetData) {
-  // 默认cellProps
-  const defaultCellProps = {
-    F: '1',
-    cellDesc: '',
-    cellType: 'text',
-    style: {},
-    sy: '0',
-  };
   // rows: 所有行,
   const { rows, cols, merges } = spreadSheetData;
   const rowLength = rows.len;
@@ -53,9 +45,15 @@ export function generateJson(spreadSheetData) {
   const data = new Array(rowLength).fill([]).map(() => new Array(colLength).fill(''));
 
   // 生成JSON所需的cellAttrs，即单元格中的数据类型、style相关
-  const cellAttrs = new Array(rowLength)
-    .fill([])
-    .map(() => new Array(colLength).fill(defaultCellProps));
+  const cellAttrs = new Array(rowLength).fill([]).map(() =>
+    new Array(colLength).fill({
+      F: '1',
+      cellDesc: '',
+      cellType: 'text',
+      style: {},
+      sy: '0',
+    }),
+  );
 
   Object.keys(rows).forEach(rowIndex => {
     if (rowIndex === 'len') {
@@ -79,6 +77,13 @@ export function generateJson(spreadSheetData) {
       // 若改单元格不存在合并，则rowSpan为1，同理colSpan为1
       currentCellProps.rowSpan = processedMerge ? processedMerge.rowSpan : '1';
       currentCellProps.colSpan = processedMerge ? processedMerge.colSpan : '1';
+
+      // 对cellType进行处理
+      if (cellContent.cellProps.cellType === 'dataSet') {
+        currentCellProps.cellType = 'DATASET';
+      } else if (cellContent.cellProps.cellType === 'text') {
+        currentCellProps.cellType = 'TEXT';
+      }
 
       // 对样式进行处理
       if (cellContent.style) {
