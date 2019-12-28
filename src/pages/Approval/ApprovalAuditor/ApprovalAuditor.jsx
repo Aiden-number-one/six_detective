@@ -6,6 +6,7 @@ import { Button, Drawer, Checkbox } from 'antd';
 import { connect } from 'dva';
 // import { formatMessage } from 'umi/locale';
 import List from '@/components/List';
+import btnStyles from '@/pages/DataImportLog/index.less';
 // import classNames from 'classnames';
 import styles from './ApprovalAuditor.less';
 
@@ -173,18 +174,7 @@ class ApprovalAuditor extends PureComponent {
                   value={checkedValues}
                   onChange={this.selectAuditor}
                 />
-                <div
-                  style={{
-                    position: 'absolute',
-                    right: 0,
-                    bottom: 0,
-                    width: '100%',
-                    borderTop: '1px solid #e9e9e9',
-                    padding: '10px 16px',
-                    background: '#fff',
-                    textAlign: 'right',
-                  }}
-                >
+                <div className={btnStyles['bottom-btns']}>
                   <Button onClick={this.onSave} type="primary">
                     Save
                   </Button>

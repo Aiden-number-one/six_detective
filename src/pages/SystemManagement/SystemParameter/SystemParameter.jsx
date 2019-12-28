@@ -4,7 +4,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
-import styles from './SystemParameters.less';
+import styles from './SystemParameter.less';
 
 import SearchForm from './components/SearchForm';
 import ModifySystem from './components/ModifySystem';
@@ -119,8 +119,6 @@ class SystemParams extends Component {
     this.state = {
       updateSystemParamsVisible: false,
       searchParameterType: undefined,
-      editIconActive: false,
-      activeIndex: undefined,
       page: {
         pageNumber: 1,
         pageSize: 10,
@@ -167,17 +165,8 @@ class SystemParams extends Component {
                 onClick={() => {
                   this.updateSystemParams(res, recode, index, active);
                 }}
-                onMouseEnter={() => this.editMouseEnter(index)}
-                onMouseLeave={this.editMouseLeave}
               >
-                <IconFont
-                  type={
-                    this.state.editIconActive && this.state.activeIndex === index
-                      ? 'icon-edit-hover'
-                      : 'icon-edit'
-                  }
-                  className={styles['btn-icon']}
-                />
+                <IconFont type="icon-edit" className="operation-icon" />
               </a>
             </span>
           ),
@@ -190,21 +179,6 @@ class SystemParams extends Component {
   componentDidMount() {
     this.querySystemParams();
   }
-
-  editMouseEnter = index => {
-    console.log('enter');
-    this.setState({
-      editIconActive: true,
-      activeIndex: index,
-    });
-  };
-
-  editMouseLeave = () => {
-    console.log('outer');
-    this.setState({
-      editIconActive: false,
-    });
-  };
 
   updateSystemParamsComfirm = () => {
     this.modifyFormRef.current.validateFields((err, values) => {
@@ -376,12 +350,7 @@ class SystemParams extends Component {
                 <Pagination
                   showSizeChanger
                   current={page.pageNumber}
-                  showTotal={() =>
-                    `Page ${(getSystemParamsListData.totalCount || 0) &&
-                      page.pageNumber.toString()} of ${Math.ceil(
-                      (getSystemParamsListData.totalCount || 0) / page.pageSize,
-                    ).toString()}`
-                  }
+                  showTotal={() => `Total ${getSystemParamsListData.totalCount} items`}
                   onShowSizeChange={this.onShowSizeChange}
                   onChange={this.pageChange}
                   total={getSystemParamsListData.totalCount}

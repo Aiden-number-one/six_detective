@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { formatMessage } from 'umi/locale';
-import styles from '../UserManagement.less';
+import styles from '../UserMaintenance.less';
 import IconFont from '@/components/IconFont';
 
 export default class SearchForm extends Component {

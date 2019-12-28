@@ -10,8 +10,8 @@ const {
   getMenuUserGroup,
   getAlertUserGroup,
 } = Service;
-export const userManagement = {
-  namespace: 'userManagement',
+export const UserMaintenance = {
+  namespace: 'userMaintenance',
   state: {
     data: [],
     orgs: [],
@@ -176,4 +176,4 @@ export const userManagement = {
     },
   },
 };
-export default userManagement;
+export default UserMaintenance;

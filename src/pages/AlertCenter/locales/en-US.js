@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:34:48
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-25 17:59:33
+ * @LastEditTime : 2019-12-27 09:41:13
  */
 export default {
   'alert-center.alert-id': 'ALERT ID',
@@ -33,7 +33,7 @@ export default {
   'alert-center.ep-code': 'EP CODE',
   'alert-center.product-code': 'PRODUCT CODE',
   'alert-center.product-category': 'PRODUCT CATEGORY',
-  'alert-center.enter-workflow': 'ENTER WORKFLOW',
+  'alert-center.enter-approval': 'ENTER APPROVAL',
   'alert-center.alert-detail': 'Alert Detail',
   'alert-center.information-detail': 'Information Detail',
   'alert-center.alert-item-list': 'Alert Item List',

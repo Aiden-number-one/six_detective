@@ -4,8 +4,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2019-12-24 10:29:49
- * @LastEditors  : mus
+ * @LastEditTime : 2019-12-27 19:43:58
+ * @LastEditors  : dailinbo
  */
 
 import { components, menuIcons, iframe } from '@/utils/common';
@@ -22,7 +22,8 @@ const geneMenuData = data => {
     menuname: item.menuname,
     path: item.page || '',
     icon: menuIcons[item.menuname],
-    name: item.parentmenuid === '-1' ? item.menuname.toUpperCase() : item.menuname,
+    // name: item.parentmenuid === '-1' ? item.menuname.toUpperCase() : item.menuname,
+    name: item.menuname,
     hideInMenu: item.menutype === '1',
     target: item.linecss,
     component: components[item.page],

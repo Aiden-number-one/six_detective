@@ -149,7 +149,7 @@ class ModifySystem extends Component {
         >
           <Col>
             <Button onClick={this.onCancel}>CANCEL</Button>
-            <Button type="primary" onClick={this.onSave}>
+            <Button type="primary" onClick={this.onSave} style={{ marginLeft: '10px' }}>
               SAVE
             </Button>
           </Col>

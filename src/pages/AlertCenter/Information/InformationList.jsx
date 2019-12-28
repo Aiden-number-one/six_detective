@@ -62,7 +62,7 @@ function InfomationList({ dispatch, infos, total, loading }) {
           border
           dataSource={infos}
           rowKey="informationNo"
-          loading={loading['alertCenter/fetch']}
+          loading={loading['alertCenter/fetchInfos']}
           rowSelection={{
             onChange: selectedRowKeys => {
               setSelectedKeys(selectedRowKeys);

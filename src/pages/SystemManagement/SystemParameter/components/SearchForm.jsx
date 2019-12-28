@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { formatMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
-import styles from '../SystemParameters.less';
+import styles from '../SystemParameter.less';
 
 export default class SearchForm extends Component {
   state = {};

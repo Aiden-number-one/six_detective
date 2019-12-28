@@ -267,7 +267,7 @@ export default [
           {
             path: '/system-management/user-maintenance',
             name: 'User Maintenance',
-            component: './SystemManagement/UserManagement/UserManagement',
+            component: './SystemManagement/UserMaintenance/UserMaintenance',
           },
           {
             path: '/system-management/menu-user-group',
@@ -302,7 +302,7 @@ export default [
           {
             path: '/system-management/system-parameters',
             name: 'System Parameters',
-            component: './SystemManagement/SystemParameters/SystemParameters',
+            component: './SystemManagement/SystemParameter/SystemParameter',
           },
         ],
       },

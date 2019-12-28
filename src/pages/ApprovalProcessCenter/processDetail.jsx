@@ -373,7 +373,7 @@ function ProcessDetail({
                 ></Radio.Group>
                 <div className={btnStyles['bottom-btns']}>
                   <Button onClick={() => submitOrApproveTask(submitType)} type="primary">
-                    Save
+                    Confirm
                   </Button>
                   <Button onClick={() => setVisible(false)} style={{ marginRight: 12 }}>
                     Cancel

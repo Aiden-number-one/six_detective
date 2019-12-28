@@ -3,19 +3,17 @@ import { connect } from 'dva';
 import { Button, Row } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormattedMessage } from 'umi/locale';
-import LopLogFilterForm, { defaultTradeDate } from './LopLogFilterForm';
+import { defaultDateRange, downloadFile } from '../constants';
+import FilterForm from '../FilterForm';
 import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
 import styles from '../index.less';
 
-const aLink = document.createElement('a');
-aLink.download = true;
-
-export function LopLog({ dispatch, loading, logs, total }) {
+export function LopLog({ dispatch, loading, page: current, logs, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
-    startTradeDate: defaultTradeDate[0],
-    endTradeDate: defaultTradeDate[1],
+    startDate: defaultDateRange[0],
+    endDate: defaultDateRange[1],
   });
 
   useEffect(() => {
@@ -31,7 +29,7 @@ export function LopLog({ dispatch, loading, logs, total }) {
   }
 
   function handlePageChange(page, pageSize) {
-    dispatch({ type: 'lop/reload', payload: { page, pageSize, ...searchParams } });
+    dispatch({ type: 'lop/fetch', payload: { page, pageSize, ...searchParams } });
   }
   async function handleUpload(params) {
     await dispatch({ type: 'lop/importByManual', payload: params });
@@ -44,16 +42,16 @@ export function LopLog({ dispatch, loading, logs, total }) {
         lopImpId,
       },
     });
+
     if (reportUrl) {
-      aLink.href = `/download?filePath=${reportUrl}`;
-      aLink.click();
+      downloadFile(reportUrl);
     }
   }
 
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <LopLogFilterForm loading={loading} onParams={handleParams} />
+        <FilterForm formType={0} loading={loading} onParams={handleParams} />
         <LopLogManualModal
           visible={visible}
           loading={loading['lop/importByManual']}
@@ -67,8 +65,9 @@ export function LopLog({ dispatch, loading, logs, total }) {
             </Button>
           </Row>
           <LopLogList
-            total={total}
             dataSource={logs}
+            page={current}
+            total={total}
             loading={loading}
             onPageChange={handlePageChange}
             onPageSizeChange={handlePageChange}
