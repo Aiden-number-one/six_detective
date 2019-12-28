@@ -138,13 +138,13 @@ export function generateJson(spreadSheetData) {
                 const [color = 'black'] = borderStyleValue;
                 if (borderStyle === 'bottom') {
                   // 下边框
-                  currentCellProps.style['border-bottom'] = `${'1px solid'}${color}`;
+                  currentCellProps.style['border-bottom'] = `${'1px solid '}${color}`;
                   currentCellProps.style['border-bottom-color'] = color;
                   currentCellProps.style['border-bottom-type'] = 'solid';
                 }
                 if (borderStyle === 'top') {
                   // 上边框
-                  currentCellProps.style['border-top'] = `${'1px solid'}${color}`;
+                  currentCellProps.style['border-top'] = `${'1px solid '}${color}`;
                   currentCellProps.style['border-top-color'] = color;
                   currentCellProps.style['border-top-type'] = 'solid';
                 }
@@ -156,7 +156,7 @@ export function generateJson(spreadSheetData) {
                 }
                 if (borderStyle === 'rigth') {
                   // 有边框
-                  currentCellProps.style['border-right'] = `${'1px solid'}${color}`;
+                  currentCellProps.style['border-right'] = `${'1px solid '}${color}`;
                   currentCellProps.style['border-right-color'] = color;
                   currentCellProps.style['border-right-type'] = 'solid';
                 }
