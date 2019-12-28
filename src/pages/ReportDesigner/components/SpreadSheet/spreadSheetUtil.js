@@ -135,30 +135,30 @@ export function generateJson(spreadSheetData) {
             // 边框相关样式
             Object.entries(cellContent.style[singleStyle]).forEach(
               ([borderStyle, borderStyleValue]) => {
-                const [color] = borderStyleValue;
+                const [color = 'black'] = borderStyleValue;
                 if (borderStyle === 'bottom') {
                   // 下边框
-                  currentCellProps.style.border_bottom = `${'1px solid'}${color}`;
-                  currentCellProps.style.border_bottom_color = color;
-                  currentCellProps.style.border_bottom_type = 'SOLID';
+                  currentCellProps.style['border-bottom'] = `${'1px solid '}${color}`;
+                  currentCellProps.style['border-bottom-color'] = color;
+                  currentCellProps.style['border-bottom-type'] = 'solid';
                 }
                 if (borderStyle === 'top') {
                   // 上边框
-                  currentCellProps.style.border_top = `${'1px solid'}${color}`;
-                  currentCellProps.style.border_top_color = color;
-                  currentCellProps.style.border_top_type = 'SOLID';
+                  currentCellProps.style['border-top'] = `${'1px solid '}${color}`;
+                  currentCellProps.style['border-top-color'] = color;
+                  currentCellProps.style['border-top-type'] = 'solid';
                 }
                 if (borderStyle === 'left') {
                   // 左边框
-                  currentCellProps.style.border_left = `${'1px solid'}${color}`;
-                  currentCellProps.style.border_left_color = color;
-                  currentCellProps.style.border_left_type = 'SOLID';
+                  currentCellProps.style['border-left'] = `${'1px solid '}${color}`;
+                  currentCellProps.style['border-left-color'] = color;
+                  currentCellProps.style['border-left-type'] = 'solid';
                 }
                 if (borderStyle === 'rigth') {
                   // 有边框
-                  currentCellProps.style.border_right = `${'1px solid'}${color}`;
-                  currentCellProps.style.border_right_color = color;
-                  currentCellProps.style.border_right_type = 'SOLID';
+                  currentCellProps.style['border-right'] = `${'1px solid '}${color}`;
+                  currentCellProps.style['border-right-color'] = color;
+                  currentCellProps.style['border-right-type'] = 'solid';
                 }
               },
             );
