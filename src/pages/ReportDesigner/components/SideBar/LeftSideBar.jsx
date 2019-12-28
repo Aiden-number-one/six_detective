@@ -2,6 +2,7 @@ import React, { PureComponent, useState } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import { Icon, Tree } from 'antd';
+import { DragSource } from 'react-dnd';
 import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 import DropSelect from '../DropSelect';
@@ -50,7 +51,15 @@ export default class LeftSideBar extends PureComponent {
         return (
           <TreeNode
             key={item.key}
-            title={<Title title={item.title} isLeaf={item.isLeaf} displayDraw={displayDraw} />}
+            title={
+              <WrapperTitle
+                title={item.title}
+                isLeaf={item.isLeaf}
+                displayDraw={() => {
+                  displayDraw(item);
+                }}
+              />
+            }
           >
             {this.generateTree(item.children)}
           </TreeNode>
@@ -59,7 +68,16 @@ export default class LeftSideBar extends PureComponent {
       return (
         <TreeNode
           key={item.key}
-          title={<Title title={item.title} isLeaf={item.isLeaf} displayDraw={displayDraw} />}
+          title={
+            <WrapperTitle
+              title={item.title}
+              isLeaf={item.isLeaf}
+              dragInfo={item.dragInfo}
+              displayDraw={() => {
+                displayDraw(item);
+              }}
+            />
+          }
         />
       );
     });
@@ -128,7 +146,7 @@ export default class LeftSideBar extends PureComponent {
   }
 }
 
-function Title({ title, isLeaf, displayDraw }) {
+function Title({ title, isLeaf, displayDraw, connectDragSource }) {
   const [hoverState, hoverAction] = useState(false);
   return (
     <div
@@ -144,20 +162,22 @@ function Title({ title, isLeaf, displayDraw }) {
     >
       <div className={styles.hoverArea} />
       {hoverState && <div className={styles.hoverBlock} />}
-      <span className={styles.title}>
-        {/* 叶子不展示文件夹标志 */}
-        {!isLeaf && (
-          <>
-            <span className="folder">
-              <Icon type="folder" />
-            </span>
-            <span className="folderOpen">
-              <Icon type="folder-open" />
-            </span>
-          </>
-        )}
-        <span style={{ marginLeft: '3.5px' }}>{title}</span>
-      </span>
+      {connectDragSource(
+        <span className={styles.title}>
+          {/* 叶子不展示文件夹标志 */}
+          {!isLeaf && (
+            <>
+              <span className="folder">
+                <Icon type="folder" />
+              </span>
+              <span className="folderOpen">
+                <Icon type="folder-open" />
+              </span>
+            </>
+          )}
+          <span style={{ marginLeft: '3.5px' }}>{title}</span>
+        </span>,
+      )}
       {hoverState && (
         <div className={styles.operationArea}>
           <IconFont
@@ -172,3 +192,24 @@ function Title({ title, isLeaf, displayDraw }) {
     </div>
   );
 }
+
+const sourceSpec = {
+  beginDrag(
+    props,
+    // monitor,
+    // component
+  ) {
+    return {
+      dragInfo: props.dragInfo,
+    };
+  },
+  // endDrag(props) {
+  //   // props可包含 ConnList的所有
+  // },
+};
+
+const WrapperTitle = DragSource('dragTitle', sourceSpec, (connected, monitor) => ({
+  connectDragSource: connected.dragSource(),
+  connectDragPreview: connected.dragPreview(),
+  isDragging: monitor.isDragging(),
+}))(Title);

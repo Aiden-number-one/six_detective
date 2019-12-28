@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import { setLocale } from 'umi/locale';
-import { DndProvider } from 'react-dnd';
+import { DndProvider, DropTarget } from 'react-dnd';
 import { Layout, Drawer } from 'antd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import SpreadSheet from './components/SpreadSheet';
@@ -45,6 +45,7 @@ export default class ReportDesigner extends PureComponent {
       },
       {
         afterSelection: this.afterSelection,
+        afterDrop: this.afterDropSpreadSheet, // drop钩子函数
       },
     );
     // 若有reportId，则调用接口查询报表设计器相关信息
@@ -74,6 +75,21 @@ export default class ReportDesigner extends PureComponent {
         columnIndex,
       },
     });
+  };
+
+  // spreadsheet的拖动区域
+  afterDropSpreadSheet = dropPosition => {
+    // 获取到拖动的区域
+    this.dropPosition = dropPosition;
+  };
+
+  // react-dnd的拖拽区域
+  afterDrop = dragInfo => {
+    // 被拖动元素的
+    const { ri, ci } = this.dropPosition;
+    // 进行赋值
+    // eslint-disable-next-line no-underscore-dangle
+    window.xsObj._setCellText({ ri: Number(ri), ci: Number(ci), text: dragInfo });
   };
 
   // 设置单元格样式
@@ -114,7 +130,9 @@ export default class ReportDesigner extends PureComponent {
   };
 
   // 改变是否显示抽屉
-  displayDraw = () => {
+  displayDraw = currentSelectDataSet => {
+    // 打开抽屉所需要的参数
+    this.currentSelectDataSetOtherInfo = currentSelectDataSet.otherInfo;
     this.setState(preState => ({
       displayDraw: !preState.displayDraw,
     }));
@@ -165,6 +183,10 @@ export default class ReportDesigner extends PureComponent {
       displayDropSelect, // 是否显示drop select
       changedisplayDropSelect: this.changedisplayDropSelect, // 显示drop select
     };
+    // 数据集编辑的相关
+    const datasetModifyProps = {
+      currentSelectDataSetOtherInfo: this.currentSelectDataSetOtherInfo, // 编辑数据集所需要的参数
+    };
     return (
       <DndProvider backend={HTML5Backend}>
         <div
@@ -184,7 +206,7 @@ export default class ReportDesigner extends PureComponent {
             }}
             visible={this.state.displayDraw}
           >
-            <DatasetModify />
+            <DatasetModify {...datasetModifyProps} />
           </Drawer>
           {/* 头部菜单栏 */}
           <ToolBar {...toolBarProps} />
@@ -199,7 +221,7 @@ export default class ReportDesigner extends PureComponent {
                 <div className={classNames(styles.main)}>
                   {display && <CustomSearchArea />}
                   <div>
-                    <SpreadSheet />
+                    <WrapperDropContent afterDrop={this.afterDrop} />
                   </div>
                 </div>
               </Content>
@@ -218,3 +240,24 @@ export default class ReportDesigner extends PureComponent {
     );
   }
 }
+
+const wrapperSpreadSheet = ({ connectDropTarget }) =>
+  connectDropTarget(
+    <div>
+      <SpreadSheet />
+    </div>,
+  );
+
+const targetSpec = {
+  drop(props, monitor) {
+    const { afterDrop } = props;
+    const { dragInfo } = monitor.getItem();
+    afterDrop(dragInfo);
+  },
+};
+
+const WrapperDropContent = DropTarget('dragTitle', targetSpec, (connected, monitor) => ({
+  connectDropTarget: connected.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop(),
+}))(wrapperSpreadSheet);
