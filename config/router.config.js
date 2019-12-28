@@ -292,7 +292,7 @@ export default [
           {
             path: '/system-management/audit-trail-logging',
             name: 'Audit Trail Logging',
-            component: './SystemManagement/AuditLog/AuditLog',
+            component: './SystemManagement/AuditTrailLogging/AuditTrailLogging',
           },
           {
             path: '/system-management/code-maintenance',
