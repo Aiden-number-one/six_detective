@@ -1,9 +1,5 @@
-.inputValue {
-  width: 220px;
-}
-
+@import '~@/assets/css/variable.less';
 .content {
-  // margin-top: 10px;
   padding: 10px;
   background: #fff;
   .tableTop {
@@ -11,13 +7,13 @@
   }
 }
 .title {
-  color: #10416c;
+  color: @primaryColor;
   font-weight: 500;
   font-size: 16px;
 }
 .userGroup {
   margin-top: 40px;
-  color: #464c51;
+  color: @textColor;
   .groupTitle {
     margin: 0;
     padding-bottom: 14px;
@@ -29,8 +25,8 @@
     width: 4px;
     height: 15px;
     margin-right: 5px;
-    color: #f8374c;
-    background-color: #f8374c;
+    color: @errorColor;
+    background-color: @errorColor;
     border: none;
     content: '';
   }
