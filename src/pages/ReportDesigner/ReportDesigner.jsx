@@ -85,11 +85,16 @@ export default class ReportDesigner extends PureComponent {
 
   // react-dnd的拖拽区域
   afterDrop = dragInfo => {
+    // const { setCellType } = this.props;
     // 被拖动元素的
     const { ri, ci } = this.dropPosition;
-    // 进行赋值
+    // 设置值
     // eslint-disable-next-line no-underscore-dangle
     window.xsObj._setCellText({ ri: Number(ri), ci: Number(ci), text: dragInfo });
+    window.xsObj.instanceArray[0].sheet.toolbar.change();
+    // setCellType('cellType', {
+    //   cellType: 'dataSet',
+    // });
   };
 
   // 设置单元格样式
@@ -155,14 +160,7 @@ export default class ReportDesigner extends PureComponent {
 
   render() {
     const { display, leftSideCollapse, rightSideCollapse, displayDropSelect } = this.state;
-    const {
-      setCellCallback,
-      dispatch,
-      setCellType,
-      location: {
-        query: { reportId },
-      },
-    } = this.props;
+    const { setCellCallback, dispatch, setCellType } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
       saveReportTemplate: this.saveReportTemplate, // 保存报表模板
@@ -173,7 +171,6 @@ export default class ReportDesigner extends PureComponent {
       setCellType, // 设置单元格的数据类型
       setCellCallback,
       dispatch,
-      reportId,
     };
     // leftTree的相关Props
     const leftSideBarProps = {
@@ -232,7 +229,10 @@ export default class ReportDesigner extends PureComponent {
               className={classNames(styles.right)}
               style={{ width: rightSideCollapse ? '300px' : '30px' }}
             >
-              <RigthSideBar />
+              <RigthSideBar
+                rightSideCollapse={rightSideCollapse}
+                changeRightSideBar={this.changeRightSideBar}
+              />
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-23 10:17:57
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-27 18:34:17
+ * @LastEditTime : 2019-12-28 15:40:46
  */
 /*
  * @Des: 报表设计器的
@@ -36,8 +36,8 @@ export function dataSetTransform(dataSetItem) {
     datasetFields: datasetFieldsString,
   } = dataSetItem;
   const datasetId = uuidv1();
-  const parameters = JSON.parse(datasetParamsString || '[]');
-  const fields = JSON.parse(datasetFieldsString || '[]');
+  const parameters = datasetParamsString;
+  const fields = datasetFieldsString;
   return {
     dataset_cat: 'user-define|public', // reserved
     dataset_name: datasetName, // 数据集名称
@@ -138,14 +138,16 @@ export function dataSetTree(dataSets) {
  */
 export function getTemplateArea(contentDetail, originContentDetail) {
   const spreadSheetData = contentDetail[0].data;
-  const spreadSheetStyle = contentDetail[0].cellAttrs;
+  const spreadSheetProps = contentDetail[0].cellAttrs;
   const needRowsCols = spreadSheetData.map((colsValue, colsIndex) => ({
     cols: colsValue.map((rowsValue, rowsIndex) => {
       const cellText = rowsValue;
+      const isDataSet = /.*\..*/.test(cellText);
       return {
+        cell_type: isDataSet ? 'DATASET' : 'TEXT',
         cell_expression: '', // 公式相关
         cell_default_value: '', // reserved
-        cell_text: cellText, // text（=ds.reg_name|用户机构|$V{dian}|all）
+        cell_text: isDataSet ? `=${cellText}` : cellText, // text（=ds.reg_name|用户机构|$V{dian}|all）
         cell_input_type: 'input', // 类型相关 （input|select|date|file|text|checkbox）
         dict: '', // reserved
         link: '', // reserved
@@ -155,10 +157,11 @@ export function getTemplateArea(contentDetail, originContentDetail) {
         height: '', // reserved
         rowspan: '', // rowspan
         colspan: '', // colspan
-        cell_style: spreadSheetStyle[colsIndex][rowsIndex].style,
+        cell_style: spreadSheetProps[colsIndex][rowsIndex].style,
       };
     }),
   }));
+  console.log(needRowsCols);
   return {
     page_order: '', // reserved
     page_size: '', // reserved

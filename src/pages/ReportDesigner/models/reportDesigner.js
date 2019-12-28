@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-26 16:52:32
+ * @LastEditTime : 2019-12-28 17:10:22
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -81,7 +81,7 @@ export default {
   },
   effects: {
     // 组装reportTemplateContent
-    *packageTemplate(_, { select, call }) {
+    *packageTemplate(_, { select, call, put }) {
       // 报表模板ID Name 及 私有数据集
       const [reportId, reportName, dataSetPrivateList] = yield select(({ reportDesigner }) => [
         reportDesigner.reportId,
@@ -110,6 +110,10 @@ export default {
         },
       });
       if (response.bcjson.flag === '1') {
+        yield put({
+          type: 'setReportId',
+          payload: response.bcjson.items[0].reportTemplateContent.report_id,
+        });
         message.info(response.bcjson.msg);
       } else {
         message.warn(response.bcjson.msg);
