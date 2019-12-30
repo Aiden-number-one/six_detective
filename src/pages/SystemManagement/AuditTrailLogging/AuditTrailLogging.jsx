@@ -36,28 +36,28 @@ class AuditTrailLogging extends Component {
     ],
     options: [
       {
-        value: 'functionName',
         label: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
+        value: 'functionName',
       },
-      { value: 'tableName', label: formatMessage({ id: 'systemManagement.auditLog.tableName' }) },
-      { value: 'biToCode', label: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }) },
+      { label: formatMessage({ id: 'systemManagement.auditLog.tableName' }), value: 'tableName' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }), value: 'biToCode' },
       {
-        value: 'productCode',
         label: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
+        value: 'productCode',
       },
       {
-        value: 'effectiveTime',
         label: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
+        value: 'effectiveTime',
       },
       {
-        value: 'filedUpdated',
         label: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
+        value: 'filedUpdated',
       },
-      { value: 'updateType', label: formatMessage({ id: 'systemManagement.auditLog.updateType' }) },
-      { value: 'logTime', label: formatMessage({ id: 'systemManagement.auditLog.logDate' }) },
-      { value: 'updatedBy', label: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }) },
-      { value: 'before', label: formatMessage({ id: 'systemManagement.auditLog.before' }) },
-      { value: 'after', label: formatMessage({ id: 'systemManagement.auditLog.after' }) },
+      { label: formatMessage({ id: 'systemManagement.auditLog.updateType' }), value: 'updateType' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.logDate' }), value: 'logTime' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }), value: 'updatedBy' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.before' }), value: 'before' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.after' }), value: 'after' },
     ],
     checkedValues: [],
     tempColumns: [],
@@ -65,10 +65,12 @@ class AuditTrailLogging extends Component {
       {
         key: 'index',
         visible: true,
+        fixed: 'left',
       },
       {
         key: 'functionName',
         visible: true,
+        fixed: 'left',
       },
       {
         key: 'tableName',
@@ -110,6 +112,7 @@ class AuditTrailLogging extends Component {
       {
         key: 'after',
         visible: false,
+        fixed: 'right',
       },
     ],
     columns: [
@@ -118,7 +121,7 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
-        width: '5%',
+        width: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
@@ -129,7 +132,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'functionName',
         key: 'functionName',
         ellipsis: true,
-        width: '18%',
+        width: 120,
       },
       {
         index: 2,
@@ -137,7 +140,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'tableName',
         key: 'tableName',
         ellipsis: true,
-        width: '18%',
+        width: 120,
         colSpan: 1,
       },
       {
@@ -145,40 +148,31 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),
         dataIndex: 'biToCode',
         key: 'biToCode',
-        width: '10%',
       },
       {
         index: 4,
         title: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
         dataIndex: 'productCode',
         key: 'productCode',
-        width: '15%',
       },
       {
         index: 5,
         title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         dataIndex: 'effectiveTime',
         key: 'effectiveTime',
-        width: '20%',
-        render: (res, obj) => (
-          <div>
-            <span>{obj.effectiveTime && timeFormat(obj.effectiveTime)}</span>
-          </div>
-        ),
+        render: (res, obj) => <span>{obj.effectiveTime && timeFormat(obj.effectiveTime)}</span>,
       },
       {
         index: 6,
         title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
         dataIndex: 'filedUpdated',
         key: 'filedUpdated',
-        width: '10%',
       },
       {
         index: 7,
         title: formatMessage({ id: 'systemManagement.auditLog.updateType' }),
         dataIndex: 'updateType',
         key: 'updateType',
-        width: '15%',
       },
       {
         index: 8,
@@ -186,7 +180,6 @@ class AuditTrailLogging extends Component {
         dataIndex: 'logTime',
         key: 'logTime',
         align: 'center',
-        width: '18%',
         render: (res, obj) => <span>{obj.logTime && timeFormat(obj.logTime)}</span>,
       },
       {
@@ -194,21 +187,19 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
-        width: '15%',
       },
       {
         index: 10,
         title: formatMessage({ id: 'systemManagement.auditLog.before' }),
         dataIndex: 'before',
         key: 'before',
-        width: '10%',
       },
       {
         index: 11,
         title: formatMessage({ id: 'systemManagement.auditLog.after' }),
         dataIndex: 'after',
         key: 'after',
-        width: '10%',
+        width: 100,
       },
     ],
     getAuditLogList: [],
@@ -223,17 +214,11 @@ class AuditTrailLogging extends Component {
 
   filterColumns = () => {
     const { columns, cuscomizeColumns } = this.state;
-    const newColumns = columns.map((item, index) => {
+    const newColumns = columns.map(item => {
       const newItem = Object.assign({}, item);
       cuscomizeColumns.filter(element => {
         if (element.key === item.key) {
           newItem.visible = element.visible;
-          if (index < 2) {
-            newItem.fixed = 'left';
-          }
-          if (index === cuscomizeColumns.length - 1) {
-            newItem.fixed = 'right';
-          }
         }
       });
       return newItem;

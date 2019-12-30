@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-13 16:47:20
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-30 10:54:21
+ * @LastEditTime : 2019-12-30 15:22:41
  */
 import moment from 'moment';
 import { formatTimeString } from '@/utils/utils';
@@ -37,9 +37,7 @@ const lockedFormat = value => (value === 'L' ? 'Y' : 'N');
 const timeFormat = time => {
   const str = formatTimeString(time);
   const strArr = str.split(' ');
-  const str1 = strArr[0];
-  const s1 = moment(str1).format('DD/MMM/YYYY');
-  return `${s1} ${strArr[1]}`;
+  return `${moment(strArr[0]).format('DD-MMM-YYYY')} ${strArr[1]}`;
 };
 
 export { userStatus, templateTypeFormat, timeFormat, lockedFormat };
