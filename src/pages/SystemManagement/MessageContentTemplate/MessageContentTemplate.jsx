@@ -54,6 +54,7 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'systemManagement.template.templateName' }),
           dataIndex: 'templateName',
           key: 'templateName',
+          align: 'left',
           ellipsis: true,
           width: 150,
         },
@@ -61,6 +62,7 @@ export default class MessageContentTemplate extends Component {
           title: formatMessage({ id: 'systemManagement.template.templateId' }),
           dataIndex: 'templateId',
           key: 'templateId',
+          align: 'center',
           width: 120,
         },
         {
@@ -69,6 +71,7 @@ export default class MessageContentTemplate extends Component {
           key: 'type',
           render: (res, obj) => <span>{templateTypeFormat(obj.type)}</span>,
           ellipsis: true,
+          align: 'left',
           width: 120,
         },
         {
@@ -76,6 +79,7 @@ export default class MessageContentTemplate extends Component {
           dataIndex: 'title',
           key: 'title',
           ellipsis: true,
+          align: 'left',
           width: 120,
         },
         {
@@ -83,6 +87,7 @@ export default class MessageContentTemplate extends Component {
           dataIndex: 'content',
           key: 'content',
           ellipsis: true,
+          align: 'left',
           width: 180,
         },
         {
@@ -90,6 +95,7 @@ export default class MessageContentTemplate extends Component {
           dataIndex: 'keyWord',
           key: 'keyWord',
           ellipsis: true,
+          align: 'left',
           width: 180,
         },
         {

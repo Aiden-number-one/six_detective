@@ -129,6 +129,7 @@ class SystemParams extends Component {
           dataIndex: 'index',
           key: 'index',
           align: 'center',
+          width: '5%',
           render: (res, recode, index) => (
             <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
           ),
@@ -137,27 +138,40 @@ class SystemParams extends Component {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterType' }),
           dataIndex: 'parameterType',
           key: 'parameterType',
+          align: 'left',
+          ellipsis: true,
+          width: '20%',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterKey' }),
           dataIndex: 'parameterKey',
           key: 'parameterKey',
+          align: 'left',
+          ellipsis: true,
+          width: '20%',
         },
         {
           title: formatMessage({ id: 'systemManagement.systemParameters.parameterValue' }),
           dataIndex: 'parameterValue',
           key: 'parameterValue',
+          align: 'left',
+          ellipsis: true,
+          width: '20%',
         },
         {
           title: formatMessage({ id: 'app.common.remark' }),
           dataIndex: 'note',
           key: 'note',
+          align: 'left',
+          ellipsis: true,
+          width: '20%',
         },
         {
           title: formatMessage({ id: 'app.common.operation' }),
           dataIndex: 'operation',
           key: 'operation',
           align: 'center',
+          width: '15%',
           render: (res, recode, index, active) => (
             <span className={styles.operation}>
               <a
