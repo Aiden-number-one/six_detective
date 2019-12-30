@@ -23,7 +23,7 @@ function AlertTask({
     await dispatch({
       type: 'alertCenter/fetchAssignUsers',
       payload: {
-        alertItemIds: selectedRows.map(item => item.ALERT_ITEM_ID),
+        taskIds: selectedRows.map(item => item.ALERT_ITEM_ID),
       },
     });
     setVisible(true);
@@ -63,7 +63,7 @@ function AlertTask({
       <Table
         border
         dataSource={alertItems}
-        rowKey="ALERT_ITEM_ID"
+        rowKey="TASK_ID"
         scroll={{ y: 320 }}
         loading={loading['alertCenter/fetchAlertItems']}
         pagination={{
@@ -73,7 +73,6 @@ function AlertTask({
           },
         }}
         rowSelection={{
-          columnWidth: 40,
           onChange: (selectedRowKeys, rows) => {
             setSelectedRows(rows);
           },
