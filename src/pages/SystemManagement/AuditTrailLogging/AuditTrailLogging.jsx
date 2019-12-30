@@ -109,6 +109,7 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
+        fixed: 'left',
         width: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
@@ -119,6 +120,7 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
         dataIndex: 'functionName',
         key: 'functionName',
+        fixed: 'left',
         ellipsis: true,
         width: 120,
       },
@@ -185,6 +187,7 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
+        fixed: 'right',
       },
       {
         index: 10,
@@ -198,6 +201,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'after',
         key: 'after',
         width: 100,
+        fixed: 'right',
       },
     ],
     getAuditLogList: [],
