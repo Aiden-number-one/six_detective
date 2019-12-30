@@ -43,6 +43,7 @@ class ApprovalDesign extends PureComponent {
     // dataSource: [],
     visible: false,
     deleteVisible: false,
+    deployVisible: false,
   };
 
   newFlowChartForm = React.createRef();
@@ -107,11 +108,26 @@ class ApprovalDesign extends PureComponent {
   // 部署模型
   deployModel = () => {
     const { dispatch, chooseModelId } = this.props;
+    this.handleCloseDeploy();
     dispatch({
       type: 'approvalDesign/deployModel',
       payload: {
         modelId: chooseModelId,
       },
+    });
+  };
+
+  // 绑定的点击事件,部署模型对话框
+  deployOpenModel = () => {
+    this.setState({
+      deployVisible: true,
+    });
+  };
+
+  // 弹出的对话框取消部署
+  handleCloseDeploy = () => {
+    this.setState({
+      deployVisible: false,
     });
   };
 
@@ -229,7 +245,7 @@ class ApprovalDesign extends PureComponent {
 
   render() {
     const { modelList, chooseModelId, modelImage } = this.props;
-    const { deleteVisible } = this.state;
+    const { deleteVisible, deployVisible } = this.state;
     return (
       <Fragment>
         <PageHeaderWrapper>
@@ -253,7 +269,7 @@ class ApprovalDesign extends PureComponent {
                 <div>
                   <Button
                     className="btn-usual"
-                    onClick={this.deployModel}
+                    onClick={this.deployOpenModel}
                     type="primary"
                     icon="deployment-unit"
                   >
@@ -319,6 +335,14 @@ class ApprovalDesign extends PureComponent {
               onCancel={this.handleCloseModelCancel}
             >
               <p>Are you sure delete this model?</p>
+            </Modal>
+            <Modal
+              title="CONFIRM"
+              visible={deployVisible}
+              onOk={this.deployModel}
+              onCancel={this.handleCloseDeploy}
+            >
+              <p>Are you sure deploy this model?</p>
             </Modal>
           </div>
         </PageHeaderWrapper>

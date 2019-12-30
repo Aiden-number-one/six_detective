@@ -356,7 +356,7 @@ class CodeMaintenance extends Component {
     const { loading, getCodeListData, getCodeItemListData } = this.props;
     const totalCount = getCodeListData && getCodeListData.totalCount;
     const totalCountItem = getCodeItemListData && getCodeItemListData.totalCount;
-    const { page, itemPage, updateCodeItemParams, modifyFlag } = this.state;
+    const { page, itemPage, updateCodeItemParams, modifyFlag, codeId } = this.state;
 
     const codeListData = getCodeListData && getCodeListData.items;
     const codeItemListData = getCodeItemListData && getCodeItemListData.items;
@@ -371,6 +371,7 @@ class CodeMaintenance extends Component {
             <div className={styles.content}>
               <Table
                 loading={loading['codeList/getCodeList']}
+                rowClassName={record => (codeId && record.codeId === codeId ? 'table-active' : '')}
                 dataSource={codeListData}
                 columns={this.state.codeColumns}
                 pagination={false}

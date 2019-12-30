@@ -7,7 +7,7 @@
     "ACTION.SAVE-AND-CLOSE": "Save and close editor",
     "ACTION.SEND": "发送",
     "ACTION.CANCEL": "cancel",
-    "ACTION.SELECT": "选择",
+    "ACTION.SELECT": "select",
     "ACTION.ADD": "添加",
     "ACTION.REMOVE": "删除",
     "ACTION.MOVE.UP": "上移",
@@ -58,8 +58,8 @@
     "APP_DEFINITION_TOOLBAR.ACTION.HELP": "开始指引",
     "APP_DEFINITION_TOOLBAR.ACTION.FEEDBACK": "提供反馈",
 
-    "BUTTON.ACTION.DELETE.TOOLTIP": "从模版中删除元素",
-    "BUTTON.ACTION.MORPH.TOOLTIP": "更改元素类型",
+    "BUTTON.ACTION.DELETE.TOOLTIP": "Delete the elements in the templet ",
+    "BUTTON.ACTION.MORPH.TOOLTIP": "Change the elements type ",
 
     "ELEMENT.AUTHOR": "作者",
     "ELEMENT.DATE_CREATED": "创建日期",

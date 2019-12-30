@@ -1,3 +1,4 @@
+@import '~@/assets/css/variable.less';
 :global {
   .proLayout .ant-select-selection,
   .ant-drawer-right .ant-select-selection,
@@ -64,6 +65,16 @@
     .ant-popover-inner-content .ant-input-disabled {
       background-color: #fff !important;
       border: none !important;
+    }
+    // .ant-input-affix-wrapper .ant-input-suffix {
+    //     left: 8px;
+    // }
+    .ant-input-affix-wrapper .ant-input {
+      // padding-left:28px;
+      line-height: 30px;
+    }
+    .ant-radio-button-wrapper:not(:first-child)::before {
+      background-color: @borderColorBase;
     }
   }
 
