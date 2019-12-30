@@ -2,7 +2,7 @@
  * @Description: Theme
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2019-12-28 16:21:55
+ * @LastEditTime : 2019-12-30 13:59:28
  * @LastEditors  : dailinbo
  */
 export default {
@@ -14,7 +14,8 @@ export default {
   textColor: '#464C51',
   textColorSecondary: '#464C51',
   borderRadiusBase: '0',
-  borderColorBase: '#979AA8',
+  // borderColorBase: '#979AA8',
+  borderColorBase: '#d9d9d9',
   successColor: '#24803D',
   warningColor: '#FFB81C',
   errorColor: '#F4374C',
