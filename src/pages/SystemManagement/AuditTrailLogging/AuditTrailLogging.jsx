@@ -235,6 +235,14 @@ class AuditTrailLogging extends Component {
     arrVisible.forEach((element, index) => {
       newColumns.splice(element - index, 1);
     });
+    newColumns.forEach((element, index) => {
+      if (index === 0) {
+        element.fixed = 'left';
+      }
+      if (index === newColumns.length - 1) {
+        element.fixed = 'right';
+      }
+    });
     this.setState({
       tempColumns: columns,
       columns: newColumns,
@@ -367,10 +375,10 @@ class AuditTrailLogging extends Component {
     });
     newColumns.sort((o1, o2) => o1.index - o2.index);
     newColumns.forEach((element, index) => {
-      if (Object.hasOwnProperty(element.fixed)) {
+      if (Object.hasOwnProperty('fixed')) {
         delete element.fixed;
       }
-      if (index < 2) {
+      if (index === 0) {
         element.fixed = 'left';
       }
       if (index === newColumns.length - 1) {
