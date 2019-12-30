@@ -63,6 +63,12 @@ function InfomationList({ dispatch, infos, total, loading }) {
           dataSource={infos}
           rowKey="informationNo"
           loading={loading['alertCenter/fetchInfos']}
+          rowClassName={record => {
+            if (info && record.informationNo === info.informationNo) {
+              return 'active';
+            }
+            return '';
+          }}
           rowSelection={{
             onChange: selectedRowKeys => {
               setSelectedKeys(selectedRowKeys);

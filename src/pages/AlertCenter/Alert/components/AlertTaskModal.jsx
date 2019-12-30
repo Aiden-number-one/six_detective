@@ -9,7 +9,7 @@ const radioStyle = {
   lineHeight: '30px',
 };
 
-export default function AlertTaskModal({ loading, visible, users, handleCancel, assignUser }) {
+export default function({ loading, visible, users, handleCancel, assignUser }) {
   const [curUserId, setUserId] = useState('');
 
   async function handleCommit() {

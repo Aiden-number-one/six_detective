@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:34:48
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 09:41:13
+ * @LastEditTime : 2019-12-30 14:44:30
  */
 export default {
   'alert-center.alert-id': 'ALERT ID',
@@ -53,4 +53,6 @@ export default {
   'alert-center.expiry-date': 'Expiry Date',
   'alert-center.effective-date': 'Effective Date',
   'alert-center.original-product-code': 'Original Product Code',
+  // e-mail
+  'alert-center.email-content': 'Confirm the email content',
 };
