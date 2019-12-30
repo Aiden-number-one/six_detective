@@ -1,9 +1,0 @@
- {{#if flag}} {{else}} {{#each this}}
-<div class="todo-project-list on border-bottom" executeFlag='{{executeFlag}}' monitorId='{{monitorId}}' batchNo='{{batchNo}}' jobId='{{jobId}}'>
-    {{judgeDiffStatus executeFlag}}
-    <div class="perform-fr">
-        <p class="perform-fr-text">{{jobNo}}</p>
-        <p class="jobName">{{jobName}}</p>
-    </div>
-</div>
-{{/each}} {{/if}}

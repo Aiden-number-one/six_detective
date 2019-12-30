@@ -35,17 +35,29 @@ class AuditTrailLogging extends Component {
       { key: '3', value: '3', title: 'Name Three' },
     ],
     options: [
-      { label: 'functionName', value: 'functionName' },
-      { label: 'tableName', value: 'tableName' },
-      { label: 'biToCode', value: 'biToCode' },
-      { label: 'productCode', value: 'productCode' },
-      { label: 'effectiveTime', value: 'effectiveTime' },
-      { label: 'filedUpdated', value: 'filedUpdated' },
-      { label: 'updateType', value: 'updateType' },
-      { label: 'logTime', value: 'logTime' },
-      { label: 'updatedBy', value: 'updatedBy' },
-      { label: 'before', value: 'before' },
-      { label: 'after', value: 'after' },
+      {
+        value: 'functionName',
+        label: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
+      },
+      { value: 'tableName', label: formatMessage({ id: 'systemManagement.auditLog.tableName' }) },
+      { value: 'biToCode', label: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }) },
+      {
+        value: 'productCode',
+        label: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
+      },
+      {
+        value: 'effectiveTime',
+        label: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
+      },
+      {
+        value: 'filedUpdated',
+        label: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
+      },
+      { value: 'updateType', label: formatMessage({ id: 'systemManagement.auditLog.updateType' }) },
+      { value: 'logTime', label: formatMessage({ id: 'systemManagement.auditLog.logDate' }) },
+      { value: 'updatedBy', label: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }) },
+      { value: 'before', label: formatMessage({ id: 'systemManagement.auditLog.before' }) },
+      { value: 'after', label: formatMessage({ id: 'systemManagement.auditLog.after' }) },
     ],
     checkedValues: [],
     tempColumns: [],
@@ -53,12 +65,10 @@ class AuditTrailLogging extends Component {
       {
         key: 'index',
         visible: true,
-        fixed: 'left',
       },
       {
         key: 'functionName',
         visible: true,
-        fixed: 'left',
       },
       {
         key: 'tableName',
@@ -100,7 +110,6 @@ class AuditTrailLogging extends Component {
       {
         key: 'after',
         visible: false,
-        fixed: 'right',
       },
     ],
     columns: [
@@ -120,7 +129,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'functionName',
         key: 'functionName',
         ellipsis: true,
-        width: '20%',
+        width: '18%',
       },
       {
         index: 2,
@@ -128,7 +137,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'tableName',
         key: 'tableName',
         ellipsis: true,
-        width: '20%',
+        width: '18%',
         colSpan: 1,
       },
       {
@@ -162,12 +171,14 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
         dataIndex: 'filedUpdated',
         key: 'filedUpdated',
+        width: '10%',
       },
       {
         index: 7,
         title: formatMessage({ id: 'systemManagement.auditLog.updateType' }),
         dataIndex: 'updateType',
         key: 'updateType',
+        width: '15%',
       },
       {
         index: 8,
@@ -175,7 +186,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'logTime',
         key: 'logTime',
         align: 'center',
-        width: '20%',
+        width: '18%',
         render: (res, obj) => <span>{obj.logTime && timeFormat(obj.logTime)}</span>,
       },
       {
@@ -183,20 +194,21 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
+        width: '15%',
       },
       {
         index: 10,
         title: formatMessage({ id: 'systemManagement.auditLog.before' }),
         dataIndex: 'before',
         key: 'before',
+        width: '10%',
       },
       {
         index: 11,
         title: formatMessage({ id: 'systemManagement.auditLog.after' }),
         dataIndex: 'after',
         key: 'after',
-        width: 100,
-        fixed: 'right',
+        width: '10%',
       },
     ],
     getAuditLogList: [],
@@ -211,13 +223,16 @@ class AuditTrailLogging extends Component {
 
   filterColumns = () => {
     const { columns, cuscomizeColumns } = this.state;
-    const newColumns = columns.map(item => {
+    const newColumns = columns.map((item, index) => {
       const newItem = Object.assign({}, item);
       cuscomizeColumns.filter(element => {
         if (element.key === item.key) {
           newItem.visible = element.visible;
-          if (Object.hasOwnProperty('fixed')) {
-            newItem.fixed = element.fixed;
+          if (index < 2) {
+            newItem.fixed = 'left';
+          }
+          if (index === cuscomizeColumns.length - 1) {
+            newItem.fixed = 'right';
           }
         }
       });
