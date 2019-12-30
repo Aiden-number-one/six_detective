@@ -352,11 +352,12 @@ function DetailForm({ form, detailItem, task }) {
   const { getFieldDecorator } = form;
   const [radioCurrentValue, setRadioCurrentValue] = useState('No');
   const [radioPdValue, setRadioPdValue] = useState('Yes');
-  const detailList = task ? (detailItem && detailItem[0]) || {} : {};
-  const alertType = detailList && detailList.alertType;
+  const detailData = task ? (detailItem && detailItem[0]) || {} : {};
+  const detailList = task ? (detailItem && detailItem[0] && detailItem[0].newValue) || {} : {};
+  const alertType = detailData && detailData.alertType;
 
-  const isShowForm = detailList && detailList.isStarter;
-  const isEditing = detailList && detailList.isEditing;
+  const isShowForm = detailData && detailData.isStarter;
+  const isEditing = detailData && detailData.isEditing;
   console.log('alertType---->', alertType, detailList, isShowForm);
   useEffect(() => {
     setRadioCurrentValue(detailList.isCaCode);
