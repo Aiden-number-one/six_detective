@@ -11,6 +11,7 @@ var KisBpmPagePropertyCtrl = ['$scope', '$modal', function($scope, $modal) {
 }];
 var KisBpmPageCtrlPopupCtrl = ['$scope', '$modal', function($scope, $modal) {
     // Put json representing custompage on scope
+    console.log('$scope.property.value--->',$scope.property.value)
     if ($scope.property.value && $scope.property.value !== undefined && $scope.property.value !== null) {
         $scope.custompage = $scope.property.value;
     } else {
@@ -41,7 +42,7 @@ var KisBpmPageCtrlPopupCtrl = ['$scope', '$modal', function($scope, $modal) {
             pageSize: "6"
         }; // 参数
         const S = new Date().getTime(); // 时间戳
-        var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S },false);
+        var dataAndHeader = KISBPM.URL.getParams({ N:N, V:V, P:P, S:S },false);
       //   debugger;
       const params = dataAndHeader.param;
       const header = dataAndHeader.header;
@@ -116,8 +117,12 @@ var KisBpmPageCtrlPopupCtrl = ['$scope', '$modal', function($scope, $modal) {
     $scope.close = function(flag) {
         $scope.property.value = {};
         $scope.custompage.value = $scope.custompage.value[$scope.custompage.isCustom];
-        if (!$scope.custompage.value) {
-            $scope.custompage = "";
+        console.log('$scope.custompage--->',$scope.custompage)
+        // if (!$scope.custompage.value) {
+        //     $scope.custompage = "";
+        // }
+        if($scope.custompage.isEditing==='0'){
+            $scope.custompage.isEditing = false
         }
         if ($scope.custompage.isEditing) {
             $scope.custompage.isEditing = '1'
@@ -125,6 +130,7 @@ var KisBpmPageCtrlPopupCtrl = ['$scope', '$modal', function($scope, $modal) {
             $scope.custompage.isEditing = '0';
         }
         $scope.property.value = $scope.custompage;
+        console.log('$scope.custompage----->',$scope.custompage)
         if (flag) {
             $scope.updatePropertyInModel($scope.property);
         }
@@ -186,7 +192,7 @@ var KisBpmeventauditPropertyCtrl = ['$scope', '$modal', function($scope, $modal)
             pageSize: "6"
         }; // 参数
         const S = new Date().getTime(); // 时间戳
-        var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S },false);
+        var dataAndHeader = KISBPM.URL.getParams({ N:N, V:V, P:P, S:S },false);
       //   debugger;
       const params = dataAndHeader.param;
       const header = dataAndHeader.header;

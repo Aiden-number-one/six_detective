@@ -109,7 +109,6 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
-        fixed: 'left',
         width: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
@@ -120,7 +119,6 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
         dataIndex: 'functionName',
         key: 'functionName',
-        fixed: 'left',
         ellipsis: true,
         width: 120,
       },
@@ -152,7 +150,7 @@ class AuditTrailLogging extends Component {
         key: 'effectiveTime',
         render: (res, obj) => (
           <div>
-            <span>{obj.operateDate && moment(obj.operateDate).format('DD/MM/YYYY')}</span>
+            <span>{obj.effectiveTime && timeFormat(obj.effectiveTime)}</span>
           </div>
         ),
       },
@@ -174,20 +172,13 @@ class AuditTrailLogging extends Component {
         dataIndex: 'logTime',
         key: 'logTime',
         align: 'center',
-        render: (res, obj) => (
-          <div>
-            <span>{obj.logTime && timeFormat(obj.logTime).t1}</span>
-            <br />
-            <span>{obj.logTime && timeFormat(obj.logTime).t2}</span>
-          </div>
-        ),
+        render: (res, obj) => <span>{obj.logTime && timeFormat(obj.logTime)}</span>,
       },
       {
         index: 9,
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
-        fixed: 'right',
       },
       {
         index: 10,
@@ -221,6 +212,9 @@ class AuditTrailLogging extends Component {
       cuscomizeColumns.filter(element => {
         if (element.key === item.key) {
           newItem.visible = element.visible;
+          if (Object.hasOwnProperty('fixed')) {
+            newItem.fixed = element.fixed;
+          }
         }
       });
       return newItem;
