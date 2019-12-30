@@ -1,0 +1,97 @@
+<!--
+ * @Author: linjian
+ * @Date: 2019-06-17 09:01:07
+ * @LastEditors: linjian
+ * @Description: file content
+ * @email: linjian@szkingdom.com
+ -->
+ <!DOCTYPE html>
+ <html>
+ <head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width">
+   <title>superlop-report-designer</title>
+   <style>
+     .formulabar {
+       position: relative;
+       height: 26px;
+       color: #737373;
+       background: #fafafa;
+       border-bottom: 1px solid #D4D4D4;
+     }
+     .formulabar input[type=text]:not(.form-control) {
+         width: calc(100% - 350px) !important;
+         height: 15px;
+         font-size: 12px;
+         margin-bottom: 0;
+         padding: 2px 10px;
+         vertical-align: middle;
+         border: none;
+         background: 0 0;
+         outline: 0;
+         box-shadow: none;
+         color: #737373;
+         background: #fff;
+         margin-left: 200px;
+         margin-top: 2px;
+         border-radius: 2px;
+         border: 1px solid rgba(150, 150, 150, 1);
+     }
+     .formulabar .formulabar-fx {
+         position: absolute;
+         width: 33px;
+         height: 21px;
+         line-height: 21px;
+         left: 165px;
+         top: 3px;
+         cursor: pointer;
+     }
+     .formulabar .formulabar-text {
+         position: absolute;
+         width: 110px;
+         height: 20px;
+         left: 35px;
+         top: 2px;
+         line-height: 21px;
+         border: 1px solid rgba(150, 150, 150, 1);
+         line-height: 19px;
+         background: #fff;
+         padding: 0px 5px;
+         border-radius: 2px;
+         text-align: center;
+     }
+   </style>
+ <link href="xspreadsheet.937421.css" rel="stylesheet"></head>
+ <body onload="load()">
+  <div  class="formulabar" data-step="4" data-intro="显示函数或单元格值" data-position="auto" >
+    <input type="text" size="200" style="width: 400px;" id="fxFn" value="">
+    <div class="formulabar-fx">
+        <i class="icon iconfont icon-fx icon-fr" title="函数"></i>
+        <i class="icon iconfont icon-xiala icon-fr" title=""></i>
+    </div>
+    <div class="formulabar-text" id="J_choose_location"></div>
+  </div>
+  <div id="x-spreadsheet-demo" style="height: 100%;"></div>
+  <div>
+    <canvas id="waterMark" width="150" height="40" style="border:1px solid #d3d3d3;display:none">
+    Your browser does not support the HTML5 canvas tag.</canvas>
+  </div>
+  <div class="x-spreadsheet">
+    <div class="x-spreadsheet-placeholder to__tip_items"></div>
+  </div>
+  <div style="display: none">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAACK0lEQVQ4T63UPYgTQRQH8P/bzXpqo0HRQgiCFoeNYE4tREmfr5lALEQRtdAT5K7RRg5BPCuvEcHCSuQQCfJeEjFXCWIh2okfcILY2IgIcoiJLrtPJtyC5nIJ0dtu2Hm/eTPvzRDW+KPEy+fz6SAIjgPYMsoaRPRFVedF5JuL64KlUmm77/tNVV0AEI8IjgEwqVRqX61Wa3dBY8wJANtEZG4ULJlrrb0M4D0z1xJwkoh+MPPdarW6IQzDGwAOAAgBzInIw0ELGWPOEJHHzHdWgMYYl6UvItPLuERRdK7ZbH5cDR0IWmufM/Oh5CyNMa5Qm0XkVi9YqVT2x3E8TkQGwELfDK21tTiOb9br9WfL53udiF4wc92Nc7nc+nQ6PamqRwB8IKJFVd1DRO/6gqVSacL3/ccAHqnqd9cJInLBYeVyueh53nlVvSIiL5OMB27ZTSoUCjuCINgN4A0zf13O9CqAtIhM9bbWULD3rIwxDvslItf6FWZVUFWfAtjped5Su91+22q1flYqlbyqHmXmk6NW+RSAMYcS0TpVPUhEDwCc7nQ6E61Wa2lUcJyZpwGoC6xWq34YhvNE9JqZZ/+5sf8MtNbWoyi61Gg0FtcKfMXMe4fd7xVFKZfLx4hok4jcToKz2WyQyWSeMPPhYaC19qKqfhKR+927XCwWN6ZSKdfMs6rqHgSo6lbP86ZUdWYIuIuIzkZRVGw0Gp//+4EF4Br/3l8P7LAtjfL/N2JOPCTFuUnLAAAAAElFTkSuQmCC" alt="">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAACZUlEQVQ4T8WUT2gTQRTGvzfTBvQoVREE8SYeFLws2ZmXxhZtK6igiAgqeBH8S8GD2INeimhRsGfFs4gotCg9hszY7TZEwaOCeBAURFGRZttsd2SlG9I0NBQKzm2YNz++9773HmGdD60zD/8fyMz7nHN3AWwgoo0ArJRypFQq/UmzXVWh7/t5IUSPtXYyDVZKHRFCPHDOnbDWVgFIrfUoAG2t5VWBSikWQowDGDDGfFuC3QHQb4z50lx7rfVjAE+ttVNtFTJzv3NunIj2pzCt9SAR3Z6fnz8wOzv7vdVIZlZpAsaYsRVApdSQEOJ+FEV9lUrlq+/7fVLK0YWFhcEwDH+36wpmPg0gMsY8WwZk5qMA7kVRxClMa62JaGxubm6oWq3+SmG+7+8QQpTr9boKw/Cz53lbc7ncRBzHxSAIag0gM+92zk3W6/XeNFBr7QEYr9VqA60wAMPW2hfMvNk59ypJkovT09OVZaZorYMkSa6mD1rrvQAeLS4uDgRB8KNZWSsMwGVrbZiV4p9Cz/O2d3d3P7TWDqV3Zp4ioivlcvnDWmANhUqpQ0TUb629tgR87Zw7Y639mNUsU+b7/hYhxMtWZcsUMvMeADeMMaeWgMcB3HLOPSeiswBGjDFPisViTxzHUwAuNafZ7HxmimDmt1LK3lKp9DMNyOfzu6SUB+M4npiZmfmUwZIkuZAZ0K6FGi4rpY4JIQ4bY861adxtaQd0gq0YPa319XS0nHM3oyh619XVtSmXyxWdc8NEdN4Y86bTulsxKYVCoZAkyUkAO4konYz3UsqxbJusGdjpQ6f3dV+wfwHIazMkPz5y0QAAAABJRU5ErkJggg==" alt="">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAIAAAC0tAIdAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpENkJCODQ0MUExMjkxMUU5QUUwREExNDZCOUY0RkE1NCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpENkJCODQ0MkExMjkxMUU5QUUwREExNDZCOUY0RkE1NCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkQ2QkI4NDNGQTEyOTExRTlBRTBEQTE0NkI5RjRGQTU0IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkQ2QkI4NDQwQTEyOTExRTlBRTBEQTE0NkI5RjRGQTU0Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+N72W1QAAAH1JREFUeNqskm0GACEQhtvV3bpSJNGPdKS6WCSxMaw+ZtdELxM1z4zXTFcIgZHFWwghKGiM8WY7Ok075wbfP7LWppRItDEm5zzPBCSlbKf3Hq5a61JK/4L4hhql1IoO9JtoBbXWFZ179+kVRZwAhKL4vL/Q7V1y+C5E+hFgAOiJMcbuCH22AAAAAElFTkSuQmCC" alt="">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAIAAAC0tAIdAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpDODkzMkVDQUExMjkxMUU5QkJGNkVDRjVFMzY2MzZEMyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpDODkzMkVDQkExMjkxMUU5QkJGNkVDRjVFMzY2MzZEMyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkM4OTMyRUM4QTEyOTExRTlCQkY2RUNGNUUzNjYzNkQzIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkM4OTMyRUM5QTEyOTExRTlCQkY2RUNGNUUzNjYzNkQzIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Zf5svAAAACtJREFUeNpi3LFjBwPRgAWI3d3diVG6c+dOJgZSwKjqkaqaBZJciFQNEGAAfh0HdcX9m3AAAAAASUVORK5CYII=" alt="">
+  </div>
+  <!-- <div class="x-spreadsheet-addRow" style="line-height: 28px;z-index:1000;position: absolute;bottom: 28px;left: 16px;">+</div> -->
+  <footer id="J_footer"></footer>
+   
+
+   <script src="/layDateFile/laydate/laydate.js"></script>
+   <!--script type="text/javascript" src="https://unpkg.com/x-data-spreadsheet@1.0.20/dist/locale/zh-cn.js"></script-->
+   <script src="/index.js"></script>
+ <script type="text/javascript" src="xspreadsheet.cfa23e.js"></script></body>
+ </html>
+ 

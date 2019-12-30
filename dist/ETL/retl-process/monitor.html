@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+
+    <title>设计</title>
+  <link href="../assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+	<link type="text/css" rel="stylesheet" href="./css/easyui.css" >
+	<link type="text/css" rel="stylesheet" href="./css/icon.css" >
+	<link type="text/css" rel="stylesheet" href="./css/style.css" >
+	<link type="text/css" rel="stylesheet" href="./svgMonitor/css/svg.css" >
+<style>
+
+</style>
+</head>
+
+<body>
+<div class="svgbox-wrap">
+  <div id="svgbox" style='margin-left: 0'></div>
+</div>
+	<!-- 弹窗 -->
+	<div id="title" class="easyui-menu" style="min-width:183px;" >
+      <div style="border:none;background:#fff;color:#333;" id="task_names">节 点 名 称：<span id='title_name'></span></div>
+      <div style="border:none;background:#fff;color:#333;" id="task_names1">任 务 编 号  :【<span id='title_number'></span>】<span id='task_name'></span></div>
+      <div style="border:none;background:#fff;color:#333;">执 行 状 态  :<span id='title_state'></span></div>
+      <div style="border:none;background:#fff;color:#333;">执 行 时 长  :<span id='title_when'></span></div>
+      <div style="border:none;background:#fff;color:#333;">返 回 信 息  :<span id='title_return'></span></div>
+    </div>
+
+<script src="./js/jquery/jquery.min.js"></script>
+<script src="./js/jquery/jquery.easyui.min.js"></script>
+<script src="./js/common/package.js"></script>
+<script src="./js/common/d3.v3.js"></script>
+<script src="./svgMonitor/js/graphic.js"></script>
+<script src="./svgMonitor/js/base.js"></script>
+<script src="./js/monitor-polling.js"></script>
+<script src="/assets/plugins/md5/md5.js"></script>
+<script src="./js/common/jquery.kingdom.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE
+html>
+
+<html>
+
+<!--下面两个是使用Code Mirror必须引入的-->
+<link rel="stylesheet" href="codemirror.css">
+<script src="codemirror.js"></script>
+
+<!--Java代码高亮必须引入-->
+<script src="clike.js"></script>
+<script src="sql.js"></script>
+<head>
+<title>CodeMirrorTest</title>
+<style type="text/css">
+     .CodeMirror{border:1px solid black;font-size:15px;width:500px;height:500px}
+</style>
+</head>
+<body>
+<textarea id="code"></textarea>
+</body>
+<script type="text/javascript">
+//根据DOM元素的id构造出一个编辑器
+//使用参数：https://zhuanlan.zhihu.com/p/22163474
+    var editor=CodeMirror.fromTextArea(document.getElementById("code"),{
+                mode:"text/x-sql", //实现Java代码高亮
+				lineNumbers: true,
+				lineWiseCopyCut:true
+        });
+</script>
+</html>

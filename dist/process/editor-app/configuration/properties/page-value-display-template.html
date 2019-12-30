@@ -1,0 +1,6 @@
+
+<span ng-if="!property.noValue&&property.value.isCustom==1">{{property.value.pageName|limitTo:20}}</span>
+<span ng-if="!property.noValue && property.value.isCustom==1 && property.value.pageName.length > 20">...</span>
+<span ng-if="!property.noValue&&property.value.isCustom==0">{{property.value.value|limitTo:20}}</span>
+<span ng-if="!property.noValue && property.value.isCustom==0 && property.value.value.length > 20">...</span>
+<span ng-if="property.noValue" translate>PROPERTY.EMPTY</span>

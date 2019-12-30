@@ -1,0 +1,13 @@
+{{#if flag}}
+<li class="t-c" data-lang="No-Data">No Data</li>
+{{else}}
+  {{#each this}}
+        <li class="list-group-item"  title = "{{connectionName}}"
+          connection_id = "{{connectionId}}">
+         <img class="driver-logo mg-5" src="/assets/img/db/{{driverLogo}}"/>
+          <strong class="connect_name">{{connectionName}}</strong> 
+          <span class="c-r c-logo"><a href="javascript:;" data-params = '{"connection_name":"{{connectionName}}","connection_desc":"{{connectionDesc}}","db_port":"{{dbPort}}","db_database":"{{dbDatabase}}","connection_type":"{{connectionType}}","jdbc_string":"{{jdbcString}}","db_user":"{{dbUser}}","db_password":"{{dbPassword}}","server":"{{server}}","max_connect_count":"{{maxConnectCount}}","driverInfo":"{{driverInfo}}","connect_id":"{{connectionId}}"}'><i class="fa fa-edit editBtn" title="EDIT" style="color:#464C51"></i></a><i class="fa fa-trash-o delBtn" title="DELETE" connection_id="{{connectionId}}" style="padding-right:3px;color:#464C51;"></i></span>         
+  {{/each}}
+{{/if}}
+
+<script src="/assets/js/lang.js"></script>

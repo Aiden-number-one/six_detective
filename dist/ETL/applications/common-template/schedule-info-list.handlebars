@@ -1,0 +1,19 @@
+{{#if flag}}
+    <p>No Data</p>
+{{else}}
+  {{#each this}}
+    <li>
+        <a href="#report-table-info-manage" style="text-decoration:none;">
+            <span class="time maxW100" style="max-width:130px">{{dateTimeFormatHelper startTime}}</span>
+            <span class="time" style="margin-right:10px;max-width:130px">{{dateTimeFormatHelper endTime}}</span>
+            <span class="details">
+                <span class="label label-sm label-icon label-success" style="position:relative;top:-5px">
+                    <span>{{rownumber @index}}</span>
+                </span>
+                <span class="overW" style="margin-right:10px;" title=({{batchNo}}-{{nodeName}})>{{scheduleName}} ({{batchNo}}-{{nodeName}} ) </span>
+                <span style="position:relative;top:-7px">{{executeFlagName}}</span>                        
+            </span>
+        </a>
+    </li>
+  {{/each}}
+{{/if}}

@@ -1,0 +1,14 @@
+{{#if flag}} {{else}} {{#each this}}
+<tr>
+    <td>{{columnName}}</td>
+    <td>{{columnType}}</td>
+    <td>{{columnLength}}</td>
+    <td>{{columnPrecision}}</td>
+    <td>{{nullFlag}}</td>
+    <td>{{autoincrementFlag}}</td>
+    <td>{{primaryFlag}}</td>
+    <td>{{foreignkeyFlag}}</td>
+    <td>{{columnDefault}}</td>
+    <td>{{columnDesc}}</td>
+</tr>
+{{/each}} {{/if}}

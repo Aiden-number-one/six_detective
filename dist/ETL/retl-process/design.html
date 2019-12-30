@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+
+    <title>Design</title>
+	<link type="text/css" rel="stylesheet" href="./css/easyui.css" >
+	<link type="text/css" rel="stylesheet" href="./css/icon.css" >
+	<link type="text/css" rel="stylesheet" href="./css/style.css" >
+  <link type="text/css" rel="stylesheet" href="./svg/css/svg.css" >
+  <link rel="stylesheet" href="./css/iconfont/iconfont.css">
+  <link href="../assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+    <!-- <link rel="stylesheet" href="../assets/css/global/dataTables.tableTools.css"> -->
+    <link href="../assets/plugins/intro/introjs.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="../assets/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" -->
+    <!-- /> -->
+    <!-- <link href="../assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css"
+    />
+    <link href="/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css"
+    />
+    <link href="../assets/plugins/bootstrap-datepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/plugins/bootstrap-select/bootstrap-select.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css" /> -->
+    <link href="../assets/css/global/components-md.css" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="../assets/css/global/plugins-md.css" rel="stylesheet" type="text/css" />
+    <!-- <link rel="stylesheet" href="../assets/plugins/fullcalendar/fullcalendar.min.css" type="text/css">
+    <link rel="stylesheet" href="../assets/plugins/fullcalendar/fullcalendar.print.css" type="text/css media='print'"> -->
+    <!-- <link href="../assets/css/layouts/layout.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/layouts/themes/blue.min.css" rel="stylesheet" type="text/css" id="style_color" /> -->
+    <link rel="stylesheet" href="../assets/css/layouts/bms.custom.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/global/bms.custom.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/pages/kd-loading.css" type="text/css">
+    <!-- <link rel="stylesheet" href="../assets/css/fonts/iconfont.css" type="text/css"> -->
+<style>
+textarea {
+	border: 1px solid #D4D4D4;
+}
+
+.textbox-disabled {
+	opacity: 1;
+	filter: alpha(opacity = 100);
+}
+
+ol, ul, li, dt, dd, dl {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#temp_task .tree-node, #tt1 .tree-node {
+	height: 30px;
+	padding-top: 6px;
+}
+i{
+  outline: none
+}
+.shu {
+	height: 20px;
+	display: block;
+	width: 120px;
+	line-height: 20px;
+	margin-left: -37px;
+  padding-left: 35px;
+  font-size: 11px
+}
+
+.shu1 {
+	height: 20px;
+	display: block;
+	line-height: 20px;
+}
+
+.toolbox>.search {
+	width: 130px;
+	margin-left: 16px;
+	height: 20px;
+	background: #fff;
+	margin-bottom: 6px;
+	font-size: 14px;
+	padding-left: 10px;
+	color: #000;
+}
+
+/* .toolbox .iconfont:hover {
+	border: 1px solid #ccc;
+} */
+
+.validatebox-invalid {
+	border: 1px solid #ffa8a8;
+}
+
+.datagrid-btable .datagrid-cell {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.required {
+  color: red;
+}
+.font800{
+  font-weight: 600;
+}
+.tab_Label li {
+  color:#737373
+}
+.tab_Label .tab_li{
+  border: none!important;
+  border-bottom: 2px solid #29b2e6!important;
+  color: #29b2e6;
+  border-radius: 0
+}
+.tab_Label{
+  background: none;
+}
+.tree-node-selected{
+  background: #beebff;
+  /* color: #fff */
+}
+.toolbox{
+  background: #f5f6fa
+}
+.toolbox>input{
+  color: #29b2e6;
+  outline-color:#29b2e6;
+  background: #f5f6fa
+}
+.btn-sure{
+  color: #FFFFFF;
+  background-color: #32c5d2;
+  border-color: #32c5d2;
+  padding: 6px 0;
+  width: 124px;
+  border: 1px solid #ccc;
+  margin-left: 5px
+}
+.btn-cancel{
+  padding: 6px 0;
+  width: 124px;
+  border: 1px solid #ccc;
+  color: #333;
+  font-weight: 600
+}
+.btn-query{
+    color: #fff;
+    background-color: #32c5d2 !important;
+    border-color: #32c5d2;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+    border: none!important;
+    border: 1px solid transparent;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    padding: 4px 10px 4px 10px;
+}
+.btn-reset{
+    color: #666;
+    background-color: #E5E5E5;
+    border-color: #E5E5E5;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+    border: 1px solid transparent;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    padding: 4px 10px 4px 10px;
+}
+#sea_txt{
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 12px!important;
+    border-color: #ddd;
+    display: inline-block;
+    height: 30px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: text
+}
+.window{
+  background: #fff;
+}
+.panel-title{
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 10px;
+    line-height: 30px;
+    color: #17a2d7;
+    margin-left: 10px;
+  }
+  .c-container .c-form .form-control{
+    padding: 2px 6px;
+    height: 24px;
+    border-radius: 2px;
+    color: #000;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 12px!important;
+    border-color: #ddd;
+    display: inline-block;
+    height: 30px;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .c-container .c-form .control-label{
+    color: #34495e;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .messager-question{
+    background: none;
+  }
+  .c-container .c-container-bg{
+    background: #fff;
+  }
+  .datagrid-header-inner{
+    background: #fff;
+  }
+  .datagrid-header-inner{
+    background: #fff;
+  }
+ .datagrid-header td, .datagrid-body td, .datagrid-footer td{
+   background: #fff;
+   border-style: solid;
+   border:none
+ }
+ .datagrid-header .datagrid-cell span{
+   font-weight: 600;
+   color: #333;
+ }
+ .datagrid-cell-c1-folderName{
+  width: 90px!important;
+ }
+ .datagrid-header .datagrid-cell{
+   width: 98px;
+ }
+ .datagrid-header-over{
+   background: #fff!important;
+ }
+ .messager-button .l-btn {
+   background: #fff
+ }
+ .c-bg-b-w{
+  border: none;
+  }
+ .messager-button .l-btn {
+   background: #fff
+ }
+.messager-button{
+  background: #fff;
+}
+.toolbo-i{
+  font-size: 17px;
+    color: #29b2e6;
+    outline-color: #29b2e6;
+    background: #f5f6fa;
+    margin: 2px 0px;
+    padding: 4px 6px;
+    cursor: pointer;
+    margin-top: 2px;
+    border: 1px solid #f5f6fa
+}
+.toolbox{
+  user-select: none
+}
+
+</style>
+</head>
+
+<body style="opacity: 0">
+<div class="svgbox-wrap">
+    <div class='toolbox' style="left: 250px;">
+      <i class="icon iconfont "  title="" id=""></i>
+      <i class="icon iconfont iconfengxiang toolbo-i"  title="" id="t-pointer"></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont' type='button' id='t-pointer' value='&#xe669;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont font800' type='button' id='t-line' title='连线' value='&#xe631;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconlianxian toolbo-i"  title="Line" id="t-line"></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont font800' type='button' id='' title='放大画布' value='&#xe626;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconfangda toolbo-i"  title="Zoom In" id="t-enlarge"></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont font800' type='button' id='t-narrow' title='缩小画布' value='&#xe63b;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconsuoxiao11 toolbo-i"  title="Zoom Out" id="t-narrow"></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont' type='button' id='t-save' title='SAVE' value='&#xe60b;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconbaocun toolbo-i"  title="Save"" id="t-save"></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont' type='button' id='t-Saves' title='另存为' value='&#xe60f;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont' type='button' id='' title='导入' value='&#xe607;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconimport toolbo-i"   title="Import" id="t-import"></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont s_alignment' type='button' title='上对齐' value='&#xe657;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;font-size: 21px' /> -->
+      <i class="icon iconfont iconshangduiqi toolbo-i s_alignment"  title="Top Align" id=""></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont x_alignment' type='button' title='下对齐' value='&#xe652;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconxiaduiqi toolbo-i x_alignment"  title="Bottom Align" id=""></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont z_alignment' type='button' title='左对齐' value='&#xe76f;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconzuoduiqi toolbo-i z_alignment"  title="Left Align" id=""></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont y_alignment' type='button' title='右对齐' value='&#xe614;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconyouduiqi toolbo-i y_alignment"  title="Right Align" id=""></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont x_Dispersed' type='button' title='水平分散' value='&#xe6c0;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconshuxian toolbo-i x_Dispersed"  title="Horizontal Distributed" id=""></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont y_Dispersed font800' type='button' title='垂直分散' value='&#xe6c3;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconsanheng toolbo-i y_Dispersed"  title="Vertical Distributed" id=""></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont Shear' type='button' title='剪切' value='&#xe637;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconjianqie toolbo-i Shear"  title="Cut" id=""></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont Copy' type='button' title='复制' value='&#xe601;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconfuzhi toolbo-i Copy"  title="Copy" id=""></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont Paste font800' type='button' title='粘贴' value='&#xe616;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont iconniantie toolbo-i Paste"  title="Paste"" id=""></i>
+      <!-- <input onselectstart='return false;' draggable="false" class='iconfont Delete font800' type='button' title='删除' value='&#xe600;' style='user-select: none; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none;' /> -->
+      <i class="icon iconfont icondel toolbo-i Delete"  title="Delete" id=""></i>
+      <input type="text" class="input-normal" id="sea_txt" />
+      <!-- <i class="fa fa-search"></i> -->
+      <!-- <input type="button" value="搜索" id="sea_but" style="width: 50px; height: 25px; font-size: 14px;" />
+      <i><img src="css/icons/reload.png" title="刷新" style="cursor: pointer;" id="Refresh" /></i> -->
+      <button type="button" class="btn-query" id="sea_but"> SEARCH
+        <i class="fa fa-search"></i>
+      </button>
+      <button type="button" class="btn-reset" id="Refresh">RESET<i class="fa fa-times"></i></button>
+    </div>
+    <div class='toolbox'></div>
+    <ul class="tab_Label" id="tab_Label">
+      <li class="tab_li">Work Component</li>
+      <li>Node Object</li>
+    </ul>
+    <div id="ssou" style="display: none" class="ssou">
+      <input type="search" class="form-control input-small input-inline" style="width:120px!important" placeholder="Please input" id="sousuo_text">
+      <!-- <input type="text" style="width: 130px; margin-left: 10px;height: 30px" id="sousuo_text" /> -->
+      <!-- <input type="button" value="搜索" id="sousuo" /> -->
+      <button type="button" class="btn-query" id="sousuo"> SEARCH
+        <i class="fa fa-search"></i>
+      </button>
+      <button type="button" class="btn-reset" id="sxin">RESET<i class="fa fa-times"></i></button>
+      <!-- <a id="sxin" class="btn-query">
+        <i class="widget-thumb-icon bg-green fa fa-refresh"></i> 刷新</a> -->
+      <!-- <i><img src="css/icons/reload.png" title="刷新" style="cursor: pointer;" id="sxin" /></i> -->
+    </div>
+    <p class="Stop1" id="Stop1">
+      <img src="images/right1.png" id="Stop_img" />
+    </p>
+    <div class="nodelistbox-wrap" style="width: 250px; background: #fff; overflow: auto; padding-bottom: 10px; height: 100%;">
+      <div id="tab_div">
+        <ul id="temp_task" class="easyui-tree">
+
+        </ul>
+        <ul id="tt1" class="easyui-tree" style="display: none;">
+
+        </ul>
+
+      </div>
+    </div>
+    <!-- 弹出窗口 -->
+    <!-- 节点编辑 -->
+    <div style='display: none;' id='temp_task_selectList'>
+      <option value="$id$">$name$</option>
+    </div>
+    <div id='nodeformbox1' class="easyui-window" title="Data Extract" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit1' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId1' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId1']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section">
+                  <div>
+                    <input type='hidden' id="taskNoName1" />
+                    <input id='i_nodeItem_id1' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskEInfo();" class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                  <!--<select  name='i_nodeItem_id' class="form-control"></select> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn  btn-small btn-cancel" onclick='$("#nodeformbox1").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox2' class="easyui-window" title="SQL Execution" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit2' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId2' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId2']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName2" />
+                    <input id='i_nodeItem_id2' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskSQLInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                  <!--<select  name='i_nodeItem_id' class="form-control"></select> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox2").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox3' class="easyui-window" title="Variable Setting" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit3' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId3' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId3']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName3" />
+                    <input id='i_nodeItem_id3' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskVInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                  <!--<select  name='i_nodeItem_id' class="form-control"></select> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox3").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox4' class="easyui-window" title="Job Workflow" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit4' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId4' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId4']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label">Task:</label>
+                <div class="col-sm-9 ">
+                  <div>
+                    <input type='hidden' id="taskNoName4" />
+                    <input id='i_nodeItem_id4' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox4").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox18' class="easyui-window" title="Table File Parsing" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit18' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId18' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id="i_nodeName18" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId18']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName18" />
+                    <input id='i_nodeItem_id18' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskMInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox18").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox19' class="easyui-window" title="WebService Request" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit19' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId19' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id="i_nodeName19" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId19']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName19" />
+                    <input id='i_nodeItem_id19' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskMInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox19").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox5' class="easyui-window" title="Procedure Execution" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit5' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId5' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId5']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName5" />
+                    <input id='i_nodeItem_id5' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskPInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                  <!--<select  name='i_nodeItem_id' class="form-control"></select> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox5").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox6' class="easyui-window" title="外部程序任务" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit6' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId6' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId6']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section">
+                  <div>
+                    <input type='hidden' id="taskNoName6" />
+                    <input id='i_nodeItem_id6' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskSInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                  <!--<select  name='i_nodeItem_id' class="form-control"></select> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox6").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 新增任务节点 -->
+    <div id='nodeformbox8' class="easyui-window" title="Text Export" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit8' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId8' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id="i_nodeName8" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId8']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName8" />
+                    <input id='i_nodeItem_id8' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskFInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox8").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-cancel" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox9' class="easyui-window" title="发送邮件任务" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit9' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId9' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id="i_nodeName9" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId9']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName9" />
+                    <input id='i_nodeItem_id9' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskMInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox9").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox10' class="easyui-window" title="执行Kettle任务" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit10' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId10' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id="i_nodeName10" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId10']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section">
+                  <div>
+                    <input type='hidden' id="taskNoName10" />
+                    <input id='i_nodeItem_id10' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskKInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox10").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 执行JS任务 -->
+    <div id='nodeformbox11' class="easyui-window" title="执行JS语句" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit11' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId11' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId11']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section">
+                  <div>
+                    <input type='hidden' id="taskNoName11" />
+                    <input id='i_nodeItem_id11' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskJInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox11").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 执行Webservice -->
+    <div id='nodeformbox12' class="easyui-window" title="执行Webservice" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit12' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId12' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId12']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section">
+                  <div>
+                    <input type='hidden' id="taskNoName12" />
+                    <input id='i_nodeItem_id12' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskWsInfo();" class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox12").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	 <!-- 数据剖析任务 -->
+  <div id='nodeformbox13' class="easyui-window" title="Data Analysis" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px;">
+    <div class="c-container">
+      <div class="c-container-p15">
+        <div class="c-bg-b-w">
+          <form  id='node_edit13' class="form-horizontal c-form clearfix" role="form">
+            <div class="form-group">
+              <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+              <div class="col-sm-9">
+              	<input type='hidden' name='i_nodeId' id='i_nodeId13'/>
+                <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId13']" >
+              </div>
+            </div>
+            <!-- <div class="form-group">
+              <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+              <div class="col-sm-9 tip-section">
+                <div>
+                  <input id='folder_id_13' name="folder_id"  class="form-control easyui-combobox" data-options=""  style='width:100%;height:24px;'/>
+                </div>
+              </div>
+            </div> -->
+            <div class="form-group">
+              <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+              <div class="col-sm-9 tip-section">
+	              <div>
+	                <input type='hidden'  id="taskNoName13"/>
+	              	<input id='i_nodeItem_id13' name="i_nodeItem_id"  class="form-control easyui-combobox" data-options=""  style='width:100%;height:24px;'/>
+                </div>
+                  <!-- <a onclick="taskDQInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'><i class="glyphicon glyphicon-pencil"></i></a> -->
+              </div>
+            </div>
+            <div class="pull-right" style="padding:5px 0">
+            	<input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox13").window("close");' value='CANCEL'/>
+				<input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE'/> 
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+ <!-- FTP文件上传下载 -->
+    <div id='nodeformbox14' class="easyui-window" title="FTP文件任务" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit14' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId14' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId14']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section">
+                  <div>
+                    <input type='hidden' id="taskNoName14" />
+                    <input id='i_nodeItem_id14' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskFTPInfo();" class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox14").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformbox15' class="easyui-window" title="Importing Text File" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width: 570px;">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit15' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId15' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id="i_nodeName15" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId15']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName15" />
+                    <input id='i_nodeItem_id15' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskMInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox15").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id='nodeformbox16' class="easyui-window" title="压缩打包任务" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit16' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId16' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id="i_nodeName16" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId16']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section">
+                  <div>
+                    <input type='hidden' id="taskNoName16" />
+                    <input id='i_nodeItem_id16' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskMInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox16").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div id='nodeformbox17' class="easyui-window" title="数据上报任务" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_edit17' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeId17' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id="i_nodeName17" placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeId17']">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="driveName" class="col-sm-3 control-label"><span class="required">* </span>Task:</label>
+                <div class="col-sm-9 tip-section"">
+                  <div>
+                    <input type='hidden' id="taskNoName17" />
+                    <input id='i_nodeItem_id17' name="i_nodeItem_id" class="form-control easyui-combobox" data-options="required:true" style='width: 100%; height: 24px;' />
+                  </div>
+                  <!-- <a onclick="taskMInfo();" id='' class="pull-right btn btn-sm btn-default" class='height:24px;'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformbox17").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='nodeformboxL' class="easyui-window" title="Block" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_editL' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeIdL' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id='i_nodeNameL' placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeIdL']">
+                </div>
+              </div>
+
+              <div class='' style='padding-left: 16px;' id='i_nodeItem_idL'>
+                  <label>
+                    <input type="radio" name="lockOption" value="1" id="input1">
+                    Triggered after any of previous jobs completed, and only triggered once
+                  </label>
+                  <label>
+                    <input type="radio" name="lockOption" value="2" id="input2">
+                    Triggered after all previous jobs completed
+                  </label>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" value='CANCEL' onclick='$("#nodeformboxL").window("close");' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id='nodeformboxC' class="easyui-window" title="Criteria Component" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width: 600px; height: 450px;">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w" style="height: 372px;">
+            <form id='node_editC' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeIdC' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id='i_nodeNameC' placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeIdC']">
+                </div>
+              </div>
+              <div class="label-title">Variable Setting</div>
+              <div class="form-group" style="padding: 0px;height:200px;">
+                <div style="box-sizing: border-box;">
+                  <div class="tourist-wide" style="border:none">
+                      <div class="btn-group">
+                          <div class="btn-group">
+                       <a id="addLineC" class="btn-operate"><i class="widget-thumb-icon bg-red fa fa-plus"></i>ADD</a>
+                          </div>
+                          <div class="btn-group">
+                           <a id="delAllLineC" class="btn-operate"><i class="widget-thumb-icon bg-red fa icon-trash"></i>Delete All</a>
+                          </div>
+                      </div>
+                    <!-- <a id='addLineC' class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+                    <a id='delAllLineC' class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除全部</a> -->
+                  </div>
+                 
+                  <div style="height: 220px; overflow: auto;">
+                    <table id="tbC" style="width: 100%;">
+                      <thead>
+                        <tr>
+                          <th width="5%" class="control-label" style="text-align: center; padding-left: 0px;">No.</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Variable Name</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Variable Type</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Operator type</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Value</th>
+                          <th class="col-sm-2 control-label" style="text-align: center;">Logical Operator</th>
+                          <th width="10%" class="col-sm-2 control-label" style="text-align: center; padding: 0px;">Operator</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" value='CANCEL' onclick='$("#nodeformboxC").window("close");' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='CONFIRM'' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id='nodeformboxI' class="easyui-window" title="Stop Component" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_editI' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeIdI' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id='i_nodeNameI' placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeIdI']">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Message:</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="i_return_message" name='i_return_message'>
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformboxI").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 等待时间组件 -->
+    <div id='nodeformboxG' class="easyui-window" title="Wait" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_editG' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label"><span class="required">* </span>Node Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeIdG' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id='i_nodeNameG' placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeIdG']">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Waiting Time:</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control easyui-validatebox " id="i_wait_time" name='i_wait_time' placeholder="" data-options="required:true,validType:'zeroOrInteger'">
+                </div>
+                <div class="col-sm-4">
+                  <select name='i_time_unit' class="form-control" id='i_time_unit'>
+                    <option value='S'>Second</option>
+                    <option value='I'>Minute</option>
+                    <option value='H'>Hour</option>
+                  </select>
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" value='CANCEL' onclick='$("#nodeformboxG").window("close");' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 检查文本 -->
+    <div id='nodeformboxF' class="easyui-window" title="Check if the file exists" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_editF' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label">Job Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeIdF' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id='i_nodeNameF' placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeIdF']">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">File Name:</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="i_file_name" name='i_file_name' placeholder="Please input the absolute path">
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformboxF").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 成功组件 -->
+    <div id='nodeformboxU' class="easyui-window" title="Success Component" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form id='node_editU' class="form-horizontal c-form clearfix" role="form">
+              <div class="form-group">
+                <label for="dataBaseD" class="col-sm-3 control-label">Job Name:</label>
+                <div class="col-sm-9">
+                  <input type='hidden' name='i_nodeId' id='i_nodeIdU' />
+                  <input type="text" class="form-control easyui-validatebox" name="i_nodeName" id='i_nodeNameU' placeholder="" required="required" validType="checkOnly[graphic.nodes,'#i_nodeIdU']">
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <input type="button" class="btn btn-default btn-small btn-cancel" onclick='$("#nodeformboxU").window("close");' value='CANCEL' />
+                <input type="submit" class="btn btn-primary btn-small btn-sure" value='SAVE' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SAVE作业弹窗 -->
+    <div id="jf_win_newJob" class="easyui-window" title="SAVE Job" data-options="modal:true,closed:true" style="width: 600px; height: 320px;">
+      <div class="c-container">
+        <div class="c-container-p15">
+          <div class="c-bg-b-w">
+            <form class="form-horizontal c-form clearfix" id="form_newJob" target='hideiframe'>
+              <input type="hidden" id="jobFlow_xml" name="xmlMsg" />
+              <!-- SAVE画布产生的 XML 信息 -->
+              <input type="hidden" id="job_item_id" name="jobId" />
+              <!-- <input type="hidden" id="folderId" /> -->
+              <input type="hidden" id="ifBack" />
+              <input type="hidden" id="_saveJobType" />
+              <input type="hidden" id="_ifNew" />
+              <input type="reset" id="fromResultJob" style="display: none;" />
+              <div class="form-group">
+                <label for="jf_jobName_input" class="col-sm-3 control-label"><span class="required">* </span>Job No.:</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control easyui-validatebox" id="jf_jobId_input" name="jobNo" data-options="required:true" maxlength="32" placeholder="32 characters maximum"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="jf_jobName_input" class="col-sm-3 control-label"><span class="required">* </span>Job Name:</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control easyui-validatebox" id="jf_jobName_input" name="jobName" data-options="required:true" maxlength="64" placeholder="64 characters maximum"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="dataBaseS" class="col-sm-3 control-label"><span class="required">* </span>Folder</label>
+                <div class="col-sm-9">
+                  <input class="easyui-combotree form-control easyui-validatebox" name="folderId" id='folderId_input' style="width: 100%; height: 24px;" data-options="required:true" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="dataBaseM" class="col-sm-3 control-label">Job Description:</label>
+                <div class="col-sm-9">
+                  <textarea id="jf_jobDe_input" class="form-control" rows="3" name="jobDesc" maxlength="1024" placeholder="1024 characters maximum"></textarea>
+                </div>
+              </div>
+              <div class="pull-right" style="padding: 5px 0">
+                <a type="button" href="javascript:void(0)" class="btn btn-default btn-sm c-btn-fb btn-cancel" id="btn-jobFlow-close">COLSE</a>
+                <a type="button" href="javascript:void(0)" id='jf_btn_saveSubmit' class="btn btn-default btn-sm c-btn-fb btn-sure">SAVE</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   
+    <div id="importTasks" class="easyui-window" title="Batch Task Importing" data-options="modal:true,closed:true,iconCls:''" style="width: 800px; height: 500px;">
+      <div class="c-container">
+        <div style='position: absolute; top: 0px; left: 0px; width: 100%; padding: 0 10px;'>
+          <div style='display: inline-block; vertical-align: middle; padding-top: 5px;' class='pull-right'>
+            Node Status:
+            <input type="text" class="easyui-combobox" id="nodeType" name="nodeType"/>
+            &nbsp; &nbsp; &nbsp;        
+            <a class="btn-operate" id="saveInfo" style="float:none"><i class="widget-thumb-icon bg-red fa fa-arrow-down" style="position: relative;left: 279px; top: 4px;"></i> Batch Import </a>
+            <!-- <button type="button" class="btn btn-default btn-small" id='saveInfo'>批量导入</button> -->
+            <button type="button" class="btn btn-default btn-small" id='cancelInfo'>CANCEL</button>
+          </div>
+        </div>
+        <div class='box-toptool'>
+          <div  class="c-container-p15 c-container-bg clearfix c-float-wrap c-contanier-pb20">
+            <div class="c-float-35p c-bg-b-w c-scrollY" style="overflow-y:auto;overflow-x:auto">
+              <ul id='tt'>
+
+              </ul>
+            </div>
+            <div class="c-float-7p">
+              <div style='position: relative; height: 100%;'>
+                <div class="c-absolute-middle-wrap">
+                  <button class="btn btn-default btn-sm c-btn40" onclick="moveRight();">
+                    <i class="glyphicon glyphicon-arrow-right"></i>
+                  </button>
+                  <button class="btn btn-default btn-sm c-btn40" onclick="moveLeft();">
+                    <i class="glyphicon glyphicon-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="c-float-58p c-bg-b-w">
+              <div class="datagrid-btable datagrid-cell">
+                <table id="table-list" style="width: 100%;">
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+    <!-- 弹出窗口 -->
+    <!-- 右键菜单 -->
+    <div>
+      <div id="svgM" class="easyui-menu" style="width: 120px;">
+        <div id='svgM_saveJob' data-options="iconCls:''">SAVE</div>
+        <!-- <div id='svgM_newJob' data-options="">新建作业</div> -->
+        <div class="menu-sep"></div>
+      </div>
+      <div id="nodeM" class="easyui-menu tubiao" style="width: 120px;">
+        <div id='nodeM_copy'>
+          <i class="icon iconfont icon-fuzhi"></i>复制节点
+        </div>
+        <div class="Shear">
+          <i class="icon iconfont icon-jianqie"></i>剪切节点
+        </div>
+        <div class="Paste">
+          <i class="icon iconfont icon-iconfontniantie"></i>粘贴节点
+        </div>
+        <div class="Delete">
+          <i class="icon iconfont icon-shanchu"></i>删除节点
+        </div>
+        <div id='nodeM_edit' data-options="iconCls:''">Edit</div>
+        <div class="menu-sep"></div>
+      </div>
+      <div id="title" class="easyui-menu " style="min-width: 183px;">
+        <div style="border: none; background: #fff; color: #333;">
+          NodeName：<span id='title_name'></span>
+        </div>
+        <div style="border: none; background: #fff; color: #333;">
+          NodeType：<span id='title_type'></span>
+        </div>
+        <div style="border: none; background: #fff; color: #333;">
+          <span id="yw_number">Task</span>NO：<span id='title_number'></span>
+        </div>
+        <div style="border: none; background: #fff; color: #333;">
+          <span id="yw_task">Task</span>Name：<span id='title_task'></span>
+        </div>
+      </div>
+      <div id="sort" class="easyui-menu tubiao" style="min-width: 100px;">
+        <div class="s_alignment">
+          <i class="icon iconfont icon-shangduiqi"></i>上对齐
+        </div>
+        <div class="x_alignment">
+          <i class="icon iconfont icon-duixiangkaoxiaduiqi"></i>下对齐
+        </div>
+        <div class="z_alignment">
+          <i class="icon iconfont icon-duiqi"></i>左对齐
+        </div>
+        <div class="y_alignment">
+          <i class="icon iconfont icon-alignright"></i>右对齐
+        </div>
+        <div class="x_Dispersed">
+          <i class="icon iconfont icon-shuipingjianjuxiangtong"></i>水平分散
+        </div>
+        <div class="y_Dispersed">
+          <i class="icon iconfont icon-chuizhijianjuxiangtong"></i>垂直分散
+        </div>
+        <div class="Shear">
+          <i class="icon iconfont icon-jianqie"></i>剪切节点
+        </div>
+        <div class="Copy">
+          <i class="icon iconfont icon-fuzhi"></i>复制节点
+        </div>
+        <div class="Paste">
+          <i class="icon iconfont icon-iconfontniantie"></i>粘贴节点
+        </div>
+        <div class="Delete">
+          <i class="icon iconfont icon-shanchu"></i>删除节点
+        </div>
+      </div>
+      <div id="pathM" class="easyui-menu" style="width: 165px;">
+        <div id='pathM_true' data-options="iconCls:'',">结果为真执行下一步</div>
+        <div id='pathM_false' data-options="">结果为假执行下一步</div>
+        <div id='pathM_unconditional' data-options="">无条件执行下一步</div>
+        <div id='pathM_enabled' data-options="">使连线生效/失效</div>
+        <div id='pathM_reverse' data-options="">箭头反转</div>
+        <div class="menu-sep"></div>
+        <div id='pathM_delete'>删除</div>
+      </div>
+    </div>
+    <div style="height: 100%;overflow:auto">
+    <div id="svgbox" style="margin-left: 250px;"></div>
+  </div>
+  </div>
+<div id="J_job_info_modal" class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title title-color-blue">SAVE Job</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="J_form_1" name="J_form_1" role="form" novalidate="novalidate" style="padding-top: 20px;">
+                    <div class="tab-content">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Job NO.
+                                        <span class="required" aria-required="true"> * </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="job_no">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Job Name
+                                        <span class="required" aria-required="true"> * </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="job_name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Folder
+                                        <span class="required" aria-required="true"> * </span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="hidden" name="folderid" class="form-control">
+                                        <input class="form-control dropdown-toggle" name="folderName" data-toggle="dropdown" aria-expanded="true">
+                                        <i class="fa fa-angle-down dropdown-arrowdown"></i>
+                                        <div id="J_flow_tree" type="jstree"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Job Description
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea name="job_desc" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sure" id="J_save_job_info">SAVE</button>
+                <button type="button" data-dismiss="modal" class="btn dark btn-outline btn-cancel">CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="./js/jquery/jquery.min.js"></script>
+<script src="./js/jquery/jquery.easyui.min.js"></script>
+<script src="./js/jquery/datagrid-dnd.js"></script>
+<script src="../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="./js/common/package.js"></script>
+<script src="./js/common/d3.v3.js"></script>
+<script src="./js/common/methods.myLoad.js"></script>
+<script src="./svg/js/undo.js"></script>
+<script src="./svg/js/graphic.js"></script>
+<script src="./svg/js/base.js"></script>
+<script src="./js/common/base.js"></script>
+<script src="./js/job_flow.js"></script>
+<script src="/assets/plugins/md5/md5.js"></script>
+<script src="./js/common/jquery.kingdom.js"></script>
+
+</body>
+
+</html>

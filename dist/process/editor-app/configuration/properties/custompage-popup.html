@@ -1,0 +1,124 @@
+<div class="modal" ng-controller="KisBpmPageCtrlPopupCtrl">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+          ng-click="close()"
+        >
+          &times;
+        </button>
+        <h2 translate>PROPERTY.CUSTOMPAGE.TITLE</h2>
+      </div>
+      <div class="modal-body">
+        <div class="row row-no-gutter">
+          <div class="form-group">
+            <div class="col-xs-3" style="display:none">
+              <div class="radio">
+                <label ng-click="selectRadio"
+                  >{{'PROPERTY.CUSTOMPAGE.CUSTOM' | translate}}
+                  <input
+                    ng-click="selectRadio"
+                    type="radio"
+                    name="isCustom"
+                    value="1"
+                    ng-model="custompage.isCustom"
+                  />
+                </label>
+              </div>
+            </div>
+            <div class="col-xs-4" style="display:none">
+              <!-- <select class="form-control" ng-model="custompage.value[1]" ng-options="x.pageid as x.pagename for x in sites" ng-change="changeSelect()">
+                                <option value="">-- 请选择 --</option>
+                            </select> -->
+              <div ng-attr-class="{{class}}">
+                <button type="button" class="btn btn-default dropdown-toggle" ng-click="showMenu()">
+                  <span ng-if="custompage.value[1]" ng-bind="custompage.pageName"></span>
+                  <span ng-if="!custompage.value[1]">-Please select-</span>
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li ng-repeat="item in sites" ng-click="selectPage($index)">
+                    <a href="javascript:;" ng-bind="item.pagename"></a>
+                  </li>
+                  <nav aria-label="">
+                    <ul class="pager">
+                      <li ng-if="!previous" class="disabled"><a href="javascript:;"><</a></li>
+                      <li ng-if="previous" ng-click="previousBt()"><a href="javascript:;"><</a></li>
+                      <li ng-if="!next" class="disabled"><a href="javascript:;">></a></li>
+                      <li ng-if="next" ng-click="nextBt()"><a href="javascript:;">></a></li>
+                    </ul>
+                  </nav>
+                </ul>
+              </div>
+            </div>
+            <div class="col-xs-4">
+              <div class="checkbox">
+                <label>
+                  <input
+                    value="1"
+                    type="checkbox"
+                    name="isEditing"
+                    ng-model="custompage.isEditing"
+                  />editable
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row row-no-gutter" style="display:none">
+          <div class="form-group">
+            <div class="col-xs-3">
+              <div class="radio">
+                <label ng-click="selectRadio"
+                  >{{'PROPERTY.CUSTOMPAGE.EXTERNALLINKS' | translate}}
+                  <input
+                    ng-click="selectRadio"
+                    type="radio"
+                    name="isCustom"
+                    value="0"
+                    ng-model="custompage.isCustom"
+                  />
+                </label>
+              </div>
+            </div>
+            <div class="col-xs-4">
+              <input
+                id="custompageInput"
+                class="form-control"
+                type="text"
+                ng-model="custompage.value[0]"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row row-no-gutter">
+                    <div class="form-group">
+                        <label for="userField">{{'PROPERTY.ASSIGNMENT.CANDIDATE_USERS' | translate}}</label>
+                        <div ng-repeat="candidateUser in assignment.candidateUsers">
+                            <input id="userField" class="form-control" type="text" ng-model="candidateUser.value" />
+                            <i class="glyphicon glyphicon-minus clickable-property" ng-click="removeCandidateUserValue($index)"></i>
+                            <i ng-if="$index == (assignment.candidateUsers.length - 1)" class="glyphicon glyphicon-plus clickable-property" ng-click="addCandidateUserValue($index)"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="groupField">{{'PROPERTY.ASSIGNMENT.CANDIDATE_GROUPS' | translate}}</label>
+                        <div ng-repeat="candidateGroup in assignment.candidateGroups">
+                            <input id="groupField" class="form-control" type="text" ng-model="candidateGroup.value" />
+                            <i class="glyphicon glyphicon-minus clickable-property" ng-click="removeCandidateGroupValue($index)"></i>
+                            <i ng-if="$index == (assignment.candidateGroups.length - 1)" class="glyphicon glyphicon-plus clickable-property" ng-click="addCandidateGroupValue($index)"></i>
+                        </div>
+                    </div>
+                </div> -->
+      </div>
+      <div class="modal-footer">
+        <button ng-click="close()" class="btn btn-primary" translate>ACTION.CANCEL</button>
+        <button ng-click="save()" class="btn btn-primary" translate>ACTION.SAVE</button>
+        <button style="display:none" ng-click="create()" class="btn btn-primary" translate>ACTION.CREATE</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+{{#if flag}}
+	<tr><td colspan="4" class="text-center">No Data</td></tr>
+{{else}}
+    {{#each this}}
+        <tr>
+            <td class="width40"> {{rownumber @index}} </td>
+            <td class="t-c width40">
+            <input type="checkbox" name="check"> </td>
+            <td data-type="import"> The {{rownumber @index}} Column </td>
+            <td data-type="target" data-origin="{{columnName}}"> {{columnName}} </td>
+        </tr>
+    {{/each}}
+{{/if}}
