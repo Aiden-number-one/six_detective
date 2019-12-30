@@ -26,7 +26,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
 
   return (
     <Drawer
-      title={<FormattedMessage id="data-import.market.manual-upload" />}
+      title={<FormattedMessage id="data-import.new-account.manual-upload" />}
       width={320}
       closable={false}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}

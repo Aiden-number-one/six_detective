@@ -11,6 +11,7 @@ import {
   AlertLog,
   AlertRichText,
   AlertEmailModal,
+  TaskBtn,
   EpTaskItem,
   ProductTaskItem,
   CaCodeTaskItem,
@@ -196,6 +197,9 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
                 }
               >
                 <TaskItem task={pane} />
+                <div align="right">
+                  <TaskBtn task={pane} />
+                </div>
               </TabPane>
             ))}
         </Tabs>

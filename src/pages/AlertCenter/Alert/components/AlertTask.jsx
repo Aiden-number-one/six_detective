@@ -7,6 +7,19 @@ import styles from '@/pages/AlertCenter/index.less';
 import IconFont from '@/components/IconFont';
 import AlertTaskModal from './AlertTaskModal';
 
+export const TaskBtn = ({ task }) => {
+  const isEnd = task.TASK_STATUS === 'A' ? 1 : 0;
+  return (
+    <Link
+      disabled={!task.USER_NAME}
+      to={`/homepage/Approval-Process-Center?taskCode=${task.TASK_ID}&isEnd=${isEnd}`}
+      title={formatMessage({ id: 'alert-center.enter-approval' })}
+    >
+      <FormattedMessage id="alert-center.enter-approval" />
+    </Link>
+  );
+};
+
 function AlertTask({
   dispatch,
   loading,
@@ -101,18 +114,7 @@ function AlertTask({
             align: 'center',
             dataIndex: 'action',
             title: <FormattedMessage id="alert-center.actions" />,
-            render: (text, record) => {
-              const isEnd = record.TASK_STATUS === 'A' ? 1 : 0;
-              return (
-                <Link
-                  disabled={!record.USER_NAME}
-                  to={`/homepage/Approval-Process-Center?taskCode=${record.TASK_ID}&isEnd=${isEnd}`}
-                  title={formatMessage({ id: 'alert-center.enter-approval' })}
-                >
-                  <FormattedMessage id="alert-center.enter-approval" />
-                </Link>
-              );
-            },
+            render: (text, record) => <TaskBtn task={record} />,
           },
         ]}
       />
