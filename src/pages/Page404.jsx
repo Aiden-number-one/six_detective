@@ -1,8 +1,8 @@
 // import { Button, Result } from 'antd';
 import React from 'react';
 import router from 'umi/router'; // 这里应该使用 antd 的 404 result 组件，
-import seperate from '@/assets/icon_seperate.svg';
-import arrow from '@/assets/arrow.png';
+import seperate from '@/assets/images/icon_seperate.svg';
+import arrow from '@/assets/images/arrow.png';
 import styles from '@/assets/css/index.less';
 // 但是还没发布，先来个简单的。
 

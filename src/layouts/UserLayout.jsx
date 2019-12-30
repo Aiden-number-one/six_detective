@@ -3,7 +3,7 @@ import DocumentTitle from 'react-document-title';
 import React from 'react';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
-import logoTrans from '../assets/logo-trans.png';
+import logoTrans from '../assets/images/logo-trans.png';
 import styles from './UserLayout.less';
 // import CustomizeSelectLang from '@/components/CustomizeSelectLang';
 

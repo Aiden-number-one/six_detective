@@ -4,11 +4,11 @@
 @pro-header-hover-bg: rgba(0, 0, 0, 0.025);
 @font-face {
   font-family: 'AvenirHeavy';
-  src: url('./assets/AvenirHeavy.otf');
+  src: url('./assets/images/AvenirHeavy.otf');
 }
 @font-face {
   font-family: 'AvenirBook';
-  src: url('./assets/AvenirBook.ttc');
+  src: url('./assets/images/AvenirBook.ttc');
 }
 // html,
 // body,
@@ -347,7 +347,7 @@
     // content
     .ant-layout {
       height: auto !important;
-      background-color: #f6f9fa;
+      background-color: #f0f2f4;
     }
     .ant-layout-content > div {
       margin: 0 0 0 0 !important;
@@ -488,7 +488,6 @@
     .ant-select-selection--single,
     .ant-select-selection__rendered {
       height: 30px;
-      line-height: 30px;
     }
     .ant-select-selection {
       background-color: #fff;
@@ -686,14 +685,14 @@
     .ant-table-column-title,
     .ant-table-tbody {
       color: #464c51;
-      font-size: 12px;
+      font-size: 14px;
       font-family: FSElliotPro, FSElliot, Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
     }
     .ant-table-column-title {
       font-weight: 600;
     }
     .ant-table-header-column .ant-table-column-title {
-      font-size: 12px;
+      font-size: 14px;
     }
     .ant-table-thead > tr > th {
       background-color: #fafcfd;
@@ -714,14 +713,34 @@
       align-items: center;
       justify-content: flex-end;
       margin-top: 10px;
-      font-size: 12px;
+      font-size: 14px;
+      line-height: 1;
+      .ant-pagination-item {
+        min-width: 26px;
+        height: 26px;
+        line-height: 26px;
+      }
+      .ant-pagination-prev,
+      .ant-pagination-next,
+      .ant-pagination-jump-prev,
+      .ant-pagination-jump-next {
+        min-width: 26px;
+        height: 26px;
+        line-height: 26px;
+      }
       .ant-pagination-total-text {
         flex: 1;
         text-align: left;
       }
+      .ant-select-selection {
+        height: 26px;
+        line-height: 26px;
+        border-top-width: 1px;
+      }
       .ant-select-selection--single,
       .ant-select-selection__rendered {
-        height: 32px;
+        height: 26px;
+        line-height: 26px;
       }
     }
 
