@@ -78,13 +78,13 @@ function TaskBtn({
           <FormattedMessage id="alert-center.export" />
         </button>
       </Col>
-      <Col span={6}>
+      <Col span={12} align="right">
         <Search
           key={urlTaskCode}
           placeholder="search"
           defaultValue={urlTaskCode}
           onSearch={value => searchTask(selectedCurrentTask, value)}
-          style={{ width: 264, height: 36 }}
+          style={{ width: 264 }}
         />
       </Col>
     </Row>
@@ -171,9 +171,14 @@ function ProcessList({
       callback: items => {
         const someNoClaim = items.find(item => item.ownerId);
         if (someNoClaim) {
-          setIsBatch(true);
-          setClaimContent(`some alerts has been claimed,
+          if (items.length > 1) {
+            setClaimContent(`some alerts has been claimed,
       Do you confirm to re-claim?`);
+          } else {
+            setClaimContent(`This alerts has been claimed,
+      Do you confirm to re-claim?`);
+          }
+          setIsBatch(true);
           setConfirmVisible(true);
         } else {
           claimOk(taskCode);
@@ -325,8 +330,8 @@ function ProcessList({
           total,
           showSizeChanger: true,
           current: currentPage,
-          showTotal(count) {
-            return `Page ${currentPage} of ${Math.ceil(count / 10).toString()}`;
+          showTotal() {
+            return `Total ${total} items`;
           },
           onChange(page, pageSize) {
             setcurrentPage(page);

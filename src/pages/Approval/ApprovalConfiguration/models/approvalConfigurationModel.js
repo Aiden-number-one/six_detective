@@ -6,6 +6,7 @@ const approvalConfigurationModel = {
   namespace: 'approvalConfiguration',
   state: {
     data: [],
+    totalCount: 0,
     deployedModelDatas: [],
     processName: '',
   },
@@ -16,7 +17,7 @@ const approvalConfigurationModel = {
         if (response.bcjson.items) {
           yield put({
             type: 'setDatas',
-            payload: response.bcjson.items,
+            payload: { totalCount: response.bcjson.totalCount, data: response.bcjson.items },
           });
         }
       }
@@ -49,7 +50,8 @@ const approvalConfigurationModel = {
     setDatas(state, action) {
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
+        totalCount: action.payload.totalCount,
       };
     },
     deployedModelDatas(state, action) {
