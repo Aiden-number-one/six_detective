@@ -109,7 +109,7 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
-        width: 60,
+        width: '5%',
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
@@ -120,7 +120,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'functionName',
         key: 'functionName',
         ellipsis: true,
-        width: 120,
+        width: '20%',
       },
       {
         index: 2,
@@ -128,7 +128,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'tableName',
         key: 'tableName',
         ellipsis: true,
-        width: 120,
+        width: '20%',
         colSpan: 1,
       },
       {
@@ -136,18 +136,21 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),
         dataIndex: 'biToCode',
         key: 'biToCode',
+        width: '10%',
       },
       {
         index: 4,
         title: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
         dataIndex: 'productCode',
         key: 'productCode',
+        width: '15%',
       },
       {
         index: 5,
         title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         dataIndex: 'effectiveTime',
         key: 'effectiveTime',
+        width: '20%',
         render: (res, obj) => (
           <div>
             <span>{obj.effectiveTime && timeFormat(obj.effectiveTime)}</span>
@@ -172,6 +175,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'logTime',
         key: 'logTime',
         align: 'center',
+        width: '20%',
         render: (res, obj) => <span>{obj.logTime && timeFormat(obj.logTime)}</span>,
       },
       {
