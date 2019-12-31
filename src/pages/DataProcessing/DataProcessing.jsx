@@ -3,6 +3,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Row, Col, Button, Table, Pagination, Select, DatePicker, Modal, Progress } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
+import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
 import styles from './DataProcessing.less';
 
 const { Option } = Select;
@@ -86,6 +87,38 @@ export default class DataProcessing extends Component {
       itemPage: {
         pageNumber: 1,
         pageSize: 10,
+      },
+      dataCharts: [
+        {
+          year: 'Records Received from ECP',
+          sales: 38,
+        },
+        {
+          year: 'Records Imported by user',
+          sales: 52,
+        },
+        {
+          year: 'TO Records Eliminated',
+          sales: 61,
+        },
+        {
+          year: 'Duplicated Records Eliminated',
+          sales: 145,
+        },
+        {
+          year: 'Late Submission',
+          sales: 48,
+        },
+        {
+          year: 'Adjustment of Stock Options Records for Format Conversion',
+          sales: 38,
+        },
+      ],
+      cols: {
+        sales: {
+          tickInterval: 20,
+          alias: 'processing',
+        },
       },
     };
   }
@@ -181,6 +214,8 @@ export default class DataProcessing extends Component {
       functionNameOptions,
       dataProcessingVisible,
       dataProcessingFlag,
+      dataCharts,
+      cols,
     } = this.state;
     const rowSelection = {
       selectedRowKeys,
@@ -192,17 +227,13 @@ export default class DataProcessing extends Component {
         <PageHeaderWrapper>
           <div className={styles.dataProcessingWraper}>
             <div className={styles.dataTableWraper}>
-              <div cassName={styles.dataTable}>
-                <Button
-                  type="primary"
-                  onClick={this.inspectData}
-                  className="btn-usual"
-                  style={{ height: '36px' }}
-                >
+              <div className={styles.dataTable}>
+                <Button type="primary" onClick={this.inspectData} className="btn-usual">
                   {formatMessage({ id: 'systemManagement.dataProcessing.inspectData' })}
                 </Button>
                 <Table
                   loading={loading['dataProcessing/getDataProcessing']}
+                  style={{ marginTop: '6px' }}
                   dataSource={dataProcessingData.items}
                   columns={this.state.codeColumns}
                   pagination={false}
@@ -223,13 +254,12 @@ export default class DataProcessing extends Component {
                 />
               </div>
               <div className={styles.cutOff}></div>
-              <div cassName={styles.dataItemTable}>
+              <div className={styles.dataItemTable}>
                 <div className={styles.tableTop}>
                   <Button
                     onClick={this.addCode}
                     type="primary"
                     className="btn-usual"
-                    style={{ height: '36px' }}
                     disabled={!hasSelected}
                   >
                     {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
@@ -241,6 +271,7 @@ export default class DataProcessing extends Component {
                   dataSource={dataProcessingItemData.items}
                   pagination={false}
                   columns={this.state.columns}
+                  style={{ marginTop: '6px' }}
                 ></Table>
                 <Pagination
                   showSizeChanger
@@ -251,25 +282,15 @@ export default class DataProcessing extends Component {
                   total={dataProcessingItemData.totalCount}
                   pageSize={itemPage.pageSize}
                 />
-                <Row
-                  type="flex"
-                  align="middle"
-                  justify="end"
-                  gutter={30}
-                  style={{ marginTop: '10px' }}
-                >
-                  <span className={styles.startProcessingBtn}>Enter Alert Center</span>
+                <Row type="flex" justify="end" style={{ marginTop: '10px' }}>
+                  <Button type="primary" className="btn-usual" style={{ height: '36px' }}>
+                    Enter Alert Center
+                  </Button>
                 </Row>
               </div>
             </div>
-            <Row>
-              <Row
-                type="flex"
-                align="middle"
-                justify="space-between"
-                gutter={30}
-                style={{ marginTop: '10px' }}
-              >
+            <div className={styles.dataProcessing}>
+              <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
                 <Col>
                   <span>Trade Date</span>
                   <RangePicker
@@ -289,9 +310,9 @@ export default class DataProcessing extends Component {
                   </Select>
                 </Col>
                 <Col>
-                  <span className={styles.startProcessingBtn} onClick={this.startProcessing}>
+                  <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
                     Start Processing
-                  </span>
+                  </Button>
                 </Col>
               </Row>
               <Modal
@@ -316,7 +337,7 @@ export default class DataProcessing extends Component {
                   <span>There are still 10 outstanding alerts. Do you want to bypass all?</span>
                 )}
               </Modal>
-              <ul className={styles.startProcessingWraper}>
+              {/* <ul className={styles.startProcessingWraper}>
                 <li>
                   <span>Records Received from ECP：</span>
                   <span>12</span>
@@ -346,8 +367,30 @@ export default class DataProcessing extends Component {
                 <li>
                   <span>The last time of data processing is at 10:55 on 12/12/2019</span>
                 </li>
-              </ul>
-            </Row>
+              </ul> */}
+              <Chart className={styles.chart} height={400} data={dataCharts} scale={cols} forceFit>
+                <span>The last time of data processing is at 10:55 on 12/12/2019</span>
+                <Axis name="year" />
+                <Axis name="sales" line={{ stroke: '#d9d9d9' }} position="left" />
+                <Tooltip
+                  crosshairs={{
+                    type: 'y',
+                  }}
+                />
+                <Guide>
+                  <Guide.Line lineStyle={{ stroke: '#d9d9d9' }} />
+                </Guide>
+                <Geom
+                  type="interval"
+                  position="year*sales"
+                  size={20}
+                  style={{
+                    stroke: '#d9d9d9',
+                    lineWidth: 1,
+                  }}
+                />
+              </Chart>
+            </div>
           </div>
         </PageHeaderWrapper>
       </Fragment>

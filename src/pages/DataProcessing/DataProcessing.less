@@ -1,20 +1,25 @@
 .dataProcessingWraper {
-  padding: 20px;
-  background: #fff;
+  // padding: 10px;
+  // background: #fff;
   :global {
     .ant-table-wrapper {
       max-height: 440px;
     }
   }
+  .chart {
+    margin-top: 20px;
+    padding: 0;
+  }
 }
 .dataTableWraper {
   display: flex;
+  padding: 10px;
+  background: #fff;
   // width: 100%;
   .cutOff {
-    width: 1px;
     height: inherit;
     margin: 0 10px;
-    background-color: #dadbdd;
+    border-left: 1px solid #dadbdd;
   }
   .dataTable {
     flex: 0 0 50% !important;
@@ -23,6 +28,11 @@
     flex: 0 0 50% !important;
   }
 }
+.dataProcessing {
+  margin-top: 5px;
+  padding: 10px;
+  background: #fff;
+}
 .startProcessingBtn {
   display: inline-block;
   height: 36px;
@@ -30,6 +40,7 @@
   border: 1px solid #ccc;
   cursor: pointer;
 }
+
 .startProcessingWraper {
   margin-top: 30px;
   padding: 0;
