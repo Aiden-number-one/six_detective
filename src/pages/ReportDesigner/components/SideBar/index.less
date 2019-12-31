@@ -2,6 +2,7 @@
 .sideBar {
   &.layout {
     height: 100%;
+    background-color: #f6f8fb;
   }
   .header {
     display: flex;
@@ -35,6 +36,9 @@
       .ant-collapse-content-box {
         padding: 0 6px 0 6px;
         background-color: #f6f8fb;
+      }
+      .ant-collapse-borderless > .ant-collapse-item {
+        border-bottom: 0;
       }
       .ant-form {
         label {
@@ -73,6 +77,12 @@
           padding: 0;
           text-align: center;
           border-radius: 0;
+          &.ant-radio-button-wrapper-checked {
+            background-color: #0599e8ff;
+            .anticon {
+              color: #fff;
+            }
+          }
         }
       }
     }
@@ -80,6 +90,20 @@
   .sider {
     background-color: #f6f8fb !important;
     border-left: 1px #d6e2ec solid;
+    :global {
+      .ant-layout-sider-children {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .anticon {
+        padding: 7px 0;
+        cursor: pointer;
+      }
+      .active {
+        color: #0599e8ff;
+      }
+    }
   }
   .topList {
     height: 100%;
