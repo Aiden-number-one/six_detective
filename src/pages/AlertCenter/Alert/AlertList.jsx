@@ -13,57 +13,6 @@ import styles from '../index.less';
 
 const { Column } = Table;
 
-function Title({ dispatch, loading, filterItems, tableColumn, id }) {
-  function handleFilterItems() {
-    dispatch({
-      type: 'global/fetchTableFilterItems',
-      payload: {
-        tableName: 'slop_biz.v_alert_center',
-        tableColumn,
-      },
-    });
-  }
-
-  async function handleCommit(conditions) {
-    dispatch({
-      type: 'alertCenter/fetch',
-      payload: {
-        currentColumn: tableColumn,
-        conditions,
-      },
-    });
-  }
-  async function handleSort(conditions, sort) {
-    dispatch({
-      type: 'alertCenter/fetch',
-      payload: {
-        currentColumn: tableColumn,
-        conditions,
-        sort,
-      },
-    });
-  }
-
-  return (
-    <ColumnTitle
-      isNum={tableColumn === 'itemsTotal'}
-      curColumn={tableColumn}
-      loading={loading['global/fetchTableFilterItems']}
-      filterItems={filterItems}
-      onFilters={handleFilterItems}
-      onSort={handleSort}
-      onCommit={handleCommit}
-    >
-      <FormattedMessage id={`alert-center.${id}`} />
-    </ColumnTitle>
-  );
-}
-
-const WrapTitle = connect(({ loading, global: { filterItems } }) => ({
-  loading: loading.effects,
-  filterItems,
-}))(Title);
-
 function AlertBtn({
   disabled,
   loading,
@@ -119,6 +68,8 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
   const [isBatchAction, setBatchAction] = useState(false);
   // reclaim state
   const [isReClaim, setReClaim] = useState(false);
+  // header filter
+  const [conditions, setConditions] = useState([]);
 
   useEffect(() => {
     dispatch({
@@ -205,6 +156,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
       });
     }
   }
+
   async function handleReClaim() {
     setReClaim(true);
     const curAlertId = alert.alertId;
@@ -248,6 +200,27 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
 
   function handleExport() {}
 
+  // filter methods
+  async function handleCommit(tableColumn, updatedConditions = []) {
+    setConditions(updatedConditions);
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        currentColumn: tableColumn,
+        conditions,
+      },
+    });
+  }
+  async function handleSort(tableColumn, sort) {
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        currentColumn: tableColumn,
+        conditions,
+        sort,
+      },
+    });
+  }
   return (
     <div className={styles['list-container']}>
       <div className={styles.list}>
@@ -283,7 +256,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
           dataSource={alerts}
           rowKey="alertId"
           loading={loading['alertCenter/fetch']}
-          rowClassName={record => (alert && record.alertId === alert.alertId ? 'active' : '')}
+          rowClassName={record => (alert && record.alertId === alert.alertId ? 'table-active' : '')}
           rowSelection={{
             getCheckboxProps: record => ({
               disabled: +record.alertStatus === 1,
@@ -310,30 +283,60 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
           <Column
             align="center"
             dataIndex="alertNo"
-            title={<WrapTitle tableColumn="alertId" id="alert-id" />}
+            title={
+              <ColumnTitle
+                isNum={false}
+                curColumn="alertId"
+                conditions={conditions}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.alert-id" />
+              </ColumnTitle>
+            }
           />
           <Column
             width="15%"
             align="center"
             dataIndex="alertName"
-            title={<WrapTitle tableColumn="alertType" id="alert-name" />}
+            title={
+              <ColumnTitle
+                isNum={false}
+                curColumn="alertType"
+                conditions={conditions}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.alert-type" />
+              </ColumnTitle>
+            }
           />
           <Column
             align="center"
             dataIndex="tradeDate"
-            title={<WrapTitle tableColumn="tradeDate" id="trade-date" />}
+            title={
+              <ColumnTitle
+                isNum={false}
+                curColumn="tradeDate"
+                conditions={conditions}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.trade-date" />
+              </ColumnTitle>
+            }
             render={text => moment(text).format(dateFormat)}
           />
           <Column
             align="center"
             dataIndex="alertTime"
-            title={<WrapTitle tableColumn="alertTime" id="alert-timestamp" />}
+            title={<FormattedMessage id="alert-center.alert-timestamp" />}
             render={text => moment(text, timestampFormat).format(timestampFormat)}
           />
           <Column
             align="center"
             dataIndex="itemsTotal"
-            title={<WrapTitle tableColumn="itemsTotal" id="items-total" />}
+            title={<FormattedMessage id="alert-center.items-total" />}
             render={text => +text}
           />
           <Column
@@ -348,7 +351,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
           />
           <Column
             align="center"
-            width="8%"
+            width="9%"
             dataIndex="action"
             title={<FormattedMessage id="alert-center.actions" />}
             render={(text, record) => (
@@ -400,9 +403,9 @@ const mapStateToProps = ({
   alertCenter: { alerts, alertItems, alertTotal, claimInfos },
 }) => ({
   alerts,
-  total: alertTotal,
   alertItems,
   claimInfos,
+  total: alertTotal,
   loading: loading.effects,
 });
 export default connect(mapStateToProps)(AlertList);

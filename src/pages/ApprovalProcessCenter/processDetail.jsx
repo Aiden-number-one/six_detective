@@ -203,6 +203,7 @@ function ProcessDetail({
             },
           });
           setUpAttachements([]);
+          setComment('');
         },
       });
     }
@@ -226,6 +227,7 @@ function ProcessDetail({
             taskCode: task.taskCode,
           },
         });
+        setComment('');
       },
     });
     setWithdrawConfirmVisible(false);
@@ -435,6 +437,11 @@ function ProcessDetail({
                         />
                         {upAttachments.length > 0 && upAttachments.length}
                       </Upload>
+                      {/* {detailItems[0] && detailItems[0].isEditing ? (
+                        <Button style={{ marginRight: '10px' }} type="primary" onClick={saveTask}>
+                          Save
+                        </Button>
+                      ) : null} */}
                       {detailItems[0] && detailItems[0].isStarter ? (
                         <>
                           <Button style={{ marginRight: '10px' }} type="primary" onClick={saveTask}>

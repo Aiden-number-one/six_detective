@@ -25,7 +25,7 @@ export default function NewAccountLogList({
     <Table
       dataSource={dataSource}
       loading={loading['new_account/fetch']}
-      rowKey="mdImpId"
+      rowKey="lopImpId"
       pagination={{
         current,
         total,
@@ -58,7 +58,7 @@ export default function NewAccountLogList({
       />
       <Column
         align="center"
-        dataIndex="submissionStatus"
+        dataIndex="statusMark"
         title={<FormattedMessage id="data-import.submission-status" />}
       />
       <Column
