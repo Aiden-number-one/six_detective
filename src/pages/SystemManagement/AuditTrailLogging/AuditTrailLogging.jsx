@@ -132,7 +132,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'functionName',
         key: 'functionName',
         ellipsis: true,
-        width: 120,
+        width: 160,
       },
       {
         index: 2,
@@ -140,7 +140,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'tableName',
         key: 'tableName',
         ellipsis: true,
-        width: 120,
+        width: 160,
         colSpan: 1,
       },
       {
