@@ -93,9 +93,8 @@ export function CaCodeTaskItem({
   );
 }
 
-function NewAccountTaskItem({
-  render,
-  task: {
+export function NewAccountTaskItem({ task }) {
+  const {
     MARKET,
     EP_CODE,
     SUBMITTER_CODE,
@@ -104,9 +103,14 @@ function NewAccountTaskItem({
     ACCOUNT_NAME,
     REPORT_BI_NAME,
     REPORTE_TO_NAME,
+    ANSWER_STATUS,
+    TO_CODE,
+    PREV_OMN_BI_NAME,
+    PREV_OMN_BI_CODE,
+    PREV_TO_CODE,
+    CONFIRM_TO_CODE,
     REMARK,
-  },
-}) {
+  } = task;
   return (
     <Descriptions column={1}>
       <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
@@ -117,38 +121,8 @@ function NewAccountTaskItem({
       <Descriptions.Item label="Account Name">{ACCOUNT_NAME}</Descriptions.Item>
       <Descriptions.Item label="Reported BI Name *">{REPORT_BI_NAME}</Descriptions.Item>
       <Descriptions.Item label="Reported TO Name">{REPORTE_TO_NAME}</Descriptions.Item>
-      {render()}
-      <Descriptions.Item label="Assigned TO Name">{REMARK}</Descriptions.Item>
-      <Descriptions.Item label="Creation Date *">{REMARK}</Descriptions.Item>
-      <Descriptions.Item label="Remark">{REMARK}</Descriptions.Item>
-    </Descriptions>
-  );
-}
 
-export function NewAccountTaskItemV1({ task }) {
-  const { TO_CODE, REMARK } = task;
-  return (
-    <NewAccountTaskItem
-      task={task}
-      render={() => (
-        <>
-          <Descriptions.Item label="BI/Omni Code *">{REMARK}</Descriptions.Item>
-          <Descriptions.Item label="Assigned BI/Omni Name *">{REMARK}</Descriptions.Item>
-          <Descriptions.Item label="Parent BI/Omni Code">{REMARK}</Descriptions.Item>
-          <Descriptions.Item label="Assigned Parent BI/Omni Name">{REMARK}</Descriptions.Item>
-          <Descriptions.Item label="TO Code">{TO_CODE}</Descriptions.Item>
-        </>
-      )}
-    />
-  );
-}
-
-export function NewAccountTaskItemV2({ task }) {
-  const { PREV_OMN_BI_CODE, PREV_OMN_BI_NAME, PREV_TO_CODE, CONFIRM_TO_CODE, REMARK } = task;
-  return (
-    <NewAccountTaskItem
-      task={task}
-      render={() => (
+      {+ANSWER_STATUS === 2 ? (
         <>
           <Descriptions.Item label="Pre-BI/Omni Code *">{PREV_OMN_BI_CODE}</Descriptions.Item>
           <Descriptions.Item label="Pre-Assigned BI/Omni Name *">
@@ -161,7 +135,18 @@ export function NewAccountTaskItemV2({ task }) {
           <Descriptions.Item label="Assigned BI/Omni Name *">{REMARK}</Descriptions.Item>
           <Descriptions.Item label="Confirmed TO Code">{CONFIRM_TO_CODE}</Descriptions.Item>
         </>
+      ) : (
+        <>
+          <Descriptions.Item label="BI/Omni Code *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Assigned BI/Omni Name *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Parent BI/Omni Code">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Assigned Parent BI/Omni Name">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="TO Code">{TO_CODE}</Descriptions.Item>
+        </>
       )}
-    />
+      <Descriptions.Item label="Assigned TO Name">{REMARK}</Descriptions.Item>
+      <Descriptions.Item label="Creation Date *">{REMARK}</Descriptions.Item>
+      <Descriptions.Item label="Remark">{REMARK}</Descriptions.Item>
+    </Descriptions>
   );
 }

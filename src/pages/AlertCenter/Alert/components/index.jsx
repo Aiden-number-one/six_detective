@@ -8,10 +8,4 @@ export { default as AlertRichText } from './AlertRichText';
 export { default as AlertEmailModal } from './AlertEmailModal';
 export { TaskBtn } from './AlertTask';
 export { epColumns, proudctColumns, caCodeColumns } from './AlertTaskColumns';
-export {
-  EpTaskItem,
-  ProductTaskItem,
-  CaCodeTaskItem,
-  NewAccountTaskItemV1,
-  NewAccountTaskItemV2,
-} from './AlertTaskItem';
+export { EpTaskItem, ProductTaskItem, CaCodeTaskItem, NewAccountTaskItem } from './AlertTaskItem';

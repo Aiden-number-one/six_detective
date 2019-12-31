@@ -18,8 +18,7 @@ import {
   epColumns,
   proudctColumns,
   caCodeColumns,
-  NewAccountTaskItemV1,
-  // NewAccountTaskItemV2,
+  NewAccountTaskItem,
 } from './components';
 
 const taskColumnsMap = {
@@ -35,9 +34,9 @@ const TaskItemMap = {
   301: EpTaskItem,
   302: ProductTaskItem,
   303: CaCodeTaskItem,
-  321: NewAccountTaskItemV1,
-  322: NewAccountTaskItemV1,
-  323: NewAccountTaskItemV1,
+  321: NewAccountTaskItem,
+  322: NewAccountTaskItem,
+  323: NewAccountTaskItem,
 };
 
 const { TabPane } = Tabs;
