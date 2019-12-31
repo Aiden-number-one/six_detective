@@ -68,16 +68,17 @@ const plugins = [
     },
   ],
   [
-    'umi-plugin-pro-block',
+    'umi-plugin-pro-block', // A plugin for deliver umi block files like ant design pro structure
     {
-      moveMock: false,
-      moveService: false,
-      modifyRequest: true,
-      autoAddMenu: true,
+      moveMock: false, // whether move _mock.js to mock, default to true
+      moveService: false, // whether move service.js to src/services/, default to true
+      modifyRequest: true, // whether modify umi-request to util(s)/request (if it exist), default to true
+      autoAddMenu: true, // whether add name and icon config to route config when download a pro, default to true
     },
   ],
-]; // 针对 preview.pro.ant.design 的 GA 统计代码
+];
 
+// 针对 preview.pro.ant.design 的 GA 统计代码
 if (isAntDesignProPreview) {
   plugins.push([
     'umi-plugin-ga',
@@ -119,6 +120,7 @@ export default {
     'box-shadow-base': boxShadowBase,
     'text-color-secondary': textColorSecondary,
   },
+  treeShaking: true,
   define: {
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
       ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '', // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。

@@ -3,8 +3,8 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-06 13:40:22
- * @LastEditors: mus
- * @LastEditTime: 2019-12-17 15:52:42
+ * @LastEditors  : mus
+ * @LastEditTime : 2019-12-30 14:46:06
  */
 
 export default {
@@ -39,4 +39,5 @@ export default {
   'report-designer.cell': 'Cell',
   'report-designer.insertelement': 'Insert Element',
   'report-designer.datasettings': 'Data Settings',
+  'report-designer.extension': 'Extension',
 };

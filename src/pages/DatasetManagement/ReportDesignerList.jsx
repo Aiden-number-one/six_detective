@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2019-12-26 11:18:48
+ * @LastEditTime : 2019-12-31 14:58:19
  * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
@@ -335,13 +335,7 @@ export default class DatasetManagement extends PureComponent {
         dataIndex: 'updateDatetime',
         key: 'updateDatetime',
         align: 'center',
-        render: (res, obj) => (
-          <div>
-            <span>{obj.updateDatetime && timeFormat(obj.updateDatetime).t1}</span>
-            <br />
-            <span>{obj.updateDatetime && timeFormat(obj.updateDatetime).t2}</span>
-          </div>
-        ),
+        render: (res, obj) => <span>{obj.updateDatetime && timeFormat(obj.updateDatetime)}</span>,
       },
       {
         title: 'Operation',

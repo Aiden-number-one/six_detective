@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Layout, Collapse, Icon, Form, Input, Select } from 'antd';
+import { Layout, Collapse, Icon, Form, Input, Select, Radio } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import styles from './index.less';
+import IconFont from '@/components/IconFont';
 
 const { Content } = Layout;
 const { Panel } = Collapse;
@@ -124,6 +125,27 @@ export default props => {
                 {/* 数据设置2 */}
                 <Form.Item label=" " {...formLayout}>
                   {getFieldDecorator('roleName', {})(<Select />)}
+                </Form.Item>
+                <Form.Item
+                  label={<FormattedMessage id="report-designer.extension" />}
+                  {...formLayout}
+                >
+                  {getFieldDecorator(
+                    'roleName',
+                    {},
+                  )(
+                    <Radio.Group defaultValue="a">
+                      <Radio.Button value="a">
+                        <IconFont type="icon-nodirection" />
+                      </Radio.Button>
+                      <Radio.Button value="b">
+                        <IconFont type="icon-zongxiang" />
+                      </Radio.Button>
+                      <Radio.Button value="c">
+                        <IconFont type="icon-hengxiang" />
+                      </Radio.Button>
+                    </Radio.Group>,
+                  )}
                 </Form.Item>
               </>
             )}

@@ -16,7 +16,16 @@ const { Sider } = Layout;
 }))
 @Form.create()
 export default class RigthSideBar extends PureComponent {
-  state = {};
+  state = {
+    siderBarType: 'cell',
+  };
+
+  // 切换rightSiderBar
+  changeSiderBarType = siderBarType => {
+    this.setState({
+      siderBarType,
+    });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -24,19 +33,22 @@ export default class RigthSideBar extends PureComponent {
     const formProps = {
       getFieldDecorator,
     };
+    const { siderBarType } = this.state;
     // 单元格的props
     const cellProps = {
       cellPosition, // 单元格位置
       dataSetPrivateList, // 私有数据集
     };
-    const typeArray = ['cellproperty', 'widgetcontrol'];
-    const type = typeArray[0];
+    const formattedMessageMap = {
+      cell: 'cellproperty',
+      query: 'widgetcontrol',
+    };
     return (
       <Layout className={classNames(styles.layout, styles.sideBar)}>
         <div className={styles.header}>
           {rightSideCollapse && (
             <div className={styles.title}>
-              {<FormattedMessage id={`report-designer.${type}`} />}
+              {<FormattedMessage id={`report-designer.${formattedMessageMap[siderBarType]}`} />}
             </div>
           )}
           <IconFont
@@ -48,9 +60,32 @@ export default class RigthSideBar extends PureComponent {
         </div>
         {rightSideCollapse && (
           <Layout>
-            {type === 'widgetcontrol' && <WidgetControl {...formProps} />}
-            {type === 'cellproperty' && <CellProperty {...formProps} {...cellProps} />}
-            <Sider width={30} className={styles.sider} />
+            {siderBarType === 'cell' && <CellProperty {...formProps} {...cellProps} />}
+            {siderBarType === 'query' && <WidgetControl {...formProps} />}
+            {siderBarType === 'global' && <CellProperty {...formProps} {...cellProps} />}
+            <Sider width={30} className={styles.sider}>
+              <IconFont
+                type="iconbiaoge2"
+                className={siderBarType === 'cell' && 'active'}
+                onClick={() => {
+                  this.changeSiderBarType('cell');
+                }}
+              />
+              <IconFont
+                type="iconshitujuzhen"
+                className={siderBarType === 'query' && 'active'}
+                onClick={() => {
+                  this.changeSiderBarType('query');
+                }}
+              />
+              <IconFont
+                type="icon-data"
+                className={siderBarType === 'global' && 'active'}
+                onClick={() => {
+                  this.changeSiderBarType('global');
+                }}
+              />
+            </Sider>
           </Layout>
         )}
       </Layout>

@@ -363,23 +363,26 @@ function ProcessList({
           },
         })}
       >
-        <Column align="center" dataIndex="taskCode" title="TASK CODE" />
-        <Column align="center" dataIndex="classification" title="CLASSIFICATION" />
-        <Column align="center" dataIndex="submitterName" title="SUBMITTER NAME" />
-        <Column align="center" dataIndex="details" title="DETAILS" />
+        <Column align="center" dataIndex="taskCode" title="Task Code" width="10%" />
+        <Column align="left" dataIndex="classification" title="Classification" width="25" />
+        <Column align="center" dataIndex="submitterName" title="Submitter Name" width="15%" />
+        <Column align="center" dataIndex="details" title="Details" width="10%" />
         <Column
           align="center"
           dataIndex="updateDate"
-          title="UPDATE DATE"
-          render={(text, record) => moment(record.updateDate).format(timestampFormat)}
+          title="Update Date"
+          width="15%"
+          render={(text, record) =>
+            record.updateDate && moment(record.updateDate).format(timestampFormat)
+          }
         />
-        <Column dataIndex="owner" title="OWNER" />
-        <Column align="center" dataIndex="statusDesc" title="STATUS" />
+        <Column dataIndex="owner" title="Owner" />
+        <Column align="center" dataIndex="statusDesc" title="Status" />
         {selectedCurrentTask !== 'his' ? (
           <Column
             align="center"
             dataIndex="action"
-            title={<FormattedMessage id="alert-center.actions" />}
+            title="Actions"
             render={(text, record) => (
               <Row className={styles.btns}>
                 <IconFont

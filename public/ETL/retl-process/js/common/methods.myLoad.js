@@ -1,5 +1,5 @@
 $.extend($.fn.form.methods, {
-	myLoad : function (jq, param) {
+	myLoad: function myLoad(jq, param) {
 		return jq.each(function () {
 			load(this, param);
 		});
@@ -7,7 +7,7 @@ $.extend($.fn.form.methods, {
 		function load(target, param) {
 			if (!$.data(target, "form")) {
 				$.data(target, "form", {
-					options : $.extend({}, $.fn.form.defaults)
+					options: $.extend({}, $.fn.form.defaults)
 				});
 			}
 			var options = $.data(target, "form").options;
@@ -17,13 +17,13 @@ $.extend($.fn.form.methods, {
 					return;
 				}
 				$.ajax({
-					url : param,
-					data : params,
-					dataType : "json",
-					success : function (rsp) {
+					url: param,
+					data: params,
+					dataType: "json",
+					success: function success(rsp) {
 						loadData(rsp);
 					},
-					error : function () {
+					error: function error() {
 						options.onLoadError.apply(target, arguments);
 					}
 				});
@@ -33,10 +33,16 @@ $.extend($.fn.form.methods, {
 			function loadData(dd) {
 				var form = $(target);
 				var formFields = form.find("input[name],select[name],textarea[name]");
-				formFields.each(function(){
+				formFields.each(function () {
 					var name = this.name;
-					var value = jQuery.proxy(function(){try{return eval('this.'+name);}catch(e){return "";}},dd)();
-					var rr = setNormalVal(name,value);
+					var value = jQuery.proxy(function () {
+						try {
+							return eval('this.' + name);
+						} catch (e) {
+							return "";
+						}
+					}, dd)();
+					var rr = setNormalVal(name, value);
 					if (!rr.length) {
 						var f = form.find("input[numberboxName=\"" + name + "\"]");
 						if (f.length) {
@@ -47,7 +53,7 @@ $.extend($.fn.form.methods, {
 							$("select[name=\"" + name + "\"]", form).val(value);
 						}
 					}
-					setPlugsVal(name,value);
+					setPlugsVal(name, value);
 				});
 				options.onLoadSuccess.call(target, dd);
 				$(target).form("validate");

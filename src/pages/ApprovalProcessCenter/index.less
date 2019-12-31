@@ -28,7 +28,8 @@
       padding: 0;
     }
     .ant-input[disabled] {
-      color: rgba(0, 0, 0, 0.25);
+      padding: 0;
+      color: unset;
       background-color: #fff;
       border: none;
     }
@@ -75,6 +76,9 @@
     }
     .ant-radio-button-wrapper:not(:first-child)::before {
       background-color: @borderColorBase;
+    }
+    .ant-form-item-control-wrapper {
+      width: 100%;
     }
   }
 
@@ -124,14 +128,30 @@
   }
   .ListBox {
     padding-bottom: 18px;
+    :global {
+      .ant-form-item {
+        margin-bottom: 0 !important;
+      }
+      .ant-list-item {
+        padding: 0;
+      }
+      .ant-list-split .ant-list-item:last-child {
+        border-bottom: 1px solid #e8e8e8;
+      }
+    }
+
     .ListItem {
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      height: 60px;
       p {
         width: 200px;
         margin: 0;
+      }
+      p:nth-child(2) {
+        width: 250px;
       }
     }
   }

@@ -2,8 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
- * @LastEditors  : mus
- * @LastEditTime : 2019-12-19 10:53:56
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-31 14:29:31
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -223,7 +223,7 @@ class ClassifyTree extends Component {
     return {
       initData: items,
       menuList: items,
-      defaultCheckedKeys: items.length > 0 ? defaultCheckedKeys : [],
+      defaultCheckedKeys: items.length > 0 && !props.all ? defaultCheckedKeys : [],
     };
   }
 
@@ -234,12 +234,13 @@ class ClassifyTree extends Component {
       this.setState({
         checkedKeys,
       });
-      this.props.onSelect(treeData[0] && treeData[0][this.props.treeKey.currentKey]);
       if (all) {
         this.compareAllChecked();
         this.setState({
           checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
         });
+      } else {
+        this.props.onSelect(treeData[0] && treeData[0][this.props.treeKey.currentKey]);
       }
     }, 600);
   }
