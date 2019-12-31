@@ -17,10 +17,11 @@ yarn-error.log
 
 /coverage
 .idea
-# yarn.lock
-package-lock.json
 *bak
 .vscode
+
+# npm-lock
+package-lock.json
 
 # visual studio code
 .history
@@ -38,3 +39,4 @@ screenshot
 .eslintcache
 
 build
+dist
