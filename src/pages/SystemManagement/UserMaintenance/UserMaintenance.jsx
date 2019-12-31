@@ -4,7 +4,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-30 20:26:55
+ * @LastEditTime : 2019-12-31 15:00:00
  */
 
 import React, { Component } from 'react';
@@ -75,7 +75,7 @@ class UserMaintenance extends Component {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
         dataIndex: 'updateTime',
         key: 'updateTime',
-        align: 'left',
+        align: 'center',
         render: (res, obj) => <span>{obj.updateTime && timeFormat(obj.updateTime)}</span>,
       },
       {
