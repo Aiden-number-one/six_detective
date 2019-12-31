@@ -6,7 +6,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import ThemeColorReplacer from 'webpack-theme-color-replacer';
 import generate from '@ant-design/colors/lib/generate';
-import path from 'path';
+// import path from 'path';
+const fs = require('fs');
+const path = require('path');
 
 function getModulePackageName(module) {
   if (!module.context) return null;
@@ -28,7 +30,35 @@ function getModulePackageName(module) {
   return packageName;
 }
 
+/* const getXSheetPath = () => {
+  const tpath = path(__dirname, '../public/xspreadsheet/xspreadsheet.*.js');
+  return fs.existsSync(tpath) && tpath;
+} */
+
+const getAntdSerials = color => {
+  const lightNum = 9;
+  const devide10 = 10; // 淡化（即less的tint）
+
+  const lightens = new Array(lightNum).fill(undefined).map((_, i) => {
+    return ThemeColorReplacer.varyColor.lighten(color, i / devide10);
+  });
+  const colorPalettes = generate(color);
+  return lightens.concat(colorPalettes);
+};
+
 export default config => {
+  // console.log('config -> ', config);
+  /* const xsRegExp = /^xspreadsheet\..+\.js$/;
+  const xspreadsheetDir = path.join(__dirname, '../public/xspreadsheet');
+
+  const fileList = fs.readdirSync(xspreadsheetDir);
+  const [xs] = fileList.filter(v => xsRegExp.test(v));
+  if (xs) {
+    config.entry('xspreadsheet').add(`${xspreadsheetDir}/${xs}`);
+    console.log('全幅 -> ', config);
+  } */
+
+
   // preview.pro.ant.design only do not use in your production;
   if (
     process.env.ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site' ||
@@ -58,8 +88,9 @@ export default config => {
         },
       },
     ]);
-  } // optimize chunks
-
+  }
+  
+  // optimize chunks
   config.optimization // share the same chunks across different modules
     .runtimeChunk(false)
     .splitChunks({
@@ -94,16 +125,12 @@ export default config => {
       },
     });
 
+  /* config.plugin('htmlTmpl').use(require('html-webpack-plugin'), [{
+    inject: 'body',
+    filename: 'index.html',
+    title: 'wfafasf',
+    favicon: path.resolve(__dirname, '../public/favicon.ico'),
+    template: path.resolve(__dirname, '../src/pages/document.ejs')
+  }]) */
 
-};
-
-const getAntdSerials = color => {
-  const lightNum = 9;
-  const devide10 = 10; // 淡化（即less的tint）
-
-  const lightens = new Array(lightNum).fill(undefined).map((_, i) => {
-    return ThemeColorReplacer.varyColor.lighten(color, i / devide10);
-  });
-  const colorPalettes = generate(color);
-  return lightens.concat(colorPalettes);
 };

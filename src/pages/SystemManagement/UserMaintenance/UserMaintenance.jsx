@@ -4,7 +4,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-28 10:33:07
+ * @LastEditTime : 2019-12-30 20:26:55
  */
 
 import React, { Component } from 'react';
@@ -58,6 +58,7 @@ class UserMaintenance extends Component {
         title: formatMessage({ id: 'app.common.username' }),
         dataIndex: 'userName',
         key: 'userName',
+        align: 'left',
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
@@ -74,19 +75,14 @@ class UserMaintenance extends Component {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateTime' }),
         dataIndex: 'updateTime',
         key: 'updateTime',
-        align: 'center',
-        render: (res, obj) => (
-          <div>
-            <span>{obj.updateTime && timeFormat(obj.updateTime).t1}</span>
-            <br />
-            <span>{obj.updateTime && timeFormat(obj.updateTime).t2}</span>
-          </div>
-        ),
+        align: 'left',
+        render: (res, obj) => <span>{obj.updateTime && timeFormat(obj.updateTime)}</span>,
       },
       {
         title: formatMessage({ id: 'systemManagement.userMaintenance.LastUpdateUser' }),
         dataIndex: 'updateBy',
         key: 'updateBy',
+        align: 'left',
       },
       {
         title: formatMessage({ id: 'app.common.operation' }),

@@ -35,17 +35,29 @@ class AuditTrailLogging extends Component {
       { key: '3', value: '3', title: 'Name Three' },
     ],
     options: [
-      { label: 'functionName', value: 'functionName' },
-      { label: 'tableName', value: 'tableName' },
-      { label: 'biToCode', value: 'biToCode' },
-      { label: 'productCode', value: 'productCode' },
-      { label: 'effectiveTime', value: 'effectiveTime' },
-      { label: 'filedUpdated', value: 'filedUpdated' },
-      { label: 'updateType', value: 'updateType' },
-      { label: 'logTime', value: 'logTime' },
-      { label: 'updatedBy', value: 'updatedBy' },
-      { label: 'before', value: 'before' },
-      { label: 'after', value: 'after' },
+      {
+        label: formatMessage({ id: 'systemManagement.auditLog.functionName' }),
+        value: 'functionName',
+      },
+      { label: formatMessage({ id: 'systemManagement.auditLog.tableName' }), value: 'tableName' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }), value: 'biToCode' },
+      {
+        label: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
+        value: 'productCode',
+      },
+      {
+        label: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
+        value: 'effectiveTime',
+      },
+      {
+        label: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
+        value: 'filedUpdated',
+      },
+      { label: formatMessage({ id: 'systemManagement.auditLog.updateType' }), value: 'updateType' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.logDate' }), value: 'logTime' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }), value: 'updatedBy' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.before' }), value: 'before' },
+      { label: formatMessage({ id: 'systemManagement.auditLog.after' }), value: 'after' },
     ],
     checkedValues: [],
     tempColumns: [],
@@ -120,7 +132,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'functionName',
         key: 'functionName',
         ellipsis: true,
-        width: 120,
+        width: 160,
       },
       {
         index: 2,
@@ -128,7 +140,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'tableName',
         key: 'tableName',
         ellipsis: true,
-        width: 120,
+        width: 160,
         colSpan: 1,
       },
       {
@@ -148,11 +160,7 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         dataIndex: 'effectiveTime',
         key: 'effectiveTime',
-        render: (res, obj) => (
-          <div>
-            <span>{obj.operateDate && moment(obj.operateDate).format('DD/MM/YYYY')}</span>
-          </div>
-        ),
+        render: (res, obj) => <span>{obj.effectiveTime && timeFormat(obj.effectiveTime)}</span>,
       },
       {
         index: 6,
@@ -172,13 +180,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'logTime',
         key: 'logTime',
         align: 'center',
-        render: (res, obj) => (
-          <div>
-            <span>{obj.logTime && timeFormat(obj.logTime).t1}</span>
-            <br />
-            <span>{obj.logTime && timeFormat(obj.logTime).t2}</span>
-          </div>
-        ),
+        render: (res, obj) => <span>{obj.logTime && timeFormat(obj.logTime)}</span>,
       },
       {
         index: 9,
@@ -232,6 +234,14 @@ class AuditTrailLogging extends Component {
     });
     arrVisible.forEach((element, index) => {
       newColumns.splice(element - index, 1);
+    });
+    newColumns.forEach((element, index) => {
+      if (index === 0) {
+        element.fixed = 'left';
+      }
+      if (index === newColumns.length - 1) {
+        element.fixed = 'right';
+      }
     });
     this.setState({
       tempColumns: columns,
@@ -365,10 +375,10 @@ class AuditTrailLogging extends Component {
     });
     newColumns.sort((o1, o2) => o1.index - o2.index);
     newColumns.forEach((element, index) => {
-      if (Object.hasOwnProperty(element.fixed)) {
+      if (Object.hasOwnProperty('fixed')) {
         delete element.fixed;
       }
-      if (index < 2) {
+      if (index === 0) {
         element.fixed = 'left';
       }
       if (index === newColumns.length - 1) {

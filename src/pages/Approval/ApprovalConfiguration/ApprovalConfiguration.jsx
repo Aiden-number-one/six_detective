@@ -2,7 +2,7 @@
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Input, Button, Table, Row, Col, Drawer, Select } from 'antd';
+import { Form, Input, Button, Table, Row, Col, Drawer, Select, Pagination } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
@@ -81,11 +81,16 @@ const ModifyForm = Form.create({})(DrawerForm);
   loading: loading.effects['approvalConfiguration/approvalConfigDatas'],
   approvalConfigList: approvalConfiguration.data,
   deployedModelList: approvalConfiguration.deployedModelDatas,
+  totalCount: approvalConfiguration.totalCount,
 }))
 class ApprovalConfiguration extends PureComponent {
   state = {
     visible: false,
     configItem: {},
+    page: {
+      pageNumber: 1,
+      pageSize: 10,
+    },
   };
 
   newConfigurationForm = React.createRef();
@@ -151,6 +156,44 @@ class ApprovalConfiguration extends PureComponent {
     });
   };
 
+  // 分页
+  pageChange = (pageNumber, pageSize) => {
+    const page = {
+      pageNumber,
+      pageSize,
+    };
+
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.configData({
+          pageNumber: pageNumber.toString(),
+          pageSize: pageSize.toString(),
+        });
+      },
+    );
+  };
+
+  onShowSizeChange = (current, pageSize) => {
+    const page = {
+      pageNumber: current,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.configData({
+          pageNumber: current.toString(),
+          pageSize: pageSize.toString(),
+        });
+      },
+    );
+  };
+
   // 修改流程图设置
   saveConfig = param => {
     const { dispatch } = this.props;
@@ -162,8 +205,8 @@ class ApprovalConfiguration extends PureComponent {
   };
 
   render() {
-    const { approvalConfigList, deployedModelList } = this.props;
-    const { configItem, visible } = this.state;
+    const { approvalConfigList, deployedModelList, totalCount } = this.props;
+    const { configItem, visible, page } = this.state;
     const setColumns = [
       {
         title: 'Function ID',
@@ -199,10 +242,19 @@ class ApprovalConfiguration extends PureComponent {
                 columns={setColumns}
                 dataSource={approvalConfigList}
                 className={styles.tableBox}
-                pagination={{
-                  size: 'small',
-                }}
+                pagination={false}
               />
+              {approvalConfigList && approvalConfigList.length > 0 && (
+                <Pagination
+                  showSizeChanger
+                  current={page.pageNumber}
+                  showTotal={() => `Total ${totalCount} items`}
+                  onShowSizeChange={this.onShowSizeChange}
+                  onChange={this.pageChange}
+                  total={totalCount}
+                  pageSize={page.pageSize}
+                />
+              )}
             </div>
             <Drawer
               title="Set Flow Name"
