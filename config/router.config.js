@@ -27,8 +27,8 @@ export default [
       {
         path: '/',
         name: 'Homepage',
-        component: './Monitor/Monitor',
-        // component: './HomePage/HomePage',
+        // component: './Monitor/Monitor',
+        component: './HomePage/HomePage',
       },
       {
         path: '/homepage',
@@ -72,8 +72,8 @@ export default [
                 component: './DatasetManagement/ReportDesignerList',
               },
               {
-                path: '/report/report-designer/dataset-management',
-                name: 'Dataset Management',
+                path: '/report/report-designer/dataset-mamagement',
+                name: 'Dataset Mamagement',
                 component: './DatasetManagement/DatasetManagement',
               },
             ],

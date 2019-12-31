@@ -561,7 +561,7 @@ $.validator.addMethod("urlOremailCheck", function(value) {
 			return true;
 		}
 
-	}, $.validator.format("请输入正整数"));
+	}, $.validator.format("please input integers"));
 	//不能输入空格
 	$.validator.addMethod("ISkonge", function(value) {
 		var value2 = value.replace(/\s/g, '');
