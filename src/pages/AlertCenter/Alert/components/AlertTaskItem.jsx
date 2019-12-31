@@ -14,10 +14,9 @@ const ContractMap = {
   O: 'Option',
 };
 
-export function EpTaskItem({ task: { MARKET, EP_CODE, EP_NAME } }) {
+export function EpTaskItem({ task: { EP_CODE, EP_NAME } }) {
   return (
     <Descriptions column={1}>
-      <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
       <Descriptions.Item label="EP Code *">{EP_CODE}</Descriptions.Item>
       <Descriptions.Item label="EP Name *">{EP_NAME}</Descriptions.Item>
     </Descriptions>
@@ -94,22 +93,20 @@ export function CaCodeTaskItem({
   );
 }
 
-function NewAccountTaskItem(
-  {
-    task: {
-      MARKET,
-      EP_CODE,
-      SUBMITTER_CODE,
-      SUBMITTER_NAME,
-      ACCOUNT_NO,
-      ACCOUNT_NAME,
-      REPORT_BI_NAME,
-      REPORTE_TO_NAME,
-      REMARK,
-    },
-  },
+function NewAccountTaskItem({
   render,
-) {
+  task: {
+    MARKET,
+    EP_CODE,
+    SUBMITTER_CODE,
+    SUBMITTER_NAME,
+    ACCOUNT_NO,
+    ACCOUNT_NAME,
+    REPORT_BI_NAME,
+    REPORTE_TO_NAME,
+    REMARK,
+  },
+}) {
   return (
     <Descriptions column={1}>
       <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
@@ -147,7 +144,7 @@ export function NewAccountTaskItemV1({ task }) {
 }
 
 export function NewAccountTaskItemV2({ task }) {
-  const { PREV_OMN_BI_CODE, PREV_OMN_BI_NAME, CONFIRM_TO_CODE, REMARK } = task;
+  const { PREV_OMN_BI_CODE, PREV_OMN_BI_NAME, PREV_TO_CODE, CONFIRM_TO_CODE, REMARK } = task;
   return (
     <NewAccountTaskItem
       task={task}
@@ -157,7 +154,7 @@ export function NewAccountTaskItemV2({ task }) {
           <Descriptions.Item label="Pre-Assigned BI/Omni Name *">
             {PREV_OMN_BI_NAME}
           </Descriptions.Item>
-          <Descriptions.Item label="Pre-TO Code">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Pre-TO Code">{PREV_TO_CODE}</Descriptions.Item>
           <Descriptions.Item label="Pre-Assigned TO Name">{REMARK}</Descriptions.Item>
           <Descriptions.Item label="Received Confirmation">{REMARK}</Descriptions.Item>
           <Descriptions.Item label="Comfirmed BI/Omni Code *">{REMARK}</Descriptions.Item>

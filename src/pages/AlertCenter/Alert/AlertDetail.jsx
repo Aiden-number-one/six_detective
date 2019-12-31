@@ -19,22 +19,25 @@ import {
   proudctColumns,
   caCodeColumns,
   NewAccountTaskItemV1,
-  NewAccountTaskItemV2,
+  // NewAccountTaskItemV2,
 } from './components';
 
 const taskColumnsMap = {
   301: epColumns,
   302: proudctColumns,
   303: caCodeColumns,
+  321: epColumns,
   322: epColumns,
+  323: epColumns,
 };
 
 const TaskItemMap = {
   301: EpTaskItem,
   302: ProductTaskItem,
   303: CaCodeTaskItem,
+  321: NewAccountTaskItemV1,
   322: NewAccountTaskItemV1,
-  323: NewAccountTaskItemV2,
+  323: NewAccountTaskItemV1,
 };
 
 const { TabPane } = Tabs;

@@ -7,14 +7,29 @@ import styles from './index.less';
 const { Option } = Select;
 const { Search } = Input;
 
-const CONDITIONS = [
+// const CONDITIONS = [
+//   { id: 1, name: 'EQUAL' },
+//   { id: 2, name: 'NOT EQUAL' },
+//   { id: 3, name: 'GREATER THAN' },
+//   { id: 4, name: 'GREATER THAN OR EQUAL' },
+//   { id: 5, name: 'LESS THAN' },
+//   { id: 6, name: 'LESS THAN OR EQUAL' },
+//   { id: 7, name: 'CONTAIN' },
+// ];
+
+const TextConditions = [
+  { id: 1, name: 'CONTAIN' },
+  { id: 2, name: 'EQUAL' },
+  { id: 3, name: 'NOT EQUAL' },
+];
+
+const NumConditions = [
   { id: 1, name: 'EQUAL' },
   { id: 2, name: 'NOT EQUAL' },
   { id: 3, name: 'GREATER THAN' },
   { id: 4, name: 'GREATER THAN OR EQUAL' },
   { id: 5, name: 'LESS THAN' },
   { id: 6, name: 'LESS THAN OR EQUAL' },
-  { id: 7, name: 'CONTAIN' },
 ];
 
 export function FilterHeader({ disabled, onSort, onClear }) {
@@ -37,24 +52,32 @@ export function FilterHeader({ disabled, onSort, onClear }) {
   );
 }
 
-export function FilterType({ isNum, loading, handleTypeChange }) {
-  const condition = ({ id }) => (isNum ? id !== 7 : [1, 2, 7].includes(id));
+export function FilterType({ isNum, onChange }) {
   return (
     <div className={styles['filter-type']}>
-      <span>{isNum ? 'NUM' : 'TEXT'}</span>
-      <Select
-        ellipsis
-        loading={loading}
-        className={styles.type}
-        defaultValue={isNum ? 1 : 7}
-        onChange={val => handleTypeChange(val)}
-      >
-        {CONDITIONS.filter(condition).map(({ id, name }) => (
-          <Option value={id} key={id}>
-            {name}
-          </Option>
-        ))}
-      </Select>
+      {isNum ? (
+        <>
+          <span>NUM</span>
+          <Select ellipsis className={styles.type} onChange={val => onChange(val)}>
+            {NumConditions.map(({ id, name }) => (
+              <Option value={id} key={id}>
+                {name}
+              </Option>
+            ))}
+          </Select>
+        </>
+      ) : (
+        <>
+          <span>TEXT</span>
+          <Select ellipsis className={styles.type} onChange={val => onChange(val)}>
+            {TextConditions.map(({ id, name }) => (
+              <Option value={id} key={id}>
+                {name}
+              </Option>
+            ))}
+          </Select>
+        </>
+      )}
     </div>
   );
 }
@@ -145,7 +168,7 @@ export function FilterCheckbox({ loading, filterList, onCheckedList, curColumn, 
   }
 
   function handleSearch(value) {
-    const sList = filterList.filter(item => item.toLowerCase() === value.toLowerCase());
+    const sList = filterList.filter(item => item.toLowerCase().includes(value.toLowerCase()));
     setSearchList(sList);
   }
 

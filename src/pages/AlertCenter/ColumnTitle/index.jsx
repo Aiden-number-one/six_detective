@@ -17,15 +17,17 @@ function ColumnTitle({
   onSort,
   onCommit,
 }) {
+  const defaultFilterType = isNum ? 1 : 7;
+
   const [isFiltered, setFiltered] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [filterType, setFilterType] = useState(isNum ? 1 : 7);
+  const [filterType, setFilterType] = useState(defaultFilterType);
   const [checkedList, setCheckedList] = useState(filterItems);
-  const isFilterSelect = [1, 3, 4, 5, 6].includes(filterType);
 
   function handleVisibleChange(v) {
     setVisible(v);
     if (v) {
+      setFilterType(defaultFilterType);
       dispatch({
         type: 'global/fetchTableFilterItems',
         payload: {
@@ -90,22 +92,22 @@ function ColumnTitle({
             onSort={handleSort}
           />
           <div className={styles.content}>
-            <FilterType isNum={isNum} handleTypeChange={type => setFilterType(type)} />
-            {isFilterSelect ? (
-              <FilterSelect
-                loading={loading}
-                filterList={filterItems}
-                curColumn={curColumn}
-                conditions={conditions}
-                onSelect={handleSelect}
-              />
-            ) : (
+            <FilterType isNum={isNum} type={filterType} onChange={type => setFilterType(type)} />
+            {filterType === 2 || filterType === 7 ? (
               <FilterCheckbox
                 loading={loading}
                 filterList={filterItems}
                 curColumn={curColumn}
                 conditions={conditions}
                 onCheckedList={c => setCheckedList(c)}
+              />
+            ) : (
+              <FilterSelect
+                loading={loading}
+                filterList={filterItems}
+                curColumn={curColumn}
+                conditions={conditions}
+                onSelect={handleSelect}
               />
             )}
             <div className={styles['bottom-btns']}>
