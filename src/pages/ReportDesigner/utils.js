@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-23 10:17:57
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-28 15:40:46
+ * @LastEditTime : 2019-12-30 17:07:30
  */
 /*
  * @Des: 报表设计器的
@@ -142,12 +142,12 @@ export function getTemplateArea(contentDetail, originContentDetail) {
   const needRowsCols = spreadSheetData.map((colsValue, colsIndex) => ({
     cols: colsValue.map((rowsValue, rowsIndex) => {
       const cellText = rowsValue;
-      const isDataSet = /.*\..*/.test(cellText);
+      const { cellType } = spreadSheetProps[colsIndex][rowsIndex];
       return {
-        cell_type: isDataSet ? 'DATASET' : 'TEXT',
+        cell_type: cellType,
         cell_expression: '', // 公式相关
         cell_default_value: '', // reserved
-        cell_text: isDataSet ? `=${cellText}` : cellText, // text（=ds.reg_name|用户机构|$V{dian}|all）
+        cell_text: cellType === 'DATASET' ? `=${cellText}` : cellText, // text（=ds.reg_name|用户机构|$V{dian}|all）
         cell_input_type: 'input', // 类型相关 （input|select|date|file|text|checkbox）
         dict: '', // reserved
         link: '', // reserved
@@ -161,7 +161,6 @@ export function getTemplateArea(contentDetail, originContentDetail) {
       };
     }),
   }));
-  console.log(needRowsCols);
   return {
     page_order: '', // reserved
     page_size: '', // reserved

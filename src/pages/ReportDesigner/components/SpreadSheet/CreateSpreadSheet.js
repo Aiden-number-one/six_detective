@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2019-12-27 18:03:29
+ * @LastEditTime : 2019-12-31 10:41:49
  * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
@@ -82,58 +82,46 @@ export default WrapperComponent =>
         imageFile: document.querySelectorAll('.sheet-img-collection img')[1],
         imageCheckedBox: document.querySelectorAll('.sheet-img-collection img')[2],
         imageUncheckedBox: document.querySelectorAll('.sheet-img-collection img')[3],
-        contextMenuItems: [
-          // 自定义右键菜单内容 TODO: FIXME: 是否需要补充快捷键
-          { key: 'copy', title: 'contextmenu.copy' },
-          { key: 'cut', title: 'contextmenu.cut' },
-          {
-            key: 'paste-options',
-            title: 'contextmenu.pasteOptions',
-            subItems: [
-              { key: 'paste', title: 'contextmenu.paste' },
-              { key: 'paste-value', title: 'contextmenu.pasteValue' },
-              { key: 'paste-format', title: 'contextmenu.pasteFormat' },
-            ],
-          },
-          { key: 'divider' },
-          {
-            key: 'filter',
-            title: 'contextmenu.filter',
-            callback: (type, obj) => {
-              console.log(type, obj);
+        contextMenuItems: {
+          // 基本的右键功能
+          base: [
+            { key: 'copy', title: 'contextmenu.copy' },
+            { key: 'cut', title: 'contextmenu.cut' },
+            {
+              key: 'paste-options',
+              title: 'contextmenu.pasteOptions',
+              subResource: [
+                { key: 'paste', title: 'contextmenu.paste' },
+                { key: 'paste-formula', title: 'contextmenu.pasteFormula' },
+                { key: 'paste-value', title: 'contextmenu.pasteValue' },
+                { key: 'paste-format', title: 'contextmenu.pasteFormat' },
+              ],
             },
-          },
-          {
-            key: 'sort',
-            title: 'contextmenu.sort',
-            callback: (type, obj) => {
-              console.log(type, obj);
+          ],
+
+          // ----- 普通右键菜单-start -----
+          usual: [
+            { key: 'divider' },
+            {
+              key: 'filter',
+              title: 'contextmenu.filter',
+              callback: (type, obj) => {
+                console.log(type, obj);
+              },
             },
-          },
-          { key: 'divider' },
-          {
-            key: 'insert-comment',
-            title: 'contextmenu.insertComment',
-            callback: (type, obj) => {
-              console.log(type, obj);
+            { key: 'insert-comment', title: 'contextmenu.insertComment' },
+            { key: 'divider' },
+            { key: 'clear', title: 'contextmenu.clear' },
+            {
+              key: 'data-design',
+              title: 'contextmenu.dataDesign',
+              callback: (type, obj) => {
+                console.log(type, obj);
+              },
             },
-          },
-          { key: 'divider' },
-          {
-            key: 'clear',
-            title: 'contextmenu.clear',
-            callback: (type, obj) => {
-              console.log(type, obj);
-            },
-          },
-          {
-            key: 'data-design',
-            title: 'contextmenu.dataDesign',
-            callback: (type, obj) => {
-              console.log(type, obj);
-            },
-          },
-        ],
+          ],
+          // ----- 普通右键菜单-end -----
+        },
         hooks: {
           afterDrop(params) {
             // 拖拽放置后的回调

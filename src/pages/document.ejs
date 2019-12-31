@@ -2,7 +2,7 @@
  * @Description: index.html
  * @Author: mus
  * @Date: 2019-08-28 16:13:01
- * @LastEditTime : 2019-12-27 18:11:55
+ * @LastEditTime : 2019-12-31 16:32:26
  * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  -->
@@ -21,7 +21,7 @@
   </head>
   <body>
     <noscript>Sorry, we need js to run correctly!</noscript>
-    
+
     <div id="root">
       <style>
         .page-loading-warp {
@@ -171,6 +171,20 @@
         </div>
       </div>
     </div>
+    <script>
+      /**
+       * 检测浏览器环境是否需要 polyfill
+       * modern browser 不需要添加 polyfill.min.js 避免多余的代码
+       * 只能用 var, 因为 ie10- 不支持 const let
+       */
+      var modernBrowser = 'assign' in Object && 'Promise' in window;
+      if (!modernBrowser) {
+        var scriptEle = document.createElement('script');
+        scriptEle.async = false;
+        scriptEle.src = '/lib/polyfill.min.js';
+        document.head.appendChild(scriptEle);
+      }
+    </script>
 
     <script src="/xspreadsheet/layDateFile/laydate/laydate.js"></script>
     <script src="/js/kjax.des.js"></script>

@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
-import { setLocale } from 'umi/locale';
+import { setLocale, formatMessage } from 'umi/locale';
 import { DndProvider, DropTarget } from 'react-dnd';
-import { Layout, Drawer } from 'antd';
+import { Layout, Drawer, Modal } from 'antd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { createCellPos } from '@/utils/utils';
 import SpreadSheet from './components/SpreadSheet';
 import CustomSearchArea from './components/CustomSearchArea/index';
 import ToolBar from './components/ToolBar/index';
@@ -23,6 +24,7 @@ export default class ReportDesigner extends PureComponent {
     rightSideCollapse: false, // 右边sideBar展开收起
     displayDraw: false, // 是否显示抽屉
     displayDropSelect: false, // 是否显示DropSelect
+    displayDelete: false, // 是否显示私有删除框
   };
 
   componentWillMount() {
@@ -88,13 +90,16 @@ export default class ReportDesigner extends PureComponent {
     // const { setCellType } = this.props;
     // 被拖动元素的
     const { ri, ci } = this.dropPosition;
-    // 设置值
+    // eslint-disable-next-line no-underscore-dangle
+    window.xsObj._setCellType({
+      sheetName: 'sheet1',
+      rc: createCellPos(ci) + (Number(ri) + 1),
+      cellType: 'dataSet',
+    });
     // eslint-disable-next-line no-underscore-dangle
     window.xsObj._setCellText({ ri: Number(ri), ci: Number(ci), text: dragInfo });
+    // 进行刷新
     window.xsObj.instanceArray[0].sheet.toolbar.change();
-    // setCellType('cellType', {
-    //   cellType: 'dataSet',
-    // });
   };
 
   // 设置单元格样式
@@ -143,6 +148,26 @@ export default class ReportDesigner extends PureComponent {
     }));
   };
 
+  // 是否要显示删除弹出框
+  displayDeletePrivate = (displayDelete, deteleDataSetKey) => {
+    if (deteleDataSetKey) {
+      this.deteleDataSetKey = deteleDataSetKey;
+    }
+    this.setState({
+      displayDelete,
+    });
+  };
+
+  // 删除action
+  deleteDataSetAction = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/deleteDataSetPrivate',
+      payload: this.deteleDataSetKey,
+    });
+    this.displayDeletePrivate(false);
+  };
+
   // 改变是否显示dropSelect
   changedisplayDropSelect = displayDropSelect => {
     this.setState({
@@ -159,7 +184,13 @@ export default class ReportDesigner extends PureComponent {
   };
 
   render() {
-    const { display, leftSideCollapse, rightSideCollapse, displayDropSelect } = this.state;
+    const {
+      display,
+      leftSideCollapse,
+      rightSideCollapse,
+      displayDropSelect,
+      displayDelete,
+    } = this.state;
     const { setCellCallback, dispatch, setCellType } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
@@ -179,6 +210,7 @@ export default class ReportDesigner extends PureComponent {
       displayDraw: this.displayDraw, // 是否显示抽屉
       displayDropSelect, // 是否显示drop select
       changedisplayDropSelect: this.changedisplayDropSelect, // 显示drop select
+      displayDeletePrivate: this.displayDeletePrivate, // 删除私有数据集
     };
     // 数据集编辑的相关
     const datasetModifyProps = {
@@ -205,6 +237,19 @@ export default class ReportDesigner extends PureComponent {
           >
             <DatasetModify {...datasetModifyProps} />
           </Drawer>
+          {/* 删除 */}
+          <Modal
+            title={formatMessage({ id: 'app.common.confirm' })}
+            visible={displayDelete}
+            onOk={this.deleteDataSetAction}
+            onCancel={() => {
+              this.displayDelete(false);
+            }}
+            cancelText={formatMessage({ id: 'app.common.cancel' })}
+            okText={formatMessage({ id: 'app.common.confirm' })}
+          >
+            <span>Please confirm that you want to delete this record?</span>
+          </Modal>
           {/* 头部菜单栏 */}
           <ToolBar {...toolBarProps} />
           <div className={styles.container} style={{ height: `${window.innerHeight - 104}px` }}>

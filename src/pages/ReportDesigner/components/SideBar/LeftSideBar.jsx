@@ -45,7 +45,7 @@ export default class LeftSideBar extends PureComponent {
 
   // 渲染树结构
   generateTree = treeData => {
-    const { displayDraw } = this.props;
+    const { displayDraw, displayDeletePrivate } = this.props;
     return treeData.map(item => {
       if (item.children) {
         return (
@@ -54,9 +54,13 @@ export default class LeftSideBar extends PureComponent {
             title={
               <WrapperTitle
                 title={item.title}
-                isLeaf={item.isLeaf}
+                isParent={item.otherInfo}
+                isLeaf={item.isLeaf} // 是否是叶子节点
                 displayDraw={() => {
                   displayDraw(item);
+                }}
+                deleteModal={() => {
+                  displayDeletePrivate(true, item.key);
                 }}
               />
             }
@@ -70,12 +74,9 @@ export default class LeftSideBar extends PureComponent {
           key={item.key}
           title={
             <WrapperTitle
-              title={item.title}
-              isLeaf={item.isLeaf}
+              title={item.title} // title
+              isLeaf={item.isLeaf} // 是否是叶子节点
               dragInfo={item.dragInfo}
-              displayDraw={() => {
-                displayDraw(item);
-              }}
             />
           }
         />
@@ -146,7 +147,7 @@ export default class LeftSideBar extends PureComponent {
   }
 }
 
-function Title({ title, isLeaf, displayDraw, connectDragSource }) {
+function Title({ title, isLeaf, displayDraw, connectDragSource, isParent, deleteModal }) {
   const [hoverState, hoverAction] = useState(false);
   return (
     <div
@@ -180,13 +181,23 @@ function Title({ title, isLeaf, displayDraw, connectDragSource }) {
       )}
       {hoverState && (
         <div className={styles.operationArea}>
-          <IconFont
-            type="icon-edit"
-            onClick={() => {
-              displayDraw();
-            }}
-          />
-          <IconFont type="icon-delete" style={{ marginLeft: 3 }} />
+          {isParent && (
+            <>
+              <IconFont
+                type="icon-edit"
+                onClick={() => {
+                  displayDraw();
+                }}
+              />
+              <IconFont
+                type="icon-delete"
+                onClick={() => {
+                  deleteModal();
+                }}
+                style={{ marginLeft: 3 }}
+              />
+            </>
+          )}
         </div>
       )}
     </div>

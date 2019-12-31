@@ -46,13 +46,13 @@ export function generateJson(spreadSheetData) {
 
   // 生成JSON所需的cellAttrs，即单元格中的数据类型、style相关
   const cellAttrs = new Array(rowLength).fill([]).map(() =>
-    new Array(colLength).fill({
+    new Array(colLength).fill({}).map(() => ({
       F: '1',
       cellDesc: '',
       cellType: 'text',
       style: {},
       sy: '0',
-    }),
+    })),
   );
 
   Object.keys(rows).forEach(rowIndex => {
@@ -62,7 +62,6 @@ export function generateJson(spreadSheetData) {
     Object.keys(rows[rowIndex].cells).forEach(cellIndex => {
       // spreadSheet单元格的数据及属性
       const cellContent = rows[rowIndex].cells[cellIndex];
-
       // 把spreadShett单元格的数据赋值给后台表格的单元格中
       data[rowIndex][cellIndex] = cellContent.text;
 
