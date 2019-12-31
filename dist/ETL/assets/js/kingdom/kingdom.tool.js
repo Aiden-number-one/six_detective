@@ -1,1 +1,0 @@
-if("undefined"==typeof jQuery)throw new Error("Kingdom requires jQuery");var Kingdom=Kingdom||{};Kingdom.Tool=Kingdom.Tool||{},Kingdom.Tool.bindSelect=function(o,n,t,r){var d=[];d.push($("<option/>").val("").text("请选择")),$.each(n,function(o,n){var e=n[t],i=n[r];d.push($("<option/>").val(i).text(e))}),$(o).empty(),$(o).append(d)};
