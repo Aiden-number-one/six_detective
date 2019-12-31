@@ -6,16 +6,6 @@ import styles from '../index.less';
 const { Column } = Table;
 const isLt5M = size => size / 1024 / 1024 < 5;
 
-const data = [];
-// eslint-disable-next-line no-plusplus
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
-}
 const EditableContext = React.createContext();
 
 function EditableCell({ editing, dataIndex, title, record, children, ...restProps }) {
@@ -44,73 +34,36 @@ function EditableCell({ editing, dataIndex, title, record, children, ...restProp
   );
 }
 
-function EditableTable({ depart, form }) {
-  const [editKey, setEditKey] = useState('');
+export function FileTable({ fileList, form }) {
+  const [uid, setUid] = useState('');
 
   return (
     <EditableContext.Provider value={form}>
       <Table
-        bordered
-        rowKey="extendKey"
-        dataSource={depart.extendInfo}
+        rowKey="uid"
+        dataSource={fileList}
         components={{
           body: {
             cell: EditableCell,
           },
         }}
+        pagination={false}
       >
+        <Column title="File Name" dataIndex="name" />
+        <Column title="Market" dataIndex="market" />
+        <Column title="Submitter Code" dataIndex="submitterCode" />
         <Column
-          title="参数ID"
-          dataIndex="extendKey"
-          width="40"
-          onCell={record => ({
-            record,
-            dataIndex: 'extendKey',
-            title: '参数ID',
-            editing: editKey === record.extendKey,
-          })}
-        />
-        <Column
-          title="参数名称"
-          dataIndex="extendKeyName"
-          onCell={record => ({
-            record,
-            dataIndex: 'extendKeyName',
-            editing: editKey === record.extendKey,
-          })}
-        />
-        <Column
-          title="值"
-          dataIndex="extendValue"
-          width="40"
-          onCell={record => ({
-            record,
-            dataIndex: 'extendValue',
-            editing: editKey === record.extendKey,
-          })}
-        />
-        <Column
-          title="说明"
-          dataIndex="remark"
-          onCell={record => ({
-            record,
-            dataIndex: 'remark',
-            editing: editKey === record.extendKey,
-          })}
-        />
-        <Column
-          title="操作"
+          title="Operation"
           dataIndex="action"
-          width="14%"
           render={(_text, record) => {
-            const isEditable = editKey === record.extendKey;
+            const isEditable = uid === record.uid;
             return isEditable ? (
               <span>
-                <EditableContext.Consumer>{() => <a>保存</a>}</EditableContext.Consumer>
-                <a onClick={() => setEditKey('')}>取消</a>
+                <EditableContext.Consumer>{() => <a>Save</a>}</EditableContext.Consumer>
+                <a onClick={() => setUid('')}>Cancel</a>
               </span>
             ) : (
-              <a onClick={() => setEditKey(record.extendKey)}>编辑</a>
+              <a onClick={() => setUid(record.uid)}>Remove</a>
             );
           }}
         />
@@ -120,8 +73,15 @@ function EditableTable({ depart, form }) {
 }
 
 function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
+  const [isFileListVisible, setFileListVisible] = useState(false);
+  const [fileList, setFileList] = useState([]);
   const { getFieldDecorator, validateFields } = form;
 
+  function handleChange(info) {
+    console.log(info);
+    setFileListVisible(true);
+    setFileList(info.fileList);
+  }
   function handleCommit() {
     validateFields(async (err, values) => {
       if (!err) {
@@ -141,7 +101,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
   return (
     <Drawer
       title={<FormattedMessage id="data-import.new-account.manual-upload" />}
-      width={320}
+      width={600}
       closable={false}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
       visible={visible}
@@ -180,9 +140,11 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             },
           })(
             <Upload
+              multiple
               accept=".xlsm,.xls,.xlsx,.pdf,application/msexcel"
-              action="/upload"
-              beforeUpload={file => isLt5M(file.size)}
+              showUploadList={false}
+              beforeUpload={() => false}
+              onChange={handleChange}
             >
               <Button>
                 <Icon type="upload" />
@@ -191,8 +153,8 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             </Upload>,
           )}
         </Form.Item>
-        <EditableTable />
       </Form>
+      {isFileListVisible && <FileTable fileList={fileList} form={form} />}
       <div className={styles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
         <Button type="primary" onClick={handleCommit}>

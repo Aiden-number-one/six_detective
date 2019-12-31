@@ -3666,11 +3666,11 @@ function Tree_Menu(existence, thisGraph, existId) {
                     }
                     var _osvg = $('#svgbox>svg')[0];
                     var svgbox = $('#svgbox');
-                    _osvg.ondragover = function (e) {
-                        e.preventDefault();
-                        return true;
-                    };
-                    _osvg.ondrop = function (e) {
+                    // _osvg.ondragover = function (e) {
+                    //     e.preventDefault();e.stopPropagation();
+                    //     return true;
+                    // };
+                    _osvg.addEventListener('drop', function (e) {
                         if (drag_domnode != undefined) {
                             var xlocation = e.clientX - leftW + (svgbox.scrollLeft() - _osvg.style.width) - graphic.rectW / 2 - 230;
                             var ylocation = e.clientY - headerH + (svgbox.scrollTop() - _osvg.style.height) - graphic.rectH / 2;
@@ -3784,12 +3784,12 @@ function Tree_Menu(existence, thisGraph, existId) {
 
                             return false;
                         };
-                        _osvg.addEventListener("dragover", function (e) {
-                            e.stopPropagation();
-                            e.preventDefault();
-                        }, false);
                         // 拖拽添加节点
-                    };
+                    }, false);
+                    _osvg.addEventListener("dragover", function (e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }, false);
                 }
             });
         } else {
