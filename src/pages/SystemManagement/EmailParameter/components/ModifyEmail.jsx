@@ -201,7 +201,7 @@ class NewUser extends Component {
         <Row type="flex" justify="end">
           <Col>
             <Button type="primary" onClick={this.onSave}>
-              SAVE
+              {formatMessage({ id: 'app.common.save' })}
             </Button>
           </Col>
         </Row>
