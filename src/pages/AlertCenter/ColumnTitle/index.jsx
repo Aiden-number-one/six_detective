@@ -1,44 +1,43 @@
 import React, { useState } from 'react';
-import { Popover } from 'antd';
+import { connect } from 'dva';
+import { Popover, Button } from 'antd';
 import classNames from 'classnames';
 import IconFont from '@/components/IconFont';
-import {
-  FilterHeader,
-  FilterFooter,
-  FilterType,
-  FilterSelect,
-  FilterCheckbox,
-} from './FilterContent';
+import { FilterHeader, FilterType, FilterSelect, FilterCheckbox } from './FilterContent';
 import styles from './index.less';
 
-let conditions = [];
-
-export default function ColumnTitle({
+function ColumnTitle({
+  dispatch,
   children,
   isNum,
   loading,
   curColumn,
   filterItems,
-  onFilters,
+  conditions,
   onSort,
   onCommit,
 }) {
   const [isFiltered, setFiltered] = useState(false);
   const [visible, setVisible] = useState(false);
   const [filterType, setFilterType] = useState(isNum ? 1 : 7);
-  const [checkedList, setCheckedList] = useState([]);
+  const [checkedList, setCheckedList] = useState(filterItems);
   const isFilterSelect = [1, 3, 4, 5, 6].includes(filterType);
 
   function handleVisibleChange(v) {
     setVisible(v);
     if (v) {
-      onFilters();
+      dispatch({
+        type: 'global/fetchTableFilterItems',
+        payload: {
+          tableName: 'slop_biz.v_alert_center',
+          tableColumn: curColumn,
+        },
+      });
     }
   }
 
   async function handleClear() {
-    conditions = conditions.filter(item => item.column !== curColumn);
-    await onCommit(conditions);
+    await onCommit(curColumn);
     setCheckedList(filterItems);
     setFiltered(false);
     setVisible(false);
@@ -55,20 +54,21 @@ export default function ColumnTitle({
       value: checkedList.toString(),
       condition: filterType.toString(),
     };
+    let updatedConditions = conditions;
     const curCondition = conditions.find(item => item.column === curColumn);
     if (curCondition) {
-      conditions = conditions.map(item => {
+      updatedConditions = conditions.map(item => {
         if (item.column === curColumn) {
           return Object.assign(item, condition);
         }
         return item;
       });
     } else {
-      conditions.push(condition);
+      updatedConditions.push(condition);
     }
     // filter icon change
     setFiltered(checkedList.toString() !== filterItems.toString());
-    await onCommit(conditions);
+    await onCommit(curColumn, updatedConditions);
     setVisible(false);
   }
 
@@ -108,11 +108,14 @@ export default function ColumnTitle({
                 onCheckedList={c => setCheckedList(c)}
               />
             )}
-            <FilterFooter
-              disabled={!checkedList.length}
-              onCancel={() => setVisible(false)}
-              onOk={handleOk}
-            />
+            <div className={styles['bottom-btns']}>
+              <Button size="small" onClick={() => setVisible(false)}>
+                Cancel
+              </Button>
+              <Button type="primary" disabled={!checkedList.length} onClick={handleOk}>
+                Commit
+              </Button>
+            </div>
           </div>
         </>
       }
@@ -129,3 +132,9 @@ export default function ColumnTitle({
     </Popover>
   );
 }
+
+const mapStateToProps = ({ loading, global: { filterItems = [] } }) => ({
+  loading: loading.effects['global/fetchTableFilterItems'],
+  filterItems,
+});
+export default connect(mapStateToProps)(ColumnTitle);

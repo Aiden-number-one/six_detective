@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
-import { Row, Col, Select, Input, Checkbox, Button, Empty, Spin } from 'antd';
+import { Row, Col, Select, Input, Checkbox, Empty, Spin } from 'antd';
 import IconFont from '@/components/IconFont';
 import styles from './index.less';
 
@@ -34,19 +34,6 @@ export function FilterHeader({ disabled, onSort, onClear }) {
         </span>
       </Col>
     </Row>
-  );
-}
-
-export function FilterFooter({ disabled, onCancel, onOk }) {
-  return (
-    <div className={styles['bottom-btns']}>
-      <Button size="small" onClick={onCancel}>
-        Cancel
-      </Button>
-      <Button type="primary" disabled={disabled} onClick={onOk}>
-        Commit
-      </Button>
-    </div>
   );
 }
 
