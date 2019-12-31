@@ -98,14 +98,13 @@ function NewAccountTaskItem(
   {
     task: {
       MARKET,
+      EP_CODE,
       SUBMITTER_CODE,
       SUBMITTER_NAME,
-      EP_CODE,
-      LOP_ACCOUNT_NO,
-      REPORTED_BT_NAME,
+      ACCOUNT_NO,
       ACCOUNT_NAME,
-      REPORTED_TO_NAME,
-      BI_OMI_CODE,
+      REPORT_BI_NAME,
+      REPORTE_TO_NAME,
       REMARK,
     },
   },
@@ -117,30 +116,30 @@ function NewAccountTaskItem(
       <Descriptions.Item label="Submitter Code *">{SUBMITTER_CODE}</Descriptions.Item>
       <Descriptions.Item label="Submitter Name *">{SUBMITTER_NAME}</Descriptions.Item>
       <Descriptions.Item label="EP Code *">{EP_CODE}</Descriptions.Item>
-      <Descriptions.Item label="LOP Account No. *">{LOP_ACCOUNT_NO}</Descriptions.Item>
+      <Descriptions.Item label="LOP Account No. *">{ACCOUNT_NO}</Descriptions.Item>
       <Descriptions.Item label="Account Name">{ACCOUNT_NAME}</Descriptions.Item>
-      <Descriptions.Item label="Reported BI Name *">{REPORTED_BT_NAME}</Descriptions.Item>
-      <Descriptions.Item label="Reported TO Name">{REPORTED_TO_NAME}</Descriptions.Item>
+      <Descriptions.Item label="Reported BI Name *">{REPORT_BI_NAME}</Descriptions.Item>
+      <Descriptions.Item label="Reported TO Name">{REPORTE_TO_NAME}</Descriptions.Item>
       {render()}
-      <Descriptions.Item label="Assigned TO Name">{BI_OMI_CODE}</Descriptions.Item>
-      <Descriptions.Item label="Creation Date *">{BI_OMI_CODE}</Descriptions.Item>
+      <Descriptions.Item label="Assigned TO Name">{REMARK}</Descriptions.Item>
+      <Descriptions.Item label="Creation Date *">{REMARK}</Descriptions.Item>
       <Descriptions.Item label="Remark">{REMARK}</Descriptions.Item>
     </Descriptions>
   );
 }
 
 export function NewAccountTaskItemV1({ task }) {
-  const { BI_OMI_CODE } = task;
+  const { TO_CODE, REMARK } = task;
   return (
     <NewAccountTaskItem
       task={task}
       render={() => (
         <>
-          <Descriptions.Item label="BI/Omni Code *">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Assigned BI/Omni Name *">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Parent BI/Omni Code">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Assigned Parent BI/Omni Name">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="TO Code">{BI_OMI_CODE}</Descriptions.Item>
+          <Descriptions.Item label="BI/Omni Code *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Assigned BI/Omni Name *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Parent BI/Omni Code">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Assigned Parent BI/Omni Name">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="TO Code">{TO_CODE}</Descriptions.Item>
         </>
       )}
     />
@@ -148,20 +147,22 @@ export function NewAccountTaskItemV1({ task }) {
 }
 
 export function NewAccountTaskItemV2({ task }) {
-  const { BI_OMI_CODE } = task;
+  const { PREV_OMN_BI_CODE, PREV_OMN_BI_NAME, CONFIRM_TO_CODE, REMARK } = task;
   return (
     <NewAccountTaskItem
       task={task}
       render={() => (
         <>
-          <Descriptions.Item label="Pre-BI/Omni Code *">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Pre-Assigned BI/Omni Name *">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Pre-TO Code">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Pre-Assigned TO Name">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Received Confirmation">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Comfirmed BI/Omni Code *">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Assigned BI/Omni Name *">{BI_OMI_CODE}</Descriptions.Item>
-          <Descriptions.Item label="Confirmed TO Code">{BI_OMI_CODE}</Descriptions.Item>
+          <Descriptions.Item label="Pre-BI/Omni Code *">{PREV_OMN_BI_CODE}</Descriptions.Item>
+          <Descriptions.Item label="Pre-Assigned BI/Omni Name *">
+            {PREV_OMN_BI_NAME}
+          </Descriptions.Item>
+          <Descriptions.Item label="Pre-TO Code">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Pre-Assigned TO Name">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Received Confirmation">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Comfirmed BI/Omni Code *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Assigned BI/Omni Name *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Confirmed TO Code">{CONFIRM_TO_CODE}</Descriptions.Item>
         </>
       )}
     />
