@@ -7,9 +7,9 @@
             <input type="checkbox" name="check" jobId={{jobId}}  jobName={{jobName}} folderId={{folderId}}> </td>
         <td class="width40 t-c"> {{ROWNUM_}}</td>
         <td class="t-c"> {{folderName}} </td>
-        <td> {{jobNo}} </td>
-        <td> {{jobName}} </td>
-        <td> {{jobDesc}} </td>
+        <td> <div class="ellipsis" style="max-width: 160px;" title="{{jobNo}}">{{jobNo}}</div> </td>
+        <td> <div class="ellipsis" style="max-width: 160px;" title="{{jobName}}">{{jobName}}</div> </td>
+        <td> <div class="ellipsis" style="max-width: 160px;" title="{{jobDesc}}">{{jobDesc}}</div> </td>
         <td class="t-c"> {{dateTimeFormatHelper modifiedTime}} </td>
         <td class="t-c"> {{modifiedEr}} </td>
         <td class="t-c"> <a name="check" jobId={{jobId}}>Detail</a></td>

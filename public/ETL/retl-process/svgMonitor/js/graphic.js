@@ -1,37 +1,32 @@
-var delay = 0
+var delay = 0;
 function Graphic(svg, xmlDoc) {
 	var thisGraph = this;
 	thisGraph.rectW = 32;
 	thisGraph.rectH = 32;
-	thisGraph.name = '';  //job name
+	thisGraph.name = ''; //job name
 	thisGraph.description = '';
-	thisGraph.item_id = '';    //job item_id  如果是新建的话  前端生成uuid
-	thisGraph.jobNo = '';  //作业编号
+	thisGraph.item_id = ''; //job item_id  如果是新建的话  前端生成uuid
+	thisGraph.jobNo = ''; //作业编号
 
 	thisGraph.svg = svg;
 	thisGraph.nodes = [];
 	thisGraph.edges = [];
 
-	thisGraph.canvas = {          //画布大小管理
+	thisGraph.canvas = { //画布大小管理
 		_h: thisGraph.svg.attr('height') || $('#svgbox').height(),
-		_w: thisGraph.svg.attr('width') || $('#svgbox').width(),
-	}
+		_w: thisGraph.svg.attr('width') || $('#svgbox').width()
 
-	//悬浮工具按钮
-	thisGraph.tool_pointer = d3.select('#t-pointer');
+		//悬浮工具按钮
+	};thisGraph.tool_pointer = d3.select('#t-pointer');
 	thisGraph.tool_liner = d3.select('#t-line');
 	thisGraph.tool_save = d3.select('#t-save');
 	//thisGraph.tool_import = d3.select('#t-import');  放在base中，防止代码污染。
-	thisGraph.tool_zoom = d3.select('#t-zoom');  //缩放
+	thisGraph.tool_zoom = d3.select('#t-zoom'); //缩放
 	thisGraph.tool_zoomed = d3.select('#t-zoomed');
-
-
-
-
 
 	//编辑节点弹窗的命名规则
 	thisGraph.formbox = '#nodeformbox';
-	thisGraph.forms = '#node_edit'
+	thisGraph.forms = '#node_edit';
 
 	//基本变量初始化完成，xmlDoc开始reappear
 	if (xmlDoc && xmlDoc != '') {
@@ -42,32 +37,25 @@ function Graphic(svg, xmlDoc) {
 		thisGraph.xmlDoc = thisGraph.createXmlDoc();
 	}
 
-
-
-
-
-
 	//辅助状态变量
 	thisGraph.state = {
-		nodeFlag: false,   //添加node
-		lineFlag: false,   //连线
-		pointer: false,     //指针释放、可进行拖拽node
-		selectedEdge: null,   //被选中的连线
-		sNode: null,        //连线源node
-		tNode: null,       //连线目标node
+		nodeFlag: false, //添加node
+		lineFlag: false, //连线
+		pointer: false, //指针释放、可进行拖拽node
+		selectedEdge: null, //被选中的连线
+		sNode: null, //连线源node
+		tNode: null, //连线目标node
 
-		selectedNodes: [],  //1、框选实现多选所需属性  2、 被选中的node
+		selectedNodes: [], //1、框选实现多选所需属性  2、 被选中的node
 		selectedMore: false,
-		sel_startxy: [0, 0],   //款选鼠标开始相对于svg的坐标
+		sel_startxy: [0, 0], //款选鼠标开始相对于svg的坐标
 
-		nodesDragFlag: false,   //节点是否被拖动
+		nodesDragFlag: false, //节点是否被拖动
 
-		copyNodes: [],
+		copyNodes: []
 
 		//mouseDownSvgFlag: true,    //辅助实现缩放：目的是去掉鼠标拖拽时（框选）的对zoom的影响,因为mousemove会触发zoom事件
 	};
-
-
 
 	//撤销恢复功能
 
@@ -77,82 +65,30 @@ function Graphic(svg, xmlDoc) {
 	});
 
 	var defs = thisGraph.svg.append('defs');
-	defs.append('marker')     // green   markerUnits="strokeWidth"
-		.attr('id', 'end-arrow-S')
-		.attr('refX', '29')
-		.attr('refY', '6')
-		.attr('markerWidth', '12')
-		.attr('markerHeight', '12')
-		.attr('orient', 'auto')
-		.attr('markerUnits', 'userSpaceOnUse')
-		.append('path')
-		.attr('fill', '#00a65a')
-		.attr('d', 'M 0 0 L 12 6 L 0 12 z');
-	defs.append('marker')    //  false
-		.attr('id', 'end-arrow-F')
-		.attr('refX', '29')
-		.attr('refY', '6')
-		.attr('markerWidth', '12')
-		.attr('markerHeight', '12')
-		.attr('orient', 'auto')
-		.attr('markerUnits', 'userSpaceOnUse')
-		.append('path')
-		.attr('fill', '#dd4b39')
-		.attr('d', 'M 0 0 L 12 6 L 0 12 z');
-	defs.append('marker')     // blue
-		.attr('id', 'end-arrow-N')
-		.attr('refX', '29')
-		.attr('refY', '6')
-		.attr('markerWidth', '12')
-		.attr('markerHeight', '12')
-		.attr('orient', 'auto')
-		.attr('markerUnits', 'userSpaceOnUse')
-		.append('path')
-		.attr('fill', '#0073b7')
-		.attr('d', 'M 0 0 L 12 6 L 0 12 z');
-	defs.append('marker')  //拖拽过程中的黑色箭头
-		.attr('id', 'dragline-end-arrow')
-		.attr('viewBox', '0 0 10 10')
-		.attr('refX', '5')
-		.attr('refY', '5')
-		.attr('markerWidth', '5')
-		.attr('markerHeight', '5')
-		.attr('orient', 'auto')
-		.append('path')
-		.attr('d', 'M 0 0 L 10 5 L 0 10 z');
-	defs.append('marker')     // 灰色
-		.attr('id', 'end-arrow-disabled')
-		.attr('refX', '29')
-		.attr('refY', '6')
-		.attr('markerWidth', '12')
-		.attr('markerHeight', '12')
-		.attr('orient', 'auto')
-		.attr('markerUnits', 'userSpaceOnUse')
-		.append('path')
-		.attr('fill', '#cccccc')
-		.attr('d', 'M 0 0 L 12 6 L 0 12 z');
+	defs.append('marker') // green   markerUnits="strokeWidth"
+	.attr('id', 'end-arrow-S').attr('refX', '29').attr('refY', '6').attr('markerWidth', '12').attr('markerHeight', '12').attr('orient', 'auto').attr('markerUnits', 'userSpaceOnUse').append('path').attr('fill', '#00a65a').attr('d', 'M 0 0 L 12 6 L 0 12 z');
+	defs.append('marker') //  false
+	.attr('id', 'end-arrow-F').attr('refX', '29').attr('refY', '6').attr('markerWidth', '12').attr('markerHeight', '12').attr('orient', 'auto').attr('markerUnits', 'userSpaceOnUse').append('path').attr('fill', '#dd4b39').attr('d', 'M 0 0 L 12 6 L 0 12 z');
+	defs.append('marker') // blue
+	.attr('id', 'end-arrow-N').attr('refX', '29').attr('refY', '6').attr('markerWidth', '12').attr('markerHeight', '12').attr('orient', 'auto').attr('markerUnits', 'userSpaceOnUse').append('path').attr('fill', '#0073b7').attr('d', 'M 0 0 L 12 6 L 0 12 z');
+	defs.append('marker') //拖拽过程中的黑色箭头
+	.attr('id', 'dragline-end-arrow').attr('viewBox', '0 0 10 10').attr('refX', '5').attr('refY', '5').attr('markerWidth', '5').attr('markerHeight', '5').attr('orient', 'auto').append('path').attr('d', 'M 0 0 L 10 5 L 0 10 z');
+	defs.append('marker') // 灰色
+	.attr('id', 'end-arrow-disabled').attr('refX', '29').attr('refY', '6').attr('markerWidth', '12').attr('markerHeight', '12').attr('orient', 'auto').attr('markerUnits', 'userSpaceOnUse').append('path').attr('fill', '#cccccc').attr('d', 'M 0 0 L 12 6 L 0 12 z');
 	thisGraph.sel_rect = null;
-
 
 	thisGraph.svgG = thisGraph.svg.append("g");
 
-	thisGraph.dragLine = thisGraph.svgG.append('path')
-		.classed('s-path', true)
-		.classed('hidden', true)
-		.attr('stroke', 'black')
-		.attr('marker-end', 'url(#dragline-end-arrow)')
-		.attr('d', 'M0,0L0,0');
+	thisGraph.dragLine = thisGraph.svgG.append('path').classed('s-path', true).classed('hidden', true).attr('stroke', 'black').attr('marker-end', 'url(#dragline-end-arrow)').attr('d', 'M0,0L0,0');
 
 	thisGraph.paths = thisGraph.svgG.append('g').selectAll('g');
 	thisGraph.circles = thisGraph.svgG.append('g').selectAll('g');
 
-	thisGraph.drag = d3.behavior.drag()
-		.on('drag', function (args) {
-			thisGraph.dragMove.call(thisGraph, args);
-		})
-		.on('dragend', function (args) {
-			thisGraph.dragMoveEnd.call(thisGraph, args);
-		});
+	thisGraph.drag = d3.behavior.drag().on('drag', function (args) {
+		thisGraph.dragMove.call(thisGraph, args);
+	}).on('dragend', function (args) {
+		thisGraph.dragMoveEnd.call(thisGraph, args);
+	});
 	thisGraph.svg.on('mousedown', function (d) {
 		thisGraph.mouseDownSvg.call(thisGraph, d);
 	});
@@ -166,23 +102,20 @@ function Graphic(svg, xmlDoc) {
 		if (thisGraph.sel_rect) {
 			thisGraph.removeMultiple();
 		}
-		var rects = d3.select('rect[_sel_rect]');  //鼠标出去svg  未能删除的框选rect
+		var rects = d3.select('rect[_sel_rect]'); //鼠标出去svg  未能删除的框选rect
 		if (rects.length) {
 			rects.remove();
 		}
-
 	});
 
-
 	//缩放
-	var zoom = d3.behavior.zoom().scaleExtent([0.6, 1])
-		.on('zoom', function () {
-			if (!thisGraph.state.mouseDownSvgFlag) {
-				thisGraph.zoomed.call(thisGraph);
-			} else {
-				return false;
-			}
-		});
+	var zoom = d3.behavior.zoom().scaleExtent([0.6, 1]).on('zoom', function () {
+		if (!thisGraph.state.mouseDownSvgFlag) {
+			thisGraph.zoomed.call(thisGraph);
+		} else {
+			return false;
+		}
+	});
 	//.on()
 	thisGraph.svg.call(zoom).on("dblclick.zoom", null);
 	thisGraph.zoom = zoom;
@@ -198,7 +131,8 @@ function Graphic(svg, xmlDoc) {
 		thisGraph.state.pointer = false;
 		thisGraph.svg.classed('s-svg-cursor-liner', true);
 	});
-	thisGraph.tool_save.on('click', function () {       //保存工作流
+	thisGraph.tool_save.on('click', function () {
+		//保存工作流
 		thisGraph.state.lineFlag = false;
 		thisGraph.svg.classed('s-svg-cursor-liner', false);
 		$('#jf_win_newJob').window('open');
@@ -216,7 +150,8 @@ function Graphic(svg, xmlDoc) {
 			$('#folderId_input').combotree('setValue', folderId);
 		}
 	});
-	thisGraph.tool_zoom.on('click', function () {   //画布增大
+	thisGraph.tool_zoom.on('click', function () {
+		//画布增大
 		thisGraph.svg.classed('s-svg-cursor-liner', false);
 		var _w = thisGraph.svg.attr('width') || $('#svgbox').width();
 		_w = parseInt(_w) + 50;
@@ -232,7 +167,7 @@ function Graphic(svg, xmlDoc) {
 	function GetQueryString(name) {
 		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 		var r = window.location.search.substr(1).match(reg);
-		if (r != null) return unescape(r[2]); return null;
+		if (r != null) return unescape(r[2]);return null;
 	}
 	//解绑右键菜单事件
 	thisGraph.rMenu = {
@@ -240,13 +175,15 @@ function Graphic(svg, xmlDoc) {
 		//svgM : $('#svgM'),   画布右键菜单去掉
 		nodeM: $('#nodeM'),
 		title: $('#title'),
-		data: null,
+		data: null
 	};
-	$('#svgbox').bind("contextmenu", function (e) {     //画布右键菜单改成点击pionter图标的功能
+	$('#svgbox').bind("contextmenu", function (e) {
+		//画布右键菜单改成点击pionter图标的功能
 		return false;
 	});
 
-	$('#nodeM_copy').click(function () {  //复制
+	$('#nodeM_copy').click(function () {
+		//复制
 		if (thisGraph.state.selectedNodes.length) {
 			var nodes = thisGraph.state.selectedNodes;
 			thisGraph.state.copyNodes = [];
@@ -258,20 +195,16 @@ function Graphic(svg, xmlDoc) {
 			thisGraph.pastNode();
 		}
 	});
-	$('#nodeM_edit').click(function () {
-	});
-
-
+	$('#nodeM_edit').click(function () {});
 };
 
 Graphic.prototype.update = function () {
 	//	console.log('更新');
 	var thisGraph = this;
 
-
 	//更新node：update已经存在，circles是所有node的最外层g元素
 	thisGraph.circles = thisGraph.circles.data(thisGraph.nodes, function (d) {
-		return d.id
+		return d.id;
 	});
 	thisGraph.circles.attr('transform', function (d) {
 		return "translate(" + d.x + "," + d.y + ")";
@@ -297,211 +230,197 @@ Graphic.prototype.update = function () {
 		if (color != '') {
 			d3.select(this).classed(color, true);
 		}
-
 	});
 
-
 	//更新新增的node
-	var addCircles_g = thisGraph.circles.enter()
-		.append('g')
-		.attr('id', function (d) {
-			return d.id;
-		})
-		.attr('transform', function (d) {
-			return "translate(" + d.x + "," + d.y + ")";
-		});
+	var addCircles_g = thisGraph.circles.enter().append('g').attr('id', function (d) {
+		return d.id;
+	}).attr('transform', function (d) {
+		return "translate(" + d.x + "," + d.y + ")";
+	});
 	//为node添加拖拽事件
 	addCircles_g.on('mousedown', function (d) {
 		//d3.event.stopPropagation();
 
 		thisGraph.mouseDownNode.call(thisGraph, d3.select(this), d);
-
-	})
-		.on('click', function (d) {
-			d3.event.stopPropagation();
-			thisGraph.clickNode.call(thisGraph, d3.select(this), d);
-		})
-		.on('mouseup', function (d) {
-			//d3.event.stopPropagation();
-			thisGraph.mouseUpNode.call(thisGraph, d3.select(this), d);
-		})
-		.call(thisGraph.drag)
-		.on('dblclick', function (d) {
-			// thisGraph.nodeDblclick.call(thisGraph, d);
-		})
-		.on('contextmenu', function (d) {
-		}).on('mouseenter', function (e) {
-			var d = e;
-			var e = window.event || e;
-			if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
-				e = arguments.callee.caller.arguments[0]
-			}
-			var de = e.fromElement || e.relatedTarget;
-			delay = 0;
-			if (document.all) {    //判断浏览器是否为IE,如果存在document.all则为IE
-				if (!this.contains(de)) {    // 判断调用onmouseover的对象(this)是否包含自身或子级，如果包含，则不执行
-					thisGraph.rightmenu1.call(thisGraph, thisGraph.rMenu.title, d);
-					if (d.name) {
-						$("#title_name").html(d.name);
-					} else {
-						$("#title_name").html(" ");
-					};
-					if (d.task_no) {
-						$("#title_number").html(d.task_no);
-					} else {
-						$("#title_number").html(" ");
-					};
-					if (d.task_name) {
-						$("#task_name").html(d.task_name);
-					} else {
-						$("#task_name").html(" ");
-					};
-					if (d.start_time) {
-						$("#title_time").html(d.start_time);
-					} else {
-						$("#title_time").html(" ");
-					};
-					if (d.end_time) {
-						$("#end_time").html(d.end_time);
-					} else {
-						$("#end_time").html(" ");
-					};
-					if (d.time_length) {
-						$("#title_when").html(d.time_length);
-					} else {
-						$("#title_when").html(" ");
-					};
-					if (d.result_mess) {
-						$("#title_return").html(d.result_mess);
-					} else {
-						$("#title_return").html(" ");
-					};
-					if (d.type == 5 || d.type == 2 || d.type == 1 || d.type == 3 || d.type == 4 || d.type == 6 || d.type == 8 || d.type == 10 || d.type == 9 || d.type == 11) {
-						$("#task_names").hide()
-						$("#task_names1").show()
-					} else {
-						$("#task_names1").hide()
-						$("#task_names").show()
-					};
-					if (d.execute_flag) {
-						if (d.execute_flag == 'S') {
-							$("#title_state").html("成功完成");
-						} else if (d.execute_flag == 'F') {
-							$("#title_state").html("出错完成");
-						} else if (d.execute_flag == 'B') {
-							$("#title_state").html("出错中断");
-						} else if (d.execute_flag == 'I') {
-							$("#title_state").html("手工中断");
-						} else if (d.execute_flag == 'E') {
-							$("#title_state").html("中断执行中");
-						} else if (d.execute_flag == 'R') {
-							$("#title_state").html("正在执行中");
-						} else if (d.execute_flag == 'A') {
-							$("#title_state").html("判断为假");
-						} else if (d.execute_flag == 'U') {
-							$("#title_state").html("未执行");
-						}
-
+	}).on('click', function (d) {
+		d3.event.stopPropagation();
+		thisGraph.clickNode.call(thisGraph, d3.select(this), d);
+	}).on('mouseup', function (d) {
+		//d3.event.stopPropagation();
+		thisGraph.mouseUpNode.call(thisGraph, d3.select(this), d);
+	}).call(thisGraph.drag).on('dblclick', function (d) {
+		// thisGraph.nodeDblclick.call(thisGraph, d);
+	}).on('contextmenu', function (d) {}).on('mouseenter', function (e) {
+		var d = e;
+		var e = window.event || e;
+		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
+			e = arguments.callee.caller.arguments[0];
+		}
+		var de = e.fromElement || e.relatedTarget;
+		delay = 0;
+		if (document.all) {
+			//判断浏览器是否为IE,如果存在document.all则为IE
+			if (!this.contains(de)) {
+				// 判断调用onmouseover的对象(this)是否包含自身或子级，如果包含，则不执行
+				thisGraph.rightmenu1.call(thisGraph, thisGraph.rMenu.title, d);
+				if (d.name) {
+					$("#title_name").html(d.name);
+				} else {
+					$("#title_name").html(" ");
+				};
+				if (d.task_no) {
+					$("#title_number").html(d.task_no);
+				} else {
+					$("#title_number").html(" ");
+				};
+				if (d.task_name) {
+					$("#task_name").html(d.task_name);
+				} else {
+					$("#task_name").html(" ");
+				};
+				if (d.start_time) {
+					$("#title_time").html(d.start_time);
+				} else {
+					$("#title_time").html(" ");
+				};
+				if (d.end_time) {
+					$("#end_time").html(d.end_time);
+				} else {
+					$("#end_time").html(" ");
+				};
+				if (d.time_length) {
+					$("#title_when").html(d.time_length);
+				} else {
+					$("#title_when").html(" ");
+				};
+				if (d.result_mess) {
+					$("#title_return").html(d.result_mess);
+				} else {
+					$("#title_return").html(" ");
+				};
+				if (d.type == 5 || d.type == 2 || d.type == 1 || d.type == 3 || d.type == 4 || d.type == 6 || d.type == 8 || d.type == 10 || d.type == 9 || d.type == 11) {
+					$("#task_names").hide();
+					$("#task_names1").show();
+				} else {
+					$("#task_names1").hide();
+					$("#task_names").show();
+				};
+				if (d.execute_flag) {
+					if (d.execute_flag == 'S') {
+						$("#title_state").html("Succeed");
+					} else if (d.execute_flag == 'F') {
+						$("#title_state").html("Error completed");
+					} else if (d.execute_flag == 'B') {
+						$("#title_state").html("Error Interrupt");
+					} else if (d.execute_flag == 'I') {
+						$("#title_state").html("Manual Interrupt");
+					} else if (d.execute_flag == 'E') {
+						$("#title_state").html("Interrupt Executing");
+					} else if (d.execute_flag == 'R') {
+						$("#title_state").html("Executing");
+					} else if (d.execute_flag == 'A') {
+						$("#title_state").html("Judgement is false.");
+					} else if (d.execute_flag == 'U') {
+						$("#title_state").html("unexecuted");
 					}
 				}
-			} else {    //标准浏览器下的方法
-				var de = e.relatedTarget || e.fromElement;
-				if (de instanceof Node) {
-					var reg = this.compareDocumentPosition(de);
+			}
+		} else {
+			//标准浏览器下的方法
+			var de = e.relatedTarget || e.fromElement;
+			if (de instanceof Node) {
+				var reg = this.compareDocumentPosition(de);
+			} else {
+				var reg = 0;
+			}
+			if (!(reg == 20 || reg == 0)) {
+				thisGraph.rightmenu1.call(thisGraph, thisGraph.rMenu.title, d);
+				if (d.name) {
+					$("#title_name").html(d.name);
 				} else {
-					var reg = 0;
-				}
-				if (!(reg == 20 || reg == 0)) {
-					thisGraph.rightmenu1.call(thisGraph, thisGraph.rMenu.title, d);
-					if (d.name) {
-						$("#title_name").html(d.name);
-					} else {
-						$("#title_name").html(" ");
-					};
-					if (d.task_no) {
-						$("#title_number").html(d.task_no);
-					} else {
-						$("#title_number").html(" ");
-					};
-					if (d.task_name) {
-						$("#task_name").html(d.task_name);
-					} else {
-						$("#task_name").html(" ");
-					};
-					if (d.time_length) {
-						$("#title_when").html(d.time_length);
-					} else {
-						$("#title_when").html(" ");
-					};
-					if (d.result_mess) {
-						$("#title_return").html(d.result_mess);
-					} else {
-						$("#title_return").html(" ");
-					};
-					if (d.type == 5 || d.type == 2 || d.type == 1 || d.type == 3 || d.type == 4 || d.type == 6 || d.type == 8 || d.type == 10 || d.type == 9 || d.type == 11) {
-						$("#task_names").hide()
-						$("#task_names1").show()
-					} else {
-						$("#task_names1").hide()
-						$("#task_names").show()
-					};
-					if (d.execute_flag) {
-						if (d.execute_flag == 'S') {
-							$("#title_state").html("成功完成");
-						} else if (d.execute_flag == 'F') {
-							$("#title_state").html("出错完成");
-						} else if (d.execute_flag == 'B') {
-							$("#title_state").html("出错中断");
-						} else if (d.execute_flag == 'I') {
-							$("#title_state").html("手工中断");
-						} else if (d.execute_flag == 'E') {
-							$("#title_state").html("中断执行中");
-						} else if (d.execute_flag == 'R') {
-							$("#title_state").html("正在执行中");
-						} else if (d.execute_flag == 'A') {
-							$("#title_state").html("判断为假");
-						} else if (d.execute_flag == 'U') {
-							$("#title_state").html("未执行");
-						}
+					$("#title_name").html(" ");
+				};
+				if (d.task_no) {
+					$("#title_number").html(d.task_no);
+				} else {
+					$("#title_number").html(" ");
+				};
+				if (d.task_name) {
+					$("#task_name").html(d.task_name);
+				} else {
+					$("#task_name").html(" ");
+				};
+				if (d.time_length) {
+					$("#title_when").html(d.time_length);
+				} else {
+					$("#title_when").html(" ");
+				};
+				if (d.result_mess) {
+					$("#title_return").html(d.result_mess);
+				} else {
+					$("#title_return").html(" ");
+				};
+				if (d.type == 5 || d.type == 2 || d.type == 1 || d.type == 3 || d.type == 4 || d.type == 6 || d.type == 8 || d.type == 10 || d.type == 9 || d.type == 11) {
+					$("#task_names").hide();
+					$("#task_names1").show();
+				} else {
+					$("#task_names1").hide();
+					$("#task_names").show();
+				};
+				if (d.execute_flag) {
+					if (d.execute_flag == 'S') {
+						$("#title_state").html("Succeed");
+					} else if (d.execute_flag == 'F') {
+						$("#title_state").html("Error completed");
+					} else if (d.execute_flag == 'B') {
+						$("#title_state").html("Error Interrupt");
+					} else if (d.execute_flag == 'I') {
+						$("#title_state").html("Manual Interrupt");
+					} else if (d.execute_flag == 'E') {
+						$("#title_state").html("Interrupt Executing");
+					} else if (d.execute_flag == 'R') {
+						$("#title_state").html("Executing");
+					} else if (d.execute_flag == 'A') {
+						$("#title_state").html("Judgement is false");
+					} else if (d.execute_flag == 'U') {
+						$("#title_state").html("unexecuted");
 					}
 				}
-			};
-
-
-		}).on('mouseleave', function (e) {
-			e = window.event || e;
-			delay = 1;
-			if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
-				e = arguments.callee.caller.arguments[0]
 			}
-			var de = e.toElement || e.relatedTarget;
+		};
+	}).on('mouseleave', function (e) {
+		e = window.event || e;
+		delay = 1;
+		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
+			e = arguments.callee.caller.arguments[0];
+		}
+		var de = e.toElement || e.relatedTarget;
 
-			if (document.all) {    //判断浏览器是否为IE,如果存在document.all则为IE
+		if (document.all) {
+			//判断浏览器是否为IE,如果存在document.all则为IE
 
-				if (!this.contains(de)) {    // 判断调用onmouseover的对象(this)是否包含自身或子级，如果包含，则不执行
-					$("#title").hide();
-					$(".menu-shadow").hide();
-				}
-			} else {    //标准浏览器下的方法
-				if (de instanceof Node) {
-					var reg = this.compareDocumentPosition(de);
-				} else {
-					var reg = 0;
-				}
-				if (!(reg == 20 || reg == 0)) {
-
-					$("#title").hide();
-					$(".menu-shadow").hide();
-				}
+			if (!this.contains(de)) {
+				// 判断调用onmouseover的对象(this)是否包含自身或子级，如果包含，则不执行
+				$("#title").hide();
+				$(".menu-shadow").hide();
 			}
-		});
+		} else {
+			//标准浏览器下的方法
+			if (de instanceof Node) {
+				var reg = this.compareDocumentPosition(de);
+			} else {
+				var reg = 0;
+			}
+			if (!(reg == 20 || reg == 0)) {
+
+				$("#title").hide();
+				$(".menu-shadow").hide();
+			}
+		}
+	});
 	//为新增的node添加圆角矩形边框
-	var rects = addCircles_g.append('rect')
-		.classed('s-rect', true)
-		.attr('width', thisGraph.rectW)
-		.attr('height', thisGraph.rectH)
-		.attr('rx', 5)
-		.attr('ry', 5);
+	var rects = addCircles_g.append('rect').classed('s-rect', true).attr('width', thisGraph.rectW).attr('height', thisGraph.rectH).attr('rx', 5).attr('ry', 5);
 
 	rects.each(function (d) {
 		var flag = d.execute_flag || 'U';
@@ -518,29 +437,17 @@ Graphic.prototype.update = function () {
 		if (color != '') {
 			d3.select(this).classed(color, true);
 		}
-
 	});
 
+	addCircles_g.append('text').classed('s-text', true).attr('x', thisGraph.rectW / 2).attr('y', 15 + thisGraph.rectH).attr('text-anchor', 'middle').text(function (d) {
+		var i = thisGraph.getNewOrder(d.type, d.title);
+		d.name = d.name == '' || null ? i : d.name;
 
-	addCircles_g.append('text')
-		.classed('s-text', true)
-		.attr('x', thisGraph.rectW / 2)
-		.attr('y', 15 + thisGraph.rectH)
-		.attr('text-anchor', 'middle')
-		.text(function (d) {
-			var i = thisGraph.getNewOrder(d.type, d.title)
-			d.name = d.name == '' || null ? i : d.name;
-
-			return d.name;
-		});
-	addCircles_g.append('image')
-		.attr('width', thisGraph.rectH - 8)
-		.attr('height', thisGraph.rectH - 8)
-		.attr('x', 4)
-		.attr('y', 4)
-		.attr("xlink:href", function (d) {
-			return 'svg/images/icon_type_' + d.type + '.png';
-		});
+		return d.name;
+	});
+	addCircles_g.append('image').attr('width', thisGraph.rectH - 8).attr('height', thisGraph.rectH - 8).attr('x', 4).attr('y', 4).attr("xlink:href", function (d) {
+		return 'svg/images/icon_type_' + d.type + '.png';
+	});
 	thisGraph.circles.exit().remove();
 
 	//更新连线
@@ -556,90 +463,71 @@ Graphic.prototype.update = function () {
 		} else {
 			return 'url(' + location.href + '#end-arrow-disabled)';
 		}
-	})
-		.classed('s-path', true)
-		.attr('stroke', function (d) {
-			if (d.enabled == 'Y') {
-				switch (d.conditional) {
-					case 'S':
-						return '#00a65a';
-					case 'F':
-						return '#dd4b39';
-					case 'N':
-						return '#0073b7';
-				}
-			} else {
-				return '#cccccc';
+	}).classed('s-path', true).attr('stroke', function (d) {
+		if (d.enabled == 'Y') {
+			switch (d.conditional) {
+				case 'S':
+					return '#00a65a';
+				case 'F':
+					return '#dd4b39';
+				case 'N':
+					return '#0073b7';
 			}
-
-		})
-		.attr('d', function (d) {
-			return 'M' + (d.source.x + thisGraph.rectW / 2) + ',' + (d.source.y + thisGraph.rectH / 2) + 'L' + (d.target.x + thisGraph.rectW / 2) + "," + (d.target.y + thisGraph.rectH / 2);
-		});
+		} else {
+			return '#cccccc';
+		}
+	}).attr('d', function (d) {
+		return 'M' + (d.source.x + thisGraph.rectW / 2) + ',' + (d.source.y + thisGraph.rectH / 2) + 'L' + (d.target.x + thisGraph.rectW / 2) + "," + (d.target.y + thisGraph.rectH / 2);
+	});
 	//更新已经存在（发生了改变的）连线的true  or  false
 	thisGraph.paths.selectAll('image').attr("xlink:href", function (d) {
-		return 'svg/images/' + d.conditional + '.png'
-	})
-		.attr('x', function (d) {
-			return (d.source.x + d.target.x + thisGraph.rectW) / 2 - 8;
-		})
-		.attr('y', function (d) {
-			return (d.target.y + d.source.y + thisGraph.rectH) / 2 - 8;
-		});
+		return 'svg/images/' + d.conditional + '.png';
+	}).attr('x', function (d) {
+		return (d.source.x + d.target.x + thisGraph.rectW) / 2 - 8;
+	}).attr('y', function (d) {
+		return (d.target.y + d.source.y + thisGraph.rectH) / 2 - 8;
+	});
 	//添加新的path及path  true or false									
 	var addPaths_g = thisGraph.paths.enter().append('g');
-	var addPaths = addPaths_g.append('path')
-		.attr('marker-end', function (d) {
-			if (d.enabled == 'Y') {
-				return 'url(' + location.href + '#end-arrow-' + d.conditional + ')';
-			} else {
-				return 'url(' + location.href + '#end-arrow-disabled)';
+	var addPaths = addPaths_g.append('path').attr('marker-end', function (d) {
+		if (d.enabled == 'Y') {
+			return 'url(' + location.href + '#end-arrow-' + d.conditional + ')';
+		} else {
+			return 'url(' + location.href + '#end-arrow-disabled)';
+		}
+	}).classed('s-path', true).attr('stroke', function (d) {
+		if (d.enabled == 'Y') {
+			switch (d.conditional) {
+				case 'S':
+					return '#00a65a';
+				case 'F':
+					return '#dd4b39';
+				case 'N':
+					return '#0073b7';
 			}
-		})
-		.classed('s-path', true)
-		.attr('stroke', function (d) {
-			if (d.enabled == 'Y') {
-				switch (d.conditional) {
-					case 'S':
-						return '#00a65a';
-					case 'F':
-						return '#dd4b39';
-					case 'N':
-						return '#0073b7';
-				}
-			} else {
-				return '#cccccc';
-			}
-		})
-		.attr('d', function (d) {
-			return 'M' + (d.source.x + thisGraph.rectW / 2) + ',' + (d.source.y + thisGraph.rectH / 2) + 'L' + (d.target.x + thisGraph.rectW / 2) + "," + (d.target.y + thisGraph.rectH / 2);
-		});
-
-	var addPathsImg = addPaths_g.append('image')
-		.attr("xlink:href", function (d) {
-			return 'svg/images/' + d.conditional + '.png';
-		})
-		.attr('x', function (d) {
-			return (d.source.x + d.target.x + thisGraph.rectW) / 2 - 8;
-		})
-		.attr('y', function (d) {
-			return (d.target.y + d.source.y + thisGraph.rectH) / 2 - 8;
-		})
-		.attr('width', 16)
-		.attr('height', 16);
-
-	addPathsImg.on('click', function (d) {      //点击pathimg  选中path并更改path   true   false
-	})
-		.on('contextmenu', function (d) {      //pathimg右键菜单  选中path并更改path   true   false
-		});
-	addPaths.on('click', function (d) {
+		} else {
+			return '#cccccc';
+		}
+	}).attr('d', function (d) {
+		return 'M' + (d.source.x + thisGraph.rectW / 2) + ',' + (d.source.y + thisGraph.rectH / 2) + 'L' + (d.target.x + thisGraph.rectW / 2) + "," + (d.target.y + thisGraph.rectH / 2);
 	});
+
+	var addPathsImg = addPaths_g.append('image').attr("xlink:href", function (d) {
+		return 'svg/images/' + d.conditional + '.png';
+	}).attr('x', function (d) {
+		return (d.source.x + d.target.x + thisGraph.rectW) / 2 - 8;
+	}).attr('y', function (d) {
+		return (d.target.y + d.source.y + thisGraph.rectH) / 2 - 8;
+	}).attr('width', 16).attr('height', 16);
+
+	addPathsImg.on('click', function (d) {//点击pathimg  选中path并更改path   true   false
+	}).on('contextmenu', function (d) {//pathimg右键菜单  选中path并更改path   true   false
+	});
+	addPaths.on('click', function (d) {});
 
 	thisGraph.paths.exit().remove();
 
-
 	//给更新后的节点添加事件：右键菜单事件
-
 };
 
 Graphic.prototype.clickNode = function (node, d) {
@@ -667,7 +555,7 @@ Graphic.prototype.dragMove = function (d) {
 	var thisGraph = this;
 	if (thisGraph.state.lineFlag) {
 		//console.log('chu fa drag');
-		thisGraph.dragLine.attr('d', 'M' + (d.x + thisGraph.rectW / 2) + ',' + (d.y + thisGraph.rectH / 2) + 'L' + (d3.event.x) + ',' + (d3.event.y));
+		thisGraph.dragLine.attr('d', 'M' + (d.x + thisGraph.rectW / 2) + ',' + (d.y + thisGraph.rectH / 2) + 'L' + d3.event.x + ',' + d3.event.y);
 	} else if (thisGraph.state.pointer) {
 		//console.log('drag chu fa'); 
 		if (thisGraph.state.selectedEdge) {
@@ -690,57 +578,51 @@ Graphic.prototype.dragMove = function (d) {
 					max_xy[0] = Math.max(max_xy[0], nodes[i].x);
 					max_xy[1] = Math.max(max_xy[1], nodes[i].y);
 				}
-				if (max_xy[0] > (thisGraph.canvas._w - thisGraph.rectW)) {
+				if (max_xy[0] > thisGraph.canvas._w - thisGraph.rectW) {
 					thisGraph.canvas._w = max_xy[0] + thisGraph.rectW;
 					thisGraph.svg.attr('width', thisGraph.canvas._w);
 					$('#svgbox').scrollLeft(thisGraph.canvas._w);
 				}
-				if (max_xy[1] > (thisGraph.canvas._h - thisGraph.rectH)) {
+				if (max_xy[1] > thisGraph.canvas._h - thisGraph.rectH) {
 					thisGraph.canvas._h = max_xy[1] + thisGraph.rectH;
 					thisGraph.svg.attr('height', thisGraph.canvas._h);
 					$('#svgbox').scrollTop(thisGraph.canvas._h);
 				}
 				thisGraph.state.nodesDragFlag = true;
 				thisGraph.update();
-
 			}
-
 		} else {
 			d.x += d3.event.dx;
 			d.y += d3.event.dy;
 			if (d.x < 0) {
 				d.x = 0;
-			} else if (d.x > (thisGraph.canvas._w - thisGraph.rectW)) {
+			} else if (d.x > thisGraph.canvas._w - thisGraph.rectW) {
 				thisGraph.canvas._w = d.x + thisGraph.rectW;
 				thisGraph.svg.attr('width', thisGraph.canvas._w);
 				$('#svgbox').scrollLeft(thisGraph.canvas._w);
 			}
 			if (d.y < 0) {
 				d.y = 0;
-			} else if (d.y > (thisGraph.canvas._h - thisGraph.rectH)) {
+			} else if (d.y > thisGraph.canvas._h - thisGraph.rectH) {
 				thisGraph.canvas._h = d.y + thisGraph.rectH;
 				thisGraph.svg.attr('height', thisGraph.canvas._h);
 				$('#svgbox').scrollTop(thisGraph.canvas._h);
 			}
 			thisGraph.update();
 		}
-
 	}
-
 };
 Graphic.prototype.dragMoveEnd = function (d) {
 	var thisGraph = this;
-}
+};
 Graphic.prototype.mouseDownNode = function (node, d) {
 	d3.event.stopPropagation();
 	var thisGraph = this;
 	if (thisGraph.state.lineFlag) {
 		//		console.log('source');
 		thisGraph.state.sNode = d;
-		thisGraph.dragLine.classed('hidden', false)
-			.attr('d', 'M' + (d.x + thisGraph.rectW / 2) + ',' + (d.y + thisGraph.rectH / 2) + 'L' + (d.x + thisGraph.rectW / 2) + ',' + (d.y + thisGraph.rectH / 2));
+		thisGraph.dragLine.classed('hidden', false).attr('d', 'M' + (d.x + thisGraph.rectW / 2) + ',' + (d.y + thisGraph.rectH / 2) + 'L' + (d.x + thisGraph.rectW / 2) + ',' + (d.y + thisGraph.rectH / 2));
 	}
-
 };
 
 Graphic.prototype.mouseUpNode = function (node, d) {
@@ -748,12 +630,14 @@ Graphic.prototype.mouseUpNode = function (node, d) {
 	var thisGraph = this;
 	if (thisGraph.state.lineFlag) {
 		if (d.type == 'S') {
-			$.messager.alert('Sorry', 'START节点只能作为一个作业的开始!');
+			$.messager.alert('Sorry', 'Start node can only be used as the start of a job!');
 		} else {
 			thisGraph.state.tNode = d;
 			thisGraph.dragLine.classed("hidden", true);
 			if (thisGraph.state.sNode && thisGraph.state.sNode !== thisGraph.state.tNode) {
-				var edges = thisGraph.edges, sNode = thisGraph.state.sNode, tNode = thisGraph.state.tNode;
+				var edges = thisGraph.edges,
+				    sNode = thisGraph.state.sNode,
+				    tNode = thisGraph.state.tNode;
 				var isRepeat = false;
 				for (var i = 0; i < edges.length; i++) {
 					var hop = edges[i];
@@ -765,7 +649,8 @@ Graphic.prototype.mouseUpNode = function (node, d) {
 				}
 
 				if (!isRepeat) {
-					var enableds = 'Y', conditionals = 'S';
+					var enableds = 'Y',
+					    conditionals = 'S';
 					if (thisGraph.state.sNode.type == 'S') {
 						conditionals = 'N';
 					}
@@ -777,28 +662,24 @@ Graphic.prototype.mouseUpNode = function (node, d) {
 					});
 					thisGraph.update();
 					thisGraph.state.sNode = null;
-
 				}
 				thisGraph.state.tNode = null;
 			}
 		}
-
-
 	}
 };
-
 
 Graphic.prototype.removeNodeFous = function () {
 	var thisGraph = this;
 	thisGraph.state.selectedNodes = [];
 	thisGraph.state.sNode = null;
 	thisGraph.circles.classed('s-selected', false);
-}
+};
 Graphic.prototype.removePathFous = function () {
 	var thisGraph = this;
 	thisGraph.state.selectedEdge = null;
 	thisGraph.paths.selectAll('path').classed('s-selected-path', false);
-}
+};
 
 //path单击 更改  ture  or  false
 Graphic.prototype.clickPathImg = function (d) {
@@ -811,7 +692,7 @@ Graphic.prototype.clickPathImg = function (d) {
 	thisGraph.update();
 
 	//console.log(thisGraph.edges);
-}
+};
 Graphic.prototype.selectPath = function (path, d) {
 	var thisGraph = this;
 	thisGraph.removeNodeFous();
@@ -821,8 +702,7 @@ Graphic.prototype.selectPath = function (path, d) {
 	thisGraph.paths.selectAll('path').filter(function (p) {
 		return p !== d;
 	}).classed('s-selected-path', false);
-
-}
+};
 //点击path置灰
 Graphic.prototype.clickPath = function (path, d) {
 	var thisGraph = this;
@@ -831,27 +711,19 @@ Graphic.prototype.clickPath = function (path, d) {
 
 	d.enabled = d.enabled == 'Y' ? 'N' : 'Y';
 	thisGraph.update();
-
-
-
-
-
-
-}
+};
 
 Graphic.prototype.keyDownSvg = function () {
 	var thisGraph = this;
-	switch (d3.event.keyCode) {
-	
-	}
-}
+	switch (d3.event.keyCode) {}
+};
 
 Graphic.prototype.pastNode = function () {
 	var thisGraph = this;
 	var _copynodes = thisGraph.state.copyNodes;
 	thisGraph.removeNodeFous();
 	if (_copynodes.length) {
-	
+
 		$.each(_copynodes, function (index) {
 			var thisnode = _copynodes[index];
 			var newnode = {
@@ -860,8 +732,8 @@ Graphic.prototype.pastNode = function () {
 				title: thisnode.title,
 				name: thisGraph.getNewOrder(thisnode.type, thisnode.title),
 				x: thisnode.x + 30,
-				y: thisnode.y + 30,
-			}
+				y: thisnode.y + 30
+			};
 			thisGraph.nodes.push(newnode);
 			thisGraph.state.selectedNodes.push(newnode);
 		});
@@ -873,7 +745,7 @@ Graphic.prototype.pastNode = function () {
 			}).classed('s-selected', true);
 		});
 	}
-}
+};
 Graphic.prototype.selectNodesStyle = function (addNodes) {
 	var thisGraph = this;
 	thisGraph.update();
@@ -886,8 +758,7 @@ Graphic.prototype.selectNodesStyle = function (addNodes) {
 			}).classed('s-selected', true);
 		});
 	}
-}
-
+};
 
 Graphic.prototype.mouseDownSvg = function () {
 	var thisGraph = this;
@@ -901,29 +772,29 @@ Graphic.prototype.mouseDownSvg = function () {
 	if (!thisGraph.state.lineFlag) {
 		thisGraph.state.selectedMore = true;
 		thisGraph.state.sel_startxy = d3.mouse(thisGraph.svg.node());
-		thisGraph.sel_rect = thisGraph.svgG.append('rect').classed('s-sel-rect', true)
-			.attr('width', '0')
-			.attr('height', '0')
-			.attr('_sel_rect', '');
+		thisGraph.sel_rect = thisGraph.svgG.append('rect').classed('s-sel-rect', true).attr('width', '0').attr('height', '0').attr('_sel_rect', '');
 	}
-}
+};
 Graphic.prototype.mouseMoveSvg = function () {
 	var thisGraph = this;
-	
-}
+};
 Graphic.prototype.mouseUpSvg = function (d) {
 	var thisGraph = this;
 	if (thisGraph.state.lineFlag) {
 		thisGraph.dragLine.classed("hidden", true);
-	} else if ((!thisGraph.state.lineFlag) && thisGraph.state.selectedMore) {
-		var sr_x = thisGraph.sel_rect.attr('x'), sr_y = thisGraph.sel_rect.attr('y');
-		var sr_wx = parseInt(sr_x) + parseInt(thisGraph.sel_rect.attr('width')), sr_hy = parseInt(sr_y) + parseInt(thisGraph.sel_rect.attr('height'));
+	} else if (!thisGraph.state.lineFlag && thisGraph.state.selectedMore) {
+		var sr_x = thisGraph.sel_rect.attr('x'),
+		    sr_y = thisGraph.sel_rect.attr('y');
+		var sr_wx = parseInt(sr_x) + parseInt(thisGraph.sel_rect.attr('width')),
+		    sr_hy = parseInt(sr_y) + parseInt(thisGraph.sel_rect.attr('height'));
 		var _nodes = thisGraph.nodes;
 		for (var i = 0; i < _nodes.length; i++) {
-			var _n = _nodes[i];	
-			var n_x = _n.x, n_y = _n.y;
-			var n_wx = n_x + thisGraph.rectW, n_hy = n_y + thisGraph.rectH;
-			if (n_x < sr_wx && n_wx > sr_x && n_hy > sr_y && n_y < sr_hy) {		
+			var _n = _nodes[i];
+			var n_x = _n.x,
+			    n_y = _n.y;
+			var n_wx = n_x + thisGraph.rectW,
+			    n_hy = n_y + thisGraph.rectH;
+			if (n_x < sr_wx && n_wx > sr_x && n_hy > sr_y && n_y < sr_hy) {
 				var an = thisGraph.circles.filter(function (cd) {
 					return cd.id == _n.id;
 				});
@@ -934,9 +805,7 @@ Graphic.prototype.mouseUpSvg = function (d) {
 		thisGraph.removeMultiple();
 
 		thisGraph.state.nodesDragFlag = false;
-
 	}
-
 };
 
 Graphic.prototype.removeMultiple = function () {
@@ -946,42 +815,41 @@ Graphic.prototype.removeMultiple = function () {
 		thisGraph.sel_rect.remove();
 		thisGraph.sel_rect = null;
 	}
-}
+};
 
 Graphic.prototype.getNodeId = function () {
 	var d = new Date().getTime();
 	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 		var r = (d + Math.random() * 16) % 16 | 0;
 		d = Math.floor(d / 16);
-		return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+		return (c == 'x' ? r : r & 0x3 | 0x8).toString(16);
 	});
 	return uuid;
-}
+};
 
 Graphic.prototype.getJobItemId = function () {
 	var d = new Date().getTime();
 	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 		var r = (d + Math.random() * 16) % 16 | 0;
 		d = Math.floor(d / 16);
-		return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+		return (c == 'x' ? r : r & 0x3 | 0x8).toString(16);
 	});
 	uuid = uuid.replace(new RegExp("-", "gm"), "");
 	return uuid;
-}
+};
 
 Graphic.prototype.zoomed = function () {
 	//console.log('缩放中。。。');
 	var thisGraph = this;
-	thisGraph.svgG
-		.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
-}
+	thisGraph.svgG.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+};
 // 连线右键菜单的显示与隐藏
 //如果传入的xmlDoc为空，新建一个完整的xmlDoc
 Graphic.prototype.createXmlDoc = function () {
 	var thisGraph = this;
 	thisGraph.item_id = thisGraph.getJobItemId();
 	var ojob = {
-		name: thisGraph.name || '',   //新建作业+作业计数器  （job页面产生，接口传入）
+		name: thisGraph.name || '', //新建作业+作业计数器  （job页面产生，接口传入）
 		type: 'S',
 		item_id: thisGraph.item_id,
 		description: '',
@@ -992,20 +860,20 @@ Graphic.prototype.createXmlDoc = function () {
 		canvas_w: thisGraph.canvas._w,
 
 		nodes: thisGraph.nodes,
-		edges: thisGraph.edges,
+		edges: thisGraph.edges
 	};
 
 	var xmlDoc;
 	try //Internet Explorer
 	{
 		xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-	}
-	catch (e) {
+	} catch (e) {
 		try //Firefox, Mozilla, Opera, etc.
 		{
 			xmlDoc = document.implementation.createDocument("", "", null);
+		} catch (e) {
+			alert(e.message);
 		}
-		catch (e) { alert(e.message) }
 	}
 	var newPI = xmlDoc.createProcessingInstruction("xml", 'version=\"1.0\" encoding=\"utf-8\"');
 	xmlDoc.appendChild(newPI);
@@ -1033,7 +901,6 @@ Graphic.prototype.createXmlDoc = function () {
 	var t_canvas_w = xmlDoc.createTextNode(ojob.canvas_w);
 	var t_canvas_h = xmlDoc.createTextNode(ojob.canvas_h);
 
-
 	j_name.appendChild(t_name);
 	j_type.appendChild(t_type);
 	j_item_id.appendChild(t_item_id);
@@ -1043,8 +910,6 @@ Graphic.prototype.createXmlDoc = function () {
 	j_parallelism_count.appendChild(t_parallelism_count);
 	j_canvas_w.appendChild(t_canvas_w);
 	j_canvas_h.appendChild(t_canvas_h);
-
-
 
 	job.appendChild(j_name);
 	job.appendChild(j_type);
@@ -1065,7 +930,7 @@ Graphic.prototype.createXmlDoc = function () {
 	var sXML = oSerializer.serializeToString(xmlDoc);
 	//console.log(sXML);
 	return sXML;
-}
+};
 //更新job的xmlDoc
 Graphic.prototype.updateXmlDoc = function () {
 	var thisGraph = this;
@@ -1083,7 +948,7 @@ Graphic.prototype.updateXmlDoc = function () {
 		canvas_h: thisGraph.canvas._h,
 		canvas_w: thisGraph.canvas._w,
 		nodes: thisGraph.nodes,
-		edges: thisGraph.edges,
+		edges: thisGraph.edges
 	};
 	//console.log(thisGraph.xmlDoc);
 
@@ -1123,7 +988,6 @@ Graphic.prototype.updateXmlDoc = function () {
 		var xloc = xmlDoc.createElement('xloc');
 		var yloc = xmlDoc.createElement('yloc');
 		var item_id;
-
 
 		var t_name = xmlDoc.createTextNode(node.name);
 		var t_type = xmlDoc.createTextNode(node.type);
@@ -1243,15 +1107,14 @@ Graphic.prototype.updateXmlDoc = function () {
 
 	thisGraph.xmlDoc = sXML;
 	return sXML;
-}
+};
 
 Graphic.prototype.reappearXmlDoc = function () {
 	var thisGraph = this;
 	thisGraph.nodes = [];
 	thisGraph.edges = [];
 
-	if (thisGraph.xmlDoc || (thisGraph.xmlDoc != '')) {
-
+	if (thisGraph.xmlDoc || thisGraph.xmlDoc != '') {
 
 		var xmlDoc = thisGraph.getXmlDocs(thisGraph.xmlDoc);
 		var graphxml_name = xmlDoc.getElementsByTagName('name')[0];
@@ -1272,7 +1135,6 @@ Graphic.prototype.reappearXmlDoc = function () {
 			thisGraph.description = '';
 		}
 
-
 		var xml_canvas_w = xmlDoc.getElementsByTagName('canvas_w')[0];
 		if (xml_canvas_w.childNodes[0]) {
 			var re_canvas_w = xml_canvas_w.childNodes[0].nodeValue;
@@ -1283,7 +1145,6 @@ Graphic.prototype.reappearXmlDoc = function () {
 			var re_canvas_h = xml_canvas_h.childNodes[0].nodeValue;
 			thisGraph.canvas._h = thisGraph.canvas._h < re_canvas_h ? re_canvas_h : thisGraph.canvas._h;
 		}
-
 
 		var nodesXml = xmlDoc.getElementsByTagName("entry");
 		for (var i = 0; i < nodesXml.length; i++) {
@@ -1302,10 +1163,9 @@ Graphic.prototype.reappearXmlDoc = function () {
 			var titles = '';
 			//此时可以忽略title
 			/*var xml_title = nodesXml[i].getElementsByTagName('title')[0];
-			if(xml_title.childNodes[0]){
-				titles = xml_title.childNodes[0].nodeValue;
-			}*/
-
+   if(xml_title.childNodes[0]){
+   	titles = xml_title.childNodes[0].nodeValue;
+   }*/
 
 			var xlocation = 50;
 			var xml_xlocation = nodesXml[i].getElementsByTagName('xloc')[0];
@@ -1318,13 +1178,13 @@ Graphic.prototype.reappearXmlDoc = function () {
 			if (xml_start_time && xml_start_time.childNodes[0]) {
 				start_time = xml_start_time.childNodes[0].nodeValue;
 			} else {
-				start_time = ''
+				start_time = '';
 			}
 			var xml_end_time = nodesXml[i].getElementsByTagName('end_time')[0];
 			if (xml_end_time && xml_end_time.childNodes[0]) {
 				end_time = xml_end_time.childNodes[0].nodeValue;
 			} else {
-				end_time = ''
+				end_time = '';
 			}
 
 			//任务编号
@@ -1332,7 +1192,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 			if (xml_task_no) {
 				task_no = xml_task_no.childNodes[0].nodeValue;
 			} else {
-				task_no = ''
+				task_no = '';
 			}
 
 			//任务名称
@@ -1340,7 +1200,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 			if (xml_task_name) {
 				task_name = xml_task_name.childNodes[0].nodeValue;
 			} else {
-				task_name = ""
+				task_name = "";
 			}
 
 			//执行时长
@@ -1348,7 +1208,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 			if (xml_time_length && xml_time_length.childNodes[0]) {
 				time_length = xml_time_length.childNodes[0].nodeValue;
 			} else {
-				time_length = ""
+				time_length = "";
 			}
 
 			//返回信息
@@ -1356,7 +1216,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 			if (xml_result_mess) {
 				result_mess = xml_result_mess.childNodes[0].nodeValue;
 			} else {
-				result_mess = ""
+				result_mess = "";
 			}
 
 			var ylocation = 50;
@@ -1376,7 +1236,6 @@ Graphic.prototype.reappearXmlDoc = function () {
 					}
 				}
 			}
-
 
 			var node = {};
 
@@ -1403,7 +1262,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 					time_length: time_length,
 					result_mess: result_mess
 
-				}
+				};
 			} else if (types == 'F') {
 				var xml_file_name = nodesXml[i].getElementsByTagName('file-name')[0];
 				var file_names = '';
@@ -1426,7 +1285,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 					task_name: task_name,
 					time_length: time_length,
 					result_mess: result_mess
-				}
+				};
 			} else if (types == 'I') {
 				var xml_return_message = nodesXml[i].getElementsByTagName('return-message')[0];
 				var return_messages = '';
@@ -1448,7 +1307,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 					task_name: task_name,
 					time_length: time_length,
 					result_mess: result_mess
-				}
+				};
 			} else if (types == 'G') {
 				var xml_wait_time = nodesXml[i].getElementsByTagName('wait-time')[0];
 				var wait_times = '';
@@ -1461,7 +1320,6 @@ Graphic.prototype.reappearXmlDoc = function () {
 				if (xml_time_unit.childNodes[0]) {
 					time_units = xml_time_unit.childNodes[0].nodeValue;
 				}
-
 
 				node = {
 					id: thisGraph.getNodeId(),
@@ -1479,7 +1337,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 					task_name: task_name,
 					time_length: time_length,
 					result_mess: result_mess
-				}
+				};
 			} else if (types == 'C') {
 				var xml_variable_name = nodesXml[i].getElementsByTagName('variable-name')[0];
 				var variable_name = '';
@@ -1507,7 +1365,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 
 				var xml_operation = nodesXml[i].getElementsByTagName('operation')[0];
 				var operation = '';
-				if (typeof (xml_operation) != "undefined" && xml_operation.childNodes[0]) {
+				if (typeof xml_operation != "undefined" && xml_operation.childNodes[0]) {
 					operation = xml_operation.childNodes[0].nodeValue;
 				}
 
@@ -1532,7 +1390,6 @@ Graphic.prototype.reappearXmlDoc = function () {
 					result_mess: result_mess
 
 				};
-
 			} else if (types == 'S') {
 				node = {
 					id: thisGraph.getNodeId(),
@@ -1548,7 +1405,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 					task_name: task_name,
 					time_length: time_length,
 					result_mess: result_mess
-				}
+				};
 			} else {
 				var item_ids = '';
 				var xml_item_id = nodesXml[i].getElementsByTagName('item_id')[0];
@@ -1570,7 +1427,7 @@ Graphic.prototype.reappearXmlDoc = function () {
 					task_name: task_name,
 					time_length: time_length,
 					result_mess: result_mess
-				}
+				};
 			}
 
 			thisGraph.nodes.push(node);
@@ -1603,15 +1460,12 @@ Graphic.prototype.reappearXmlDoc = function () {
 				target: target,
 				enabled: enableds,
 				conditional: conditionals
-			}
+			};
 
 			thisGraph.edges.push(edge);
 		}
-	} else {
-
-	}
-}
-
+	} else {}
+};
 
 Graphic.prototype.getXmlDocs = function (text) {
 	var xmlDoc;
@@ -1620,17 +1474,17 @@ Graphic.prototype.getXmlDocs = function (text) {
 		xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
 		xmlDoc.async = "false";
 		xmlDoc.loadXML(text);
-	}
-	catch (e) {
+	} catch (e) {
 		try //Firefox, Mozilla, Opera, etc.
 		{
 			var parser = new DOMParser();
 			xmlDoc = parser.parseFromString(text, "text/xml");
+		} catch (e) {
+			alert(e.message);
 		}
-		catch (e) { alert(e.message) }
 	}
 	return xmlDoc;
-}
+};
 
 Graphic.prototype.getNewOrder = function (types, titles) {
 	var thisGraph = this;
@@ -1656,22 +1510,22 @@ Graphic.prototype.getNewOrder = function (types, titles) {
 		}
 	}
 	return i + '';
-}
+};
 
 //导入任务按照编号命名
 Graphic.prototype.getImportTaskName = function (taskNumber) {
 	var thisGraph = this;
 	var nodes = thisGraph.nodes;
 
-	for (var j = 0; j < nodes.length; j++) {   // 导入任务名称去重
+	for (var j = 0; j < nodes.length; j++) {
+		// 导入任务名称去重
 		if (nodes[j].name == taskNumber) {
 			taskNumber += '2';
 			continue;
 		}
 	}
 	return taskNumber;
-}
-
+};
 
 //导入任务按照数组生成连线
 Graphic.prototype.getImportTaskHop = function (addNodes, hopType) {
@@ -1683,20 +1537,19 @@ Graphic.prototype.getImportTaskHop = function (addNodes, hopType) {
 				target: addNodes[i],
 				enabled: 'Y',
 				conditional: hopType
-			}
+			};
 			thisGraph.edges.push(hop);
 		}
 	}
 	//thisGraph.nodes = $.merge( thisGraph.nodes, addNodes);
-}
-
+};
 
 //初始化画布，根据xml
 Graphic.prototype.initCanvas = function () {
 	var thisGraph = this;
 	thisGraph.svg.attr('height', thisGraph.canvas._h);
 	thisGraph.svg.attr('width', thisGraph.canvas._w);
-}
+};
 
 //弹出窗口相关数据和按钮点击功能
 Graphic.prototype.saveJobFlowXmlDoc = function () {
@@ -1705,7 +1558,7 @@ Graphic.prototype.saveJobFlowXmlDoc = function () {
 	thisGraph.name = jobName;
 	thisGraph.description = $('#jf_jobDe_input').val();
 	$('#jobFlow_xml').val(thisGraph.updateXmlDoc());
-}
+};
 
 //不同组件的节点弹出窗口方法
 Graphic.prototype.nodeDblclick = function (d) {
@@ -1715,9 +1568,11 @@ Graphic.prototype.nodeDblclick = function (d) {
 	//根据d的type弹出不同的form
 	var type = d.type;
 
-	if (type == 'S') {//开始组件
+	if (type == 'S') {
+		//开始组件
 		return false;
-	} else if (type == 'L') {//等待完成组件
+	} else if (type == 'L') {
+		//等待完成组件
 		$(thisGraph.formbox + type).window('open');
 		$('#i_nodeIdL').val(d.id);
 		$(".validatebox-tip").remove();
@@ -1727,16 +1582,17 @@ Graphic.prototype.nodeDblclick = function (d) {
 			var i = d.lock;
 			var inputList = document.getElementsByName("lockOption");
 			for (var x = 0; x < inputList.length; x++) {
-				inputList[x].checked = false;  //取消选中
+				inputList[x].checked = false; //取消选中
 			}
 			var input = document.getElementById("input" + i);
 			input.checked = true;
-		} else {//默认选中第二个 
+		} else {
+			//默认选中第二个 
 			var input = document.getElementById("input2");
-			input.checked = true;  //选中第二个　
+			input.checked = true; //选中第二个　
 		}
-
-	} else if (type == 'I') {//中止组件
+	} else if (type == 'I') {
+		//中止组件
 		$(thisGraph.formbox + type).window('open');
 		$('#node_edit' + type).form('clear');
 		$('#i_nodeIdI').val(d.id);
@@ -1747,8 +1603,8 @@ Graphic.prototype.nodeDblclick = function (d) {
 		if (d.return_message != '') {
 			$('#i_return_message').val(d.return_message);
 		}
-
-	} else if (type == 'G') {//等待一定时间组件
+	} else if (type == 'G') {
+		//等待一定时间组件
 		$(thisGraph.formbox + type).window('open');
 		//$('#node_edit' + type).form('clear');
 		$('#i_nodeIdG').val(d.id);
@@ -1762,9 +1618,8 @@ Graphic.prototype.nodeDblclick = function (d) {
 		} else {
 			$('#i_wait_time').val('0');
 		}
-
-
-	} else if (type == 'C') {  //条件判断组件--弹出条件校验窗口
+	} else if (type == 'C') {
+		//条件判断组件--弹出条件校验窗口
 		$(thisGraph.formbox + type).window('open');
 		$('#node_edit' + type).form('clear');
 		$('#i_nodeIdC').val(d.id);
@@ -1777,9 +1632,8 @@ Graphic.prototype.nodeDblclick = function (d) {
 		$('#i_variable_type').val(d.variable_type);
 		$('#i_variable_value').val(d.variable_value);
 		$('#i_success_condition').val(d.success_condition);
-
-
-	} else { //任务组件
+	} else {
+		//任务组件
 		$(thisGraph.formbox + type).window('open');
 		$('#node_edit' + type).form('clear');
 		$(".validatebox-tip").remove();
@@ -1796,7 +1650,7 @@ Graphic.prototype.nodeDblclick = function (d) {
 			textField: 'name',
 			editable: true,
 			url: 'job/taskList.action?type=' + d.type,
-			onLoadSuccess: function () {
+			onLoadSuccess: function onLoadSuccess() {
 
 				var data = nodeItemIdDom.combobox('getData');
 				if (data.length > 0) {
@@ -1806,30 +1660,25 @@ Graphic.prototype.nodeDblclick = function (d) {
 		});
 		formDom.form('myLoad', data);
 	}
-
-
-
-
-}
-
+};
 
 Graphic.prototype.nodePreContextMenu = function (node, d) {
 	var thisGraph = this;
 	if (thisGraph.state.selectedNodes.length <= 1) {
 		thisGraph.selectNode(node, d);
 	}
-}
+};
 
 Graphic.prototype.pathM_true_click = function () {
 	var thisGraph = this;
 	thisGraph.state.selectedEdge.conditional = 'S';
 	thisGraph.update();
-}
+};
 Graphic.prototype.pathM_false_click = function () {
 	var thisGraph = this;
 	thisGraph.state.selectedEdge.conditional = 'F';
 	thisGraph.update();
-}
+};
 Graphic.prototype.pathM_reverse_click = function () {
 	var thisGraph = this;
 	var source = thisGraph.state.selectedEdge.target;
@@ -1843,30 +1692,31 @@ Graphic.prototype.pathM_reverse_click = function () {
 	thisGraph.state.selectedEdge.source = source;
 	thisGraph.state.selectedEdge.target = target;
 	thisGraph.update();
-}
+};
 
 Graphic.prototype.pathM_enabled_click = function () {
 	var thisGraph = this;
 	var en = thisGraph.state.selectedEdge.enabled;
 	thisGraph.state.selectedEdge.enabled = en == 'Y' ? 'N' : 'Y';
 	thisGraph.update();
-}
+};
 
 Graphic.prototype.pathM_unconditional_click = function () {
 	var thisGraph = this;
 	thisGraph.state.selectedEdge.conditional = 'N';
 	thisGraph.update();
-}
+};
 
 //鼠标移入菜单的显示与隐藏
 Graphic.prototype.rightmenu1 = function (ele, d) {
 
 	var thisGraph = this;
 
-	var height_ = $("#svgbox").height()
+	var height_ = $("#svgbox").height();
 
-	var _y = d3.event.clientY, _x = d3.event.clientX;
-	if ((height_ - _y) < 200) {
+	var _y = d3.event.clientY,
+	    _x = d3.event.clientX;
+	if (height_ - _y < 200) {
 		_y = _y - 20;
 	}
 	var maxw = $('#svgbox').width() - ele.width();
@@ -1875,12 +1725,10 @@ Graphic.prototype.rightmenu1 = function (ele, d) {
 		if (delay == '0') {
 			ele.menu('show', {
 				left: _x + 30,
-				top: _y + 30,
+				top: _y + 30
 
 			});
 		}
-	}, 500)
+	}, 500);
 	return false;
-}
-
-
+};

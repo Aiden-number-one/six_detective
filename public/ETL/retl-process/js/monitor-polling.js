@@ -17,7 +17,7 @@ function init_graph(index) {
 					graphic.reappearXmlDoc();
 					graphic.initCanvas();
 					graphic.update();
-					if(window.setIntervalVarIframe){
+					if (window.setIntervalVarIframe) {
 						clearInterval(window.setIntervalVarIframe);
 					}
 					window.setIntervalVarIframe = setInterval(pollingSvg, 1000);
@@ -27,8 +27,7 @@ function init_graph(index) {
 			} else {
 				alert('请求全量xml出错');
 			}
-		} else {
-		}
+		} else {}
 	});
 }
 
@@ -49,17 +48,16 @@ function pollingSvg() {
 					graphic.update();
 				}
 			}
-		} else {
-		}
+		} else {}
 	});
 }
 
 function GetQueryString(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 	var r = window.location.search.substr(1).match(reg);
-	if (r != null) return unescape(r[2]); return null;
+	if (r != null) return unescape(r[2]);return null;
 }
 
 $(document).ready(function () {
 	init_graph();
-})
+});

@@ -206,6 +206,8 @@ class EmailParameter extends Component {
                 onOk={this.handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={this.handleCancel}
+                cancelText={formatMessage({ id: 'app.common.cancel' })}
+                okText={formatMessage({ id: 'app.common.save' })}
               >
                 <p>All of you change have been saved</p>
               </Modal>

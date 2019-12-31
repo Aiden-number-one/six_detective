@@ -375,9 +375,9 @@ export default class ModifyUser extends Component {
           }}
         >
           <Col>
-            <Button onClick={this.onCancel}>CANCEL</Button>
+            <Button onClick={this.onCancel}>{formatMessage({ id: 'app.common.cancel' })}</Button>
             <Button type="primary" onClick={this.onSave} style={{ marginLeft: '10px' }}>
-              SAVE
+              {formatMessage({ id: 'app.common.save' })}
             </Button>
           </Col>
         </Row>
