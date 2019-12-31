@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-24 16:04:36
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 09:49:19
+ * @LastEditTime : 2019-12-30 19:14:42
  */
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -22,6 +22,11 @@ export const epColumns = [
 ];
 
 export const proudctColumns = [
+  {
+    dataIndex: 'TRADE_DATAE',
+    title: formatMessage({ id: 'alert-center.trade-date' }),
+    render: text => moment(text).format(dateFormat),
+  },
   {
     dataIndex: 'PRODUCT_CODE',
     title: formatMessage({ id: 'alert-center.product-code' }),

@@ -1,9 +1,123 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Drawer, Form, Input, Upload, Icon, Button } from 'antd';
+import { Drawer, Form, Input, Upload, Icon, Button, Table } from 'antd';
 import styles from '../index.less';
 
+const { Column } = Table;
 const isLt5M = size => size / 1024 / 1024 < 5;
+
+const data = [];
+// eslint-disable-next-line no-plusplus
+for (let i = 0; i < 100; i++) {
+  data.push({
+    key: i.toString(),
+    name: `Edrward ${i}`,
+    age: 32,
+    address: `London Park no. ${i}`,
+  });
+}
+const EditableContext = React.createContext();
+
+function EditableCell({ editing, dataIndex, title, record, children, ...restProps }) {
+  return (
+    <EditableContext.Consumer>
+      {({ getFieldDecorator }) => (
+        <td {...restProps}>
+          {editing ? (
+            <Form.Item style={{ margin: 0 }}>
+              {getFieldDecorator(dataIndex, {
+                rules: [
+                  {
+                    required: true,
+                    message: `Please Input ${title}!`,
+                  },
+                ],
+                initialValue: record[dataIndex],
+              })(<Input />)}
+            </Form.Item>
+          ) : (
+            children
+          )}
+        </td>
+      )}
+    </EditableContext.Consumer>
+  );
+}
+
+function EditableTable({ depart, form }) {
+  const [editKey, setEditKey] = useState('');
+
+  return (
+    <EditableContext.Provider value={form}>
+      <Table
+        bordered
+        rowKey="extendKey"
+        dataSource={depart.extendInfo}
+        components={{
+          body: {
+            cell: EditableCell,
+          },
+        }}
+      >
+        <Column
+          title="参数ID"
+          dataIndex="extendKey"
+          width="40"
+          onCell={record => ({
+            record,
+            dataIndex: 'extendKey',
+            title: '参数ID',
+            editing: editKey === record.extendKey,
+          })}
+        />
+        <Column
+          title="参数名称"
+          dataIndex="extendKeyName"
+          onCell={record => ({
+            record,
+            dataIndex: 'extendKeyName',
+            editing: editKey === record.extendKey,
+          })}
+        />
+        <Column
+          title="值"
+          dataIndex="extendValue"
+          width="40"
+          onCell={record => ({
+            record,
+            dataIndex: 'extendValue',
+            editing: editKey === record.extendKey,
+          })}
+        />
+        <Column
+          title="说明"
+          dataIndex="remark"
+          onCell={record => ({
+            record,
+            dataIndex: 'remark',
+            editing: editKey === record.extendKey,
+          })}
+        />
+        <Column
+          title="操作"
+          dataIndex="action"
+          width="14%"
+          render={(_text, record) => {
+            const isEditable = editKey === record.extendKey;
+            return isEditable ? (
+              <span>
+                <EditableContext.Consumer>{() => <a>保存</a>}</EditableContext.Consumer>
+                <a onClick={() => setEditKey('')}>取消</a>
+              </span>
+            ) : (
+              <a onClick={() => setEditKey(record.extendKey)}>编辑</a>
+            );
+          }}
+        />
+      </Table>
+    </EditableContext.Provider>
+  );
+}
 
 function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
   const { getFieldDecorator, validateFields } = form;
@@ -26,7 +140,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
 
   return (
     <Drawer
-      title={<FormattedMessage id="data-import.market.manual-upload" />}
+      title={<FormattedMessage id="data-import.new-account.manual-upload" />}
       width={320}
       closable={false}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
@@ -34,16 +148,6 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
       onClose={handleCancel}
     >
       <Form className={styles['modal-form']}>
-        <Form.Item label={<FormattedMessage id="data-import.submitter-code" />}>
-          {getFieldDecorator('submitterCode', {
-            rules: [
-              {
-                required: true,
-                message: 'Please input submitter code!',
-              },
-            ],
-          })(<Input placeholder="please input submitter code" />)}
-        </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
@@ -87,6 +191,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             </Upload>,
           )}
         </Form.Item>
+        <EditableTable />
       </Form>
       <div className={styles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
