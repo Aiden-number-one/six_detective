@@ -2,7 +2,7 @@
  * @Description: index.html
  * @Author: mus
  * @Date: 2019-08-28 16:13:01
- * @LastEditTime : 2019-12-27 18:11:55
+ * @LastEditTime : 2019-12-31 16:49:00
  * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  -->
@@ -17,10 +17,11 @@
     />
     <title>HKEX</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-    <link href="/xspreadsheet/xspreadsheet.937421.css" rel="stylesheet"></head>
+    <link href="/xspreadsheet/xspreadsheet.937421.css" rel="stylesheet" />
   </head>
   <body>
     <noscript>Sorry, we need js to run correctly!</noscript>
+
     <div id="root">
       <style>
         .page-loading-warp {
@@ -170,9 +171,24 @@
         </div>
       </div>
     </div>
+    <script>
+      /**
+       * 检测浏览器环境是否需要 polyfill
+       * modern browser 不需要添加 polyfill.min.js 避免多余的代码
+       * 只能用 var, 因为 ie10- 不支持 const let
+       */
+      var modernBrowser = 'assign' in Object && 'Promise' in window;
+      if (!modernBrowser) {
+        var scriptEle = document.createElement('script');
+        scriptEle.async = false;
+        scriptEle.src = '/lib/polyfill.min.js';
+        document.head.appendChild(scriptEle);
+      }
+    </script>
+
     <script src="/xspreadsheet/layDateFile/laydate/laydate.js"></script>
     <script src="/js/kjax.des.js"></script>
-    <script src="/xspreadsheet/xspreadsheet.cfa23e.js"></script>
+    <script src="/xspreadsheet/xspreadsheet.7694d9.js"></script>
     <script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
     <!-- <script src="https://cdn.bootcss.com/react/16.10.2/umd/react.development.js"></script>
     <script src="https://cdn.bootcss.com/react-dom/16.10.2/umd/react-dom.development.js"></script> -->

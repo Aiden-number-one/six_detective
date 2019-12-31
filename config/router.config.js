@@ -27,8 +27,8 @@ export default [
       {
         path: '/',
         name: 'Homepage',
-        component: './Monitor/Monitor',
-        // component: './HomePage/HomePage',
+        // component: './Monitor/Monitor',
+        component: './HomePage/HomePage',
       },
       {
         path: '/homepage',

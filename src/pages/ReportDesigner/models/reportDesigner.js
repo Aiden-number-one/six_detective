@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-28 17:10:22
+ * @LastEditTime : 2019-12-30 20:54:13
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -22,6 +22,15 @@ export default {
     dataSetPrivateList: [], // 私有数据集
   },
   reducers: {
+    // 删除私有数据集相关
+    deleteDataSetPrivate(state, action) {
+      return {
+        ...state,
+        dataSetPrivateList: state.dataSetPrivateList.filter(
+          value => value.dataset_id !== action.payload,
+        ),
+      };
+    },
     // 设置报表模板的JSON串
     setReportTemplateContent(state, action) {
       return {
