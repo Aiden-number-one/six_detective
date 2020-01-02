@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2019-12-23 14:21:23
+ * @LastEditTime : 2020-01-02 10:00:24
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -155,6 +155,7 @@ class AddDataSet extends PureComponent {
       type: 'sqlDataSource/setVariableList',
       payload: datasetParams,
     });
+    this.toggleModal('paramSetting');
   };
 
   // 刷新数据源表列表
