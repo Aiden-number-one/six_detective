@@ -105,7 +105,6 @@ function ProcessDetail({
       });
       if (!isErr) return;
     }
-    console.log('(nextUsers.length--->', nextUsers);
     if (nextUsers.length < 1) {
       submitOrApproveTask(type);
     } else {

@@ -217,9 +217,9 @@ function ProcessList({
         const someNoClaim = items.find(item => item.ownerId !== loginName);
         if (someNoClaim) {
           if (items.length > 1) {
-            throw new Error('Some tasks have not been claimed, please claim them and try again');
+            throw new Error('Some tasks has not been claimed, please claim them and try again');
           }
-          throw new Error('The task have not been claimed, please claim it and try again');
+          throw new Error('The task has not been claimed, please claim it and try again');
         } else {
           setVisible(true);
         }
