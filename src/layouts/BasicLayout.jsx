@@ -47,18 +47,27 @@ const BasicLayout = props => {
    * constructor
    */
   const [openKeys, setOpenKeys] = useState([]);
+  const [newMenuData, setNewMenuData] = useState([]);
 
   // const listenClose = () => {
   //   window.localStorage.clear();
   // }
 
   useEffect(() => {
+    dispatch({
+      type: 'menu/getMenuData',
+      callback: m => {
+        // newMenuData = Object.assign([], menuData);
+        setNewMenuData(m);
+        console.log('menuData====', m, menuData);
+      },
+    });
+  }, []);
+
+  useEffect(() => {
     setLocale('en-US');
     // window.addEventListener('beforeunload', listenClose, false);
     if (dispatch) {
-      dispatch({
-        type: 'menu/getMenuData',
-      });
       dispatch({
         type: 'menu/getTaskCount',
         payload: {},
@@ -74,6 +83,7 @@ const BasicLayout = props => {
           // userAgent: window.navigator.userAgent,
         },
       });
+
       setInterval(() => {
         if (window.location.pathname !== '/login') {
           dispatch({
@@ -259,7 +269,7 @@ const BasicLayout = props => {
           );
         }}
         footerRender={footerRender}
-        menuDataRender={() => menuDataRender(menuData)}
+        menuDataRender={() => menuDataRender(newMenuData)}
         // menuDataRender={menuDataRender}
         formatMessage={formatMessage}
         rightContentRender={rightProps => <RightContent {...rightProps} />}
@@ -274,7 +284,7 @@ const BasicLayout = props => {
           openKeys,
           onOpenChange: openKeysNew => {
             const latestOpenKey = openKeysNew.slice(-1) ? openKeysNew.slice(-1)[0] : '';
-            if (menuData.map(value => value.page).indexOf(latestOpenKey) === -1) {
+            if (newMenuData.map(value => value.page).indexOf(latestOpenKey) === -1) {
               setOpenKeys(openKeysNew);
             } else {
               setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
