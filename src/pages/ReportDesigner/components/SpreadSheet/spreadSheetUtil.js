@@ -153,7 +153,7 @@ export function generateJson(spreadSheetData) {
                   currentCellProps.style['border-left-color'] = color;
                   currentCellProps.style['border-left-type'] = 'solid';
                 }
-                if (borderStyle === 'rigth') {
+                if (borderStyle === 'right') {
                   // 有边框
                   currentCellProps.style['border-right'] = `${'1px solid '}${color}`;
                   currentCellProps.style['border-right-color'] = color;
