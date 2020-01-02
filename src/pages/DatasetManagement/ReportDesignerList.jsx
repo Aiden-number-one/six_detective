@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2019-12-31 14:58:19
+ * @LastEditTime : 2019-12-31 17:46:01
  * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
@@ -132,7 +132,7 @@ export default class DatasetManagement extends PureComponent {
   // 数据源列表标题
   Title = () => (
     <span className={styles.titleBox}>
-      <span>DataSet Classify</span>
+      <span>Folder</span>
       <Icon
         type="plus"
         onClick={() => {

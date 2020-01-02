@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 18:53:34
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 19:49:40
+ * @LastEditTime : 2020-01-02 10:23:09
  */
 import moment from 'moment';
 
@@ -33,8 +33,8 @@ export const dateFormat = 'DD-MMM-YYYY';
 export const timeFormat = 'HH:mm:ss';
 export const timestampFormat = `${dateFormat} ${timeFormat}`;
 
-const yesterday = moment().subtract(1, 'days');
-const today = moment();
+export const yesterday = moment().subtract(1, 'days');
+export const today = moment();
 
 export const defaultDateRange = [yesterday, today];
 export const defaultMarket = ['HKFE', 'SEHK'];

@@ -19,10 +19,19 @@ export default props => {
   const [cellType, changeCellType] = useState('0');
   // 当前被选择的数据集
   const [dataset, changeDataset] = useState(undefined);
+  // 数据设置相关
+  const [dataSetting, changeDataSetting] = useState('group');
   // 根据被选择的数据集得到想对应的列
   // TODO: 如果，树那边的数据集被删掉，则右边已经设置的单元格怎么办？
   const currentDatasetObj = dataSetPrivateList.find(value => value.dataset_id === dataset);
   const currentColumn = currentDatasetObj ? currentDatasetObj.fields : [];
+  /**
+   * 表单值汇总
+   * cell: 单元格 elementType: 元素类型
+   * text: 单元格内容
+   * formula: 公式内容
+   * dataset:数据集 datacolumn: 数据集所对应的列 dataseting: 数据设置选择框 dataseting2: 数据设置选择框的副选择框 extension: 扩展方向
+   */
   return (
     <Content className={styles.content}>
       {/* 控件设置基本信息 */}
@@ -45,23 +54,23 @@ export default props => {
               label={<FormattedMessage id="report-designer.insertelement" />}
               {...formLayout}
             >
-              {getFieldDecorator('roleName', {
-                initialValue: '0',
+              {getFieldDecorator('elementType', {
+                initialValue: 'text',
               })(
                 <Select
                   onChange={e => {
                     changeCellType(e);
                   }}
                 >
-                  <Option value="0">Text</Option>
-                  <Option value="1">Formula</Option>
-                  <Option value="2">Data Column</Option>
+                  <Option value="text">Text</Option>
+                  <Option value="formula">Formula</Option>
+                  <Option value="column">Data Column</Option>
                 </Select>,
               )}
             </Form.Item>
             {/* 插入文本 */}
             {/* 文本 */}
-            {cellType === '0' && (
+            {cellType === 'text' && (
               <Form.Item label=" " {...formLayout}>
                 {getFieldDecorator('text', {})(<Input />)}
               </Form.Item>
@@ -69,7 +78,7 @@ export default props => {
 
             {/* 插入公式 */}
             {/* 公式 */}
-            {cellType === '1' && (
+            {cellType === 'formula' && (
               <Form.Item label=" " {...formLayout}>
                 {getFieldDecorator('formula', {})(<Input />)}
               </Form.Item>
@@ -77,7 +86,7 @@ export default props => {
 
             {/* 插入数据列 */}
             {/* 数据集 */}
-            {cellType === '2' && (
+            {cellType === 'column' && (
               <>
                 <Form.Item
                   label={<FormattedMessage id="report-designer.dataset" />}
@@ -120,33 +129,72 @@ export default props => {
                   label={<FormattedMessage id="report-designer.datasettings" />}
                   {...formLayout}
                 >
-                  {getFieldDecorator('roleName', {})(<Select />)}
-                </Form.Item>
-                {/* 数据设置2 */}
-                <Form.Item label=" " {...formLayout}>
-                  {getFieldDecorator('roleName', {})(<Select />)}
-                </Form.Item>
-                <Form.Item
-                  label={<FormattedMessage id="report-designer.extension" />}
-                  {...formLayout}
-                >
-                  {getFieldDecorator(
-                    'roleName',
-                    {},
-                  )(
-                    <Radio.Group defaultValue="a">
-                      <Radio.Button value="a">
-                        <IconFont type="icon-nodirection" />
-                      </Radio.Button>
-                      <Radio.Button value="b">
-                        <IconFont type="icon-zongxiang" />
-                      </Radio.Button>
-                      <Radio.Button value="c">
-                        <IconFont type="icon-hengxiang" />
-                      </Radio.Button>
-                    </Radio.Group>,
+                  {getFieldDecorator('dataseting', {
+                    initialValue: 'group',
+                  })(
+                    <Select
+                      onChange={value => {
+                        changeDataSetting(value);
+                      }}
+                    >
+                      <Option value="group">
+                        {<FormattedMessage id="report-designer.group" />}
+                      </Option>
+                      <Option value="list">{<FormattedMessage id="report-designer.list" />}</Option>
+                      <Option value="sum">{<FormattedMessage id="report-designer.sum" />}</Option>
+                    </Select>,
                   )}
                 </Form.Item>
+                {/* 数据设置2 */}
+                {dataSetting === 'group' && (
+                  <Form.Item label=" " {...formLayout}>
+                    {getFieldDecorator('groupdatasetting', {
+                      initialValue: 'normal',
+                    })(
+                      <Select>
+                        <Option value="normal">Normal</Option>
+                      </Select>,
+                    )}
+                  </Form.Item>
+                )}
+                {dataSetting === 'sum' && (
+                  <Form.Item label=" " {...formLayout}>
+                    {getFieldDecorator('sumsetting', {
+                      initialValue: 'none',
+                    })(
+                      <Select>
+                        <Option value="count">Count</Option>
+                        <Option value="average">Average</Option>
+                        <Option value="max">Max</Option>
+                        <Option value="min">Min</Option>
+                        <Option value="sun">Sum</Option>
+                        <Option value="none">None</Option>
+                      </Select>,
+                    )}
+                  </Form.Item>
+                )}
+                {dataSetting !== 'sum' && (
+                  <Form.Item
+                    label={<FormattedMessage id="report-designer.extension" />}
+                    {...formLayout}
+                  >
+                    {getFieldDecorator('extension', {
+                      initialValue: 'none',
+                    })(
+                      <Radio.Group defaultValue="a">
+                        <Radio.Button value="none">
+                          <IconFont type="icon-nodirection" />
+                        </Radio.Button>
+                        <Radio.Button value="down">
+                          <IconFont type="icon-zongxiang" />
+                        </Radio.Button>
+                        <Radio.Button value="right">
+                          <IconFont type="icon-hengxiang" />
+                        </Radio.Button>
+                      </Radio.Group>,
+                    )}
+                  </Form.Item>
+                )}
               </>
             )}
           </Form>
