@@ -296,9 +296,9 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             }
           />
           <Column
-            width="15%"
             align="center"
             dataIndex="alertName"
+            ellipsis
             title={
               <ColumnTitle
                 isNum={false}
@@ -307,7 +307,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
                 onSort={handleSort}
                 onCommit={handleCommit}
               >
-                <FormattedMessage id="alert-center.alert-type" />
+                <FormattedMessage id="alert-center.alert-name" />
               </ColumnTitle>
             }
           />
@@ -343,6 +343,13 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             align="center"
             dataIndex="userName"
             title={<FormattedMessage id="alert-center.owner" />}
+            render={text => {
+              if (text) {
+                const users = text.split(',');
+                return users.length > 1 ? 'Multiple' : text;
+              }
+              return text;
+            }}
           />
           <Column
             align="center"
@@ -350,8 +357,8 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             title={<FormattedMessage id="alert-center.status" />}
           />
           <Column
-            align="center"
             width="9%"
+            align="center"
             dataIndex="action"
             title={<FormattedMessage id="alert-center.actions" />}
             render={(text, record) => (

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-30 13:41:43
+ * @LastEditTime : 2020-01-02 10:56:10
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -176,6 +176,12 @@ export default {
     *fetchAlertItems({ payload }, { call, put }) {
       const { items, err } = yield call(getAlertItems, payload);
       if (err) {
+        yield put({
+          type: 'saveAlertItems',
+          payload: {
+            alertItems: [],
+          },
+        });
         throw new Error(err);
       }
 
@@ -190,6 +196,12 @@ export default {
       const { alertId } = payload;
       const { items, err } = yield call(getAlertComments, { alertId });
       if (err) {
+        yield put({
+          type: 'saveComments',
+          payload: {
+            comments: [],
+          },
+        });
         throw new Error(err);
       }
       yield put({
@@ -203,6 +215,12 @@ export default {
       const { alertId } = payload;
       const { items, err } = yield call(getAlertLogs, { alertId });
       if (err) {
+        yield put({
+          type: 'saveLogs',
+          payload: {
+            logs: [],
+          },
+        });
         throw new Error(err);
       }
       yield put({
@@ -215,6 +233,12 @@ export default {
     *fetchAssignUsers({ payload }, { call, put }) {
       const { items, err } = yield call(getAssignUsers, payload);
       if (err) {
+        yield put({
+          type: 'saveUsers',
+          payload: {
+            users: [],
+          },
+        });
         throw new Error(err);
       }
       yield put({

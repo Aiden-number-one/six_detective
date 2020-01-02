@@ -40,7 +40,7 @@ const footerRender = () => (
 );
 
 const BasicLayout = props => {
-  const { dispatch, children, settings, collapsed, menuData } = props;
+  const { dispatch, children, settings, collapsed, menuData, taskCount, alertCount } = props;
 
   // console.log('props=========', props);
   /**
@@ -60,6 +60,14 @@ const BasicLayout = props => {
         type: 'menu/getMenuData',
       });
       dispatch({
+        type: 'menu/getTaskCount',
+        payload: {},
+      });
+      dispatch({
+        type: 'menu/getAlertCount',
+        payload: {},
+      });
+      dispatch({
         type: 'login/getLoginStatus',
         payload: {
           // loginName: window.localStorage.currentUser,
@@ -67,13 +75,15 @@ const BasicLayout = props => {
         },
       });
       setInterval(() => {
-        dispatch({
-          type: 'login/getLoginStatus',
-          payload: {
-            // loginName: window.localStorage.currentUser,
-            // userAgent: window.navigator.userAgent,
-          },
-        });
+        if (window.location.pathname !== '/login') {
+          dispatch({
+            type: 'login/getLoginStatus',
+            payload: {
+              // loginName: window.localStorage.currentUser,
+              // userAgent: window.navigator.userAgent,
+            },
+          });
+        }
       }, 60000);
     }
   }, []);
@@ -89,34 +99,46 @@ const BasicLayout = props => {
     });
 
   const popoverContent = () => (
-    <div className={styles.popover}>
-      <div className={styles.popoverHeader}>
-        <p>Surveillacnce Dep.</p>
-        <p>thomaschow@hkex.com</p>
-      </div>
-      <div className={styles.popoverContent}>
-        <div className={styles.left}>
-          <div className={styles.imgBox}></div>
-          <span>Profile</span>
-        </div>
-        <div className={styles.right}>
-          <div className={styles.imgBox}></div>
-          <span>Setting</span>
-        </div>
-      </div>
-      <div className={styles.popoverFooter}>
-        <a
-          onClick={() => {
-            if (dispatch) {
-              dispatch({
-                type: 'login/logout',
-              });
-            }
-          }}
-        >
-          Sign Out
-        </a>
-      </div>
+    <div className={styles.popoverFooter}>
+      <a
+        onClick={() => {
+          if (dispatch) {
+            dispatch({
+              type: 'login/logout',
+            });
+          }
+        }}
+      >
+        <IconFont type="icon-signout" style={{ marginRight: 5 }} />
+        Sign Out
+      </a>
+    </div>
+  );
+
+  const infoContent = () => (
+    <div className={styles.infoContent}>
+      <a
+        onClick={() => {
+          router.push('/homepage/alert-center');
+        }}
+      >
+        <span>
+          <IconFont type="icon-alert" style={{ marginRight: 5 }} />
+          Alert Center
+        </span>
+        <span>({taskCount})</span>
+      </a>
+      <a
+        onClick={() => {
+          router.push('/homepage/Approval-Process-Center');
+        }}
+      >
+        <span>
+          <IconFont type="icon-approval" style={{ marginRight: 5 }} />
+          Approval Process Center
+        </span>
+        <span>({alertCount})</span>
+      </a>
     </div>
   );
 
@@ -145,14 +167,26 @@ const BasicLayout = props => {
       </div>
       <div className={styles.right}>
         <div className={styles.info}>
-          <Badge dot>
-            <IconFont type="icon-xiaoxi" className={styles.bell} />
-          </Badge>
+          <Popover
+            placement="bottomRight"
+            content={infoContent()}
+            trigger="click"
+            overlayClassName="taskinfo"
+          >
+            {(Number(taskCount) > 0 || Number(alertCount) > 0) && (
+              <Badge dot>
+                <IconFont type="icon-xiaoxi" className={styles.bell} />
+              </Badge>
+            )}
+            {Number(taskCount) === 0 && Number(alertCount) === 0 && (
+              <IconFont type="icon-xiaoxi" className={styles.bell} />
+            )}
+          </Popover>
         </div>
         <div className={styles.user}>
           <IconFont type="icon-usercircle" className={styles.avatar} />
           {/* <CustomizeSelectLang /> */}
-          <span title="Thomas Chow" className={styles.username}>
+          <span title={window.localStorage.loginName} className={styles.username}>
             {window.localStorage.loginName}
           </span>
           <Popover
@@ -258,4 +292,6 @@ export default connect(({ global, settings, menu }) => ({
   collapsed: global.collapsed,
   settings,
   menuData: menu.menuData,
+  taskCount: menu.taskCount,
+  alertCount: menu.alertCount,
 }))(BasicLayout);
