@@ -126,7 +126,7 @@ const BasicLayout = props => {
           <IconFont type="icon-alert" style={{ marginRight: 5 }} />
           Alert Center
         </span>
-        <span>({taskCount})</span>
+        <span>({alertCount})</span>
       </a>
       <a
         onClick={() => {
@@ -137,7 +137,7 @@ const BasicLayout = props => {
           <IconFont type="icon-approval" style={{ marginRight: 5 }} />
           Approval Process Center
         </span>
-        <span>({alertCount})</span>
+        <span>({taskCount})</span>
       </a>
     </div>
   );

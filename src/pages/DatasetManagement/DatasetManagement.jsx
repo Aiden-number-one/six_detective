@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2019-12-31 17:46:34
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-02 20:05:29
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -128,7 +128,7 @@ export default class DatasetManagement extends PureComponent {
   // 删除树节点
   handleDeleteTree = (e, nodeTree) => {
     this.setState({
-      drawerTitle: 'Delete DataSet Classify',
+      drawerTitle: 'Delete Folder',
     });
     this.operateType = 'DELETE';
     this.nodeTree = nodeTree;
@@ -138,7 +138,7 @@ export default class DatasetManagement extends PureComponent {
   // 修改树节点
   handleModifyTree = (e, nodeTree) => {
     this.setState({
-      drawerTitle: 'Edit DataSet Classify',
+      drawerTitle: 'Edit Folder',
     });
     this.operateType = 'EDIT';
     this.nodeTree = nodeTree;
@@ -148,7 +148,7 @@ export default class DatasetManagement extends PureComponent {
   // 新增树节点
   handleAddTree = (e, nodeTree) => {
     this.setState({
-      drawerTitle: 'ADD DataSet Classify',
+      drawerTitle: 'ADD Folder',
     });
     this.operateType = 'ADD';
     if (nodeTree) {
@@ -255,14 +255,6 @@ export default class DatasetManagement extends PureComponent {
     const { dispatch, activeFolderId } = this.props;
     const param = {};
     param.datasetId = this.record.datasetId;
-    param.datasetName = this.record.datasetName;
-    param.datasourceId = this.record.datasourceId;
-    param.datasourceName = this.record.datasourceName;
-    param.commandText = this.record.commandText;
-    param.datasetParams = this.record.datasetParams;
-    param.datasetFields = this.record.datasetFields;
-    param.datasetType = this.record.datasetType;
-    param.datasetIsDict = this.record.datasetIsDict;
     param.folderId = activeFolderId;
     dispatch({
       type: 'dataSet/operateDataSet',
@@ -369,6 +361,7 @@ export default class DatasetManagement extends PureComponent {
                     connectionId: record.datasourceId,
                     connectionName: record.datasourceName,
                     datasetId: record.datasetId,
+                    datasetType: record.datasetType,
                   },
                 });
               }}
@@ -379,7 +372,7 @@ export default class DatasetManagement extends PureComponent {
             <a
               onClick={() => {
                 this.record = record;
-                if (record.datasetParams && JSON.parse(record.datasetParams).length > 0) {
+                if (record.datasetParams && record.datasetParams.length > 0) {
                   this.toggleDrawer('paramSetting');
                 } else {
                   this.handleParamSetting();
