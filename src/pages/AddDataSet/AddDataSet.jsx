@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2019-12-23 14:21:23
+ * @LastEditTime : 2020-01-02 11:02:03
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -155,6 +155,7 @@ class AddDataSet extends PureComponent {
       type: 'sqlDataSource/setVariableList',
       payload: datasetParams,
     });
+    this.toggleModal('paramSetting');
   };
 
   // 刷新数据源表列表
@@ -329,11 +330,14 @@ class AddDataSet extends PureComponent {
         query: { datasetType },
       },
       variableList,
+      dataSourceList,
     } = this.props;
     dispatch({
       type: 'sqlDataSource/addDataSet',
       payload: {
-        datasourceId: this.connection_id,
+        datasourceId:
+          this.connection_id ||
+          (dataSourceList && dataSourceList[0] && dataSourceList[0].connectionId),
         datasourceName: this.connection_name,
         commandText: this.state.sql,
         datasetParams: JSON.stringify(variableList),

@@ -14,7 +14,16 @@ const { Sider } = Layout;
   cellPosition: formArea.cellPosition,
   dataSetPrivateList: reportDesigner.dataSetPrivateList,
 }))
-@Form.create()
+@Form.create({
+  onFieldsChange(props, changedFields, allFields) {
+    // 若修改form，则即使更新fields
+    console.log(allFields);
+    // const { dispatch } = props;
+    // dispatch({
+    //   type: '',
+    // });
+  },
+})
 export default class RigthSideBar extends PureComponent {
   state = {
     siderBarType: 'cell',
