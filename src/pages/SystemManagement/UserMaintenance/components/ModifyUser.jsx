@@ -51,6 +51,7 @@ class FormUser extends Component {
             })(
               <Input
                 placeholder={`Please Input ${formatMessage({ id: 'app.common.username' })}`}
+                autocomplete="off"
               />,
             )}
           </Form.Item>
