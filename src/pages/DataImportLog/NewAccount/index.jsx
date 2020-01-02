@@ -32,9 +32,19 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   function handlePageChange(page, pageSize) {
     dispatch({ type: 'newAccount/reload', payload: { page, pageSize, ...searchParams } });
   }
-  async function handleUpload(params) {
-    await dispatch({ type: 'newAccount/importByManual', payload: params });
-    setVisible(false);
+  async function handleUpload(fileList) {
+    const count = fileList.length;
+    console.log(count);
+
+    // dispatch({
+    //   type: 'newAccount/fileUpload',
+    //   payload: {
+    //     file,
+    //   },
+    // });
+    // dispatch({ type: 'newAccount/importByManual', payload: params });
+    // await dispatch({ type: 'newAccount/importByManual', payload: params });
+    // setVisible(false);
   }
   async function handleDownload(lopImpId) {
     const reportUrl = await dispatch({
@@ -51,12 +61,11 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
     <PageHeaderWrapper>
       <div className={styles.container}>
         <FilterForm formType={2} loading={loading} onParams={handleParams} />
-        {/* <NewAccountLogFilterForm loading={loading} onParams={handleParams} /> */}
         <NewAccountLogModal
           visible={visible}
           loading={loading}
-          handleCancel={() => setVisible(false)}
-          handleUpload={handleUpload}
+          onCancel={() => setVisible(false)}
+          onUpload={handleUpload}
         />
         <div className={styles['list-wrap']}>
           <Row className={styles['btn-group']}>

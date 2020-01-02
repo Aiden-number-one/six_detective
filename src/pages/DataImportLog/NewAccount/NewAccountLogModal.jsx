@@ -34,9 +34,7 @@ function EditableCell({ editing, dataIndex, title, record, children, ...restProp
   );
 }
 
-export function FileTable({ fileList, form }) {
-  const [uid, setUid] = useState('');
-
+export function FileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, onRemove }) {
   return (
     <EditableContext.Provider value={form}>
       <Table
@@ -49,21 +47,56 @@ export function FileTable({ fileList, form }) {
         }}
         pagination={false}
       >
-        <Column title="File Name" dataIndex="name" />
-        <Column title="Market" dataIndex="market" />
-        <Column title="Submitter Code" dataIndex="submitterCode" />
+        <Column width={120} ellipsis title="File Name" dataIndex="name" />
+        <Column
+          ellipsis
+          width={150}
+          title="Market"
+          dataIndex="market"
+          onCell={record => ({
+            record,
+            dataIndex: 'market',
+            title: 'Market',
+            editing: fileUid === record.uid,
+          })}
+        />
+        <Column
+          title="Submitter Code"
+          dataIndex="submitterCode"
+          onCell={record => ({
+            record,
+            dataIndex: 'submitterCode',
+            title: 'Submitter Code',
+            editing: fileUid === record.uid,
+          })}
+        />
         <Column
           title="Operation"
           dataIndex="action"
-          render={(_text, record) => {
-            const isEditable = uid === record.uid;
-            return isEditable ? (
+          render={(text, record) => {
+            const isEditable = fileUid === record.uid;
+            return (
               <span>
-                <EditableContext.Consumer>{() => <a>Save</a>}</EditableContext.Consumer>
-                <a onClick={() => setUid('')}>Cancel</a>
+                {isEditable ? (
+                  <>
+                    <EditableContext.Consumer>
+                      {() => (
+                        <a style={{ marginRight: 10 }} onClick={() => onSave(form, record.uid)}>
+                          Save
+                        </a>
+                      )}
+                    </EditableContext.Consumer>
+                    <a onClick={onCancel}>Cancel</a>
+                  </>
+                ) : (
+                  <a disabled={fileUid !== ''} onClick={() => onEdit(record)}>
+                    Edit
+                  </a>
+                )}
+                <a style={{ marginLeft: 10 }} onClick={() => onRemove(record)}>
+                  Remove
+                </a>
               </span>
-            ) : (
-              <a onClick={() => setUid(record.uid)}>Remove</a>
             );
           }}
         />
@@ -71,41 +104,70 @@ export function FileTable({ fileList, form }) {
     </EditableContext.Provider>
   );
 }
+const EditableFormTable = Form.create({ name: 'file' })(FileTable);
 
-function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
-  const [isFileListVisible, setFileListVisible] = useState(false);
+function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
+  const [fileUid, setFileUid] = useState('');
   const [fileList, setFileList] = useState([]);
-  const { getFieldDecorator, validateFields } = form;
+  const { getFieldDecorator } = form;
 
-  function handleChange(info) {
-    console.log(info);
-    setFileListVisible(true);
-    setFileList(info.fileList);
+  function handleBeforeUpload(file, fList) {
+    // const
+    setFileList([...fileList, ...fList.map(f => ({ uid: f.uid, name: f.name, file: f }))]);
+    return false;
   }
-  function handleCommit() {
-    validateFields(async (err, values) => {
-      if (!err) {
-        const { uploadFiles, ...rest } = values;
-        const { bcjson } = (uploadFiles && uploadFiles.length && uploadFiles[0].response) || {};
-        const { flag, items = {} } = bcjson || {};
 
-        if (flag === '1' && items) {
-          const filename = items.relativeUrl;
-          await handleUpload({ filename, ...rest });
-          form.resetFields();
-        }
+  function handleCommit() {
+    form.validateFields(async err => {
+      if (!err) {
+        console.log(fileList);
+        onUpload(fileList);
+        // const { uploadFiles, ...rest } = values;
+        // const { bcjson } = (uploadFiles && uploadFiles.length && uploadFiles[0].response) || {};
+        // const { flag, items = {} } = bcjson || {};
+        // if (flag === '1' && items) {
+        //   const filename = items.relativeUrl;
+        //   await handleUpload({ filename, ...rest });
+        //   form.resetFields();
+        // }
       }
     });
+  }
+
+  function handleSave(fileForm, uid) {
+    fileForm.validateFields((err, values) => {
+      if (!err) {
+        setFileList(
+          fileList.map(item => {
+            if (item.uid === uid) {
+              return {
+                ...values,
+                ...item,
+              };
+            }
+            return item;
+          }),
+        );
+        setFileUid('');
+      }
+    });
+  }
+
+  function handleRemove(file) {
+    setFileList(fileList.filter(f => f.uid !== file.uid));
+    if (!fileList.lenght) {
+      form.resetFields();
+    }
   }
 
   return (
     <Drawer
       title={<FormattedMessage id="data-import.new-account.manual-upload" />}
-      width={600}
+      width={800}
       closable={false}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
       visible={visible}
-      onClose={handleCancel}
+      onClose={onCancel}
     >
       <Form className={styles['modal-form']}>
         <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
@@ -131,20 +193,18 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
               },
             ],
             valuePropName: 'fileList',
-            getValueFromEvent: e => {
+            getValueFromEvent(e) {
               if (Array.isArray(e)) {
                 return e;
               }
-              // just show one recent file
-              return e && e.fileList.slice(-1);
+              return e && e.fileList;
             },
           })(
             <Upload
               multiple
-              accept=".xlsm,.xls,.xlsx,.pdf,application/msexcel"
+              accept=".xlsm,.xls,.xlsx,.csv,.pdf,application/msexcel"
               showUploadList={false}
-              beforeUpload={() => false}
-              onChange={handleChange}
+              beforeUpload={handleBeforeUpload}
             >
               <Button>
                 <Icon type="upload" />
@@ -154,9 +214,18 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
           )}
         </Form.Item>
       </Form>
-      {isFileListVisible && <FileTable fileList={fileList} form={form} />}
+      {fileList.length > 0 && (
+        <EditableFormTable
+          fileUid={fileUid}
+          fileList={fileList}
+          onSave={handleSave}
+          onRemove={handleRemove}
+          onCancel={() => setFileUid('')}
+          onEdit={record => setFileUid(record.uid)}
+        />
+      )}
       <div className={styles['bottom-btns']}>
-        <Button onClick={handleCancel}>Cancel</Button>
+        <Button onClick={onCancel}>Cancel</Button>
         <Button type="primary" onClick={handleCommit}>
           Commit
         </Button>
@@ -165,4 +234,4 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
   );
 }
 
-export default Form.create()(LopLogManualModal);
+export default Form.create()(NewAccountLogManualModal);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Row, Col, Empty, Spin, Icon, Button } from 'antd';
+import { Tabs, Row, Col, Empty, Spin, Icon, Button, message } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
@@ -49,7 +49,7 @@ function CustomEmpty({ className = '', style = {} }) {
   );
 }
 
-function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
+function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
   const [activeKey, setActiveKey] = useState('1');
@@ -132,8 +132,27 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
     }
     setActiveKey(curActiveKey);
   }
-
-  function handleSendEmail() {}
+  async function showEmail() {
+    const err = await dispatch({
+      type: 'alertCenter/fetchEmail',
+      payload: {
+        alertId: alert.alertId,
+      },
+    });
+    if (!err) {
+      setEmailVisible(true);
+    } else {
+      message.warn(err);
+    }
+  }
+  function handleSendEmail() {
+    dispatch({
+      type: 'alertCenter/sendEmail',
+      payload: {
+        alertId: alert.alertId,
+      },
+    });
+  }
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -158,14 +177,18 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
             {alert.isEmail === '1' && (
               <>
                 <div align="right">
-                  <Button type="primary" onClick={() => setEmailVisible(true)}>
+                  <Button
+                    type="primary"
+                    loading={loading['alertCenter/fetchEmail']}
+                    onClick={showEmail}
+                  >
                     Send Email
                   </Button>
                 </div>
                 <AlertEmailModal
                   loading={loading}
                   visible={emailVisible}
-                  content="fake email content ..."
+                  content={email}
                   handleCancel={() => setEmailVisible(false)}
                   onSendEmail={handleSendEmail}
                 />
@@ -243,8 +266,9 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
   );
 }
 
-export default connect(({ loading, alertCenter: { comments, logs } }) => ({
+export default connect(({ loading, alertCenter: { comments, logs, email } }) => ({
   loading: loading.effects,
   comments,
   logs,
+  email,
 }))(AlertDetail);

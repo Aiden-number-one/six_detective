@@ -2,7 +2,7 @@
  * @Description: app global config
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2019-12-31 16:34:42
+ * @LastEditTime : 2020-01-02 14:07:36
  * @LastEditors  : iron
  * @Description: umi 配置文件
  */

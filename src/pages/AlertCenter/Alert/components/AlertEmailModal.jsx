@@ -4,9 +4,6 @@ import { FormattedMessage } from 'umi/locale';
 import btnStyles from '@/pages/DataImportLog/index.less';
 
 export default function({ loading, visible, content, handleCancel, onSendEmail }) {
-  async function handleCommit() {
-    onSendEmail();
-  }
   return (
     <Drawer
       title={<FormattedMessage id="alert-center.email-content" />}
@@ -22,8 +19,8 @@ export default function({ loading, visible, content, handleCancel, onSendEmail }
         <Button
           type="primary"
           disabled={!content}
-          onClick={handleCommit}
-          loading={loading['alertCenter/assignTask']}
+          onClick={onSendEmail}
+          loading={loading['alertCenter/sendEmail']}
         >
           Commit
         </Button>

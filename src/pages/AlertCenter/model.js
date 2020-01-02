@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-02 10:56:10
+ * @LastEditTime : 2020-01-02 21:26:29
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -74,6 +74,12 @@ export async function exportAlert({ fileType }) {
     },
   });
 }
+export async function getEmailByType(params) {
+  return request('api_get_email_by_alert_id', {
+    data: params,
+  });
+}
+
 export default {
   namespace: 'alertCenter',
   state: {
@@ -86,6 +92,7 @@ export default {
     logs: [],
     users: [],
     claimInfos: [],
+    email: '',
   },
   reducers: {
     save(state, { payload }) {
@@ -133,6 +140,12 @@ export default {
       return {
         ...state,
         claimInfos: payload.claimInfos,
+      };
+    },
+    saveEmail(state, { payload }) {
+      return {
+        ...state,
+        email: payload.email,
       };
     },
   },
@@ -319,6 +332,32 @@ export default {
       if (err) {
         throw new Error(err);
       }
+    },
+    *fetchEmail({ payload }, { call, put }) {
+      const { err, items } = yield call(getEmailByType, {
+        alertId: payload.alertId,
+        operType: 'emailByAlert',
+      });
+      if (err) {
+        return err;
+      }
+      yield put({
+        type: 'saveEmail',
+        payload: {
+          email: items,
+        },
+      });
+      return '';
+    },
+    *sendEmail({ payload }, { call }) {
+      const { err, msg } = yield call(getEmailByType, {
+        alertId: payload.alertId,
+        operType: 'emailStatusChanged',
+      });
+      if (err) {
+        throw new Error(err);
+      }
+      message.success(msg);
     },
   },
 };

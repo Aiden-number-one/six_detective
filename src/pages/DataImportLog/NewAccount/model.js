@@ -4,9 +4,9 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 19:48:27
+ * @LastEditTime : 2020-01-02 19:44:49
  */
-import { message } from 'antd';
+// import { message } from 'antd';
 import { request } from '@/utils/request.default';
 import { reqFormat as format } from '../constants';
 
@@ -25,7 +25,16 @@ export async function getLogs(params = {}) {
 }
 
 export async function postManual(params) {
-  return request('set_imp_his_add', { data: params });
+  return request('set_lop_report_manual_import', { data: params });
+}
+
+export async function fileUpload(params) {
+  const formData = new FormData();
+  formData.append('file', params.file);
+  return request('file_upload', {
+    params: { fileClass: 'ACCOUNT' },
+    data: formData,
+  });
 }
 
 export const pageSelector = ({ newAccount }) => newAccount.page;
@@ -64,13 +73,20 @@ export default {
         },
       });
     },
-    *importByManual({ payload }, { call, put }) {
+    *importByManual({ payload }, { call }) {
       const { err } = yield call(postManual, payload);
       if (err) {
         throw new Error(err);
       }
-      message.success('upload success');
-      yield put({ type: 'fetch', payload });
+      // message.success(msg);
+      // yield put({ type: 'fetch', payload });
+    },
+    *fileUpload({ payload }, { call }) {
+      console.log(payload);
+      const { err } = yield call(fileUpload, payload);
+      if (err) {
+        throw new Error(err);
+      }
     },
   },
 };
