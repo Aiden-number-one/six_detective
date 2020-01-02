@@ -34,15 +34,23 @@ KISBPM.URL = {
   putModel: function(modelId) {
     return ACTIVITI.CONFIG.contextRoot + '/model/' + modelId + '/save';
   },
-  getParams: function({ N, V, P, S }, isEncoder = true) {
-    const NVPS = {
-      N,
-      V,
-      P,
-      S,
+  getParams: function(params, isEncoder) {
+    var isEncoder = isEncoder==false?isEncoder : true;
+    var NVPS = {
+      N: params.N,
+      V: params.V,
+      P: params.P,
+      S: params.S,
     };
-    P.bcLangType = 'ZHCN';
-    // debugger;
+    params.P.bcLangType = 'ZHCN';
+    // const NVPS = {
+    //   N,
+    //   V,
+    //   P,
+    //   S,
+    // };
+    // P.bcLangType = 'ZHCN';
+    
     if (isEncoder) {
       NVPS.P = BASE64.encoder(JSON.stringify(NVPS.P));
       return {
@@ -50,12 +58,12 @@ KISBPM.URL = {
           bcp: NVPS.P,
           s: NVPS.S,
         },
-        header: this.getHeader(NVPS),
+        header: KISBPM.URL.getHeader(NVPS),
       };
     }
-    // debugger;
     if (window.btoa) {
       NVPS.P = window.btoa(unescape(encodeURIComponent(JSON.stringify(NVPS.P))));
+      
     }
 
     return {
@@ -63,24 +71,25 @@ KISBPM.URL = {
         bcp: NVPS.P,
         s: NVPS.S,
       },
-      header: this.getHeader(NVPS),
+      header: KISBPM.URL.getHeader(NVPS),
     };
   },
   getHeader: function(NVPS) {
-    const rid = `RID${uuidv1().replace(/-/g, '')}`;
+    var rid = 'RID' + uuidv1().replace(/-/g, '');
     return {
-      'X-Bc-S': (() => {
-        const randowNVPS = this.getRandowNVPS();
-        const signMode = randowNVPS.join('');
-        let signText = '';
-        randowNVPS.forEach(value => {
+      'X-Bc-S': (function() {
+        console.log('this---------->', this);
+        var randowNVPS = KISBPM.URL.getRandowNVPS();
+        var signMode = randowNVPS.join('');
+        var signText = '';
+        randowNVPS.forEach(function(value) {
           signText += value + NVPS[value];
         });
-        signText += `I${rid}`;
+        signText += 'I' + rid;
         return signMode + MD5(signText).toUpperCase();
       })(),
-      'X-Bc-T': (() => {
-        return  `BCT${localStorage.getItem('BCTID')}`;
+      'X-Bc-T': (function() {
+        return 'BCT' + localStorage.getItem('BCTID');
       })(),
       'X-Bc-I': rid,
     };
@@ -102,7 +111,7 @@ KISBPM.URL = {
   //         test_param.href = document.location.href;
   //         return test_param;
   //     },
- 
+
   get16: function(a, v, p) {
     var pp = {};
     var _t = new Date().getTime() + '';
@@ -141,7 +150,7 @@ KISBPM.URL = {
     pp.wp = BASE64.encoder(document.location.href);
     return pp;
   },
-  getRandowNVPS: () => {
+  getRandowNVPS: function() {
     var array = ['N', 'V', 'P', 'S'];
     var newArray = [];
     while (array.length > 0) {

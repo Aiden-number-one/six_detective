@@ -338,7 +338,7 @@ var SaveModelCtrl = [
       };
       modelMetaData.name = $scope.saveDialog.name;
       modelMetaData.description = $scope.saveDialog.description;
-      if(modelMetaData.model.properties){
+      if (modelMetaData.model.properties) {
         modelMetaData.model.properties.name = $scope.saveDialog.name;
       }
       var json = $scope.editor.getJSON();
@@ -367,44 +367,57 @@ var SaveModelCtrl = [
 
       // Parse dom to string
       var svgDOM = DataManager.serialize(svgClone);
+      svgDOM = svgDOM.replace(/marker-start="url\("#/g,"marker-start=\"url(#").replace(/start"\)"/g,"start\)\"");
 
+       svgDOM = svgDOM.replace(/marker-mid="url\("#/g,"marker-mid=\"url(#").replace(/mid"\)"/g,"mid\)\"");
+
+
+ 
+       svgDOM = svgDOM.replace(/marker-end="url\("#/g,"marker-end=\"url(#").replace(/end"\)"/g,"end\)\"");
+      // var svgDOM=(new XMLSerializer()).serializeToString(svgClone)
       ////encodeURIComponent
-      //var basesvgDOM = BASE64.encoder(svgDOM);
-      var basesvgDOM = encodeURIComponent(svgDOM);
-      //var basejson = BASE64.encoder(json);
+      // var basesvgDOM = BASE64.encoder(svgDOM);
+      // console.log('svgDOM------->',svgDOM)
+      var basesvgDOM = svgDOM;
+      console.log('basesvgDOM--->',basesvgDOM)
+      // var basejson = BASE64.encoder(json);
       var basejson = encodeURIComponent(json);
-      const modelId = EDITOR.UTIL.getParameterByName('modelId');
-      const V = 'v2.0'; // 版本号
-      const N = 'bayconnect.superlop.set_workflow_model_save'; // 接口名
-      const P = {
+      var modelId = EDITOR.UTIL.getParameterByName('modelId');
+      var V = 'v2.0'; // 版本号
+      var N = 'bayconnect.superlop.set_workflow_model_save'; // 接口名
+      var P = {
         jsonXml: basejson,
         svgXml: basesvgDOM,
         name: $scope.saveDialog.name,
         description: $scope.saveDialog.description,
         modelId: modelId,
       }; // 参数
-      const S = new Date().getTime(); // 时间戳
-      var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S },false);
+      console.log('p--------66--->',P)
+      var S = new Date().getTime(); // 时间戳
+      var dataAndHeader = KISBPM.URL.getParams({ N: N, V: V, P: P, S: S }, false);
       //   debugger;
-      const params = dataAndHeader.param;
-      const header = dataAndHeader.header;
+      var params = dataAndHeader.param;
+      var header = dataAndHeader.header;
+      var defaultToolbarHeaders = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      };
+      var headerToolbarObject = Object.assign(header, defaultToolbarHeaders);
+      console.log('headerToolbarObject---888->',params)
       $http({
         method: 'POST',
         data: params,
         ignoreErrors: true,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          ...header,
-        },
+        headers:headerToolbarObject,
         transformRequest: function(obj) {
+          console.log('obj--------->',obj)
           var str = [];
           for (var p in obj) {
             str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
           }
           return str.join('&');
         },
-        url: '/api/' + V + '/' + N + '.json',
+        url: '/api/' + V + '/' + N + '.json'
       })
         .success(function(data, status, headers, config) {
           if (data.bcjson.flag == 1) {
@@ -435,14 +448,14 @@ var SaveModelCtrl = [
             }
           } else {
             $scope.error = {};
-            console.log(JSON.stringify(data.kdjson.msg));
+            console.log(JSON.stringify(data.bcjson.msg));
             $scope.status.loading = false;
           }
         })
         .error(function(data, status, headers, config) {
           $scope.error = {};
           console.log(
-            'Something went wrong when updating the process model:' + JSON.stringify(data),
+            'Something went wrong when updating the process model:' + JSON.stringify(data)
           );
           $scope.status.loading = false;
         });
@@ -608,7 +621,7 @@ var SaveModelCtrl = [
             // 应对在没有改变流条件时，自动添加了[]，现在去掉
             childShape.properties.conditionsequenceflow = childShape.properties.conditionsequenceflow.replace(
               /\[\w*]$/,
-              '',
+              ''
             );
           }
         }
@@ -764,7 +777,7 @@ var SaveModelCtrl = [
               // eslint-disable-next-line no-var
               var percentObj = value.approve_percent;
               var elStr = elString;
-              let percent = percentObj.percent / 100;
+              var percent = percentObj.percent / 100;
               if (percentObj.approve == 1) {
                 // 同意
                 elStr += '>=';

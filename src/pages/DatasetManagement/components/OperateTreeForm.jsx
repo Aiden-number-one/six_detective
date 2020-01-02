@@ -2,8 +2,8 @@
  * @Description: 新增修改数据集分类树
  * @Author: lan
  * @Date: 2019-12-11 15:51:22
- * @LastEditTime: 2019-12-11 18:10:22
- * @LastEditors: lan
+ * @LastEditTime : 2020-01-02 20:53:27
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -43,14 +43,14 @@ export default class OperateTreeForm extends PureComponent {
         {operateType === 'DELETE' ? (
           'Please Confirm to delete'
         ) : (
-          <Form.Item label="Classify Name" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
-            {getFieldDecorator('className', {
+          <Form.Item label="Folder Name" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+            {getFieldDecorator('folderName', {
               rules: [
                 {
                   required: true,
                 },
               ],
-              initialValue: nodeTree && nodeTree.className,
+              initialValue: nodeTree && nodeTree.folderName,
             })(<Input />)}
           </Form.Item>
         )}

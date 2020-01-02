@@ -29,10 +29,14 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message:
-                    emailObj && emailObj.emailHost
-                      ? 'Please Input Correct Server IP'
-                      : 'Please Input Server IP',
+                  message: `${formatMessage({
+                    id: 'systemManagement.emailParameter.severIP',
+                  })} is missing`,
+                },
+                {
+                  message: `Error: Mis-typed in ${formatMessage({
+                    id: 'systemManagement.emailParameter.severIP',
+                  })}`,
                   pattern: severIPPattern,
                 },
               ],
@@ -48,7 +52,12 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please Input Port of Email Sever',
+                  message: `${formatMessage({
+                    id: 'systemManagement.emailParameter.port',
+                  })} is missing`,
+                },
+                {
+                  message: 'The numbers of characters should be between 0 to 65535',
                   pattern: portPattern,
                 },
               ],
@@ -63,12 +72,16 @@ class FormUser extends Component {
             {getFieldDecorator('emailAddress', {
               rules: [
                 {
-                  type: 'email',
-                  message: 'Please Input Sender Correct Email Address!',
+                  required: true,
+                  message: `${formatMessage({
+                    id: 'systemManagement.emailParameter.senderEmailAddress',
+                  })} is missing`,
                 },
                 {
-                  required: true,
-                  message: 'Please Input Sender Email Address',
+                  type: 'email',
+                  message: `Error: Mis-typed in ${formatMessage({
+                    id: 'systemManagement.emailParameter.senderEmailAddress',
+                  })}`,
                 },
               ],
               initialValue: emailObj && emailObj.emailAddress,
@@ -83,7 +96,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please Input Sender Email Password',
+                  message: `${formatMessage({
+                    id: 'systemManagement.emailParameter.senderEmailPassword',
+                  })} is missing`,
                 },
               ],
               initialValue: emailObj && emailObj.emailPassword,
@@ -129,6 +144,7 @@ class NewUser extends Component {
     const { getEmailListData } = this.props;
     const newEmailListData = Object.assign([], getEmailListData);
     this.newUserRef.current.validateFields((err, values) => {
+      console.log('values===', values);
       if (err) {
         return;
       }

@@ -4,6 +4,7 @@ import { Row, Col, Button, Table, Pagination, Select, DatePicker, Modal, Progres
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
+import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
 
 const { Option } = Select;
@@ -226,67 +227,78 @@ export default class DataProcessing extends Component {
       <Fragment>
         <PageHeaderWrapper>
           <div className={styles.dataProcessingWraper}>
-            <div className={styles.dataTableWraper}>
-              <div className={styles.dataTable}>
-                <Button type="primary" onClick={this.inspectData} className="btn-usual">
-                  {formatMessage({ id: 'systemManagement.dataProcessing.inspectData' })}
-                </Button>
-                <Table
-                  loading={loading['dataProcessing/getDataProcessing']}
-                  style={{ marginTop: '6px' }}
-                  dataSource={dataProcessingData.items}
-                  columns={this.state.codeColumns}
-                  pagination={false}
-                  onRow={record => ({
-                    onClick: () => {
-                      this.connectDataProcessing(record);
-                    }, // 点击行
-                  })}
-                ></Table>
-                <Pagination
-                  showSizeChanger
-                  current={page.pageNumber}
-                  showTotal={() => `Total ${dataProcessingData.totalCount} items`}
-                  onShowSizeChange={this.onShowSizeChange}
-                  onChange={this.pageChange}
-                  total={dataProcessingData.totalCount}
-                  pageSize={page.pageSize}
-                />
-              </div>
-              <div className={styles.cutOff}></div>
-              <div className={styles.dataItemTable}>
-                <div className={styles.tableTop}>
-                  <Button
-                    onClick={this.addCode}
-                    type="primary"
-                    className="btn-usual"
-                    disabled={!hasSelected}
-                  >
-                    {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
+            {false && (
+              <div className={styles.dataTableWraper}>
+                <div className={styles.dataTable}>
+                  <Button type="primary" onClick={this.inspectData} className="btn-usual">
+                    {formatMessage({ id: 'systemManagement.dataProcessing.inspectData' })}
                   </Button>
+                  <Table
+                    loading={loading['dataProcessing/getDataProcessing']}
+                    style={{ marginTop: '6px' }}
+                    dataSource={dataProcessingData.items}
+                    columns={this.state.codeColumns}
+                    pagination={false}
+                    onRow={record => ({
+                      onClick: () => {
+                        this.connectDataProcessing(record);
+                      }, // 点击行
+                    })}
+                  ></Table>
+                  <Pagination
+                    showSizeChanger
+                    current={page.pageNumber}
+                    showTotal={() => `Total ${dataProcessingData.totalCount} items`}
+                    onShowSizeChange={this.onShowSizeChange}
+                    onChange={this.pageChange}
+                    total={dataProcessingData.totalCount}
+                    pageSize={page.pageSize}
+                  />
                 </div>
-                <Table
-                  loading={loading['codeList/getCodeItemList']}
-                  rowSelection={rowSelection}
-                  dataSource={dataProcessingItemData.items}
-                  pagination={false}
-                  columns={this.state.columns}
-                  style={{ marginTop: '6px' }}
-                ></Table>
-                <Pagination
-                  showSizeChanger
-                  current={itemPage.pageNumber}
-                  showTotal={() => `Total ${dataProcessingItemData.totalCount} items`}
-                  onShowSizeChange={this.onShowItemSizeChange}
-                  onChange={this.pageItemChange}
-                  total={dataProcessingItemData.totalCount}
-                  pageSize={itemPage.pageSize}
-                />
-                <Row type="flex" justify="end" style={{ marginTop: '10px' }}>
-                  <Button type="primary" className="btn-usual" style={{ height: '36px' }}>
-                    Enter Alert Center
-                  </Button>
-                </Row>
+                <div className={styles.cutOff}></div>
+                <div className={styles.dataItemTable}>
+                  <div className={styles.tableTop}>
+                    <Button
+                      onClick={this.addCode}
+                      type="primary"
+                      className="btn-usual"
+                      disabled={!hasSelected}
+                    >
+                      {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
+                    </Button>
+                  </div>
+                  <Table
+                    loading={loading['codeList/getCodeItemList']}
+                    rowSelection={rowSelection}
+                    dataSource={dataProcessingItemData.items}
+                    pagination={false}
+                    columns={this.state.columns}
+                    style={{ marginTop: '6px' }}
+                  ></Table>
+                  <Pagination
+                    showSizeChanger
+                    current={itemPage.pageNumber}
+                    showTotal={() => `Total ${dataProcessingItemData.totalCount} items`}
+                    onShowSizeChange={this.onShowItemSizeChange}
+                    onChange={this.pageItemChange}
+                    total={dataProcessingItemData.totalCount}
+                    pageSize={itemPage.pageSize}
+                  />
+                  <Row type="flex" justify="end" style={{ marginTop: '10px' }}>
+                    <Button type="primary" className="btn-usual" style={{ height: '36px' }}>
+                      Enter Alert Center
+                    </Button>
+                  </Row>
+                </div>
+              </div>
+            )}
+            <div style={{ padding: '10px', background: '#fff' }}>
+              <Button type="primary" onClick={this.inspectData} className="btn-usual">
+                {formatMessage({ id: 'systemManagement.dataProcessing.inspectData' })}
+              </Button>
+              <div className={styles.dataEmptyWraper}>
+                <IconFont type="icon-empty-dataprocess" className={styles['dataprocessing-icon']} />
+                <div>Please Press Inspect Data to Display Outstanding Alerts</div>
               </div>
             </div>
             <div className={styles.dataProcessing}>

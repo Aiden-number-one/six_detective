@@ -2,7 +2,7 @@
  * @Description: 获取数据集列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime : 2019-12-23 10:33:00
+ * @LastEditTime : 2020-01-02 20:58:22
  * @LastEditors  : lan
  */
 import { message } from 'antd';
@@ -56,7 +56,9 @@ export default {
         // 保存数据集分类树
         yield put({
           type: 'getClassifyTree',
-          payload: {},
+          payload: {
+            dataStyle: 'Y',
+          },
         });
       }
     },
@@ -67,7 +69,9 @@ export default {
         // 保存数据集分类树
         yield put({
           type: 'getClassifyTree',
-          payload: {},
+          payload: {
+            dataStyle: 'Y',
+          },
         });
       }
     },

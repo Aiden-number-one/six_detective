@@ -35,7 +35,7 @@ var ActivitiRest = {
           textStatus,
           'error: ',
           error,
-          jqXHR,
+          jqXHR
         );
       });
   },
@@ -47,7 +47,7 @@ var ActivitiRest = {
 		processDefinitionId: processDefinitionId,
     }; // 参数
     const S = new Date().getTime(); // 时间戳
-    var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S });
+    var dataAndHeader = KISBPM.URL.getParams({ N:N, V:V, P:P, S:S });
     const data = dataAndHeader.param;
     const header = dataAndHeader.header;
     // var url = '/admin_api';
@@ -67,7 +67,7 @@ var ActivitiRest = {
           "Process definition diagram layout '" +
             processDefinitionId +
             "' not found;MSG:" +
-            data.bcjson.msg,
+            data.bcjson.msg
         );
       }
       var processDefinitionDiagramLayout = data.bcjson.items;
@@ -104,7 +104,7 @@ var ActivitiRest = {
 		processInstanceId: processInstanceId,
     }; // 参数
     const S = new Date().getTime(); // 时间戳
-    var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S });
+    var dataAndHeader = KISBPM.URL.getParams({ N:N, V:V, P:P, S:S });
     const data = dataAndHeader.param;
     const header = dataAndHeader.header;
     $.ajax({
