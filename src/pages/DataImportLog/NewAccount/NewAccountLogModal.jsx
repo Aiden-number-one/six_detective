@@ -1,13 +1,87 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Drawer, Form, Input, Upload, Icon, Button } from 'antd';
+import { Drawer, Form, Input, Upload, Icon, Button, Table } from 'antd';
 import styles from '../index.less';
 
+const { Column } = Table;
 const isLt5M = size => size / 1024 / 1024 < 5;
 
+const EditableContext = React.createContext();
+
+function EditableCell({ editing, dataIndex, title, record, children, ...restProps }) {
+  return (
+    <EditableContext.Consumer>
+      {({ getFieldDecorator }) => (
+        <td {...restProps}>
+          {editing ? (
+            <Form.Item style={{ margin: 0 }}>
+              {getFieldDecorator(dataIndex, {
+                rules: [
+                  {
+                    required: true,
+                    message: `Please Input ${title}!`,
+                  },
+                ],
+                initialValue: record[dataIndex],
+              })(<Input />)}
+            </Form.Item>
+          ) : (
+            children
+          )}
+        </td>
+      )}
+    </EditableContext.Consumer>
+  );
+}
+
+export function FileTable({ fileList, form }) {
+  const [uid, setUid] = useState('');
+
+  return (
+    <EditableContext.Provider value={form}>
+      <Table
+        rowKey="uid"
+        dataSource={fileList}
+        components={{
+          body: {
+            cell: EditableCell,
+          },
+        }}
+        pagination={false}
+      >
+        <Column title="File Name" dataIndex="name" />
+        <Column title="Market" dataIndex="market" />
+        <Column title="Submitter Code" dataIndex="submitterCode" />
+        <Column
+          title="Operation"
+          dataIndex="action"
+          render={(_text, record) => {
+            const isEditable = uid === record.uid;
+            return isEditable ? (
+              <span>
+                <EditableContext.Consumer>{() => <a>Save</a>}</EditableContext.Consumer>
+                <a onClick={() => setUid('')}>Cancel</a>
+              </span>
+            ) : (
+              <a onClick={() => setUid(record.uid)}>Remove</a>
+            );
+          }}
+        />
+      </Table>
+    </EditableContext.Provider>
+  );
+}
+
 function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
+  const [isFileListVisible, setFileListVisible] = useState(false);
+  const [fileList, setFileList] = useState([]);
   const { getFieldDecorator, validateFields } = form;
 
+  function handleChange(info) {
+    console.log(info);
+    setFileListVisible(true);
+    setFileList(info.fileList);
+  }
   function handleCommit() {
     validateFields(async (err, values) => {
       if (!err) {
@@ -26,24 +100,14 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
 
   return (
     <Drawer
-      title={<FormattedMessage id="data-import.market.manual-upload" />}
-      width={320}
+      title={<FormattedMessage id="data-import.new-account.manual-upload" />}
+      width={600}
       closable={false}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
       visible={visible}
       onClose={handleCancel}
     >
       <Form className={styles['modal-form']}>
-        <Form.Item label={<FormattedMessage id="data-import.submitter-code" />}>
-          {getFieldDecorator('submitterCode', {
-            rules: [
-              {
-                required: true,
-                message: 'Please input submitter code!',
-              },
-            ],
-          })(<Input placeholder="please input submitter code" />)}
-        </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
@@ -76,9 +140,11 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
             },
           })(
             <Upload
+              multiple
               accept=".xlsm,.xls,.xlsx,.pdf,application/msexcel"
-              action="/upload"
-              beforeUpload={file => isLt5M(file.size)}
+              showUploadList={false}
+              beforeUpload={() => false}
+              onChange={handleChange}
             >
               <Button>
                 <Icon type="upload" />
@@ -88,6 +154,7 @@ function LopLogManualModal({ form, visible, handleCancel, handleUpload }) {
           )}
         </Form.Item>
       </Form>
+      {isFileListVisible && <FileTable fileList={fileList} form={form} />}
       <div className={styles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
         <Button type="primary" onClick={handleCommit}>

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 20:20:54
+ * @LastEditTime : 2019-12-30 13:41:43
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -54,9 +54,9 @@ export async function claimAlert({ alertIds, isCoverClaim }) {
     data: { alertIds: alertIds.join(','), isCoverClaim: isCoverClaim.toString() },
   });
 }
-export async function getAssignUsers({ alertItemIds }) {
+export async function getAssignUsers({ taskIds }) {
   return request('get_user_list_by_process_instance_step', {
-    data: { alertItemIds: alertItemIds.join(',') },
+    data: { taskIds: taskIds.join(',') },
   });
 }
 export async function assignAlertItem({ taskIds, userId }) {

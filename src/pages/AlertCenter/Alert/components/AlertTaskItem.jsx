@@ -14,11 +14,9 @@ const ContractMap = {
   O: 'Option',
 };
 
-export function EpTaskItem({ task: { MARKET, ALERT_ITEM_ID, EP_CODE, EP_NAME } }) {
+export function EpTaskItem({ task: { EP_CODE, EP_NAME } }) {
   return (
     <Descriptions column={1}>
-      <Descriptions.Item label="alert item id *">{ALERT_ITEM_ID}</Descriptions.Item>
-      <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
       <Descriptions.Item label="EP Code *">{EP_CODE}</Descriptions.Item>
       <Descriptions.Item label="EP Name *">{EP_NAME}</Descriptions.Item>
     </Descriptions>
@@ -91,6 +89,64 @@ export function CaCodeTaskItem({
         {moment(EXPIRY_DATE).format(dateFormat)}
       </Descriptions.Item>
       <Descriptions.Item label="Remark *">{REMARK}</Descriptions.Item>
+    </Descriptions>
+  );
+}
+
+export function NewAccountTaskItem({ task }) {
+  const {
+    MARKET,
+    EP_CODE,
+    SUBMITTER_CODE,
+    SUBMITTER_NAME,
+    ACCOUNT_NO,
+    ACCOUNT_NAME,
+    REPORT_BI_NAME,
+    REPORTE_TO_NAME,
+    ANSWER_STATUS,
+    TO_CODE,
+    PREV_OMN_BI_NAME,
+    PREV_OMN_BI_CODE,
+    PREV_TO_CODE,
+    CONFIRM_TO_CODE,
+    REMARK,
+  } = task;
+  return (
+    <Descriptions column={1}>
+      <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="Submitter Code *">{SUBMITTER_CODE}</Descriptions.Item>
+      <Descriptions.Item label="Submitter Name *">{SUBMITTER_NAME}</Descriptions.Item>
+      <Descriptions.Item label="EP Code *">{EP_CODE}</Descriptions.Item>
+      <Descriptions.Item label="LOP Account No. *">{ACCOUNT_NO}</Descriptions.Item>
+      <Descriptions.Item label="Account Name">{ACCOUNT_NAME}</Descriptions.Item>
+      <Descriptions.Item label="Reported BI Name *">{REPORT_BI_NAME}</Descriptions.Item>
+      <Descriptions.Item label="Reported TO Name">{REPORTE_TO_NAME}</Descriptions.Item>
+
+      {+ANSWER_STATUS === 2 ? (
+        <>
+          <Descriptions.Item label="Pre-BI/Omni Code *">{PREV_OMN_BI_CODE}</Descriptions.Item>
+          <Descriptions.Item label="Pre-Assigned BI/Omni Name *">
+            {PREV_OMN_BI_NAME}
+          </Descriptions.Item>
+          <Descriptions.Item label="Pre-TO Code">{PREV_TO_CODE}</Descriptions.Item>
+          <Descriptions.Item label="Pre-Assigned TO Name">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Received Confirmation">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Comfirmed BI/Omni Code *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Assigned BI/Omni Name *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Confirmed TO Code">{CONFIRM_TO_CODE}</Descriptions.Item>
+        </>
+      ) : (
+        <>
+          <Descriptions.Item label="BI/Omni Code *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Assigned BI/Omni Name *">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Parent BI/Omni Code">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="Assigned Parent BI/Omni Name">{REMARK}</Descriptions.Item>
+          <Descriptions.Item label="TO Code">{TO_CODE}</Descriptions.Item>
+        </>
+      )}
+      <Descriptions.Item label="Assigned TO Name">{REMARK}</Descriptions.Item>
+      <Descriptions.Item label="Creation Date *">{REMARK}</Descriptions.Item>
+      <Descriptions.Item label="Remark">{REMARK}</Descriptions.Item>
     </Descriptions>
   );
 }

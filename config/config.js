@@ -2,8 +2,8 @@
  * @Description: app global config
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2019-12-28 16:11:05
- * @LastEditors  : dailinbo
+ * @LastEditTime : 2019-12-31 16:34:42
+ * @LastEditors  : iron
  * @Description: umi 配置文件
  */
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -113,12 +113,12 @@ export default {
     'heading-color': headingColor,
     'text-color': textColor,
     'border-radius-base': borderRadiusBase,
-    'border-color-base':  borderColorBase,
+    'border-color-base': borderColorBase,
     'success-color': successColor,
     'warning-color': warningColor,
     'error-color': errorColor,
     'box-shadow-base': boxShadowBase,
-    'text-color-secondary': textColorSecondary
+    'text-color-secondary': textColorSecondary,
   },
   treeShaking: true,
   define: {

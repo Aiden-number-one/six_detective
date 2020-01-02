@@ -89,34 +89,19 @@ const BasicLayout = props => {
     });
 
   const popoverContent = () => (
-    <div className={styles.popover}>
-      <div className={styles.popoverHeader}>
-        <p>Surveillacnce Dep.</p>
-        <p>thomaschow@hkex.com</p>
-      </div>
-      <div className={styles.popoverContent}>
-        <div className={styles.left}>
-          <div className={styles.imgBox}></div>
-          <span>Profile</span>
-        </div>
-        <div className={styles.right}>
-          <div className={styles.imgBox}></div>
-          <span>Setting</span>
-        </div>
-      </div>
-      <div className={styles.popoverFooter}>
-        <a
-          onClick={() => {
-            if (dispatch) {
-              dispatch({
-                type: 'login/logout',
-              });
-            }
-          }}
-        >
-          Sign Out
-        </a>
-      </div>
+    <div className={styles.popoverFooter}>
+      <a
+        onClick={() => {
+          if (dispatch) {
+            dispatch({
+              type: 'login/logout',
+            });
+          }
+        }}
+      >
+        <IconFont type="icon-xiaoxi" style={{ marginRight: 5 }} />
+        Sign Out
+      </a>
     </div>
   );
 
@@ -152,7 +137,7 @@ const BasicLayout = props => {
         <div className={styles.user}>
           <IconFont type="icon-usercircle" className={styles.avatar} />
           {/* <CustomizeSelectLang /> */}
-          <span title="Thomas Chow" className={styles.username}>
+          <span title={window.localStorage.loginName} className={styles.username}>
             {window.localStorage.loginName}
           </span>
           <Popover

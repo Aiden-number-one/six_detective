@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Row, Col, Empty, Spin, Icon } from 'antd';
+import { Tabs, Row, Col, Empty, Spin, Icon, Button } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
@@ -10,24 +10,33 @@ import {
   AlertComment,
   AlertLog,
   AlertRichText,
+  AlertEmailModal,
+  TaskBtn,
   EpTaskItem,
   ProductTaskItem,
   CaCodeTaskItem,
   epColumns,
   proudctColumns,
   caCodeColumns,
+  NewAccountTaskItem,
 } from './components';
 
 const taskColumnsMap = {
   301: epColumns,
   302: proudctColumns,
   303: caCodeColumns,
+  321: epColumns,
+  322: epColumns,
+  323: epColumns,
 };
 
 const TaskItemMap = {
   301: EpTaskItem,
   302: ProductTaskItem,
   303: CaCodeTaskItem,
+  321: NewAccountTaskItem,
+  322: NewAccountTaskItem,
+  323: NewAccountTaskItem,
 };
 
 const { TabPane } = Tabs;
@@ -46,6 +55,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
   const [activeKey, setActiveKey] = useState('1');
   const taskColumns = taskColumnsMap[+alert.alertTypeId];
   const TaskItem = TaskItemMap[+alert.alertTypeId];
+  const [emailVisible, setEmailVisible] = useState(false);
 
   useEffect(() => {
     const { alertTypeId, alertId, itemsTotal } = alert;
@@ -123,6 +133,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
     setActiveKey(curActiveKey);
   }
 
+  function handleSendEmail() {}
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -144,6 +155,22 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
             tab={<FormattedMessage id="alert-center.alert-detail" />}
           >
             <AlertDes alert={alert} />
+            {alert.isEmail === '1' && (
+              <>
+                <div align="right">
+                  <Button type="primary" onClick={() => setEmailVisible(true)}>
+                    Send Email
+                  </Button>
+                </div>
+                <AlertEmailModal
+                  loading={loading}
+                  visible={emailVisible}
+                  content="fake email content ..."
+                  handleCancel={() => setEmailVisible(false)}
+                  onSendEmail={handleSendEmail}
+                />
+              </>
+            )}
           </TabPane>
           {+alert.itemsTotal !== 0 && taskColumns && (
             <TabPane
@@ -172,6 +199,9 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [] }) {
                 }
               >
                 <TaskItem task={pane} />
+                <div align="right">
+                  <TaskBtn task={pane} />
+                </div>
               </TabPane>
             ))}
         </Tabs>

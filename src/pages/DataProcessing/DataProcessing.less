@@ -1,20 +1,37 @@
 .dataProcessingWraper {
-  padding: 20px;
+  // padding: 10px;
+  // background: #fff;
+  :global {
+    .ant-table-wrapper {
+      max-height: 440px;
+    }
+  }
+  .chart {
+    margin-top: 20px;
+    padding: 0;
+  }
 }
-.dataProcessingTable {
-  // display:flex;
-  width: 100%;
+.dataTableWraper {
+  display: flex;
+  padding: 10px;
+  background: #fff;
+  // width: 100%;
+  .cutOff {
+    height: inherit;
+    margin: 0 10px;
+    border-left: 1px solid #dadbdd;
+  }
   .dataTable {
-    // flex: 0 0 50%;
-    // float: left;
-    // width: 55%;
+    flex: 0 0 50% !important;
   }
   .dataItemTable {
-    // flex: 0 0 50%;
-    // float: left;
-    // width: 40%;
-    margin-left: 20px;
+    flex: 0 0 50% !important;
   }
+}
+.dataProcessing {
+  margin-top: 5px;
+  padding: 10px;
+  background: #fff;
 }
 .startProcessingBtn {
   display: inline-block;
@@ -23,6 +40,7 @@
   border: 1px solid #ccc;
   cursor: pointer;
 }
+
 .startProcessingWraper {
   margin-top: 30px;
   padding: 0;
