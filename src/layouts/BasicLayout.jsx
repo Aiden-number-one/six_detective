@@ -140,7 +140,7 @@ const BasicLayout = props => {
       </a>
       <a
         onClick={() => {
-          router.push('/homepage/Approval-Process-Center');
+          router.push('/homepage/Approval-Process-Center?task=all');
         }}
       >
         <span>
