@@ -66,32 +66,39 @@ class AuditTrailLogging extends Component {
         key: 'index',
         visible: true,
         fixed: 'left',
+        width: 60,
       },
       {
         key: 'functionName',
         visible: true,
         fixed: 'left',
+        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'tableName',
         visible: true,
+        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'biToCode',
         visible: false,
+        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'productCode',
         visible: true,
+        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'effectiveTime',
         visible: true,
         className: 'columnsnone',
+        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'filedUpdated',
         visible: false,
+        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'updateType',
@@ -115,6 +122,7 @@ class AuditTrailLogging extends Component {
         fixed: 'right',
       },
     ],
+    // countColumns: 1,
     columns: [
       {
         index: 0,
@@ -132,7 +140,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'functionName',
         key: 'functionName',
         ellipsis: true,
-        width: 160,
+        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 2,
@@ -140,20 +148,22 @@ class AuditTrailLogging extends Component {
         dataIndex: 'tableName',
         key: 'tableName',
         ellipsis: true,
-        width: 160,
         colSpan: 1,
+        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 3,
         title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),
         dataIndex: 'biToCode',
         key: 'biToCode',
+        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 4,
         title: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
         dataIndex: 'productCode',
         key: 'productCode',
+        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 5,
@@ -187,6 +197,7 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
+        width: 110,
       },
       {
         index: 10,
@@ -199,13 +210,18 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.after' }),
         dataIndex: 'after',
         key: 'after',
-        width: 100,
       },
     ],
     getAuditLogList: [],
   };
 
   auditLogForm = React.createRef();
+
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   return {
+  //     countColumns: prevState.columns.length,
+  //   };
+  // }
 
   componentDidMount() {
     this.filterColumns();
@@ -375,11 +391,14 @@ class AuditTrailLogging extends Component {
     });
     newColumns.sort((o1, o2) => o1.index - o2.index);
     newColumns.forEach((element, index) => {
-      if (Object.hasOwnProperty('fixed')) {
-        delete element.fixed;
-      }
+      // if (Object.hasOwnProperty('fixed')) {
+      //   delete element.fixed;
+      // }
+      element.fixed = '';
+      // element.width = `${100 / newColumns.length}%`
       if (index === 0) {
         element.fixed = 'left';
+        // element.width = 60
       }
       if (index === newColumns.length - 1) {
         element.fixed = 'right';
