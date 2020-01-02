@@ -57,9 +57,7 @@ class FormUser extends Component {
                   })} is missing`,
                 },
                 {
-                  message: `Error: Mis-typed in ${formatMessage({
-                    id: 'systemManagement.emailParameter.port',
-                  })}`,
+                  message: 'The numbers of characters should be between 0 to 65535',
                   pattern: portPattern,
                 },
               ],
