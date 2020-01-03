@@ -411,11 +411,11 @@ class AuditTrailLogging extends Component {
       element.fixed = '';
       // element.width = `${100 / newColumns.length}%`
       element.width = '';
-      if (index === 0) {
+      if (newColumns.length > 5 && index === 0) {
         element.fixed = 'left';
         element.width = 60;
       }
-      if (index === newColumns.length - 1) {
+      if (newColumns.length > 5 && index === newColumns.length - 1) {
         element.fixed = 'right';
         element.width = 120;
       }
