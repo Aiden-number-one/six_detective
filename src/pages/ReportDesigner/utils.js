@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-03 17:41:07
+ * @LastEditTime : 2020-01-03 19:06:00
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -204,9 +204,7 @@ export function getTemplateAreaCellPartXml(contentDetail) {
   spreadSheetData.forEach((colsValue, colsIndex) => {
     colsValue.forEach((rowsValue, rowsIndex) => {
       const cellText = rowsValue;
-      const { cellType, rowSpan = '1', colSpan = '1', style } = spreadSheetProps[colsIndex][
-        rowsIndex
-      ];
+      const { cellType, style } = spreadSheetProps[colsIndex][rowsIndex];
       const {
         bgcolor,
         forecolor,
@@ -235,8 +233,8 @@ export function getTemplateAreaCellPartXml(contentDetail) {
         borderRightWidth,
       } = style;
       // 生成
-      cellxml += `<cell expand="None" name="${createCellPos(rowsIndex) +
-        (colsIndex + 1).toString()}" row="${rowSpan}" col="${colSpan}">
+      cellxml += `<cell expand="Down" name="${createCellPos(colsIndex) +
+        (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}">
         <cell-style font-size="${fontSize}" align="${align}" valign="${valign}" ${bgcolor &&
         `bgcolor="${bgcolor}"`} ${forecolor && `bgcolor="${forecolor}"`} ${underline &&
         `underline="${underline}"`} ${fontFamily && `font-family="${fontFamily}"`} ${italic &&
@@ -253,7 +251,9 @@ export function getTemplateAreaCellPartXml(contentDetail) {
       } else if (cellType === 'DATASET') {
         const datasetName = cellText.split('.')[0];
         const property = cellText.split('.')[1];
-        cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}"></dataset-value>`;
+        cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}" aggregate="group" order="none" mapping-type="simple"></dataset-value>`;
+      } else {
+        cellxml += '<simple-value><![CDATA[]]></simple-value>';
       }
       cellxml += '</cell>';
     });
