@@ -1,12 +1,15 @@
 .approvalDesign {
   padding: 10px !important;
   background-color: #fff !important;
+  :global {
+    .ant-upload-list {
+      display: none !important;
+    }
+  }
+
   .contentBox {
     position: relative;
     display: flex;
-    .leftBox {
-      // background: #f6f8fb;
-    }
     .rightBox {
       width: 100%;
       height: calc(100vh - 200px);

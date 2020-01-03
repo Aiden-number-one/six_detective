@@ -4,8 +4,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2019-12-27 19:43:58
- * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-02 19:48:32
+ * @LastEditors  : iron
  */
 
 import { components, menuIcons, iframe } from '@/utils/common';
@@ -259,5 +259,7 @@ export function stringToNum(a) {
   }
   return numout;
 }
-
+export function isFormData(v) {
+  return Object.prototype.toString.call(v) === '[object FormData]';
+}
 export { isProOrDev, isUrl, geneMenuData, getRandowNVPS, passWordStrength };

@@ -160,7 +160,7 @@ class ApprovalAuditor extends PureComponent {
                 />
               </div>
               <div className={styles.rightBox}>
-                <iframe title="diagram" width="100%" height="300px" src={diagramUrl}></iframe>
+                <iframe title="diagram" width="100%" src={diagramUrl}></iframe>
               </div>
               <Drawer
                 title="Auditor"

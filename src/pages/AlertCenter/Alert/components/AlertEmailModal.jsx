@@ -4,9 +4,6 @@ import { FormattedMessage } from 'umi/locale';
 import btnStyles from '@/pages/DataImportLog/index.less';
 
 export default function({ loading, visible, content, handleCancel, onSendEmail }) {
-  async function handleCommit() {
-    onSendEmail();
-  }
   return (
     <Drawer
       title={<FormattedMessage id="alert-center.email-content" />}
@@ -16,14 +13,14 @@ export default function({ loading, visible, content, handleCancel, onSendEmail }
       bodyStyle={{ paddingBottom: 80 }}
       onClose={handleCancel}
     >
-      <Spin spinning={false}>{content}</Spin>
+      <Spin spinning={false}>1231</Spin>
       <div className={btnStyles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
         <Button
           type="primary"
           disabled={!content}
-          onClick={handleCommit}
-          loading={loading['alertCenter/assignTask']}
+          onClick={onSendEmail}
+          loading={loading['alertCenter/sendEmail']}
         >
           Commit
         </Button>

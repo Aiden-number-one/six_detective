@@ -31,7 +31,7 @@ function MarketLog({ dispatch, loading, logs, page: current, total }) {
   }
 
   function handlePageChange(page, pageSize) {
-    dispatch({ type: 'market/reload', payload: { page, pageSize, ...searchParams } });
+    dispatch({ type: 'market/fetch', payload: { page, pageSize, ...searchParams } });
   }
 
   async function handleUpload(params) {
