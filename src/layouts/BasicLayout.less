@@ -53,6 +53,9 @@
       width: 35px;
       height: 45px;
       border-right: 1px dotted #aaa69c;
+      & > span {
+        line-height: 15px;
+      }
       .bell {
         font-size: 22px;
       }
@@ -81,11 +84,17 @@
   .userinfo.ant-popover-placement-bottomRight {
     padding-top: 12px;
   }
+  .taskinfo.ant-popover-placement-bottomRight {
+    padding-top: 7px;
+  }
   .ant-pro-basicLayout-content.ant-pro-basicLayout-has-header {
     padding-top: 45px;
   }
   .ant-popover-inner-content {
     padding: 0;
+  }
+  .ant-popover-arrow {
+    display: none;
   }
 }
 .popoverFooter {
@@ -102,5 +111,23 @@
   background-color: #f3f6f9;
   a {
     color: #0d87d4;
+  }
+}
+.infoContent {
+  display: flex;
+  flex-direction: column;
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 200px;
+    height: 40px;
+    padding: 0 10px;
+    color: #97a4b0;
+    font-size: 12px;
+  }
+  a:hover {
+    color: #0d87d4;
+    background-color: #f3f6f9;
   }
 }

@@ -2,7 +2,7 @@
  * @Description: 修改数据集名称
  * @Author: lan
  * @Date: 2019-12-11 20:54:21
- * @LastEditTime : 2019-12-24 13:25:13
+ * @LastEditTime : 2020-01-02 20:02:52
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -41,10 +41,6 @@ export default class ParamSetting extends PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { toggleDrawer, visible, clearRecord, record } = this.props;
-    let datasetParams = [];
-    if (record.datasetParams) {
-      datasetParams = JSON.parse(record.datasetParams);
-    }
     return (
       <Drawer
         title="Params"
@@ -57,17 +53,22 @@ export default class ParamSetting extends PureComponent {
         destroyOnClose
       >
         <Form onSubmit={this.handleSubmit}>
-          {datasetParams.map(item => (
-            <Form.Item label={item.parameter_name} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
-              {getFieldDecorator(item.parameter_name, {
-                rules: [
-                  {
-                    required: true,
-                  },
-                ],
-              })(<Input />)}
-            </Form.Item>
-          ))}
+          {record.datasetParams &&
+            record.datasetParams.map(item => (
+              <Form.Item
+                label={item.parameter_name}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+              >
+                {getFieldDecorator(item.parameter_name, {
+                  rules: [
+                    {
+                      required: true,
+                    },
+                  ],
+                })(<Input />)}
+              </Form.Item>
+            ))}
           <div
             style={{
               position: 'absolute',

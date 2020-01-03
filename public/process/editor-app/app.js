@@ -19,7 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 var activitiModeler = angular.module('activitiModeler', [
   'ngCookies',
   'ngResource',
@@ -104,30 +103,31 @@ activitiModeler
 
       /* Helper method to fetch model from server (always needed) */
       function fetchModel(modelId) {
-        const V = 'v2.0'; // 版本号
-        const N = 'bayconnect.superlop.get_workflow_model_detail'; // 接口名
-        const P = {
+        var V = 'v2.0'; // 版本号
+        var N = 'bayconnect.superlop.get_workflow_model_detail'; // 接口名
+        var P = {
           modelId: modelId,
         }; // 参数
-        const S = new Date().getTime(); // 时间戳
-        var dataAndHeader = KISBPM.URL.getParams({ N, V, P, S });
-        const data = dataAndHeader.param;
-        const header = dataAndHeader.header;
+        var S = new Date().getTime(); // 时间戳
+        var dataAndHeader = KISBPM.URL.getParams({ N: N, V: V, P: P, S: S });
+        var data = dataAndHeader.param;
+        var header = dataAndHeader.header;
         var transFn = function(data) {
           return jQuery.param(data);
         };
+        var defaultHeaders = {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+          'If-Modified-Since': '0',
+        };
+        var headerObject = Object.assign(header, defaultHeaders);
         var postCfg = {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-            'If-Modified-Since': '0',
-            ...header,
-          },
+          headers: headerObject,
           transformRequest: transFn,
         };
         $http
           .post('/api/' + V + '/' + N + '.json', data, postCfg)
-          .success(function(data, status, headers, config) {
-            var kdjson = data.bcjson;
+          .success(function(result, status, headers, config) {
+            var kdjson = result.bcjson;
             data = {};
             if (kdjson.flag === '0' || kdjson.len === 0) {
               console.error('Error loading model with id ' + modelId + ' ' + kdjson.msg);
@@ -135,13 +135,14 @@ activitiModeler
             } else {
               data = kdjson.items;
             }
+            console.log('data--888--->',data,kdjson)
             /**
              * 处理流条件 - xyx
              * 由于只能传递conditionsequenceflow属性，所以只能把自定义的类型
              * （保存在_conditionsequenceflowtype，百分比-percent，自定义流条件-condition)
              * 再加到conditionsequenceflow上，用来回显数据。
              */
-            var childShapes = data.model.childShapes || [],
+            var childShapes = data.model&&data.model.childShapes || [],
               childShape,
               properties,
               conditionsequenceflow;
@@ -242,7 +243,7 @@ activitiModeler
           $rootScope.editor.setSelection([]); // needed cause it checks for element changes and does nothing if the elements are the same
           $rootScope.editor.setSelection(
             $rootScope.selectedElements,
-            $rootScope.subSelectionElements,
+            $rootScope.subSelectionElements
           );
           $rootScope.selectedElements = undefined;
           $rootScope.subSelectionElements = undefined;
@@ -333,7 +334,7 @@ activitiModeler
                 $rootScope.editor.setSelection([]); // needed cause it checks for element changes and does nothing if the elements are the same
                 $rootScope.editor.setSelection(
                   $rootScope.selectedElements,
-                  $rootScope.subSelectionElements,
+                  $rootScope.subSelectionElements
                 );
                 $rootScope.selectedElements = undefined;
                 $rootScope.subSelectionElements = undefined;
@@ -493,7 +494,7 @@ activitiModeler
                 $rootScope.showAlert(alert);
               }
             },
-            alert.current.type == 'error' ? 5000 : 1000,
+            alert.current.type == 'error' ? 5000 : 1000
           );
         } else {
           $rootScope.alerts.current = undefined;

@@ -30,15 +30,22 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   }
 
   function handlePageChange(page, pageSize) {
-    dispatch({ type: 'newAccount/reload', payload: { page, pageSize, ...searchParams } });
+    dispatch({ type: 'newAccount/fetch', payload: { page, pageSize, ...searchParams } });
   }
-  async function handleUpload(params) {
-    await dispatch({ type: 'newAccount/importByManual', payload: params });
+  async function handleUpload(fileList) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const val of fileList) {
+      // eslint-disable-next-line no-await-in-loop
+      await dispatch({
+        type: 'newAccount/importByManual',
+        payload: val,
+      });
+    }
     setVisible(false);
   }
   async function handleDownload(lopImpId) {
     const reportUrl = await dispatch({
-      type: 'newAccount/fetchReportUrl',
+      type: 'lop/fetchReportUrl',
       payload: {
         lopImpId,
       },
@@ -51,12 +58,11 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
     <PageHeaderWrapper>
       <div className={styles.container}>
         <FilterForm formType={2} loading={loading} onParams={handleParams} />
-        {/* <NewAccountLogFilterForm loading={loading} onParams={handleParams} /> */}
         <NewAccountLogModal
           visible={visible}
           loading={loading}
-          handleCancel={() => setVisible(false)}
-          handleUpload={handleUpload}
+          onCancel={() => setVisible(false)}
+          onUpload={handleUpload}
         />
         <div className={styles['list-wrap']}>
           <Row className={styles['btn-group']}>

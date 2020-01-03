@@ -40,6 +40,12 @@ export default [
           //   component: './Monitor/Monitor',
           // },
           {
+            path: '/homepage/quick-menu-management',
+            name: 'quick-menu-management',
+            component: './HomePage/QuickMenu',
+            hideInMenu: true,
+          },
+          {
             path: '/homepage/alert-center',
             name: 'Alert Center',
             component: './AlertCenter/Alert',

@@ -40,24 +40,41 @@ const footerRender = () => (
 );
 
 const BasicLayout = props => {
-  const { dispatch, children, settings, collapsed, menuData } = props;
+  const { dispatch, children, settings, collapsed, menuData, taskCount, alertCount } = props;
 
   // console.log('props=========', props);
   /**
    * constructor
    */
   const [openKeys, setOpenKeys] = useState([]);
+  const [newMenuData, setNewMenuData] = useState([]);
 
   // const listenClose = () => {
   //   window.localStorage.clear();
   // }
 
   useEffect(() => {
+    dispatch({
+      type: 'menu/getMenuData',
+      callback: m => {
+        // newMenuData = Object.assign([], menuData);
+        setNewMenuData(m);
+        console.log('menuData====', m, menuData);
+      },
+    });
+  }, []);
+
+  useEffect(() => {
     setLocale('en-US');
     // window.addEventListener('beforeunload', listenClose, false);
     if (dispatch) {
       dispatch({
-        type: 'menu/getMenuData',
+        type: 'menu/getTaskCount',
+        payload: {},
+      });
+      dispatch({
+        type: 'menu/getAlertCount',
+        payload: {},
       });
       dispatch({
         type: 'login/getLoginStatus',
@@ -66,14 +83,17 @@ const BasicLayout = props => {
           // userAgent: window.navigator.userAgent,
         },
       });
+
       setInterval(() => {
-        dispatch({
-          type: 'login/getLoginStatus',
-          payload: {
-            // loginName: window.localStorage.currentUser,
-            // userAgent: window.navigator.userAgent,
-          },
-        });
+        if (window.location.pathname !== '/login') {
+          dispatch({
+            type: 'login/getLoginStatus',
+            payload: {
+              // loginName: window.localStorage.currentUser,
+              // userAgent: window.navigator.userAgent,
+            },
+          });
+        }
       }, 60000);
     }
   }, []);
@@ -99,8 +119,35 @@ const BasicLayout = props => {
           }
         }}
       >
-        <IconFont type="icon-xiaoxi" style={{ marginRight: 5 }} />
+        <IconFont type="icon-signout" style={{ marginRight: 5 }} />
         Sign Out
+      </a>
+    </div>
+  );
+
+  const infoContent = () => (
+    <div className={styles.infoContent}>
+      <a
+        onClick={() => {
+          router.push('/homepage/alert-center');
+        }}
+      >
+        <span>
+          <IconFont type="icon-alert" style={{ marginRight: 5 }} />
+          Alert Center
+        </span>
+        <span>({alertCount})</span>
+      </a>
+      <a
+        onClick={() => {
+          router.push('/homepage/Approval-Process-Center');
+        }}
+      >
+        <span>
+          <IconFont type="icon-approval" style={{ marginRight: 5 }} />
+          Approval Process Center
+        </span>
+        <span>({taskCount})</span>
       </a>
     </div>
   );
@@ -130,9 +177,21 @@ const BasicLayout = props => {
       </div>
       <div className={styles.right}>
         <div className={styles.info}>
-          <Badge dot>
-            <IconFont type="icon-xiaoxi" className={styles.bell} />
-          </Badge>
+          <Popover
+            placement="bottomRight"
+            content={infoContent()}
+            trigger="click"
+            overlayClassName="taskinfo"
+          >
+            {(Number(taskCount) > 0 || Number(alertCount) > 0) && (
+              <Badge dot>
+                <IconFont type="icon-xiaoxi" className={styles.bell} />
+              </Badge>
+            )}
+            {Number(taskCount) === 0 && Number(alertCount) === 0 && (
+              <IconFont type="icon-xiaoxi" className={styles.bell} />
+            )}
+          </Popover>
         </div>
         <div className={styles.user}>
           <IconFont type="icon-usercircle" className={styles.avatar} />
@@ -210,7 +269,7 @@ const BasicLayout = props => {
           );
         }}
         footerRender={footerRender}
-        menuDataRender={() => menuDataRender(menuData)}
+        menuDataRender={() => menuDataRender(newMenuData)}
         // menuDataRender={menuDataRender}
         formatMessage={formatMessage}
         rightContentRender={rightProps => <RightContent {...rightProps} />}
@@ -225,7 +284,7 @@ const BasicLayout = props => {
           openKeys,
           onOpenChange: openKeysNew => {
             const latestOpenKey = openKeysNew.slice(-1) ? openKeysNew.slice(-1)[0] : '';
-            if (menuData.map(value => value.page).indexOf(latestOpenKey) === -1) {
+            if (newMenuData.map(value => value.page).indexOf(latestOpenKey) === -1) {
               setOpenKeys(openKeysNew);
             } else {
               setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
@@ -243,4 +302,6 @@ export default connect(({ global, settings, menu }) => ({
   collapsed: global.collapsed,
   settings,
   menuData: menu.menuData,
+  taskCount: menu.taskCount,
+  alertCount: menu.alertCount,
 }))(BasicLayout);

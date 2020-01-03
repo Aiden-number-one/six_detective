@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2019-12-31 17:46:01
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-03 15:52:39
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -63,6 +63,10 @@ export default class DatasetManagement extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'dataSet/getClassifyTree',
+      payload: {
+        dataStyle: 'Y',
+        fileType: 'R',
+      },
     });
     dispatch({
       type: 'reportList/getReportList',
@@ -155,7 +159,7 @@ export default class DatasetManagement extends PureComponent {
   // 删除树节点
   handleDeleteTree = (e, nodeTree) => {
     this.setState({
-      drawerTitle: 'Delete DataSet Classify',
+      drawerTitle: 'Delete Folder',
     });
     this.operateType = 'DELETE';
     this.nodeTree = nodeTree;
@@ -165,7 +169,7 @@ export default class DatasetManagement extends PureComponent {
   // 修改树节点
   handleModifyTree = (e, nodeTree) => {
     this.setState({
-      drawerTitle: 'Edit DataSet Classify',
+      drawerTitle: 'Edit Folder',
     });
     this.operateType = 'EDIT';
     this.nodeTree = nodeTree;
@@ -175,7 +179,7 @@ export default class DatasetManagement extends PureComponent {
   // 新增树节点
   handleAddTree = (e, nodeTree) => {
     this.setState({
-      drawerTitle: 'ADD DataSet Classify',
+      drawerTitle: 'ADD Folder',
     });
     this.operateType = 'ADD';
     if (nodeTree) {
@@ -209,13 +213,16 @@ export default class DatasetManagement extends PureComponent {
     const param = {};
     // 新增树节点
     if (this.operateType === 'ADD') {
+      param.operType = this.operateType;
+      param.isParentFolder = '1';
+      param.fileType = 'R';
       // 新增二级以下节点
       if (this.nodeTree) {
-        param.className = values.className;
-        param.parentClassId = this.nodeTree.classId;
+        param.folderName = values.folderName;
+        param.parentFolderId = this.nodeTree.folderId;
       } else {
         // 新增跟节点
-        param.className = values.className;
+        param.folderName = values.folderName;
       }
       dispatch({
         type: 'dataSet/operateClassifyTree',
@@ -226,8 +233,9 @@ export default class DatasetManagement extends PureComponent {
     }
     // 修改节点
     if (this.operateType === 'EDIT') {
-      param.className = values.className;
-      param.classId = this.nodeTree.classId;
+      param.operType = 'UPD';
+      param.folderName = values.folderName;
+      param.folderId = this.nodeTree.folderId;
       dispatch({
         type: 'dataSet/operateClassifyTree',
         payload: {
@@ -237,7 +245,8 @@ export default class DatasetManagement extends PureComponent {
     }
     // 删除节点
     if (this.operateType === 'DELETE') {
-      param.ids = [this.nodeTree.classId];
+      param.operType = 'DEL';
+      param.folderId = this.nodeTree.folderId;
       dispatch({
         type: 'dataSet/deleteClassifyTree',
         payload: {
