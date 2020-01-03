@@ -6,6 +6,7 @@ import { formatMessage } from 'umi/locale';
 import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
 import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
+import { getAuthority } from '@/utils/authority';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -20,6 +21,7 @@ export default class DataProcessing extends Component {
     super();
     this.state = {
       codeId: '',
+      authBypass: false,
       dataProcessingVisible: false,
       dataProcessingFlag: false,
       codeColumns: [
@@ -125,6 +127,11 @@ export default class DataProcessing extends Component {
   }
 
   componentDidMount() {
+    // const { authBypass } = getStore('authBtn')
+    // this.setState({
+    //   authBypass,
+    // })
+    console.log('getAuthority=', getAuthority());
     this.queryDataProcessing();
   }
 
@@ -214,6 +221,7 @@ export default class DataProcessing extends Component {
       selectedRowKeys,
       functionNameOptions,
       dataProcessingVisible,
+      authBypass,
       dataProcessingFlag,
       dataCharts,
       cols,
@@ -222,12 +230,11 @@ export default class DataProcessing extends Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-    const hasSelected = selectedRowKeys.length > 0;
     return (
       <Fragment>
         <PageHeaderWrapper>
           <div className={styles.dataProcessingWraper}>
-            {false && (
+            {true && (
               <div className={styles.dataTableWraper}>
                 <div className={styles.dataTable}>
                   <Button type="primary" onClick={this.inspectData} className="btn-usual">
@@ -262,7 +269,7 @@ export default class DataProcessing extends Component {
                       onClick={this.addCode}
                       type="primary"
                       className="btn-usual"
-                      disabled={!hasSelected}
+                      disabled={!authBypass}
                     >
                       {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
                     </Button>
@@ -292,15 +299,20 @@ export default class DataProcessing extends Component {
                 </div>
               </div>
             )}
-            <div style={{ padding: '10px', background: '#fff' }}>
-              <Button type="primary" onClick={this.inspectData} className="btn-usual">
-                {formatMessage({ id: 'systemManagement.dataProcessing.inspectData' })}
-              </Button>
-              <div className={styles.dataEmptyWraper}>
-                <IconFont type="icon-empty-dataprocess" className={styles['dataprocessing-icon']} />
-                <div>Please Press Inspect Data to Display Outstanding Alerts</div>
+            {false && (
+              <div style={{ padding: '10px', background: '#fff' }}>
+                <Button type="primary" onClick={this.inspectData} className="btn-usual">
+                  {formatMessage({ id: 'systemManagement.dataProcessing.inspectData' })}
+                </Button>
+                <div className={styles.dataEmptyWraper}>
+                  <IconFont
+                    type="icon-empty-dataprocess"
+                    className={styles['dataprocessing-icon']}
+                  />
+                  <div>Please Press Inspect Data to Display Outstanding Alerts</div>
+                </div>
               </div>
-            </div>
+            )}
             <div className={styles.dataProcessing}>
               <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
                 <Col>

@@ -34,7 +34,7 @@ function EditableCell({ editing, dataIndex, title, record, children, ...restProp
   );
 }
 
-export function FileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, onRemove }) {
+function FileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, onRemove }) {
   return (
     <EditableContext.Provider value={form}>
       <Table
@@ -120,16 +120,7 @@ function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
   function handleCommit() {
     form.validateFields(async err => {
       if (!err) {
-        console.log(fileList);
         onUpload(fileList);
-        // const { uploadFiles, ...rest } = values;
-        // const { bcjson } = (uploadFiles && uploadFiles.length && uploadFiles[0].response) || {};
-        // const { flag, items = {} } = bcjson || {};
-        // if (flag === '1' && items) {
-        //   const filename = items.relativeUrl;
-        //   await handleUpload({ filename, ...rest });
-        //   form.resetFields();
-        // }
       }
     });
   }
@@ -141,8 +132,8 @@ function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
           fileList.map(item => {
             if (item.uid === uid) {
               return {
-                ...values,
                 ...item,
+                ...values,
               };
             }
             return item;
@@ -155,7 +146,7 @@ function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
 
   function handleRemove(file) {
     setFileList(fileList.filter(f => f.uid !== file.uid));
-    if (!fileList.lenght) {
+    if (!fileList.length) {
       form.resetFields();
     }
   }

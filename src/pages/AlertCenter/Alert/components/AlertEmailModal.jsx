@@ -13,7 +13,7 @@ export default function({ loading, visible, content, handleCancel, onSendEmail }
       bodyStyle={{ paddingBottom: 80 }}
       onClose={handleCancel}
     >
-      <Spin spinning={false}>{content}</Spin>
+      <Spin spinning={false}>1231</Spin>
       <div className={btnStyles['bottom-btns']}>
         <Button onClick={handleCancel}>Cancel</Button>
         <Button

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-02 21:26:29
+ * @LastEditTime : 2020-01-03 09:19:29
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -75,8 +75,11 @@ export async function exportAlert({ fileType }) {
   });
 }
 export async function getEmailByType(params) {
-  return request('api_get_email_by_alert_id', {
-    data: params,
+  return request('get_email_by_alert_id', {
+    data: {
+      ...params,
+      alertId: '888',
+    },
   });
 }
 

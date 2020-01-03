@@ -30,25 +30,22 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   }
 
   function handlePageChange(page, pageSize) {
-    dispatch({ type: 'newAccount/reload', payload: { page, pageSize, ...searchParams } });
+    dispatch({ type: 'newAccount/fetch', payload: { page, pageSize, ...searchParams } });
   }
   async function handleUpload(fileList) {
-    const count = fileList.length;
-    console.log(count);
-
-    // dispatch({
-    //   type: 'newAccount/fileUpload',
-    //   payload: {
-    //     file,
-    //   },
-    // });
-    // dispatch({ type: 'newAccount/importByManual', payload: params });
-    // await dispatch({ type: 'newAccount/importByManual', payload: params });
-    // setVisible(false);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const val of fileList) {
+      // eslint-disable-next-line no-await-in-loop
+      await dispatch({
+        type: 'newAccount/importByManual',
+        payload: val,
+      });
+    }
+    setVisible(false);
   }
   async function handleDownload(lopImpId) {
     const reportUrl = await dispatch({
-      type: 'newAccount/fetchReportUrl',
+      type: 'lop/fetchReportUrl',
       payload: {
         lopImpId,
       },
