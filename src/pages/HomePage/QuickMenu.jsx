@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Transfer, Tree, Icon } from 'antd';
-// import classNames from 'classnames';
+import { Transfer, Tree, Icon, Button, Modal } from 'antd';
+import classNames from 'classnames';
+import router from 'umi/router';
 import _ from 'lodash';
 import { connect } from 'dva';
 
@@ -11,8 +12,9 @@ import styles from './QuickMenu.less';
 
 const { TreeNode } = Tree;
 
-@connect(({ menu }) => ({
+@connect(({ menu, quickMenu }) => ({
   menuData: menu.menuData,
+  quickMenuData: quickMenu.quickMenuData,
 }))
 export default class QuickMenu extends PureComponent {
   state = {
@@ -20,7 +22,22 @@ export default class QuickMenu extends PureComponent {
     targetKeys: [],
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'quickMenu/getQuickMenu',
+      payload: {},
+      callback: values => {
+        const targetKeys = [];
+        values.forEach(item => targetKeys.push(item.menuid));
+        const targetData = this.TreeFolderTrans(values);
+        this.setState({
+          targetData,
+          targetKeys,
+        });
+      },
+    });
+  }
 
   // 左边树
   generateLeftTree = (treeNodes = [], checkedKeys = []) =>
@@ -106,10 +123,10 @@ export default class QuickMenu extends PureComponent {
       const index = targetData.findIndex(item => item.key === target.key);
       const newTargetData = [...targetData];
       const newTargetKeys = [...targetKeys];
-      newTargetData.splice(index + 1, 0, target);
-      newTargetData.splice(index - 1, 1);
-      newTargetKeys.splice(index + 1, 0, target.key);
-      newTargetKeys.splice(index - 1, 1);
+      newTargetData.splice(index + 2, 0, target);
+      newTargetData.splice(index, 1);
+      newTargetKeys.splice(index + 2, 0, target.key);
+      newTargetKeys.splice(index, 1);
       this.setState({
         targetData: newTargetData,
         targetKeys: newTargetKeys,
@@ -136,8 +153,50 @@ export default class QuickMenu extends PureComponent {
     return dataList;
   };
 
+  // 保存操作
+  saveQuickMenu = () => {
+    const { targetKeys } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'quickMenu/saveQuickMenu',
+      payload: {
+        menuIds: targetKeys.join(','),
+      },
+      callback: values => {
+        const keys = [];
+        values.forEach(item => keys.push(item.menuid));
+        const targetData = this.TreeFolderTrans(values);
+        this.setState({
+          targetData,
+          targetKeys: keys,
+        });
+      },
+    });
+  };
+
+  // 确认弹框
+  showConfirm = type => {
+    Modal.confirm({
+      content:
+        type === 'clear'
+          ? 'Do you confirm to clear quick menu?'
+          : 'Do you confirm to give up the updated quick menu?',
+      onOk: () => {
+        if (type === 'clear') {
+          this.setState({
+            targetData: [],
+            targetKeys: [],
+          });
+        } else {
+          router.goBack();
+        }
+      },
+      onCancel() {},
+    });
+  };
+
   render() {
-    const { menuData } = this.props;
+    const { menuData, quickMenuData } = this.props;
 
     const { targetKeys, targetData } = this.state;
 
@@ -163,6 +222,22 @@ export default class QuickMenu extends PureComponent {
           targetKeys={targetKeys}
           dataSource={transferDataSource}
           showSelectAll={false}
+          rowKey={record => record.key}
+          titles={[
+            <h3 className={styles.groupTitle}>All Menu</h3>,
+            <h3 className={styles.groupTitle}>
+              Quick Menu
+              <Button
+                className={classNames('btn-usual', styles.quickMenuIcon)}
+                type="primary"
+                onClick={() => {
+                  this.showConfirm('clear');
+                }}
+              >
+                Clear
+              </Button>
+            </h3>,
+          ]}
         >
           {({ direction, selectedKeys }) => {
             if (direction === 'left') {
@@ -183,6 +258,24 @@ export default class QuickMenu extends PureComponent {
             return null;
           }}
         </Transfer>
+        <div className={styles.buttonGroup}>
+          <Button
+            className="btn-usual"
+            type="primary"
+            onClick={() => {
+              if (_.isEqual(quickMenuData, targetKeys)) {
+                router.goBack();
+              } else {
+                this.showConfirm();
+              }
+            }}
+          >
+            Return
+          </Button>
+          <Button type="primary" onClick={this.saveQuickMenu}>
+            Save
+          </Button>
+        </div>
       </PageHeaderWrapper>
     );
   }

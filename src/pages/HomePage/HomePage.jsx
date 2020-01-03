@@ -13,57 +13,6 @@ import styles from './HomePage.less';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
-const MenuItem = [
-  {
-    title: 'LOP Data Import',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Alert Model  Management',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Market Data Import',
-    icon: 'icon-data',
-  },
-  {
-    title: 'EP Code',
-    icon: 'icon-data',
-  },
-  {
-    title: 'LOP Data Import',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Product Code',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Submitter  Information',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Rule  Maintenance',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Parameter Maintenance',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Position Data',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Market Data Import',
-    icon: 'icon-data',
-  },
-  {
-    title: 'EP Code',
-    icon: 'icon-data',
-  },
-];
-
 @connect(({ allAlert, perAlert }) => ({
   allAlterData: allAlert.allAlterData, // 全部的alert的数据
   allAlertCount: allAlert.allAlertCount, // 全部alert总数
@@ -78,6 +27,7 @@ export default class HomePage extends PureComponent {
   state = {
     alertState: 'ALL', // ALERT切换按钮
     textActive: 'Today', // today this week切换
+    targetData: [],
   };
 
   componentDidMount() {
@@ -126,7 +76,36 @@ export default class HomePage extends PureComponent {
       type: 'perAlert/getPerClosedAlterCount',
       payload: {},
     });
+    dispatch({
+      type: 'quickMenu/getQuickMenu',
+      payload: {},
+      callback: values => {
+        const targetData = this.TreeFolderTrans(values);
+        this.setState({
+          targetData,
+        });
+      },
+    });
   }
+
+  // 接口菜单数据转化为Ant Tree所需数据
+  TreeFolderTrans = value => {
+    const dataList = [];
+    value.forEach(item => {
+      if (item.children) {
+        item.children = this.TreeFolderTrans(item.children);
+      }
+      const param = {
+        key: item.menuid,
+        value: item.menuid,
+        title: item.menuname,
+        children: item.children,
+        ...item,
+      };
+      dataList.push(param);
+    });
+    return dataList;
+  };
 
   // 渲染Alter ALL条形图
   renderAlterAllChart = data => {
@@ -308,7 +287,7 @@ export default class HomePage extends PureComponent {
       // perClosedAlertCount, // personal Closed Alert 总数
     } = this.props;
 
-    const { alertState, textActive } = this.state;
+    const { alertState, textActive, targetData } = this.state;
 
     return (
       <div>
@@ -528,10 +507,16 @@ export default class HomePage extends PureComponent {
                       />
                     </h3>
                     <Row>
-                      {MenuItem.map(item => (
+                      {targetData.map(item => (
                         <Col span={11} className={styles.menuItem}>
-                          <IconFont type={item.icon} className={styles.icon} />
-                          <span>{item.title}</span>
+                          {/* <IconFont type={item.icon} className={styles.icon} /> */}
+                          <span
+                            onClick={() => {
+                              router.push(item.menuurl);
+                            }}
+                          >
+                            {item.title}
+                          </span>
                         </Col>
                       ))}
                     </Row>
