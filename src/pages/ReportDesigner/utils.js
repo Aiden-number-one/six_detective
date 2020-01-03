@@ -1,20 +1,19 @@
 /*
- * @Des: Des
- * @Author: mus
- * @Email: mus@szkingdom.com
- * @Date: 2019-12-23 10:17:57
- * @LastEditors  : mus
- * @LastEditTime : 2019-12-30 17:07:30
- */
-/*
  * @Des: 报表设计器的
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-23 16:22:29
+ * @LastEditTime : 2020-01-03 16:21:36
  */
 import uuidv1 from 'uuid/v1';
+import { stringToNum, createCellPos } from '@/utils/utils';
+
+// 单元格初始化高
+export const INITHEIGHT = 23;
+
+// 单元格初始化宽
+export const INITWIDTH = 180;
 
 /**
  * @description: 根据公有数据集列表字段生成所JSON中的数据集字段
@@ -129,44 +128,142 @@ export function dataSetTree(dataSets) {
 }
 
 /**
- * @description: 转换报表内设置的JSON串
- * @param {object} contentDetail 表格相关信息
- * @param {object} originContentDetail 源数据
- * @return {object} 报表JSON串中的temaplateArea相关
+ * @description: 生成xml部分的宽高部分
+ * @param {type} param
+ * @return: return
+ * @Author: mus
+ * @Date: 2020-01-02 21:32:58
+ */
+export function getColColumnXml(contentDetail) {
+  let colColumnCel = '';
+  const { rowArray, columnArray } = contentDetail[0];
+  rowArray.forEach((value, index) => {
+    colColumnCel += `<row row-number="${(index + 1).toString()}" height="${value.toString()}"/>`;
+  });
+  columnArray.forEach((value, index) => {
+    colColumnCel += `<column col-number="${(index + 1).toString()}" width="${value.toString()}"/>`;
+  });
+  return colColumnCel;
+}
+
+/**
+ * @description: 根据数据集生成数据集的xml
+ * @param {type} param
+ * @return: return
+ * @Author: mus
+ * @Date: 2020-01-03 10:55:58
+ */
+export function getDataSetXml(contentDetail) {
+  const dataSourceMap = {};
+  contentDetail.forEach(value => {
+    const currentDataSet = dataSourceMap[value.query.datasource_id];
+    if (currentDataSet) {
+      currentDataSet.push(value);
+      return;
+    }
+    dataSourceMap[value.query.datasource_id] = [value];
+  });
+  let dataSetXml = '';
+  Object.entries(dataSourceMap).forEach(([datasourceId, datasourceValue]) => {
+    const { query = {} } = datasourceValue[0];
+    const { datasource_name: datasourceName } = query;
+    dataSetXml += `<datasource datasourceid="${datasourceId}" name="${datasourceName}" type="jdbc" username="db2inst1" password="db2inst1" url="jdbc:db2://10.60.69.126:50000/sample:currentSchema=SLOP_SYS;" driver="com.ibm.db2.jcc.DB2Driver">`;
+    datasourceValue.forEach(dataset => {
+      const { dataset_name: datasetName, dataset_type: type, fields = [] } = dataset;
+      dataSetXml += ` <dataset name="${datasetName}" type="${type}">`;
+      fields.forEach(field => {
+        const { field_data_name: name } = field;
+        dataSetXml += `<field name="${name}"/>`;
+      });
+      dataSetXml += '</dataset>';
+    });
+    dataSetXml += '</datasource>';
+  });
+  return dataSetXml;
+}
+
+/**
+ * @description: 生成xml部分的单元格部分
+ * @param {type} param
+ * @return: return
+ * @Author: mus
+ * @Date: 2020-01-02 17:25:52
+ */
+export function getTemplateAreaCellPartXml(contentDetail) {
+  let cellxml = '';
+  const spreadSheetData = contentDetail[0].data;
+  const spreadSheetProps = contentDetail[0].cellAttrs;
+  spreadSheetData.forEach((colsValue, colsIndex) => {
+    colsValue.forEach((rowsValue, rowsIndex) => {
+      const cellText = rowsValue;
+      const { cellType, rowSpan = '1', colSpan = '1', style } = spreadSheetProps[colsIndex][
+        rowsIndex
+      ];
+      const {
+        bgcolor,
+        forecolor,
+        underline,
+        align = 'center',
+        valign = 'middle',
+        fontFamily,
+        italic,
+        bold,
+        fontSize = '10',
+        borderBottom,
+        borderBottomColor,
+        borderBottomType,
+        borderBottomWidth,
+        borderTop,
+        borderTopColor,
+        borderTopType,
+        borderTopWidth,
+        borderLeft,
+        borderLeftColor,
+        borderLeftType,
+        bordeLeftWidth,
+        borderRight,
+        borderRightColor,
+        borderRightType,
+        borderRightWidth,
+      } = style;
+      // 生成
+      cellxml += `<cell expand="None" name="${createCellPos(rowsIndex) +
+        (colsIndex + 1).toString()}" row="${rowSpan}" col="${colSpan}">
+        <cell-style font-size="${fontSize}" align="${align}" valign="${valign}" ${bgcolor &&
+        `bgcolor="${bgcolor}"`} ${forecolor && `bgcolor="${forecolor}"`} ${underline &&
+        `underline="${underline}"`} ${fontFamily && `font-family="${fontFamily}"`} ${italic &&
+        `italic="${italic}"`} ${bold && `italic="${bold}"`} ${borderBottom &&
+        `<bottom-border width=${borderBottomWidth} style=${borderBottomType} color=${borderBottomColor}`} ${borderTop &&
+        `<top-border width=${borderTopWidth} style=${borderTopType} color=${borderTopColor}`} ${borderLeft &&
+        `<left-border width=${bordeLeftWidth} style=${borderLeftType} color=${borderLeftColor}`} ${borderRight &&
+        `<right-border width=${borderRightWidth} style=${borderRightType} color=${borderRightColor}`}></cell-style>`;
+      // 去除undefined
+      cellxml = cellxml.replace(/ undefined/g, '');
+      // 生成value相关元素
+      if (cellType === 'TEXT') {
+        cellxml += `<simple-value><![CDATA[${cellText}]]></simple-value>`;
+      } else if (cellType === 'DATASET') {
+        const datasetName = cellText.split('.')[0];
+        const property = cellText.split('.')[1];
+        cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}"></dataset-value>`;
+      }
+      cellxml += '</cell>';
+    });
+  });
+  return cellxml;
+}
+
+/**
+ * @description: 修改TemplateArea内的type
+ * @param {object}  object 分别为：原始的TemplateArea、需要修改的key值、改为的value值、修改单元格的position
+ * @return {object} 新的TemplateArea
  * @Author: mus
  * @Date: 2019-12-23 16:41:39
  */
-export function getTemplateArea(contentDetail, originContentDetail) {
-  const spreadSheetData = contentDetail[0].data;
-  const spreadSheetProps = contentDetail[0].cellAttrs;
-  const needRowsCols = spreadSheetData.map((colsValue, colsIndex) => ({
-    cols: colsValue.map((rowsValue, rowsIndex) => {
-      const cellText = rowsValue;
-      const { cellType } = spreadSheetProps[colsIndex][rowsIndex];
-      return {
-        cell_type: cellType,
-        cell_expression: '', // 公式相关
-        cell_default_value: '', // reserved
-        cell_text: cellType === 'DATASET' ? `=${cellText}` : cellText, // text（=ds.reg_name|用户机构|$V{dian}|all）
-        cell_input_type: 'input', // 类型相关 （input|select|date|file|text|checkbox）
-        dict: '', // reserved
-        link: '', // reserved
-        frameid: '', // reserved
-        width: '', // reserved
-        colwidth: '', // reserved
-        height: '', // reserved
-        rowspan: '', // rowspan
-        colspan: '', // colspan
-        cell_style: spreadSheetProps[colsIndex][rowsIndex].style,
-      };
-    }),
-  }));
-  return {
-    page_order: '', // reserved
-    page_size: '', // reserved
-    max_row: '', // reserved
-    max_column: '', // reserved
-    rows: needRowsCols,
-    originContentDetail,
-  };
+export function modifyTemplateAreaInside({ originTemplateArea, type, value, position }) {
+  const colIndex = stringToNum(position.match(/([A-Z]+)([0-9]+)/)[1]) - 1;
+  const rowIndex = position.match(/([A-Z]+)([0-9]+)/)[2] - 1;
+  const content = originTemplateArea.rows[rowIndex].cols[colIndex];
+  content[type] = value;
+  return { ...originTemplateArea };
 }

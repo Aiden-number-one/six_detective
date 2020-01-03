@@ -11,13 +11,26 @@
         background-color: transparent;
       }
     }
+    .ant-list-empty-text {
+      padding: 0;
+    }
+    .ant-row {
+      height: 330px;
+      overflow: auto;
+    }
   }
   .groupTitle {
+    position: relative;
     margin: 0;
     padding: 8px 5px 0;
     color: #464c51;
     font-weight: 600;
     font-size: 12px;
+    .quickMenuIcon {
+      position: absolute;
+      right: 15px;
+      color: #0d87d4;
+    }
   }
   .groupTitle::before {
     display: inline-block;
@@ -113,12 +126,15 @@
             background-color: #f4374c;
             .leftBlock,
             .rightBlock {
+              position: relative;
               display: flex;
               flex-direction: column;
               align-items: center;
               justify-content: center;
               img {
                 position: absolute;
+                top: 0;
+                right: 5px;
               }
               .title {
                 margin-top: 7px;
@@ -214,12 +230,13 @@
       flex-direction: column;
       .quickMenu {
         min-width: 310px;
+        min-height: 366px;
         padding: 5px;
         background-color: #fff;
         .menuItem {
           display: flex;
           align-items: center;
-          min-width: 140px;
+          min-width: 130px;
           height: 45px;
           margin: 5px;
           padding: 0 15px;
@@ -238,6 +255,7 @@
         }
       }
       .information {
+        height: 257px;
         margin-top: 5px;
         padding: 5px;
         color: #464c51;

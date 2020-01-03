@@ -401,7 +401,7 @@ function ProcessDetail({
               {currentTaskType !== 'his' && currentOwner ? (
                 <div className={styles['comment-box']}>
                   <TextArea
-                    placeholder="COMMENT"
+                    placeholder="Plase Input Comment"
                     className={styles.txt}
                     value={comment}
                     onChange={({ target: { value } }) => setComment(value)}

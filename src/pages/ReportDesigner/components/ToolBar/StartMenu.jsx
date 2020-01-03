@@ -518,7 +518,10 @@ export default class ToolBar extends Component {
                           this.setState({
                             backgroundColor: value.hex,
                           });
-                          setCellStyle('bgcolor', value.hex);
+                          setCellStyle(
+                            'bgcolor',
+                            `rgb(${value.rgb.r},${value.rgb.g},${value.rgb.b})`,
+                          );
                         }}
                       />
                     }
@@ -547,7 +550,10 @@ export default class ToolBar extends Component {
                           this.setState({
                             fontColor: value.hex,
                           });
-                          setCellStyle('color', value.hex);
+                          setCellStyle(
+                            'color',
+                            `rgb(${value.rgb.r},${value.rgb.g},${value.rgb.b})`,
+                          );
                         }}
                       />
                     }

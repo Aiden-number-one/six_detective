@@ -2,13 +2,13 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2019-12-31 10:41:49
+ * @LastEditTime : 2020-01-03 16:32:54
  * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
 import { generateJson } from './spreadSheetUtil';
-import { getTemplateArea } from '../../utils';
+import { INITHEIGHT, INITWIDTH } from '../../utils';
 
 const styleKeyMap = {
   'font-bold': 'bold',
@@ -61,13 +61,13 @@ export default WrapperComponent =>
         name: 'sheet1',
         fxObj: document.querySelector('#fxFn'),
         row: {
-          len: 10,
-          height: 23,
+          len: 5,
+          height: INITHEIGHT,
           minHeight: 2, // 设置高度可调最小高度
         },
         col: {
-          len: 20,
-          width: 180,
+          len: 5,
+          width: INITWIDTH,
           indexWidth: 20,
           minWidth: 2, // 设置列最小宽度
           colAttr: [],
@@ -239,7 +239,7 @@ export default WrapperComponent =>
           const contentDetail = generateJson(changeData);
           dispatch({
             type: 'reportDesigner/setTemplateArea',
-            payload: getTemplateArea(contentDetail, changeData),
+            payload: { contentDetail, changeData },
           });
         });
     };
