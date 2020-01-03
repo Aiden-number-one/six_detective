@@ -4,9 +4,9 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-02 19:44:49
+ * @LastEditTime : 2020-01-03 09:54:56
  */
-// import { message } from 'antd';
+import { message } from 'antd';
 import { request } from '@/utils/request.default';
 import { reqFormat as format } from '../constants';
 
@@ -24,6 +24,10 @@ export async function getLogs(params = {}) {
   });
 }
 
+export async function postAuto() {
+  return request('set_manual_start_new_acc_job');
+}
+
 export async function postManual(params) {
   return request('set_lop_report_manual_import', { data: params });
 }
@@ -36,8 +40,6 @@ export async function fileUpload(params) {
     data: formData,
   });
 }
-
-export const pageSelector = ({ newAccount }) => newAccount.page;
 
 export default {
   namespace: 'newAccount',
@@ -74,19 +76,27 @@ export default {
       });
     },
     *importByManual({ payload }, { call }) {
-      const { err } = yield call(postManual, payload);
+      const { file, market, submitterCode } = payload;
+      const { err: uploadErr, items } = yield call(fileUpload, { file });
+
+      const { err: manualErr } = yield call(postManual, {
+        filename: items.relativeUrl,
+        market,
+        submitterCode,
+      });
+
+      const err = manualErr || uploadErr;
       if (err) {
         throw new Error(err);
       }
-      // message.success(msg);
-      // yield put({ type: 'fetch', payload });
     },
-    *fileUpload({ payload }, { call }) {
-      console.log(payload);
-      const { err } = yield call(fileUpload, payload);
+    *importByAuto({ payload }, { call, put }) {
+      const { err, msg } = yield call(postAuto);
       if (err) {
         throw new Error(err);
       }
+      message.success(msg);
+      yield put({ type: 'fetch', payload });
     },
   },
 };
