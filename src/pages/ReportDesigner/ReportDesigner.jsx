@@ -177,9 +177,12 @@ export default class ReportDesigner extends PureComponent {
 
   // 保存模板
   saveReportTemplate = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'reportDesigner/packageTemplate',
+    window.xsObj.instanceArray[0].sheet.toolbar.change();
+    setTimeout(() => {
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'reportDesigner/packageTemplate',
+      });
     });
   };
 

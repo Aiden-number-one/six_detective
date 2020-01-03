@@ -14,7 +14,7 @@ const formLayout = {
 };
 
 export default props => {
-  const { getFieldDecorator, cellPosition, dataSetPrivateList } = props;
+  const { getFieldDecorator, cellPosition, dataSetPrivateList, dispatch } = props;
   // 单元格类型
   const [cellType, changeCellType] = useState('0');
   // 当前被选择的数据集
@@ -181,7 +181,21 @@ export default props => {
                     {getFieldDecorator('extension', {
                       initialValue: 'none',
                     })(
-                      <Radio.Group defaultValue="a">
+                      <Radio.Group
+                        defaultValue="a"
+                        onChange={e => {
+                          // 保证templateArea能正常生成
+                          window.xsObj.instanceArray[0].sheet.toolbar.change();
+                          dispatch({
+                            type: 'reportDesigner/modifyTemplateArea',
+                            payload: {
+                              type: 'expend_direction',
+                              value: e.target.value,
+                              position: cellPosition,
+                            },
+                          });
+                        }}
+                      >
                         <Radio.Button value="none">
                           <IconFont type="icon-nodirection" />
                         </Radio.Button>
