@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-02 11:02:03
+ * @LastEditTime : 2020-01-03 16:46:07
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -87,6 +87,10 @@ class AddDataSet extends PureComponent {
     // 获取数据集分类树
     dispatch({
       type: 'getClassifyTree/getClassifyTree',
+      payload: {
+        dataStyle: 'Y',
+        fileType: 'D',
+      },
     });
     // 如果是修改数据集
     if (datasetId) {

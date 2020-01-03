@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
 import G2 from '@antv/g2';
-import { Tabs, DatePicker, List, Row, Col } from 'antd';
+import moment from 'moment';
+import { Tabs, DatePicker, List, Row, Col, Empty } from 'antd';
 import classNames from 'classnames';
 import { connect } from 'dva';
+import router from 'umi/router';
 
+import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 import ring from '@/assets/images/ring.png';
 
@@ -12,58 +15,7 @@ import styles from './HomePage.less';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
-const MenuItem = [
-  {
-    title: 'LOP Data Import',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Alert Model  Management',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Market Data Import',
-    icon: 'icon-data',
-  },
-  {
-    title: 'EP Code',
-    icon: 'icon-data',
-  },
-  {
-    title: 'LOP Data Import',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Product Code',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Submitter  Information',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Rule  Maintenance',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Parameter Maintenance',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Position Data',
-    icon: 'icon-data',
-  },
-  {
-    title: 'Market Data Import',
-    icon: 'icon-data',
-  },
-  {
-    title: 'EP Code',
-    icon: 'icon-data',
-  },
-];
-
-@connect(({ allAlert, perAlert }) => ({
+@connect(({ allAlert, perAlert, information }) => ({
   allAlterData: allAlert.allAlterData, // 全部的alert的数据
   allAlertCount: allAlert.allAlertCount, // 全部alert总数
   allOutstandingALertCount: allAlert.allOutstandingALertCount, // 全部未认领的alert的总数
@@ -72,11 +24,13 @@ const MenuItem = [
   perClaimAlertCount: perAlert.perClaimAlertCount, //  personal Claim alert 总数
   perProcessingAlertCount: perAlert.perProcessingAlertCount, // personal Processing alert 总数
   perClosedAlertCount: perAlert.perClosedAlertCount, // personal Closed Alert 总数
+  informationData: information.informationData, // information Data
 }))
 export default class HomePage extends PureComponent {
   state = {
     alertState: 'ALL', // ALERT切换按钮
     textActive: 'Today', // today this week切换
+    targetData: [],
   };
 
   componentDidMount() {
@@ -125,7 +79,44 @@ export default class HomePage extends PureComponent {
       type: 'perAlert/getPerClosedAlterCount',
       payload: {},
     });
+    dispatch({
+      type: 'quickMenu/getQuickMenu',
+      payload: {},
+      callback: values => {
+        const targetData = this.TreeFolderTrans(values);
+        this.setState({
+          targetData,
+        });
+      },
+    });
+    dispatch({
+      type: 'information/getInformation',
+      payload: {
+        pageNumber: 1,
+        pageSize: 4,
+        dataTable: 'SLOP_BIZ.V_INFO',
+      },
+    });
   }
+
+  // 接口菜单数据转化为Ant Tree所需数据
+  TreeFolderTrans = value => {
+    const dataList = [];
+    value.forEach(item => {
+      if (item.children) {
+        item.children = this.TreeFolderTrans(item.children);
+      }
+      const param = {
+        key: item.menuid,
+        value: item.menuid,
+        title: item.menuname,
+        children: item.children,
+        ...item,
+      };
+      dataList.push(param);
+    });
+    return dataList;
+  };
 
   // 渲染Alter ALL条形图
   renderAlterAllChart = data => {
@@ -305,9 +296,11 @@ export default class HomePage extends PureComponent {
       perClaimAlertCount, //  personal Claim alert 总数
       perProcessingAlertCount, // personal Processing alert 总数
       // perClosedAlertCount, // personal Closed Alert 总数
+
+      informationData,
     } = this.props;
 
-    const { alertState, textActive } = this.state;
+    const { alertState, textActive, targetData } = this.state;
 
     return (
       <div>
@@ -424,7 +417,7 @@ export default class HomePage extends PureComponent {
                             </div>
                           </div>
                         </div>
-                        <div id="AlterAll"></div>
+                        <div id="AlterAll" style={{ minHeight: 250 }}></div>
                       </>
                     )}
                     {/* ALTER PERSONAL */}
@@ -462,7 +455,7 @@ export default class HomePage extends PureComponent {
                             </div>
                           </div>
                         </div>
-                        <div id="AlterPersonal"></div>
+                        <div id="AlterPersonal" style={{ minHeight: 250 }}></div>
                       </>
                     )}
                   </div>
@@ -516,14 +509,30 @@ export default class HomePage extends PureComponent {
                 <div className={styles.rightSide}>
                   {/* Quick Menu */}
                   <div className={styles.quickMenu}>
-                    <h3 className={styles.groupTitle}>Quick Menu</h3>
+                    <h3 className={styles.groupTitle}>
+                      Quick Menu
+                      <IconFont
+                        type="iconliangduanduiqi"
+                        className={styles.quickMenuIcon}
+                        onClick={() => {
+                          router.push('/homepage/quick-menu-management');
+                        }}
+                      />
+                    </h3>
                     <Row>
-                      {MenuItem.map(item => (
+                      {targetData.map(item => (
                         <Col span={11} className={styles.menuItem}>
-                          <IconFont type={item.icon} className={styles.icon} />
-                          <span>{item.title}</span>
+                          {/* <IconFont type={item.icon} className={styles.icon} /> */}
+                          <span
+                            onClick={() => {
+                              router.push(item.menuurl);
+                            }}
+                          >
+                            {item.title}
+                          </span>
                         </Col>
                       ))}
+                      {!targetData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                     </Row>
                   </div>
                   {/* Information */}
@@ -531,16 +540,18 @@ export default class HomePage extends PureComponent {
                     <h3 className={styles.groupTitle}>Information</h3>
                     <List
                       itemLayout="horizontal"
-                      dataSource={[{}, {}, {}, {}]}
-                      renderItem={() => (
+                      dataSource={informationData}
+                      renderItem={item => (
                         <List.Item>
                           <span className={styles.icon}>
-                            <IconFont />
+                            <IconFont type="icon-sound" />
                           </span>
                           <span title="" className={styles.description}>
-                            A/C NO. matches with existing A/C NO. , with discrepancy in pr
+                            {item.informationDetail}
                           </span>
-                          <span className={styles.date}>12/Nov/2019 13:30</span>
+                          <span className={styles.date}>
+                            {moment(item.timestamp).format(timestampFormat)}
+                          </span>
                         </List.Item>
                       )}
                     />

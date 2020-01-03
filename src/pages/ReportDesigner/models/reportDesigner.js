@@ -4,10 +4,16 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-30 20:54:13
+ * @LastEditTime : 2020-01-03 17:10:53
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
+import {
+  modifyTemplateAreaInside,
+  getTemplateAreaCellPartXml,
+  getColColumnXml,
+  getDataSetXml,
+} from '../utils';
 
 const { getDataSet, getReportTemplateContent, setReportTemplateContent } = Service;
 
@@ -17,7 +23,8 @@ export default {
     reportName: 'Untitled', // 当前报表设计器的名字
     reportTemplateContent: '', // 报表设计器的JSON
     reportId: '', // 报表设计器的id
-    teamplateAreaObj: '', // 报表设计器表格区域的相关Object对象
+    teamplateAreaObj: {}, // 报表设计器表格区域的相关Object对象
+    originTemplateAreaObj: {}, // xspreadsheet的原始数据
     dataSetPublicList: [], // 公共数据集列表
     dataSetPrivateList: [], // 私有数据集
   },
@@ -77,7 +84,18 @@ export default {
     setTemplateArea(state, action) {
       return {
         ...state,
-        teamplateAreaObj: action.payload,
+        teamplateAreaObj: action.payload.contentDetail,
+        originTemplateAreaObj: action.payload.changeData,
+      };
+    },
+    // 修改模版区域的Object
+    modifyTemplateArea(state, action) {
+      return {
+        ...state,
+        teamplateAreaObj: modifyTemplateAreaInside({
+          ...action.payload,
+          originTemplateArea: state.teamplateAreaObj,
+        }),
       };
     },
     // 设置报表模板的ID
@@ -92,25 +110,34 @@ export default {
     // 组装reportTemplateContent
     *packageTemplate(_, { select, call, put }) {
       // 报表模板ID Name 及 私有数据集
-      const [reportId, reportName, dataSetPrivateList] = yield select(({ reportDesigner }) => [
-        reportDesigner.reportId,
-        reportDesigner.reportName,
-        reportDesigner.dataSetPrivateList,
+      const [
+        reportId,
+        reportName,
+        dataSetPrivateList,
+        teamplateAreaObj,
+        originTemplateAreaObj,
+      ] = yield select(({ reportDesigner }) => [
+        reportDesigner.reportId, // 报表模板id
+        reportDesigner.reportName, // 报表模板name
+        reportDesigner.dataSetPrivateList, // 私有数据集
+        reportDesigner.teamplateAreaObj, // 报表模板区域数据
+        reportDesigner.originTemplateAreaObj, // 报表模板区域原始数据
       ]);
-      // 关于模板区域的Object
-      const teamplateAreaObj = yield select(
-        ({ reportDesigner }) => reportDesigner.teamplateAreaObj,
-      );
+      // 得到单元格的相关xml
+      const templateAreaXml = getTemplateAreaCellPartXml(teamplateAreaObj);
+      // 得到单元格宽高的相关xml
+      const colsColumnsXml = getColColumnXml(teamplateAreaObj);
+      // 得到数据集相关的xml
+      const datasetXml = getDataSetXml(dataSetPrivateList);
       const reportTemplateContentObj = {
         report_id: reportId, // 新建为空
         report_name: reportName,
         report_description: '', // 暂无
         report_version: 'v1.0', // 默认1.0
-        report_style: {}, // 暂无
-        datasets: dataSetPrivateList, // 数据集相关
-        paramsList: [], // 参数相关即查询条件相关
-        queryArea: {}, // 查询条件相关
-        templateArea: teamplateAreaObj,
+        templateArea: {
+          xml: `<?xml version="1.0" encoding="UTF-8"?><ureport>${templateAreaXml}${colsColumnsXml}${datasetXml}</ureport>`,
+          originTemplateAreaObj,
+        },
       };
       const response = yield call(setReportTemplateContent, {
         param: {

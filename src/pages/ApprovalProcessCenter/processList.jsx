@@ -101,7 +101,7 @@ function ProcessList({
   setCurrentTaskType,
 }) {
   const [selectedKeys, setSelectedKeys] = useState([]);
-  const [selectedCurrentTask, setSelectedTasks] = useState('my');
+  const [selectedCurrentTask, setSelectedTasks] = useState('all');
   const [currentPage, setcurrentPage] = useState('1');
   const [currentRow, setcurrentRow] = useState('1');
   const [visible, setVisible] = useState(false);
@@ -115,22 +115,40 @@ function ProcessList({
   const urlIsEnd = GetQueryString('isEnd');
   useEffect(() => {
     setUrlCode(urlTaskCode);
-    if (urlIsEnd === '1') {
-      setSelectedTasks('his');
+    if (urlIsEnd) {
+      if (urlIsEnd === '1') {
+        setSelectedTasks('his');
+        router.push({
+          pathname: '/homepage/Approval-Process-Center',
+        });
+      } else {
+        setSelectedTasks('my');
+        router.push({
+          pathname: '/homepage/Approval-Process-Center',
+          query: {
+            isEnd: urlIsEnd,
+          },
+        });
+      }
+      dispatch({
+        type: 'approvalCenter/fetch',
+        payload: {
+          type: urlIsEnd === '1' ? 'his' : 'my',
+          taskCode: urlTaskCode,
+        },
+      });
+    } else {
+      dispatch({
+        type: 'approvalCenter/fetch',
+        payload: {
+          type: selectedCurrentTask,
+          taskCode: urlTaskCode,
+        },
+      });
     }
-    router.push({
-      pathname: '/homepage/Approval-Process-Center',
-    });
-    dispatch({
-      type: 'approvalCenter/fetch',
-      payload: {
-        type: urlIsEnd === '1' ? 'his' : selectedCurrentTask,
-        taskCode: urlTaskCode,
-      },
-    });
   }, []);
 
-  // default alert
+  // default task
   useEffect(() => {
     if (tasks && tasks.length > 0) {
       const [firstTasks] = tasks;
@@ -150,9 +168,11 @@ function ProcessList({
       },
       callback: items => {
         if (items[0].ownerId) {
+          const loginName = localStorage.getItem('loginName');
+          const isYou = loginName === items[0].ownerId;
           setIsBatch(false);
           setClickTaskCode(taskCode);
-          setClaimContent(`This task has been claimed by [${items[0].ownerId}]
+          setClaimContent(`This task has been claimed by [${isYou ? 'you' : items[0].ownerId}]
           Do you confirm to re-claim?`);
           setConfirmVisible(true);
         } else {
@@ -172,10 +192,10 @@ function ProcessList({
         const someNoClaim = items.find(item => item.ownerId);
         if (someNoClaim) {
           if (items.length > 1) {
-            setClaimContent(`some alerts has been claimed,
+            setClaimContent(`some tasks has been claimed,
       Do you confirm to re-claim?`);
           } else {
-            setClaimContent(`This alerts has been claimed,
+            setClaimContent(`This task has been claimed,
       Do you confirm to re-claim?`);
           }
           setIsBatch(true);
@@ -188,6 +208,7 @@ function ProcessList({
   }
 
   function claimOk(taskCode) {
+    setUrlCode('');
     dispatch({
       type: 'approvalCenter/claim',
       payload: {

@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Table, Pagination, Modal, Checkbox, Row, Col } from 'antd';
+import { Form, Table, Pagination, Modal, Checkbox, Row, Col, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -66,7 +66,7 @@ class AuditTrailLogging extends Component {
         key: 'index',
         visible: true,
         fixed: 'left',
-        width: 60,
+        // width: 60,
       },
       {
         key: 'functionName',
@@ -129,7 +129,8 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'app.common.number' }),
         dataIndex: 'index',
         key: 'index',
-        width: 60,
+        align: 'center',
+        // width: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
@@ -140,6 +141,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'functionName',
         key: 'functionName',
         ellipsis: true,
+        align: 'left',
         // width: ('100%' - 60) / this.state.countColumns,
       },
       {
@@ -148,6 +150,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'tableName',
         key: 'tableName',
         ellipsis: true,
+        align: 'left',
         colSpan: 1,
         // width: ('100%' - 60) / this.state.countColumns,
       },
@@ -156,6 +159,7 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.BITOCode' }),
         dataIndex: 'biToCode',
         key: 'biToCode',
+        align: 'left',
         // width: ('100%' - 60) / this.state.countColumns,
       },
       {
@@ -163,6 +167,7 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.productCode' }),
         dataIndex: 'productCode',
         key: 'productCode',
+        align: 'left',
         // width: ('100%' - 60) / this.state.countColumns,
       },
       {
@@ -170,6 +175,9 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         dataIndex: 'effectiveTime',
         key: 'effectiveTime',
+        align: 'center',
+        width: 180,
+        date: true,
         render: (res, obj) => <span>{obj.effectiveTime && timeFormat(obj.effectiveTime)}</span>,
       },
       {
@@ -177,12 +185,14 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
         dataIndex: 'filedUpdated',
         key: 'filedUpdated',
+        align: 'left',
       },
       {
         index: 7,
         title: formatMessage({ id: 'systemManagement.auditLog.updateType' }),
         dataIndex: 'updateType',
         key: 'updateType',
+        align: 'left',
       },
       {
         index: 8,
@@ -190,6 +200,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'logTime',
         key: 'logTime',
         align: 'center',
+        date: true,
         render: (res, obj) => <span>{obj.logTime && timeFormat(obj.logTime)}</span>,
       },
       {
@@ -197,19 +208,22 @@ class AuditTrailLogging extends Component {
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
-        width: 110,
+        align: 'left',
+        // width: 110,
       },
       {
         index: 10,
         title: formatMessage({ id: 'systemManagement.auditLog.before' }),
         dataIndex: 'before',
         key: 'before',
+        align: 'left',
       },
       {
         index: 11,
         title: formatMessage({ id: 'systemManagement.auditLog.after' }),
         dataIndex: 'after',
         key: 'after',
+        align: 'left',
       },
     ],
     getAuditLogList: [],
@@ -254,9 +268,11 @@ class AuditTrailLogging extends Component {
     newColumns.forEach((element, index) => {
       if (index === 0) {
         element.fixed = 'left';
+        element.width = 60;
       }
       if (index === newColumns.length - 1) {
         element.fixed = 'right';
+        element.width = 120;
       }
     });
     this.setState({
@@ -370,11 +386,15 @@ class AuditTrailLogging extends Component {
 
   customizeConfirm = () => {
     const { tempColumns, columns, checkedValues } = this.state;
+    const columnsValues = columns.map(element => element.key);
+    const newColumns = Object.assign([], columns);
+    if (checkedValues.length < 1) {
+      message.warning('Please checked Column');
+      return;
+    }
     this.setState({
       customizeVisible: false,
     });
-    const columnsValues = columns.map(element => element.key);
-    const newColumns = Object.assign([], columns);
     checkedValues.map(element => {
       if (!columnsValues.includes(element)) {
         newColumns.push(tempColumns.filter(item => item.key === element)[0]);
@@ -396,12 +416,17 @@ class AuditTrailLogging extends Component {
       // }
       element.fixed = '';
       // element.width = `${100 / newColumns.length}%`
+      element.width = '';
       if (index === 0) {
         element.fixed = 'left';
-        // element.width = 60
+        element.width = 60;
       }
-      if (index === newColumns.length - 1) {
+      if (newColumns.length > 5 && index === newColumns.length - 1) {
         element.fixed = 'right';
+        element.width = 120;
+      }
+      if (newColumns.length > 5 && element.hasOwnProperty('date')) {
+        element.width = 180;
       }
     });
     this.setState({
@@ -466,7 +491,7 @@ class AuditTrailLogging extends Component {
             pagination={false}
             columns={this.state.columns}
             rowKey={Math.random().toString()}
-            scroll={{ x: 1300 }}
+            scroll={{ x: this.state.columns.length > 5 ? document.body.clientWidth : false }}
           />
           {getAuditLogList && getAuditLogList.length > 0 && (
             <Pagination

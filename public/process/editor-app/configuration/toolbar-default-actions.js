@@ -379,7 +379,6 @@ var SaveModelCtrl = [
       // var basesvgDOM = BASE64.encoder(svgDOM);
       // console.log('svgDOM------->',svgDOM)
       var basesvgDOM = svgDOM;
-      console.log('basesvgDOM--->',basesvgDOM)
       // var basejson = BASE64.encoder(json);
       var basejson = encodeURIComponent(json);
       var modelId = EDITOR.UTIL.getParameterByName('modelId');
@@ -392,7 +391,6 @@ var SaveModelCtrl = [
         description: $scope.saveDialog.description,
         modelId: modelId,
       }; // 参数
-      console.log('p--------66--->',P)
       var S = new Date().getTime(); // 时间戳
       var dataAndHeader = KISBPM.URL.getParams({ N: N, V: V, P: P, S: S }, false);
       //   debugger;
@@ -403,14 +401,12 @@ var SaveModelCtrl = [
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       };
       var headerToolbarObject = Object.assign(header, defaultToolbarHeaders);
-      console.log('headerToolbarObject---888->',params)
       $http({
         method: 'POST',
         data: params,
         ignoreErrors: true,
         headers:headerToolbarObject,
         transformRequest: function(obj) {
-          console.log('obj--------->',obj)
           var str = [];
           for (var p in obj) {
             str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
@@ -447,13 +443,12 @@ var SaveModelCtrl = [
               successCallback();
             }
           } else {
-            $scope.error = {};
-            console.log(JSON.stringify(data.bcjson.msg));
+            $scope.error = data.bcjson.msg;
             $scope.status.loading = false;
           }
         })
         .error(function(data, status, headers, config) {
-          $scope.error = {};
+          $scope.error = data.bcjson.msg;
           console.log(
             'Something went wrong when updating the process model:' + JSON.stringify(data)
           );
