@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors  : mus
- * @LastEditTime : 2019-12-31 15:15:53
+ * @LastEditors  : iron
+ * @LastEditTime : 2020-01-02 20:19:50
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -14,7 +14,7 @@ import { extend } from 'umi-request';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
 import { message } from 'antd';
-import { getRandowNVPS } from './utils';
+import { getRandowNVPS, isFormData } from './utils';
 
 const API_PREFFIX = '/api';
 const VERSION = 'v2.0';
@@ -81,12 +81,14 @@ request.interceptors.request.use((url, opts) => {
   const longJson = url === '/api/v2.0/bayconnect.superlop.set_report_template_content_edit.json';
   const options = {
     ...opts,
-    // params: isProOrDev() && !longJson ? opts.data : {}, // 暂时为测试放开
-    params: !longJson ? opts.data : {}, // 暂时为测试放开
-    data: {
-      bcp: cryptoParams,
-      s: timestamp,
-    },
+    // params: isProOrDev() && !longJson ? {...opts.params,...opts.data} :{}, // 暂时为测试放开
+    params: !longJson ? { ...opts.params, ...opts.data } : {}, // 暂时为测试放开
+    data: isFormData(opts.data)
+      ? opts.data
+      : {
+          bcp: cryptoParams,
+          s: timestamp,
+        },
     headers: setReqHeaders(NVPS),
   };
 

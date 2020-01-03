@@ -2,15 +2,14 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime : 2020-01-02 10:28:37
+ * @LastEditTime : 2020-01-02 15:45:34
  * @LastEditors  : lan
  * @Email: mus@szkingdom.com
  */
 const prefix = '';
 
 export default {
-  getTaskCount: 'get_not_finish_task_count', // 获取任务数
-  getAlertCount: 'get_not_finish_alert_count', // 获取警报数
+  getSP: 'get_qry_statement_result', // 获取存储过程
   getMenu: 'get_acl_menu', // 获取数据门户主题列表
   // getMenu: 'mock/run/7765f3a2-a030-4578-a016-cc13c4156136', // Mock
   getDatas: 'kingdom.retl.getDatas',

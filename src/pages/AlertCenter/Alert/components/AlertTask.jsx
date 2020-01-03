@@ -36,7 +36,7 @@ function AlertTask({
     await dispatch({
       type: 'alertCenter/fetchAssignUsers',
       payload: {
-        taskIds: selectedRows.map(item => item.ALERT_ITEM_ID),
+        taskIds: selectedRows.map(item => item.TASK_ID),
       },
     });
     setVisible(true);

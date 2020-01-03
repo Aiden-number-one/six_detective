@@ -2,8 +2,10 @@ import React, { PureComponent } from 'react';
 import G2 from '@antv/g2';
 import { Tabs, DatePicker, List, Row, Col } from 'antd';
 import classNames from 'classnames';
+import { connect } from 'dva';
 
 import IconFont from '@/components/IconFont';
+import ring from '@/assets/images/ring.png';
 
 import styles from './HomePage.less';
 
@@ -61,31 +63,100 @@ const MenuItem = [
   },
 ];
 
-export default class Monitor extends PureComponent {
+@connect(({ allAlert, perAlert }) => ({
+  allAlterData: allAlert.allAlterData, // 全部的alert的数据
+  allAlertCount: allAlert.allAlertCount, // 全部alert总数
+  allOutstandingALertCount: allAlert.allOutstandingALertCount, // 全部未认领的alert的总数
+  allClaimAlertCount: allAlert.allClaimAlertCount, // 全部已认领的alert总数
+  allProcessingAlertCount: allAlert.allProcessingAlertCount, // 全部处理中的alert总数
+  perClaimAlertCount: perAlert.perClaimAlertCount, //  personal Claim alert 总数
+  perProcessingAlertCount: perAlert.perProcessingAlertCount, // personal Processing alert 总数
+  perClosedAlertCount: perAlert.perClosedAlertCount, // personal Closed Alert 总数
+}))
+export default class HomePage extends PureComponent {
   state = {
     alertState: 'ALL', // ALERT切换按钮
     textActive: 'Today', // today this week切换
   };
 
   componentDidMount() {
-    this.renderAlterAllChart();
+    const { dispatch } = this.props;
+    // 获取All alert 条形图数据
+    dispatch({
+      type: 'allAlert/getAllAlterData',
+      payload: {},
+      callback: data => {
+        this.renderAlterAllChart(data);
+      },
+    });
+    // 获取All alert total
+    dispatch({
+      type: 'allAlert/getAllAlertCount',
+      payload: {},
+    });
+    // 获取All outstanding alert total
+    dispatch({
+      type: 'allAlert/getAllOutstandingALertCount',
+      payload: {
+        isClaimed: 0,
+      },
+    });
+    // 获取All Claim alert total
+    dispatch({
+      type: 'allAlert/getAllClaimAlertCount',
+      payload: {},
+    });
+    // 获取All processing alert total
+    dispatch({
+      type: 'allAlert/getAllProcessingAlertCount',
+      payload: {},
+    });
+    dispatch({
+      type: 'perAlert/getPerClaimAlertCount',
+      payload: {
+        isPersonal: '1',
+      },
+    });
+    dispatch({
+      type: 'perAlert/getPerProcessingAlertCount',
+      payload: {},
+    });
+    dispatch({
+      type: 'perAlert/getPerClosedAlterCount',
+      payload: {},
+    });
   }
 
   // 渲染Alter ALL条形图
-  renderAlterAllChart = () => {
+  renderAlterAllChart = data => {
     // Alter ALL 的条形图
-    const AlterAll = [
-      { label: 'Outstanding', type: 'CLAIMED', value: 2800 },
-      { label: 'Outstanding', type: 'PROCESSING', value: 2260 },
-      { label: 'Alan', type: 'CLAIMED', value: 1800 },
-      { label: 'Alan', type: 'PROCESSING', value: 1300 },
-      { label: 'Thomas', type: 'CLAIMED', value: 950 },
-      { label: 'Thomas', type: 'PROCESSING', value: 900 },
-      { label: 'Alex', type: 'CLAIMED', value: 500 },
-      { label: 'Alex', type: 'PROCESSING', value: 390 },
-      { label: 'Fri.', type: 'CLAIMED', value: 170 },
-      { label: 'Fri.', type: 'PROCESSING', value: 100 },
-    ];
+    const AlterAll = [];
+    data.forEach(item => {
+      AlterAll.push({
+        label: item.userName, // 纵坐标
+        type: 'CLAIMED', // 分类
+        value: item.claimedCount, // 已认领数
+      });
+    });
+    data.forEach(item => {
+      AlterAll.push({
+        label: item.userName, // 纵坐标
+        type: 'PROCESSING', // 分类
+        value: item.processingCount, // 处理中数
+      });
+    });
+    // AlterAll = [
+    //   { label: 'Outstanding', type: 'CLAIMED', value: 2800 },
+    //   { label: 'Alan', type: 'CLAIMED', value: 1800 },
+    //   { label: 'Outstanding', type: 'PROCESSING', value: 2260 },
+    //   { label: 'Alan', type: 'PROCESSING', value: 1300 },
+    //   { label: 'Thomas', type: 'CLAIMED', value: 950 },
+    //   { label: 'Thomas', type: 'PROCESSING', value: 900 },
+    //   { label: 'Alex', type: 'CLAIMED', value: 500 },
+    //   { label: 'Alex', type: 'PROCESSING', value: 390 },
+    //   { label: 'Fri.', type: 'CLAIMED', value: 170 },
+    //   { label: 'Fri.', type: 'PROCESSING', value: 100 },
+    // ];
     const alterAllChart = new G2.Chart({
       container: 'AlterAll',
       forceFit: true,
@@ -151,12 +222,18 @@ export default class Monitor extends PureComponent {
 
   // 渲染Alter Personal条形图
   renderAlterPerChart = () => {
+    const {
+      allOutstandingALertCount,
+      perClaimAlertCount,
+      perProcessingAlertCount,
+      perClosedAlertCount,
+    } = this.props;
     // Alter Personal 的条形图
     const AlterPersonal = [
-      { label: 'Outstanding', value: 2800 },
-      { label: 'Calimed', value: 1800 },
-      { label: 'Processing', value: 950 },
-      { label: 'Finished', value: 500 },
+      { label: 'Outstanding', value: allOutstandingALertCount },
+      { label: 'Calimed', value: perClaimAlertCount },
+      { label: 'Processing', value: perProcessingAlertCount },
+      { label: 'Finished', value: perClosedAlertCount },
     ];
     const alterPersonalChart = new G2.Chart({
       container: 'AlterPersonal',
@@ -206,6 +283,7 @@ export default class Monitor extends PureComponent {
         },
         offset: 10,
       })
+      .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
       .size(15)
       .adjust([
         {
@@ -217,6 +295,18 @@ export default class Monitor extends PureComponent {
   };
 
   render() {
+    const {
+      allAlertCount,
+      allOutstandingALertCount,
+      allClaimAlertCount,
+      allProcessingAlertCount,
+      allAlterData,
+
+      perClaimAlertCount, //  personal Claim alert 总数
+      perProcessingAlertCount, // personal Processing alert 总数
+      // perClosedAlertCount, // personal Closed Alert 总数
+    } = this.props;
+
     const { alertState, textActive } = this.state;
 
     return (
@@ -243,7 +333,7 @@ export default class Monitor extends PureComponent {
                                 alertState: 'ALL',
                               },
                               () => {
-                                this.renderAlterAllChart();
+                                this.renderAlterAllChart(allAlterData);
                               },
                             );
                           }}
@@ -306,26 +396,32 @@ export default class Monitor extends PureComponent {
                           <div className={styles.redBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>TOTAL</span>
-                              <span className={styles.value}>{100}</span>
+                              <span className={styles.value}>{allAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <span className={styles.title}>OUTSTANDING</span>
-                              <span className={styles.value}>{50}</span>
+                              <span className={styles.value}>{allOutstandingALertCount}</span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>CLAIMED</span>
-                              <span className={styles.value}>{300}</span>
+                              <span className={styles.value}>{allClaimAlertCount}</span>
                             </div>
-                            <div className={styles.rightBlock}></div>
+                            <div className={styles.rightBlock}>
+                              <img src={ring} alt="" width={70} />
+                              <span>{(allClaimAlertCount / allAlertCount).toFixed(2)}%</span>
+                            </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>PROCESSING</span>
-                              <span className={styles.value}>{200}</span>
+                              <span className={styles.value}>{allProcessingAlertCount}</span>
                             </div>
-                            <div className={styles.rightBlock}></div>
+                            <div className={styles.rightBlock}>
+                              <img src={ring} alt="" width={70} />
+                              <span>{(allProcessingAlertCount / allAlertCount).toFixed(2)}%</span>
+                            </div>
                           </div>
                         </div>
                         <div id="AlterAll"></div>
@@ -338,26 +434,32 @@ export default class Monitor extends PureComponent {
                           <div className={styles.redBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>TOTAL</span>
-                              <span className={styles.value}>{100}</span>
+                              <span className={styles.value}>{allAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <span className={styles.title}>OUTSTANDING</span>
-                              <span className={styles.value}>{50}</span>
+                              <span className={styles.value}>{allOutstandingALertCount}</span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>CLAIMED</span>
-                              <span className={styles.value}>{300}</span>
+                              <span className={styles.value}>{perClaimAlertCount}</span>
                             </div>
-                            <div className={styles.rightBlock}></div>
+                            <div className={styles.rightBlock}>
+                              <img src={ring} alt="" width={70} />
+                              <span>{(perClaimAlertCount / allAlertCount).toFixed(2)}%</span>
+                            </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>PROCESSING</span>
-                              <span className={styles.value}>{200}</span>
+                              <span className={styles.value}>{perProcessingAlertCount}</span>
                             </div>
-                            <div className={styles.rightBlock}></div>
+                            <div className={styles.rightBlock}>
+                              <img src={ring} alt="" width={70} />
+                              <span>{(perProcessingAlertCount / allAlertCount).toFixed(2)}%</span>
+                            </div>
                           </div>
                         </div>
                         <div id="AlterPersonal"></div>
