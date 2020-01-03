@@ -2,12 +2,14 @@
  * @Description: menu modal
  * @Author: mus
  * @Date: 2019-09-19 17:03:33
- * @LastEditTime : 2020-01-02 18:58:00
+ * @LastEditTime : 2020-01-03 11:07:33
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
 import Service from '@/utils/Service';
 import { geneMenuData } from '@/utils/utils';
+import { setAuthority } from '@/utils/authority';
+import authData from './auth.json';
 
 const { getMenu, getTaskCount, getAlertCount } = Service;
 
@@ -29,12 +31,22 @@ export default {
       });
       const newItems = Object.assign([], items);
       const newMenu = Object.assign([], newItems[0].menu);
+      const btnArray = [];
       for (let i = 0; i < newMenu.length; i += 1) {
         if (newMenu[i].menuid.indexOf('btn') > -1) {
-          newMenu.splice(i, 1);
+          btnArray.push(newMenu.splice(i, 1));
           i -= 1;
         }
       }
+      const authBtn = {};
+      btnArray.forEach(element => {
+        authData.forEach(item => {
+          if (element[0].menuid === item.menuid) {
+            authBtn[`auth${item.name}`] = true;
+          }
+        });
+      });
+      setAuthority(authBtn);
       newItems[0].menu = newMenu;
       callback(geneMenuData(newItems));
     },
