@@ -305,7 +305,7 @@ class AlertUserGroup extends Component {
         </Drawer>
         {/* delete */}
         <Modal
-          title="CONFIRM"
+          title={formatMessage({ id: 'app.common.confirm' })}
           visible={deleteVisible}
           onOk={this.deleteConfirm}
           onCancel={this.deleteCancel}
