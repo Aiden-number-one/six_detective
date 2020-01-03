@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Table, Pagination, Modal, Checkbox, Row, Col } from 'antd';
+import { Form, Table, Pagination, Modal, Checkbox, Row, Col, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -177,6 +177,7 @@ class AuditTrailLogging extends Component {
         key: 'effectiveTime',
         align: 'center',
         width: 180,
+        date: true,
         render: (res, obj) => <span>{obj.effectiveTime && timeFormat(obj.effectiveTime)}</span>,
       },
       {
@@ -199,6 +200,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'logTime',
         key: 'logTime',
         align: 'center',
+        date: true,
         render: (res, obj) => <span>{obj.logTime && timeFormat(obj.logTime)}</span>,
       },
       {
@@ -384,11 +386,15 @@ class AuditTrailLogging extends Component {
 
   customizeConfirm = () => {
     const { tempColumns, columns, checkedValues } = this.state;
+    const columnsValues = columns.map(element => element.key);
+    const newColumns = Object.assign([], columns);
+    if (checkedValues.length < 1) {
+      message.warning('Please checked Column');
+      return;
+    }
     this.setState({
       customizeVisible: false,
     });
-    const columnsValues = columns.map(element => element.key);
-    const newColumns = Object.assign([], columns);
     checkedValues.map(element => {
       if (!columnsValues.includes(element)) {
         newColumns.push(tempColumns.filter(item => item.key === element)[0]);
@@ -415,9 +421,12 @@ class AuditTrailLogging extends Component {
         element.fixed = 'left';
         element.width = 60;
       }
-      if (index === newColumns.length - 1) {
+      if (newColumns.length > 5 && index === newColumns.length - 1) {
         element.fixed = 'right';
         element.width = 120;
+      }
+      if (newColumns.length > 5 && element.hasOwnProperty('date')) {
+        element.width = 180;
       }
     });
     this.setState({
