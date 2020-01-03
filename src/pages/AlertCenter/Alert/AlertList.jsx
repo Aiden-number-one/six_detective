@@ -93,10 +93,14 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
     if (claimInfos && claimInfos.length > 0) {
       claimInfos.forEach(item => {
         if (item.userName) {
+          const userNameArr = item.userName.split(',');
+
           const text = isBatchAction ? (
             <div>some alerts has been claimed</div>
           ) : (
-            <div>this alert has been claimed by {item.userName}</div>
+            <div>
+              this alert has been claimed by {userNameArr.length > 1 ? 'others' : item.userName}
+            </div>
           );
           setClaimContent(text);
           setClaimVisible(true);
@@ -125,8 +129,13 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
     setBatchAction(false);
     setAlert(record);
     if (record.userName) {
+      const userNameArr = record.userName.split(',');
       setClaimVisible(true);
-      setClaimContent(<div>this alert has been claimed by {record.userName}</div>);
+      setClaimContent(
+        <div>
+          this alert has been claimed by {userNameArr.length > 1 ? 'others' : record.userName}
+        </div>,
+      );
     } else {
       dispatch({
         type: 'alertCenter/claim',
@@ -297,7 +306,6 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
           />
           <Column
             ellipsis
-            align="center"
             dataIndex="alertName"
             title={
               <ColumnTitle
@@ -340,24 +348,21 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             render={text => +text}
           />
           <Column
-            align="center"
             dataIndex="userName"
             title={<FormattedMessage id="alert-center.owner" />}
             render={text => {
               if (text) {
                 const users = text.split(',');
-                return users.length > 1 ? 'Multiple' : text;
+                return users.length > 1 ? <span title={text}>Multiple</span> : text;
               }
               return text;
             }}
           />
           <Column
-            align="center"
             dataIndex="alertStatusDesc"
             title={<FormattedMessage id="alert-center.status" />}
           />
           <Column
-            align="center"
             dataIndex="action"
             title={<FormattedMessage id="alert-center.actions" />}
             render={(text, record) => (
