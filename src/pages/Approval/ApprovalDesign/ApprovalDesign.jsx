@@ -17,7 +17,7 @@ class ModelForm extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSubmit}>
-        <Form.Item label="Name" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
+        <Form.Item label="Flow Name" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('name', {
             rules: [{ required: true, message: 'Please input your name!' }],
           })(<Input placeholder="" />)}
@@ -329,7 +329,7 @@ class ApprovalDesign extends PureComponent {
               </div>
             </Drawer>
             <Modal
-              title="delete"
+              title="Delete"
               visible={deleteVisible}
               onOk={this.handleDeleteOk}
               onCancel={this.handleCloseModelCancel}
@@ -337,7 +337,7 @@ class ApprovalDesign extends PureComponent {
               <p>Are you sure delete this model?</p>
             </Modal>
             <Modal
-              title="CONFIRM"
+              title="Confirm"
               visible={deployVisible}
               onOk={this.deployModel}
               onCancel={this.handleCloseDeploy}
