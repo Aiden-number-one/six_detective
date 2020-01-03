@@ -31,7 +31,7 @@ export default function({ loading, visible, users, handleCancel, assignUser }) {
             {users.map(user => (
               <Radio style={radioStyle} value={user.userId} key={user.userId}>
                 <span>{user.userName}</span>
-                <Tag color="#108ee" style={{ marginLeft: 8 }}>
+                <Tag color="#108ee9" style={{ marginLeft: 8 }}>
                   {user.groupName}
                 </Tag>
               </Radio>
