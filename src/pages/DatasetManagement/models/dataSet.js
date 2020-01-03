@@ -2,7 +2,7 @@
  * @Description: 获取数据集列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime : 2020-01-02 20:58:22
+ * @LastEditTime : 2020-01-03 17:17:36
  * @LastEditors  : lan
  */
 import { message } from 'antd';
@@ -58,6 +58,7 @@ export default {
           type: 'getClassifyTree',
           payload: {
             dataStyle: 'Y',
+            fileType: payload.fileType,
           },
         });
       }
@@ -71,6 +72,7 @@ export default {
           type: 'getClassifyTree',
           payload: {
             dataStyle: 'Y',
+            fileType: payload.fileType,
           },
         });
       }

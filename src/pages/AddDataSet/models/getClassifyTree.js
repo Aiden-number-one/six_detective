@@ -2,7 +2,7 @@
  * @Description: 获取数据集分类树
  * @Author: lan
  * @Date: 2019-12-10 11:18:33
- * @LastEditTime : 2019-12-24 20:21:37
+ * @LastEditTime : 2020-01-03 16:43:15
  * @LastEditors  : lan
  */
 import { message } from 'antd';
@@ -18,10 +18,11 @@ const TreeFolderTrans = value => {
       item.children = TreeFolderTrans(item.children);
     }
     const param = {
-      key: item.classId,
-      value: item.classId,
-      title: item.className,
+      key: item.folderId,
+      value: item.folderId,
+      title: item.folderName,
       children: item.children,
+      ...item,
     };
     dataList.push(param);
   });
