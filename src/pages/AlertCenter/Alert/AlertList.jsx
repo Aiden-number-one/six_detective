@@ -296,9 +296,9 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             }
           />
           <Column
+            ellipsis
             align="center"
             dataIndex="alertName"
-            ellipsis
             title={
               <ColumnTitle
                 isNum={false}
@@ -357,7 +357,6 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             title={<FormattedMessage id="alert-center.status" />}
           />
           <Column
-            width="9%"
             align="center"
             dataIndex="action"
             title={<FormattedMessage id="alert-center.actions" />}
