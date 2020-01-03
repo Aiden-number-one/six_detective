@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-03 15:41:34
+ * @LastEditTime : 2020-01-03 17:10:53
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -135,7 +135,7 @@ export default {
         report_description: '', // 暂无
         report_version: 'v1.0', // 默认1.0
         templateArea: {
-          xml: `<?xml version="1.0" encoding="UTF-8"?>${templateAreaXml}${colsColumnsXml}${datasetXml}<ureport></ureport>`,
+          xml: `<?xml version="1.0" encoding="UTF-8"?><ureport>${templateAreaXml}${colsColumnsXml}${datasetXml}</ureport>`,
           originTemplateAreaObj,
         },
       };
