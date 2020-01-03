@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-02 21:00:59
+ * @LastEditTime : 2020-01-03 15:52:39
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -65,6 +65,7 @@ export default class DatasetManagement extends PureComponent {
       type: 'dataSet/getClassifyTree',
       payload: {
         dataStyle: 'Y',
+        fileType: 'R',
       },
     });
     dispatch({

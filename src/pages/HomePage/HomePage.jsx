@@ -3,6 +3,7 @@ import G2 from '@antv/g2';
 import { Tabs, DatePicker, List, Row, Col } from 'antd';
 import classNames from 'classnames';
 import { connect } from 'dva';
+import router from 'umi/router';
 
 import IconFont from '@/components/IconFont';
 import ring from '@/assets/images/ring.png';
@@ -424,7 +425,7 @@ export default class HomePage extends PureComponent {
                             </div>
                           </div>
                         </div>
-                        <div id="AlterAll"></div>
+                        <div id="AlterAll" style={{ minHeight: 250 }}></div>
                       </>
                     )}
                     {/* ALTER PERSONAL */}
@@ -462,7 +463,7 @@ export default class HomePage extends PureComponent {
                             </div>
                           </div>
                         </div>
-                        <div id="AlterPersonal"></div>
+                        <div id="AlterPersonal" style={{ minHeight: 250 }}></div>
                       </>
                     )}
                   </div>
@@ -516,7 +517,16 @@ export default class HomePage extends PureComponent {
                 <div className={styles.rightSide}>
                   {/* Quick Menu */}
                   <div className={styles.quickMenu}>
-                    <h3 className={styles.groupTitle}>Quick Menu</h3>
+                    <h3 className={styles.groupTitle}>
+                      Quick Menu
+                      <IconFont
+                        type="iconliangduanduiqi"
+                        className={styles.quickMenuIcon}
+                        onClick={() => {
+                          router.push('/homepage/quick-menu-management');
+                        }}
+                      />
+                    </h3>
                     <Row>
                       {MenuItem.map(item => (
                         <Col span={11} className={styles.menuItem}>
