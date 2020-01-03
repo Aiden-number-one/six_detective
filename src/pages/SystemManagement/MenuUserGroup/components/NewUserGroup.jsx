@@ -99,15 +99,15 @@ class NewUser extends Component {
         message.warning('Please checked Authorizing access to menus');
         return;
       }
-      const newSelectedKeys = selectedKeys.map(element => element.substring(0, 3));
-      let selectedKeysArray = Object.assign([], selectedKeys);
-      newSelectedKeys.forEach(element => selectedKeysArray.push(element));
-      selectedKeysArray = [...new Set(selectedKeysArray)];
+      // const newSelectedKeys = selectedKeys.map(element => element.substring(0, 3));
+      // let selectedKeysArray = Object.assign([], selectedKeys);
+      // newSelectedKeys.forEach(element => selectedKeysArray.push(element));
+      // selectedKeysArray = [...new Set(selectedKeysArray)];
       if (!updateFlag) {
         const param = {
           groupName: values.groupName,
           groupDesc: values.groupDesc,
-          menuIds: selectedKeysArray.join(','),
+          menuIds: selectedKeys.join(','),
         };
         dispatch({
           type: 'menuUserGroup/newUserGroup',
@@ -131,7 +131,7 @@ class NewUser extends Component {
           groupId: groupMenuInfo.groupId,
           groupName: values.groupName,
           groupDesc: values.groupDesc,
-          menuIds: selectedKeysArray.join(','),
+          menuIds: selectedKeys.join(','),
         };
         dispatch({
           type: 'menuUserGroup/updateUserGroup',
@@ -175,8 +175,13 @@ class NewUser extends Component {
     console.log('value===', value);
   };
 
-  onCheck = selectedKeyss => {
-    const newSelectedKeys = selectedKeyss;
+  onCheck = (selectedKeyss, event) => {
+    console.log('selectedKeyss===', selectedKeyss);
+    console.log('event===', event);
+    console.log('halfCheckedKeys=', event.halfCheckedKeys);
+    // const newSelectedKeys = selectedKeyss.checked
+    const newSelectedKeys = selectedKeyss.concat(event.halfCheckedKeys);
+    console.log('newSelectedKeys==', newSelectedKeys);
     this.setState({
       selectedKeys: newSelectedKeys,
     });
