@@ -320,11 +320,11 @@ class ApprovalDesign extends PureComponent {
             >
               <AddFlowChartForm ref={this.newFlowChartForm} />
               <div className={btnStyles['bottom-btns']}>
-                <Button onClick={this.AddNewFlowChart} type="primary">
-                  Save
-                </Button>
                 <Button onClick={this.handleCancel} style={{ marginRight: 12 }}>
                   Cancel
+                </Button>
+                <Button onClick={this.AddNewFlowChart} type="primary">
+                  Save
                 </Button>
               </div>
             </Drawer>

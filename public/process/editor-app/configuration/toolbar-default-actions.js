@@ -379,7 +379,6 @@ var SaveModelCtrl = [
       // var basesvgDOM = BASE64.encoder(svgDOM);
       // console.log('svgDOM------->',svgDOM)
       var basesvgDOM = svgDOM;
-      console.log('basesvgDOM--->',basesvgDOM)
       // var basejson = BASE64.encoder(json);
       var basejson = encodeURIComponent(json);
       var modelId = EDITOR.UTIL.getParameterByName('modelId');
