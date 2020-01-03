@@ -1,4 +1,5 @@
 import { stringToNum } from '@/utils/utils';
+import { INITHEIGHT, INITWIDTH } from '../../utils';
 
 /**
  * @description: 处理合并单元格相关
@@ -55,9 +56,24 @@ export function generateJson(spreadSheetData) {
     })),
   );
 
+  // 行高初始数据
+  const rowArray = new Array(rowLength).fill(INITHEIGHT);
+  // 列宽初始数据
+  const columnArray = new Array(colLength).fill(INITWIDTH);
+  // 设置列的相关数据
+  Object.keys(cols).forEach(colsIndex => {
+    if (cols[colsIndex].width) {
+      columnArray[colsIndex] = cols[colsIndex].width;
+    }
+  });
+
   Object.keys(rows).forEach(rowIndex => {
     if (rowIndex === 'len') {
       return;
+    }
+    // 若存在行高，则设置行高
+    if (rows[rowIndex].height) {
+      rowArray[rowIndex] = rows[rowIndex].height;
     }
     Object.keys(rows[rowIndex].cells).forEach(cellIndex => {
       // spreadSheet单元格的数据及属性
@@ -78,7 +94,9 @@ export function generateJson(spreadSheetData) {
       currentCellProps.colSpan = processedMerge ? processedMerge.colSpan : '1';
 
       // 对cellType进行处理
-      if (cellContent.cellProps.cellType === 'dataSet') {
+      if (!cellContent.cellProps) {
+        currentCellProps.cellType = 'TEXT';
+      } else if (cellContent.cellProps.cellType === 'dataSet') {
         currentCellProps.cellType = 'DATASET';
       } else if (cellContent.cellProps.cellType === 'text') {
         currentCellProps.cellType = 'TEXT';
@@ -89,23 +107,25 @@ export function generateJson(spreadSheetData) {
         Object.entries(cellContent.style).forEach(([singleStyle, singleStyleValue]) => {
           if (singleStyle === 'bgcolor') {
             // 背景颜色
-            currentCellProps.style.background_color = singleStyleValue;
+            // eslint-disable-next-line prefer-destructuring
+            currentCellProps.style.bgcolor = singleStyleValue.match(/rgb\((.*)\)/)[1];
           }
           if (singleStyle === 'color') {
             // 字体颜色
-            currentCellProps.style.color = singleStyleValue;
+            // eslint-disable-next-line prefer-destructuring
+            currentCellProps.style.forecolor = singleStyleValue.match(/rgb\((.*)\)/)[1];
           }
           if (singleStyle === 'underline' && singleStyleValue) {
             // 下划线
-            currentCellProps.style.text_decoration = ['underline'];
+            currentCellProps.style.underline = true;
           }
           if (singleStyle === 'align') {
             // 水平对齐方式
-            currentCellProps.style.text_align = singleStyleValue;
+            currentCellProps.style.align = singleStyleValue;
           }
           if (singleStyle === 'valign') {
             // 垂直对齐方式
-            currentCellProps.style.vertical_align = singleStyleValue;
+            currentCellProps.style.valign = singleStyleValue;
           }
           if (singleStyle === 'font') {
             // 字体相关
@@ -113,19 +133,19 @@ export function generateJson(spreadSheetData) {
               ([fontStyle, fontStyleValue]) => {
                 if (fontStyle === 'name') {
                   // 字体 font-family
-                  currentCellProps.style.font_family = fontStyleValue;
+                  currentCellProps.style.fontFamily = fontStyleValue;
                 }
                 if (fontStyle === 'size') {
                   // 字体 font-size
-                  currentCellProps.style.font_size = fontStyleValue;
+                  currentCellProps.style.fontSize = fontStyleValue;
                 }
                 if (fontStyle === 'italic' && fontStyleValue) {
                   // 字体 斜体
-                  currentCellProps.style.font_style = 'italic';
+                  currentCellProps.style.italic = true;
                 }
                 if (fontStyle === 'bold' && fontStyleValue) {
                   // 字体 加粗
-                  currentCellProps.style.font_weight = 'bold';
+                  currentCellProps.style.bold = true;
                 }
               },
             );
@@ -134,30 +154,38 @@ export function generateJson(spreadSheetData) {
             // 边框相关样式
             Object.entries(cellContent.style[singleStyle]).forEach(
               ([borderStyle, borderStyleValue]) => {
-                const [color = 'black'] = borderStyleValue;
+                const [color = 'rgba(0,0,0)'] = borderStyleValue;
                 if (borderStyle === 'bottom') {
                   // 下边框
-                  currentCellProps.style['border-bottom'] = `${'1px solid '}${color}`;
-                  currentCellProps.style['border-bottom-color'] = color;
-                  currentCellProps.style['border-bottom-type'] = 'solid';
+                  // eslint-disable-next-line prefer-destructuring
+                  currentCellProps.style.borderBottomColor = color.match(/rgb\((.*)\)/)[1];
+                  currentCellProps.style.borderBottomType = 'solid';
+                  currentCellProps.style.borderBottomWidth = '1';
+                  currentCellProps.style.borderBottom = true;
                 }
                 if (borderStyle === 'top') {
                   // 上边框
-                  currentCellProps.style['border-top'] = `${'1px solid '}${color}`;
-                  currentCellProps.style['border-top-color'] = color;
-                  currentCellProps.style['border-top-type'] = 'solid';
+                  // eslint-disable-next-line prefer-destructuring
+                  currentCellProps.style.borderTopColor = color.match(/rgb\((.*)\)/)[1];
+                  currentCellProps.style.borderTopType = 'solid';
+                  currentCellProps.style.borderTopWidth = '1';
+                  currentCellProps.style.borderTop = true;
                 }
                 if (borderStyle === 'left') {
                   // 左边框
-                  currentCellProps.style['border-left'] = `${'1px solid '}${color}`;
-                  currentCellProps.style['border-left-color'] = color;
-                  currentCellProps.style['border-left-type'] = 'solid';
+                  // eslint-disable-next-line prefer-destructuring
+                  currentCellProps.style.borderLeftColor = color.match(/rgb\((.*)\)/)[1];
+                  currentCellProps.style.borderLeftType = 'solid';
+                  currentCellProps.style.borderLeftWidth = '1';
+                  currentCellProps.style.borderLeft = true;
                 }
                 if (borderStyle === 'right') {
                   // 有边框
-                  currentCellProps.style['border-right'] = `${'1px solid '}${color}`;
-                  currentCellProps.style['border-right-color'] = color;
-                  currentCellProps.style['border-right-type'] = 'solid';
+                  // eslint-disable-next-line prefer-destructuring
+                  currentCellProps.style.borderRightColor = color.match(/rgb\((.*)\)/)[1];
+                  currentCellProps.style.borderRightType = 'solid';
+                  currentCellProps.style.borderRightWidth = '1';
+                  currentCellProps.style.borderRight = true;
                 }
               },
             );
@@ -170,6 +198,8 @@ export function generateJson(spreadSheetData) {
   sheet.push({
     data,
     cellAttrs,
+    rowArray,
+    columnArray,
   });
   return sheet;
 }

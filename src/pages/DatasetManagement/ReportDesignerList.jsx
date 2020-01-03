@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-02 21:00:59
+ * @LastEditTime : 2020-01-03 17:18:18
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -65,6 +65,7 @@ export default class DatasetManagement extends PureComponent {
       type: 'dataSet/getClassifyTree',
       payload: {
         dataStyle: 'Y',
+        fileType: 'R',
       },
     });
     dispatch({
@@ -210,11 +211,11 @@ export default class DatasetManagement extends PureComponent {
   operateClassifyTree = values => {
     const { dispatch } = this.props;
     const param = {};
+    param.fileType = 'R';
     // 新增树节点
     if (this.operateType === 'ADD') {
       param.operType = this.operateType;
       param.isParentFolder = '1';
-      param.fileType = 'R';
       // 新增二级以下节点
       if (this.nodeTree) {
         param.folderName = values.folderName;

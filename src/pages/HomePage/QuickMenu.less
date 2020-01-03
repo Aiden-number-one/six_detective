@@ -1,0 +1,71 @@
+.quickMenu {
+  min-height: 450px;
+  :global {
+    .ant-transfer-list-header {
+      padding: 5px 12px;
+    }
+    .ant-transfer-list-body {
+      background-color: #fff;
+    }
+    .ant-transfer-list-body-customize-wrapper {
+      padding-top: 0;
+    }
+    .ant-transfer-operation {
+      display: none;
+    }
+    .ant-transfer-list-header-selected > span:first-child {
+      display: none;
+    }
+    .ant-transfer-list-header-title {
+      position: relative;
+      right: 0;
+    }
+    .ant-transfer-list {
+      flex: 1;
+    }
+  }
+  .groupTitle {
+    position: relative;
+    height: 30px;
+    margin: 0;
+    color: #464c51;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 30px;
+    .quickMenuIcon {
+      position: absolute;
+      right: 0;
+      width: 80px;
+      font-size: 12px;
+    }
+  }
+  .groupTitle::before {
+    display: inline-block;
+    width: 4px;
+    height: 12px;
+    margin-right: 5px;
+    color: #f4374c;
+    background-color: #f4374c;
+    border: none;
+    content: '';
+  }
+  .titleWraper:hover {
+    .hoverText {
+      display: inline-block;
+      margin: 1px 0 1px 5px;
+      color: #10416c;
+      border-radius: 3px;
+      i {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+.buttonGroup {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 10px;
+  button {
+    margin-right: 12px;
+  }
+}

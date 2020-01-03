@@ -15,14 +15,14 @@ const { Sider } = Layout;
   dataSetPrivateList: reportDesigner.dataSetPrivateList,
 }))
 @Form.create({
-  onFieldsChange(props, changedFields, allFields) {
-    // 若修改form，则即使更新fields
-    console.log(allFields);
-    // const { dispatch } = props;
-    // dispatch({
-    //   type: '',
-    // });
-  },
+  // onFieldsChange(props, changedFields, allFields) {
+  //   // 若修改form，则即使更新fields
+  //   console.log(allFields);
+  //   // const { dispatch } = props;
+  //   // dispatch({
+  //   //   type: '',
+  //   // });
+  // },
 })
 export default class RigthSideBar extends PureComponent {
   state = {
@@ -38,9 +38,16 @@ export default class RigthSideBar extends PureComponent {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { cellPosition, rightSideCollapse, changeRightSideBar, dataSetPrivateList } = this.props;
+    const {
+      cellPosition,
+      rightSideCollapse,
+      changeRightSideBar,
+      dataSetPrivateList,
+      dispatch,
+    } = this.props;
     const formProps = {
       getFieldDecorator,
+      dispatch,
     };
     const { siderBarType } = this.state;
     // 单元格的props
