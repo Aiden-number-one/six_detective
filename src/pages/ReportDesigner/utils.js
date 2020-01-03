@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-03 16:21:36
+ * @LastEditTime : 2020-01-03 17:41:07
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -29,7 +29,11 @@ export function dataSetTransform(dataSetItem) {
     datasetType,
     datasourceId,
     datasourceName,
+    dbUser,
+    dbSecretWord,
     commandText,
+    jdbcString,
+    driverInfo,
     datasetId: originDatasetId,
     datasetParams: datasetParamsString,
     datasetFields: datasetFieldsString,
@@ -49,16 +53,10 @@ export function dataSetTransform(dataSetItem) {
       datasource_name: datasourceName, // 数据源名称
       datasource_id: datasourceId, // 数据源ID
       command_text: commandText, // SQL
-      hostname: '', // reserved
-      path: '', // reserved
-      method: '', // reserved
-      cate: '', // reserved
-      node: '', // reserved
-      page_type: '0', // reserved
-      page_params: '', // reserved
-      page_size_params: '', // reserved
-      record_name: '', // reserved
-
+      username: dbUser, // 数据源的用户名
+      password: dbSecretWord, // 数据源的密码
+      url: jdbcString, // jdbcString
+      driver: driverInfo, // 驱动
       // SQL参数格式
       // [
       //   {
@@ -166,11 +164,21 @@ export function getDataSetXml(contentDetail) {
   let dataSetXml = '';
   Object.entries(dataSourceMap).forEach(([datasourceId, datasourceValue]) => {
     const { query = {} } = datasourceValue[0];
-    const { datasource_name: datasourceName } = query;
-    dataSetXml += `<datasource datasourceid="${datasourceId}" name="${datasourceName}" type="jdbc" username="db2inst1" password="db2inst1" url="jdbc:db2://10.60.69.126:50000/sample:currentSchema=SLOP_SYS;" driver="com.ibm.db2.jcc.DB2Driver">`;
+    const {
+      datasource_name: datasourceName,
+      username,
+      password,
+      url,
+      driver,
+      command_text: commandText,
+    } = query;
+    dataSetXml += `<datasource datasourceid="${datasourceId}" name="${datasourceName}" type="jdbc" username="${username}" password="${password}" url="${url}" driver="${driver}">`;
     datasourceValue.forEach(dataset => {
       const { dataset_name: datasetName, dataset_type: type, fields = [] } = dataset;
-      dataSetXml += ` <dataset name="${datasetName}" type="${type}">`;
+      dataSetXml += ` <dataset name="${datasetName}" type="${type.toLocaleLowerCase()}">`;
+      if (type === 'SQL') {
+        dataSetXml += ` <sql><![CDATA[${commandText}]]></sql>`;
+      }
       fields.forEach(field => {
         const { field_data_name: name } = field;
         dataSetXml += `<field name="${name}"/>`;
