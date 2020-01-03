@@ -17,9 +17,9 @@ export default function NewAccountLogList({
 }) {
   const [curImpId, setImpId] = useState('');
 
-  function handleClick(id) {
+  async function handleClick(id) {
     setImpId(id);
-    onDownload(id);
+    await onDownload(id);
   }
   return (
     <Table
@@ -60,6 +60,11 @@ export default function NewAccountLogList({
         align="center"
         dataIndex="statusMark"
         title={<FormattedMessage id="data-import.submission-status" />}
+      />
+      <Column
+        align="center"
+        dataIndex="submisssionTime"
+        title={<FormattedMessage id="data-import.new-account.submission-time" />}
       />
       <Column
         align="center"
