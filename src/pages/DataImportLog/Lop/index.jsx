@@ -9,7 +9,7 @@ import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
 import styles from '../index.less';
 
-export function LopLog({ dispatch, loading, page: current, logs, total }) {
+export function LopLog({ dispatch, loading, page: current, logs, total, submitters }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     startDate: defaultDateRange[0],
@@ -22,6 +22,13 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
       payload: searchParams,
     });
   }, []);
+
+  function getSubmitters(params) {
+    dispatch({
+      type: 'lop/fetchSubmitters',
+      payload: params,
+    });
+  }
 
   function handleParams(type, params) {
     setSearchParams(params);
@@ -54,7 +61,9 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
         <FilterForm formType={0} loading={loading} onParams={handleParams} />
         <LopLogManualModal
           visible={visible}
-          loading={loading['lop/importByManual']}
+          loading={loading}
+          submitters={submitters}
+          onSubmitter={getSubmitters}
           onCancel={() => setVisible(false)}
           onUpload={handleUpload}
         />
@@ -79,8 +88,9 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
   );
 }
 
-export default connect(({ loading, lop: { logs, page, total } }) => ({
+export default connect(({ loading, lop: { logs, page, total, submitters } }) => ({
   loading: loading.effects,
+  submitters,
   logs,
   page,
   total,

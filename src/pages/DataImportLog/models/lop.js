@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-03 16:50:48
+ * @LastEditTime : 2020-01-04 23:16:47
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -39,7 +39,16 @@ export async function getReportUrl({ lopImpId }) {
   });
 }
 
-export const pageSelector = ({ lop }) => lop.page;
+export async function getSubmitters(params = {}) {
+  const { page = 1, pageSize = 10, submitterCode } = params;
+  return request('get_submitter_info_list_page', {
+    data: {
+      submitterCode,
+      pageNumber: page.toString(),
+      pageSize: pageSize.toString(),
+    },
+  });
+}
 
 export default {
   namespace: 'lop',
@@ -47,6 +56,9 @@ export default {
     logs: [],
     page: 1,
     total: 0,
+    submittersPage: 1,
+    submittersTotal: 0,
+    submitters: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -56,6 +68,12 @@ export default {
         page,
         logs,
         total,
+      };
+    },
+    saveSubmitters(state, { payload }) {
+      return {
+        ...state,
+        submitters: payload.submitters,
       };
     },
   },
@@ -97,6 +115,20 @@ export default {
         throw new Error(err);
       }
       return reportUrl;
+    },
+    *fetchSubmitters({ payload }, { call, put }) {
+      const { err, items, totalCount } = yield call(getSubmitters, payload);
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveSubmitters',
+        payload: {
+          submitters: items,
+          submittersPage: payload.page,
+          submittersTotal: totalCount,
+        },
+      });
     },
   },
 };

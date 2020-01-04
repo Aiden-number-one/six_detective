@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Drawer, Form, DatePicker, Input, Select, Upload, Icon, Button } from 'antd';
+import { Drawer, Form, DatePicker, Input, Select, Upload, Icon, Button, Spin } from 'antd';
 import { SUBMISSION_REPORT, yesterday, dateFormat } from '../constants';
 import styles from '../index.less';
 
@@ -8,7 +8,15 @@ const { Option } = Select;
 
 const isLt5M = size => size / 1024 / 1024 < 5;
 
-function LopLogManualModal({ form, visible, loading, onCancel, onUpload }) {
+function LopLogManualModal({
+  form,
+  visible,
+  loading,
+  submitters,
+  onSubmitter,
+  onCancel,
+  onUpload,
+}) {
   const { getFieldDecorator, validateFields } = form;
 
   function handleClose() {
@@ -16,6 +24,15 @@ function LopLogManualModal({ form, visible, loading, onCancel, onUpload }) {
     onCancel();
   }
 
+  function handleChange(value) {
+    console.log(value);
+  }
+
+  function handleSearch(value) {
+    onSubmitter({
+      submitterCode: value,
+    });
+  }
   function handleCommit() {
     validateFields(async (err, values) => {
       if (!err) {
@@ -61,7 +78,22 @@ function LopLogManualModal({ form, visible, loading, onCancel, onUpload }) {
                 message: 'Please input submitter code!',
               },
             ],
-          })(<Input placeholder="please input submitter code" />)}
+          })(
+            <Select
+              placeholder="please input submitter code"
+              showSearch
+              showArrow={false}
+              filterOption={false}
+              defaultActiveFirstOption={false}
+              notFoundContent={loading['lop/fetchSubmitters'] ? <Spin size="small" /> : null}
+              onChange={handleChange}
+              onSearch={handleSearch}
+            >
+              {submitters.map(item => (
+                <Option key={`${item.market}-${item.submitterCode}`}>{item.submitterCode}</Option>
+              ))}
+            </Select>,
+          )}
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
           {getFieldDecorator('submitterName', {
@@ -135,7 +167,7 @@ function LopLogManualModal({ form, visible, loading, onCancel, onUpload }) {
       </Form>
       <div className={styles['bottom-btns']}>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button type="primary" loading={loading} onClick={handleCommit}>
+        <Button type="primary" loading={loading['lop/importByManual']} onClick={handleCommit}>
           Commit
         </Button>
       </div>
