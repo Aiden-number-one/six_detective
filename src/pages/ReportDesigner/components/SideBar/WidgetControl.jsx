@@ -6,7 +6,7 @@ import styles from './index.less';
 const { Content } = Layout;
 const { Panel } = Collapse;
 const { TextArea } = Input;
-// const { Option } = Select;
+const { Option } = Select;
 
 const formLayout = {
   labelCol: { span: 8 },
@@ -28,12 +28,26 @@ export default props => {
           <Form colon={false}>
             {/* 控件类型 */}
             <Form.Item label={<FormattedMessage id="report-designer.widgettype" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Select>{/* <Option></Option> */}</Select>)}
+              {getFieldDecorator(
+                'widgettype',
+                {},
+              )(
+                <Select onChange={}>
+                  <Option value="input">Input</Option>
+                  <Option value="inputnumber">Input Number</Option>
+                  <Option value="datepickeryyyy">Date Picker(yyyy)</Option>
+                  <Option value="datepickeryyyymm">Date Picker(yyyy-mm)</Option>
+                  <Option value="datepickeryyyymmdd">Date Picker(yyyy-mm-dd)</Option>
+                  <Option value="select">Select</Option>
+                  <Option value="radio">Radio</Option>
+                  <Option value="checkbox">Checkbox</Option>
+                </Select>,
+              )}
             </Form.Item>
             {/* 标签名称 */}
             <Form.Item label={<FormattedMessage id="report-designer.tag-name" />} {...formLayout}>
               <Form.Item style={{ display: 'inline-block', width: '50%' }}>
-                <Input />
+                {getFieldDecorator('widgetname', {})(<Input />)}
               </Form.Item>
               <Form.Item style={{ display: 'inline-block', width: '50%', paddingLeft: 4 }}>
                 <Checkbox>{<FormattedMessage id="report-designer.visible" />}</Checkbox>
