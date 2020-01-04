@@ -9,7 +9,7 @@ import { createCellPos } from '@/utils/utils';
 import SpreadSheet from './components/SpreadSheet';
 import CustomSearchArea from './components/CustomSearchArea/index';
 import ToolBar from './components/ToolBar/index';
-import RigthSideBar from './components/SideBar/RigthSideBar';
+import RightSideBar from './components/SideBar/RightSideBar';
 import LeftSideBar from './components/SideBar/LeftSideBar';
 import DatasetModify from './components/DatasetModify';
 import styles from './ReportDesigner.less';
@@ -277,7 +277,7 @@ export default class ReportDesigner extends PureComponent {
               className={classNames(styles.right)}
               style={{ width: rightSideCollapse ? '300px' : '30px' }}
             >
-              <RigthSideBar
+              <RightSideBar
                 rightSideCollapse={rightSideCollapse}
                 changeRightSideBar={this.changeRightSideBar}
               />

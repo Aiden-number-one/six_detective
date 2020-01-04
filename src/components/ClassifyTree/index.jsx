@@ -2,8 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
- * @LastEditors  : lan
- * @LastEditTime : 2020-01-04 11:00:09
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-04 15:24:50
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -23,6 +23,7 @@
  */
 import React, { Component, Fragment } from 'react';
 import { Tree, Input, Icon, Checkbox } from 'antd';
+import IconFont from '@/components/IconFont';
 
 import styles from './index.less';
 import { formatTree } from '@/utils/utils';
@@ -130,7 +131,18 @@ class TitleMessage extends Component {
   }
 }
 
-function loop(orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, operate) {
+function loop(
+  orgsTree,
+  treeKey,
+  handleAddTree,
+  handleModifyTree,
+  handleDeleteTree,
+  operate,
+  btnIds,
+) {
+  // const [customeBtnIds, setCustomeBtnIds] = useState([])
+  // setCustomeBtnIds(btnIds)
+  // console.log('customeBtnIds=', customeBtnIds)
   return (
     orgsTree &&
     orgsTree.map(item => {
@@ -156,6 +168,7 @@ function loop(orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTr
       if (children && showTitle) {
         return (
           <TreeNode
+            // selectable={false}
             key={currentKey}
             title={
               <TitleMessage
@@ -169,29 +182,59 @@ function loop(orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTr
             }
             parentId={parentKey}
           >
-            {loop(children, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, operate)}
+            {loop(
+              children,
+              treeKey,
+              handleAddTree,
+              handleModifyTree,
+              handleDeleteTree,
+              operate,
+              btnIds,
+            )}
           </TreeNode>
         );
       }
       return (
+        // <Fragment>
         <TreeNode
-          checkable
+          checkable={!currentKey.includes('btn')}
+          selectable={false}
+          className={currentKey.includes('btn') ? styles.btnClass : ''}
           key={currentKey}
           title={
-            <TitleMessage
-              title={currentName}
-              nodeKeys={item}
-              handleAddTree={handleAddTree}
-              handleModifyTree={handleModifyTree}
-              handleDeleteTree={handleDeleteTree}
-              operate={operate}
-            />
+            <Fragment>
+              {!currentKey.includes('btn') && (
+                <TitleMessage
+                  title={currentName}
+                  nodeKeys={item}
+                  handleAddTree={handleAddTree}
+                  handleModifyTree={handleModifyTree}
+                  handleDeleteTree={handleDeleteTree}
+                  operate={operate}
+                />
+              )}
+              {currentKey.includes('btn') && (
+                <Checkbox
+                  value={currentKey}
+                  checked={btnIds.includes(currentKey)}
+                  onChange={value => onChangeChecked(value)}
+                >
+                  <IconFont type="icon-anniu" className={styles.btnIcon} />
+                  <span>{currentName}</span>
+                </Checkbox>
+              )}
+            </Fragment>
           }
           parentId={parentKey}
         />
+        // </Fragment>
       );
     })
   );
+}
+
+function onChangeChecked(value) {
+  console.log('value===', value);
 }
 
 class ClassifyTree extends Component {
@@ -345,6 +388,7 @@ class ClassifyTree extends Component {
   };
 
   onCheck = (selectedKeys, info) => {
+    console.log('selectedKeys, info==', selectedKeys, info);
     const { menuList } = this.state;
     const checkedKeys = this.setGridDataFromTree([], menuList);
     const newCheckedKeys = checkedKeys.map(element => element.menuid);
@@ -421,6 +465,7 @@ class ClassifyTree extends Component {
       add,
       modify,
       move,
+      btnIds,
     } = this.props;
     if (menuList) {
       this.generateList(menuList, treeKey);
@@ -452,11 +497,19 @@ class ClassifyTree extends Component {
           autoExpandParent={autoExpandParent}
           defaultExpandAll
         >
-          {loop(menuList, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, {
-            add,
-            modify,
-            move,
-          })}
+          {loop(
+            menuList,
+            treeKey,
+            handleAddTree,
+            handleModifyTree,
+            handleDeleteTree,
+            {
+              add,
+              modify,
+              move,
+            },
+            btnIds,
+          )}
         </Tree>
       </div>
     );
