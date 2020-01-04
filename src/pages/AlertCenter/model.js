@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-03 10:21:33
+ * @LastEditTime : 2020-01-04 15:46:12
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -342,6 +342,7 @@ export default {
         operType: 'emailByAlert',
       });
       if (err) {
+        message.warn(err.slice(0, 150));
         return err;
       }
       yield put({
