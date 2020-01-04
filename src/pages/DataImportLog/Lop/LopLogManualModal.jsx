@@ -73,7 +73,7 @@ function LopLogManualModal({ form, visible, loading, onCancel, onUpload }) {
             ],
           })(<Input placeholder="please input submmitter name" />)}
         </Form.Item>
-        <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
+        <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
           {getFieldDecorator('submissionReport', {
             rules: [
               {
@@ -89,7 +89,7 @@ function LopLogManualModal({ form, visible, loading, onCancel, onUpload }) {
             </Select>,
           )}
         </Form.Item>
-        <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
+        <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
               {

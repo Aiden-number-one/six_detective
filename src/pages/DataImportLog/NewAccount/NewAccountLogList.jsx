@@ -52,10 +52,7 @@ export default function NewAccountLogList({
         dataIndex="submitterCode"
         title={<FormattedMessage id="data-import.submitter-code" />}
       />
-      <Column
-        dataIndex="fileName"
-        title={<FormattedMessage id="data-import.new-account.file-name" />}
-      />
+      <Column dataIndex="fileName" title={<FormattedMessage id="data-import.file-name" />} />
       <Column
         align="center"
         dataIndex="statusMark"

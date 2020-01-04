@@ -218,7 +218,7 @@ function NewAccountLogManualModal({ form, visible, onHide, onUpload }) {
     >
       <Form className={styles['modal-form']}>
         <Alert message={warningMsg} type="warning" showIcon />
-        <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
+        <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
               {
