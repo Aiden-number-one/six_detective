@@ -32,7 +32,7 @@ export default props => {
                 'widgettype',
                 {},
               )(
-                <Select onChange={}>
+                <Select>
                   <Option value="input">Input</Option>
                   <Option value="inputnumber">Input Number</Option>
                   <Option value="datepickeryyyy">Date Picker(yyyy)</Option>
@@ -50,7 +50,10 @@ export default props => {
                 {getFieldDecorator('widgetname', {})(<Input />)}
               </Form.Item>
               <Form.Item style={{ display: 'inline-block', width: '50%', paddingLeft: 4 }}>
-                <Checkbox>{<FormattedMessage id="report-designer.visible" />}</Checkbox>
+                {getFieldDecorator(
+                  'widgetvisible',
+                  {},
+                )(<Checkbox>{<FormattedMessage id="report-designer.visible" />}</Checkbox>)}
               </Form.Item>
             </Form.Item>
             {/* 提示文字 */}
