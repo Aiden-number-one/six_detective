@@ -795,11 +795,11 @@ export default class HomePage extends PureComponent {
                             renderItem={item => (
                               <List.Item>
                                 <span
-                                  title={item.alertTypeName}
+                                  title={item.alertDesc}
                                   className={styles.description}
                                   style={{ maxWidth: 500 }}
                                 >
-                                  {item.alertTypeName}
+                                  {item.alertDesc}
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
@@ -1080,8 +1080,8 @@ export default class HomePage extends PureComponent {
                             dataSource={myAlertData}
                             renderItem={item => (
                               <List.Item>
-                                <span title={item.alertTypeName} className={styles.description}>
-                                  {item.alertTypeName}
+                                <span title={item.alertDesc} className={styles.description}>
+                                  {item.alertDesc}
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
