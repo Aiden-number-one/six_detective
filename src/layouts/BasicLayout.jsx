@@ -59,7 +59,12 @@ const BasicLayout = props => {
       callback: m => {
         // newMenuData = Object.assign([], menuData);
         setNewMenuData(m);
-        console.log('menuData====', m, menuData);
+        console.log('menuData111====', m, menuData);
+        if (m.length <= 0) {
+          dispatch({
+            type: 'login/logout',
+          });
+        }
       },
     });
   }, []);
