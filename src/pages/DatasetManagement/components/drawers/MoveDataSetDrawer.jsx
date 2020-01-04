@@ -2,7 +2,7 @@
  * @Description: 修改数据集名称
  * @Author: lan
  * @Date: 2019-12-11 20:54:21
- * @LastEditTime : 2019-12-23 13:18:49
+ * @LastEditTime : 2020-01-04 10:38:24
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -65,8 +65,9 @@ export default class MoveDataSetDrawer extends PureComponent {
         <ClassifyTree
           treeData={classifyTree}
           treeKey={{
-            currentKey: 'classId',
-            currentName: 'className',
+            currentKey: 'folderId',
+            currentName: 'folderName',
+            parentKey: 'parentId',
           }}
           showSearch={false}
           onSelect={value => {

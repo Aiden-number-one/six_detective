@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-03 17:16:27
+ * @LastEditTime : 2020-01-04 10:48:27
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -164,11 +164,15 @@ export default class DatasetManagement extends PureComponent {
   // 选中树
   onSelect = value => {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'dataSet/setActiveTree',
-      payload: value,
-    });
-    this.queryDataSet();
+    if (value) {
+      dispatch({
+        type: 'dataSet/setActiveTree',
+        payload: value,
+      });
+    }
+    setTimeout(() => {
+      this.queryDataSet();
+    }, 0);
   };
 
   // 操作树节点
