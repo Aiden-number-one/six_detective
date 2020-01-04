@@ -70,6 +70,7 @@ class NewUser extends Component {
     super(props);
     this.state = {
       selectedKeys: [],
+      btnIds: [],
       // defaultCheckedKeys: [],
     };
   }
@@ -138,6 +139,10 @@ class NewUser extends Component {
           payload: params,
           callback: () => {
             this.props.onSave(true);
+            message.success({
+              content: 'save success',
+              duration: 2,
+            });
           },
         });
       }
@@ -156,8 +161,17 @@ class NewUser extends Component {
       payload: params,
       callback: () => {
         const selectedKeys = this.props.updateGroup.map(element => element.menuId);
+        const btnIds = [];
+        for (let i = 0; i < selectedKeys.length; i += 1) {
+          if (selectedKeys[i].includes('btn')) {
+            btnIds.push(selectedKeys.splice(i, 1)[0]);
+            i -= 1;
+          }
+        }
+        console.log('selectedKeys===============, btnIds', selectedKeys, btnIds);
         that.setState({
           selectedKeys,
+          btnIds,
         });
       },
     });
@@ -195,7 +209,7 @@ class NewUser extends Component {
 
   render() {
     const { menuData, groupMenuInfo } = this.props;
-    const { selectedKeys } = this.state;
+    const { selectedKeys, btnIds } = this.state;
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
@@ -209,6 +223,7 @@ class NewUser extends Component {
                 onCheck={this.onCheck}
                 treeData={menuData}
                 checkedKeys={selectedKeys}
+                btnIds={btnIds}
                 treeKey={{
                   currentKey: 'menuid',
                   currentName: 'menuname',
