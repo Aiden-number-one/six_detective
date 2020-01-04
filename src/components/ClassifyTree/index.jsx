@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-04 15:24:50
+ * @LastEditTime : 2020-01-04 17:13:16
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -131,112 +131,6 @@ class TitleMessage extends Component {
   }
 }
 
-function loop(
-  orgsTree,
-  treeKey,
-  handleAddTree,
-  handleModifyTree,
-  handleDeleteTree,
-  operate,
-  btnIds,
-) {
-  // const [customeBtnIds, setCustomeBtnIds] = useState([])
-  // setCustomeBtnIds(btnIds)
-  // console.log('customeBtnIds=', customeBtnIds)
-  return (
-    orgsTree &&
-    orgsTree.map(item => {
-      const { children } = item;
-      const currentKey = item[`${treeKey.currentKey}`];
-      const currentName = item[`${treeKey.currentName}`];
-      const parentKey = item[`${treeKey.parentKey}`];
-      let index = -1;
-      if (searchValue) {
-        index = currentName.indexOf(searchValue);
-      }
-      let lineTitle = '';
-      lineTitle = `<span>${currentName.replace(
-        searchValue,
-        `<span style='color:#f00'>${searchValue}</span>`,
-      )}</span>`;
-
-      if (lineTitle) {
-        // eslint-disable-next-line react/no-danger
-        lineTitle = <div dangerouslySetInnerHTML={{ __html: lineTitle }} />;
-      }
-      const showTitle = index > -1 ? lineTitle : currentName;
-      if (children && showTitle) {
-        return (
-          <TreeNode
-            // selectable={false}
-            key={currentKey}
-            title={
-              <TitleMessage
-                title={showTitle}
-                nodeKeys={item}
-                handleAddTree={handleAddTree}
-                handleModifyTree={handleModifyTree}
-                handleDeleteTree={handleDeleteTree}
-                operate={operate}
-              />
-            }
-            parentId={parentKey}
-          >
-            {loop(
-              children,
-              treeKey,
-              handleAddTree,
-              handleModifyTree,
-              handleDeleteTree,
-              operate,
-              btnIds,
-            )}
-          </TreeNode>
-        );
-      }
-      return (
-        // <Fragment>
-        <TreeNode
-          checkable={!currentKey.includes('btn')}
-          selectable={false}
-          className={currentKey.includes('btn') ? styles.btnClass : ''}
-          key={currentKey}
-          title={
-            <Fragment>
-              {!currentKey.includes('btn') && (
-                <TitleMessage
-                  title={currentName}
-                  nodeKeys={item}
-                  handleAddTree={handleAddTree}
-                  handleModifyTree={handleModifyTree}
-                  handleDeleteTree={handleDeleteTree}
-                  operate={operate}
-                />
-              )}
-              {currentKey.includes('btn') && (
-                <Checkbox
-                  value={currentKey}
-                  checked={btnIds.includes(currentKey)}
-                  onChange={value => onChangeChecked(value)}
-                >
-                  <IconFont type="icon-anniu" className={styles.btnIcon} />
-                  <span>{currentName}</span>
-                </Checkbox>
-              )}
-            </Fragment>
-          }
-          parentId={parentKey}
-        />
-        // </Fragment>
-      );
-    })
-  );
-}
-
-function onChangeChecked(value) {
-  console.log('value===', value);
-}
-
 class ClassifyTree extends Component {
   static defaultPorps = {
     all: false,
@@ -248,6 +142,7 @@ class ClassifyTree extends Component {
     expandedKeys: [],
     defaultCheckedKeys: [],
     checkedKeys: [],
+    customeBtnIds: [],
     autoExpandParent: true,
     allChecked: false,
   };
@@ -272,13 +167,15 @@ class ClassifyTree extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      const { checkedKeys, all } = this.props;
+      const { checkedKeys, all, btnIds } = this.props;
       const { menuList } = this.state;
       this.setState({
         checkedKeys,
+        customeBtnIds: btnIds,
       });
       this.props.onSelect(menuList[0] && menuList[0][this.props.treeKey.currentKey]);
       if (all) {
+        console.log('menuList======', menuList);
         this.compareAllChecked();
         this.setState({
           checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
@@ -294,7 +191,10 @@ class ClassifyTree extends Component {
     checkedKeysArray = [...new Set(checkedKeysArray)];
     menuList.forEach(element => {
       if (checkedKeysArray.includes(element.menuid)) {
-        if (element.children.some(item => checkedKeysArray.includes(item.menuid))) {
+        if (
+          element.children &&
+          element.children.some(item => checkedKeysArray.includes(item.menuid))
+        ) {
           const idx = checkedKeysArray.indexOf(element.menuid);
           if (idx > -1) {
             checkedKeysArray.splice(idx, 1);
@@ -326,11 +226,18 @@ class ClassifyTree extends Component {
   compareAllChecked = () => {
     const { checkedKeys } = this.props;
     const { menuList } = this.state;
+    console.log('menuList==', menuList);
     const selectedKeys = this.setGridDataFromTree([], menuList);
     const newCheckedKeys = selectedKeys.map(element => element.menuid);
     // this.setState({
     //   checkedKeys,
     // });
+    for (let i = 0; i < newCheckedKeys.length; i += 1) {
+      if (newCheckedKeys[i].includes('btn')) {
+        newCheckedKeys.splice(i, 1);
+        i -= 1;
+      }
+    }
     if (this.arrayEquals(newCheckedKeys, checkedKeys)) {
       this.setState({
         allChecked: true,
@@ -388,14 +295,19 @@ class ClassifyTree extends Component {
   };
 
   onCheck = (selectedKeys, info) => {
-    console.log('selectedKeys, info==', selectedKeys, info);
-    const { menuList } = this.state;
+    const { menuList, customeBtnIds } = this.state;
     const checkedKeys = this.setGridDataFromTree([], menuList);
     const newCheckedKeys = checkedKeys.map(element => element.menuid);
-    this.props.onCheck(selectedKeys, info);
+    this.props.onCheck(selectedKeys, info, customeBtnIds);
     this.setState({
       checkedKeys: selectedKeys,
     });
+    for (let i = 0; i < newCheckedKeys.length; i += 1) {
+      if (newCheckedKeys[i].includes('btn')) {
+        newCheckedKeys.splice(i, 1);
+        i -= 1;
+      }
+    }
     if (this.arrayEquals(newCheckedKeys, selectedKeys)) {
       this.setState({
         allChecked: true,
@@ -445,6 +357,118 @@ class ClassifyTree extends Component {
     }
   };
 
+  loop = (orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, operate) => {
+    // const [customeBtnIds, setCustomeBtnIds] = useState([])
+    // setCustomeBtnIds(btnIds)
+    const { customeBtnIds } = this.state;
+    return (
+      orgsTree &&
+      orgsTree.map(item => {
+        const { children } = item;
+        const currentKey = item[`${treeKey.currentKey}`];
+        const currentName = item[`${treeKey.currentName}`];
+        const parentKey = item[`${treeKey.parentKey}`];
+        let index = -1;
+        if (searchValue) {
+          index = currentName.indexOf(searchValue);
+        }
+        let lineTitle = '';
+        lineTitle = `<span>${currentName.replace(
+          searchValue,
+          `<span style='color:#f00'>${searchValue}</span>`,
+        )}</span>`;
+
+        if (lineTitle) {
+          // eslint-disable-next-line react/no-danger
+          lineTitle = <div dangerouslySetInnerHTML={{ __html: lineTitle }} />;
+        }
+        const showTitle = index > -1 ? lineTitle : currentName;
+        if (children && showTitle) {
+          return (
+            <TreeNode
+              // selectable={false}
+              key={currentKey}
+              title={
+                <TitleMessage
+                  title={showTitle}
+                  nodeKeys={item}
+                  handleAddTree={handleAddTree}
+                  handleModifyTree={handleModifyTree}
+                  handleDeleteTree={handleDeleteTree}
+                  operate={operate}
+                />
+              }
+              parentId={parentKey}
+            >
+              {this.loop(
+                children,
+                treeKey,
+                handleAddTree,
+                handleModifyTree,
+                handleDeleteTree,
+                operate,
+              )}
+            </TreeNode>
+          );
+        }
+        return (
+          // <Fragment>
+          <TreeNode
+            checkable={!currentKey.includes('btn')}
+            selectable={false}
+            className={currentKey.includes('btn') ? styles.btnClass : ''}
+            key={currentKey}
+            title={
+              <Fragment>
+                {!currentKey.includes('btn') && (
+                  <TitleMessage
+                    title={currentName}
+                    nodeKeys={item}
+                    handleAddTree={handleAddTree}
+                    handleModifyTree={handleModifyTree}
+                    handleDeleteTree={handleDeleteTree}
+                    operate={operate}
+                  />
+                )}
+                {currentKey.includes('btn') && (
+                  <Checkbox
+                    value={currentKey}
+                    checked={customeBtnIds.includes(currentKey)}
+                    onChange={this.onChangeChecked}
+                  >
+                    <IconFont type="icon-anniu" className={styles.btnIcon} />
+                    <span>{currentName}</span>
+                  </Checkbox>
+                )}
+              </Fragment>
+            }
+            parentId={parentKey}
+          />
+          // </Fragment>
+        );
+      })
+    );
+  };
+
+  onChangeChecked = value => {
+    const { customeBtnIds, checkedKeys } = this.state;
+    const btnIds = Object.assign([], customeBtnIds);
+    if (value.target.checked) {
+      btnIds.push(value.target.value);
+    } else {
+      const index = btnIds.indexOf(value.target.value);
+      btnIds.splice(index, 1);
+    }
+    this.setState(
+      {
+        customeBtnIds: btnIds,
+      },
+      () => {
+        this.props.onCheck(checkedKeys, false, btnIds);
+      },
+    );
+  };
+
   render() {
     const {
       expandedKeys,
@@ -465,7 +489,6 @@ class ClassifyTree extends Component {
       add,
       modify,
       move,
-      btnIds,
     } = this.props;
     if (menuList) {
       this.generateList(menuList, treeKey);
@@ -497,19 +520,11 @@ class ClassifyTree extends Component {
           autoExpandParent={autoExpandParent}
           defaultExpandAll
         >
-          {loop(
-            menuList,
-            treeKey,
-            handleAddTree,
-            handleModifyTree,
-            handleDeleteTree,
-            {
-              add,
-              modify,
-              move,
-            },
-            btnIds,
-          )}
+          {this.loop(menuList, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, {
+            add,
+            modify,
+            move,
+          })}
         </Tree>
       </div>
     );

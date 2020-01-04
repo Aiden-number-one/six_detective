@@ -168,7 +168,6 @@ class NewUser extends Component {
             i -= 1;
           }
         }
-        console.log('selectedKeys===============, btnIds', selectedKeys, btnIds);
         that.setState({
           selectedKeys,
           btnIds,
@@ -189,13 +188,14 @@ class NewUser extends Component {
     console.log('value===', value);
   };
 
-  onCheck = (selectedKeyss, event) => {
-    console.log('selectedKeyss===', selectedKeyss);
-    console.log('event===', event);
-    console.log('halfCheckedKeys=', event.halfCheckedKeys);
-    // const newSelectedKeys = selectedKeyss.checked
-    const newSelectedKeys = selectedKeyss.concat(event.halfCheckedKeys);
-    console.log('newSelectedKeys==', newSelectedKeys);
+  onCheck = (selectedKeyss, event, btnIds) => {
+    let halfCheckedKeys = [];
+    if (typeof event === 'boolean') {
+      halfCheckedKeys = [];
+    } else {
+      halfCheckedKeys = Object.assign([], event.halfCheckedKeys);
+    }
+    const newSelectedKeys = selectedKeyss.concat(halfCheckedKeys, btnIds);
     this.setState({
       selectedKeys: newSelectedKeys,
     });
