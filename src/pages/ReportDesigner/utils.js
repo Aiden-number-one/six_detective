@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-03 19:06:00
+ * @LastEditTime : 2020-01-04 10:57:22
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -233,8 +233,9 @@ export function getTemplateAreaCellPartXml(contentDetail) {
         borderRightWidth,
       } = style;
       // 生成
-      cellxml += `<cell expand="Down" name="${createCellPos(colsIndex) +
-        (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}">
+      cellxml += `<cell expand="${cellType === 'DATASET' ? 'Down' : 'None'}" name="${createCellPos(
+        colsIndex,
+      ) + (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}">
         <cell-style font-size="${fontSize}" align="${align}" valign="${valign}" ${bgcolor &&
         `bgcolor="${bgcolor}"`} ${forecolor && `bgcolor="${forecolor}"`} ${underline &&
         `underline="${underline}"`} ${fontFamily && `font-family="${fontFamily}"`} ${italic &&
@@ -247,7 +248,7 @@ export function getTemplateAreaCellPartXml(contentDetail) {
       cellxml = cellxml.replace(/ undefined/g, '');
       // 生成value相关元素
       if (cellType === 'TEXT') {
-        cellxml += `<simple-value><![CDATA[${cellText}]]></simple-value>`;
+        cellxml += `<simple-value><![CDATA[${cellText || ''}]]></simple-value>`;
       } else if (cellType === 'DATASET') {
         const datasetName = cellText.split('.')[0];
         const property = cellText.split('.')[1];
