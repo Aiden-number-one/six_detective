@@ -29,7 +29,7 @@ export default props => {
             {/* 控件类型 */}
             <Form.Item label={<FormattedMessage id="report-designer.widgettype" />} {...formLayout}>
               {getFieldDecorator(
-                'widgettype',
+                'widgetType',
                 {},
               )(
                 <Select>
@@ -47,25 +47,25 @@ export default props => {
             {/* 标签名称 */}
             <Form.Item label={<FormattedMessage id="report-designer.tag-name" />} {...formLayout}>
               <Form.Item style={{ display: 'inline-block', width: '50%' }}>
-                {getFieldDecorator('widgetname', {})(<Input />)}
+                {getFieldDecorator('widgetName', {})(<Input />)}
               </Form.Item>
               <Form.Item style={{ display: 'inline-block', width: '50%', paddingLeft: 4 }}>
                 {getFieldDecorator(
-                  'widgetvisible',
+                  'widgetVisible',
                   {},
                 )(<Checkbox>{<FormattedMessage id="report-designer.visible" />}</Checkbox>)}
               </Form.Item>
             </Form.Item>
             {/* 提示文字 */}
             <Form.Item label={<FormattedMessage id="report-designer.tooltip" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Input />)}
+              {getFieldDecorator('widgetPlaceholder', {})(<Input />)}
             </Form.Item>
             {/* 描述信息 */}
             <Form.Item
               label={<FormattedMessage id="report-designer.description" />}
               {...formLayout}
             >
-              {getFieldDecorator('roleName', {})(<TextArea rows={2} />)}
+              {getFieldDecorator('widgetDes', {})(<TextArea rows={2} />)}
             </Form.Item>
             {/* 默认状态 */}
             <Form.Item
@@ -73,7 +73,7 @@ export default props => {
               {...formLayout}
             >
               {getFieldDecorator(
-                'roleName',
+                'widgetStatus',
                 {},
               )(
                 <Radio.Group defaultValue="a">
@@ -94,11 +94,11 @@ export default props => {
               label={<FormattedMessage id="report-designer.defaultvalue" />}
               {...formLayout}
             >
-              {getFieldDecorator('roleName', {})(<Input />)}
+              {getFieldDecorator('widgetDefault', {})(<Input />)}
             </Form.Item>
             {/* 表字段 */}
             <Form.Item label={<FormattedMessage id="report-designer.field" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Input />)}
+              {getFieldDecorator('widgetKey', {})(<Input />)}
             </Form.Item>
           </Form>
         </Panel>

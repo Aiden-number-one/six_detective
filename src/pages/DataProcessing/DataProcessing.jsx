@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Row, Col, Button, Table, Pagination, Select, DatePicker, Modal, Progress } from 'antd';
+import { Row, Col, Button, Table, Select, Modal, Progress } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
@@ -9,7 +9,7 @@ import styles from './DataProcessing.less';
 import { getAuthority } from '@/utils/authority';
 
 const { Option } = Select;
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 
 @connect(({ dataProcessing, loading }) => ({
   loading: loading.effects,
@@ -24,6 +24,7 @@ export default class DataProcessing extends Component {
       authBypass: false,
       dataProcessingVisible: false,
       dataProcessingFlag: false,
+      inspectDataVisible: false,
       codeColumns: [
         {
           title: formatMessage({ id: 'app.common.number' }),
@@ -50,16 +51,16 @@ export default class DataProcessing extends Component {
         },
       ],
       columns: [
-        {
-          title: formatMessage({ id: 'app.common.number' }),
-          dataIndex: 'index',
-          key: 'index',
-          render: (res, recode, index) => (
-            <span>
-              {(this.state.itemPage.pageNumber - 1) * this.state.itemPage.pageSize + index + 1}
-            </span>
-          ),
-        },
+        // {
+        //   title: formatMessage({ id: 'app.common.number' }),
+        //   dataIndex: 'index',
+        //   key: 'index',
+        //   render: (res, recode, index) => (
+        //     <span>
+        //       {(this.state.itemPage.pageNumber - 1) * this.state.itemPage.pageSize + index + 1}
+        //     </span>
+        //   ),
+        // },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
           dataIndex: 'subitemId',
@@ -187,7 +188,11 @@ export default class DataProcessing extends Component {
     );
   };
 
-  inspectData = () => {};
+  inspectData = () => {
+    this.setState({
+      inspectDataVisible: true,
+    });
+  };
 
   onSelectChange = selectedRowKeys => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
@@ -216,8 +221,9 @@ export default class DataProcessing extends Component {
   render() {
     const { loading, dataProcessingData, dataProcessingItemData } = this.props;
     const {
-      page,
-      itemPage,
+      // page,
+      // itemPage,
+      inspectDataVisible,
       selectedRowKeys,
       functionNameOptions,
       dataProcessingVisible,
@@ -234,7 +240,7 @@ export default class DataProcessing extends Component {
       <Fragment>
         <PageHeaderWrapper>
           <div className={styles.dataProcessingWraper}>
-            {true && (
+            {inspectDataVisible && (
               <div className={styles.dataTableWraper}>
                 <div className={styles.dataTable}>
                   <Button type="primary" onClick={this.inspectData} className="btn-usual">
@@ -252,7 +258,7 @@ export default class DataProcessing extends Component {
                       }, // 点击行
                     })}
                   ></Table>
-                  <Pagination
+                  {/* <Pagination
                     showSizeChanger
                     current={page.pageNumber}
                     showTotal={() => `Total ${dataProcessingData.totalCount} items`}
@@ -260,7 +266,54 @@ export default class DataProcessing extends Component {
                     onChange={this.pageChange}
                     total={dataProcessingData.totalCount}
                     pageSize={page.pageSize}
+                  /> */}
+                  <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
+                    {/* <Col>
+                  <span>Trade Date</span>
+                  <RangePicker
+                    format="YYYY-MM-DD"
+                    placeholder={['Start Date', 'End Date']}
+                    style={{ width: '180px' }}
                   />
+                </Col> */}
+                    <Col>
+                      <span>Market</span>
+                      <Select placeholder="Please Select" style={{ width: '120px' }}>
+                        {functionNameOptions.map(item => (
+                          <Option key={item.key} value={item.value}>
+                            {item.title}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Col>
+                    <Col>
+                      <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
+                        Start Processing
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Modal
+                    title={formatMessage({ id: 'app.common.confirm' })}
+                    visible={dataProcessingVisible}
+                    onOk={this.dataProcessingConfirm}
+                    onCancel={this.dataProcessingCancel}
+                    cancelText={formatMessage({ id: 'app.common.cancel' })}
+                    okText={formatMessage({ id: 'app.common.confirm' })}
+                  >
+                    {dataProcessingFlag ? (
+                      <div>
+                        <Progress percent={50} status="active" />
+                        <p style={{ textAlign: 'left' }}>
+                          Processed：<span>1234</span> records
+                        </p>
+                        <p style={{ textAlign: 'left' }}>
+                          Pending to process：<span>1234</span> records
+                        </p>
+                      </div>
+                    ) : (
+                      <span>There are still 10 outstanding alerts. Do you want to bypass all?</span>
+                    )}
+                  </Modal>
                 </div>
                 <div className={styles.cutOff}></div>
                 <div className={styles.dataItemTable}>
@@ -282,7 +335,7 @@ export default class DataProcessing extends Component {
                     columns={this.state.columns}
                     style={{ marginTop: '6px' }}
                   ></Table>
-                  <Pagination
+                  {/* <Pagination
                     showSizeChanger
                     current={itemPage.pageNumber}
                     showTotal={() => `Total ${dataProcessingItemData.totalCount} items`}
@@ -290,7 +343,7 @@ export default class DataProcessing extends Component {
                     onChange={this.pageItemChange}
                     total={dataProcessingItemData.totalCount}
                     pageSize={itemPage.pageSize}
-                  />
+                  /> */}
                   <Row type="flex" justify="end" style={{ marginTop: '10px' }}>
                     <Button type="primary" className="btn-usual" style={{ height: '36px' }}>
                       Enter Alert Center
@@ -299,7 +352,7 @@ export default class DataProcessing extends Component {
                 </div>
               </div>
             )}
-            {false && (
+            {!inspectDataVisible && (
               <div style={{ padding: '10px', background: '#fff' }}>
                 <Button type="primary" onClick={this.inspectData} className="btn-usual">
                   {formatMessage({ id: 'systemManagement.dataProcessing.inspectData' })}
@@ -314,53 +367,6 @@ export default class DataProcessing extends Component {
               </div>
             )}
             <div className={styles.dataProcessing}>
-              <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
-                <Col>
-                  <span>Trade Date</span>
-                  <RangePicker
-                    format="YYYY-MM-DD"
-                    placeholder={['Start Date', 'End Date']}
-                    style={{ width: '180px' }}
-                  />
-                </Col>
-                <Col>
-                  <span>Market</span>
-                  <Select placeholder="Please Select" style={{ width: '120px' }}>
-                    {functionNameOptions.map(item => (
-                      <Option key={item.key} value={item.value}>
-                        {item.title}
-                      </Option>
-                    ))}
-                  </Select>
-                </Col>
-                <Col>
-                  <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
-                    Start Processing
-                  </Button>
-                </Col>
-              </Row>
-              <Modal
-                title={formatMessage({ id: 'app.common.confirm' })}
-                visible={dataProcessingVisible}
-                onOk={this.dataProcessingConfirm}
-                onCancel={this.dataProcessingCancel}
-                cancelText={formatMessage({ id: 'app.common.cancel' })}
-                okText={formatMessage({ id: 'app.common.confirm' })}
-              >
-                {dataProcessingFlag ? (
-                  <div>
-                    <Progress percent={50} status="active" />
-                    <p style={{ textAlign: 'left' }}>
-                      Processed：<span>1234</span> records
-                    </p>
-                    <p style={{ textAlign: 'left' }}>
-                      Pending to process：<span>1234</span> records
-                    </p>
-                  </div>
-                ) : (
-                  <span>There are still 10 outstanding alerts. Do you want to bypass all?</span>
-                )}
-              </Modal>
               {/* <ul className={styles.startProcessingWraper}>
                 <li>
                   <span>Records Received from ECP：</span>

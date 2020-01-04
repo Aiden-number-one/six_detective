@@ -18,6 +18,41 @@
       height: 330px;
       overflow: auto;
     }
+    .ant-list-item:hover {
+      color: #0d87d4;
+      background: #f2f6f8;
+      .description::before {
+        background: #f2f6f8;
+      }
+    }
+    .description {
+      position: relative;
+      width: 180px;
+      max-height: 28px;
+      margin-right: -1em;
+      padding-right: 1em;
+      overflow: hidden;
+      line-height: 13px;
+      text-align: justify;
+      cursor: pointer;
+      &::before {
+        position: absolute;
+        right: 12px;
+        bottom: 0;
+        padding: 0 1px;
+        background: #fff;
+        content: '...';
+      }
+      &::after {
+        position: absolute;
+        right: 14px;
+        width: 1em;
+        height: 1em;
+        margin-top: 0.2em;
+        background: white;
+        content: '';
+      }
+    }
   }
   .groupTitle {
     position: relative;
@@ -30,6 +65,13 @@
       position: absolute;
       right: 15px;
       color: #0d87d4;
+    }
+    .more {
+      position: absolute;
+      right: 15px;
+      color: #0d87d4;
+      border-bottom: 1px solid #0d87d4;
+      cursor: pointer;
     }
   }
   .groupTitle::before {
@@ -52,6 +94,7 @@
       margin-right: 5px;
       // 统计模块
       .statisticalModule {
+        height: 418px;
         background-color: #fff;
         // 头部
         .tabsHeader {
@@ -167,6 +210,7 @@
       }
       // 待处理任务
       .pendingTasks {
+        height: 205px;
         margin: 5px 0;
         background-color: #fff;
         :global {
@@ -191,11 +235,13 @@
             }
           }
           .description {
-            width: 400px;
+            max-width: 400px;
+            height: 20px;
             margin-left: 50px;
+            overflow: hidden;
             font-weight: 600;
+            line-height: 20px;
             cursor: pointer;
-            .textOverflow();
           }
           .date {
             width: 100px;
@@ -230,12 +276,13 @@
       flex-direction: column;
       .quickMenu {
         min-width: 310px;
-        min-height: 366px;
+        height: 366px;
         padding: 5px;
         background-color: #fff;
         .menuItem {
           display: flex;
           align-items: center;
+          justify-content: center;
           min-width: 130px;
           height: 45px;
           margin: 5px;
@@ -273,34 +320,6 @@
           width: 20px;
           padding-left: 5px;
           font-size: 14px;
-        }
-        .description {
-          position: relative;
-          width: 180px;
-          max-height: 28px;
-          margin-right: -1em;
-          padding-right: 1em;
-          overflow: hidden;
-          line-height: 13px;
-          text-align: justify;
-          cursor: pointer;
-          &::before {
-            position: absolute;
-            right: 12px;
-            bottom: 0;
-            padding: 0 1px;
-            background: #fff;
-            content: '...';
-          }
-          &::after {
-            position: absolute;
-            right: 14px;
-            width: 1em;
-            height: 1em;
-            margin-top: 0.2em;
-            background: white;
-            content: '';
-          }
         }
         .date {
           width: 100px;

@@ -32,7 +32,7 @@ function AlertTask({
   alert: { alertTypeId, alertId, itemsTotal },
 }) {
   const [visible, setVisible] = useState(false);
-  const [selectedRows, setSelectedRows] = useState(alertItems.length === 1 ? alertItems : []);
+  const [selectedTaskIds, setSelectedTaskIds] = useState([]);
 
   useEffect(() => {
     // no items
@@ -47,11 +47,18 @@ function AlertTask({
     }
   }, [alertTypeId, alertId, itemsTotal]);
 
+  // default selected that just one task
+  useEffect(() => {
+    if (alertItems.length === 1) {
+      setSelectedTaskIds(alertItems.map(item => item.TASK_ID));
+    }
+  }, [alertItems]);
+
   async function showUsers() {
     await dispatch({
       type: 'alertCenter/fetchAssignUsers',
       payload: {
-        taskIds: selectedRows.map(item => item.TASK_ID),
+        taskIds: selectedTaskIds,
       },
     });
     setVisible(true);
@@ -62,7 +69,7 @@ function AlertTask({
       type: 'alertCenter/assignTask',
       payload: {
         userId,
-        taskIds: selectedRows.map(item => item.TASK_ID),
+        taskIds: selectedTaskIds,
         alertTypeId,
         alertId,
       },
@@ -79,7 +86,7 @@ function AlertTask({
         assignUser={handleAssignUser}
       />
       <div className={styles.btns}>
-        <button type="button" disabled={!selectedRows.length} onClick={showUsers}>
+        <button type="button" disabled={!selectedTaskIds.length} onClick={showUsers}>
           {loading['alertCenter/fetchAssignUsers'] ? (
             <Icon type="loading" className={styles['btn-icon']} />
           ) : (
@@ -101,8 +108,9 @@ function AlertTask({
           },
         }}
         rowSelection={{
-          onChange: (selectedRowKeys, rows) => {
-            setSelectedRows(rows);
+          selectedRowKeys: selectedTaskIds,
+          onChange: selectedRowKeys => {
+            setSelectedTaskIds(selectedRowKeys);
           },
         }}
         onRow={record => ({

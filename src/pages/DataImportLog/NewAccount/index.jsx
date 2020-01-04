@@ -32,17 +32,24 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   function handlePageChange(page, pageSize) {
     dispatch({ type: 'newAccount/fetch', payload: { page, pageSize, ...searchParams } });
   }
-  async function handleUpload(fileList, callback) {
+  async function handleUpload(fileList, onFile, onFinish) {
+    let count = fileList.length;
     // eslint-disable-next-line no-restricted-syntax
-    for (const val of fileList) {
+    for (const file of fileList) {
       // eslint-disable-next-line no-await-in-loop
-      await dispatch({
+      const err = await dispatch({
         type: 'newAccount/importByManual',
-        payload: val,
+        payload: file,
       });
-      callback(val);
+      // eslint-disable-next-line no-await-in-loop
+      onFile(err, file);
+      if (err) break;
+      count -= 1;
     }
-    setVisible(false);
+
+    if (count === 0) {
+      onFinish();
+    }
   }
   async function handleDownload(lopImpId) {
     const reportUrl = await dispatch({
@@ -62,7 +69,7 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
         <NewAccountLogModal
           visible={visible}
           loading={loading}
-          onCancel={() => setVisible(false)}
+          onHide={() => setVisible(false)}
           onUpload={handleUpload}
         />
         <div className={styles['list-wrap']}>
