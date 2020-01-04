@@ -2,12 +2,13 @@
  * @Description: all alert data
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-02 19:50:34
+ * @LastEditTime : 2020-01-04 15:52:17
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
 
 const {
+  getMyAlert, // 获取my alert data
   getAlertCount, // 获取个人警告数
   getPerProcessingAlertCount, // 个人处理中的alert数
   getClosedAlertCount, // 个人已关闭alert数
@@ -20,9 +21,20 @@ export default {
     perClaimAlertCount: 0, //  personal Claim alert 总数
     perProcessingAlertCount: 0, // personal Processing alert 总数
     perClosedAlertCount: 0, // personal Closed Alert 总数
+    myAlertData: [], // my alert data
   },
 
   effects: {
+    // 获取my alert的数据
+    *getMyAlert({ payload }, { call, put }) {
+      const response = yield call(getMyAlert, { param: payload });
+      if (response.bcjson.flag === '1') {
+        yield put({
+          type: 'saveMyAlert',
+          payload: response.bcjson.items,
+        });
+      }
+    },
     // 获取个人已认领总数
     *getPerClaimAlertCount({ payload }, { call, put }) {
       const response = yield call(getAlertCount, { param: payload });
@@ -58,6 +70,13 @@ export default {
   },
 
   reducers: {
+    // baocun
+    saveMyAlert(state, action) {
+      return {
+        ...state,
+        myAlertData: action.payload,
+      };
+    },
     // 保存per closed alert总数
     savePerClosedAlterCount(state, action) {
       return {

@@ -2,10 +2,11 @@
  * @Description: 首页相关接口
  * @Author: lan
  * @Date: 2019-11-28 14:18:22
- * @LastEditTime : 2020-01-03 18:41:51
+ * @LastEditTime : 2020-01-04 15:53:07
  * @LastEditors  : lan
  */
 export default {
+  getMyAlert: 'get_my_alert', // 获取My alert
   getQuickMenu: 'get_quickly_query_menu', // 获取快捷菜单
   saveQuickMenu: 'set_quickly_add_menu', // 设置快捷菜单
   getAllAlterData: 'get_alert_count_group_by_owner', // 获取全部的alert的数据

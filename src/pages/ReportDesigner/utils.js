@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-03 19:06:00
+ * @LastEditTime : 2020-01-04 11:28:43
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -201,10 +201,10 @@ export function getTemplateAreaCellPartXml(contentDetail) {
   let cellxml = '';
   const spreadSheetData = contentDetail[0].data;
   const spreadSheetProps = contentDetail[0].cellAttrs;
-  spreadSheetData.forEach((colsValue, colsIndex) => {
-    colsValue.forEach((rowsValue, rowsIndex) => {
-      const cellText = rowsValue;
-      const { cellType, style } = spreadSheetProps[colsIndex][rowsIndex];
+  spreadSheetData.forEach((rowsValue, rowsIndex) => {
+    rowsValue.forEach((colsValue, colsIndex) => {
+      const cellText = colsValue;
+      const { cellType, style } = spreadSheetProps[rowsIndex][colsIndex];
       const {
         bgcolor,
         forecolor,
@@ -233,8 +233,9 @@ export function getTemplateAreaCellPartXml(contentDetail) {
         borderRightWidth,
       } = style;
       // 生成
-      cellxml += `<cell expand="Down" name="${createCellPos(colsIndex) +
-        (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}">
+      cellxml += `<cell expand="${cellType === 'DATASET' ? 'Down' : 'None'}" name="${createCellPos(
+        colsIndex,
+      ) + (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}">
         <cell-style font-size="${fontSize}" align="${align}" valign="${valign}" ${bgcolor &&
         `bgcolor="${bgcolor}"`} ${forecolor && `bgcolor="${forecolor}"`} ${underline &&
         `underline="${underline}"`} ${fontFamily && `font-family="${fontFamily}"`} ${italic &&
@@ -244,10 +245,10 @@ export function getTemplateAreaCellPartXml(contentDetail) {
         `<left-border width=${bordeLeftWidth} style=${borderLeftType} color=${borderLeftColor}`} ${borderRight &&
         `<right-border width=${borderRightWidth} style=${borderRightType} color=${borderRightColor}`}></cell-style>`;
       // 去除undefined
-      cellxml = cellxml.replace(/ undefined/g, '');
+      cellxml = cellxml.replace(/undefined/g, '');
       // 生成value相关元素
       if (cellType === 'TEXT') {
-        cellxml += `<simple-value><![CDATA[${cellText}]]></simple-value>`;
+        cellxml += `<simple-value><![CDATA[${cellText || ''}]]></simple-value>`;
       } else if (cellType === 'DATASET') {
         const datasetName = cellText.split('.')[0];
         const property = cellText.split('.')[1];

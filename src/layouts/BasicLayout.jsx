@@ -59,7 +59,12 @@ const BasicLayout = props => {
       callback: m => {
         // newMenuData = Object.assign([], menuData);
         setNewMenuData(m);
-        console.log('menuData====', m, menuData);
+        console.log('menuData111====', m, menuData);
+        if (m.length <= 0) {
+          dispatch({
+            type: 'login/logout',
+          });
+        }
       },
     });
   }, []);
@@ -182,6 +187,16 @@ const BasicLayout = props => {
             content={infoContent()}
             trigger="click"
             overlayClassName="taskinfo"
+            onClick={() => {
+              dispatch({
+                type: 'menu/getTaskCount',
+                payload: {},
+              });
+              dispatch({
+                type: 'menu/getAlertCount',
+                payload: {},
+              });
+            }}
           >
             {(Number(taskCount) > 0 || Number(alertCount) > 0) && (
               <Badge dot>

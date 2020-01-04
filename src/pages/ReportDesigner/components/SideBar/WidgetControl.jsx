@@ -6,6 +6,7 @@ import styles from './index.less';
 const { Content } = Layout;
 const { Panel } = Collapse;
 const { TextArea } = Input;
+const { Option } = Select;
 
 const formLayout = {
   labelCol: { span: 8 },
@@ -27,27 +28,44 @@ export default props => {
           <Form colon={false}>
             {/* 控件类型 */}
             <Form.Item label={<FormattedMessage id="report-designer.widgettype" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Select />)}
+              {getFieldDecorator(
+                'widgetType',
+                {},
+              )(
+                <Select>
+                  <Option value="input">Input</Option>
+                  <Option value="inputnumber">Input Number</Option>
+                  <Option value="datepickeryyyy">Date Picker(yyyy)</Option>
+                  <Option value="datepickeryyyymm">Date Picker(yyyy-mm)</Option>
+                  <Option value="datepickeryyyymmdd">Date Picker(yyyy-mm-dd)</Option>
+                  <Option value="select">Select</Option>
+                  <Option value="radio">Radio</Option>
+                  <Option value="checkbox">Checkbox</Option>
+                </Select>,
+              )}
             </Form.Item>
             {/* 标签名称 */}
             <Form.Item label={<FormattedMessage id="report-designer.tag-name" />} {...formLayout}>
               <Form.Item style={{ display: 'inline-block', width: '50%' }}>
-                <Input />
+                {getFieldDecorator('widgetName', {})(<Input />)}
               </Form.Item>
               <Form.Item style={{ display: 'inline-block', width: '50%', paddingLeft: 4 }}>
-                <Checkbox>{<FormattedMessage id="report-designer.visible" />}</Checkbox>
+                {getFieldDecorator(
+                  'widgetVisible',
+                  {},
+                )(<Checkbox>{<FormattedMessage id="report-designer.visible" />}</Checkbox>)}
               </Form.Item>
             </Form.Item>
             {/* 提示文字 */}
             <Form.Item label={<FormattedMessage id="report-designer.tooltip" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Input />)}
+              {getFieldDecorator('widgetPlaceholder', {})(<Input />)}
             </Form.Item>
             {/* 描述信息 */}
             <Form.Item
               label={<FormattedMessage id="report-designer.description" />}
               {...formLayout}
             >
-              {getFieldDecorator('roleName', {})(<TextArea rows={2} />)}
+              {getFieldDecorator('widgetDes', {})(<TextArea rows={2} />)}
             </Form.Item>
             {/* 默认状态 */}
             <Form.Item
@@ -55,7 +73,7 @@ export default props => {
               {...formLayout}
             >
               {getFieldDecorator(
-                'roleName',
+                'widgetStatus',
                 {},
               )(
                 <Radio.Group defaultValue="a">
@@ -76,11 +94,11 @@ export default props => {
               label={<FormattedMessage id="report-designer.defaultvalue" />}
               {...formLayout}
             >
-              {getFieldDecorator('roleName', {})(<Input />)}
+              {getFieldDecorator('widgetDefault', {})(<Input />)}
             </Form.Item>
             {/* 表字段 */}
             <Form.Item label={<FormattedMessage id="report-designer.field" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Input />)}
+              {getFieldDecorator('widgetKey', {})(<Input />)}
             </Form.Item>
           </Form>
         </Panel>
