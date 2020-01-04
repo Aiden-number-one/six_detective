@@ -24,7 +24,7 @@ const { Sider } = Layout;
   //   // });
   // },
 })
-export default class RigthSideBar extends PureComponent {
+export default class RightSideBar extends PureComponent {
   state = {
     siderBarType: 'cell',
   };

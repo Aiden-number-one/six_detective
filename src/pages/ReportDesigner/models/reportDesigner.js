@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-04 13:29:53
+ * @LastEditTime : 2020-01-04 14:08:02
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -134,6 +134,7 @@ export default {
         report_name: reportName,
         report_description: '', // 暂无
         report_version: 'v1.0', // 默认1.0
+        datasets: dataSetPrivateList,
         templateArea: {
           xml: `<?xml version="1.0" encoding="UTF-8"?><ureport>${templateAreaXml}${colsColumnsXml}${datasetXml}<paper type="A4" left-margin="90" right-margin="90"
           top-margin="72" bottom-margin="72" paging-mode="fitpage" fixrows="0"
@@ -180,16 +181,20 @@ export default {
       });
       if (response.bcjson.flag === '1' && response.bcjson.items[0]) {
         // TODO: 需要优化
-        if (response.bcjson.items[0].reportTemplateContent.templateArea.originContentDetail) {
+        if (response.bcjson.items[0].reportTemplateContent.templateArea.originTemplateAreaObj) {
           const { reportTemplateContent } = response.bcjson.items[0];
           // 处理报表模板回显
           window.xsObj.instanceArray[0].loadData(
-            reportTemplateContent.templateArea.originContentDetail,
+            reportTemplateContent.templateArea.originTemplateAreaObj,
           );
           // 处理私有数据集
           yield put({
             type: 'setDataSetPrivateList',
             payload: reportTemplateContent.datasets,
+          });
+          yield put({
+            type: 'changeReportName',
+            payload: reportTemplateContent.report_name,
           });
         }
       }
