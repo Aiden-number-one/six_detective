@@ -18,10 +18,10 @@ export default {
   },
   effects: {},
   reducers: {
-    changeCustomSearchData(state, action) {
+    addCustomSearchData(state, action) {
       return {
         ...state,
-        customSearchData: action.payload,
+        customSearchData: [...state.customSearchData, action.payload],
       };
     },
     deleteCustomeSearchData(state, action) {

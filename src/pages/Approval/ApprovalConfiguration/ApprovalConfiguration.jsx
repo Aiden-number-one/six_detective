@@ -52,6 +52,9 @@ class DrawerForm extends PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { flowNameList, configItem } = this.props;
+    const isFindProcessUuid = flowNameList.find(
+      item => item.processDefinitionId === configItem.processUuid,
+    );
     return (
       <Form onSubmit={this.handleSubmit}>
         <Form.Item label="Function Id" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
@@ -62,7 +65,7 @@ class DrawerForm extends PureComponent {
         <Form.Item label="Flow Name" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('processUuid', {
             rules: [{ required: false }],
-            initialValue: configItem.processUuid,
+            initialValue: isFindProcessUuid ? configItem.processUuid : '',
           })(
             <Select>
               {flowNameList.map(item => (
@@ -271,10 +274,10 @@ class ApprovalConfiguration extends PureComponent {
                     ref={this.newModifyForm}
                   />
                   <div className={btnStyles['bottom-btns']}>
+                    <Button onClick={this.handleCancel}>Cancel</Button>
                     <Button onClick={this.handelSave} style={{ marginRight: 12 }} type="primary">
                       Save
                     </Button>
-                    <Button onClick={this.handleCancel}>Cancel</Button>
                   </div>
                 </>
               )}

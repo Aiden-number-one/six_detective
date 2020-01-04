@@ -75,6 +75,9 @@
       cursor: not-allowed;
       .icon {
         color: #ccc;
+        &:hover {
+          color: #ccc;
+        }
       }
     }
     .icon {
@@ -215,5 +218,23 @@
     &:hover {
       color: #4c83b3;
     }
+  }
+}
+
+.email-container {
+  .email-header {
+    padding: 6px 10px;
+    background-color: #ebf4d9;
+    border-bottom: 2px solid #c2c6ab;
+    .title {
+      font-weight: bolder;
+    }
+    .common {
+      color: #cfd2be;
+      font-size: 12px;
+    }
+  }
+  .email-content {
+    padding: 10px 20px 0;
   }
 }

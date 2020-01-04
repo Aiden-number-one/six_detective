@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import G2 from '@antv/g2';
-import { Tabs, DatePicker, List, Row, Col } from 'antd';
+import moment from 'moment';
+import { Tabs, DatePicker, List, Row, Col, Empty } from 'antd';
 import classNames from 'classnames';
 import { connect } from 'dva';
 import router from 'umi/router';
 
+import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 import ring from '@/assets/images/ring.png';
 
@@ -13,7 +15,7 @@ import styles from './HomePage.less';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
-@connect(({ allAlert, perAlert }) => ({
+@connect(({ allAlert, perAlert, information }) => ({
   allAlterData: allAlert.allAlterData, // 全部的alert的数据
   allAlertCount: allAlert.allAlertCount, // 全部alert总数
   allOutstandingALertCount: allAlert.allOutstandingALertCount, // 全部未认领的alert的总数
@@ -22,6 +24,7 @@ const { RangePicker } = DatePicker;
   perClaimAlertCount: perAlert.perClaimAlertCount, //  personal Claim alert 总数
   perProcessingAlertCount: perAlert.perProcessingAlertCount, // personal Processing alert 总数
   perClosedAlertCount: perAlert.perClosedAlertCount, // personal Closed Alert 总数
+  informationData: information.informationData, // information Data
 }))
 export default class HomePage extends PureComponent {
   state = {
@@ -84,6 +87,14 @@ export default class HomePage extends PureComponent {
         this.setState({
           targetData,
         });
+      },
+    });
+    dispatch({
+      type: 'information/getInformation',
+      payload: {
+        pageNumber: 1,
+        pageSize: 4,
+        dataTable: 'SLOP_BIZ.V_INFO',
       },
     });
   }
@@ -285,6 +296,8 @@ export default class HomePage extends PureComponent {
       perClaimAlertCount, //  personal Claim alert 总数
       perProcessingAlertCount, // personal Processing alert 总数
       // perClosedAlertCount, // personal Closed Alert 总数
+
+      informationData,
     } = this.props;
 
     const { alertState, textActive, targetData } = this.state;
@@ -519,6 +532,7 @@ export default class HomePage extends PureComponent {
                           </span>
                         </Col>
                       ))}
+                      {!targetData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                     </Row>
                   </div>
                   {/* Information */}
@@ -526,16 +540,18 @@ export default class HomePage extends PureComponent {
                     <h3 className={styles.groupTitle}>Information</h3>
                     <List
                       itemLayout="horizontal"
-                      dataSource={[{}, {}, {}, {}]}
-                      renderItem={() => (
+                      dataSource={informationData}
+                      renderItem={item => (
                         <List.Item>
                           <span className={styles.icon}>
-                            <IconFont />
+                            <IconFont type="icon-sound" />
                           </span>
                           <span title="" className={styles.description}>
-                            A/C NO. matches with existing A/C NO. , with discrepancy in pr
+                            {item.informationDetail}
                           </span>
-                          <span className={styles.date}>12/Nov/2019 13:30</span>
+                          <span className={styles.date}>
+                            {moment(item.timestamp).format(timestampFormat)}
+                          </span>
                         </List.Item>
                       )}
                     />

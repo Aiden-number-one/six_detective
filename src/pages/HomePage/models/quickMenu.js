@@ -1,27 +1,27 @@
 /*
- * @Description: all alert data
+ * @Description: quick menu
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-03 18:16:13
+ * @LastEditTime : 2020-01-03 18:43:28
  * @LastEditors  : lan
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
 
 const {
-  getQuickMenu, // 获取个人警告数
-  saveQuickMenu, // 个人处理中的alert数
+  getQuickMenu, // 获取快捷菜单
+  saveQuickMenu, // 设置快捷菜单
 } = Service;
 
 export default {
   namespace: 'quickMenu',
 
   state: {
-    quickMenuData: [], //  personal Claim alert 总数
+    quickMenuData: [], // 快捷菜单keys
   },
 
   effects: {
-    // 获取个人已认领总数
+    // 获取快捷菜单
     *getQuickMenu({ payload, callback }, { call, put }) {
       const response = yield call(getQuickMenu, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -32,7 +32,7 @@ export default {
         if (callback) callback(response.bcjson.items);
       }
     },
-    // 获取个人处理中总数
+    // 设置快捷菜单
     *saveQuickMenu({ payload, callback }, { call, put }) {
       const response = yield call(saveQuickMenu, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -46,7 +46,7 @@ export default {
   },
 
   reducers: {
-    // 保存per closed alert总数
+    // 获取快捷菜单Keys
     setQuickMenu(state, action) {
       const quickMenuData = [];
       action.payload.forEach(item => quickMenuData.push(item.menuid));

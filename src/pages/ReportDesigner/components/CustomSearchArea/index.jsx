@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-21 17:24:13
+ * @LastEditTime : 2020-01-04 11:13:26
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -109,8 +109,8 @@ const targetSpec = {
       h: 1,
     };
     dispatch({
-      type: 'formArea/changeCustomSearchData',
-      payload: [...customSearchData, newSearchData],
+      type: 'formArea/addCustomSearchData',
+      payload: newSearchData,
     });
   },
 };

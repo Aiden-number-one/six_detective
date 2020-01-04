@@ -58,20 +58,10 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
   const [emailVisible, setEmailVisible] = useState(false);
 
   useEffect(() => {
-    const { alertTypeId, alertId, itemsTotal } = alert;
+    const { alertId } = alert;
     // clear task item
     setPanes([]);
     setActiveKey('1');
-    // no items
-    if (+itemsTotal !== 0) {
-      dispatch({
-        type: 'alertCenter/fetchAlertItems',
-        payload: {
-          alertTypeId,
-          alertId,
-        },
-      });
-    }
 
     dispatch({
       type: 'alertCenter/fetchLogs',

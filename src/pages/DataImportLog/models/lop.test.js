@@ -3,11 +3,11 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-04 19:55:21
- * @LastEditors: iron
- * @LastEditTime: 2019-12-05 11:09:32
+ * @LastEditors  : iron
+ * @LastEditTime : 2020-01-03 17:00:29
  */
 import { effects } from 'dva/saga';
-import lop, { getLogs, postAuto, postManual, pageSelector } from './model';
+import lop, { getLogs, postAuto, postManual, pageSelector } from './lop';
 
 const { reducers, state, effects: sagas } = lop;
 const { call, put, select } = effects;
