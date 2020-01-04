@@ -288,6 +288,19 @@ function ProcessDetail({
               weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
             };
           }
+        } else if (
+          alertTypeValue === '321' ||
+          alertTypeValue === '322' ||
+          alertTypeValue === '323' ||
+          alertTypeValue === '324'
+        ) {
+          valueData = {
+            confirmBiName: values.confirmBiName,
+            confirmToName: values.confirmToName,
+            reportAnyPosition: values.reportAnyPosition,
+            watch: values.watch,
+            remark: values.remark,
+          };
         }
 
         Object.assign(taskValue, valueData);
