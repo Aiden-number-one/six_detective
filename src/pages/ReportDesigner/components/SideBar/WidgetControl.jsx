@@ -6,6 +6,7 @@ import styles from './index.less';
 const { Content } = Layout;
 const { Panel } = Collapse;
 const { TextArea } = Input;
+// const { Option } = Select;
 
 const formLayout = {
   labelCol: { span: 8 },
@@ -27,7 +28,7 @@ export default props => {
           <Form colon={false}>
             {/* 控件类型 */}
             <Form.Item label={<FormattedMessage id="report-designer.widgettype" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Select />)}
+              {getFieldDecorator('roleName', {})(<Select>{/* <Option></Option> */}</Select>)}
             </Form.Item>
             {/* 标签名称 */}
             <Form.Item label={<FormattedMessage id="report-designer.tag-name" />} {...formLayout}>
