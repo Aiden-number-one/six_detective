@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Drawer, Button, Radio, Empty, Spin, Tag } from 'antd';
+import { Drawer, Button, Radio, Empty, Spin } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import btnStyles from '@/pages/DataImportLog/index.less';
 
@@ -30,10 +30,8 @@ export default function({ loading, visible, users, handleCancel, assignUser }) {
           <Radio.Group onChange={e => setUserId(e.target.value)} value={curUserId}>
             {users.map(user => (
               <Radio style={radioStyle} value={user.userId} key={user.userId}>
-                <span>{user.userName}</span>
-                <Tag color="#108ee9" style={{ marginLeft: 8 }}>
-                  {user.groupName}
-                </Tag>
+                <span style={{ marginRight: 6 }}>{user.userName}</span>
+                <b>[{user.groupName}]</b>
               </Radio>
             ))}
           </Radio.Group>

@@ -95,7 +95,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
       setPanes(panes.map(p => (isEqual(p) ? pane : p)));
     } else {
       // add pane
-      setPanes([...panes, pane]);
+      setPanes([pane, ...panes]);
     }
     setActiveKey(pane.ALERT_ITEM_ID.toString());
   }
@@ -132,7 +132,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
     if (!err) {
       setEmailVisible(true);
     } else {
-      message.warn(err);
+      message.warn(err.slice(0, 150));
     }
   }
   function handleSendEmail() {
