@@ -182,6 +182,16 @@ const BasicLayout = props => {
             content={infoContent()}
             trigger="click"
             overlayClassName="taskinfo"
+            onClick={() => {
+              dispatch({
+                type: 'menu/getTaskCount',
+                payload: {},
+              });
+              dispatch({
+                type: 'menu/getAlertCount',
+                payload: {},
+              });
+            }}
           >
             {(Number(taskCount) > 0 || Number(alertCount) > 0) && (
               <Badge dot>
