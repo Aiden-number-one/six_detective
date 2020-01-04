@@ -168,6 +168,7 @@ class ApprovalAuditor extends PureComponent {
                 onClose={this.onClose}
                 visible={this.state.visible}
                 bodyStyle={{ paddingBottom: 80 }}
+                className={styles.drawerBox}
               >
                 <Checkbox.Group
                   options={checkboxData}
@@ -175,11 +176,11 @@ class ApprovalAuditor extends PureComponent {
                   onChange={this.selectAuditor}
                 />
                 <div className={btnStyles['bottom-btns']}>
-                  <Button onClick={this.onSave} type="primary">
-                    Save
-                  </Button>
                   <Button onClick={this.onClose} style={{ marginRight: 12 }}>
                     Cancel
+                  </Button>
+                  <Button onClick={this.onSave} type="primary">
+                    Save
                   </Button>
                 </div>
               </Drawer>

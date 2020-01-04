@@ -14,9 +14,10 @@ const ContractMap = {
   O: 'Option',
 };
 
-export function EpTaskItem({ task: { EP_CODE, EP_NAME } }) {
+export function EpTaskItem({ task: { MARKET, EP_CODE, EP_NAME } }) {
   return (
     <Descriptions column={1}>
+      <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
       <Descriptions.Item label="EP Code *">{EP_CODE}</Descriptions.Item>
       <Descriptions.Item label="EP Name *">{EP_NAME}</Descriptions.Item>
     </Descriptions>

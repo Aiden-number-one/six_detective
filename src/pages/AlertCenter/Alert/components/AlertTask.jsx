@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormattedMessage, formatMessage } from 'umi/locale';
 import Link from 'umi/link';
 import { connect } from 'dva';
@@ -8,10 +8,12 @@ import IconFont from '@/components/IconFont';
 import AlertTaskModal from './AlertTaskModal';
 
 export const TaskBtn = ({ task }) => {
+  const localUserName = localStorage.getItem('loginName');
+  const isDisabled = !task.USER_NAME || localUserName !== task.USER_NAME;
   const isEnd = task.TASK_STATUS === 'A' ? 1 : 0;
   return (
     <Link
-      disabled={!task.USER_NAME}
+      disabled={isDisabled}
       to={`/homepage/Approval-Process-Center?taskCode=${task.TASK_ID}&isEnd=${isEnd}`}
       title={formatMessage({ id: 'alert-center.enter-approval' })}
     >
@@ -27,10 +29,23 @@ function AlertTask({
   users,
   taskColumns,
   onTaskRow,
-  alert: { alertTypeId, alertId },
+  alert: { alertTypeId, alertId, itemsTotal },
 }) {
   const [visible, setVisible] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState(alertItems.length === 1 ? alertItems : []);
+
+  useEffect(() => {
+    // no items
+    if (+itemsTotal !== 0) {
+      dispatch({
+        type: 'alertCenter/fetchAlertItems',
+        payload: {
+          alertTypeId,
+          alertId,
+        },
+      });
+    }
+  }, [alertTypeId, alertId, itemsTotal]);
 
   async function showUsers() {
     await dispatch({
@@ -97,6 +112,8 @@ function AlertTask({
         })}
         columns={[
           {
+            width: 80,
+            align: 'center',
             dataIndex: 'MARKET',
             title: formatMessage({ id: 'alert-center.market' }),
           },
@@ -106,11 +123,11 @@ function AlertTask({
             title: formatMessage({ id: 'alert-center.owner' }),
           },
           {
-            align: 'center',
             dataIndex: 'TASK_STATUS_DESC',
             title: formatMessage({ id: 'alert-center.status' }),
           },
           {
+            width: 120,
             align: 'center',
             dataIndex: 'action',
             title: <FormattedMessage id="alert-center.actions" />,

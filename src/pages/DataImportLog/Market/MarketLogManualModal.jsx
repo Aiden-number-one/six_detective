@@ -49,7 +49,7 @@ function MarketLogManualModal({ form, visible, loading, onCancel, onUpload }) {
       title={<FormattedMessage id="data-import.market.manual-upload" />}
       width={320}
       closable={false}
-      bodyStyle={{ paddingBottom: 80 }}
+      bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
       visible={visible}
       onClose={handleClose}
     >

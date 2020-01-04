@@ -2,7 +2,7 @@
  * @Description: 获取数据集列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime : 2020-01-03 17:17:36
+ * @LastEditTime : 2020-01-04 10:50:20
  * @LastEditors  : lan
  */
 import { message } from 'antd';
@@ -39,12 +39,10 @@ export default {
         });
         if (response.bcjson.items[0]) {
           // 默认选中第一个
-          yield put({
-            type: 'getDataSet',
-            payload: {
-              folderId: response.bcjson.items[0].classId,
-            },
-          });
+          // yield put({
+          //   type: 'getDataSet',
+          //   payload: {},
+          // });
           if (callback) callback(response);
         }
       }
@@ -117,14 +115,14 @@ export default {
     },
     // 操作数据集
     *operateDataSet({ payload }, { call, put, select }) {
-      const classId = yield select(({ dataSet }) => dataSet.activeTree);
+      const folderId = yield select(({ dataSet }) => dataSet.activeTree);
       const res = yield call(operateDataSet, { param: payload });
       if (res && res.bcjson.flag === '1') {
         // 重新获取数据集
         yield put({
           type: 'getDataSet',
           payload: {
-            folderId: classId,
+            folderId,
           },
         });
       } else {

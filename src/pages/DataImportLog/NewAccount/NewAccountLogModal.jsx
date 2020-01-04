@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Drawer, Form, Input, Upload, Icon, Button, Table } from 'antd';
+import { Drawer, Form, Input, Upload, Icon, Button, Table, Select, Alert } from 'antd';
 import styles from '../index.less';
 
 const { Column } = Table;
+const { Option } = Select;
+
+const warningMsg = 'Please validate before upload. If information is incorrect,please edit.';
+
 const isLt5M = size => size / 1024 / 1024 < 5;
 
 const EditableContext = React.createContext();
@@ -12,18 +16,34 @@ function EditableCell({ editing, dataIndex, title, record, children, ...restProp
   return (
     <EditableContext.Consumer>
       {({ getFieldDecorator }) => (
-        <td {...restProps}>
+        <td {...restProps} style={{ padding: 16 }}>
           {editing ? (
-            <Form.Item style={{ margin: 0 }}>
-              {getFieldDecorator(dataIndex, {
-                rules: [
-                  {
-                    required: true,
-                    message: `Please Input ${title}!`,
-                  },
-                ],
-                initialValue: record[dataIndex],
-              })(<Input />)}
+            <Form.Item>
+              {dataIndex === 'market' &&
+                getFieldDecorator(dataIndex, {
+                  rules: [
+                    {
+                      required: true,
+                      message: `Please select ${title}!`,
+                    },
+                  ],
+                  initialValue: record[dataIndex],
+                })(
+                  <Select>
+                    <Option value="HKFE">HKFE</Option>
+                    <Option value="SEHK">SEHK</Option>
+                  </Select>,
+                )}
+              {dataIndex === 'submitterCode' &&
+                getFieldDecorator(dataIndex, {
+                  rules: [
+                    {
+                      required: true,
+                      message: `Please Input ${title}!`,
+                    },
+                  ],
+                  initialValue: record[dataIndex],
+                })(<Input />)}
             </Form.Item>
           ) : (
             children
@@ -34,12 +54,13 @@ function EditableCell({ editing, dataIndex, title, record, children, ...restProp
   );
 }
 
-function FileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, onRemove }) {
+function EditableFileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, onRemove }) {
   return (
     <EditableContext.Provider value={form}>
       <Table
         rowKey="uid"
         dataSource={fileList}
+        rowClassName={styles['editable-row']}
         components={{
           body: {
             cell: EditableCell,
@@ -47,10 +68,10 @@ function FileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, onRemove
         }}
         pagination={false}
       >
-        <Column width={120} ellipsis title="File Name" dataIndex="name" />
+        <Column width={180} ellipsis title="File Name" dataIndex="fileName" />
         <Column
-          ellipsis
-          width={150}
+          width={120}
+          align="center"
           title="Market"
           dataIndex="market"
           onCell={record => ({
@@ -81,7 +102,7 @@ function FileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, onRemove
                   <>
                     <EditableContext.Consumer>
                       {() => (
-                        <a style={{ marginRight: 10 }} onClick={() => onSave(form, record.uid)}>
+                        <a style={{ marginRight: 10 }} onClick={() => onSave(record.uid)}>
                           Save
                         </a>
                       )}
@@ -93,7 +114,11 @@ function FileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, onRemove
                     Edit
                   </a>
                 )}
-                <a style={{ marginLeft: 10 }} onClick={() => onRemove(record)}>
+                <a
+                  style={{ marginLeft: 10 }}
+                  disabled={fileUid !== ''}
+                  onClick={() => onRemove(record)}
+                >
                   Remove
                 </a>
               </span>
@@ -104,36 +129,22 @@ function FileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, onRemove
     </EditableContext.Provider>
   );
 }
-const EditableFormTable = Form.create({ name: 'file' })(FileTable);
 
 function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
   const [fileUid, setFileUid] = useState('');
   const [fileList, setFileList] = useState([]);
   const { getFieldDecorator } = form;
 
-  function handleBeforeUpload(file, fList) {
-    // const
-    setFileList([...fileList, ...fList.map(f => ({ uid: f.uid, name: f.name, file: f }))]);
-    return false;
-  }
-
-  function handleCommit() {
-    form.validateFields(async err => {
-      if (!err) {
-        onUpload(fileList);
-      }
-    });
-  }
-
-  function handleSave(fileForm, uid) {
-    fileForm.validateFields((err, values) => {
+  function handleSave(uid) {
+    form.validateFields((err, values) => {
+      const { uploadFiles, ...rest } = values;
       if (!err) {
         setFileList(
           fileList.map(item => {
             if (item.uid === uid) {
               return {
                 ...item,
-                ...values,
+                ...rest,
               };
             }
             return item;
@@ -145,22 +156,53 @@ function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
   }
 
   function handleRemove(file) {
-    setFileList(fileList.filter(f => f.uid !== file.uid));
-    if (!fileList.length) {
+    const leftFileList = fileList.filter(f => f.uid !== file.uid);
+    setFileList(leftFileList);
+    if (!leftFileList.length) {
       form.resetFields();
     }
+  }
+
+  function handleBeforeUpload(file, fList) {
+    setFileList([
+      ...fileList,
+      ...fList.map(f => ({
+        uid: f.uid,
+        file: f,
+        fileName: f.name,
+        market: 'HKFE',
+        submitterCode: '',
+      })),
+    ]);
+    return false;
+  }
+
+  async function handleCommit() {
+    form.validateFields(async err => {
+      if (!err) {
+        const noSubmitterCodeFile = fileList.find(item => !item.submitterCode);
+        if (noSubmitterCodeFile) {
+          setFileUid(noSubmitterCodeFile.uid);
+        } else if (fileList.length > 0) {
+          await onUpload(fileList, file => {
+            handleRemove(file);
+          });
+        }
+      }
+    });
   }
 
   return (
     <Drawer
       title={<FormattedMessage id="data-import.new-account.manual-upload" />}
-      width={800}
+      width={750}
       closable={false}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
       visible={visible}
       onClose={onCancel}
     >
       <Form className={styles['modal-form']}>
+        <Alert message={warningMsg} type="warning" showIcon />
         <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
@@ -206,7 +248,8 @@ function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
         </Form.Item>
       </Form>
       {fileList.length > 0 && (
-        <EditableFormTable
+        <EditableFileTable
+          form={form}
           fileUid={fileUid}
           fileList={fileList}
           onSave={handleSave}

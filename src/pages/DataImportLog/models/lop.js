@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 19:37:05
+ * @LastEditTime : 2020-01-03 16:50:48
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -91,18 +91,11 @@ export default {
       message.success(msg);
       yield put({ type: 'fetch', payload });
     },
-    *fetchReportUrl({ payload }, { call, put }) {
+    *fetchReportUrl({ payload }, { call }) {
       const { err, items: reportUrl } = yield call(getReportUrl, payload);
       if (err) {
         throw new Error(err);
       }
-      yield put({
-        type: 'saveReportUrl',
-        payload: {
-          reportUrl,
-        },
-      });
-
       return reportUrl;
     },
   },
