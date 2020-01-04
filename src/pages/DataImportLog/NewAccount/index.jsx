@@ -32,7 +32,7 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   function handlePageChange(page, pageSize) {
     dispatch({ type: 'newAccount/fetch', payload: { page, pageSize, ...searchParams } });
   }
-  async function handleUpload(fileList) {
+  async function handleUpload(fileList, callback) {
     // eslint-disable-next-line no-restricted-syntax
     for (const val of fileList) {
       // eslint-disable-next-line no-await-in-loop
@@ -40,6 +40,7 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
         type: 'newAccount/importByManual',
         payload: val,
       });
+      callback(val);
     }
     setVisible(false);
   }

@@ -326,14 +326,14 @@ function ProcessDetail({
   return (
     <>
       <ConfirmModel
-        title="CONFIRM"
+        title="Confirm"
         content="Do you comfirm to reject this task?"
         closeModel={() => setConfirmVisible(false)}
         confirmVisible={confirmVisible}
         comfirm={() => submitOrApproveTask(submitType)}
       />
       <ConfirmModel
-        title="CONFIRM"
+        title="Confirm"
         content="Do you comfirm to withdraw this task?"
         closeModel={() => setWithdrawConfirmVisible(false)}
         confirmVisible={withdrawConfirmVisible}
@@ -373,11 +373,11 @@ function ProcessDetail({
                   value={radioValue}
                 ></Radio.Group>
                 <div className={btnStyles['bottom-btns']}>
-                  <Button onClick={() => submitOrApproveTask(submitType)} type="primary">
-                    Confirm
-                  </Button>
                   <Button onClick={() => setVisible(false)} style={{ marginRight: 12 }}>
                     Cancel
+                  </Button>
+                  <Button onClick={() => submitOrApproveTask(submitType)} type="primary">
+                    Confirm
                   </Button>
                 </div>
               </Drawer>
@@ -443,9 +443,16 @@ function ProcessDetail({
                       ) : null} */}
                       {detailItems[0] && detailItems[0].isStarter ? (
                         <>
-                          <Button style={{ marginRight: '10px' }} type="primary" onClick={saveTask}>
-                            Save
-                          </Button>
+                          {detailItems[0].isEditing ? (
+                            <Button
+                              style={{ marginRight: '10px' }}
+                              type="primary"
+                              onClick={saveTask}
+                            >
+                              Save
+                            </Button>
+                          ) : null}
+
                           <Button type="primary" onClick={() => submitDrawer('submit')}>
                             Submit
                           </Button>

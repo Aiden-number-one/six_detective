@@ -96,7 +96,6 @@ function InfomationList({ dispatch, infos, total, loading }) {
             title={<FormattedMessage id="alert-center.information-no" />}
           />
           <Column
-            align="center"
             dataIndex="informationType"
             title={<FormattedMessage id="alert-center.information-type" />}
           />
@@ -112,12 +111,10 @@ function InfomationList({ dispatch, infos, total, loading }) {
             title={<FormattedMessage id="alert-center.market" />}
           />
           <Column
-            align="center"
             dataIndex="submitterCode"
             title={<FormattedMessage id="alert-center.submitter-code" />}
           />
           <Column
-            align="center"
             dataIndex="submitterName"
             title={<FormattedMessage id="alert-center.submitter-name" />}
           />
