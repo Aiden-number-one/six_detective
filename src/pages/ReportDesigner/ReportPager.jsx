@@ -2,7 +2,7 @@
  * @Author: liangchaoshun
  * @Date: 2020-01-04 13:58:42
  * @Last Modified by: liangchaoshun
- * @Last Modified time: 2020-01-06 09:15:35
+ * @Last Modified time: 2020-01-06 22:01:29
  * @Description: 报表设计器的分页组件
  *
  * ---------------------------------------
@@ -15,27 +15,123 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Input, Select, Icon } from 'antd';
+import { Input, Select, Icon, message } from 'antd';
+import classNames from 'classnames';
 
 import less from './ReportPager.less';
 
-function ReportPager(props) {
-  const { inlineBlock, showTotal, totalRecord = '--', totalPage = '--', showPageSize } = props;
-  const [currPage, setCurrPage] = useState(1);
+// 当前组件的常量
+const pagerConst = {
+  VALUE_DEFAULT: '--',
+  SETP_HOME: 'step-home',
+  SETP_PREV: 'step-prev',
+  SETP_NEXT: 'step-next',
+  SETP_END: 'step-end',
+};
 
+function ReportPager(props) {
+  const { VALUE_DEFAULT, SETP_HOME, SETP_PREV, SETP_NEXT, SETP_END } = pagerConst;
+  // 父组件传入的属性和方法
+  const {
+    inlineBlock, // 是否为行内块元素
+    showTotal, // 是否显示总记录数
+    totalRecord = VALUE_DEFAULT, // 总记录数
+    totalPage = VALUE_DEFAULT, // 总页数
+    showPageSize, // 是否显示每页条数选项
+    pageChageCallback, // 页码|每页条数 改变后的回调
+    pageSizeArr = [10, 20, 30], // 每页条数选项
+  } = props;
+
+  const [currPage, setCurrPage] = useState(1); // 当前页码，默认 1
+  const [pageSize, setPageSize] = useState(10); // 每页条数，默认 10
+  const [isDiablePAH, setIsDiablePAH] = useState(true); // 是否禁用按钮： 上一页 和 首页
+  const [isDiableNAE, setIsDiableNAE] = useState(false); // 是否禁用按钮： 下一页 和 尾页
+
+  // componentDidMount
   useEffect(() => {
-    // console.log('ReportPager effect: ', props);
+    // console.log('reportPager componentDidMount effect: ', currPage, pageSize);
+    if (totalPage === VALUE_DEFAULT || totalPage === 1) {
+      setIsDiableNAE(true); // 如果没数据或者只有一页时，禁用 下一页 和 尾页 按钮
+    }
   }, []);
 
+  // componentDidUpdate
+  useEffect(() => {
+    // console.log('reportPager componentDidUpdate effect: ', currPage, pageSize);
+
+    // 处理按钮状态：禁用 | 开启
+    if (currPage === 1) {
+      setIsDiablePAH(true); // 禁用前两个按钮
+      setIsDiableNAE(false); // 开启后两个按钮
+    } else if (totalPage === VALUE_DEFAULT) {
+      setIsDiableNAE(true);
+    } else if (currPage === totalPage) {
+      setIsDiablePAH(false); // 开启前两个按钮
+      setIsDiableNAE(true); // 禁用后两个按钮
+    } else {
+      setIsDiablePAH(false);
+    }
+
+    // 处理回调：比如，父组件重新请求数据 TODO: FIXME: 为什么首次进来就会执行？？？
+    if (currPage) {
+      // 不为空
+      if (/^[1-9]+$/.test(currPage)) {
+        pageChageCallback({ pageSize, pageNumber: currPage }); // callback
+      } else {
+        message.error(
+          <span style={{ color: '#f4374c' }}>
+            Page format errors, enter a number greater than zero
+          </span>,
+        );
+      }
+    }
+  }, [currPage, pageSize]);
+
   // 当前页码数改变时
-  const onCurrPageChange = ev => {
+  const currPageInputChage = ev => {
     const { value } = ev.target;
     setCurrPage(value);
   };
 
   // 每页显示的条数改变时
   const onPageSizeChange = value => {
-    console.log('pageSizeChange: ', value);
+    // console.log('pageSizeChange: ', value);
+    setCurrPage(1); // 重置为 第一页
+    setPageSize(value);
+  };
+
+  // 当前页码改变时，统一处理函数
+  const pageNumChangeHandler = (action, ev) => {
+    // console.log('pageNumChangeHandler: ', action);
+    const tar = ev.currentTarget;
+    if (tar.classList.contains(less['step-disable'])) return;
+    // eslint-disable-next-line default-case
+    switch (action) {
+      case SETP_HOME:
+        if (currPage !== 1) {
+          setCurrPage(1);
+          // console.log('currPage home -> ', currPage);
+        }
+        break;
+      case SETP_PREV:
+        if (currPage > 1) {
+          setCurrPage(currPage - 1);
+          // console.log('currPage prev -> ', currPage);
+        }
+        break;
+      case SETP_NEXT:
+        if (currPage < totalPage) {
+          setCurrPage(currPage + 1);
+          // console.log('currPage next -> ', currPage);
+        }
+        break;
+      case SETP_END:
+        if (currPage !== totalPage) {
+          setCurrPage(totalPage);
+          // console.log('currPage end -> ', currPage);
+        }
+        break;
+    }
   };
 
   return (
@@ -50,27 +146,53 @@ function ReportPager(props) {
         </div>
       ) : null}
       {showPageSize ? (
-        <Select defaultValue="10" onChange={onPageSizeChange}>
-          <Select.Option value="10">10/Page</Select.Option>
-          <Select.Option value="20">20/Page</Select.Option>
-          <Select.Option value="30">30/Page</Select.Option>
+        <Select defaultValue={pageSizeArr[0]} onChange={onPageSizeChange}>
+          {pageSizeArr.map(value => (
+            <Select.Option key={value} value={value}>
+              {value}/Page
+            </Select.Option>
+          ))}
         </Select>
       ) : null}
-      <span className={`${less['step-icon']} ${less['step-home']}`} title="Home">
+      <span
+        title="Home"
+        onClick={ev => pageNumChangeHandler(SETP_HOME, ev)}
+        className={classNames(less['step-icon'], less['step-home'], {
+          [less['step-disable']]: isDiablePAH,
+        })}
+      >
         <Icon type="vertical-right" />
       </span>
-      <span className={`${less['step-icon']} ${less['prev-step']}`} title="Previous">
+      <span
+        title="Prev"
+        onClick={ev => pageNumChangeHandler(SETP_PREV, ev)}
+        className={classNames(less['step-icon'], less['step-prev'], {
+          [less['step-disable']]: isDiablePAH,
+        })}
+      >
         <Icon type="left" />
       </span>
       <div className={less['page-num']}>
-        <Input value={currPage} onChange={onCurrPageChange} />
+        <Input value={currPage} onChange={currPageInputChage} />
         <span> / </span>
         <span>{totalPage}</span>
       </div>
-      <span className={`${less['step-icon']} ${less['next-step']}`} title="Next">
+      <span
+        title="Next"
+        onClick={ev => pageNumChangeHandler(SETP_NEXT, ev)}
+        className={classNames(less['step-icon'], less['step-next'], {
+          [less['step-disable']]: isDiableNAE,
+        })}
+      >
         <Icon type="right" />
       </span>
-      <span className={`${less['step-icon']} ${less['step-end']}`} title="End">
+      <span
+        title="End"
+        onClick={ev => pageNumChangeHandler(SETP_END, ev)}
+        className={classNames(less['step-icon'], less['step-end'], {
+          [less['step-disable']]: isDiableNAE,
+        })}
+      >
         <Icon type="vertical-left" />
       </span>
     </div>
