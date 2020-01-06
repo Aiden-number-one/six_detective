@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-04 10:49:11
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-06 11:23:14
+ * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -42,7 +42,6 @@ export default class DatasetManagement extends PureComponent {
 
   state = {
     drawerTitle: '', // 抽屉标题
-    // selectedRowKeys: [], // 默认选中的表格
     visible: {
       operateTree: false, // 新增数据集分类抽屉
       dataSetName: false, // 数据集属性抽屉
@@ -59,7 +58,6 @@ export default class DatasetManagement extends PureComponent {
 
   // 生命周期函数, 获取数据集分类树
   componentDidMount() {
-    const { page } = this.state;
     const { dispatch } = this.props;
     dispatch({
       type: 'dataSet/getClassifyTree',
@@ -68,17 +66,18 @@ export default class DatasetManagement extends PureComponent {
         fileType: 'R',
       },
     });
+  }
+
+  // 组建销毁时，清楚model中的内容
+  componentWillUnmount() {
+    const { dispatch } = this.props;
     dispatch({
-      type: 'reportList/getReportList',
-      payload: {
-        pageNumber: page.pageNumber.toString(),
-        pageSize: page.pageSize.toString(),
-      },
+      type: 'dataSet/clearReducer',
     });
   }
 
   // 获取数据集列表
-  queryReportTemplate = value => {
+  queryReportTemplate = () => {
     const { dispatch, activeTree } = this.props;
     const { page } = this.state;
     const newPage = {
@@ -90,11 +89,10 @@ export default class DatasetManagement extends PureComponent {
     });
     this.searchForm.current.validateFields((err, values) => {
       dispatch({
-        type: 'dataSet/getDataSet',
+        type: 'reportList/getReportList',
         payload: {
-          sqlName: values.sqlName,
-          taskId: value || activeTree,
-          isShare: 0,
+          datasetName: values.datasetName,
+          folderId: '',
           ...newPage,
         },
       });
@@ -200,15 +198,6 @@ export default class DatasetManagement extends PureComponent {
     setTimeout(() => {
       this.queryReportTemplate(value);
     }, 0);
-    // dispatch({
-    //   type: 'dataSet/getDataSet',
-    //   payload: {
-    //     taskId: value,
-    //     isShare: 0,
-    //     pageNumber: this.state.page.pageNumber.toString(),
-    //     pageSize: this.state.page.pageSize.toString(),
-    //   },
-    // });
   };
 
   // 操作树节点

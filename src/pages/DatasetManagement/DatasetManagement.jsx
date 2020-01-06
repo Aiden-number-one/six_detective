@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-04 10:48:27
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-06 10:42:51
+ * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -68,6 +68,14 @@ export default class DatasetManagement extends PureComponent {
         dataStyle: 'Y',
         fileType: 'D',
       },
+    });
+  }
+
+  // 组建销毁时，清楚model中的内容
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dataSet/clearReducer',
     });
   }
 

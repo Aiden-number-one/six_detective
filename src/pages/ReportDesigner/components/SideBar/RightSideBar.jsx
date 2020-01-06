@@ -15,6 +15,7 @@ const { Sider } = Layout;
   cellPosition: reportDesigner.cellPosition,
   dataSetPrivateList: reportDesigner.dataSetPrivateList,
   spreadsheetOtherProps: reportDesigner.spreadsheetOtherProps,
+  teamplateAreaObj: reportDesigner.teamplateAreaObj,
 }))
 @Form.create({
   onFieldsChange(props, changedFields, allFields) {
@@ -86,6 +87,7 @@ export default class RightSideBar extends PureComponent {
       dataSetPrivateList,
       dispatch,
       spreadsheetOtherProps,
+      teamplateAreaObj,
     } = this.props;
     this.resetFields();
     const { siderBarType } = this.state;
@@ -99,6 +101,7 @@ export default class RightSideBar extends PureComponent {
       cellPosition, // 单元格位置
       dataSetPrivateList, // 私有数据集
       otherProps: spreadsheetOtherProps.length > 0 ? spreadsheetOtherProps[rowIndex][colIndex] : {},
+      text: teamplateAreaObj.length > 0 ? teamplateAreaObj[0].data[rowIndex][colIndex] : '',
     };
     // 表单的props
     const formProps = {

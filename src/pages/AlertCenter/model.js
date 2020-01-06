@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-04 15:46:12
+ * @LastEditTime : 2020-01-05 00:07:54
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -65,6 +65,9 @@ export async function assignAlertItem({ taskIds, userId }) {
 export async function closeAlert({ alertIds = [] }) {
   return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
 }
+// export async function getAttachments({ alertId }) {
+//   return request('set_template_generate', { data: { alertId, operType: 'emaiByAlert' } });
+// }
 export async function exportAlert({ fileType }) {
   return request('set_data_file_export', {
     data: {
@@ -76,10 +79,7 @@ export async function exportAlert({ fileType }) {
 }
 export async function getEmailByType(params) {
   return request('get_email_by_alert_id', {
-    data: {
-      ...params,
-      alertId: '888',
-    },
+    data: params,
   });
 }
 
@@ -96,6 +96,7 @@ export default {
     users: [],
     claimInfos: [],
     email: [],
+    attachments: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -149,6 +150,12 @@ export default {
       return {
         ...state,
         email: payload.email,
+      };
+    },
+    saveAttachments(state, { payload }) {
+      return {
+        ...state,
+        attachments: payload.attachments,
       };
     },
   },
@@ -335,6 +342,21 @@ export default {
       if (err) {
         throw new Error(err);
       }
+    },
+    *fetchAttachments({ payload }, { call, put }) {
+      const { err, items } = yield call(getEmailByType, {
+        alertId: payload.alertId,
+        operType: 'queryUrlByAlertId',
+      });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveAttachments',
+        payload: {
+          attachments: items,
+        },
+      });
     },
     *fetchEmail({ payload }, { call, put }) {
       const { err, items } = yield call(getEmailByType, {
