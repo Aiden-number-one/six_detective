@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-06 14:37:59
+ * @LastEditTime : 2020-01-06 15:04:23
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -114,7 +114,7 @@ export default {
       }
 
       return {
-        users: items,
+        users: items || [],
         total: totalCount,
       };
     },

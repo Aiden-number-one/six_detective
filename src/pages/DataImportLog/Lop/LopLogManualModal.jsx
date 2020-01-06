@@ -15,6 +15,7 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
   const [submitters, setSubmitters] = useState([]);
   const [submitterPage, setSubmitterPage] = useState(1);
   const [currentSubmitter, setSubmitter] = useState({});
+
   const { getFieldDecorator, validateFields } = form;
 
   function handleClose() {
@@ -60,12 +61,18 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
   function handleCommit() {
     validateFields(async (err, values) => {
       if (!err) {
-        const { tradeDate, uploadFiles, ...rest } = values;
+        const { tradeDate, uploadFiles, submitterCode, ...rest } = values;
         const { bcjson } = (uploadFiles && uploadFiles.length && uploadFiles[0].response) || {};
         const { flag, items = {} } = bcjson || {};
-        if (flag === '1' && items) {
+        if (flag === '1' && items && submitterCode) {
+          const code = submitterCode.split('-')[1];
           const filename = items.relativeUrl;
-          await onUpload({ tradeDate: tradeDate.format('YYYYMMDD'), filename, ...rest });
+          await onUpload({
+            tradeDate: tradeDate.format('YYYYMMDD'),
+            filename,
+            submitterCode: code,
+            ...rest,
+          });
           form.resetFields();
         }
       }
@@ -95,6 +102,7 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.submitter-code" />}>
           {getFieldDecorator('submitterCode', {
+            initialValue: currentSubmitter.submitterCode,
             rules: [
               {
                 required: true,
@@ -123,7 +131,7 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
           {getFieldDecorator('submitterName', {
-            initialValue: currentSubmitter.submitterName || '',
+            initialValue: currentSubmitter.submitterName,
             rules: [
               {
                 required: true,
