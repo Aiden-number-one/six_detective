@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Input, Button, Upload } from 'antd';
 import IconFont from '@/components/IconFont';
 import styles from '@/pages/AlertCenter/index.less';
-import AlertAttachments from './AlertAttachments';
+import AlertAttachments from './AlertUpAttachments';
 import AlertPhrase from './AlertPhrase';
 
 const { TextArea } = Input;

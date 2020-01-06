@@ -3,28 +3,34 @@ import { Row, Col, Popover, Typography } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import moment from 'moment';
 import IconFont from '@/components/IconFont';
-import { timestampFormat } from '@/pages/DataImportLog/constants';
+import { timestampFormat, downloadFile } from '@/pages/DataImportLog/constants';
+import styles from '@/pages/AlertCenter/index.less';
+import { AttachmentList } from './AlertDownAttachments';
 
-const { Paragraph, Text } = Typography;
+const { Paragraph } = Typography;
 
 function AlertAttachmentPop({ attachments }) {
+  function downloadAll(files) {
+    files.forEach(({ url }) => {
+      downloadFile(url);
+    });
+  }
   return (
     <Popover
       placement="bottomRight"
-      title={<FormattedMessage id="alert-center.attachement-list" />}
-      content={
-        <Row style={{ padding: '6px 14px', width: 240, maxHeight: 150, overflowY: 'auto' }}>
-          {attachments.map(({ name, url }, index) => (
-            <Col key={url}>
-              <Text ellipsis style={{ width: '100%' }} title={name}>
-                <a download href={`/download?filePath=${url}`} style={{ marginBottom: 20 }}>
-                  {index + 1}. {name}
-                </a>
-              </Text>
-            </Col>
-          ))}
-        </Row>
+      overlayClassName={styles['comment-attachment-container']}
+      title={
+        <div className={styles.title}>
+          <FormattedMessage id="alert-center.attachement-list" />
+          <IconFont
+            type="icondownload-all"
+            title="Download All"
+            className={styles['download-all']}
+            onClick={() => downloadAll(attachments)}
+          />
+        </div>
       }
+      content={<AttachmentList attachments={attachments} />}
     >
       <IconFont type="iconbiezhen" />
       {attachments.length}
@@ -33,15 +39,7 @@ function AlertAttachmentPop({ attachments }) {
 }
 
 export default function({ comment: { id, commitTime, commentContent, fileList } }) {
-  let attachments = fileList ? fileList.split(',') : [];
-  attachments = attachments.map(file => {
-    const l = file.split('/');
-    const f = l.slice(-1)[0];
-    return {
-      name: f,
-      url: file,
-    };
-  });
+  const attachments = fileList ? fileList.split(',') : [];
   return (
     <li key={id}>
       <Row>
@@ -49,7 +47,9 @@ export default function({ comment: { id, commitTime, commentContent, fileList } 
           {moment(commitTime).format(timestampFormat)}
         </Col>
         <Col span={5} offset={1} align="right">
-          {attachments.length > 0 && <AlertAttachmentPop attachments={attachments} />}
+          {attachments.length > 0 && (
+            <AlertAttachmentPop attachments={attachments.map(url => ({ url }))} />
+          )}
         </Col>
       </Row>
       <Row>

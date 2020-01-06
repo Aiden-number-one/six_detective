@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Row, Col, Empty, Spin, Icon, Button, message } from 'antd';
+import { Tabs, Row, Col, Empty, Spin, Icon, Button } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
@@ -11,6 +11,7 @@ import {
   AlertLog,
   AlertRichText,
   AlertEmailModal,
+  AlertDownAttachments,
   TaskBtn,
   EpTaskItem,
   ProductTaskItem,
@@ -49,13 +50,15 @@ function CustomEmpty({ className = '', style = {} }) {
   );
 }
 
-function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email }) {
+function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email, attachments }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
   const [activeKey, setActiveKey] = useState('1');
+  const [emailVisible, setEmailVisible] = useState(false);
+
   const taskColumns = taskColumnsMap[+alert.alertTypeId];
   const TaskItem = TaskItemMap[+alert.alertTypeId];
-  const [emailVisible, setEmailVisible] = useState(false);
+  const isAttachmentsVisible = [321, 322, 323].includes(+alert.alertTypeId);
 
   useEffect(() => {
     const { alertId } = alert;
@@ -75,6 +78,15 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
         alertId,
       },
     });
+    // show attachments
+    if (isAttachmentsVisible) {
+      dispatch({
+        type: 'alertCenter/fetchAttachments',
+        payload: {
+          alertId,
+        },
+      });
+    }
   }, [alert]);
 
   async function handleCommit(comment, fileList) {
@@ -95,7 +107,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
       setPanes(panes.map(p => (isEqual(p) ? pane : p)));
     } else {
       // add pane
-      setPanes([...panes, pane]);
+      setPanes([pane, ...panes]);
     }
     setActiveKey(pane.ALERT_ITEM_ID.toString());
   }
@@ -131,17 +143,16 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
     });
     if (!err) {
       setEmailVisible(true);
-    } else {
-      message.warn(err);
     }
   }
-  function handleSendEmail() {
-    dispatch({
+  async function handleSendEmail() {
+    await dispatch({
       type: 'alertCenter/sendEmail',
       payload: {
         alertId: alert.alertId,
       },
     });
+    setEmailVisible(false);
   }
   return (
     <Row className={styles['detail-container']} gutter={10}>
@@ -218,6 +229,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
               </TabPane>
             ))}
         </Tabs>
+        {attachments.length > 0 && <AlertDownAttachments attachments={attachments} />}
       </Col>
       <Col span={8}>
         <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
@@ -256,9 +268,10 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
   );
 }
 
-export default connect(({ loading, alertCenter: { comments, logs, email } }) => ({
+export default connect(({ loading, alertCenter: { comments, logs, email, attachments } }) => ({
   loading: loading.effects,
   comments,
   logs,
   email,
+  attachments,
 }))(AlertDetail);

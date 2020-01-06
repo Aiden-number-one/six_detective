@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 10:54:40
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-03 10:17:45
+ * @LastEditTime : 2020-01-04 19:22:40
  */
 export default {
   // common
@@ -15,12 +15,13 @@ export default {
   'data-import.manual-import': 'MANUAL IMPORT',
   'data-import.search': 'SEARCH',
   'data-import.market': 'Market',
+  'data-import.file-name': 'File Name',
+  'data-import.submission-report': 'Submission Report',
   'data-import.trade-date': 'Trade Date',
   'data-import.submitter-code': 'Submitter Code',
   'data-import.submission-date': 'Submission Date',
   // lop
   'data-import.lop.submitter-name': 'Submitter Name',
-  'data-import.lop.submission-report': 'Submission Report',
   'data-import.lop.processing-status': 'Processing Status',
   'data-import.lop.late-submission': 'Late Submission',
   'data-import.lop.submission-channel': 'Submission Channel',
@@ -36,7 +37,6 @@ export default {
   'data-import.market.file': 'File',
   'data-import.market.manual-upload': 'MANUAL UPLOAD',
   // new account
-  'data-import.new-account.file-name': 'File Name',
   'data-import.new-account.submission-time': 'Submission Time',
   'data-import.new-account.manual-upload': 'MANUAL IMPORT NEW ACCOUNT REPORT',
 };

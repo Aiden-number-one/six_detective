@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-03 17:05:43
+ * @LastEditTime : 2020-01-04 18:55:06
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -79,16 +79,21 @@ export default {
       const { file, market, submitterCode } = payload;
       const { err: uploadErr, items } = yield call(fileUpload, { file });
 
+      if (uploadErr) {
+        message.warn(uploadErr);
+        return uploadErr;
+      }
       const { err: manualErr } = yield call(postManual, {
         filename: items.relativeUrl,
         market,
         submitterCode,
       });
 
-      const err = manualErr || uploadErr;
-      if (err) {
-        throw new Error(err);
+      if (manualErr) {
+        message.warn(manualErr);
+        return manualErr;
       }
+      return '';
     },
     *importByAuto({ payload }, { call, put }) {
       const { err, msg } = yield call(postAuto);

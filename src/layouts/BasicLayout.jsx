@@ -5,7 +5,7 @@
  */
 import ProLayout from '@ant-design/pro-layout';
 import React, { useEffect, useState } from 'react';
-import { Icon, Badge, Popover } from 'antd';
+import { Icon, Badge, Popover, message } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -59,7 +59,13 @@ const BasicLayout = props => {
       callback: m => {
         // newMenuData = Object.assign([], menuData);
         setNewMenuData(m);
-        console.log('menuData====', m, menuData);
+        console.log('menuData111====', m, menuData);
+        if (m.length <= 0) {
+          message.warning('The menu is empty');
+          dispatch({
+            type: 'login/logout',
+          });
+        }
       },
     });
   }, []);
