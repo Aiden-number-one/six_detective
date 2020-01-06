@@ -14,13 +14,9 @@ const formLayout = {
 };
 
 export default props => {
-  const { getFieldDecorator, cellPosition, dataSetPrivateList, dispatch } = props;
-  // 单元格类型
-  const [cellType, changeCellType] = useState('0');
+  const { getFieldDecorator, cellPosition, dataSetPrivateList, otherProps } = props;
   // 当前被选择的数据集
   const [dataset, changeDataset] = useState(undefined);
-  // 数据设置相关
-  const [dataSetting, changeDataSetting] = useState('group');
   // 根据被选择的数据集得到想对应的列
   // TODO: 如果，树那边的数据集被删掉，则右边已经设置的单元格怎么办？
   const currentDatasetObj = dataSetPrivateList.find(value => value.dataset_id === dataset);
@@ -30,7 +26,7 @@ export default props => {
    * cell: 单元格 elementType: 元素类型
    * text: 单元格内容
    * formula: 公式内容
-   * dataset:数据集 datacolumn: 数据集所对应的列 dataseting: 数据设置选择框 dataseting2: 数据设置选择框的副选择框 extension: 扩展方向
+   * dataset:数据集 datacolumn: 数据集所对应的列 dataSetting: 数据设置选择框 dataseting2: 数据设置选择框的副选择框 extension: 扩展方向
    */
   return (
     <Content className={styles.content}>
@@ -55,13 +51,9 @@ export default props => {
               {...formLayout}
             >
               {getFieldDecorator('elementType', {
-                initialValue: 'text',
+                initialValue: otherProps.elementType || 'text',
               })(
-                <Select
-                  onChange={e => {
-                    changeCellType(e);
-                  }}
-                >
+                <Select>
                   <Option value="text">Text</Option>
                   <Option value="formula">Formula</Option>
                   <Option value="column">Data Column</Option>
@@ -70,7 +62,7 @@ export default props => {
             </Form.Item>
             {/* 插入文本 */}
             {/* 文本 */}
-            {cellType === 'text' && (
+            {(otherProps.elementType === 'text' || otherProps.elementType === undefined) && (
               <Form.Item label=" " {...formLayout}>
                 {getFieldDecorator('text', {})(<Input />)}
               </Form.Item>
@@ -78,7 +70,7 @@ export default props => {
 
             {/* 插入公式 */}
             {/* 公式 */}
-            {cellType === 'formula' && (
+            {otherProps.elementType === 'formula' && (
               <Form.Item label=" " {...formLayout}>
                 {getFieldDecorator('formula', {})(<Input />)}
               </Form.Item>
@@ -86,16 +78,15 @@ export default props => {
 
             {/* 插入数据列 */}
             {/* 数据集 */}
-            {cellType === 'column' && (
+            {otherProps.elementType === 'column' && (
               <>
                 <Form.Item
                   label={<FormattedMessage id="report-designer.dataset" />}
                   {...formLayout}
                 >
-                  {getFieldDecorator(
-                    'dataset',
-                    {},
-                  )(
+                  {getFieldDecorator('dataSet', {
+                    initialValue: otherProps.dataSet.datasetId || undefined,
+                  })(
                     <Select
                       placeholder="Please Select"
                       onChange={datasetValue => {
@@ -113,10 +104,9 @@ export default props => {
                   label={<FormattedMessage id="report-designer.datacolumn" />}
                   {...formLayout}
                 >
-                  {getFieldDecorator(
-                    'datacolumn',
-                    {},
-                  )(
+                  {getFieldDecorator('dataColumn', {
+                    initialValue: otherProps.dataSet.fieldDataName || undefined,
+                  })(
                     <Select placeholder="Please Select">
                       {currentColumn.map(value => (
                         <Option value={value.field_data_name}>{value.field_data_name}</Option>
@@ -129,14 +119,10 @@ export default props => {
                   label={<FormattedMessage id="report-designer.datasettings" />}
                   {...formLayout}
                 >
-                  {getFieldDecorator('dataseting', {
-                    initialValue: 'group',
+                  {getFieldDecorator('dataSetting', {
+                    initialValue: otherProps.dataSetting || 'group',
                   })(
-                    <Select
-                      onChange={value => {
-                        changeDataSetting(value);
-                      }}
-                    >
+                    <Select>
                       <Option value="group">
                         {<FormattedMessage id="report-designer.group" />}
                       </Option>
@@ -146,10 +132,10 @@ export default props => {
                   )}
                 </Form.Item>
                 {/* 数据设置2 */}
-                {dataSetting === 'group' && (
+                {otherProps.dataSetting === 'group' && (
                   <Form.Item label=" " {...formLayout}>
-                    {getFieldDecorator('groupdatasetting', {
-                      initialValue: 'normal',
+                    {getFieldDecorator('groupSetting', {
+                      initialValue: otherProps.groupSetting || 'normal',
                     })(
                       <Select>
                         <Option value="normal">Normal</Option>
@@ -157,52 +143,37 @@ export default props => {
                     )}
                   </Form.Item>
                 )}
-                {dataSetting === 'sum' && (
+                {otherProps.dataSetting === 'sum' && (
                   <Form.Item label=" " {...formLayout}>
-                    {getFieldDecorator('sumsetting', {
-                      initialValue: 'none',
+                    {getFieldDecorator('sumSetting', {
+                      initialValue: otherProps.sumSetting || 'Sum',
                     })(
                       <Select>
+                        <Option value="sum">Sum</Option>
                         <Option value="count">Count</Option>
                         <Option value="average">Average</Option>
                         <Option value="max">Max</Option>
                         <Option value="min">Min</Option>
-                        <Option value="sun">Sum</Option>
-                        <Option value="none">None</Option>
                       </Select>,
                     )}
                   </Form.Item>
                 )}
-                {dataSetting !== 'sum' && (
+                {otherProps.dataSetting !== 'sum' && (
                   <Form.Item
                     label={<FormattedMessage id="report-designer.extension" />}
                     {...formLayout}
                   >
-                    {getFieldDecorator('extension', {
-                      initialValue: 'none',
+                    {getFieldDecorator('expendDirection', {
+                      initialValue: otherProps.expendDirection || 'Down',
                     })(
-                      <Radio.Group
-                        defaultValue="a"
-                        onChange={e => {
-                          // 保证templateArea能正常生成
-                          window.xsObj.instanceArray[0].sheet.toolbar.change();
-                          dispatch({
-                            type: 'reportDesigner/modifyTemplateArea',
-                            payload: {
-                              type: 'expend_direction',
-                              value: e.target.value,
-                              position: cellPosition,
-                            },
-                          });
-                        }}
-                      >
-                        <Radio.Button value="none">
+                      <Radio.Group>
+                        <Radio.Button value="None">
                           <IconFont type="icon-nodirection" />
                         </Radio.Button>
-                        <Radio.Button value="down">
+                        <Radio.Button value="Down">
                           <IconFont type="icon-zongxiang" />
                         </Radio.Button>
-                        <Radio.Button value="right">
+                        <Radio.Button value="Right">
                           <IconFont type="icon-hengxiang" />
                         </Radio.Button>
                       </Radio.Group>,

@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-04 11:28:43
+ * @LastEditTime : 2020-01-04 21:20:09
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -105,7 +105,11 @@ export function dataSetTree(dataSets) {
         children: dataSet.fields.map(field => ({
           title: field.field_data_name,
           key: `${dataSet.dataset_id}${field.field_data_name}`,
-          dragInfo: `${dataSet.dataset_name}.${field.field_data_name}`,
+          dragInfo: {
+            datasetId: dataSet.dataset_id,
+            datasetName: dataSet.dataset_name,
+            fieldDataName: field.field_data_name,
+          },
           isLeaf: true,
         })),
         isLeaf: dataSet.fields.length === 0,
@@ -197,7 +201,7 @@ export function getDataSetXml(contentDetail) {
  * @Author: mus
  * @Date: 2020-01-02 17:25:52
  */
-export function getTemplateAreaCellPartXml(contentDetail) {
+export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps) {
   let cellxml = '';
   const spreadSheetData = contentDetail[0].data;
   const spreadSheetProps = contentDetail[0].cellAttrs;
@@ -232,10 +236,31 @@ export function getTemplateAreaCellPartXml(contentDetail) {
         borderRightType,
         borderRightWidth,
       } = style;
+      let expand = 'None';
+      let aggregate = 'group';
+      if (cellType === 'DATASET') {
+        // TODO：spreadsheetOtherProps 怎么保持与表格单元格的一致
+        try {
+          const otherProps = spreadsheetOtherProps[rowsIndex][colsIndex];
+          if (otherProps.dataSetting === 'group') {
+            aggregate = 'group';
+          }
+          if (otherProps.dataSetting === 'list') {
+            aggregate = 'list';
+          }
+          expand = otherProps.expendDirection || 'Down';
+          if (otherProps.dataSetting === 'sum') {
+            aggregate = otherProps.sumSetting;
+            // 汇总的话为None
+            expand = 'None';
+          }
+        } catch {
+          aggregate = 'group';
+        }
+      }
       // 生成
-      cellxml += `<cell expand="${cellType === 'DATASET' ? 'Down' : 'None'}" name="${createCellPos(
-        colsIndex,
-      ) + (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}">
+      cellxml += `<cell expand="${expand}" name="${createCellPos(colsIndex) +
+        (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}">
         <cell-style font-size="${fontSize}" align="${align}" valign="${valign}" ${bgcolor &&
         `bgcolor="${bgcolor}"`} ${forecolor && `bgcolor="${forecolor}"`} ${underline &&
         `underline="${underline}"`} ${fontFamily && `font-family="${fontFamily}"`} ${italic &&
@@ -252,7 +277,7 @@ export function getTemplateAreaCellPartXml(contentDetail) {
       } else if (cellType === 'DATASET') {
         const datasetName = cellText.split('.')[0];
         const property = cellText.split('.')[1];
-        cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}" aggregate="group" order="none" mapping-type="simple"></dataset-value>`;
+        cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}" aggregate="${aggregate}" order="none" mapping-type="simple"></dataset-value>`;
       } else {
         cellxml += '<simple-value><![CDATA[]]></simple-value>';
       }
@@ -264,15 +289,75 @@ export function getTemplateAreaCellPartXml(contentDetail) {
 
 /**
  * @description: 修改TemplateArea内的type
- * @param {object}  object 分别为：原始的TemplateArea、需要修改的key值、改为的value值、修改单元格的position
+ * @param {object}  object 分别为：value为Object类型，格式为{key:value,key:value}、
+ * 修改单元格的position、单元格otherProps的相关
  * @return {object} 新的TemplateArea
  * @Author: mus
  * @Date: 2019-12-23 16:41:39
  */
-export function modifyTemplateAreaInside({ originTemplateArea, type, value, position }) {
+export function modifyTemplateAreaInside({ value, position, spreadsheetOtherProps }) {
+  let newSpreadsheetOtherProps = [...spreadsheetOtherProps];
+  const [rowIndex, colIndex] = getColIndexRowIndex(position);
+  if (newSpreadsheetOtherProps.length === 0) {
+    // 若spreadsheetOtherProps的length为0，则填充spreadsheetOtherProps
+    const { rows, cols } = window.xsObj.instanceArray[0].data;
+    const rowLength = rows.len;
+    const colLength = cols.len;
+    newSpreadsheetOtherProps = new Array(rowLength).fill([]).map(() =>
+      new Array(colLength).fill({}).map(() => ({
+        dataSet: {},
+        expendDirection: 'Down',
+      })),
+    );
+  }
+  const content = newSpreadsheetOtherProps[rowIndex][colIndex];
+  newSpreadsheetOtherProps[rowIndex][colIndex] = { ...content, ...value };
+  return newSpreadsheetOtherProps;
+}
+
+/**
+ * @description: 根据字符串得到相应的行列index
+ * @param {type} param
+ * @return: return
+ * @Author: mus
+ * @Date: 2020-01-04 15:30:13
+ */
+export function getColIndexRowIndex(position) {
   const colIndex = stringToNum(position.match(/([A-Z]+)([0-9]+)/)[1]) - 1;
   const rowIndex = position.match(/([A-Z]+)([0-9]+)/)[2] - 1;
-  const content = originTemplateArea.rows[rowIndex].cols[colIndex];
-  content[type] = value;
-  return { ...originTemplateArea };
+  return [rowIndex, colIndex];
+}
+
+/**
+ * @description: 根据index得到字符串
+ * @param {type} param
+ * @return: return
+ * @Author: mus
+ * @Date: 2020-01-04 19:36:54
+ */
+export function getCellStringByIndex(rowIndex, colIndex) {
+  return createCellPos(colIndex) + (Number(rowIndex) + 1);
+}
+
+/**
+ * @description: 设置单元格属性类型及值
+ * @param {type} param
+ * @return: return
+ * @Author: mus
+ * @Date: 2020-01-04 19:35:28
+ */
+export function setCellTypeAndValue(type, value, cellPosition) {
+  const [rowIndex, colIndex] = getColIndexRowIndex(cellPosition);
+  // eslint-disable-next-line no-underscore-dangle
+  window.xsObj._setCellType({
+    sheetName: 'sheet1',
+    rc: cellPosition,
+    cellType: type,
+  });
+  // eslint-disable-next-line no-underscore-dangle
+  window.xsObj._setCellText({
+    ri: Number(rowIndex),
+    ci: Number(colIndex),
+    text: value,
+  });
 }
