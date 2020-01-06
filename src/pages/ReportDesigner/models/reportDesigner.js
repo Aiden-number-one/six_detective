@@ -4,9 +4,10 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-04 14:08:02
+ * @LastEditTime : 2020-01-06 13:58:08
  */
 import { message } from 'antd';
+import { createCellPos } from '@/utils/utils';
 import Service from '@/utils/Service';
 import {
   modifyTemplateAreaInside,
@@ -23,10 +24,12 @@ export default {
     reportName: 'Untitled', // 当前报表设计器的名字
     reportTemplateContent: '', // 报表设计器的JSON
     reportId: '', // 报表设计器的id
-    teamplateAreaObj: {}, // 报表设计器表格区域的相关Object对象
+    teamplateAreaObj: [], // 报表设计器表格区域的相关Object对象
     originTemplateAreaObj: {}, // xspreadsheet的原始数据
     dataSetPublicList: [], // 公共数据集列表
     dataSetPrivateList: [], // 私有数据集
+    spreadsheetOtherProps: [], // spreadSheet的其他属性
+    cellPosition: 'A1', // 当前的单元格
   },
   reducers: {
     // 删除私有数据集相关
@@ -92,9 +95,10 @@ export default {
     modifyTemplateArea(state, action) {
       return {
         ...state,
-        teamplateAreaObj: modifyTemplateAreaInside({
-          ...action.payload,
-          originTemplateArea: state.teamplateAreaObj,
+        spreadsheetOtherProps: modifyTemplateAreaInside({
+          value: action.payload,
+          position: action.cellPostion || state.cellPosition,
+          spreadsheetOtherProps: state.spreadsheetOtherProps,
         }),
       };
     },
@@ -103,6 +107,22 @@ export default {
       return {
         ...state,
         reportId: action.payload,
+      };
+    },
+    // 存储otherProps的相关属性 例如扩展方向相关
+    setSpreadsheetOtherProps(state, action) {
+      return {
+        ...state,
+        spreadsheetOtherProps: action.payload,
+      };
+    },
+    // 修改cellPosition
+    changeCellPosition(state, action) {
+      const { rowIndex, columnIndex } = action.payload;
+      const cellPosition = createCellPos(columnIndex) + (rowIndex + 1);
+      return {
+        ...state,
+        cellPosition,
       };
     },
   },
@@ -116,15 +136,17 @@ export default {
         dataSetPrivateList,
         teamplateAreaObj,
         originTemplateAreaObj,
+        spreadsheetOtherProps,
       ] = yield select(({ reportDesigner }) => [
         reportDesigner.reportId, // 报表模板id
         reportDesigner.reportName, // 报表模板name
         reportDesigner.dataSetPrivateList, // 私有数据集
         reportDesigner.teamplateAreaObj, // 报表模板区域数据
         reportDesigner.originTemplateAreaObj, // 报表模板区域原始数据
+        reportDesigner.spreadsheetOtherProps, // 单元格otherProps
       ]);
       // 得到单元格的相关xml
-      const templateAreaXml = getTemplateAreaCellPartXml(teamplateAreaObj);
+      const templateAreaXml = getTemplateAreaCellPartXml(teamplateAreaObj, spreadsheetOtherProps);
       // 得到单元格宽高的相关xml
       const colsColumnsXml = getColColumnXml(teamplateAreaObj);
       // 得到数据集相关的xml
@@ -141,6 +163,7 @@ export default {
           width="595" height="842" orientation="portrait" html-report-align="left" bg-image=""
           html-interval-refresh-value="0" column-enabled="false"></paper></ureport>`,
           originTemplateAreaObj,
+          spreadsheetOtherProps,
         },
       };
       const response = yield call(setReportTemplateContent, {
@@ -187,6 +210,11 @@ export default {
           window.xsObj.instanceArray[0].loadData(
             reportTemplateContent.templateArea.originTemplateAreaObj,
           );
+          // 处理SpreadsheetOtherProps
+          yield put({
+            type: 'setSpreadsheetOtherProps',
+            payload: reportTemplateContent.templateArea.spreadsheetOtherProps || [],
+          });
           // 处理私有数据集
           yield put({
             type: 'setDataSetPrivateList',

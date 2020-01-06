@@ -125,12 +125,4 @@ export default config => {
       },
     });
 
-  /* config.plugin('htmlTmpl').use(require('html-webpack-plugin'), [{
-    inject: 'body',
-    filename: 'index.html',
-    title: 'wfafasf',
-    favicon: path.resolve(__dirname, '../public/favicon.ico'),
-    template: path.resolve(__dirname, '../src/pages/document.ejs')
-  }]) */
-
 };
