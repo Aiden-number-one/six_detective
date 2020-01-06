@@ -24,17 +24,22 @@ const getExt = (filename = '') => {
   return filename.substr(index + 1);
 };
 
+const getFileName = url => {
+  const l = url.split('/');
+  return l.slice(-1)[0];
+};
+
 export function AttachmentList({ attachments }) {
   return (
     <ul className={styles['down-attachment-list']}>
-      {attachments.map(({ name, url }) => (
+      {attachments.map(({ url }) => (
         <li key={url}>
-          <Text ellipsis style={{ width: '85%' }} title={name}>
+          <Text ellipsis style={{ width: '85%' }} title={getFileName(url)}>
             <IconFont
               type={extIconMap[getExt(url)] || extIconMap.default}
               className={styles['file-icon']}
             />
-            {url}
+            {getFileName(url)}
           </Text>
           <a download href={`/download?filePath=${url}`}>
             <IconFont type="icondownload" className={styles.icon} />

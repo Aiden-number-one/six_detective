@@ -9,18 +9,6 @@ import { AttachmentList } from './AlertDownAttachments';
 
 const { Paragraph } = Typography;
 
-export function parseFiles(fileList) {
-  const attachments = fileList ? fileList.split(',') : [];
-  return attachments.map(file => {
-    const l = file.split('/');
-    const f = l.slice(-1)[0];
-    return {
-      name: f,
-      url: file,
-    };
-  });
-}
-
 function AlertAttachmentPop({ attachments }) {
   function downloadAll(files) {
     files.forEach(({ url }) => {
@@ -51,7 +39,7 @@ function AlertAttachmentPop({ attachments }) {
 }
 
 export default function({ comment: { id, commitTime, commentContent, fileList } }) {
-  const attachments = parseFiles(fileList);
+  const attachments = fileList ? fileList.split(',') : [];
   return (
     <li key={id}>
       <Row>
@@ -59,7 +47,9 @@ export default function({ comment: { id, commitTime, commentContent, fileList } 
           {moment(commitTime).format(timestampFormat)}
         </Col>
         <Col span={5} offset={1} align="right">
-          {attachments.length > 0 && <AlertAttachmentPop attachments={attachments} />}
+          {attachments.length > 0 && (
+            <AlertAttachmentPop attachments={attachments.map(url => ({ url }))} />
+          )}
         </Col>
       </Row>
       <Row>
