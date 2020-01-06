@@ -1,0 +1,103 @@
+/*
+ * @Author: liangchaoshun
+ * @Date: 2020-01-03 16:21:21
+ * @Last Modified by: liangchaoshun
+ * @Last Modified time: 2020-01-06 09:55:26
+ * @Description: 样式：报表设计器分页
+ *
+ */
+
+.fontSize(@size: 12px) {
+  font-size: @size;
+}
+
+.report-page {
+  margin: 7px 0;
+  padding-left: 17px;
+  .fontSize(14px);
+
+  color: #464c51;
+  font-family: AvenirHeavy, sans-serif;
+
+  span {
+    vertical-align: middle;
+  }
+
+  .total-records {
+    display: inline-block;
+  }
+
+  :global {
+    .ant-select {
+      // numbers / page
+      vertical-align: middle;
+      .ant-select-selection {
+        height: 26px;
+        margin: 0 5px;
+        color: #464c51;
+        border-color: #979aa8;
+        .ant-select-selection__rendered {
+          .fontSize(14px);
+
+          line-height: 26px;
+        }
+        .ant-select-arrow {
+          right: 7px;
+          margin-top: -5px;
+          color: #464c51;
+        }
+      }
+    }
+  }
+
+  // page-step
+  .step-icon {
+    position: relative;
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    margin: 0 5px;
+    border: 1px solid #979aa8;
+    cursor: pointer;
+
+    :global(.anticon) {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      color: rgb(59, 61, 63);
+      font-size: 12px;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  // home
+  .step-home {
+    margin-left: 10px;
+  }
+  // end
+  .step-end {
+    margin-right: 10px;
+  }
+  // previous
+  .prev-step {
+    margin-right: 10px;
+  }
+  // next
+  .next-step {
+    margin-left: 10px;
+  }
+
+  // 页码
+  .page-num {
+    display: inline-block;
+    :global(.ant-input) {
+      box-sizing: border-box;
+      width: 55px;
+      height: 26px;
+      line-height: 26px;
+      text-align: center;
+      vertical-align: middle;
+      border-color: #979aa8;
+    }
+  }
+}

@@ -13,7 +13,7 @@ const { getReportTemplateDataQuery } = Service;
 export default {
   namespace: 'reportDesignPreview',
   state: {
-    previewData: '<div></div>',
+    previewData: {},
   },
   reducers: {
     // 保存报表预览数据
@@ -32,7 +32,7 @@ export default {
       });
       yield put({
         type: 'savePreviewData',
-        payload: response.bcjson.items[0].tableData,
+        payload: response.bcjson,
       });
     },
   },
