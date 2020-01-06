@@ -21,6 +21,7 @@ export default class DataProcessing extends Component {
     super();
     this.state = {
       alertType: '',
+      alertIds: '',
       authBypass: false,
       dataProcessingVisible: false,
       dataProcessingFlag: false,
@@ -63,18 +64,18 @@ export default class DataProcessing extends Component {
         // },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
-          dataIndex: 'subitemId',
-          key: 'subitemId',
+          dataIndex: 'alertOwner',
+          key: 'alertOwner',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterCode' }),
-          dataIndex: 'subitemName',
-          key: 'subitemName',
+          dataIndex: 'submitterCode',
+          key: 'submitterCode',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterName' }),
-          dataIndex: 'sequence',
-          key: 'sequence',
+          dataIndex: 'submitterName',
+          key: 'submitterName',
         },
       ],
       functionNameOptions: [
@@ -128,11 +129,9 @@ export default class DataProcessing extends Component {
   }
 
   componentDidMount() {
-    // const { authBypass } = getStore('authBtn')
-    // this.setState({
-    //   authBypass,
-    // })
-    console.log('getAuthority=', getAuthority());
+    this.setState({
+      authBypass: getAuthority().authBypass,
+    });
     // this.queryDataProcessing();
   }
 
@@ -196,9 +195,14 @@ export default class DataProcessing extends Component {
     this.queryDataProcessing();
   };
 
-  onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys, selectedRows);
+    const alertIds = [];
+    selectedRows.forEach(element => alertIds.push(element.alertId));
+    this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {
+      // console.log('alertIds===', this.state.alertIds);
+      // this.alertItemsByPass()
+    });
   };
 
   startProcessing = () => {
@@ -217,6 +221,28 @@ export default class DataProcessing extends Component {
   dataProcessingCancel = () => {
     this.setState({
       dataProcessingVisible: false,
+    });
+  };
+
+  onBypass = () => {
+    // dataProcessingVisible: false,
+    this.alertItemsByPass();
+  };
+
+  alertItemsByPass = () => {
+    const { dispatch } = this.props;
+    const params = {
+      operType: 'alertItemsByPass',
+      // pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
+      // pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
+      alertIds: `${this.state.alertIds}`,
+    };
+    dispatch({
+      type: 'dataProcessing/alertItemsByPass',
+      payload: params,
+      callback: () => {
+        this.queryDataProcessing();
+      },
     });
   };
 
@@ -254,7 +280,11 @@ export default class DataProcessing extends Component {
                     style={{ marginTop: '6px' }}
                     // eslint-disable-next-line no-confusing-arrow
                     rowClassName={record =>
-                      alertType && record.alertType === alertType ? styles['table-active'] : ''
+                      (alertType && record.alertType === alertType ? styles['table-active'] : '') ||
+                      (record.isClosedIntraday === '1' ? styles['table-alert'] : '') ||
+                      (record.isClosedIntraday === '1' && record.alertType === alertType
+                        ? styles['table-alert-active']
+                        : '')
                     }
                     dataSource={dataProcessingData.items}
                     columns={this.state.codeColumns}
@@ -326,7 +356,7 @@ export default class DataProcessing extends Component {
                 <div className={styles.dataItemTable}>
                   <div className={styles.tableTop}>
                     <Button
-                      onClick={this.addCode}
+                      onClick={this.onBypass}
                       type="primary"
                       className="btn-usual"
                       disabled={!authBypass}

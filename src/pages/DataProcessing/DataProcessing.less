@@ -1,3 +1,4 @@
+@import '~@/assets/css/variable.less';
 .dataProcessingWraper {
   // padding: 10px;
   // background: #fff;
@@ -66,7 +67,13 @@
   line-height: 1;
   background-color: #f2f6f8;
 }
-.table-active::after {
+.table-alert,
+.table-alert-active {
+  line-height: 1;
+  background-color: @warningColor !important;
+}
+.table-active::after,
+.table-alert-active::after {
   // position: absolute;
   // top: 0;
   // right: 0;
@@ -74,8 +81,8 @@
   display: inline-block;
   width: 0;
   height: 0;
-  border-top: 20px solid transparent;
-  border-bottom: 20px solid transparent;
+  border-top: 19px solid transparent;
+  border-bottom: 19px solid transparent;
   border-left: 20px solid red;
   content: '';
 }
