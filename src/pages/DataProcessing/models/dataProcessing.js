@@ -3,11 +3,11 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-18 09:43:47
+ * @LastEditTime : 2020-01-06 16:33:40
  */
 import Service from '@/utils/Service';
 
-const { getSystemCode } = Service;
+const { getDataProcessing } = Service;
 const codeMaintenance = {
   namespace: 'dataProcessing',
   state: {
@@ -16,7 +16,7 @@ const codeMaintenance = {
   },
   effects: {
     *getDataProcessing({ payload, callback }, { call, put }) {
-      const response = yield call(getSystemCode, { param: payload });
+      const response = yield call(getDataProcessing, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
@@ -30,7 +30,7 @@ const codeMaintenance = {
       }
     },
     *getDataProcessingItem({ payload }, { call, put }) {
-      const response = yield call(getSystemCode, { param: payload });
+      const response = yield call(getDataProcessing, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
