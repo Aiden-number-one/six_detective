@@ -15,7 +15,7 @@ import styles from './HomePage.less';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
-@connect(({ allAlert, perAlert, information }) => ({
+@connect(({ allAlert, perAlert, information, dashboard }) => ({
   allAlterData: allAlert.allAlterData, // 全部的alert的数据
   allAlertCount: allAlert.allAlertCount, // 全部alert总数
   allOutstandingALertCount: allAlert.allOutstandingALertCount, // 全部未认领的alert的总数
@@ -26,6 +26,12 @@ const { RangePicker } = DatePicker;
   perClosedAlertCount: perAlert.perClosedAlertCount, // personal Closed Alert 总数
   informationData: information.informationData, // information Data
   myAlertData: perAlert.myAlertData, // My Alert 的表格数据
+  fileCountData: dashboard.fileCountData,
+  marketData: dashboard.marketData, // dashboard marketData
+  marketDataByCategory: dashboard.marketDataByCategory, //
+  processingStageData: dashboard.processingStageData, //
+  lateReportFileCount: dashboard.lateReportFileCount, //
+  outstandingReportFileCount: dashboard.outstandingReportFileCount, //
 }))
 export default class HomePage extends PureComponent {
   state = {
@@ -34,6 +40,8 @@ export default class HomePage extends PureComponent {
     approvalState: 'ALL', // APPROVAL PROCESS切换按钮
     approvalTextActive: 'Today', // APPROVAL PROCESS today this week切换
     targetData: [], // 快捷菜单
+    renderProcess: true, // 是否渲染
+    renderDashboard: true, // 是否渲染
   };
 
   componentDidMount() {
@@ -42,9 +50,9 @@ export default class HomePage extends PureComponent {
     dispatch({
       type: 'allAlert/getAllAlterData',
       payload: {},
-      callback: data => {
-        this.renderAlterAllChart(data);
-      },
+      // callback: data => {
+      //   this.renderAlterAllChart(data);
+      // },
     });
     // 获取All alert total
     dispatch({
@@ -113,14 +121,64 @@ export default class HomePage extends PureComponent {
         dataTable: 'SLOP_BIZ.V_INFO',
       },
     });
+    dispatch({
+      type: 'dashboard/getFileCountByDate',
+      payload: {},
+    });
+    dispatch({
+      type: 'dashboard/getMarketData',
+      payload: {},
+    });
+    dispatch({
+      type: 'dashboard/getMarketDataByCategory',
+      payload: {
+        market: 'HKFE',
+      },
+    });
+    dispatch({
+      type: 'dashboard/getProcessingStageData',
+      payload: {},
+    });
+  }
+
+  componentDidUpdate() {
+    const { allAlterData } = this.props;
+    if (allAlterData[0]) {
+      this.renderAlterAllChart(allAlterData);
+    }
   }
 
   // tabs 切换
   onTabsChange = activeKey => {
+    const { renderProcess, renderDashboard } = this.state;
+    const { marketData, marketDataByCategory, processingStageData } = this.props;
     if (activeKey === '2') {
       setTimeout(() => {
-        if (document.getElementById('ApprovalAll')) {
+        if (document.getElementById('ApprovalAll') && renderProcess) {
           this.renderApprovalAllChart();
+          this.setState({
+            renderProcess: false,
+          });
+        }
+      }, 0);
+    }
+    if (activeKey === '3') {
+      setTimeout(() => {
+        if (renderDashboard) {
+          this.renderSubmissionStatusPieChart();
+          this.renderSubmissionStatusBarChart();
+          if (marketData[0]) {
+            this.renderMarketPieChart();
+          }
+          if (marketDataByCategory[0]) {
+            this.renderMarketRoseChart();
+          }
+          if (processingStageData[0]) {
+            this.renderProcessingStageBarChart();
+          }
+          this.setState({
+            renderDashboard: false,
+          });
         }
       }, 0);
     }
@@ -339,6 +397,7 @@ export default class HomePage extends PureComponent {
     });
   };
 
+  // 渲染Approval All柱状图
   renderApprovalAllChart = () => {
     // const ApprovalAll = [];
     // data.forEach(item => {
@@ -439,6 +498,7 @@ export default class HomePage extends PureComponent {
     });
   };
 
+  // 渲染Approval Personal柱状图
   renderApprovalPerChart = () => {
     // const {
     //   allOutstandingALertCount,
@@ -519,7 +579,7 @@ export default class HomePage extends PureComponent {
     });
   };
 
-  // ApprovalPersonalPie
+  // 渲染Approval Personal饼图
   renderApprovalPerPieChart = () => {
     // const {
     //   allOutstandingALertCount,
@@ -604,6 +664,432 @@ export default class HomePage extends PureComponent {
     // });
   };
 
+  // 渲染Submission Status饼图
+  renderSubmissionStatusPieChart = () => {
+    const { fileCountData } = this.props;
+    let submissionStatusCount = 0;
+    let submissionStatusPie = [];
+    if (fileCountData[0]) {
+      const { currentTradeDate, lastTradeDate } = fileCountData[0];
+      const currentDate = Object.keys(currentTradeDate)[0];
+      const lastDate = Object.keys(lastTradeDate)[0];
+      submissionStatusCount = currentTradeDate[currentDate] + lastTradeDate[lastDate];
+      submissionStatusPie = [
+        {
+          label: 'Current Trade Day',
+          value: currentTradeDate[currentDate],
+          percent: Number((currentTradeDate[currentDate] / submissionStatusCount).toFixed(4)),
+          date: currentDate,
+        },
+        {
+          label: 'Last trade date',
+          value: lastTradeDate[lastDate],
+          percent: Number((lastTradeDate[lastDate] / submissionStatusCount).toFixed(4)),
+          data: lastDate,
+        },
+      ];
+    }
+    const submissionStatusPieChart = new G2.Chart({
+      container: 'submissionStatusPie',
+      forceFit: true,
+      height: 300,
+      padding: [50, 20, 20, 0],
+    });
+    submissionStatusPieChart.source(submissionStatusPie, {
+      percent: {
+        formatter: val => {
+          const value = `${val * 100}%`;
+          return value;
+        },
+      },
+    });
+    submissionStatusPieChart.coord('theta', {
+      radius: 0.5,
+    });
+    submissionStatusPieChart.tooltip({
+      showTitle: false,
+    });
+    submissionStatusPieChart.legend({
+      position: 'top-center',
+      marker: 'square',
+    });
+    submissionStatusPieChart
+      .intervalStack()
+      .position('percent')
+      .label('percent', {
+        useHtml: true,
+        htmlTemplate: (val, item) =>
+          `<div>${item.point.value}(${val})</div><div style="white-space:nowrap;text-align: center;">${item.point.label}</div>`,
+      })
+      .tooltip('label*percent', (label, percent) => {
+        const value = `${percent * 100}%`;
+        return {
+          name: label,
+          value,
+        };
+      })
+      .color('label', ['#10416C', '#F4374C'])
+      .style({
+        lineWidth: 1,
+        stroke: '#fff',
+      });
+    submissionStatusPieChart.render();
+    submissionStatusPieChart.on('interval:click', ev => {
+      const clickData = ev.data;
+      if (clickData) {
+        // eslint-disable-next-line no-underscore-dangle
+        const tradeDate = clickData._origin.date;
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'dashboard/getOutstandingReportFileCount',
+          payload: {
+            tradeDate,
+          },
+        });
+        dispatch({
+          type: 'dashboard/getLateReportFileCount',
+          payload: {
+            tradeDate,
+          },
+          callback: () => {
+            const { lateReportFileCount, outstandingReportFileCount } = this.props;
+            const submissionStatusBar = [];
+            lateReportFileCount.forEach(item => {
+              submissionStatusBar.push({
+                label: 'Late report',
+                value: item.count,
+                type: item.market,
+              });
+            });
+            outstandingReportFileCount.forEach(item => {
+              submissionStatusBar.push({
+                label: 'Outstanding reports',
+                value: item.count,
+                type: item.market,
+              });
+            });
+            this.state.submissionStatusBarChart.changeData(submissionStatusBar);
+          },
+        });
+      }
+    });
+  };
+
+  // 渲染Submission Status柱图
+  renderSubmissionStatusBarChart = () => {
+    const { lateReportFileCount, outstandingReportFileCount } = this.props;
+    const submissionStatusBar = [];
+    lateReportFileCount.forEach(item => {
+      submissionStatusBar.push({
+        label: 'Late report',
+        value: item.count,
+        type: item.market,
+      });
+    });
+    outstandingReportFileCount.forEach(item => {
+      submissionStatusBar.push({
+        label: 'Outstanding reports',
+        value: item.count,
+        type: item.market,
+      });
+    });
+    const submissionStatusBarChart = new G2.Chart({
+      container: 'submissionStatusBar',
+      forceFit: true,
+      height: 300,
+      padding: [50, 20, 20, 50],
+    });
+    submissionStatusBarChart.source(submissionStatusBar);
+    submissionStatusBarChart.legend(false);
+    submissionStatusBarChart.axis('value', {
+      position: 'left',
+      label: {
+        color: '#464C51',
+      },
+      line: {
+        lineWidth: 0.5, // 设置线的宽度
+      },
+      grid: {
+        lineStyle: {
+          stroke: '#D4DDE3',
+          lineWidth: 0.5,
+          lineDash: [0],
+        },
+      },
+    });
+    submissionStatusBarChart.axis('label', {
+      label: {
+        offset: 12,
+        color: '#464C51',
+      },
+      line: {
+        lineWidth: 0.5, // 设置线的宽度
+      },
+    });
+    submissionStatusBarChart
+      .interval()
+      .position('label*value')
+      .label('value', {
+        textStyle: {
+          fill: '#464C51',
+          fontSize: 12,
+        },
+        offset: 10,
+      })
+      .color('label', ['#0D87D4'])
+      .size(15)
+      .adjust([
+        {
+          type: 'dodge',
+          marginRatio: 1 / 32,
+        },
+      ]);
+    submissionStatusBarChart.render();
+    submissionStatusBarChart.on('interval:click', ev => {
+      const clickData = ev.data;
+      if (clickData) {
+        // eslint-disable-next-line no-underscore-dangle
+        // const alertOwnerId = localStorage.getItem('loginName');
+      }
+    });
+    this.setState({ submissionStatusBarChart });
+  };
+
+  // 渲染market饼图
+  renderMarketPieChart = () => {
+    const { marketData } = this.props;
+    const marketPie = [];
+    let marketDataCount = 0;
+    marketData.forEach(item => {
+      marketDataCount += Number(item.count);
+    });
+    marketData.forEach(item => {
+      marketPie.push({
+        label: item.market,
+        value: Number(item.count),
+        percent:
+          marketDataCount === 0
+            ? marketDataCount
+            : Number((Number(item.count) / marketDataCount).toFixed(4)),
+      });
+    });
+    const marketPieChart = new G2.Chart({
+      container: 'marketPie',
+      forceFit: true,
+      height: 180,
+      padding: [10, 5, 10, 5],
+    });
+    marketPieChart.source(marketPie, {
+      percent: {
+        formatter: val => {
+          const value = `${(val * 100).toFixed(2)}%`;
+          return value;
+        },
+      },
+    });
+    marketPieChart.coord('theta', {
+      radius: 0.8,
+      innerRadius: 0.7,
+    });
+    marketPieChart.tooltip({
+      showTitle: false,
+    });
+    marketPieChart.legend({
+      position: 'left-top',
+      marker: 'square',
+      offsetX: 10,
+      offsetY: 20,
+    });
+    marketPieChart
+      .intervalStack()
+      .position('percent')
+      .label('percent', {
+        useHtml: true,
+        htmlTemplate: (val, item) =>
+          `<div style="white-space:nowrap;text-align: center;">(${item.point.label})</div><div>${item.point.value}(${val})</div>`,
+      })
+      .tooltip('label*percent', (label, percent) => {
+        const value = `${(percent * 100).toFixed(2)}%`;
+        return {
+          name: label,
+          value,
+        };
+      })
+      .color('label', ['#10416C', '#0D87D4'])
+      .style({
+        lineWidth: 1,
+        stroke: '#fff',
+      });
+    marketPieChart.render();
+    marketPieChart.on('interval:click', ev => {
+      const clickData = ev.data;
+      if (clickData) {
+        // eslint-disable-next-line no-underscore-dangle
+        const market = clickData._origin.label;
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'dashboard/getMarketDataByCategory',
+          payload: {
+            market,
+          },
+          callback: () => {
+            this.renderMarketRoseChart();
+          },
+        });
+      }
+    });
+  };
+
+  // 渲染market南丁格尔玫瑰图
+  renderMarketRoseChart = () => {
+    const { marketDataByCategory } = this.props;
+    const marketRose = [];
+    marketDataByCategory.forEach(item => {
+      marketRose.push({
+        label: item.biCategory,
+        value: Number(item.count),
+      });
+    });
+    // const marketRose = [
+    //   { label: 'Current Trade Day', value: 30 },
+    //   { label: 'Last trade date', value: 79 },
+    //   { label: 'Last trade date2', value: 79 },
+    //   { label: 'Last trade date3', value: 2 },
+    //   { label: 'Last trade date4', value: 93 },
+    //   { label: 'Last trade date5', value: 15 },
+    // ];
+    const marketRoseChart = new G2.Chart({
+      container: 'marketRose',
+      forceFit: true,
+      height: 210,
+      padding: [10, 75, 10, 75],
+    });
+    marketRoseChart.source(marketRose);
+    marketRoseChart.coord('polar', {
+      innerRadius: 0.2,
+    });
+    marketRoseChart.tooltip({
+      showTitle: false,
+    });
+    marketRoseChart.legend({
+      position: 'left-top',
+      offsetX: -17,
+      offsetY: 20,
+    });
+    marketRoseChart.axis(false);
+    marketRoseChart
+      .interval()
+      .position('label*value')
+      .color('label', ['#10416C', '#0D87D4']);
+    marketRoseChart.render();
+    // marketRoseChart.on('interval:click', ev => {
+    //   const clickData = ev.data;
+    //   if (clickData) {
+    //     // eslint-disable-next-line no-underscore-dangle
+    //     const alertOwnerId = localStorage.getItem('loginName');
+    //     // eslint-disable-next-line no-underscore-dangle
+    //     const alertStatusDesc = clickData._origin.label;
+    //     router.push(`/homepage/Approval-Process-Center?alertOwnerId=
+    // ${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`);
+    //   }
+    // });
+  };
+
+  // 渲染 processing stage 条形图
+  renderProcessingStageBarChart = () => {
+    const { processingStageData } = this.props;
+    const processingStageBar = [
+      {
+        label: 'Fail submission',
+        type: 'Number of Files',
+        value: processingStageData[0]['Fail submission'],
+      },
+      {
+        label: 'Failed validation',
+        type: 'Number of Files',
+        value: processingStageData[0]['Failed validation'],
+      },
+      {
+        label: 'In validation',
+        type: 'Number of Files',
+        value: processingStageData[0]['In validation'],
+      },
+      { label: 'Processed', type: 'Number of Files', value: processingStageData[0].Processed },
+      {
+        label: 'Ready for Processing',
+        type: 'Number of Files',
+        value: processingStageData[0]['Ready for Processing'],
+      },
+    ];
+    const processingStageBarChart = new G2.Chart({
+      container: 'processingStageBar', // div ID
+      forceFit: true, // 是否自适应宽度
+      height: 170, // 画布高度
+      padding: [20, 20, 40, 140], // 上下左右的padding
+    });
+    processingStageBarChart.source(processingStageBar);
+    processingStageBarChart.legend({
+      position: 'top-center', // 设置图例的显示位置
+      label: {
+        color: '#464C51', // 图例的字体颜色
+      },
+    });
+    processingStageBarChart.scale('value', {
+      alias: 'Number of Files',
+    });
+    processingStageBarChart.scale('label', {
+      alias: 'Processing_Stage',
+    });
+    // 柱图value坐标
+    processingStageBarChart.axis('value', {
+      position: 'right',
+      label: {
+        color: '#464C51',
+      },
+      line: {
+        lineWidth: 0.5, // 设置线的宽度
+      },
+      grid: {
+        lineStyle: {
+          lineWidth: 0,
+        },
+      },
+      title: {
+        offset: 30,
+      },
+    });
+    processingStageBarChart.axis('label', {
+      label: {
+        offset: 2,
+        color: '#464C51',
+      },
+      line: {
+        lineWidth: 0.5, // 设置线的宽度
+      },
+      title: {
+        offset: 130,
+      },
+    });
+    // 将柱图转为条形图
+    processingStageBarChart
+      .coord()
+      .transpose()
+      .scale(1, -1);
+    processingStageBarChart
+      .interval()
+      .position('label*value')
+      .color('type', ['#10416c'])
+      .size(12)
+      .label('value', {
+        textStyle: {
+          fill: '#464C51',
+          fontSize: 11,
+        },
+        offset: 2,
+      });
+    processingStageBarChart.render();
+  };
+
   render() {
     const {
       allAlertCount,
@@ -618,6 +1104,10 @@ export default class HomePage extends PureComponent {
 
       informationData,
       myAlertData,
+
+      marketData,
+      marketDataByCategory,
+      processingStageData,
     } = this.props;
 
     const { alertState, textActive, approvalState, approvalTextActive, targetData } = this.state;
@@ -646,7 +1136,9 @@ export default class HomePage extends PureComponent {
                                 alertState: 'ALL',
                               },
                               () => {
-                                this.renderAlterAllChart(allAlterData);
+                                if (allAlterData[0]) {
+                                  this.renderAlterAllChart(allAlterData);
+                                }
                               },
                             );
                           }}
@@ -723,7 +1215,13 @@ export default class HomePage extends PureComponent {
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>{(allClaimAlertCount / allAlertCount).toFixed(2)}%</span>
+                              <span>
+                                {(allAlertCount === 0
+                                  ? allAlertCount
+                                  : allClaimAlertCount / allAlertCount
+                                ).toFixed(2)}
+                                %
+                              </span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
@@ -733,11 +1231,18 @@ export default class HomePage extends PureComponent {
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>{(allProcessingAlertCount / allAlertCount).toFixed(2)}%</span>
+                              <span>
+                                {(allAlertCount === 0
+                                  ? allAlertCount
+                                  : allProcessingAlertCount / allAlertCount
+                                ).toFixed(2)}
+                                %
+                              </span>
                             </div>
                           </div>
                         </div>
-                        <div id="AlterAll" style={{ minHeight: 250 }}></div>
+                        {!allAlterData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                        <div id="AlterAll"></div>
                       </>
                     )}
                     {/* ALTER PERSONAL */}
@@ -761,7 +1266,13 @@ export default class HomePage extends PureComponent {
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>{(perClaimAlertCount / allAlertCount).toFixed(2)}%</span>
+                              <span>
+                                {(allAlertCount === 0
+                                  ? allAlertCount
+                                  : perClaimAlertCount / allAlertCount
+                                ).toFixed(2)}
+                                %
+                              </span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
@@ -771,11 +1282,17 @@ export default class HomePage extends PureComponent {
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>{(perProcessingAlertCount / allAlertCount).toFixed(2)}%</span>
+                              <span>
+                                {(allAlertCount === 0
+                                  ? allAlertCount
+                                  : perProcessingAlertCount / allAlertCount
+                                ).toFixed(2)}
+                                %
+                              </span>
                             </div>
                           </div>
                         </div>
-                        <div id="AlterPersonal" style={{ minHeight: 250 }}></div>
+                        <div id="AlterPersonal"></div>
                       </>
                     )}
                   </div>
@@ -1002,7 +1519,13 @@ export default class HomePage extends PureComponent {
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>{(allClaimAlertCount / allAlertCount).toFixed(2)}%</span>
+                              <span>
+                                {(allAlertCount === 0
+                                  ? allAlertCount
+                                  : allClaimAlertCount / allAlertCount
+                                ).toFixed(2)}
+                                %
+                              </span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
@@ -1012,7 +1535,13 @@ export default class HomePage extends PureComponent {
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>{(allProcessingAlertCount / allAlertCount).toFixed(2)}%</span>
+                              <span>
+                                {(allAlertCount === 0
+                                  ? allAlertCount
+                                  : allProcessingAlertCount / allAlertCount
+                                ).toFixed(2)}
+                                %
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -1040,7 +1569,13 @@ export default class HomePage extends PureComponent {
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>{(perClaimAlertCount / allAlertCount).toFixed(2)}%</span>
+                              <span>
+                                {(allAlertCount === 0
+                                  ? allAlertCount
+                                  : perClaimAlertCount / allAlertCount
+                                ).toFixed(2)}
+                                %
+                              </span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
@@ -1050,7 +1585,13 @@ export default class HomePage extends PureComponent {
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>{(perProcessingAlertCount / allAlertCount).toFixed(2)}%</span>
+                              <span>
+                                {(allAlertCount === 0
+                                  ? allAlertCount
+                                  : perProcessingAlertCount / allAlertCount
+                                ).toFixed(2)}
+                                %
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -1189,7 +1730,55 @@ export default class HomePage extends PureComponent {
             </TabPane>
             {/* DASHBOARD */}
             <TabPane tab="DASHBOARD" key="3">
-              暂未开发
+              <div className={styles.homepageContent}>
+                {/* 左侧 */}
+                <div className={styles.leftSide}>
+                  {/* Submission status */}
+                  <div className={styles.submitStatus}>
+                    <div style={{ flex: 2, minHeight: 250 }}>
+                      <h3 className={styles.groupTitle}>Submission Status</h3>
+                      <div id="submissionStatusPie"></div>
+                      {/* <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> */}
+                    </div>
+                    <div style={{ flex: 3, minHeight: 250 }}>
+                      <h3 className={styles.groupTitle}>Submission status of different markets</h3>
+                      <div id="submissionStatusBar"></div>
+                      {/* <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> */}
+                    </div>
+                  </div>
+                  {/* Number of Outstanding Cases */}
+                  <div className={styles.outstandingCases}>
+                    <h3 className={styles.groupTitle}>NO. of Outstanding Cases(Investigating)</h3>
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                  </div>
+                </div>
+                {/* 右侧 */}
+                <div className={styles.rightSide}>
+                  {/* reported */}
+                  <div className={styles.reported}>
+                    <div style={{ flex: 1 }}>
+                      <h3
+                        className={styles.groupTitle}
+                        title="Number of reported LOP holders in SEHK and HKFE"
+                      >
+                        Number of reported LOP holders in SEHK and HKFE
+                      </h3>
+                      <div id="marketPie"></div>
+                      {!marketData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div id="marketRose"></div>
+                      {!marketDataByCategory[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                    </div>
+                  </div>
+                  {/* Processing Stage */}
+                  <div className={styles.processingStage}>
+                    <h3 className={styles.groupTitle}>Processing Stage</h3>
+                    <div id="processingStageBar"></div>
+                    {!processingStageData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                  </div>
+                </div>
+              </div>
             </TabPane>
           </Tabs>
         </div>
