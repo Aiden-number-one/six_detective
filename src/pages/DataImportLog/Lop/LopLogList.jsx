@@ -8,7 +8,7 @@ import styles from '../index.less';
 
 const { Column } = Table;
 
-const submissionReport = formatMessage({ id: 'data-import.lop.submission-report' });
+const submissionReport = formatMessage({ id: 'data-import.submission-report' });
 const processingStatus = formatMessage({ id: 'data-import.lop.processing-status' });
 
 const submissionChannelMap = {
@@ -58,9 +58,6 @@ export default function({
           </Descriptions.Item>
           <Descriptions.Item label={<FormattedMessage id="data-import.lop.late-submission" />}>
             {record.lateSubmission}
-          </Descriptions.Item>
-          <Descriptions.Item label={<FormattedMessage id="data-import.lop.latest-version" />}>
-            {record.latestVersion}
           </Descriptions.Item>
           <Descriptions.Item label={<FormattedMessage id="data-import.lop.latest-version" />}>
             {record.latestVersion}

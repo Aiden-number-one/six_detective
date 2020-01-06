@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Row, Col, Empty, Spin, Icon, Button, message } from 'antd';
+import { Tabs, Row, Col, Empty, Spin, Icon, Button } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
@@ -95,7 +95,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
       setPanes(panes.map(p => (isEqual(p) ? pane : p)));
     } else {
       // add pane
-      setPanes([...panes, pane]);
+      setPanes([pane, ...panes]);
     }
     setActiveKey(pane.ALERT_ITEM_ID.toString());
   }
@@ -131,8 +131,6 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
     });
     if (!err) {
       setEmailVisible(true);
-    } else {
-      message.warn(err);
     }
   }
   function handleSendEmail() {

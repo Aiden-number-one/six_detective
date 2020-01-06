@@ -32,7 +32,7 @@ const MarketFormItem = ({ getFieldDecorator }) => (
 );
 
 const SubmissionReportFormItem = ({ getFieldDecorator }) => (
-  <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
+  <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
     {getFieldDecorator('submissionReport', {
       initialValue: '',
     })(

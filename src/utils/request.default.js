@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-02 20:19:50
+ * @LastEditTime : 2020-01-04 09:52:24
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -106,7 +106,7 @@ request.interceptors.response.use(async (response, opts) => {
   const result = await response.clone().json();
 
   const { bcjson } = result || {};
-  const { flag, items, msg, ...others } = bcjson;
+  const { flag, items, msg, ...others } = bcjson || {};
 
   // login invalid
   if (flag === '001') {

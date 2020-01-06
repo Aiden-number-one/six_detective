@@ -70,6 +70,7 @@ class NewUser extends Component {
     super(props);
     this.state = {
       selectedKeys: [],
+      btnIds: [],
       // defaultCheckedKeys: [],
     };
   }
@@ -138,6 +139,10 @@ class NewUser extends Component {
           payload: params,
           callback: () => {
             this.props.onSave(true);
+            message.success({
+              content: 'save success',
+              duration: 2,
+            });
           },
         });
       }
@@ -156,8 +161,16 @@ class NewUser extends Component {
       payload: params,
       callback: () => {
         const selectedKeys = this.props.updateGroup.map(element => element.menuId);
+        const btnIds = [];
+        for (let i = 0; i < selectedKeys.length; i += 1) {
+          if (selectedKeys[i].includes('btn')) {
+            btnIds.push(selectedKeys.splice(i, 1)[0]);
+            i -= 1;
+          }
+        }
         that.setState({
           selectedKeys,
+          btnIds,
         });
       },
     });
@@ -175,13 +188,14 @@ class NewUser extends Component {
     console.log('value===', value);
   };
 
-  onCheck = (selectedKeyss, event) => {
-    console.log('selectedKeyss===', selectedKeyss);
-    console.log('event===', event);
-    console.log('halfCheckedKeys=', event.halfCheckedKeys);
-    // const newSelectedKeys = selectedKeyss.checked
-    const newSelectedKeys = selectedKeyss.concat(event.halfCheckedKeys);
-    console.log('newSelectedKeys==', newSelectedKeys);
+  onCheck = (selectedKeyss, event, btnIds) => {
+    let halfCheckedKeys = [];
+    if (typeof event === 'boolean') {
+      halfCheckedKeys = [];
+    } else {
+      halfCheckedKeys = Object.assign([], event.halfCheckedKeys);
+    }
+    const newSelectedKeys = selectedKeyss.concat(halfCheckedKeys, btnIds);
     this.setState({
       selectedKeys: newSelectedKeys,
     });
@@ -195,7 +209,7 @@ class NewUser extends Component {
 
   render() {
     const { menuData, groupMenuInfo } = this.props;
-    const { selectedKeys } = this.state;
+    const { selectedKeys, btnIds } = this.state;
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
@@ -209,6 +223,7 @@ class NewUser extends Component {
                 onCheck={this.onCheck}
                 treeData={menuData}
                 checkedKeys={selectedKeys}
+                btnIds={btnIds}
                 treeKey={{
                   currentKey: 'menuid',
                   currentName: 'menuname',
