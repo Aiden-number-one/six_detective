@@ -76,6 +76,7 @@ function EditableFileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, 
           dataIndex="market"
           onCell={record => ({
             record,
+            align: 'center',
             dataIndex: 'market',
             title: 'Market',
             editing: fileUid === record.uid,
@@ -130,10 +131,26 @@ function EditableFileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, 
   );
 }
 
-function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
+function NewAccountLogManualModal({ form, visible, onHide, onUpload }) {
   const [fileUid, setFileUid] = useState('');
   const [fileList, setFileList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const { getFieldDecorator } = form;
+
+  function handleBeforeUpload(file, fList) {
+    setFileList([
+      ...fileList,
+      ...fList.map(f => ({
+        uid: f.uid,
+        file: f,
+        fileName: f.name,
+        market: 'HKFE',
+        submitterCode: '',
+      })),
+    ]);
+    return false;
+  }
 
   function handleSave(uid) {
     form.validateFields((err, values) => {
@@ -163,18 +180,17 @@ function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
     }
   }
 
-  function handleBeforeUpload(file, fList) {
-    setFileList([
-      ...fileList,
-      ...fList.map(f => ({
-        uid: f.uid,
-        file: f,
-        fileName: f.name,
-        market: 'HKFE',
-        submitterCode: '',
-      })),
-    ]);
-    return false;
+  function fileHandle(e) {
+    if (e) {
+      setLoading(false);
+    }
+  }
+
+  function allUploadFinish() {
+    setLoading(false);
+    form.resetFields();
+    setFileList([]);
+    onHide();
   }
 
   async function handleCommit() {
@@ -184,9 +200,8 @@ function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
         if (noSubmitterCodeFile) {
           setFileUid(noSubmitterCodeFile.uid);
         } else if (fileList.length > 0) {
-          await onUpload(fileList, file => {
-            handleRemove(file);
-          });
+          setLoading(true);
+          onUpload(fileList, fileHandle, allUploadFinish);
         }
       }
     });
@@ -199,11 +214,11 @@ function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
       closable={false}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
       visible={visible}
-      onClose={onCancel}
+      onClose={onHide}
     >
       <Form className={styles['modal-form']}>
         <Alert message={warningMsg} type="warning" showIcon />
-        <Form.Item label={<FormattedMessage id="data-import.lop.submission-report" />}>
+        <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
               {
@@ -259,8 +274,8 @@ function NewAccountLogManualModal({ form, visible, onCancel, onUpload }) {
         />
       )}
       <div className={styles['bottom-btns']}>
-        <Button onClick={onCancel}>Cancel</Button>
-        <Button type="primary" onClick={handleCommit}>
+        <Button onClick={onHide}>Cancel</Button>
+        <Button type="primary" loading={loading} onClick={handleCommit}>
           Commit
         </Button>
       </div>

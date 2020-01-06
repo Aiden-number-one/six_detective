@@ -6,6 +6,7 @@ import { DndProvider, DropTarget } from 'react-dnd';
 import { Layout, Drawer, Modal } from 'antd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { createCellPos } from '@/utils/utils';
+import { setCellTypeAndValue, getCellStringByIndex } from './utils';
 import SpreadSheet from './components/SpreadSheet';
 import CustomSearchArea from './components/CustomSearchArea/index';
 import ToolBar from './components/ToolBar/index';
@@ -71,7 +72,7 @@ export default class ReportDesigner extends PureComponent {
   afterSelection = (rowIndex, columnIndex) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'formArea/changeCellPosition',
+      type: 'reportDesigner/changeCellPosition',
       payload: {
         rowIndex,
         columnIndex,
@@ -87,17 +88,21 @@ export default class ReportDesigner extends PureComponent {
 
   // react-dnd的拖拽区域
   afterDrop = dragInfo => {
-    // const { setCellType } = this.props;
+    const { dispatch } = this.props;
     // 被拖动元素的
     const { ri, ci } = this.dropPosition;
     // eslint-disable-next-line no-underscore-dangle
-    window.xsObj._setCellType({
-      sheetName: 'sheet1',
-      rc: createCellPos(ci) + (Number(ri) + 1),
-      cellType: 'dataSet',
+    const { datasetName, fieldDataName } = dragInfo;
+    // 设置当前单元格为数据集类型且设置其值
+    setCellTypeAndValue('dataSet', `${datasetName}.${fieldDataName}`, getCellStringByIndex(ri, ci));
+    dispatch({
+      type: 'reportDesigner/modifyTemplateArea',
+      payload: {
+        dataSet: dragInfo,
+        elementType: 'column',
+      },
+      cellPostion: createCellPos(ci) + (Number(ri) + 1),
     });
-    // eslint-disable-next-line no-underscore-dangle
-    window.xsObj._setCellText({ ri: Number(ri), ci: Number(ci), text: dragInfo });
     // 进行刷新
     window.xsObj.instanceArray[0].sheet.toolbar.change();
   };

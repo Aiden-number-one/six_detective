@@ -1,0 +1,113 @@
+/*
+ * @Author: liangchaoshun
+ * @Date: 2020-01-03 16:21:21
+ * @Last Modified by: liangchaoshun
+ * @Last Modified time: 2020-01-06 09:57:57
+ * @Description: 样式：报表设计器预览页
+ *
+ */
+
+// 分页容器
+.page-container {
+  border-bottom: 1px solid #0d87d4;
+  :global {
+    .anticon-export,
+    .anticon-printer {
+      color: #464c51;
+      font-size: 22px;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+    .anticon-export {
+      margin: 0 10px;
+    }
+    .anticon-printer {
+      font-size: 25px;
+    }
+  }
+}
+
+// 过滤条件
+.filter-condition {
+  padding: 30px 10px;
+  border-bottom: 1px solid #0d87d4;
+  // 行：label + dropdown
+  .dropdown-item {
+    display: inline-block;
+    margin: 5px 10px 5px 5px;
+    .dropdown-label {
+      display: inline-block;
+      width: 140px;
+      margin-right: 10px;
+      color: #464c51;
+      font-size: 14px;
+      text-align: right;
+    }
+    :global {
+      // 下拉选择
+      .ant-select {
+        width: 200px;
+        .ant-select-selection {
+          border-color: #979aa8;
+          .ant-select-selection__placeholder {
+            color: #464c51;
+          }
+        }
+      }
+      // 日期选择器
+      .ant-calendar-picker {
+        .ant-input {
+          width: 200px;
+          border-color: #979aa8;
+          &:-moz-placeholder {
+            color: #464c51;
+          }
+          &::-moz-placeholder {
+            color: #464c51;
+          }
+          &:-ms-input-placeholder {
+            color: #464c51;
+          }
+          &::-webkit-input-placeholder {
+            color: #464c51;
+          }
+        }
+      }
+
+      .ant-select-arrow,
+      .ant-calendar-picker-icon {
+        color: #464c51;
+      }
+    }
+  }
+
+  .dimen-title,
+  .radio-opts {
+    display: inline-block;
+  }
+
+  // 行：单选框条件
+  .dimen-row {
+    margin: 20px 5px;
+    .dimen-title {
+      width: 140px;
+      margin-right: 10px;
+      color: #464c51;
+      font-size: 14px;
+      text-align: right;
+    }
+    .radio-opts {
+      :global {
+        .ant-radio-inner {
+          color: #c3c7cb;
+        }
+      }
+    }
+  }
+
+  // 行：搜索按钮
+  .search-btn-row {
+    margin: 10px 0;
+    text-align: center;
+  }
+}

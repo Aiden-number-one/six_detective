@@ -3,27 +3,66 @@ import { Row, Col, Popover, Typography } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import moment from 'moment';
 import IconFont from '@/components/IconFont';
-import { timestampFormat } from '@/pages/DataImportLog/constants';
+import { timestampFormat, downloadFile } from '@/pages/DataImportLog/constants';
+import styles from '@/pages/AlertCenter/index.less';
 
 const { Paragraph, Text } = Typography;
 
+const getExt = filename => {
+  const index = filename.lastIndexOf('.');
+  return filename.substr(index + 1);
+};
+
+const extIconMap = {
+  png: 'iconimage',
+  jpg: 'iconimage',
+  jpeg: 'iconimage',
+  xls: 'iconxls',
+  xlsx: 'iconxls',
+  doc: 'iconword',
+  docx: 'iconword',
+  pdf: 'iconPDF',
+  default: 'iconfile',
+};
+
 function AlertAttachmentPop({ attachments }) {
+  function downloadAll(files) {
+    files.forEach(({ url }) => {
+      downloadFile(url);
+    });
+  }
   return (
     <Popover
       placement="bottomRight"
-      title={<FormattedMessage id="alert-center.attachement-list" />}
+      overlayClassName={styles['comment-attachment-container']}
+      title={
+        <div className={styles.title}>
+          <FormattedMessage id="alert-center.attachement-list" />
+          <IconFont
+            type="icondownload-all"
+            title="Download All"
+            className={styles['download-all']}
+            onClick={() => downloadAll(attachments)}
+          />
+        </div>
+      }
       content={
-        <Row style={{ padding: '6px 14px', width: 240, maxHeight: 150, overflowY: 'auto' }}>
-          {attachments.map(({ name, url }, index) => (
-            <Col key={url}>
-              <Text ellipsis style={{ width: '100%' }} title={name}>
-                <a download href={`/download?filePath=${url}`} style={{ marginBottom: 20 }}>
-                  {index + 1}. {name}
-                </a>
+        <ul className={styles['attachment-list']}>
+          {attachments.map(({ name, url }) => (
+            <li key={url}>
+              <Text ellipsis style={{ width: '85%' }} title={name}>
+                <IconFont
+                  type={extIconMap[getExt(url)] || extIconMap.default}
+                  className={styles['file-icon']}
+                />
+                {name}
               </Text>
-            </Col>
+              <a download href={`/download?filePath=${url}`}>
+                <IconFont type="icondownload" className={styles.icon} />
+              </a>
+            </li>
           ))}
-        </Row>
+        </ul>
       }
     >
       <IconFont type="iconbiezhen" />
