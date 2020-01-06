@@ -50,9 +50,9 @@ export default class HomePage extends PureComponent {
     dispatch({
       type: 'allAlert/getAllAlterData',
       payload: {},
-      // callback: data => {
-      //   this.renderAlterAllChart(data);
-      // },
+      callback: data => {
+        this.renderAlterAllChart(data);
+      },
     });
     // 获取All alert total
     dispatch({
@@ -141,17 +141,46 @@ export default class HomePage extends PureComponent {
     });
   }
 
-  componentDidUpdate() {
-    const { allAlterData } = this.props;
-    if (allAlterData[0]) {
-      this.renderAlterAllChart(allAlterData);
-    }
-  }
+  // componentDidUpdate() {
+  //   const { allAlterData } = this.props;
+  //   if (allAlterData[0]) {
+  //     this.renderAlterAllChart(allAlterData);
+  //   }
+  // }
 
   // tabs 切换
   onTabsChange = activeKey => {
     const { renderProcess, renderDashboard } = this.state;
-    const { marketData, marketDataByCategory, processingStageData } = this.props;
+    const {
+      fileCountData,
+      marketData,
+      marketDataByCategory,
+      processingStageData,
+      lateReportFileCount,
+      outstandingReportFileCount,
+    } = this.props;
+    const { currentTradeDate, lastTradeDate } = fileCountData[0];
+    const currentDate = Object.keys(currentTradeDate)[0];
+    const lastDate = Object.keys(lastTradeDate)[0];
+    let isRender = false;
+    let isRender1 = false;
+    lateReportFileCount.forEach(item => {
+      if (item.count > 0) {
+        isRender = true;
+      }
+    });
+    outstandingReportFileCount.forEach(item => {
+      if (item.count > 0) {
+        isRender = true;
+      }
+    });
+    if (processingStageData[0]) {
+      Object.keys(processingStageData[0]).forEach(item => {
+        if (processingStageData[0][item] > 0) {
+          isRender1 = true;
+        }
+      });
+    }
     if (activeKey === '2') {
       setTimeout(() => {
         if (document.getElementById('ApprovalAll') && renderProcess) {
@@ -165,15 +194,19 @@ export default class HomePage extends PureComponent {
     if (activeKey === '3') {
       setTimeout(() => {
         if (renderDashboard) {
-          this.renderSubmissionStatusPieChart();
-          this.renderSubmissionStatusBarChart();
+          if (currentTradeDate[currentDate] !== 0 || lastTradeDate[lastDate] !== 0) {
+            this.renderSubmissionStatusPieChart();
+          }
+          if (isRender) {
+            this.renderSubmissionStatusBarChart();
+          }
           if (marketData[0]) {
             this.renderMarketPieChart();
           }
           if (marketDataByCategory[0]) {
             this.renderMarketRoseChart();
           }
-          if (processingStageData[0]) {
+          if (isRender1) {
             this.renderProcessingStageBarChart();
           }
           this.setState({
@@ -1100,15 +1133,54 @@ export default class HomePage extends PureComponent {
 
       perClaimAlertCount, //  personal Claim alert 总数
       perProcessingAlertCount, // personal Processing alert 总数
-      // perClosedAlertCount, // personal Closed Alert 总数
+      perClosedAlertCount, // personal Closed Alert 总数
 
       informationData,
       myAlertData,
 
+      fileCountData,
+      lateReportFileCount,
+      outstandingReportFileCount,
       marketData,
       marketDataByCategory,
       processingStageData,
     } = this.props;
+
+    let currentTradeDate;
+    let lastTradeDate;
+    let currentDate;
+    let lastDate;
+    if (fileCountData[0]) {
+      // eslint-disable-next-line prefer-destructuring
+      currentTradeDate = fileCountData[0].currentTradeDate;
+      // eslint-disable-next-line prefer-destructuring
+      lastTradeDate = fileCountData[0].lastTradeDate;
+      // eslint-disable-next-line prefer-destructuring
+      currentDate = Object.keys(currentTradeDate)[0];
+      // eslint-disable-next-line prefer-destructuring
+      lastDate = Object.keys(lastTradeDate)[0];
+    }
+
+    let isRender = false;
+    lateReportFileCount.forEach(item => {
+      if (item.count > 0) {
+        isRender = true;
+      }
+    });
+    outstandingReportFileCount.forEach(item => {
+      if (item.count > 0) {
+        isRender = true;
+      }
+    });
+
+    let isRender1 = false;
+    if (processingStageData[0]) {
+      Object.keys(processingStageData[0]).forEach(item => {
+        if (processingStageData[0][item] > 0) {
+          isRender1 = true;
+        }
+      });
+    }
 
     const { alertState, textActive, approvalState, approvalTextActive, targetData } = this.state;
 
@@ -1156,7 +1228,14 @@ export default class HomePage extends PureComponent {
                                 alertState: 'PER',
                               },
                               () => {
-                                this.renderAlterPerChart();
+                                if (
+                                  allOutstandingALertCount !== 0 ||
+                                  perClaimAlertCount !== 0 ||
+                                  perProcessingAlertCount !== 0 ||
+                                  perClosedAlertCount !== 0
+                                ) {
+                                  this.renderAlterPerChart();
+                                }
                               },
                             );
                           }}
@@ -1293,6 +1372,12 @@ export default class HomePage extends PureComponent {
                           </div>
                         </div>
                         <div id="AlterPersonal"></div>
+                        {allOutstandingALertCount === 0 &&
+                          perClaimAlertCount === 0 &&
+                          perProcessingAlertCount === 0 &&
+                          perClosedAlertCount === 0 && (
+                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                          )}
                       </>
                     )}
                   </div>
@@ -1738,12 +1823,17 @@ export default class HomePage extends PureComponent {
                     <div style={{ flex: 2, minHeight: 250 }}>
                       <h3 className={styles.groupTitle}>Submission Status</h3>
                       <div id="submissionStatusPie"></div>
-                      {/* <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> */}
+                      {currentTradeDate &&
+                        currentTradeDate[currentDate] === 0 &&
+                        lastTradeDate &&
+                        lastTradeDate[lastDate] === 0 && (
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        )}
                     </div>
                     <div style={{ flex: 3, minHeight: 250 }}>
                       <h3 className={styles.groupTitle}>Submission status of different markets</h3>
                       <div id="submissionStatusBar"></div>
-                      {/* <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> */}
+                      {!isRender && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                     </div>
                   </div>
                   {/* Number of Outstanding Cases */}
@@ -1775,7 +1865,7 @@ export default class HomePage extends PureComponent {
                   <div className={styles.processingStage}>
                     <h3 className={styles.groupTitle}>Processing Stage</h3>
                     <div id="processingStageBar"></div>
-                    {!processingStageData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                    {!isRender1 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                   </div>
                 </div>
               </div>
