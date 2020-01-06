@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Layout, Collapse, Icon, Form, Input, Select, Radio } from 'antd';
 import { FormattedMessage } from 'umi/locale';
+import { getColIndexRowIndex } from '../../utils';
 import styles from './index.less';
 import IconFont from '@/components/IconFont';
 
@@ -14,7 +15,7 @@ const formLayout = {
 };
 
 export default props => {
-  const { getFieldDecorator, cellPosition, dataSetPrivateList, otherProps } = props;
+  const { getFieldDecorator, cellPosition, dataSetPrivateList, otherProps, text } = props;
   // 当前被选择的数据集
   const [dataset, changeDataset] = useState(undefined);
   // 根据被选择的数据集得到想对应的列
@@ -47,8 +48,8 @@ export default props => {
             </Form.Item>
             {/* 插入元素类型 */}
             <Form.Item
-              label={<FormattedMessage id="report-designer.insertelement" />}
               {...formLayout}
+              label={<FormattedMessage id="report-designer.insertelement" />}
             >
               {getFieldDecorator('elementType', {
                 initialValue: otherProps.elementType || 'text',
@@ -64,7 +65,21 @@ export default props => {
             {/* 文本 */}
             {(otherProps.elementType === 'text' || otherProps.elementType === undefined) && (
               <Form.Item label=" " {...formLayout}>
-                {getFieldDecorator('text', {})(<Input />)}
+                <Input
+                  value={text}
+                  onChange={e => {
+                    const [rowIndex, colIndex] = getColIndexRowIndex(cellPosition);
+                    // 设置单元格属性
+                    // eslint-disable-next-line no-underscore-dangle
+                    window.xsObj._setCellText({
+                      ri: Number(rowIndex),
+                      ci: Number(colIndex),
+                      text: e.target.value,
+                    });
+                    // 进行刷新
+                    window.xsObj.instanceArray[0].sheet.toolbar.change();
+                  }}
+                />
               </Form.Item>
             )}
 

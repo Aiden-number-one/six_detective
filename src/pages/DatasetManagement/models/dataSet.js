@@ -2,8 +2,8 @@
  * @Description: 获取数据集列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime : 2020-01-04 10:50:20
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-06 10:34:53
+ * @LastEditors  : mus
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -131,6 +131,17 @@ export default {
     },
   },
   reducers: {
+    // 清楚当前数据集列表的相关reducer
+    clearReducer() {
+      return {
+        classifyTreeData: [], // 树列表
+        dataSetData: [], // 数据集
+        column: [], // 数据预览表头
+        tableData: [], // 数据预览数据
+        activeTree: '', // 选中的树
+        activeFolderId: '', // 移动文件夹选中的树
+      };
+    },
     // 保存数据集分类文件夹
     setClassifyTreeData(state, action) {
       return {
