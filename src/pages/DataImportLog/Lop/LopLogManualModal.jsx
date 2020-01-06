@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'umi/locale';
+import debounce from 'lodash/debounce';
 import { Drawer, Form, DatePicker, Input, Select, Upload, Icon, Button, Spin } from 'antd';
 import { SUBMISSION_REPORT, yesterday, dateFormat } from '../constants';
 import styles from '../index.less';
@@ -8,15 +9,12 @@ const { Option } = Select;
 
 const isLt5M = size => size / 1024 / 1024 < 5;
 
-function LopLogManualModal({
-  form,
-  visible,
-  loading,
-  submitters,
-  onSubmitter,
-  onCancel,
-  onUpload,
-}) {
+function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUpload }) {
+  const [searchVal, setSearchVal] = useState('');
+  const [submitterTotal, setSubmitterTotal] = useState(0);
+  const [submitters, setSubmitters] = useState([]);
+  const [submitterPage, setSubmitterPage] = useState(1);
+  const [currentSubmitter, setSubmitter] = useState({});
   const { getFieldDecorator, validateFields } = form;
 
   function handleClose() {
@@ -24,14 +22,40 @@ function LopLogManualModal({
     onCancel();
   }
 
-  function handleChange(value) {
-    console.log(value);
+  async function handleSearchSubmitterCode(value) {
+    if (value) {
+      setSearchVal(value);
+      setSubmitterPage(1);
+      const { users, total } = await onSubmitter({
+        submitterCode: value,
+        page: submitterPage,
+      });
+      setSubmitterTotal(total);
+      setSubmitters(users);
+    }
   }
 
-  function handleSearch(value) {
-    onSubmitter({
-      submitterCode: value,
-    });
+  async function handleSubmitterScroll(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const { target } = e;
+    if (
+      target.scrollTop + target.offsetHeight === target.scrollHeight &&
+      submitters.length < submitterTotal
+    ) {
+      const nextScrollPage = submitterPage + 1;
+      setSubmitterPage(nextScrollPage);
+      const { users } = await onSubmitter({
+        submitterCode: searchVal,
+        page: nextScrollPage,
+      });
+      // update submitters
+      setSubmitters([...submitters, ...users]);
+    }
+  }
+
+  function handleSubmitterCodeChange(value, option) {
+    setSubmitter(option.props.submitter);
   }
   function handleCommit() {
     validateFields(async (err, values) => {
@@ -39,7 +63,6 @@ function LopLogManualModal({
         const { tradeDate, uploadFiles, ...rest } = values;
         const { bcjson } = (uploadFiles && uploadFiles.length && uploadFiles[0].response) || {};
         const { flag, items = {} } = bcjson || {};
-
         if (flag === '1' && items) {
           const filename = items.relativeUrl;
           await onUpload({ tradeDate: tradeDate.format('YYYYMMDD'), filename, ...rest });
@@ -80,30 +103,34 @@ function LopLogManualModal({
             ],
           })(
             <Select
-              placeholder="please input submitter code"
               showSearch
               showArrow={false}
               filterOption={false}
+              placeholder="please input submmitter code"
               defaultActiveFirstOption={false}
               notFoundContent={loading['lop/fetchSubmitters'] ? <Spin size="small" /> : null}
-              onChange={handleChange}
-              onSearch={handleSearch}
+              onChange={handleSubmitterCodeChange}
+              onSearch={debounce(handleSearchSubmitterCode, 800)}
+              onPopupScroll={handleSubmitterScroll}
             >
               {submitters.map(item => (
-                <Option key={`${item.market}-${item.submitterCode}`}>{item.submitterCode}</Option>
+                <Option key={`${item.market}-${item.submitterCode}`} submitter={item}>
+                  {`${item.submitterCode} (${item.market})`}
+                </Option>
               ))}
             </Select>,
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
           {getFieldDecorator('submitterName', {
+            initialValue: currentSubmitter.submitterName || '',
             rules: [
               {
                 required: true,
                 message: 'Please input submitter name!',
               },
             ],
-          })(<Input placeholder="please input submmitter name" />)}
+          })(<Input disabled placeholder="please input submmitter name" />)}
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
           {getFieldDecorator('submissionReport', {

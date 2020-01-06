@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-04 23:16:47
+ * @LastEditTime : 2020-01-06 14:37:59
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -56,9 +56,6 @@ export default {
     logs: [],
     page: 1,
     total: 0,
-    submittersPage: 1,
-    submittersTotal: 0,
-    submitters: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -68,12 +65,6 @@ export default {
         page,
         logs,
         total,
-      };
-    },
-    saveSubmitters(state, { payload }) {
-      return {
-        ...state,
-        submitters: payload.submitters,
       };
     },
   },
@@ -116,19 +107,16 @@ export default {
       }
       return reportUrl;
     },
-    *fetchSubmitters({ payload }, { call, put }) {
+    *fetchSubmitters({ payload }, { call }) {
       const { err, items, totalCount } = yield call(getSubmitters, payload);
       if (err) {
         throw new Error(err);
       }
-      yield put({
-        type: 'saveSubmitters',
-        payload: {
-          submitters: items,
-          submittersPage: payload.page,
-          submittersTotal: totalCount,
-        },
-      });
+
+      return {
+        users: items,
+        total: totalCount,
+      };
     },
   },
 };

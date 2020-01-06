@@ -9,7 +9,7 @@ import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
 import styles from '../index.less';
 
-export function LopLog({ dispatch, loading, page: current, logs, total, submitters }) {
+export function LopLog({ dispatch, loading, page: current, logs, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     startDate: defaultDateRange[0],
@@ -23,8 +23,8 @@ export function LopLog({ dispatch, loading, page: current, logs, total, submitte
     });
   }, []);
 
-  function getSubmitters(params) {
-    dispatch({
+  async function getSubmitters(params) {
+    return dispatch({
       type: 'lop/fetchSubmitters',
       payload: params,
     });
@@ -62,7 +62,6 @@ export function LopLog({ dispatch, loading, page: current, logs, total, submitte
         <LopLogManualModal
           visible={visible}
           loading={loading}
-          submitters={submitters}
           onSubmitter={getSubmitters}
           onCancel={() => setVisible(false)}
           onUpload={handleUpload}
@@ -88,9 +87,8 @@ export function LopLog({ dispatch, loading, page: current, logs, total, submitte
   );
 }
 
-export default connect(({ loading, lop: { logs, page, total, submitters } }) => ({
+export default connect(({ loading, lop: { logs, page, total } }) => ({
   loading: loading.effects,
-  submitters,
   logs,
   page,
   total,
