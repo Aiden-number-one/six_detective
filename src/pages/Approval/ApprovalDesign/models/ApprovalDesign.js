@@ -73,7 +73,7 @@ export default {
     *importModel({ payload, callback }, { call }) {
       const response = yield call(importModel, { param: payload });
       if (response.bcjson.flag === '1') {
-        message.success('Successful import');
+        message.success(response.bcjson.msg);
         callback('1', '10');
       } else {
         throw new Error(response.bcjson.msg);

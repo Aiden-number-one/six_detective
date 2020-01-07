@@ -170,9 +170,12 @@ function ProcessList({
         if (items[0].ownerId) {
           const loginName = localStorage.getItem('loginName');
           const isYou = loginName === items[0].ownerId;
+          if (isYou) {
+            throw new Error('You have claimed the task');
+          }
           setIsBatch(false);
           setClickTaskCode(taskCode);
-          setClaimContent(`This task has been claimed by [${isYou ? 'you' : items[0].ownerId}]
+          setClaimContent(`This task has been claimed by [${items[0].ownerId}]
           Do you confirm to re-claim?`);
           setConfirmVisible(true);
         } else {
@@ -195,6 +198,11 @@ function ProcessList({
             setClaimContent(`some tasks has been claimed,
       Do you confirm to re-claim?`);
           } else {
+            const loginName = localStorage.getItem('loginName');
+            const isYou = loginName === items[0].ownerId;
+            if (isYou) {
+              throw new Error('You have claimed the task');
+            }
             setClaimContent(`This task has been claimed,
       Do you confirm to re-claim?`);
           }
