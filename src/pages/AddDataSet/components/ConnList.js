@@ -37,7 +37,7 @@ class ConnList extends PureComponent {
           }
         }}
       >
-        {data[0] ? (
+        {data && data[0] ? (
           data.map((item, index) => (
             <DndProvider>
               <WrapperDropTarget

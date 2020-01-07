@@ -16,6 +16,8 @@ const {
   operateDataSet, // 新增修改数据集
   getDataSetDetail, // 获取单个数据集详情
   getVariableList, // 获取参数
+  getProcedure, // 获取存储过程
+  getProcStatement, // 获取存储过程参数
 } = Service;
 
 export default {
@@ -34,6 +36,7 @@ export default {
     columnData: [], // 列数据
     dataSet: {}, // 数据集详情
     variableList: [], // 参数设置列表
+    procedureDataList: [], // 存储过程列表
   },
 
   effects: {
@@ -71,7 +74,7 @@ export default {
     },
     // 获取数据源数据
     *getDataSourceList({ payload }, { call, put }) {
-      const { connectionId, ...param } = payload;
+      const { connectionId, datasetType, ...param } = payload;
       const res = yield call(getDataSourceList, { param });
       if (res && res.bcjson.flag === '1') {
         // 保存数据源
@@ -94,15 +97,28 @@ export default {
           payload: [],
         });
         // 获取数据源表
-        yield put({
-          type: 'getMetadataList',
-          payload: {
-            connection_id:
-              connectionId || (res.bcjson.items[0] && res.bcjson.items[0].connectionId),
-            pageNumber: '1',
-            pageSize: '30',
-          },
-        });
+        if (datasetType === 'SQL') {
+          yield put({
+            type: 'getMetadataList',
+            payload: {
+              connection_id:
+                connectionId || (res.bcjson.items[0] && res.bcjson.items[0].connectionId),
+              pageNumber: '1',
+              pageSize: '30',
+            },
+          });
+        } else {
+          yield put({
+            type: 'getProcedure',
+            payload: {
+              connectionId:
+                connectionId || (res.bcjson.items[0] && res.bcjson.items[0].connectionId),
+              objectType: datasetType,
+              pageNumber: '1',
+              pageSize: '30',
+            },
+          });
+        }
       } else {
         message.error(res.bcjson.msg.substring(0, 1000));
       }
@@ -132,6 +148,40 @@ export default {
         });
       } else {
         message.error(res.bcjson.msg.substring(0, 1000));
+      }
+    },
+    // 获取数据源下的存储过程
+    *getProcedure({ payload }, { call, put, select }) {
+      const procedureDataList = yield select(
+        ({ sqlDataSource }) => sqlDataSource.procedureDataList,
+      );
+      const res = yield call(getProcedure, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        // 懒加载
+        yield put({
+          type: 'setProcedureDataList',
+          payload: {
+            list: [
+              ...procedureDataList,
+              ...res.bcjson.items.map(value => ({
+                id: value.OBJECTNAME,
+                name: value.OBJECTNAME,
+                icon: 'iconbianjiqi_charubiaoge',
+                otherInfo: value,
+              })),
+            ],
+            totalCount: res.bcjson.totalCount,
+          },
+        });
+      } else {
+        message.error(res.bcjson.msg.substring(0, 1000));
+      }
+    },
+    // 获取存储过程参数
+    *getProcStatement({ payload, callback }, { call }) {
+      const res = yield call(getProcStatement, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        if (callback) callback(res.bcjson.items);
       }
     },
     // 获取表列
@@ -194,6 +244,7 @@ export default {
       return {
         ...state,
         metaDataTableList: [],
+        procedureDataList: [],
       };
     },
     // 数据源表
@@ -204,6 +255,21 @@ export default {
         totalCount,
       };
     },
+    // 存储过程
+    setProcedureDataList(state, { payload: { list, totalCount } }) {
+      return {
+        ...state,
+        procedureDataList: list,
+        totalCount,
+      };
+    },
+    // 存储过程参数 setProcStatement
+    // setProcStatement(state, action) {
+    //   return {
+    //     ...state,
+    //     procStatement: action.payload,
+    //   };
+    // },
     // 数据源列表
     setDataSourceList(state, action) {
       return {

@@ -2,10 +2,12 @@
  * @Description: 数据集相关接口
  * @Author: lan
  * @Date: 2019-11-28 14:18:22
- * @LastEditTime : 2020-01-02 20:33:18
+ * @LastEditTime : 2020-01-07 10:56:16
  * @LastEditors  : lan
  */
 export default {
+  getProcStatement: 'get_proc_statement', // 获取存储过程参数
+  getProcedure: 'get_qry_statement_result', // 获取存储过程
   getClassifyTree: 'get_folder_menu', // 获取数据集分类树
   getDataSet: 'get_dataset_list_query', // 获取数据集
   getMetadataTablePerform: 'get_dataset_data_result_query', // sql数据预览

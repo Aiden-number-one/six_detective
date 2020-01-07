@@ -833,7 +833,13 @@ export default class HomePage extends PureComponent {
       padding: [50, 20, 20, 50],
     });
     submissionStatusBarChart.source(submissionStatusBar);
-    submissionStatusBarChart.legend(false);
+    submissionStatusBarChart.legend({
+      position: 'top-right', // 设置图例的显示位置
+      itemGap: 20, // 图例项之间的间距
+      label: {
+        color: '#464C51',
+      },
+    });
     submissionStatusBarChart.axis('value', {
       position: 'left',
       label: {
@@ -862,6 +868,7 @@ export default class HomePage extends PureComponent {
     submissionStatusBarChart
       .interval()
       .position('label*value')
+      .color('type', ['#F4374C', '#0D87D4'])
       .label('value', {
         textStyle: {
           fill: '#464C51',
@@ -869,8 +876,7 @@ export default class HomePage extends PureComponent {
         },
         offset: 10,
       })
-      .color('label', ['#0D87D4'])
-      .size(15)
+      // .size(15)
       .adjust([
         {
           type: 'dodge',
