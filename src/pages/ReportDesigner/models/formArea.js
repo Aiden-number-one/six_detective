@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-05 09:43:41
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-04 15:26:27
+ * @LastEditTime : 2020-01-06 16:07:13
  */
 
 // import fetch from '@/utils/request.default';
@@ -25,6 +25,26 @@ export default {
       return {
         ...state,
         customSearchData: action.payload,
+      };
+    },
+    changeCustomSearchData(state, action) {
+      const { props, index } = action.payload;
+      const newCustomSearchData = state.customSearchData.map(value => {
+        if (value.i === index) {
+          return {
+            ...value,
+            ...props,
+            active: true,
+          };
+        }
+        return {
+          ...value,
+          active: false,
+        };
+      });
+      return {
+        ...state,
+        customSearchData: newCustomSearchData,
       };
     },
   },
