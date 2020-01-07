@@ -314,7 +314,7 @@ export default class DataProcessing extends Component {
   };
 
   goClertCenter = () => {
-    router.push('/homepage/alert-center');
+    router.push({ pathname: '/homepage/alert-center', query: { alertIds: this.state.alertIds } });
   };
 
   render() {

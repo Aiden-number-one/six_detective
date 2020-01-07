@@ -82,10 +82,12 @@ class EmailParameter extends Component {
         mailHost: values.mailHost,
         mailPort: values.mailPort,
         mailAddress: values.mailAddress,
-        mailPassword: values.mailPassword,
+        mailPassword: window.kddes.getDes(values.mailPassword),
         isopen: values.isopen,
         remark: values.remark,
       };
+      console.log('password==', window.kddes.getDes(values.mailPassword));
+      console.log('param===', param);
       dispatch({
         type: 'getEmail/addEmailDate',
         payload: param,
