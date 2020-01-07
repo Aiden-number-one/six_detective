@@ -162,7 +162,7 @@ class NewUser extends Component {
             element.paramRealValue = values.emailAddress;
             break;
           case 'password':
-            element.paramRealValue = values.emailPassword;
+            element.paramRealValue = window.kddes.getDes(values.emailPassword);
             break;
           case 'status':
             element.paramRealValue = values.status ? '0' : '1';
