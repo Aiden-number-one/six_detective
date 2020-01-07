@@ -65,16 +65,17 @@
 .table-active {
   // color: @primaryColor;
   // position: relative;
+  // position: relative;
   line-height: 1;
-  // background-color: #f2f6f8;
+  background-color: #f2f6f8;
 }
 .table-alert,
 .table-alert-active {
-  line-height: 1;
-  background-color: @warningColor !important;
+  // line-height: 1;
+  // background-color: @warningColor !important;
+  background-color: #f2f6f8;
 }
-.table-active::after,
-.table-alert-active::after {
+.table-active::after {
   // position: absolute;
   // top: 0;
   // right: 0;
@@ -82,9 +83,10 @@
   display: inline-block;
   width: 0;
   height: 0;
-  border-top: 19px solid transparent;
-  border-bottom: 19px solid transparent;
-  border-left: 20px solid red;
+  margin-top: 12px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid @primaryColor;
   content: '';
 }
 
