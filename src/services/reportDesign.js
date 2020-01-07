@@ -11,6 +11,7 @@ export default {
   setReportTemplateContent: 'set_report_template_content_edit', // 保存报表模板
   getReportTemplateContent: 'get_report_template_content_query', // 查询报表模板
   getReportTemplateList: 'get_report_template_list_query', // 获取报表模版列表
-  getReportTemplateDataQuery: 'set_report_template_data_query', // 进行报表模板查询
+  getReportTemplateDataQuery: 'set_report_template_data_query', // 进行报表模板查询-预览页面
+  getReportDataFile: 'get_report_data_file', // 报表预览-导出文件
   getFieldList: 'get_report_template_dataset_field_list', // 根据sql得到相应的file
 };

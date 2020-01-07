@@ -34,7 +34,7 @@ function InfomationList({ dispatch, infos, total, loading }) {
 
   function handlePageChange(page, pageSize) {
     dispatch({
-      type: 'alertCenter/fetch',
+      type: 'alertCenter/fetchInfos',
       payload: {
         page,
         pageSize,
@@ -53,9 +53,9 @@ function InfomationList({ dispatch, infos, total, loading }) {
             </button>
           </Col>
           <Col span={6} align="right">
-            <Button type="link">
-              <Link to="/homepage/alert-center">Alert Center</Link>
-            </Button>
+            <Link to="/homepage/alert-center" className={styles.info}>
+              Alert Center
+            </Link>
           </Col>
         </Row>
         <Table

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Table, Icon } from 'antd';
 import { FormattedMessage } from 'umi/locale';
+import moment from 'moment';
 import IconFont from '@/components/IconFont';
-import { pageSizeOptions } from '../constants';
+import { timestampFormat, pageSizeOptions } from '../constants';
+import { statusMap } from '../Market/MarketLogList';
 
 const { Column } = Table;
 
@@ -24,7 +26,7 @@ export default function NewAccountLogList({
   return (
     <Table
       dataSource={dataSource}
-      loading={loading['new_account/fetch']}
+      loading={loading['newAccount/fetch']}
       rowKey="lopImpId"
       pagination={{
         current,
@@ -55,13 +57,22 @@ export default function NewAccountLogList({
       <Column dataIndex="fileName" title={<FormattedMessage id="data-import.file-name" />} />
       <Column
         align="center"
-        dataIndex="statusMark"
+        dataIndex="submissionStatus"
         title={<FormattedMessage id="data-import.submission-status" />}
+        render={(text, record) => {
+          const des = record.submissionStatus;
+          if ([1, 2, 9].includes(+text)) {
+            const Status = statusMap[+text];
+            return <Status des={des} />;
+          }
+          return des;
+        }}
       />
       <Column
         align="center"
-        dataIndex="submisssionTime"
+        dataIndex="submissionTime"
         title={<FormattedMessage id="data-import.new-account.submission-time" />}
+        render={text => moment(text, 'YYYYMMDDhhmmss').format(timestampFormat)}
       />
       <Column
         align="center"

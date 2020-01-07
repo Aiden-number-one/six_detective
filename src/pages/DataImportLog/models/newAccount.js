@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-04 18:55:06
+ * @LastEditTime : 2020-01-07 10:19:40
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -31,6 +31,17 @@ export async function postAuto() {
 export async function postManual(params) {
   return request('set_lop_report_manual_import', { data: params });
 }
+export async function getParseFiles(files) {
+  const formData = new FormData();
+
+  files.forEach(file => {
+    formData.append('multifiles', file);
+  });
+
+  return request('multi_file_parser', {
+    data: formData,
+  });
+}
 
 export async function fileUpload(params) {
   const formData = new FormData();
@@ -46,6 +57,7 @@ export default {
   state: {
     logs: [],
     total: 0,
+    parseFiles: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -55,6 +67,12 @@ export default {
         logs,
         page,
         total,
+      };
+    },
+    saveParseFiles(state, { payload }) {
+      return {
+        ...state,
+        parseFiles: payload.parseFiles,
       };
     },
   },
@@ -75,17 +93,31 @@ export default {
         },
       });
     },
+    *fetchParseFiles({ payload }, { call, put }) {
+      const { err, items } = yield call(getParseFiles, payload);
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveParseFiles',
+        payload: {
+          parseFiles: items,
+        },
+      });
+    },
     *importByManual({ payload }, { call }) {
-      const { file, market, submitterCode } = payload;
+      const { file, market, submitterCode, category } = payload;
       const { err: uploadErr, items } = yield call(fileUpload, { file });
 
       if (uploadErr) {
         message.warn(uploadErr);
         return uploadErr;
       }
+
       const { err: manualErr } = yield call(postManual, {
         filename: items.relativeUrl,
         market,
+        category,
         submitterCode,
       });
 
