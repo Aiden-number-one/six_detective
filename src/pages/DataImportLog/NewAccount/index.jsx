@@ -9,7 +9,7 @@ import NewAccountLogModal from './NewAccountLogModal';
 import NewAccountLogList from './NewAccountLogList';
 import styles from '../index.less';
 
-function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
+function NewAccountLog({ dispatch, loading, logs, page: current, total, parseFiles }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     market: defaultMarket,
@@ -32,6 +32,14 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   function handlePageChange(page, pageSize) {
     dispatch({ type: 'newAccount/fetch', payload: { page, pageSize, ...searchParams } });
   }
+
+  function handleFilesParse(fileList) {
+    dispatch({
+      type: 'newAccount/fetchParseFiles',
+      payload: fileList,
+    });
+  }
+
   async function handleUpload(fileList, onFile, onFinish) {
     let count = fileList.length;
     // eslint-disable-next-line no-restricted-syntax
@@ -70,7 +78,9 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
           visible={visible}
           loading={loading}
           onHide={() => setVisible(false)}
+          parseFiles={parseFiles}
           onUpload={handleUpload}
+          onParseFiles={handleFilesParse}
         />
         <div className={styles['list-wrap']}>
           <Row className={styles['btn-group']}>
@@ -93,9 +103,10 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   );
 }
 
-export default connect(({ loading, newAccount: { logs, page, total } }) => ({
+export default connect(({ loading, newAccount: { logs, page, total, parseFiles } }) => ({
   loading: loading.effects,
   logs,
   page,
   total,
+  parseFiles,
 }))(NewAccountLog);

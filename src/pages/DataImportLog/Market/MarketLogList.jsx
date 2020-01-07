@@ -15,7 +15,7 @@ const IconStatus = ({ type, color, des }) => (
   <Icon type={type} style={{ color, fontSize: 16 }} title={des} />
 );
 
-const statusMap = {
+export const statusMap = {
   1: ({ des }) => <IconStatus type="loading" color="#009cff" des={des} />,
   2: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
   9: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
@@ -61,11 +61,7 @@ export default function({
         dataIndex="market"
         title={<FormattedMessage id="data-import.market" />}
       />
-      <Column
-        align="center"
-        dataIndex="fileType"
-        title={<FormattedMessage id="data-import.market.file-type" />}
-      />
+      <Column dataIndex="fileType" title={<FormattedMessage id="data-import.market.file-type" />} />
       <Column
         align="center"
         dataIndex="uploadDate"
