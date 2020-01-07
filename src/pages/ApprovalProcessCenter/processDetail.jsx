@@ -48,6 +48,8 @@ function ProcessDetail({
   const [withdrawConfirmVisible, setWithdrawConfirmVisible] = useState(false);
   const [upAttachments, setUpAttachements] = useState([]);
   const [currentOwner, setIsCurrentOwner] = useState(true);
+  const [confirmToCategoryValue, setConfirmToCategory] = useState('');
+  const [confirmBiCategoryValue, setConfirmBiCategory] = useState('');
   const newDetailForm = React.createRef();
   const isLt5M = size => size / 1024 / 1024 < 5;
   useEffect(() => {
@@ -125,6 +127,10 @@ function ProcessDetail({
     if (type === 'submit') {
       newDetailForm.current.validateFields((err, values) => {
         const alertTypeValue = detailItems[0].alertType;
+        const defaultConfirmToCategory =
+          detailItems[0] && detailItems[0].newValue && detailItems[0].newValue.confirmToCategory;
+        const defaultConfirmBiCategory =
+          detailItems[0] && detailItems[0].newValue && detailItems[0].newValue.confirmBiCategory;
         isErr = !err;
         if (!err) {
           if (alertTypeValue === '301') {
@@ -173,17 +179,27 @@ function ProcessDetail({
                 weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
               };
             }
+          } else if (
+            alertTypeValue === '321' ||
+            alertTypeValue === '322' ||
+            alertTypeValue === '323' ||
+            alertTypeValue === '324'
+          ) {
+            valueData = {
+              confirmToCategory: confirmToCategoryValue || defaultConfirmToCategory,
+              confirmBiCategory: confirmBiCategoryValue || defaultConfirmBiCategory,
+              confirmToCode: values.confirmToCode,
+              confirmToName: values.confirmToName,
+              confirmBiCode: values.confirmBiCode,
+              confirmBiName: values.confirmBiName,
+              reportAnyPosition: values.reportAnyPosition,
+              watch: values.watch,
+              remark: values.remark,
+            };
           }
 
           Object.assign(taskValue, valueData);
           console.log('Received values of form: ', values, valueData, taskValue);
-          // eslint-disable-next-line array-callback-return
-          // detailData.map(item => {
-          //   if (item.isEdit) {
-          //     epCname.push(values[item.key]);
-          //   }
-          // });
-          // epCname = epCname.join(',');
         }
       });
     }
@@ -232,6 +248,14 @@ function ProcessDetail({
     setWithdrawConfirmVisible(false);
   }
 
+  function saveConfirmToCategory(value) {
+    setConfirmToCategory(value);
+  }
+
+  function saveConfirmBiCategory(value) {
+    setConfirmBiCategory(value);
+  }
+
   function saveTask() {
     let valueData = {};
     let isErr = true;
@@ -240,6 +264,10 @@ function ProcessDetail({
     };
     newDetailForm.current.validateFields((err, values) => {
       const alertTypeValue = detailItems[0].alertType;
+      const defaultConfirmToCategory =
+        detailItems[0] && detailItems[0].newValue && detailItems[0].newValue.confirmToCategory;
+      const defaultConfirmBiCategory =
+        detailItems[0] && detailItems[0].newValue && detailItems[0].newValue.confirmBiCategory;
       isErr = !err;
       if (!err) {
         if (alertTypeValue === '301') {
@@ -295,8 +323,12 @@ function ProcessDetail({
           alertTypeValue === '324'
         ) {
           valueData = {
-            confirmBiName: values.confirmBiName,
+            confirmToCategory: confirmToCategoryValue || defaultConfirmToCategory,
+            confirmBiCategory: confirmBiCategoryValue || defaultConfirmBiCategory,
+            confirmToCode: values.confirmToCode,
             confirmToName: values.confirmToName,
+            confirmBiCode: values.confirmBiCode,
+            confirmBiName: values.confirmBiName,
             reportAnyPosition: values.reportAnyPosition,
             watch: values.watch,
             remark: values.remark,
@@ -372,6 +404,8 @@ function ProcessDetail({
                 saveTask={saveTask}
                 detailItem={detailItems}
                 task={task}
+                saveConfirmToCategory={saveConfirmToCategory}
+                saveConfirmBiCategory={saveConfirmBiCategory}
               />
               <Drawer
                 title="Assign to"
@@ -517,13 +551,14 @@ function ProcessDetail({
 export default connect(
   ({
     loading,
-    approvalCenter: { detailItems, userList, taskHistoryList, logList, nextUsers },
+    approvalCenter: { detailItems, userList, taskHistoryList, logList, nextUsers, nextGroup },
   }) => ({
     detailItems,
     userList,
     taskHistoryList,
     logList,
     nextUsers,
+    nextGroup,
     loading: loading.effects,
   }),
 )(ProcessDetail);

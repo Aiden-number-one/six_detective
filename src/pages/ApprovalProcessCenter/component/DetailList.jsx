@@ -11,7 +11,7 @@ const { Column } = Table;
 function NewEP({ detailData, oldValueList, isShowForm, getFieldDecorator }) {
   return (
     <div className={styles.ListBox}>
-      <List key="NewEP">
+      <List key="NewEP" split={false}>
         <List.Item>
           <div className={styles.ListItem}>
             <p></p>
@@ -61,7 +61,7 @@ function NewProduct({
 }) {
   return (
     <div className={styles.ListBox}>
-      <List key="NewProduct">
+      <List key="NewProduct" split={false}>
         <List.Item>
           <div className={styles.ListItem}>
             <p></p>
@@ -392,7 +392,7 @@ function NewProduct({
 function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentValue, isShowForm }) {
   return (
     <div className={styles.ListBox}>
-      <List key="CaCode">
+      <List key="CaCode" split={false}>
         <List.Item>
           <div className={styles.ListItem}>
             <p></p>
@@ -485,7 +485,13 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
   );
 }
 
-function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
+function NewAccound({
+  detailData,
+  isShowForm,
+  getFieldDecorator,
+  onChangeConfirmedToValue,
+  onChangeConfirmedBiValue,
+}) {
   return (
     <div className={styles.ListBox}>
       <List key="NewAccound" split={false}>
@@ -550,14 +556,13 @@ function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
           </div>
         </List.Item>
         <List.Item>
-          <div className={styles.ListItem}>
-            <p>Received Answer</p>
-            <p>{detailData.receivedAnswer}</p>
-          </div>
-        </List.Item>
-        <List.Item>
           <div className={styles.reportHistory}>
-            <Table dataSource={detailData.reportHistory} rowKey="reportHistory" pagination={false}>
+            <Table
+              bordered
+              dataSource={detailData.reportHistory}
+              rowKey="reportHistory"
+              pagination={false}
+            >
               <Column align="center" dataIndex="reportedTime" title="Reported Time" />
               <Column
                 align="center"
@@ -571,12 +576,23 @@ function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
+            <p>Received Answer</p>
+            <p>{detailData.receivedAnswer}</p>
+          </div>
+        </List.Item>
+        <List.Item>
+          <div className={styles.ListItem}>
             <p>Answer History</p>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.reportHistory}>
-            <Table dataSource={detailData.answerHistory} rowKey="answerHistory" pagination={false}>
+            <Table
+              bordered
+              dataSource={detailData.answerHistory}
+              rowKey="answerHistory"
+              pagination={false}
+            >
               <Column align="center" dataIndex="answeredTime" title="Answered Time" />
               <Column align="center" dataIndex="answeredFullBIName" title="Answered Full BI Name" />
               <Column align="center" dataIndex="answeredCategory" title="Answered Category" />
@@ -591,16 +607,23 @@ function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
           <div className={styles.ListItem}>
             <div>
               <Form.Item label="Confirmed BI">
-                {getFieldDecorator('confirmedBi', {
-                  rules: [{ required: false, message: 'Please select Confirmed BI' }],
-                  initialValue: '',
+                {getFieldDecorator('confirmBiCode', {
+                  rules: [{ required: true, message: 'Confirmed BI is missing' }],
+                  initialValue: detailData.confirmBiCode,
                 })(
                   isShowForm ? (
-                    <Select>
+                    <Select
+                      onChange={(value, name) => onChangeConfirmedBiValue(value, name)}
+                      optionLabelProp="value"
+                    >
                       {detailData.biCategoryList.map(item => (
-                        <Option value={item.biName} key={item}>
-                          <p>{item.biCode}</p>
-                          <p>{item.biName}</p>
+                        <Option
+                          value={item.confirmBiCode}
+                          label={item.confirmBiName}
+                          key={item.confirmBiCategory}
+                        >
+                          <p style={{ float: 'left' }}>{item.confirmBiCode}</p>
+                          <p style={{ float: 'right' }}>{item.confirmBiName}</p>
                         </Option>
                       ))}
                     </Select>
@@ -610,31 +633,36 @@ function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
                 )}
               </Form.Item>
             </div>
-            <p>
-              <Form.Item label="">
-                {getFieldDecorator('confirmBiName', {
-                  rules: [{ required: !!isShowForm, message: 'Please input Confirmed BI!' }],
-                  initialValue: detailData.confirmBiName,
-                })(<Input style={{ width: '214px', marginLeft: '20px' }} disabled={!isShowForm} />)}
-              </Form.Item>
-            </p>
+            <Form.Item label="">
+              {getFieldDecorator('confirmBiName', {
+                rules: [{ required: !!isShowForm, message: 'Confirmed BI is missing' }],
+                initialValue: detailData.confirmBiName,
+              })(<Input style={{ width: '200px', marginLeft: '20px' }} disabled={!isShowForm} />)}
+            </Form.Item>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
             <div>
               <Form.Item label="Confirmed TO">
-                {getFieldDecorator('confirmedTo', {
-                  rules: [{ required: false, message: 'Please select Confirmed TO' }],
-                  initialValue: '',
+                {getFieldDecorator('confirmToCode', {
+                  rules: [{ required: true, message: 'Confirmed TO is missing' }],
+                  initialValue: detailData.confirmToCode,
                 })(
                   isShowForm ? (
-                    <Select>
+                    <Select
+                      onChange={(value, name) => onChangeConfirmedToValue(value, name)}
+                      optionLabelProp="value"
+                    >
                       {detailData.toCategoryList &&
                         detailData.toCategoryList.map(item => (
-                          <Option value={item.toCode} key={item}>
-                            <span style={{ float: 'left' }}>{item.toCode}</span>
-                            <span style={{ float: 'right' }}>{item.toName}</span>
+                          <Option
+                            value={item.confirmToCode}
+                            label={item.confirmToName}
+                            key={item.confirmToCategory}
+                          >
+                            <span style={{ float: 'left' }}>{item.confirmToCode}</span>
+                            <span style={{ float: 'right' }}>{item.confirmToName}</span>
                           </Option>
                         ))}
                     </Select>
@@ -644,14 +672,12 @@ function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
                 )}
               </Form.Item>
             </div>
-            <p>
-              <Form.Item label="">
-                {getFieldDecorator('confirmToName', {
-                  rules: [{ required: !!isShowForm, message: 'Please input Confirmed TO!' }],
-                  initialValue: detailData.confirmToName,
-                })(<Input style={{ width: '214px', marginLeft: '20px' }} disabled={!isShowForm} />)}
-              </Form.Item>
-            </p>
+            <Form.Item label="">
+              {getFieldDecorator('confirmToName', {
+                rules: [{ required: !!isShowForm, message: 'Confirmed TO is missing' }],
+                initialValue: detailData.confirmToName,
+              })(<Input style={{ width: '200px', marginLeft: '20px' }} disabled={!isShowForm} />)}
+            </Form.Item>
           </div>
         </List.Item>
         <List.Item>
@@ -659,7 +685,7 @@ function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
             <div>
               <Form.Item label="Report Any Position">
                 {getFieldDecorator('reportAnyPosition', {
-                  rules: [{ required: !!isShowForm }],
+                  rules: [{ required: !!isShowForm, message: 'Report Any Position is missing' }],
                   initialValue: detailData.reportAnyPosition,
                 })(
                   isShowForm ? (
@@ -684,7 +710,7 @@ function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
             <div>
               <Form.Item label="Watch">
                 {getFieldDecorator('watch', {
-                  rules: [{ required: !!isShowForm }],
+                  rules: [{ required: !!isShowForm, message: 'Watch is missing' }],
                   initialValue: detailData.watch,
                 })(
                   isShowForm ? (
@@ -709,7 +735,7 @@ function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
             <div>
               <Form.Item label="Remark">
                 {getFieldDecorator('remark', {
-                  rules: [{ required: !!isShowForm, message: 'Please input remark!' }],
+                  rules: [{ required: !!isShowForm, message: 'remark is missing' }],
                   initialValue: detailData.remark,
                 })(<TextArea disabled={!isShowForm} autoSize={{ minRows: 1 }} />)}
               </Form.Item>
@@ -721,35 +747,71 @@ function NewAccound({ detailData, isShowForm, getFieldDecorator }) {
   );
 }
 
-function DetailForm({ form, detailItem, task }) {
+function DetailForm({ form, task, detailItem, saveConfirmToCategory, saveConfirmBiCategory }) {
   const { getFieldDecorator } = form;
   const [radioCurrentValue, setRadioCurrentValue] = useState('No');
   const [radioPdValue, setRadioPdValue] = useState('Yes');
+  // const task = true;
+  // const detailItem = [
+  //   {
+  //     newValue: {
+  //       previousBiCode: 'UNC_00345',
+  //       confirmToCode: null,
+  //       previousBiName: 'BPSS OMNIBUS ACC HKCC',
+  //       previousToName: null,
+  //       lopAccountNo: 'Z_BPSS SG',
+  //       previousToCode: null,
+  //       toCategoryList: [
+  //         {
+  //           confirmToCode: 'NULL8',
+  //           confirmToName: 'NULL',
+  //           confirmToCategory: '888',
+  //         },
+  //         {
+  //           confirmToCode: 'jay',
+  //           confirmToName: 'kebi',
+  //           confirmToCategory: '999',
+  //         },
+  //       ],
+  //       answerHistory: [],
+  //       reportHistory: [
+  //         {
+  //           reportedTime: 1578143715844,
+  //           reportedAccountName: 'BPSS OMNIBUS ACC HKCC',
+  //           reportedBiName: 'BPSS OMNIBUS ACC HKCC',
+  //           reportedToName: null,
+  //         },
+  //       ],
+  //       market: 'HKFE',
+  //       confirmBiCode: null,
+  //       epToCode: 'BNP',
+  //       confirmBiName: null,
+  //       confirmToName: null,
+  //       biCategoryList: [
+  //         {
+  //           confirmBiCode: 'kaxi',
+  //           confirmBiName: 'ouwen',
+  //           confirmBiCategory: '111',
+  //         },
+  //         {
+  //           confirmBiCode: 'kd',
+  //           confirmBiName: 'james',
+  //           confirmBiCategory: '333',
+  //         },
+  //       ],
+  //       submitterName: 'BNP Paribas Securities (Asia) Ltd',
+  //       submitterCode: '00BNP',
+  //       receivedAnswer: 'Unreceived Yet',
+  //     },
+  //     alertType: '322',
+  //     isEditing: true,
+  //     isStarter: false,
+  //     oldValue: {},
+  //     ownerId: null,
+  //   },
+  // ];
   const detailData = task ? (detailItem && detailItem[0]) || {} : {};
   const detailList = task ? (detailItem && detailItem[0] && detailItem[0].newValue) || {} : {};
-  // const detailList = {
-  //   previousBiCode: 'UNC_00298',
-  //   previousBiName: 'HI-MANPT-16-SFONDS',
-  //   previousToName: 'ALLIANZ GLOBAL INVESTORS GMBH',
-  //   lopAccountNo: 'Z_HIMA16S',
-  //   previousToCode: 'UNC_00050',
-  //   toCategoryList: [null],
-  //   answerHistory: [],
-  //   reportHistory: [
-  //     {
-  //       reportedTime: 1578039314433,
-  //       reportedAccountName: 'HI-MANPT-16-SFONDS',
-  //       reportedBiName: 'HI-MANPT-16-SFONDS',
-  //       reportedToName: 'ALLIANZ GLOBAL INVESTORS GMBH',
-  //     },
-  //   ],
-  //   market: 'HKFE',
-  //   epToCode: 'BNP',
-  //   biCategoryList: [],
-  //   submitterName: 'BNP Paribas Securities (Asia) Ltd',
-  //   submitterCode: '00BNP',
-  //   receivedAnswer: 'Unreceived Yet',
-  // };
   const oldValueList = task ? (detailItem && detailItem[0] && detailItem[0].oldValue) || {} : {};
   const alertType = detailData && detailData.alertType;
 
@@ -763,6 +825,20 @@ function DetailForm({ form, detailItem, task }) {
   useEffect(() => {
     setRadioPdValue(detailList.isCalculatePd);
   }, [detailList.isCalculatePd]);
+
+  function onChangeConfirmedToValue(value, name) {
+    form.setFieldsValue({
+      confirmToName: name.props.label,
+    });
+    saveConfirmToCategory(name.key);
+  }
+  function onChangeConfirmedBiValue(value, name) {
+    form.setFieldsValue({
+      confirmBiName: name.props.label,
+    });
+    saveConfirmBiCategory(name.key);
+  }
+
   return (
     <>
       {detailList && (
@@ -822,6 +898,8 @@ function DetailForm({ form, detailItem, task }) {
             <NewAccound
               detailData={detailList}
               getFieldDecorator={getFieldDecorator}
+              onChangeConfirmedToValue={onChangeConfirmedToValue}
+              onChangeConfirmedBiValue={onChangeConfirmedBiValue}
               isShowForm={isEditing}
             />
           ) : null}

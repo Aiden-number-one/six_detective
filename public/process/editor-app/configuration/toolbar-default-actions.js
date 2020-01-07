@@ -329,6 +329,10 @@ var SaveModelCtrl = [
     };
     $scope.save = function(successCallback) {
       if (!$scope.saveDialog.name || $scope.saveDialog.name.length == 0) {
+        $scope.error = 'Name cannot be empty'
+        return;
+      }else if(!$scope.saveDialog.description || $scope.saveDialog.description.length == 0){
+        $scope.error = 'description  cannot be empty'
         return;
       }
 
