@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-06 21:06:58
+ * @LastEditTime : 2020-01-07 10:31:25
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -95,6 +95,7 @@ export function dataSetTree(dataSets) {
       datasetType: dataSet.dataset_type, // 数据集类型
       datasetName: dataSet.dataset_name, // 数据集名字
       datasetParams: dataSet.query.parameters, // 参数
+      datasetId: dataSet.dataset_id, // 数据集的id
     },
     children: [
       // 字段

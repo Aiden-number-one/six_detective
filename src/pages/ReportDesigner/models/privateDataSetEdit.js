@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-05 09:43:41
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-06 21:16:15
+ * @LastEditTime : 2020-01-07 11:19:10
  */
 
 import Service from '@/utils/Service';
@@ -12,6 +12,7 @@ import Service from '@/utils/Service';
 const {
   sqlFormated, // sql美化
   getVariableList, // 获取参数
+  getFieldList, // 获取列表
 } = Service;
 
 export default {
@@ -40,6 +41,14 @@ export default {
           payload: res.bcjson.items,
         });
       }
+    },
+    // 获取字段
+    *getField({ payload }, { call }) {
+      const res = yield call(getFieldList, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        return res.bcjson.items;
+      }
+      return res.bcjson.msg;
     },
   },
   reducers: {

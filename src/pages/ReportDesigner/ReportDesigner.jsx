@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import classNames from 'classnames';
 import { setLocale, formatMessage } from 'umi/locale';
 import { DndProvider, DropTarget } from 'react-dnd';
-import { Layout, Drawer, Modal } from 'antd';
+import { Layout, Drawer, Modal, Spin } from 'antd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { createCellPos } from '@/utils/utils';
 import { setCellTypeAndValue, getCellStringByIndex } from './utils';
@@ -16,7 +16,11 @@ import DatasetModify from './components/DatasetModify';
 import styles from './ReportDesigner.less';
 
 const { Sider, Content } = Layout;
-@connect(() => ({}))
+@connect(({ loading }) => ({
+  loading:
+    loading.effects['privateDataSetEdit/getField'] ||
+    loading.effects['reportDesigner/packageTemplate'],
+}))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
   state = {
@@ -199,7 +203,7 @@ export default class ReportDesigner extends PureComponent {
       displayDropSelect,
       displayDelete,
     } = this.state;
-    const { setCellCallback, dispatch, setCellType } = this.props;
+    const { setCellCallback, dispatch, setCellType, loading = false } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
       saveReportTemplate: this.saveReportTemplate, // 保存报表模板
@@ -226,70 +230,79 @@ export default class ReportDesigner extends PureComponent {
     };
     return (
       <DndProvider backend={HTML5Backend}>
-        <div
-          onClick={() => {
-            this.changedisplayDropSelect(false);
-          }}
-        >
-          {/* 抽屉区域 */}
-          <Drawer
-            destroyOnClose
-            closable={false}
-            title="Dataset Modify"
-            width={900}
-            onClose={() => {
-              this.setState({
-                displayDraw: false,
-              });
+        <Spin spinning={loading}>
+          <div
+            onClick={() => {
+              this.changedisplayDropSelect(false);
             }}
-            visible={this.state.displayDraw}
           >
-            <DatasetModify {...datasetModifyProps} />
-          </Drawer>
-          {/* 删除 */}
-          <Modal
-            title={formatMessage({ id: 'app.common.confirm' })}
-            visible={displayDelete}
-            onOk={this.deleteDataSetAction}
-            onCancel={() => {
-              this.displayDeletePrivate(false);
-            }}
-            cancelText={formatMessage({ id: 'app.common.cancel' })}
-            okText={formatMessage({ id: 'app.common.confirm' })}
-          >
-            <span>Please confirm that you want to delete this record?</span>
-          </Modal>
-          {/* 头部菜单栏 */}
-          <ToolBar {...toolBarProps} />
-          <div className={styles.container} style={{ height: `${window.innerHeight - 104}px` }}>
-            <Layout className={classNames(styles.layout)}>
-              {/* 数据集区域 */}
-              <Sider width={leftSideCollapse ? 300 : 30}>
-                <LeftSideBar {...leftSideBarProps} />
-              </Sider>
-              {/* 报表区域 */}
-              <Content>
-                <div className={classNames(styles.main)}>
-                  {display && <CustomSearchArea />}
-                  <div>
-                    <WrapperDropContent afterDrop={this.afterDrop} />
-                  </div>
-                </div>
-              </Content>
-            </Layout>
-            {/* 右侧区域 */}
-            <div
-              id="rigthSideBar"
-              className={classNames(styles.right)}
-              style={{ width: rightSideCollapse ? '300px' : '30px' }}
+            {/* 抽屉区域 */}
+            <Drawer
+              destroyOnClose
+              closable={false}
+              title="Dataset Modify"
+              width={900}
+              onClose={() => {
+                this.setState({
+                  displayDraw: false,
+                });
+              }}
+              visible={this.state.displayDraw}
             >
-              <RightSideBar
-                rightSideCollapse={rightSideCollapse}
-                changeRightSideBar={this.changeRightSideBar}
+              <DatasetModify
+                {...datasetModifyProps}
+                onClose={() => {
+                  this.setState({
+                    displayDraw: false,
+                  });
+                }}
               />
+            </Drawer>
+            {/* 删除 */}
+            <Modal
+              title={formatMessage({ id: 'app.common.confirm' })}
+              visible={displayDelete}
+              onOk={this.deleteDataSetAction}
+              onCancel={() => {
+                this.displayDeletePrivate(false);
+              }}
+              cancelText={formatMessage({ id: 'app.common.cancel' })}
+              okText={formatMessage({ id: 'app.common.confirm' })}
+            >
+              <span>Please confirm that you want to delete this record?</span>
+            </Modal>
+            {/* 头部菜单栏 */}
+            <ToolBar {...toolBarProps} />
+            <div className={styles.container} style={{ height: `${window.innerHeight - 104}px` }}>
+              <Layout className={classNames(styles.layout)}>
+                {/* 数据集区域 */}
+                <Sider width={leftSideCollapse ? 300 : 30}>
+                  <LeftSideBar {...leftSideBarProps} />
+                </Sider>
+                {/* 报表区域 */}
+                <Content>
+                  <div className={classNames(styles.main)}>
+                    {display && <CustomSearchArea />}
+                    <div>
+                      <WrapperDropContent afterDrop={this.afterDrop} />
+                    </div>
+                  </div>
+                </Content>
+              </Layout>
+              {/* 右侧区域 */}
+              <div
+                id="rigthSideBar"
+                className={classNames(styles.right)}
+                style={{ width: rightSideCollapse ? '300px' : '30px' }}
+              >
+                <RightSideBar
+                  rightSideCollapse={rightSideCollapse}
+                  changeRightSideBar={this.changeRightSideBar}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </Spin>
       </DndProvider>
     );
   }
