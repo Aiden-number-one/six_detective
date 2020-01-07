@@ -233,6 +233,7 @@ export default class ReportDesigner extends PureComponent {
         >
           {/* 抽屉区域 */}
           <Drawer
+            destroyOnClose
             closable={false}
             title="Dataset Modify"
             width={900}
@@ -251,7 +252,7 @@ export default class ReportDesigner extends PureComponent {
             visible={displayDelete}
             onOk={this.deleteDataSetAction}
             onCancel={() => {
-              this.displayDelete(false);
+              this.displayDeletePrivate(false);
             }}
             cancelText={formatMessage({ id: 'app.common.cancel' })}
             okText={formatMessage({ id: 'app.common.confirm' })}

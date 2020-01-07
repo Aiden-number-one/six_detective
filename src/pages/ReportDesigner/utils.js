@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-04 21:20:09
+ * @LastEditTime : 2020-01-06 21:06:58
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -35,12 +35,10 @@ export function dataSetTransform(dataSetItem) {
     jdbcString,
     driverInfo,
     datasetId: originDatasetId,
-    datasetParams: datasetParamsString,
-    datasetFields: datasetFieldsString,
+    datasetParams,
+    datasetFields,
   } = dataSetItem;
   const datasetId = uuidv1();
-  const parameters = datasetParamsString;
-  const fields = datasetFieldsString;
   return {
     dataset_cat: 'user-define|public', // reserved
     dataset_name: datasetName, // 数据集名称
@@ -65,7 +63,7 @@ export function dataSetTransform(dataSetItem) {
       //     "parameter_value": "". // 实际值
       //   }
       // ]
-      parameters,
+      parameters: datasetParams,
     },
 
     // 数据集字段
@@ -76,7 +74,7 @@ export function dataSetTransform(dataSetItem) {
     //   "column_comments":"", //字段备注
     //   "column_auto":"" // reserved
     // },
-    fields,
+    fields: datasetFields,
   };
 }
 
@@ -96,6 +94,7 @@ export function dataSetTree(dataSets) {
       commandText: dataSet.query.command_text, // SQL串
       datasetType: dataSet.dataset_type, // 数据集类型
       datasetName: dataSet.dataset_name, // 数据集名字
+      datasetParams: dataSet.query.parameters, // 参数
     },
     children: [
       // 字段

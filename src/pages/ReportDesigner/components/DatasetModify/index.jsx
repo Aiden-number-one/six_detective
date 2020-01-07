@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { PureComponent } from 'react';
-import { Row, Col, Button, Form, Input } from 'antd';
+import { Row, Col, Button, Form, Input, Select } from 'antd';
 import { connect } from 'dva';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import styles from './index.less';
@@ -11,6 +11,8 @@ import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/sql-hint';
 import 'codemirror/theme/ambiance.css';
 
+const { Option } = Select;
+
 const options = {
   lineNumbers: true, // 显示行号
   mode: { name: 'text/x-mysql' }, // 定义mode
@@ -18,8 +20,37 @@ const options = {
 };
 
 @Form.create()
-@connect(() => ({}))
+@connect(
+  ({ privateDataSetEdit }) => ({
+    variableList: privateDataSetEdit.variableList,
+    sql: privateDataSetEdit.sql,
+  }),
+  null,
+  null,
+  {
+    pure: false,
+  },
+)
 export default class DatasetModify extends PureComponent {
+  componentDidMount() {
+    const { dispatch, currentSelectDataSetOtherInfo = {} } = this.props;
+    dispatch({
+      type: 'privateDataSetEdit/setVariableList',
+      payload: currentSelectDataSetOtherInfo.datasetParams || [],
+    });
+    dispatch({
+      type: 'privateDataSetEdit/changeSql',
+      payload: currentSelectDataSetOtherInfo.commandText,
+    });
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'privateDataSetEdit/clear',
+    });
+  }
+
   onSave = () => {
     // const { dispatch } = this.props;
     // dispatch({
@@ -27,10 +58,38 @@ export default class DatasetModify extends PureComponent {
     // });
   };
 
+  // 获取参数设置
+  getVariableList = () => {
+    const { dispatch, currentSelectDataSetOtherInfo = {} } = this.props;
+    dispatch({
+      type: 'privateDataSetEdit/getVariable',
+      payload: {
+        scriptContent: this.sql || currentSelectDataSetOtherInfo.commandText,
+      },
+    });
+  };
+
+  // 进行参数格式化
+  formatSQL = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'privateDataSetEdit/changeSql',
+      payload: this.sql,
+    });
+    dispatch({
+      type: 'privateDataSetEdit/sqlFormated',
+      payload: {
+        scriptContent: this.sql,
+      },
+    });
+  };
+
   render() {
     const {
+      sql,
       form: { getFieldDecorator },
       currentSelectDataSetOtherInfo = {},
+      variableList = [],
     } = this.props;
     return (
       <div className={styles.modifyDataSet}>
@@ -47,7 +106,7 @@ export default class DatasetModify extends PureComponent {
             })(<Input placeholder="Please Input Name of Data Set" />)}
           </Form.Item>
           <Form.Item label="Type of Data Set" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
-            {getFieldDecorator('userName', {
+            {getFieldDecorator('datasetType', {
               rules: [
                 {
                   required: true,
@@ -55,7 +114,12 @@ export default class DatasetModify extends PureComponent {
                 },
               ],
               initialValue: currentSelectDataSetOtherInfo.datasetType,
-            })(<Input placeholder="Please Input Name of Data Set" />)}
+            })(
+              <Select placeholder="Please Input Name of Data Set">
+                <Option value="sql">SQL</Option>
+                <Option value="storedprocedure">Stored Procedure</Option>
+              </Select>,
+            )}
           </Form.Item>
           <Form.Item
             label=" "
@@ -64,7 +128,7 @@ export default class DatasetModify extends PureComponent {
             className={styles.codeMirrorStyle}
           >
             <CodeMirror
-              value={currentSelectDataSetOtherInfo.commandText}
+              value={sql}
               options={options}
               onChange={(editor, data, value) => {
                 this.sql = value;
@@ -77,25 +141,44 @@ export default class DatasetModify extends PureComponent {
                 }
               </span>
               <div className={styles.buttCollection}>
-                <button type="button">Parameter Setting</button>
-                <button type="button">Format</button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    this.getVariableList();
+                  }}
+                >
+                  Parameter Setting
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    this.formatSQL();
+                  }}
+                >
+                  Format
+                </Button>
               </div>
             </div>
           </Form.Item>
         </Form>
         {/* 编辑数据集相关 */}
-        <Form.Item label=" " labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
-          <div className={styles.inputCollection}>
-            <span className={styles.valueName}>Variable Name</span>
-            <span className={styles.valueType}>Variable Type</span>
-            <span className={styles.value}>Value</span>
-          </div>
-          <div className={styles.inputCollection}>
-            <Input className={styles.valueName} />
-            <Input className={styles.valueType} />
-            <Input className={styles.value} />
-          </div>
-        </Form.Item>
+        {variableList.length > 0 && (
+          <Form.Item label=" " labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
+            <div className={styles.inputCollection}>
+              <span className={styles.valueName}>Variable Name</span>
+              <span className={styles.valueType}>Variable Type</span>
+              <span className={styles.value}>Value</span>
+            </div>
+            {variableList.map(value => (
+              <div className={styles.inputCollection}>
+                <Input className={styles.valueName} value={value.parameter_name} disabled />
+                <Input className={styles.valueType} value={value.parameter_type} disabled />
+                <Input className={styles.value} value={value.parameter_value} />
+              </div>
+            ))}
+          </Form.Item>
+        )}
+
         <Row
           type="flex"
           justify="end"
@@ -110,7 +193,9 @@ export default class DatasetModify extends PureComponent {
           }}
         >
           <Col>
-            <Button onClick={this.onCancel}>CANCEL</Button>
+            <Button onClick={this.onCancel} style={{ marginRight: 10 }}>
+              CANCEL
+            </Button>
             <Button type="primary" onClick={this.onSave}>
               SAVE
             </Button>
