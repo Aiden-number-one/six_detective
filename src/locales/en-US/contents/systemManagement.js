@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-18 14:11:28
+ * @LastEditTime : 2020-01-06 15:53:13
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -45,6 +45,7 @@ export default {
   'systemManagement.template.templateContent': 'Content',
   'systemManagement.template.keyword': 'Key word',
   'systemManagement.userGroup.remark': 'Remark',
+  'systemManagement.userGroup.groupMember': 'Group Member',
   'systemManagement.systemParameter.parameterType': 'Parameter Type',
   'systemManagement.systemParameter.note': 'Note',
   'systemManagement.auditLog.logDate': 'Log Time',

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-03 16:50:48
+ * @LastEditTime : 2020-01-06 15:04:23
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -39,7 +39,16 @@ export async function getReportUrl({ lopImpId }) {
   });
 }
 
-export const pageSelector = ({ lop }) => lop.page;
+export async function getSubmitters(params = {}) {
+  const { page = 1, pageSize = 10, submitterCode } = params;
+  return request('get_submitter_info_list_page', {
+    data: {
+      submitterCode,
+      pageNumber: page.toString(),
+      pageSize: pageSize.toString(),
+    },
+  });
+}
 
 export default {
   namespace: 'lop',
@@ -97,6 +106,17 @@ export default {
         throw new Error(err);
       }
       return reportUrl;
+    },
+    *fetchSubmitters({ payload }, { call }) {
+      const { err, items, totalCount } = yield call(getSubmitters, payload);
+      if (err) {
+        throw new Error(err);
+      }
+
+      return {
+        users: items || [],
+        total: totalCount,
+      };
     },
   },
 };
