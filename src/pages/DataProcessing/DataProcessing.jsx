@@ -5,6 +5,7 @@ import { Row, Col, Button, Table, Select, Modal, Progress } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
+import router from 'umi/router';
 import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
 import { getAuthority } from '@/utils/authority';
@@ -312,6 +313,10 @@ export default class DataProcessing extends Component {
     });
   };
 
+  goClertCenter = () => {
+    router.push('/homepage/alert-center');
+  };
+
   render() {
     const { loading, dataProcessingData, dataProcessingItemData } = this.props;
     const {
@@ -469,7 +474,12 @@ export default class DataProcessing extends Component {
                     pageSize={itemPage.pageSize}
                   /> */}
                   <Row type="flex" justify="end" style={{ marginTop: '10px' }}>
-                    <Button type="primary" className="btn-usual" style={{ height: '36px' }}>
+                    <Button
+                      type="primary"
+                      className="btn-usual"
+                      style={{ height: '36px' }}
+                      onClick={this.goClertCenter}
+                    >
                       Enter Alert Center
                     </Button>
                   </Row>
