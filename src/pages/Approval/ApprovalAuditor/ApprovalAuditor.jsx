@@ -2,7 +2,7 @@
 /* eslint-disable no-plusplus */
 import React, { PureComponent, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Button, Drawer, Checkbox } from 'antd';
+import { Button, Drawer, Radio } from 'antd';
 import { connect } from 'dva';
 // import { formatMessage } from 'umi/locale';
 import List from '@/components/List';
@@ -22,7 +22,7 @@ class ApprovalAuditor extends PureComponent {
     // dataSource: [],
     visible: false,
     stepId: '',
-    checkedValues: [],
+    checkedValues: '',
   };
 
   componentDidMount() {
@@ -37,17 +37,15 @@ class ApprovalAuditor extends PureComponent {
   showDrawer = async (processDefinitionIds, taskId) => {
     await this.getAuditorData(processDefinitionIds, taskId);
     const { auditorData } = this.props;
-    const auditorChecked = (auditorData.length > 0 && auditorData[0].relateNo) || [];
+    const auditorChecked = (auditorData.length > 0 && auditorData[0].relateNo) || '';
     // console.log('auditorChecked---->', auditorData,auditorChecked);
-    const checkedList = auditorChecked.length && auditorChecked.split(',');
+    const checkedList = auditorChecked.length && auditorChecked;
 
     this.setState({
       visible: true,
       stepId: taskId,
       checkedValues: checkedList,
     });
-    // debugger
-    console.log('auditorData-->', this.props.auditorData, this.state.checkedValues);
   };
 
   // 添加审核角色
@@ -65,14 +63,13 @@ class ApprovalAuditor extends PureComponent {
     const nodeAuditInfo = [];
     nodeAuditInfo.push({
       stepId,
-      auditIds: checkedValues.join(),
+      auditIds: checkedValues,
       auditType: '0',
     });
     const param = {
       processUuid: this.props.processDefinitionId,
       auditInfo: JSON.stringify(nodeAuditInfo),
     };
-    console.log('param--->', param);
     this.saveConfig(param);
     this.setState({
       visible: false,
@@ -133,9 +130,9 @@ class ApprovalAuditor extends PureComponent {
   };
 
   selectAuditor = checkedValues => {
-    // console.log('checkedValues---->', checkedValues);
+    console.log('checkedValues--999-->', checkedValues);
     this.setState({
-      checkedValues,
+      checkedValues: checkedValues.target.value,
     });
   };
 
@@ -170,7 +167,7 @@ class ApprovalAuditor extends PureComponent {
                 bodyStyle={{ paddingBottom: 80 }}
                 className={styles.drawerBox}
               >
-                <Checkbox.Group
+                <Radio.Group
                   options={checkboxData}
                   value={checkedValues}
                   onChange={this.selectAuditor}

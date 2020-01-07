@@ -65,13 +65,13 @@ class AuditTrailLogging extends Component {
       {
         key: 'index',
         visible: true,
-        fixed: 'left',
+        // fixed: 'left',
         // width: 60,
       },
       {
         key: 'functionName',
         visible: true,
-        fixed: 'left',
+        // fixed: 'left',
         // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
@@ -119,7 +119,7 @@ class AuditTrailLogging extends Component {
       {
         key: 'after',
         visible: false,
-        fixed: 'right',
+        // fixed: 'right',
       },
     ],
     // countColumns: 1,
@@ -267,11 +267,11 @@ class AuditTrailLogging extends Component {
     });
     newColumns.forEach((element, index) => {
       if (index === 0) {
-        element.fixed = 'left';
+        // element.fixed = 'left';
         element.width = 60;
       }
       if (index === newColumns.length - 1) {
-        element.fixed = 'right';
+        // element.fixed = 'right';
         element.width = 120;
       }
     });
@@ -418,11 +418,11 @@ class AuditTrailLogging extends Component {
       // element.width = `${100 / newColumns.length}%`
       element.width = '';
       if (index === 0) {
-        element.fixed = 'left';
+        // element.fixed = 'left';
         element.width = 60;
       }
       if (newColumns.length > 5 && index === newColumns.length - 1) {
-        element.fixed = 'right';
+        // element.fixed = 'right';
         element.width = 120;
       }
       if (newColumns.length > 5 && element.hasOwnProperty('date')) {

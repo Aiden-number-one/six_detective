@@ -4,7 +4,8 @@
   // background: #fff;
   :global {
     .ant-table-wrapper {
-      max-height: 440px;
+      max-height: 400px;
+      overflow-y: auto;
     }
   }
   .chart {
@@ -64,25 +65,40 @@
 .table-active {
   // color: @primaryColor;
   // position: relative;
+  // position: relative;
   line-height: 1;
   background-color: #f2f6f8;
 }
 .table-alert,
 .table-alert-active {
-  line-height: 1;
-  background-color: @warningColor !important;
+  // line-height: 1;
+  // background-color: @warningColor !important;
+  background-color: #f2f6f8;
 }
-.table-active::after,
-.table-alert-active::after {
+.table-active::after {
   // position: absolute;
   // top: 0;
   // right: 0;
   // bottom: 0;
-  display: inline-block;
+  float: right;
+  clear: both;
   width: 0;
   height: 0;
-  border-top: 19px solid transparent;
-  border-bottom: 19px solid transparent;
-  border-left: 20px solid red;
+  margin-top: 12px;
+  // background-color: #fff;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid @primaryColor;
   content: '';
+}
+
+.processingWraper {
+  :global {
+    .ant-modal-content {
+      .ant-modal-header,
+      .ant-modal-footer {
+        display: none;
+      }
+    }
+  }
 }

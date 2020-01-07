@@ -295,7 +295,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             title={
               <ColumnTitle
                 isNum={false}
-                curColumn="alertId"
+                curColumn="alertNo"
                 conditions={conditions}
                 onSort={handleSort}
                 onCommit={handleCommit}
@@ -310,7 +310,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
             title={
               <ColumnTitle
                 isNum={false}
-                curColumn="alertType"
+                curColumn="alertName"
                 conditions={conditions}
                 onSort={handleSort}
                 onCommit={handleCommit}

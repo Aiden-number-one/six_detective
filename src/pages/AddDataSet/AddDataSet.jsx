@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-03 16:46:07
+ * @LastEditTime : 2020-01-07 11:05:04
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -32,6 +32,7 @@ const { Option } = Select;
   dataSourceList: sqlDataSource.dataSourceList, // 数据源选择框
   totalCount: sqlDataSource.totalCount, // 数据源下表的总数
   metaDataTableList: sqlDataSource.metaDataTableList, // 数据源下的表
+  procedureDataList: sqlDataSource.procedureDataList, // 数据源下的存储过程
   tableData: sqlDataSource.tableData, // 数据预览的表数据
   column: sqlDataSource.column, // 数据预览表头
   sqlDataSetName: sqlDataSource.sqlDataSetName, // 数据集名称
@@ -73,7 +74,7 @@ class AddDataSet extends PureComponent {
     const { dispatch } = this.props;
     const {
       location: {
-        query: { connectionId, connectionName, datasetId },
+        query: { connectionId, connectionName, datasetId, datasetType },
       },
     } = this.props;
     this.connection_id = connectionId;
@@ -82,7 +83,7 @@ class AddDataSet extends PureComponent {
     // 获取数据源
     dispatch({
       type: 'sqlDataSource/getDataSourceList',
-      payload: { connectionId },
+      payload: { connectionId, datasetType },
     });
     // 获取数据集分类树
     dispatch({
@@ -164,20 +165,31 @@ class AddDataSet extends PureComponent {
 
   // 刷新数据源表列表
   loadMore = () => {
-    const { dispatch, totalCount } = this.props;
+    const {
+      dispatch,
+      totalCount,
+      location: {
+        query: { datasetType }, // 存储过程或者sql
+      },
+      dataSourceList,
+    } = this.props;
     // eslint-disable-next-line no-plusplus
     if (this.pageNumber++ >= totalCount / 30) {
       return false;
     }
-    dispatch({
-      // 获取数据源表
-      type: 'sqlDataSource/getMetadataList',
-      payload: {
-        connection_id: this.connection_id,
-        pageNumber: this.pageNumber.toString(),
-        pageSize: '30',
-      },
-    });
+    if (datasetType === 'SQL') {
+      dispatch({
+        // 获取数据源表
+        type: 'sqlDataSource/getMetadataList',
+        payload: {
+          connection_id:
+            this.connection_id ||
+            (dataSourceList && dataSourceList[0] && dataSourceList[0].connectionId),
+          pageNumber: this.pageNumber.toString(),
+          pageSize: '30',
+        },
+      });
+    }
     return true;
   };
 
@@ -379,6 +391,7 @@ class AddDataSet extends PureComponent {
     const {
       dataSourceList, // 数据源
       metaDataTableList, // 数据源表
+      procedureDataList, // 存储过程
       dispatch,
       tableData, // 数据预览数据
       classifyTree, // 数据集分类树
@@ -538,14 +551,27 @@ class AddDataSet extends PureComponent {
                           payload: [],
                         });
                         // 重新渲染
-                        dispatch({
-                          type: 'sqlDataSource/getMetadataList',
-                          payload: {
-                            connection_id: val,
-                            pageNumber: this.pageNumber.toString(),
-                            pageSize: '30',
-                          },
-                        });
+                        if (datasetType === 'SQL') {
+                          dispatch({
+                            type: 'sqlDataSource/getMetadataList',
+                            payload: {
+                              connection_id: val,
+                              pageNumber: this.pageNumber.toString(),
+                              pageSize: '30',
+                            },
+                          });
+                        } else {
+                          dispatch({
+                            // 获取存储过程
+                            type: 'sqlDataSource/getProcedure',
+                            payload: {
+                              connectionId: val,
+                              objectType: datasetType,
+                              pageNumber: this.pageNumber.toString(),
+                              pageSize: '30',
+                            },
+                          });
+                        }
                         // 保存当前选中的数据源ID
                         dispatch({
                           type: 'sqlDataSource/saveConnectionId',
@@ -565,7 +591,7 @@ class AddDataSet extends PureComponent {
                 </div>
                 <ConnList
                   loadMore={this.loadMore}
-                  data={metaDataTableList}
+                  data={datasetType === 'SQL' ? metaDataTableList : procedureDataList}
                   connection_id={
                     this.connection_id ||
                     (dataSourceList && dataSourceList[0] && dataSourceList[0].connectionId)
@@ -576,6 +602,7 @@ class AddDataSet extends PureComponent {
                     style={{ width: '100%', padding: '6px 12px 0' }}
                     defaultValue={['0', '1']}
                     onChange={this.checkBoxChange}
+                    disabled={datasetType !== 'SQL'}
                   >
                     <Row>
                       <Col span={12}>
@@ -643,6 +670,10 @@ class AddDataSet extends PureComponent {
                       datasetType={datasetType || dataSet.datasetType}
                       inputSql={this.state.sql}
                       alterInputSql={this.alterInputSql}
+                      dbConnection={
+                        this.connection_id ||
+                        (dataSourceList && dataSourceList[0] && dataSourceList[0].connectionId)
+                      }
                     />
                   </div>
                   <div className={styles.searchBox}>

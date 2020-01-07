@@ -93,6 +93,8 @@ export default {
     nextUsers: [],
     taskHistoryList: [],
     logList: [],
+    nextGroup: '',
+    currentGroup: '',
   },
   reducers: {
     save(state, { payload }) {
@@ -120,24 +122,28 @@ export default {
     },
     saveTaskGroup(state, { payload }) {
       const { taskGroup } = payload;
+      const currentGroup = taskGroup && taskGroup[0].currentGroup;
+      const nextGroup = taskGroup && taskGroup[1].nextGroup;
       const assignRadioList =
         taskGroup &&
         taskGroup[0].currentUsers &&
         taskGroup[0].currentUsers.map(item => ({
-          label: item.userId,
-          value: item.userId,
+          label: `${item} (${currentGroup})`,
+          value: item,
         }));
       const submitOrPassRadioList =
         taskGroup &&
         taskGroup[1].nextUsers &&
         taskGroup[1].nextUsers.map(item => ({
-          label: item.userId,
-          value: item.userId,
+          label: `${item} (${nextGroup})`,
+          value: item,
         }));
       return {
         ...state,
         currentUsers: assignRadioList,
         nextUsers: submitOrPassRadioList,
+        currentGroup,
+        nextGroup,
       };
     },
 
