@@ -4,7 +4,8 @@
   // background: #fff;
   :global {
     .ant-table-wrapper {
-      max-height: 440px;
+      max-height: 400px;
+      overflow-y: auto;
     }
   }
   .chart {
@@ -65,7 +66,7 @@
   // color: @primaryColor;
   // position: relative;
   line-height: 1;
-  background-color: #f2f6f8;
+  // background-color: #f2f6f8;
 }
 .table-alert,
 .table-alert-active {
@@ -85,4 +86,15 @@
   border-bottom: 19px solid transparent;
   border-left: 20px solid red;
   content: '';
+}
+
+.processingWraper {
+  :global {
+    .ant-modal-content {
+      .ant-modal-header,
+      .ant-modal-footer {
+        display: none;
+      }
+    }
+  }
 }
