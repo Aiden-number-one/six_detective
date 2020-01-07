@@ -314,7 +314,9 @@ export default class DataProcessing extends Component {
   };
 
   goClertCenter = () => {
-    router.push({ pathname: '/homepage/alert-center', query: { alertIds: this.state.alertIds } });
+    const { dataProcessingItemData } = this.props;
+    const alertIds = dataProcessingItemData.items.map(element => element.alertId);
+    router.push({ pathname: '/homepage/alert-center', query: { alertIds: alertIds.join(',') } });
   };
 
   render() {
