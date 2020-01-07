@@ -6,5 +6,5 @@
 if exist %DIST_PATH% (  
 	DEL /F /A /Q %DIST_PATH%
 )
-npm run build
+yarn run build
 @pause

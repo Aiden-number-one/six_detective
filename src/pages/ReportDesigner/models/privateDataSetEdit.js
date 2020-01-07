@@ -4,22 +4,21 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-05 09:43:41
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-04 15:26:49
+ * @LastEditTime : 2020-01-06 21:16:15
  */
 
-import { createCellPos } from '@/utils/utils';
 import Service from '@/utils/Service';
 
 const {
   sqlFormated, // sql美化
-  // getVariableList, // 获取参数
+  getVariableList, // 获取参数
 } = Service;
 
 export default {
-  namespace: 'privateDataSet',
+  namespace: 'privateDataSetEdit',
   state: {
-    customSearchData: [], // 查询控件的数据
-    cellPosition: 'A1',
+    sql: '',
+    variableList: [],
   },
   effects: {
     *sqlFormated({ payload }, { call, put }) {
@@ -31,26 +30,35 @@ export default {
         });
       }
     },
+    // 获取参数
+    *getVariable({ payload }, { call, put }) {
+      const res = yield call(getVariableList, { param: payload });
+      if (res && res.bcjson.flag === '1') {
+        // 参数列表
+        yield put({
+          type: 'setVariableList',
+          payload: res.bcjson.items,
+        });
+      }
+    },
   },
   reducers: {
-    addCustomSearchData(state, action) {
+    clear() {
       return {
-        ...state,
-        customSearchData: [...state.customSearchData, action.payload],
+        sql: '',
+        variableList: [],
       };
     },
-    deleteCustomeSearchData(state, action) {
+    changeSql(state, action) {
       return {
         ...state,
-        customSearchData: action.payload,
+        sql: action.payload,
       };
     },
-    changeCellPosition(state, action) {
-      const { rowIndex, columnIndex } = action.payload;
-      const cellPosition = createCellPos(columnIndex) + (rowIndex + 1);
+    setVariableList(state, action) {
       return {
         ...state,
-        cellPosition,
+        variableList: action.payload,
       };
     },
   },

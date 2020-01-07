@@ -2,8 +2,8 @@
  * @Description: app global config
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2020-01-02 14:07:36
- * @LastEditors  : iron
+ * @LastEditTime : 2020-01-06 17:31:52
+ * @LastEditors  : dailinbo
  * @Description: umi 配置文件
  */
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -167,6 +167,7 @@ export default {
     '/api': {
       // target: 'http://10.60.62.60:7567/superlop/restv2/admin/', // 季旋
       target: 'http://10.201.62.184:7567/superlop/restv2/admin/', // 线上
+      // target: 'http://10.60.69.113:7567/superlop/restv2/admin/', // 测试
       // target: 'http://10.60.62.46:7567/superlop/restv2/admin/', // 线上
       // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,

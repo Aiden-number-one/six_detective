@@ -3,11 +3,11 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-18 09:39:15
+ * @LastEditTime : 2020-01-06 15:35:55
  */
 import Service from '@/utils/Service';
 
-const { getAlertUserGroup, newAlertUser, updateAlertUser } = Service;
+const { getAlertUserGroup, newAlertUser, updateAlertUser, getAlertUserList } = Service;
 
 const alertUserGroup = {
   namespace: 'alertUserGroup',
@@ -15,6 +15,7 @@ const alertUserGroup = {
     data: [],
     saveUser: {},
     updateData: {},
+    getAlertData: [],
   },
   effects: {
     *getAlertUserGroup({ payload }, { call, put }) {
@@ -54,6 +55,17 @@ const alertUserGroup = {
         throw new Error(response.bcjson.msg);
       }
     },
+    *getAlertUserList({ payload }, { call, put }) {
+      const response = yield call(getAlertUserList, { param: payload });
+      if (response.bcjson.flag === '1') {
+        yield put({
+          type: 'getAlert',
+          payload: response.bcjson.items,
+        });
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
@@ -72,6 +84,12 @@ const alertUserGroup = {
       return {
         ...state,
         updateData: action.payload,
+      };
+    },
+    getAlert(state, action) {
+      return {
+        ...state,
+        getAlertData: action.payload,
       };
     },
   },

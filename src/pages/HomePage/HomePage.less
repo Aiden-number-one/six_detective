@@ -58,12 +58,15 @@
     position: relative;
     margin: 0;
     padding: 8px 5px 0;
+    overflow: hidden;
     color: #464c51;
     font-weight: 600;
     font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     .quickMenuIcon {
       position: absolute;
-      right: 15px;
+      right: 7px;
       color: #0d87d4;
     }
     .more {
@@ -84,6 +87,14 @@
     border: none;
     content: '';
   }
+  .submitStatus,
+  .outstandingCases,
+  .reported,
+  .processingStage {
+    .groupTitle {
+      padding: 10px 10px 0;
+    }
+  }
   .homepageContent {
     display: flex;
     // 左侧
@@ -91,6 +102,7 @@
       display: flex;
       flex: 7 0;
       flex-direction: column;
+      min-width: 644px;
       margin-right: 5px;
       // 统计模块
       .statisticalModule {
@@ -162,7 +174,7 @@
           .redBox,
           .blackBox {
             display: flex;
-            width: 220px;
+            min-width: 200px;
             height: 90px;
             margin: 0 5px;
             padding: 12px;
@@ -177,7 +189,7 @@
               img {
                 position: absolute;
                 top: 0;
-                right: 5px;
+                right: 0;
               }
               .title {
                 margin-top: 7px;
@@ -268,14 +280,27 @@
           }
         }
       }
+      // submitStatus
+      .submitStatus {
+        display: flex;
+        height: 366px;
+        background-color: #fff;
+      }
+      // outstandingCases
+      .outstandingCases {
+        height: 257px;
+        margin: 5px 0;
+        background-color: #fff;
+      }
     }
     // 右侧
     .rightSide {
       display: flex;
       flex: 3 0;
       flex-direction: column;
+      min-width: 275px;
       .quickMenu {
-        min-width: 310px;
+        min-width: 275px;
         height: 366px;
         padding: 5px;
         background-color: #fff;
@@ -283,10 +308,10 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          min-width: 130px;
+          min-width: 120px;
           height: 45px;
           margin: 5px;
-          padding: 0 15px;
+          padding: 0 5px;
           color: #464c51;
           font-size: 12px;
           font-family: 'AvenirHeavy', sans-serif;
@@ -322,9 +347,22 @@
           font-size: 14px;
         }
         .date {
-          width: 100px;
+          width: 70px;
+          margin-left: 5px;
           color: #7f91a4;
         }
+      }
+      .reported {
+        display: flex;
+        flex-direction: column;
+        min-width: 275px;
+        height: 418px;
+        background-color: #fff;
+      }
+      .processingStage {
+        height: 205px;
+        margin-top: 5px;
+        background-color: #fff;
       }
     }
   }

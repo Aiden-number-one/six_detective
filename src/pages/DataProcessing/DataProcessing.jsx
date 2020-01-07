@@ -20,7 +20,8 @@ export default class DataProcessing extends Component {
   constructor() {
     super();
     this.state = {
-      codeId: '',
+      alertType: '',
+      alertIds: '',
       authBypass: false,
       dataProcessingVisible: false,
       dataProcessingFlag: false,
@@ -36,18 +37,18 @@ export default class DataProcessing extends Component {
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.market' }),
-          dataIndex: 'codeId',
-          key: 'codeId',
+          dataIndex: 'market',
+          key: 'market',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertName' }),
-          dataIndex: 'codeName',
-          key: 'codeName',
+          dataIndex: 'alertName',
+          key: 'alertName',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.numberOfAlert' }),
-          dataIndex: 'codeName',
-          key: 'codeName',
+          dataIndex: 'numberOfAlert',
+          key: 'numberOfAlert',
         },
       ],
       columns: [
@@ -63,18 +64,18 @@ export default class DataProcessing extends Component {
         // },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
-          dataIndex: 'subitemId',
-          key: 'subitemId',
+          dataIndex: 'alertOwner',
+          key: 'alertOwner',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterCode' }),
-          dataIndex: 'subitemName',
-          key: 'subitemName',
+          dataIndex: 'submitterCode',
+          key: 'submitterCode',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterName' }),
-          dataIndex: 'sequence',
-          key: 'sequence',
+          dataIndex: 'submitterName',
+          key: 'submitterName',
         },
       ],
       functionNameOptions: [
@@ -88,10 +89,10 @@ export default class DataProcessing extends Component {
         pageNumber: 1,
         pageSize: 10,
       },
-      itemPage: {
-        pageNumber: 1,
-        pageSize: 10,
-      },
+      // itemPage: {
+      //   pageNumber: 1,
+      //   pageSize: 10,
+      // },
       dataCharts: [
         {
           year: 'Records Received from ECP',
@@ -128,35 +129,37 @@ export default class DataProcessing extends Component {
   }
 
   componentDidMount() {
-    // const { authBypass } = getStore('authBtn')
-    // this.setState({
-    //   authBypass,
-    // })
-    console.log('getAuthority=', getAuthority());
-    this.queryDataProcessing();
+    this.setState({
+      authBypass: getAuthority().authBypass,
+    });
+    // this.queryDataProcessing();
   }
 
   queryDataProcessing = () => {
     const { dispatch } = this.props;
-    const { page, codeName } = this.state;
+    // const { page, codeName } = this.state;
     const params = {
-      pageNumber: page.pageNumber.toString(),
-      pageSize: page.pageSize.toString(),
-      operType: 'codeQuery',
-      codeName,
+      // pageNumber: page.pageNumber.toString(),
+      // pageSize: page.pageSize.toString(),
+      operType: 'queryAlertType',
+      // codeName,
     };
     dispatch({
       type: 'dataProcessing/getDataProcessing',
       payload: params,
       callback: () => {
+        // this.setState({
+        //   inspectDataVisible: true,
+        // });
+        const { dataProcessingData } = this.props;
         this.setState(
           {
-            codeId:
-              this.props.dataProcessingData.items[0] &&
-              this.props.dataProcessingData.items[0].codeId,
+            alertType: dataProcessingData.items[0] && dataProcessingData.items[0].alertType,
+            inspectDataVisible: true,
           },
           () => {
-            this.queryDataProcessingItem();
+            // eslint-disable-next-line no-unused-expressions
+            this.state.alertType && this.queryDataProcessingItem();
           },
         );
       },
@@ -166,10 +169,10 @@ export default class DataProcessing extends Component {
   queryDataProcessingItem = () => {
     const { dispatch } = this.props;
     const params = {
-      operType: 'subitemQueryBycodeId',
-      pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
-      pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
-      codeId: `${this.state.codeId}`,
+      operType: 'queryAlertItems',
+      // pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
+      // pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
+      alertType: `${this.state.alertType}`,
     };
     dispatch({
       type: 'dataProcessing/getDataProcessingItem',
@@ -180,7 +183,7 @@ export default class DataProcessing extends Component {
   connectDataProcessing = record => {
     this.setState(
       {
-        codeId: record.codeId,
+        alertType: record.alertType,
       },
       () => {
         this.queryDataProcessingItem();
@@ -189,14 +192,17 @@ export default class DataProcessing extends Component {
   };
 
   inspectData = () => {
-    this.setState({
-      inspectDataVisible: true,
-    });
+    this.queryDataProcessing();
   };
 
-  onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys, selectedRows);
+    const alertIds = [];
+    selectedRows.forEach(element => alertIds.push(element.alertId));
+    this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {
+      // console.log('alertIds===', this.state.alertIds);
+      // this.alertItemsByPass()
+    });
   };
 
   startProcessing = () => {
@@ -218,6 +224,28 @@ export default class DataProcessing extends Component {
     });
   };
 
+  onBypass = () => {
+    // dataProcessingVisible: false,
+    this.alertItemsByPass();
+  };
+
+  alertItemsByPass = () => {
+    const { dispatch } = this.props;
+    const params = {
+      operType: 'alertItemsByPass',
+      // pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
+      // pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
+      alertIds: `${this.state.alertIds}`,
+    };
+    dispatch({
+      type: 'dataProcessing/alertItemsByPass',
+      payload: params,
+      callback: () => {
+        this.queryDataProcessing();
+      },
+    });
+  };
+
   render() {
     const { loading, dataProcessingData, dataProcessingItemData } = this.props;
     const {
@@ -231,6 +259,7 @@ export default class DataProcessing extends Component {
       dataProcessingFlag,
       dataCharts,
       cols,
+      alertType,
     } = this.state;
     const rowSelection = {
       selectedRowKeys,
@@ -249,6 +278,14 @@ export default class DataProcessing extends Component {
                   <Table
                     loading={loading['dataProcessing/getDataProcessing']}
                     style={{ marginTop: '6px' }}
+                    // eslint-disable-next-line no-confusing-arrow
+                    rowClassName={record =>
+                      (alertType && record.alertType === alertType ? styles['table-active'] : '') ||
+                      (record.isClosedIntraday === '1' ? styles['table-alert'] : '') ||
+                      (record.isClosedIntraday === '1' && record.alertType === alertType
+                        ? styles['table-alert-active']
+                        : '')
+                    }
                     dataSource={dataProcessingData.items}
                     columns={this.state.codeColumns}
                     pagination={false}
@@ -319,7 +356,7 @@ export default class DataProcessing extends Component {
                 <div className={styles.dataItemTable}>
                   <div className={styles.tableTop}>
                     <Button
-                      onClick={this.addCode}
+                      onClick={this.onBypass}
                       type="primary"
                       className="btn-usual"
                       disabled={!authBypass}

@@ -9,5 +9,5 @@ if exist %ANTV_PATH% (
 	rd /s /Q %ANTV_PATH%
 )
 
-npm install --registry=https://registry.npm.taobao.org
+yarn install --registry https://registry.npm.taobao.org
 @pause
