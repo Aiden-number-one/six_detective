@@ -8,7 +8,7 @@
  */
 import Service from '@/utils/Service';
 
-const { getReportTemplateDataQuery } = Service;
+const { getReportTemplateDataQuery, getReportDataFile } = Service;
 
 export default {
   namespace: 'reportDesignPreview',
@@ -34,6 +34,18 @@ export default {
         type: 'savePreviewData',
         payload: response.bcjson,
       });
+    },
+
+    // 导出报表文件
+    *fetchExportFile({ payload, callback }, { call }) {
+      const response = yield call(getReportDataFile, {
+        param: payload,
+      });
+      if (response.bcjson.flag === '1') {
+        callback(response.bcjson.items[0].filePath);
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
     },
   },
 };

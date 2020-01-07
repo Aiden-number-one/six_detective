@@ -2,8 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
+// import { element } from 'prop-types';
 // import { routerRedux } from 'dva/router';
-// import styles from '../AlertUserGroup.less';
+import styles from '../AlertUserGroup.less';
 
 // import ClassifyTree from '@/components/ClassifyTree';
 
@@ -16,7 +17,7 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { groupMenuInfo } = this.props;
+    const { groupMenuInfo, updateFlag, getAlertData } = this.props;
     return (
       <Fragment>
         <Form>
@@ -50,6 +51,21 @@ class FormUser extends Component {
               initialValue: groupMenuInfo && groupMenuInfo.groupDesc,
             })(<TextArea rows={4} placeholder="Please input" />)}
           </Form.Item>
+          <Form.Item
+            label={formatMessage({ id: 'systemManagement.userGroup.groupMember' })}
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 8 }}
+          >
+            {updateFlag && (
+              <Fragment>
+                {/* <ul><li>Group Member</li></ul> */}
+                <ul className={styles.groupAlert}>
+                  {getAlertData &&
+                    getAlertData.map(item => <li key={item.userId}>{item.userName}</li>)}
+                </ul>
+              </Fragment>
+            )}
+          </Form.Item>
         </Form>
       </Fragment>
     );
@@ -62,6 +78,7 @@ const NewFormUser = Form.create()(FormUser);
   loading: loading.effects,
   userGroup: alertUserGroup.saveUser,
   updateGroup: alertUserGroup.updateData,
+  getAlertData: alertUserGroup.getAlertData,
 }))
 class NewUser extends Component {
   newUserRef = React.createRef();
@@ -74,10 +91,10 @@ class NewUser extends Component {
   }
 
   componentDidMount() {
-    // const { updateFlag } = this.props;
-    // if (updateFlag) {
-    //   this.getMenuGrops();
-    // }
+    const { updateFlag } = this.props;
+    if (updateFlag) {
+      this.getAlertDataList();
+    }
   }
 
   onCancel = () => {
@@ -90,7 +107,6 @@ class NewUser extends Component {
   onSave = () => {
     const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
-      console.log('err=======', err);
       if (err) {
         return;
       }
@@ -143,7 +159,7 @@ class NewUser extends Component {
       type: 'alertUserGroup/updateUserGroup',
       payload: params,
       callback: () => {
-        const selectedKeys = this.props.updateGroup.map(element => element.menuId);
+        const selectedKeys = this.props.updateGroup.map(item => item.menuId);
         that.setState({
           selectedKeys,
         });
@@ -151,11 +167,27 @@ class NewUser extends Component {
     });
   };
 
+  getAlertDataList = () => {
+    const { dispatch, groupMenuInfo } = this.props;
+    const params = {
+      alertId: groupMenuInfo.groupId,
+    };
+    dispatch({
+      type: 'alertUserGroup/getAlertUserList',
+      payload: params,
+    });
+  };
+
   render() {
-    const { groupMenuInfo } = this.props;
+    const { groupMenuInfo, updateFlag, getAlertData } = this.props;
     return (
       <Fragment>
-        <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
+        <NewFormUser
+          ref={this.newUserRef}
+          groupMenuInfo={groupMenuInfo}
+          updateFlag={updateFlag}
+          getAlertData={getAlertData}
+        />
         <Row
           type="flex"
           justify="end"

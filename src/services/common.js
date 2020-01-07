@@ -2,8 +2,8 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime : 2020-01-02 15:45:34
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-07 09:23:15
+ * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
 const prefix = '';
@@ -49,6 +49,7 @@ export default {
   downloadFile: `${prefix}file_download_quick`,
   // getUserList: `${prefix}get_user_list_impl`,
   getUserList: `${prefix}get_user_list_information`,
+  getAlertUserList: `${prefix}get_alert_user_page_query`,
   addUser: `${prefix}set_sysuser_info_add`,
   updateUser: `${prefix}set_user_update`,
   operationUser: `${prefix}set_user_service_impl`,
@@ -77,4 +78,6 @@ export default {
   updateTemplate: `${prefix}set_template_update`,
   getSystemCode: `${prefix}get_system_code`,
   dataExport: `${prefix}set_data_file_export`,
+  getDataProcessing: `${prefix}get_data_process_info`,
+  startProcessing: `${prefix}slop_biz.p_i_data_processing`,
 };

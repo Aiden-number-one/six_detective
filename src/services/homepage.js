@@ -2,10 +2,16 @@
  * @Description: 首页相关接口
  * @Author: lan
  * @Date: 2019-11-28 14:18:22
- * @LastEditTime : 2020-01-04 15:53:07
+ * @LastEditTime : 2020-01-06 18:11:33
  * @LastEditors  : lan
  */
 export default {
+  getLateReportFileCount: 'get_late_report_file_count_by_trade_date', //
+  getOutstandingReportFileCount: 'get_outstanding_report_file_count_by_trade_date', //
+  getProcessingStageData: 'get_file_count_group_by_proc_status', //
+  getMarketData: 'get_bi_count_group_by_market', // 获取
+  getMarketDataByCategory: 'get_bi_count_of_market_group_by_category', // 获取
+  getFileCountByDate: 'get_file_count_group_by_trade_date', //
   getMyAlert: 'get_my_alert', // 获取My alert
   getQuickMenu: 'get_quickly_query_menu', // 获取快捷菜单
   saveQuickMenu: 'set_quickly_add_menu', // 设置快捷菜单

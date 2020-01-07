@@ -14,7 +14,7 @@ const formLayout = {
 };
 
 export default props => {
-  const { getFieldDecorator } = props;
+  const { getFieldDecorator, currentWidge = {} } = props;
   return (
     <Content className={styles.content}>
       {/* 控件设置基本信息 */}
@@ -28,10 +28,9 @@ export default props => {
           <Form colon={false}>
             {/* 控件类型 */}
             <Form.Item label={<FormattedMessage id="report-designer.widgettype" />} {...formLayout}>
-              {getFieldDecorator(
-                'widgetType',
-                {},
-              )(
+              {getFieldDecorator('widgetType', {
+                initialValue: currentWidge.widgetType,
+              })(
                 <Select>
                   <Option value="input">Input</Option>
                   <Option value="inputnumber">Input Number</Option>
@@ -39,6 +38,7 @@ export default props => {
                   <Option value="datepickeryyyymm">Date Picker(yyyy-mm)</Option>
                   <Option value="datepickeryyyymmdd">Date Picker(yyyy-mm-dd)</Option>
                   <Option value="select">Select</Option>
+                  <Option value="selectmultiple">Multiple selection</Option>
                   <Option value="radio">Radio</Option>
                   <Option value="checkbox">Checkbox</Option>
                 </Select>,
@@ -47,43 +47,47 @@ export default props => {
             {/* 标签名称 */}
             <Form.Item label={<FormattedMessage id="report-designer.tag-name" />} {...formLayout}>
               <Form.Item style={{ display: 'inline-block', width: '50%' }}>
-                {getFieldDecorator('widgetName', {})(<Input />)}
+                {getFieldDecorator('widgetName', {
+                  initialValue: currentWidge.widgetName,
+                })(<Input />)}
               </Form.Item>
               <Form.Item style={{ display: 'inline-block', width: '50%', paddingLeft: 4 }}>
-                {getFieldDecorator(
-                  'widgetVisible',
-                  {},
-                )(<Checkbox>{<FormattedMessage id="report-designer.visible" />}</Checkbox>)}
+                {getFieldDecorator('widgetNameVisible', {
+                  initialValue: currentWidge.widgetNameVisible,
+                })(<Checkbox>{<FormattedMessage id="report-designer.visible" />}</Checkbox>)}
               </Form.Item>
             </Form.Item>
             {/* 提示文字 */}
             <Form.Item label={<FormattedMessage id="report-designer.tooltip" />} {...formLayout}>
-              {getFieldDecorator('widgetPlaceholder', {})(<Input />)}
+              {getFieldDecorator('widgetPlaceholder', {
+                initialValue: currentWidge.widgetPlaceholder,
+              })(<Input />)}
             </Form.Item>
             {/* 描述信息 */}
             <Form.Item
               label={<FormattedMessage id="report-designer.description" />}
               {...formLayout}
             >
-              {getFieldDecorator('widgetDes', {})(<TextArea rows={2} />)}
+              {getFieldDecorator('widgetDes', {
+                initialValue: currentWidge.widgetDes,
+              })(<TextArea rows={2} />)}
             </Form.Item>
             {/* 默认状态 */}
             <Form.Item
               label={<FormattedMessage id="report-designer.defaultstatus" />}
               {...formLayout}
             >
-              {getFieldDecorator(
-                'widgetStatus',
-                {},
-              )(
-                <Radio.Group defaultValue="a">
-                  <Radio.Button value="a">
+              {getFieldDecorator('widgetStatus', {
+                initialValue: currentWidge.widgetStatus || 'normal',
+              })(
+                <Radio.Group>
+                  <Radio.Button value="normal">
                     <FormattedMessage id="report-designer.normal" />
                   </Radio.Button>
-                  <Radio.Button value="b">
+                  <Radio.Button value="readyonly">
                     <FormattedMessage id="report-designer.readyonly" />
                   </Radio.Button>
-                  <Radio.Button value="c">
+                  <Radio.Button value="hide">
                     <FormattedMessage id="report-designer.hide" />
                   </Radio.Button>
                 </Radio.Group>,
@@ -104,33 +108,45 @@ export default props => {
         </Panel>
       </Collapse>
       {/* 控件设置选项信息 */}
-      <Collapse
-        bordered={false}
-        defaultActiveKey={['1']}
-        expandIconPosition="right"
-        expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-      >
-        <Panel header={<FormattedMessage id="report-designer.option" />} key="1">
-          <Form colon={false}>
-            {/* 来源于 */}
-            <Form.Item label={<FormattedMessage id="report-designer.from" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Select />)}
-            </Form.Item>
-            {/* 数据源 */}
-            <Form.Item label={<FormattedMessage id="report-designer.datasource" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Select />)}
-            </Form.Item>
-            {/* 数据集 */}
-            <Form.Item label={<FormattedMessage id="report-designer.dataset" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Select />)}
-            </Form.Item>
-            {/* 数据字段 */}
-            <Form.Item label={<FormattedMessage id="report-designer.datacolumn" />} {...formLayout}>
-              {getFieldDecorator('roleName', {})(<Select />)}
-            </Form.Item>
-          </Form>
-        </Panel>
-      </Collapse>
+      {/* 此内容只在单选、多选、radio、checkbox中显示 */}
+      {(currentWidge.widgetType === 'select' ||
+        currentWidge.widgetType === 'selectmultiple' ||
+        currentWidge.widgetType === 'radio' ||
+        currentWidge.widgetType === 'checkbox') && (
+        <Collapse
+          bordered={false}
+          defaultActiveKey={['1']}
+          expandIconPosition="right"
+          expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+        >
+          <Panel header={<FormattedMessage id="report-designer.option" />} key="1">
+            <Form colon={false}>
+              {/* 来源于 */}
+              <Form.Item label={<FormattedMessage id="report-designer.from" />} {...formLayout}>
+                {getFieldDecorator('roleName', {})(<Select />)}
+              </Form.Item>
+              {/* 数据源 */}
+              <Form.Item
+                label={<FormattedMessage id="report-designer.datasource" />}
+                {...formLayout}
+              >
+                {getFieldDecorator('roleName', {})(<Select />)}
+              </Form.Item>
+              {/* 数据集 */}
+              <Form.Item label={<FormattedMessage id="report-designer.dataset" />} {...formLayout}>
+                {getFieldDecorator('roleName', {})(<Select />)}
+              </Form.Item>
+              {/* 数据字段 */}
+              <Form.Item
+                label={<FormattedMessage id="report-designer.datacolumn" />}
+                {...formLayout}
+              >
+                {getFieldDecorator('roleName', {})(<Select />)}
+              </Form.Item>
+            </Form>
+          </Panel>
+        </Collapse>
+      )}
       {/* 控件校验 */}
       <Collapse
         bordered={false}
@@ -150,3 +166,6 @@ export default props => {
     </Content>
   );
 };
+// export default connect(({ formArea }) => ({
+//   // customSearchData: formArea.customSearchData,
+// }))(WidgetControl);

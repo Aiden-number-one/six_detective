@@ -1,8 +1,10 @@
 import React from 'react';
-import { Descriptions } from 'antd';
+import { Descriptions, Table } from 'antd';
 // import { FormattedMessage } from 'umi/locale';
 import moment from 'moment';
 import { dateFormat } from '@/pages/DataImportLog/constants';
+
+const { Column } = Table;
 
 const isCACodeMap = {
   0: 'No',
@@ -89,6 +91,57 @@ export function CaCodeTaskItem({
       <Descriptions.Item label="Expiry Date *">
         {moment(EXPIRY_DATE).format(dateFormat)}
       </Descriptions.Item>
+      <Descriptions.Item label="Remark *">{REMARK}</Descriptions.Item>
+    </Descriptions>
+  );
+}
+export function A1({ task }) {
+  const {
+    MARKET,
+    SUBMITTER_CODE,
+    SUBMITTER_NAME,
+    ACCOUNT_NO,
+    PREV_OMN_BI_NAME,
+    PREV_TO_CODE,
+    REPORTED_HISTORY,
+    ANSWER_HISTORY,
+    REMARK,
+  } = task;
+  return (
+    <Descriptions column={1}>
+      <Descriptions.Item label="Market *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="Submitter Code *">{SUBMITTER_CODE}</Descriptions.Item>
+      <Descriptions.Item label="Submitter Name *">{SUBMITTER_NAME}</Descriptions.Item>
+      <Descriptions.Item label="EP/TO Name *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="LOP Account No *">{ACCOUNT_NO}</Descriptions.Item>
+      <Descriptions.Item label="Previous BI Code *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="Previous BI Name *">{PREV_OMN_BI_NAME}</Descriptions.Item>
+      <Descriptions.Item label="Previous TO Code *">{PREV_TO_CODE}</Descriptions.Item>
+      <Descriptions.Item label="Previous TO Name *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="Report History *">
+        <Table dataSource={REPORTED_HISTORY}>
+          <Column align="center" dataIndex="alertNo" title="Reported Time" />
+          <Column align="center" dataIndex="ACCOUNT_NAME" title="Reported Account Name" />
+          <Column align="center" dataIndex="REPORTED_BI_NAME" title="Reported BI Name" />
+          <Column align="center" dataIndex="REPORTED_TO_NAME" title="Reported TO Name" />
+        </Table>
+      </Descriptions.Item>
+      <Descriptions.Item label="Received Answer *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="Answer History *">
+        <Table dataSource={ANSWER_HISTORY}>
+          <Column align="center" dataIndex="alertNo" title="Answered Time" />
+          <Column align="center" dataIndex="alertNo" title="Answered Full BI Name" />
+          <Column align="center" dataIndex="alertNo" title="Answered BI Category" />
+          <Column align="center" dataIndex="alertNo" title="Matched BI Code" />
+          <Column align="center" dataIndex="alertNo" title="Matched OMN Code" />
+          <Column align="center" dataIndex="alertNo" title="Answered Full TO Name" />
+          <Column align="center" dataIndex="alertNo" title="Matched TO" />
+        </Table>
+      </Descriptions.Item>
+      <Descriptions.Item label="Confirmed BI *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="Confirmed TO *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="Report Any Position *">{MARKET}</Descriptions.Item>
+      <Descriptions.Item label="Watch *">{MARKET}</Descriptions.Item>
       <Descriptions.Item label="Remark *">{REMARK}</Descriptions.Item>
     </Descriptions>
   );

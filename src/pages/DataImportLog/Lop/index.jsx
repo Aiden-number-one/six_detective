@@ -23,6 +23,13 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
     });
   }, []);
 
+  async function getSubmitters(params) {
+    return dispatch({
+      type: 'lop/fetchSubmitters',
+      payload: params,
+    });
+  }
+
   function handleParams(type, params) {
     setSearchParams(params);
     dispatch({ type, payload: params });
@@ -54,7 +61,8 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
         <FilterForm formType={0} loading={loading} onParams={handleParams} />
         <LopLogManualModal
           visible={visible}
-          loading={loading['lop/importByManual']}
+          loading={loading}
+          onSubmitter={getSubmitters}
           onCancel={() => setVisible(false)}
           onUpload={handleUpload}
         />

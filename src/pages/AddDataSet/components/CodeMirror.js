@@ -27,6 +27,7 @@ class CodeMirrorComponent extends Component {
       datasetType,
       inputSql,
       alterInputSql,
+      dbConnection,
     } = this.props;
     const menu = (
       <Menu
@@ -64,6 +65,36 @@ class CodeMirrorComponent extends Component {
         <Menu.Item key="2">Select</Menu.Item>
       </Menu>
     );
+    const proMenu = (
+      <Menu
+        onClick={() => {
+          const procedureName = sqlItem.name;
+          dispatch({
+            type: 'sqlDataSource/getProcStatement',
+            payload: {
+              dbConnection,
+              procedureName,
+              procType: '2',
+            },
+            callback: value => {
+              const params = value.map(item => `\${${item.ARGUMENT_NAME}}`);
+              const insertProceduce = `CALL ${procedureName}(${params.join(',')})`;
+              dispatch({
+                type: 'sqlKeydown/changeSql',
+                payload: inputSql + insertProceduce,
+              });
+              alterInputSql(inputSql + insertProceduce);
+            },
+          });
+          dispatch({
+            type: 'sqlKeydown/changeSqlDropDown',
+            payload: false,
+          });
+        }}
+      >
+        <Menu.Item key="1">Call</Menu.Item>
+      </Menu>
+    );
     return connectDropTarget(
       <div
         style={{ position: 'relative' }}
@@ -76,7 +107,7 @@ class CodeMirrorComponent extends Component {
           }
         }}
       >
-        {(!inputSql || !sql) && (
+        {!inputSql && !sql && (
           <span
             style={{
               position: 'absolute',
@@ -90,7 +121,11 @@ class CodeMirrorComponent extends Component {
             Please Input {datasetType}
           </span>
         )}
-        <Dropdown overlay={menu} onVisibleChange={() => {}} visible={visible}>
+        <Dropdown
+          overlay={datasetType === 'SQL' ? menu : proMenu}
+          onVisibleChange={() => {}}
+          visible={visible}
+        >
           <div style={{ visibility: 'hidden', position: 'absolute', top: 50, left: 70 }} />
         </Dropdown>
         <CodeMirror

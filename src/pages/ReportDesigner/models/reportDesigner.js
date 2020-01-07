@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-04 20:45:24
+ * @LastEditTime : 2020-01-07 09:35:56
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -24,7 +24,7 @@ export default {
     reportName: 'Untitled', // 当前报表设计器的名字
     reportTemplateContent: '', // 报表设计器的JSON
     reportId: '', // 报表设计器的id
-    teamplateAreaObj: {}, // 报表设计器表格区域的相关Object对象
+    teamplateAreaObj: [], // 报表设计器表格区域的相关Object对象
     originTemplateAreaObj: {}, // xspreadsheet的原始数据
     dataSetPublicList: [], // 公共数据集列表
     dataSetPrivateList: [], // 私有数据集

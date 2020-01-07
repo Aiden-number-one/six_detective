@@ -2,8 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-04 17:13:16
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-06 11:15:23
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -415,7 +415,6 @@ class ClassifyTree extends Component {
           // <Fragment>
           <TreeNode
             checkable={!currentKey.includes('btn')}
-            selectable={false}
             className={currentKey.includes('btn') ? styles.btnClass : ''}
             key={currentKey}
             title={

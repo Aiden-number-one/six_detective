@@ -11,48 +11,67 @@ import styles from './index.less';
 
 const { Sider } = Layout;
 
-@connect(({ reportDesigner }) => ({
+@connect(({ reportDesigner, formArea }) => ({
   cellPosition: reportDesigner.cellPosition,
   dataSetPrivateList: reportDesigner.dataSetPrivateList,
   spreadsheetOtherProps: reportDesigner.spreadsheetOtherProps,
+  teamplateAreaObj: reportDesigner.teamplateAreaObj,
+  customSearchData: formArea.customSearchData,
 }))
 @Form.create({
   onFieldsChange(props, changedFields, allFields) {
-    // TODO：异步问题
-    if (props.cellPosition !== allFields.cell.value) {
-      return;
-    }
-    // 若修改form，则即使更新fields
-    const { dispatch, dataSetPrivateList, cellPosition } = props;
+    const { dispatch } = props;
+    // 便利得到result
     const result = {};
     Object.entries(allFields).forEach(([key, value]) => {
       result[key] = value.value;
     });
-    const { dataSet, dataColumn, ...otherProps } = result;
-    otherProps.dataSet = {
-      datasetId: dataSet,
-      datasetName: dataSetPrivateList.find(value => value.dataset_id === dataSet)
-        ? dataSetPrivateList.find(value => value.dataset_id === dataSet).dataset_name
-        : undefined,
-      fieldDataName: dataColumn,
-    };
-    // 若此单元格为数据集类型，且数据集与数据集字段都有，则为此单元格设置元素
-    if (
-      otherProps.dataSet.datasetName &&
-      otherProps.dataSet.fieldDataName &&
-      otherProps.elementType
-    ) {
-      setCellTypeAndValue(
-        'dataSet',
-        `${otherProps.dataSet.datasetName}.${otherProps.dataSet.fieldDataName}`,
-        cellPosition,
-      );
+    // 若单元格设置区域，则进行以下操作
+    if (allFields.cell) {
+      // TODO：异步问题
+      if (props.cellPosition !== allFields.cell.value) {
+        return;
+      }
+      // 若修改form，则即使更新fields
+      const { dataSetPrivateList, cellPosition } = props;
+      const { dataSet, dataColumn, ...otherProps } = result;
+      otherProps.dataSet = {
+        datasetId: dataSet,
+        datasetName: dataSetPrivateList.find(value => value.dataset_id === dataSet)
+          ? dataSetPrivateList.find(value => value.dataset_id === dataSet).dataset_name
+          : undefined,
+        fieldDataName: dataColumn,
+      };
+      // 若此单元格为数据集类型，且数据集与数据集字段都有，则为此单元格设置元素
+      if (
+        otherProps.dataSet.datasetName &&
+        otherProps.dataSet.fieldDataName &&
+        otherProps.elementType
+      ) {
+        setCellTypeAndValue(
+          'dataSet',
+          `${otherProps.dataSet.datasetName}.${otherProps.dataSet.fieldDataName}`,
+          cellPosition,
+        );
+      }
+      dispatch({
+        type: 'reportDesigner/modifyTemplateArea',
+        payload: otherProps,
+      });
     }
-    dispatch({
-      type: 'reportDesigner/modifyTemplateArea',
-      payload: otherProps,
-    });
+    const { customSearchData } = props;
+    if (allFields.widgetType && customSearchData.length > 0) {
+      // 若单元格为控件设置的操作，则进行以下操作
+      dispatch({
+        type: 'formArea/changeCustomSearchData',
+        payload: {
+          index: customSearchData.find(value => value.active).i,
+          props: result,
+        },
+      });
+    }
   },
+  // 若是控件设置区域，则进行下面的操作
 })
 export default class RightSideBar extends PureComponent {
   state = {
@@ -86,6 +105,8 @@ export default class RightSideBar extends PureComponent {
       dataSetPrivateList,
       dispatch,
       spreadsheetOtherProps,
+      teamplateAreaObj,
+      customSearchData,
     } = this.props;
     this.resetFields();
     const { siderBarType } = this.state;
@@ -99,6 +120,11 @@ export default class RightSideBar extends PureComponent {
       cellPosition, // 单元格位置
       dataSetPrivateList, // 私有数据集
       otherProps: spreadsheetOtherProps.length > 0 ? spreadsheetOtherProps[rowIndex][colIndex] : {},
+      text: teamplateAreaObj.length > 0 ? teamplateAreaObj[0].data[rowIndex][colIndex] : '',
+    };
+    // 控件的props
+    const widgetProps = {
+      currentWidge: customSearchData.find(value => value.active) || {},
     };
     // 表单的props
     const formProps = {
@@ -123,8 +149,8 @@ export default class RightSideBar extends PureComponent {
         {rightSideCollapse && (
           <Layout>
             {siderBarType === 'cell' && <CellProperty {...formProps} {...cellProps} />}
-            {siderBarType === 'query' && <WidgetControl {...formProps} />}
-            {siderBarType === 'global' && <CellProperty {...formProps} {...cellProps} />}
+            {siderBarType === 'query' && <WidgetControl {...formProps} {...widgetProps} />}
+            {siderBarType === 'global' && <CellProperty {...formProps} />}
             <Sider width={30} className={styles.sider}>
               <IconFont
                 type="iconbiaoge2"

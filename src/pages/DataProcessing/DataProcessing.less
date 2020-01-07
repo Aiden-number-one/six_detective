@@ -1,9 +1,11 @@
+@import '~@/assets/css/variable.less';
 .dataProcessingWraper {
   // padding: 10px;
   // background: #fff;
   :global {
     .ant-table-wrapper {
-      max-height: 440px;
+      max-height: 400px;
+      overflow-y: auto;
     }
   }
   .chart {
@@ -58,4 +60,41 @@
 .dataprocessing-icon {
   display: block;
   font-size: 52px;
+}
+// 数据处理表格自定义类名
+.table-active {
+  // color: @primaryColor;
+  // position: relative;
+  line-height: 1;
+  // background-color: #f2f6f8;
+}
+.table-alert,
+.table-alert-active {
+  line-height: 1;
+  background-color: @warningColor !important;
+}
+.table-active::after,
+.table-alert-active::after {
+  // position: absolute;
+  // top: 0;
+  // right: 0;
+  // bottom: 0;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 19px solid transparent;
+  border-bottom: 19px solid transparent;
+  border-left: 20px solid red;
+  content: '';
+}
+
+.processingWraper {
+  :global {
+    .ant-modal-content {
+      .ant-modal-header,
+      .ant-modal-footer {
+        display: none;
+      }
+    }
+  }
 }

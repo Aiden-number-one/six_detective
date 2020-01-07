@@ -4,12 +4,12 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-03 16:32:36
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-24 17:02:55
+ * @LastEditTime : 2020-01-04 21:13:53
  */
 import { mp, mockRes } from './utils';
 
 export default {
-  [mp('get_alert_center_page_list')]: mockRes(100, [
+  [mp('get_table_page_list')]: mockRes(100, [
     {
       alertId: '@id()',
       'alertType|1': [1, 2],
@@ -46,19 +46,7 @@ export default {
       rowsCount: '0',
       filePath: null,
       commentContent: '@paragraph',
-      fileList: null,
-    },
-  ]),
-  [mp('get_alert_comment_list')]: mockRes(1, [
-    {
-      id: '@id',
-      alertId: '@id',
-      operateMode: '',
-      commitTime: '@date("yyyy-MM-dd")',
-      rowsCount: '0',
-      filePath: null,
-      commentContent: '@paragraph',
-      fileList: null,
+      fileList: 'aaa.png,bb.doc,masdfa.docx',
     },
   ]),
   [mp('get_table_column_filter_list')]: mockRes(1, ['1', '2', '3']),

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { Drawer, Form, Input, Upload, Icon, Button, Table, Select, Alert } from 'antd';
+
 import styles from '../index.less';
 
 const { Column } = Table;
@@ -68,7 +69,13 @@ function EditableFileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, 
         }}
         pagination={false}
       >
-        <Column width={180} ellipsis title="File Name" dataIndex="fileName" />
+        <Column
+          width={180}
+          ellipsis
+          title="File Name"
+          dataIndex="fileName"
+          render={text => <span title={text}>{text}</span>}
+        />
         <Column
           width={120}
           align="center"
@@ -131,10 +138,34 @@ function EditableFileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, 
   );
 }
 
-function NewAccountLogManualModal({ form, visible, onHide, onUpload }) {
+function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFiles, onUpload }) {
   const [fileUid, setFileUid] = useState('');
-  const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [fileList, setFileList] = useState([]);
+  const [validFiles, setValidFiles] = useState([]);
+  const [parseErrs, setParseErrs] = useState([]);
+
+  useEffect(() => {
+    if (parseFiles.length > 0) {
+      const files = parseFiles
+        .filter(file => file.flag === 'T')
+        .map(file => {
+          const fileBinary = fileList.find(item => item.fileName === file.fileName);
+          return {
+            ...fileBinary,
+            ...file,
+          };
+        });
+
+      const errs = parseFiles
+        .filter(file => file.flag === 'F')
+        .map(file => `${file.fileName}, ${file.detail}`);
+
+      setValidFiles(files);
+      setParseErrs(errs);
+      setFileList([]);
+    }
+  }, [parseFiles]);
 
   const { getFieldDecorator } = form;
 
@@ -149,15 +180,21 @@ function NewAccountLogManualModal({ form, visible, onHide, onUpload }) {
         submitterCode: '',
       })),
     ]);
+
     return false;
   }
 
+  async function handleParseFiles() {
+    setValidFiles([]);
+    setParseErrs([]);
+    onParseFiles(fileList.map(item => item.file));
+  }
   function handleSave(uid) {
     form.validateFields((err, values) => {
       const { uploadFiles, ...rest } = values;
       if (!err) {
-        setFileList(
-          fileList.map(item => {
+        setValidFiles(
+          validFiles.map(item => {
             if (item.uid === uid) {
               return {
                 ...item,
@@ -173,8 +210,8 @@ function NewAccountLogManualModal({ form, visible, onHide, onUpload }) {
   }
 
   function handleRemove(file) {
-    const leftFileList = fileList.filter(f => f.uid !== file.uid);
-    setFileList(leftFileList);
+    const leftFileList = validFiles.filter(f => f.uid !== file.uid);
+    setValidFiles(leftFileList);
     if (!leftFileList.length) {
       form.resetFields();
     }
@@ -190,18 +227,20 @@ function NewAccountLogManualModal({ form, visible, onHide, onUpload }) {
     setLoading(false);
     form.resetFields();
     setFileList([]);
+    setValidFiles([]);
+    setParseErrs([]);
     onHide();
   }
 
   async function handleCommit() {
     form.validateFields(async err => {
       if (!err) {
-        const noSubmitterCodeFile = fileList.find(item => !item.submitterCode);
+        const noSubmitterCodeFile = validFiles.find(item => !item.submitterCode);
         if (noSubmitterCodeFile) {
           setFileUid(noSubmitterCodeFile.uid);
-        } else if (fileList.length > 0) {
+        } else if (validFiles.length > 0) {
           setLoading(true);
-          onUpload(fileList, fileHandle, allUploadFinish);
+          onUpload(validFiles, fileHandle, allUploadFinish);
         }
       }
     });
@@ -216,8 +255,8 @@ function NewAccountLogManualModal({ form, visible, onHide, onUpload }) {
       visible={visible}
       onClose={onHide}
     >
-      <Form className={styles['modal-form']}>
-        <Alert message={warningMsg} type="warning" showIcon />
+      <Alert message={warningMsg} type="warning" showIcon banner />
+      <Form layout="vertical">
         <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
@@ -262,11 +301,21 @@ function NewAccountLogManualModal({ form, visible, onHide, onUpload }) {
           )}
         </Form.Item>
       </Form>
-      {fileList.length > 0 && (
+      {parseErrs.length > 0 && (
+        <ul className={styles['account-error']}>
+          {parseErrs.map(text => (
+            <li key={text}>
+              <Icon type="close-circle" className={styles.icon} />
+              {text}
+            </li>
+          ))}
+        </ul>
+      )}
+      {validFiles.length > 0 && (
         <EditableFileTable
           form={form}
           fileUid={fileUid}
-          fileList={fileList}
+          fileList={validFiles}
           onSave={handleSave}
           onRemove={handleRemove}
           onCancel={() => setFileUid('')}
@@ -275,7 +324,15 @@ function NewAccountLogManualModal({ form, visible, onHide, onUpload }) {
       )}
       <div className={styles['bottom-btns']}>
         <Button onClick={onHide}>Cancel</Button>
-        <Button type="primary" loading={loading} onClick={handleCommit}>
+        <Button type="primary" disabled={!fileList.length} onClick={handleParseFiles}>
+          Parse Files
+        </Button>
+        <Button
+          type="primary"
+          loading={loading}
+          disabled={!validFiles.length}
+          onClick={handleCommit}
+        >
           Commit
         </Button>
       </div>

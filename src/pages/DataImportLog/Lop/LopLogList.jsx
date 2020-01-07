@@ -77,12 +77,10 @@ export default function({
         render={(text, record) => <span>{moment(record.tradeDate).format(dateFormat)}</span>}
       />
       <Column
-        align="center"
         dataIndex="submitterCode"
         title={<FormattedMessage id="data-import.submitter-code" />}
       />
       <Column
-        align="center"
         dataIndex="submitterName"
         title={<FormattedMessage id="data-import.lop.submitter-name" />}
       />

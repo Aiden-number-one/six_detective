@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-12 14:08:57
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-21 13:35:00
+ * @LastEditTime : 2020-01-04 20:10:36
  */
 
 export const PHRASES = [

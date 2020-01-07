@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import classnames from 'classnames';
 import { Row, Col, Button, Table, Select, Modal, Progress } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
@@ -7,6 +8,7 @@ import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
 import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
 import { getAuthority } from '@/utils/authority';
+import { getStore } from '@/utils/store';
 
 const { Option } = Select;
 // const { RangePicker } = DatePicker;
@@ -15,14 +17,19 @@ const { Option } = Select;
   loading: loading.effects,
   dataProcessingData: dataProcessing.data,
   dataProcessingItemData: dataProcessing.itemData,
+  startProcessingData: dataProcessing.startProcessingData,
+  marketData: dataProcessing.marketData,
 }))
 export default class DataProcessing extends Component {
   constructor() {
     super();
     this.state = {
-      codeId: '',
+      alertType: '',
+      alertIds: '',
+      market: '',
       authBypass: false,
       dataProcessingVisible: false,
+      dataAlertVisible: false,
       dataProcessingFlag: false,
       inspectDataVisible: false,
       codeColumns: [
@@ -36,18 +43,18 @@ export default class DataProcessing extends Component {
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.market' }),
-          dataIndex: 'codeId',
-          key: 'codeId',
+          dataIndex: 'market',
+          key: 'market',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertName' }),
-          dataIndex: 'codeName',
-          key: 'codeName',
+          dataIndex: 'alertName',
+          key: 'alertName',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.numberOfAlert' }),
-          dataIndex: 'codeName',
-          key: 'codeName',
+          dataIndex: 'numberOfAlert',
+          key: 'numberOfAlert',
         },
       ],
       columns: [
@@ -63,35 +70,31 @@ export default class DataProcessing extends Component {
         // },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
-          dataIndex: 'subitemId',
-          key: 'subitemId',
+          dataIndex: 'alertOwner',
+          key: 'alertOwner',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterCode' }),
-          dataIndex: 'subitemName',
-          key: 'subitemName',
+          dataIndex: 'submitterCode',
+          key: 'submitterCode',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterName' }),
-          dataIndex: 'sequence',
-          key: 'sequence',
+          dataIndex: 'submitterName',
+          key: 'submitterName',
         },
       ],
-      functionNameOptions: [
-        { key: '', value: '', title: 'All' },
-        { key: '1', value: '1', title: 'Name One' },
-        { key: '2', value: '2', title: 'Name Two' },
-        { key: '3', value: '3', title: 'Name Three' },
-      ],
+      functionNameOptions: [],
       selectedRowKeys: [],
+      intradays: [],
       page: {
         pageNumber: 1,
         pageSize: 10,
       },
-      itemPage: {
-        pageNumber: 1,
-        pageSize: 10,
-      },
+      // itemPage: {
+      //   pageNumber: 1,
+      //   pageSize: 10,
+      // },
       dataCharts: [
         {
           year: 'Records Received from ECP',
@@ -128,35 +131,38 @@ export default class DataProcessing extends Component {
   }
 
   componentDidMount() {
-    // const { authBypass } = getStore('authBtn')
-    // this.setState({
-    //   authBypass,
-    // })
-    console.log('getAuthority=', getAuthority());
-    this.queryDataProcessing();
+    this.getMarket();
+    this.setState({
+      authBypass: getAuthority().authBypass,
+    });
+    // this.queryDataProcessing();
   }
 
   queryDataProcessing = () => {
     const { dispatch } = this.props;
-    const { page, codeName } = this.state;
+    // const { page, codeName } = this.state;
     const params = {
-      pageNumber: page.pageNumber.toString(),
-      pageSize: page.pageSize.toString(),
-      operType: 'codeQuery',
-      codeName,
+      // pageNumber: page.pageNumber.toString(),
+      // pageSize: page.pageSize.toString(),
+      operType: 'queryAlertType',
+      // codeName,
     };
     dispatch({
       type: 'dataProcessing/getDataProcessing',
       payload: params,
       callback: () => {
+        // this.setState({
+        //   inspectDataVisible: true,
+        // });
+        const { dataProcessingData } = this.props;
         this.setState(
           {
-            codeId:
-              this.props.dataProcessingData.items[0] &&
-              this.props.dataProcessingData.items[0].codeId,
+            alertType: dataProcessingData.items[0] && dataProcessingData.items[0].alertType,
+            inspectDataVisible: true,
           },
           () => {
-            this.queryDataProcessingItem();
+            // eslint-disable-next-line no-unused-expressions
+            this.state.alertType && this.queryDataProcessingItem();
           },
         );
       },
@@ -166,10 +172,10 @@ export default class DataProcessing extends Component {
   queryDataProcessingItem = () => {
     const { dispatch } = this.props;
     const params = {
-      operType: 'subitemQueryBycodeId',
-      pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
-      pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
-      codeId: `${this.state.codeId}`,
+      operType: 'queryAlertItems',
+      // pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
+      // pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
+      alertType: `${this.state.alertType}`,
     };
     dispatch({
       type: 'dataProcessing/getDataProcessingItem',
@@ -177,10 +183,32 @@ export default class DataProcessing extends Component {
     });
   };
 
+  getMarket = () => {
+    const { dispatch } = this.props;
+    const params = {
+      operType: 'marketSourceQuery',
+      dictValue: 'MARKET_SOURCE',
+    };
+    dispatch({
+      type: 'dataProcessing/getMarket',
+      payload: params,
+      callback: () => {
+        console.log('this.props.marketData====', this.props.marketData);
+        this.setState({
+          functionNameOptions: this.props.marketData.map(element => ({
+            key: element.dataId,
+            value: element.dictdataValue,
+            title: element.dictdataName,
+          })),
+        });
+      },
+    });
+  };
+
   connectDataProcessing = record => {
     this.setState(
       {
-        codeId: record.codeId,
+        alertType: record.alertType,
       },
       () => {
         this.queryDataProcessingItem();
@@ -189,21 +217,53 @@ export default class DataProcessing extends Component {
   };
 
   inspectData = () => {
-    this.setState({
-      inspectDataVisible: true,
+    this.queryDataProcessing();
+  };
+
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys, selectedRows);
+    const alertIds = [];
+    selectedRows.forEach(element => alertIds.push(element.alertId));
+    this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {
+      // console.log('alertIds===', this.state.alertIds);
+      // this.alertItemsByPass()
     });
   };
 
-  onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
+  onChangeMarkt = (value, key) => {
+    console.log('value', value, key);
+    this.setState({
+      market: value,
+    });
   };
 
   startProcessing = () => {
-    this.setState({
-      dataProcessingVisible: true,
-      dataProcessingFlag: true,
-    });
+    const { dataProcessingData } = this.props;
+    const isClosedIntraday = dataProcessingData.items.some(
+      element => element.isClosedIntraday === '1',
+    );
+    const intradays = dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
+    if (isClosedIntraday) {
+      this.setState({
+        intradays,
+        dataAlertVisible: true,
+      });
+    } else {
+      const { dispatch } = this.props;
+      const { market } = this.state;
+      const params = {
+        user_id: getStore('userId'),
+        market,
+      };
+      dispatch({
+        type: 'dataProcessing/startProcessing',
+        payload: params,
+      });
+      this.setState({
+        dataProcessingVisible: true,
+        dataProcessingFlag: true,
+      });
+    }
   };
 
   dataProcessingConfirm = () => {
@@ -218,6 +278,40 @@ export default class DataProcessing extends Component {
     });
   };
 
+  dataAlertConfirm = () => {
+    this.setState({
+      dataAlertVisible: false,
+    });
+  };
+
+  dataAlertCancel = () => {
+    this.setState({
+      dataAlertVisible: false,
+    });
+  };
+
+  onBypass = () => {
+    // dataProcessingVisible: false,
+    this.alertItemsByPass();
+  };
+
+  alertItemsByPass = () => {
+    const { dispatch } = this.props;
+    const params = {
+      operType: 'alertItemsByPass',
+      // pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
+      // pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
+      alertIds: `${this.state.alertIds}`,
+    };
+    dispatch({
+      type: 'dataProcessing/alertItemsByPass',
+      payload: params,
+      callback: () => {
+        this.queryDataProcessing();
+      },
+    });
+  };
+
   render() {
     const { loading, dataProcessingData, dataProcessingItemData } = this.props;
     const {
@@ -227,10 +321,13 @@ export default class DataProcessing extends Component {
       selectedRowKeys,
       functionNameOptions,
       dataProcessingVisible,
+      dataAlertVisible,
+      intradays,
       authBypass,
       dataProcessingFlag,
       dataCharts,
       cols,
+      alertType,
     } = this.state;
     const rowSelection = {
       selectedRowKeys,
@@ -249,6 +346,13 @@ export default class DataProcessing extends Component {
                   <Table
                     loading={loading['dataProcessing/getDataProcessing']}
                     style={{ marginTop: '6px' }}
+                    // eslint-disable-next-line no-confusing-arrow
+                    rowClassName={record =>
+                      classnames({
+                        [styles['table-active']]: record.alertType === alertType,
+                        [styles['table-alert']]: record.isClosedIntraday === '1',
+                      })
+                    }
                     dataSource={dataProcessingData.items}
                     columns={this.state.codeColumns}
                     pagination={false}
@@ -278,7 +382,11 @@ export default class DataProcessing extends Component {
                 </Col> */}
                     <Col>
                       <span>Market</span>
-                      <Select placeholder="Please Select" style={{ width: '120px' }}>
+                      <Select
+                        placeholder="Please Select"
+                        style={{ width: '120px' }}
+                        onChange={this.onChangeMarkt}
+                      >
                         {functionNameOptions.map(item => (
                           <Option key={item.key} value={item.value}>
                             {item.title}
@@ -293,8 +401,10 @@ export default class DataProcessing extends Component {
                     </Col>
                   </Row>
                   <Modal
+                    icon=""
                     title={formatMessage({ id: 'app.common.confirm' })}
                     visible={dataProcessingVisible}
+                    className={styles.processingWraper}
                     onOk={this.dataProcessingConfirm}
                     onCancel={this.dataProcessingCancel}
                     cancelText={formatMessage({ id: 'app.common.cancel' })}
@@ -314,12 +424,26 @@ export default class DataProcessing extends Component {
                       <span>There are still 10 outstanding alerts. Do you want to bypass all?</span>
                     )}
                   </Modal>
+                  <Modal
+                    icon=""
+                    title={formatMessage({ id: 'app.common.confirm' })}
+                    visible={dataAlertVisible}
+                    onOk={this.dataAlertConfirm}
+                    onCancel={this.dataAlertCancel}
+                    cancelText={formatMessage({ id: 'app.common.cancel' })}
+                    okText={formatMessage({ id: 'app.common.confirm' })}
+                  >
+                    <span>
+                      There are still {intradays.length} outstanding alerts. Do you want to bypass
+                      all?
+                    </span>
+                  </Modal>
                 </div>
                 <div className={styles.cutOff}></div>
                 <div className={styles.dataItemTable}>
                   <div className={styles.tableTop}>
                     <Button
-                      onClick={this.addCode}
+                      onClick={this.onBypass}
                       type="primary"
                       className="btn-usual"
                       disabled={!authBypass}
