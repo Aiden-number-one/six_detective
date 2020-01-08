@@ -60,16 +60,20 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'systemManagement.dataProcessing.market' }),
           dataIndex: 'market',
           key: 'market',
+          ellipsis: true,
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertName' }),
           dataIndex: 'alertName',
           key: 'alertName',
+          ellipsis: true,
+          width: '40%',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.numberOfAlert' }),
           dataIndex: 'numberOfAlert',
           key: 'numberOfAlert',
+          ellipsis: true,
           render: (res, recode) => (
             <Fragment>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -122,7 +126,7 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterName' }),
           dataIndex: 'submitterName',
           key: 'submitterName',
-          width: '35%',
+          width: '40%',
           ellipsis: true,
         },
       ],
@@ -464,35 +468,6 @@ export default class DataProcessing extends Component {
                     total={dataProcessingData.totalCount}
                     pageSize={page.pageSize}
                   /> */}
-                  <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
-                    {/* <Col>
-                  <span>Trade Date</span>
-                  <RangePicker
-                    format="YYYY-MM-DD"
-                    placeholder={['Start Date', 'End Date']}
-                    style={{ width: '180px' }}
-                  />
-                </Col> */}
-                    <Col>
-                      <span>Market</span>
-                      <Select
-                        placeholder="Please Select"
-                        style={{ width: '120px' }}
-                        onChange={this.onChangeMarkt}
-                      >
-                        {functionNameOptions.map(item => (
-                          <Option key={item.key} value={item.value}>
-                            {item.title}
-                          </Option>
-                        ))}
-                      </Select>
-                    </Col>
-                    <Col>
-                      <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
-                        Start Processing
-                      </Button>
-                    </Col>
-                  </Row>
                   <Modal
                     icon=""
                     title={formatMessage({ id: 'app.common.confirm' })}
@@ -620,6 +595,36 @@ export default class DataProcessing extends Component {
                   <span>The last time of data processing is at 10:55 on 12/12/2019</span>
                 </li>
               </ul> */}
+              <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
+                {/* <Col>
+                  <span>Trade Date</span>
+                  <RangePicker
+                    format="YYYY-MM-DD"
+                    placeholder={['Start Date', 'End Date']}
+                    style={{ width: '180px' }}
+                  />
+                </Col> */}
+                <Col>
+                  <span>Market</span>
+                  <Select
+                    placeholder="Please Select"
+                    allowClear
+                    style={{ width: '120px' }}
+                    onChange={this.onChangeMarkt}
+                  >
+                    {functionNameOptions.map(item => (
+                      <Option key={item.key} value={item.value}>
+                        {item.title}
+                      </Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col>
+                  <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
+                    Start Processing
+                  </Button>
+                </Col>
+              </Row>
               <Chart className={styles.chart} height={400} data={dataCharts} scale={cols} forceFit>
                 <span>The last time of data processing is at 10:55 on 12/12/2019</span>
                 <Axis name="year" />
