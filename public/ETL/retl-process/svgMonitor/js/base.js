@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: lan
+ * @Date: 2019-12-30 16:32:12
+ * @LastEditTime: 2020-01-07 15:31:48
+ * @LastEditors: lan
+ */
 var graphic;
 
 $(document).ready(function () {
@@ -44,20 +51,22 @@ function getContextPath() {
 //----------------- 导入功能- end-------------------
 function getXmlDoc(text) {
 	var xmlDoc;
-	try //Internet Explorer
+	// try //Internet Explorer
+	//   {
+	//   	xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+	//   	xmlDoc.async="false";
+	// 	xmlDoc.loadXML(text);
+	//   }
+	// catch(e)
+	//   {
+	try //Firefox, Mozilla, Opera, etc.
 	{
-		xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-		xmlDoc.async = "false";
-		xmlDoc.loadXML(text);
+		var parser = new DOMParser();
+		xmlDoc = parser.parseFromString(text, "text/xml");
 	} catch (e) {
-		try //Firefox, Mozilla, Opera, etc.
-		{
-			var parser = new DOMParser();
-			xmlDoc = parser.parseFromString(text, "text/xml");
-		} catch (e) {
-			alert(e.message);
-		}
+		alert(e.message);
 	}
+	//   }
 	return xmlDoc;
 }
 
