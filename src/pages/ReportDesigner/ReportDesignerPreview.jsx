@@ -7,9 +7,10 @@ import ReportPager from './ReportPager';
 import PreviewSearchArea from './components/PreviewSearchArea';
 
 @connect(({ reportDesignPreview }) => {
-  const { previewData = {} } = reportDesignPreview;
+  const { previewData = {}, dataSetColumn = {} } = reportDesignPreview;
   return {
     previewData,
+    dataSetColumn,
   };
 })
 class ReportDesignerPreview extends Component {
@@ -21,6 +22,7 @@ class ReportDesignerPreview extends Component {
   }
 
   componentDidMount() {
+    // 获取预览数据
     this.fetchData();
   }
 
@@ -126,6 +128,7 @@ class ReportDesignerPreview extends Component {
     const { dimenRadio } = this.state;
     const {
       previewData: { items = [] },
+      dataSetColumn, // 当选项来源于数据集时，select中option的数据来源
     } = this.props;
     const [tableData, rowCountAndTemplateArea] = items; // 考虑 undefined
     // 总的记录数及templateArea
@@ -167,6 +170,7 @@ class ReportDesignerPreview extends Component {
               this.formRef = inst;
             }}
             customSearchData={customSearchData}
+            dataSetColumn={dataSetColumn}
           />
           <Row className={less['search-btn-row']}>
             <Button type="primary" icon="search" onClick={this.search}>

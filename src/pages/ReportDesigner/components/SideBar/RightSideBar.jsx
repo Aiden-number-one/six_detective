@@ -1,8 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import { connect } from 'dva';
-import { Layout, Form } from 'antd';
+import { Layout, Form, Tree, Icon } from 'antd';
 import classNames from 'classnames';
 import { FormattedMessage } from 'umi/locale';
+import _ from 'lodash';
+import uuidv1 from 'uuid/v1';
 import { getColIndexRowIndex, setCellTypeAndValue } from '../../utils';
 import IconFont from '@/components/IconFont';
 import WidgetControl from './WidgetControl';
@@ -10,6 +12,7 @@ import CellProperty from './CellProperty';
 import styles from './index.less';
 
 const { Sider } = Layout;
+const { TreeNode } = Tree;
 
 @connect(({ reportDesigner, formArea }) => ({
   cellPosition: reportDesigner.cellPosition,
@@ -17,6 +20,7 @@ const { Sider } = Layout;
   spreadsheetOtherProps: reportDesigner.spreadsheetOtherProps,
   teamplateAreaObj: reportDesigner.teamplateAreaObj,
   customSearchData: formArea.customSearchData,
+  dataSetPublicList: reportDesigner.dataSetPublicList,
 }))
 @Form.create({
   onFieldsChange(props, changedFields, allFields) {
@@ -81,13 +85,49 @@ export default class RightSideBar extends PureComponent {
     siderBarType: 'cell',
   };
 
-  // 修改数据集的自定义类型的中的value
-  modifyCustomerType = (customList, modifyIndex, modifyValue) => {
-    // 修改自定义数据集中的相关内容
+  // 根据查询条件的数据结构，生成树状结构
+  generateTree = () => {
     const { customSearchData, dispatch } = this.props;
-    const currentCustom = [...customList];
-    // eslint-disable-next-line no-param-reassign
-    currentCustom[modifyIndex].value = modifyValue;
+    return (
+      <TreeNode key="parent" title="Widgets">
+        {customSearchData.map((value, index) => (
+          <TreeNode
+            key={value.i}
+            title={
+              <Title
+                index={index}
+                title={value.widgetName}
+                isLeaf
+                copyData={() => {
+                  dispatch({
+                    type: 'formArea/copyCustomeSearchData',
+                    payload: index,
+                  });
+                }}
+                deleteData={() => {
+                  dispatch({
+                    type: 'formArea/deleteCustomeSearchData',
+                    payload: index,
+                  });
+                }}
+              />
+            }
+          />
+        ))}
+      </TreeNode>
+    );
+  };
+
+  // 增添数据集的自定义类型
+  addCustomerType = () => {
+    // 新增自定义类型
+    const { customSearchData, dispatch } = this.props;
+    const current = customSearchData.find(value => value.active) || {};
+    const currentCustom = current.customList || [];
+    currentCustom.push({
+      value: '',
+      key: uuidv1(),
+    });
     dispatch({
       type: 'formArea/changeCustomSearchData',
       payload: {
@@ -99,15 +139,26 @@ export default class RightSideBar extends PureComponent {
     });
   };
 
-  // 控制数据集的自定义类型
-  addCustomerType = () => {
-    // 新增自定义类型
+  /**
+   * @description: 删除或编辑数据集的自定义类型
+   * @param {string} index 需要修改自定义列表的index
+   * @param {string} type 类型为： modify / delete
+   * @param {string} inputValue 修改的值
+   * @return:
+   * @Author: mus
+   * @Date: 2020-01-08 21:04:32
+   */
+  deleteOrModifyCustomerType = (index, type, inputValue) => {
+    // 删除自定义类型
     const { customSearchData, dispatch } = this.props;
     const current = customSearchData.find(value => value.active) || {};
-    const currentCustom = current.custom || [];
-    currentCustom.push({
-      value: '',
-    });
+    const currentCustom = [...current.customList] || [];
+    if (type === 'modify') {
+      currentCustom[index].value = inputValue;
+    }
+    if (type === 'delete') {
+      currentCustom.splice(index, 1);
+    }
     dispatch({
       type: 'formArea/changeCustomSearchData',
       payload: {
@@ -161,6 +212,7 @@ export default class RightSideBar extends PureComponent {
       spreadsheetOtherProps,
       teamplateAreaObj,
       customSearchData,
+      dataSetPublicList,
     } = this.props;
     this.resetFields();
     const { siderBarType } = this.state;
@@ -180,8 +232,9 @@ export default class RightSideBar extends PureComponent {
     const widgetProps = {
       currentWidge: customSearchData.find(value => value.active) || {},
       dataSetPrivateList, // 私有数据集，用于展示field
-      modifyCustomerType: this.modifyCustomerType,
       addCustomerType: this.addCustomerType,
+      deleteOrModifyCustomerType: this.deleteOrModifyCustomerType,
+      dataSetPublicList,
     };
     // 表单的props
     const formProps = {
@@ -204,36 +257,85 @@ export default class RightSideBar extends PureComponent {
           />
         </div>
         {rightSideCollapse && (
-          <Layout>
-            {siderBarType === 'cell' && <CellProperty {...formProps} {...cellProps} />}
-            {siderBarType === 'query' && <WidgetControl {...formProps} {...widgetProps} />}
-            {siderBarType === 'global' && <CellProperty {...formProps} />}
-            <Sider width={30} className={styles.sider}>
-              <IconFont
-                type="iconbiaoge2"
-                className={siderBarType === 'cell' && 'active'}
-                onClick={() => {
-                  this.changeSiderBarType('cell');
-                }}
-              />
-              <IconFont
-                type="iconshitujuzhen"
-                className={siderBarType === 'query' && 'active'}
-                onClick={() => {
-                  this.changeSiderBarType('query');
-                }}
-              />
-              <IconFont
-                type="icon-data"
-                className={siderBarType === 'global' && 'active'}
-                onClick={() => {
-                  this.changeSiderBarType('global');
-                }}
-              />
-            </Sider>
-          </Layout>
+          <>
+            <div className={styles.tree} style={{ marginBottom: 20 }}>
+              <Tree>{this.generateTree()}</Tree>
+            </div>
+            <Layout>
+              {siderBarType === 'cell' && <CellProperty {...formProps} {...cellProps} />}
+              {siderBarType === 'query' && <WidgetControl {...formProps} {...widgetProps} />}
+              {siderBarType === 'global' && <CellProperty {...formProps} />}
+              <Sider width={30} className={styles.sider}>
+                <IconFont
+                  type="iconbiaoge2"
+                  className={siderBarType === 'cell' && 'active'}
+                  onClick={() => {
+                    this.changeSiderBarType('cell');
+                  }}
+                />
+                <IconFont
+                  type="iconshitujuzhen"
+                  className={siderBarType === 'query' && 'active'}
+                  onClick={() => {
+                    this.changeSiderBarType('query');
+                  }}
+                />
+                <IconFont
+                  type="icon-data"
+                  className={siderBarType === 'global' && 'active'}
+                  onClick={() => {
+                    this.changeSiderBarType('global');
+                  }}
+                />
+              </Sider>
+            </Layout>
+          </>
         )}
       </Layout>
     );
   }
+}
+
+function Title({ title, isLeaf, copyData, deleteData }) {
+  const [hoverState, hoverAction] = useState(false);
+  return (
+    <div
+      className={styles.treeTitle}
+      onMouseEnter={e => {
+        e.stopPropagation();
+        hoverAction(true);
+      }}
+      onMouseLeave={e => {
+        e.stopPropagation();
+        hoverAction(false);
+      }}
+    >
+      <div className={styles.hoverArea} />
+      {hoverState && <div className={styles.hoverBlock} />}
+      <span className={styles.title}>
+        <span style={{ marginLeft: '3.5px' }}>{title}</span>
+      </span>
+      {hoverState && (
+        <div className={styles.operationArea}>
+          {isLeaf && (
+            <>
+              <IconFont
+                type="iconcopy"
+                onClick={() => {
+                  copyData();
+                }}
+              />
+              <IconFont
+                type="icon-delete"
+                onClick={() => {
+                  deleteData();
+                }}
+                style={{ marginLeft: 3 }}
+              />
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
