@@ -30,6 +30,7 @@ export default class DataProcessing extends Component {
       market: '',
       authBypass: false,
       alertBypassStatus: [],
+      isBypass: false,
       dataProcessingVisible: false,
       dataAlertVisible: false,
       dataProcessingFlag: false,
@@ -205,6 +206,7 @@ export default class DataProcessing extends Component {
         this.setState(
           {
             alertType: dataProcessingData.items[0] && dataProcessingData.items[0].alertType,
+            isBypass: !!(dataProcessingData.items[0].isClosedIntraday === '1'),
             inspectDataVisible: true,
           },
           () => {
@@ -266,8 +268,10 @@ export default class DataProcessing extends Component {
     this.setState(
       {
         alertType: record.alertType,
+        isBypass: !!(record.isClosedIntraday === '1'),
       },
       () => {
+        console.log('this.state.isBypass===', this.state.isBypass);
         this.queryDataProcessingItem();
       },
     );
@@ -425,6 +429,7 @@ export default class DataProcessing extends Component {
       checkedAll,
       alertIndeterminate,
       alertBypassStatus,
+      isBypass,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -527,7 +532,7 @@ export default class DataProcessing extends Component {
                   <div
                     className={styles.tableTop}
                     style={
-                      authBypass && alertBypassStatus.length > 0
+                      authBypass && alertBypassStatus.length > 0 && isBypass
                         ? { visibility: 'visible' }
                         : { visibility: 'hidden' }
                     }
@@ -538,7 +543,7 @@ export default class DataProcessing extends Component {
                   </div>
                   <Table
                     loading={loading['codeList/getCodeItemList']}
-                    rowSelection={alertBypassStatus.length > 0 ? rowSelection : null}
+                    rowSelection={alertBypassStatus.length > 0 && isBypass ? rowSelection : null}
                     dataSource={dataProcessingItemData.items}
                     pagination={false}
                     columns={this.state.columns}
