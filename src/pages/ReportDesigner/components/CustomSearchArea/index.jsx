@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-06 17:09:40
+ * @LastEditTime : 2020-01-08 13:42:28
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -87,10 +87,22 @@ class CustomSearchArea extends PureComponent {
     // const widgetAreaAction = {
     //   addWidgetArea: this.addWidgetArea,
     // };
-    const { customSearchData, connectDropTarget } = this.props;
+    const { customSearchData, connectDropTarget, dispatch } = this.props;
     return connectDropTarget(
       <div className={styles.customSearchArea}>
-        <ResponsiveReactGridLayout layout={customSearchData} {...this.props}>
+        <ResponsiveReactGridLayout
+          layout={customSearchData}
+          onLayoutChange={layout => {
+            dispatch({
+              type: 'formArea/changeAllCustomSearchData',
+              payload: customSearchData.map(value => {
+                const layoutItem = layout.find(v => v.i === value.i);
+                return { ...value, ...layoutItem };
+              }),
+            });
+          }}
+          {...this.props}
+        >
           {this.generateDOM()}
         </ResponsiveReactGridLayout>
         {/* <WidgetArea {...widgetAreaAction} /> */}

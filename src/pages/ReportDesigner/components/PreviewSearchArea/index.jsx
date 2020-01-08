@@ -4,35 +4,40 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 22:27:04
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-08 11:19:13
+ * @LastEditTime : 2020-01-08 17:10:50
  */
-import React from 'react';
-import { Form, Input, Divider } from 'antd';
+import React, { PureComponent } from 'react';
+import { Form, Input } from 'antd';
 
-function PreviewSearchArea(props) {
-  const { form: getFieldDecorator, customSearchData } = props;
-  return (
-    <>
-      {customSearchData.map((value, index) => {
-        const { widgetType, widgetName, widgetPlaceholder } = value;
-        if (value.widgetType === 'input') {
-          return (
-            <Form.Item label={`Field ${index}`}>
-              {getFieldDecorator(`field-${index}`, {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Input something!',
-                  },
-                ],
-              })(<Input placeholder="placeholder" />)}
-            </Form.Item>
-          );
-        }
-        return <div></div>;
-      })}
-    </>
-  );
+class PreviewSearchArea extends PureComponent {
+  render() {
+    const {
+      form: { getFieldDecorator },
+      customSearchData,
+    } = this.props;
+    return (
+      <>
+        {customSearchData.map((value, index) => {
+          const { widgetType, widgetName, widgetPlaceholder, widgetKey } = value;
+          if (widgetType === 'input') {
+            return (
+              <Form.Item label={widgetName}>
+                {getFieldDecorator(widgetKey, {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Required',
+                    },
+                  ],
+                })(<Input placeholder={widgetPlaceholder} />)}
+              </Form.Item>
+            );
+          }
+          return <div></div>;
+        })}
+      </>
+    );
+  }
 }
 
 export default Form.create()(PreviewSearchArea);
