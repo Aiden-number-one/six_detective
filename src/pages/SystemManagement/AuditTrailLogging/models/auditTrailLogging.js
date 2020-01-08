@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 10:40:21
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-28 13:53:39
+ * @LastEditTime : 2020-01-08 22:13:50
  */
 import Service from '@/utils/Service';
 
@@ -13,7 +13,7 @@ const auditTrailLogging = {
   namespace: 'auditLog',
   state: {
     data: [],
-    dataExport: [],
+    dataExportPath: '',
   },
   effects: {
     *getAuditLogList({ payload, callback }, { call, put }) {
@@ -30,14 +30,15 @@ const auditTrailLogging = {
         throw new Error(response.bcjson.msg);
       }
     },
-    *getDataExport({ payload }, { call, put }) {
+    *getDataExport({ payload, callback }, { call, put }) {
       const response = yield call(dataExport, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
-            type: 'getDataExport',
-            payload: response.bcjson,
+            type: 'getExport',
+            payload: response.bcjson.items,
           });
+          callback();
         }
       } else {
         throw new Error(response.bcjson.msg);
@@ -51,10 +52,10 @@ const auditTrailLogging = {
         data: action.payload,
       };
     },
-    getDataExport(state, action) {
+    getExport(state, action) {
       return {
         ...state,
-        dataExport: action.payload,
+        dataExportPath: action.payload,
       };
     },
   },
