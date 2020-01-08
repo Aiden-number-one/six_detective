@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { connect } from 'dva';
 import router from 'umi/router';
 
-import { timestampFormat, dateFormat } from '@/pages/DataImportLog/constants';
+import { dateFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 import ring from '@/assets/images/ring.png';
 
@@ -36,9 +36,9 @@ const { RangePicker } = DatePicker;
 export default class HomePage extends PureComponent {
   state = {
     alertState: 'ALL', // ALERT切换按钮
-    textActive: 'Today', // ALERT today this week切换
+    textActive: '', // ALERT today this week切换
     approvalState: 'ALL', // APPROVAL PROCESS切换按钮
-    approvalTextActive: 'Today', // APPROVAL PROCESS today this week切换
+    approvalTextActive: '', // APPROVAL PROCESS today this week切换
     targetData: [], // 快捷菜单
     renderProcess: true, // 是否渲染
     renderDashboard: true, // 是否渲染
@@ -54,53 +54,13 @@ export default class HomePage extends PureComponent {
         this.renderAlterAllChart(data);
       },
     });
-    // 获取All alert total
-    dispatch({
-      type: 'allAlert/getAllAlertCount',
-      payload: {},
-    });
-    // 获取All outstanding alert total
-    dispatch({
-      type: 'allAlert/getAllOutstandingALertCount',
-      payload: {
-        isClaimed: 0,
-      },
-    });
-    // 获取All Claim alert total
-    dispatch({
-      type: 'allAlert/getAllClaimAlertCount',
-      payload: {
-        isClaimed: 1,
-      },
-    });
-    // 获取All processing alert total
-    dispatch({
-      type: 'allAlert/getAllProcessingAlertCount',
-      payload: {},
-    });
-    // 获取个人 Alert Claim total
-    dispatch({
-      type: 'perAlert/getPerClaimAlertCount',
-      payload: {
-        isPersonal: '1',
-      },
-    });
-    // 获取个人 Alert processing total
-    dispatch({
-      type: 'perAlert/getPerProcessingAlertCount',
-      payload: {},
-    });
-    // 获取个人 Alert Closed total
-    dispatch({
-      type: 'perAlert/getPerClosedAlterCount',
-      payload: {},
-    });
+    this.getAlertData();
     // 获取My alert的数据
     dispatch({
       type: 'perAlert/getMyAlert',
       payload: {
         pageNumber: 1,
-        pageSize: 3,
+        pageSize: 4,
       },
     });
     // 获取快捷菜单
@@ -142,6 +102,125 @@ export default class HomePage extends PureComponent {
       payload: {},
     });
   }
+
+  getAlertData = (params = {}) => {
+    const { dispatch } = this.props;
+    // 获取All alert total
+    dispatch({
+      type: 'allAlert/getAllAlertCount',
+      payload: {
+        ...params,
+      },
+    });
+    // 获取All outstanding alert total
+    dispatch({
+      type: 'allAlert/getAllOutstandingALertCount',
+      payload: {
+        ...params,
+        isClaimed: 0,
+      },
+    });
+    // 获取All Claim alert total
+    dispatch({
+      type: 'allAlert/getAllClaimAlertCount',
+      payload: {
+        ...params,
+        isClaimed: 1,
+      },
+    });
+    // 获取All processing alert total
+    dispatch({
+      type: 'allAlert/getAllProcessingAlertCount',
+      payload: {},
+    });
+    // 获取个人 Alert Claim total
+    dispatch({
+      type: 'perAlert/getPerClaimAlertCount',
+      payload: {
+        ...params,
+        isPersonal: '1',
+      },
+    });
+    // 获取个人 Alert processing total
+    dispatch({
+      type: 'perAlert/getPerProcessingAlertCount',
+      payload: {
+        ...params,
+      },
+    });
+    // 获取个人 Alert Closed total
+    dispatch({
+      type: 'perAlert/getPerClosedAlterCount',
+      payload: {
+        ...params,
+      },
+    });
+  };
+
+  getAlertDataByDate = (params = {}) => {
+    const {
+      dispatch,
+      allOutstandingALertCount,
+      perClaimAlertCount,
+      perProcessingAlertCount,
+      perClosedAlertCount,
+    } = this.props;
+    // 获取All alert 条形图数据
+    dispatch({
+      type: 'allAlert/getAllAlterData',
+      payload: {
+        ...params,
+      },
+      callback: data => {
+        if (data[0]) {
+          const AlterAll = [];
+          data.forEach(item => {
+            AlterAll.push({
+              label: item.userName, // 纵坐标
+              type: 'CLAIMED', // 分类
+              value: item.claimedCount, // 已认领数
+            });
+          });
+          data.forEach(item => {
+            AlterAll.push({
+              label: item.userName, // 纵坐标
+              type: 'PROCESSING', // 分类
+              value: item.processingCount, // 处理中数
+            });
+          });
+          if (this.state.alterAllChart) {
+            this.state.alterAllChart.source(AlterAll);
+            this.state.alterAllChart.repaint();
+          }
+        } else if (this.state.alterAllChart) {
+          this.state.alterAllChart.source([]);
+          this.state.alterAllChart.repaint();
+        }
+      },
+    });
+    this.getAlertData(params);
+    setTimeout(() => {
+      if (
+        allOutstandingALertCount === 0 &&
+        perClaimAlertCount === 0 &&
+        perProcessingAlertCount === 0 &&
+        perClosedAlertCount === 0
+      ) {
+        // eslint-disable-next-line no-unused-expressions
+        this.state.alterPersonalChart && this.state.alterPersonalChart.changeData([]);
+      } else {
+        // Alter Personal 的条形图
+        const AlterPersonal = [
+          { label: 'Outstanding', value: allOutstandingALertCount },
+          { label: 'Calimed', value: perClaimAlertCount },
+          { label: 'Processing', value: perProcessingAlertCount },
+          { label: 'Finished', value: perClosedAlertCount },
+        ];
+        // eslint-disable-next-line no-unused-expressions
+        this.state.alterPersonalChart && this.state.alterPersonalChart.changeData(AlterPersonal);
+      }
+    }, 0);
+  };
 
   // componentDidUpdate() {
   //   const { allAlterData } = this.props;
@@ -237,6 +316,11 @@ export default class HomePage extends PureComponent {
     });
     return dataList;
   };
+
+  // 渲染allClaimed
+  // renderAllClaimed = data => {
+  //   const
+  // }
 
   // 渲染Alter ALL条形图
   renderAlterAllChart = data => {
@@ -344,6 +428,9 @@ export default class HomePage extends PureComponent {
         );
       }
     });
+    this.setState({
+      alterAllChart,
+    });
   };
 
   // 渲染Alter Personal条形图
@@ -430,6 +517,7 @@ export default class HomePage extends PureComponent {
         );
       }
     });
+    this.setState({ alterPersonalChart });
   };
 
   // 渲染Approval All柱状图
@@ -720,7 +808,7 @@ export default class HomePage extends PureComponent {
           label: 'Last trade date',
           value: lastTradeDate[lastDate],
           percent: Number((lastTradeDate[lastDate] / submissionStatusCount).toFixed(4)),
-          data: lastDate,
+          date: lastDate,
         },
       ];
     }
@@ -738,9 +826,11 @@ export default class HomePage extends PureComponent {
         },
       },
     });
-    submissionStatusPieChart.coord('theta', {
-      radius: 0.5,
-    });
+    submissionStatusPieChart
+      .coord('theta', {
+        radius: 0.5,
+      })
+      .rotate(90);
     submissionStatusPieChart.tooltip({
       showTitle: false,
     });
@@ -754,7 +844,7 @@ export default class HomePage extends PureComponent {
       .label('percent', {
         useHtml: true,
         htmlTemplate: (val, item) =>
-          `<div>${item.point.value}(${val})</div><div style="white-space:nowrap;text-align: center;">${item.point.label}</div>`,
+          `<div style="font-size: 12px;">${item.point.value}(${val})</div><div style="font-size: 12px;white-space:nowrap;text-align: center;">${item.point.label}</div>`,
       })
       .tooltip('label*percent', (label, percent) => {
         const value = `${percent * 100}%`;
@@ -803,7 +893,8 @@ export default class HomePage extends PureComponent {
                 type: item.market,
               });
             });
-            this.state.submissionStatusBarChart.changeData(submissionStatusBar);
+            this.state.submissionStatusBarChart.source(submissionStatusBar);
+            this.state.submissionStatusBarChart.repaint();
           },
         });
       }
@@ -981,7 +1072,8 @@ export default class HomePage extends PureComponent {
                 value: Number(item.count),
               });
             });
-            this.state.marketRoseChart.changeData(marketRose);
+            this.state.marketRoseChart.source(marketRose);
+            this.state.marketRoseChart.repaint();
           },
         });
       }
@@ -1160,6 +1252,8 @@ export default class HomePage extends PureComponent {
       marketData,
       marketDataByCategory,
       processingStageData,
+
+      dispatch,
     } = this.props;
 
     let currentTradeDate;
@@ -1205,7 +1299,7 @@ export default class HomePage extends PureComponent {
         <div className={styles.homepage}>
           <Tabs defaultActiveKey="1" onChange={this.onTabsChange}>
             {/* ALERT */}
-            <TabPane tab="ALERT" key="1">
+            <TabPane tab="Alert" key="1">
               <div className={styles.homepageContent}>
                 {/* 左侧 */}
                 <div className={styles.leftSide}>
@@ -1231,7 +1325,7 @@ export default class HomePage extends PureComponent {
                             );
                           }}
                         >
-                          ALL
+                          All
                         </span>
                         <span
                           className={classNames(
@@ -1256,7 +1350,7 @@ export default class HomePage extends PureComponent {
                             );
                           }}
                         >
-                          PERSONAL
+                          Personal
                         </span>
                       </div>
                       <div className={styles.timepicker}>
@@ -1266,9 +1360,16 @@ export default class HomePage extends PureComponent {
                             textActive === 'Today' ? styles.textActive : '',
                           )}
                           onClick={() => {
+                            const { startDate, endDate } = this.state;
                             this.setState({
                               textActive: 'Today',
                             });
+                            if (!startDate && !endDate) {
+                              const params = {
+                                period: 1,
+                              };
+                              this.getAlertDataByDate(params);
+                            }
                           }}
                         >
                           Today
@@ -1279,18 +1380,47 @@ export default class HomePage extends PureComponent {
                             textActive === 'Week' ? styles.textActive : '',
                           )}
                           onClick={() => {
+                            const { startDate, endDate } = this.state;
                             this.setState({
                               textActive: 'Week',
                             });
+                            if (!startDate && !endDate) {
+                              const params = {
+                                period: 2,
+                              };
+                              this.getAlertDataByDate(params);
+                            }
                           }}
                         >
                           This Week
                         </span>
                         <RangePicker
-                          format="DD-MM-YYYY"
+                          style={{ width: 300 }}
+                          format="DD-MMM-YYYY"
                           onChange={dates => {
-                            const startDate = moment(dates[0]).format('YYYYMMDD');
-                            const endDate = moment(dates[1]).format('YYYYMMDD');
+                            const params = {};
+                            if (dates[0]) {
+                              const startDate = moment(dates[0]).format('YYYYMMDD');
+                              const endDate = moment(dates[1]).format('YYYYMMDD');
+                              this.setState({
+                                startDate,
+                                endDate,
+                              });
+                              params.startDate = startDate;
+                              params.endDate = endDate;
+                            } else {
+                              this.setState({
+                                startDate: '',
+                                endDate: '',
+                              });
+                              if (textActive === 'Today') {
+                                params.period = 1;
+                              }
+                              if (textActive === 'Week') {
+                                params.period = 2;
+                              }
+                            }
+                            this.getAlertDataByDate(params);
                           }}
                         />
                       </div>
@@ -1301,38 +1431,51 @@ export default class HomePage extends PureComponent {
                         <div className={styles.statisticalBox}>
                           <div className={styles.redBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>TOTAL</span>
+                              <span className={styles.title}>Total</span>
                               <span className={styles.value}>{allAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <span className={styles.title}>OUTSTANDING</span>
+                              <span className={styles.title}>Outstanding</span>
                               <span className={styles.value}>{allOutstandingALertCount}</span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>CLAIMED</span>
+                              <span className={styles.title}>Claimed</span>
                               <span className={styles.value}>{allClaimAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: 26,
+                                  right: 13,
+                                }}
+                              >
                                 {(allAlertCount === 0
                                   ? allAlertCount
                                   : (allClaimAlertCount / allAlertCount) * 100
                                 ).toFixed(2)}
                                 %
                               </span>
+                              {/* <div id="allClaimed"></div> */}
                             </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>PROCESSING</span>
+                              <span className={styles.title}>Processing</span>
                               <span className={styles.value}>{allProcessingAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: 26,
+                                  right: 13,
+                                }}
+                              >
                                 {(allAlertCount === 0
                                   ? allAlertCount
                                   : (allProcessingAlertCount / allAlertCount) * 100
@@ -1342,8 +1485,15 @@ export default class HomePage extends PureComponent {
                             </div>
                           </div>
                         </div>
-                        {!allAlterData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-                        <div id="AlterAll"></div>
+                        {!allAlterData[0] && (
+                          <div className={styles.empty} style={{ height: 250 }}>
+                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                          </div>
+                        )}
+                        <div
+                          id="AlterAll"
+                          style={{ display: !allAlterData[0] ? 'none' : 'block' }}
+                        ></div>
                       </>
                     )}
                     {/* ALTER PERSONAL */}
@@ -1352,22 +1502,28 @@ export default class HomePage extends PureComponent {
                         <div className={styles.statisticalBox}>
                           <div className={styles.redBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>TOTAL</span>
+                              <span className={styles.title}>Total</span>
                               <span className={styles.value}>{allAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <span className={styles.title}>OUTSTANDING</span>
+                              <span className={styles.title}>Outstanding</span>
                               <span className={styles.value}>{allOutstandingALertCount}</span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>CLAIMED</span>
+                              <span className={styles.title}>Claimed</span>
                               <span className={styles.value}>{perClaimAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: 26,
+                                  right: 13,
+                                }}
+                              >
                                 {(allAlertCount === 0
                                   ? allAlertCount
                                   : (perClaimAlertCount / allAlertCount) * 100
@@ -1378,12 +1534,18 @@ export default class HomePage extends PureComponent {
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>PROCESSING</span>
+                              <span className={styles.title}>Processing</span>
                               <span className={styles.value}>{perProcessingAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: 26,
+                                  right: 13,
+                                }}
+                              >
                                 {(allAlertCount === 0
                                   ? allAlertCount
                                   : (perProcessingAlertCount / allAlertCount) * 100
@@ -1393,12 +1555,25 @@ export default class HomePage extends PureComponent {
                             </div>
                           </div>
                         </div>
-                        <div id="AlterPersonal"></div>
+                        <div
+                          id="AlterPersonal"
+                          style={{
+                            display:
+                              allOutstandingALertCount === 0 &&
+                              perClaimAlertCount === 0 &&
+                              perProcessingAlertCount === 0 &&
+                              perClosedAlertCount === 0
+                                ? 'none'
+                                : 'block',
+                          }}
+                        ></div>
                         {allOutstandingALertCount === 0 &&
                           perClaimAlertCount === 0 &&
                           perProcessingAlertCount === 0 &&
                           perClosedAlertCount === 0 && (
-                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                            <div className={styles.empty} style={{ height: 250 }}>
+                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                            </div>
                           )}
                       </>
                     )}
@@ -1410,9 +1585,8 @@ export default class HomePage extends PureComponent {
                       tabBarExtraContent={<span className={styles.more}>More</span>}
                     >
                       {/* ALERT */}
-                      <TabPane tab="ALERT" key="1">
+                      <TabPane tab="Alert" key="1">
                         <div className={styles.infoList}>
-                          <h3 className={styles.groupTitle}>Authorizing access to menus</h3>
                           <List
                             itemLayout="horizontal"
                             dataSource={myAlertData}
@@ -1435,9 +1609,8 @@ export default class HomePage extends PureComponent {
                         </div>
                       </TabPane>
                       {/* APPROVAL PROCESS */}
-                      <TabPane tab="TASK" key="2">
+                      <TabPane tab="Task" key="2">
                         <div className={styles.infoList}>
-                          <h3 className={styles.groupTitle}>Authorizing access to menus</h3>
                           <List
                             itemLayout="horizontal"
                             dataSource={[{}, {}, {}]}
@@ -1446,8 +1619,8 @@ export default class HomePage extends PureComponent {
                                 <span title="" className={styles.description}>
                                   NO. matches withexisting A/C NO. , with discrepancy in prA/C
                                 </span>
-                                <span className={styles.date}>12/Nov/2019</span>
                                 <span className={classNames(styles.user, styles.yellow)}>TC</span>
+                                <span className={styles.date}>12/Nov/2019</span>
                               </List.Item>
                             )}
                           />
@@ -1483,7 +1656,11 @@ export default class HomePage extends PureComponent {
                           </span>
                         </Col>
                       ))}
-                      {!targetData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                      {!targetData[0] && (
+                        <div className={styles.empty}>
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        </div>
+                      )}
                     </Row>
                   </div>
                   {/* Information */}
@@ -1519,7 +1696,7 @@ export default class HomePage extends PureComponent {
                             {item.informationDetail}
                           </span>
                           <span className={styles.date}>
-                            {moment(item.timestamp).format(timestampFormat)}
+                            {moment(item.timestamp).format(dateFormat)}
                           </span>
                         </List.Item>
                       )}
@@ -1529,7 +1706,7 @@ export default class HomePage extends PureComponent {
               </div>
             </TabPane>
             {/* APPROVAL PROCESS */}
-            <TabPane tab="APPROVAL PROCESS" key="2">
+            <TabPane tab="Approval Process" key="2">
               <div className={styles.homepageContent}>
                 {/* 左侧 */}
                 <div className={styles.leftSide}>
@@ -1553,7 +1730,7 @@ export default class HomePage extends PureComponent {
                             );
                           }}
                         >
-                          ALL
+                          All
                         </span>
                         <span
                           className={classNames(
@@ -1572,7 +1749,7 @@ export default class HomePage extends PureComponent {
                             );
                           }}
                         >
-                          PERSONAL
+                          Personal
                         </span>
                       </div>
                       <div className={styles.timepicker}>
@@ -1602,7 +1779,7 @@ export default class HomePage extends PureComponent {
                         >
                           This Week
                         </span>
-                        <RangePicker format="DD-MM-YYYY" />
+                        <RangePicker style={{ width: 300 }} format="DD-MM-YYYY" />
                       </div>
                     </div>
                     {/* ALTER ALL */}
@@ -1611,22 +1788,28 @@ export default class HomePage extends PureComponent {
                         <div className={styles.statisticalBox}>
                           <div className={styles.redBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>TOTAL</span>
+                              <span className={styles.title}>Total</span>
                               <span className={styles.value}>{allAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <span className={styles.title}>OUTSTANDING</span>
+                              <span className={styles.title}>Outstanding</span>
                               <span className={styles.value}>{allOutstandingALertCount}</span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>CLAIMED</span>
+                              <span className={styles.title}>Claimed</span>
                               <span className={styles.value}>{allClaimAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: 26,
+                                  right: 13,
+                                }}
+                              >
                                 {(allAlertCount === 0
                                   ? allAlertCount
                                   : allClaimAlertCount / allAlertCount
@@ -1637,12 +1820,18 @@ export default class HomePage extends PureComponent {
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>PROCESSING</span>
+                              <span className={styles.title}>Processing</span>
                               <span className={styles.value}>{allProcessingAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: 26,
+                                  right: 13,
+                                }}
+                              >
                                 {(allAlertCount === 0
                                   ? allAlertCount
                                   : allProcessingAlertCount / allAlertCount
@@ -1661,22 +1850,28 @@ export default class HomePage extends PureComponent {
                         <div className={styles.statisticalBox}>
                           <div className={styles.redBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>TOTAL</span>
+                              <span className={styles.title}>Total</span>
                               <span className={styles.value}>{allAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <span className={styles.title}>OUTSTANDING</span>
+                              <span className={styles.title}>Outstanding</span>
                               <span className={styles.value}>{allOutstandingALertCount}</span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>CLAIMED</span>
+                              <span className={styles.title}>Claimed</span>
                               <span className={styles.value}>{perClaimAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: 26,
+                                  right: 13,
+                                }}
+                              >
                                 {(allAlertCount === 0
                                   ? allAlertCount
                                   : perClaimAlertCount / allAlertCount
@@ -1687,12 +1882,18 @@ export default class HomePage extends PureComponent {
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
-                              <span className={styles.title}>PROCESSING</span>
+                              <span className={styles.title}>Processing</span>
                               <span className={styles.value}>{perProcessingAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
-                              <span>
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: 26,
+                                  right: 13,
+                                }}
+                              >
                                 {(allAlertCount === 0
                                   ? allAlertCount
                                   : perProcessingAlertCount / allAlertCount
@@ -1720,9 +1921,8 @@ export default class HomePage extends PureComponent {
                       tabBarExtraContent={<span className={styles.more}>More</span>}
                     >
                       {/* ALERT */}
-                      <TabPane tab="ALERT" key="1">
+                      <TabPane tab="Alert" key="1">
                         <div className={styles.infoList}>
-                          <h3 className={styles.groupTitle}>Authorizing access to menus</h3>
                           <List
                             itemLayout="horizontal"
                             dataSource={myAlertData}
@@ -1742,9 +1942,8 @@ export default class HomePage extends PureComponent {
                         </div>
                       </TabPane>
                       {/* APPROVAL PROCESS */}
-                      <TabPane tab="TASK" key="2">
+                      <TabPane tab="Task" key="2">
                         <div className={styles.infoList}>
-                          <h3 className={styles.groupTitle}>Authorizing access to menus</h3>
                           <List
                             itemLayout="horizontal"
                             dataSource={[{}, {}, {}]}
@@ -1790,7 +1989,11 @@ export default class HomePage extends PureComponent {
                           </span>
                         </Col>
                       ))}
-                      {!targetData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                      {!targetData[0] && (
+                        <div className={styles.empty}>
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        </div>
+                      )}
                     </Row>
                   </div>
                   {/* Information */}
@@ -1826,7 +2029,7 @@ export default class HomePage extends PureComponent {
                             {item.informationDetail}
                           </span>
                           <span className={styles.date}>
-                            {moment(item.timestamp).format(timestampFormat)}
+                            {moment(item.timestamp).format(dateFormat)}
                           </span>
                         </List.Item>
                       )}
@@ -1836,7 +2039,7 @@ export default class HomePage extends PureComponent {
               </div>
             </TabPane>
             {/* DASHBOARD */}
-            <TabPane tab="DASHBOARD" key="3">
+            <TabPane tab="Dashboard" key="3">
               <div className={styles.homepageContent}>
                 {/* 左侧 */}
                 <div className={styles.leftSide}>
@@ -1849,19 +2052,28 @@ export default class HomePage extends PureComponent {
                         currentTradeDate[currentDate] === 0 &&
                         lastTradeDate &&
                         lastTradeDate[lastDate] === 0 && (
-                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                          <div className={styles.empty} style={{ height: 300 }}>
+                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                          </div>
                         )}
                     </div>
                     <div style={{ flex: 3, minHeight: 250 }}>
                       <h3 className={styles.groupTitle}>Submission status of different markets</h3>
                       <div id="submissionStatusBar"></div>
-                      {!isRender && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                      {!isRender && (
+                        <div className={styles.empty} style={{ height: 300 }}>
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        </div>
+                      )}
                     </div>
                   </div>
                   {/* Number of Outstanding Cases */}
                   <div className={styles.outstandingCases}>
                     <h3 className={styles.groupTitle}>NO. of Outstanding Cases(Investigating)</h3>
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+
+                    <div className={styles.empty}>
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    </div>
                   </div>
                 </div>
                 {/* 右侧 */}
@@ -1876,18 +2088,30 @@ export default class HomePage extends PureComponent {
                         Number of reported LOP holders in SEHK and HKFE
                       </h3>
                       <div id="marketPie"></div>
-                      {!marketData[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                      {!marketData[0] && (
+                        <div className={styles.empty} style={{ height: 180 }}>
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        </div>
+                      )}
                     </div>
                     <div style={{ flex: 1 }}>
                       <div id="marketRose"></div>
-                      {!marketDataByCategory[0] && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                      {!marketDataByCategory[0] && (
+                        <div className={styles.empty} style={{ height: 200 }}>
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        </div>
+                      )}
                     </div>
                   </div>
                   {/* Processing Stage */}
                   <div className={styles.processingStage}>
                     <h3 className={styles.groupTitle}>Processing Stage</h3>
                     <div id="processingStageBar"></div>
-                    {!isRender1 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                    {!isRender1 && (
+                      <div className={styles.empty} style={{ height: 170 }}>
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@
  * @Description: all alert data
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-07 09:26:58
+ * @LastEditTime : 2020-01-08 11:29:48
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -75,7 +75,7 @@ export default {
             type: 'saveAllAlterData',
             payload: response.bcjson.items,
           });
-          if (callback && response.bcjson.items[0]) callback(response.bcjson.items);
+          if (callback) callback(response.bcjson.items);
         }
       }
     },
