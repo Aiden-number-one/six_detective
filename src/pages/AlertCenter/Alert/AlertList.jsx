@@ -23,8 +23,15 @@ function AlertBtn({
   exportAlerts,
 }) {
   return (
-    <Row className={styles.btns}>
-      <Col span={18}>
+    <Row className={styles.btns} type="flex" justify="space-between" align="middle">
+      <Col className={styles['page-name']}>
+        <IconFont type="icon-alertmanagement" className={styles.icon} />
+        <span>Alert Center</span>
+      </Col>
+      <Col>
+        <Link to="/homepage/information" className={styles.info}>
+          Information
+        </Link>
         <button
           type="button"
           disabled={disabled}
@@ -47,11 +54,6 @@ function AlertBtn({
           <IconFont type="iconexport" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </button>
-      </Col>
-      <Col span={6} align="right">
-        <Link to="/homepage/information" className={styles.info}>
-          Information
-        </Link>
       </Col>
     </Row>
   );
@@ -231,7 +233,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
     });
   }
   return (
-    <div className={styles['alert-container']}>
+    <div className={styles['list-container']}>
       <div className={styles.list}>
         <AlertBtn
           loading={loading}
@@ -261,7 +263,6 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
           onOk={handleExport}
         />
         <Table
-          border
           dataSource={alerts}
           rowKey="alertId"
           loading={loading['alertCenter/fetch']}
@@ -411,7 +412,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
 
 const mapStateToProps = ({
   loading,
-  alertCenter: { alerts, alertItems, alertTotal, claimInfos },
+  alertCenter: { alerts, alertItems = [], alertTotal, claimInfos },
 }) => ({
   alerts,
   alertItems,

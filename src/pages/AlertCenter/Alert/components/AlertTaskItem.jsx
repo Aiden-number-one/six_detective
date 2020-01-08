@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'antd';
 import moment from 'moment';
 import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
@@ -44,7 +44,7 @@ export function ProductTaskItem({
   },
 }) {
   return (
-    <GrDescriptions labelWidth="33%">
+    <GrDescriptions labelWidth="34%">
       <GrDescriptions.Item label="Market *">{MARKET}</GrDescriptions.Item>
       <GrDescriptions.Item label="HKEX DCASS Code *">{EXTERNAL_PRODUCT_CODE}</GrDescriptions.Item>
       <GrDescriptions.Item label="Is CA Code? *">{isCACodeMap[+IS_CA_CODE]}</GrDescriptions.Item>
@@ -101,9 +101,8 @@ export function CaCodeTaskItem({
     </GrDescriptions>
   );
 }
-export function NewAccountTaskItem({ task, taskHistory = {}, onHistory }) {
+export function NewAccountTaskItem({ task, loading, reportHistory, answerHistory }) {
   const {
-    TASK_ID,
     MARKET,
     SUBMITTER_CODE,
     SUBMITTER_NAME,
@@ -123,23 +122,6 @@ export function NewAccountTaskItem({ task, taskHistory = {}, onHistory }) {
     REMARK,
   } = task;
 
-  const [reportHistory, setReportHistory] = useState([]);
-  const [answerHistory, setAnswerHistory] = useState([]);
-  useEffect(() => {
-    onHistory(TASK_ID);
-  }, []);
-
-  useEffect(() => {
-    if (taskHistory.reportHistory) {
-      setReportHistory(reportHistory.length ? reportHistory : []);
-    }
-    if (answerHistory.reportHistory) {
-      setAnswerHistory(answerHistory.length ? answerHistory : []);
-    }
-  }, [taskHistory]);
-
-  console.log(taskHistory);
-
   return (
     <GrDescriptions labelWidth="25%">
       <GrDescriptions.Item label="Market *">{MARKET}</GrDescriptions.Item>
@@ -151,8 +133,15 @@ export function NewAccountTaskItem({ task, taskHistory = {}, onHistory }) {
       <GrDescriptions.Item label="Previous BI Name *">{PREV_BI_NAME}</GrDescriptions.Item>
       <GrDescriptions.Item label="Previous TO Code *">{PREV_TO_CODE}</GrDescriptions.Item>
       <GrDescriptions.Item label="Previous TO Name *">{PREV_TO_NAME}</GrDescriptions.Item>
-      <GrDescriptions.Item label="Report History *">
-        <Table dataSource={reportHistory} rowKey="ACCOUNT_NAME" bordered>
+      <GrDescriptions.Item label="Report History *" direction="column">
+        <Table
+          dataSource={reportHistory}
+          rowKey="chgId"
+          style={{ marginTop: 10 }}
+          loading={loading}
+          pagination={false}
+          bordered
+        >
           <Column
             align="center"
             dataIndex="reportedTime"
@@ -165,15 +154,22 @@ export function NewAccountTaskItem({ task, taskHistory = {}, onHistory }) {
         </Table>
       </GrDescriptions.Item>
       <GrDescriptions.Item label="Received Answer *">{ANSWER_STATUS}</GrDescriptions.Item>
-      <GrDescriptions.Item label="Answer History *">
-        <Table dataSource={answerHistory} rowKey="ANSWERED_FULL_BI_NAME" bordered>
-          <Column align="center" dataIndex="ANSWERED_TIME" title="Answered Time" />
-          <Column align="center" dataIndex="ANSWERED_FULL_BI_NAME" title="Answered Full BI Name" />
-          <Column align="center" dataIndex="ANSWERED_Bi_CATEGORY" title="Answered BI Category" />
-          <Column align="center" dataIndex="MATCHED_BI_CODE" title="Matched BI Code" />
-          <Column align="center" dataIndex="MATCHED_OMN_CODE" title="Matched OMN Code" />
-          <Column align="center" dataIndex="ANSWERED_FULL_TO_NAME" title="Answered Full TO Name" />
-          <Column align="center" dataIndex="MATCHED_TO" title="Matched TO" />
+      <GrDescriptions.Item label="Answer History *" direction="column">
+        <Table
+          dataSource={answerHistory}
+          rowKey="answerId"
+          style={{ marginTop: 10 }}
+          loading={loading}
+          pagination={false}
+          bordered
+        >
+          <Column align="center" dataIndex="answeredTime" title="Answered Time" />
+          <Column align="center" dataIndex="answeredFullBiName" title="Answered Full BI Name" />
+          <Column align="center" dataIndex="answeredBiCategory" title="Answered BI Category" />
+          <Column align="center" dataIndex="matchedBiCode" title="Matched BI Code" />
+          <Column align="center" dataIndex="matchedOmnCode" title="Matched OMN Code" />
+          <Column align="center" dataIndex="answeredFullToName" title="Answered Full TO Name" />
+          <Column align="center" dataIndex="matchedTo" title="Matched TO" />
         </Table>
       </GrDescriptions.Item>
       <GrDescriptions.Item label="Confirmed BI *">

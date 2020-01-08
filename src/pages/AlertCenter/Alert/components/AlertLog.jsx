@@ -7,7 +7,7 @@ const { Paragraph } = Typography;
 
 export default function({ log: { operateTime, log } }) {
   return (
-    <Row style={{ fontSize: 13 }}>
+    <Row>
       <Col span={11}>{moment(operateTime).format(timestampFormat)}</Col>
       <Col span={12} offset={1}>
         <Paragraph ellipsis={{ rows: 3, expandable: true }}>{log}</Paragraph>

@@ -59,7 +59,8 @@ function AlertDetail({
   logs,
   email,
   attachments,
-  taskHistory,
+  reportHistory,
+  answerHistory,
 }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
@@ -118,6 +119,15 @@ function AlertDetail({
     } else {
       // add pane
       setPanes([pane, ...panes]);
+      // task item history list
+      if ([321, 322, 323].includes(+alert.alertTypeId)) {
+        dispatch({
+          type: 'alertCenter/fetchTaskHistory',
+          payload: {
+            taskId: pane.TASK_ID,
+          },
+        });
+      }
     }
     setActiveKey(pane.ALERT_ITEM_ID.toString());
   }
@@ -165,14 +175,6 @@ function AlertDetail({
     setEmailVisible(false);
   }
 
-  function handleTaskHistory(taskId) {
-    dispatch({
-      type: 'alertCenter/fetchTaskHistory',
-      payload: {
-        taskId,
-      },
-    });
-  }
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -241,7 +243,12 @@ function AlertDetail({
                   </Row>
                 }
               >
-                <TaskItem task={pane} onHistory={handleTaskHistory} taskHistory={taskHistory} />
+                <TaskItem
+                  task={pane}
+                  loading={loading['alertCenter/fetchTaskHistory']}
+                  reportHistory={reportHistory}
+                  answerHistory={answerHistory}
+                />
                 <div align="right">
                   <TaskBtn task={pane} />
                 </div>
@@ -288,12 +295,22 @@ function AlertDetail({
 }
 
 export default connect(
-  ({ loading, alertCenter: { comments, logs, email, attachments, taskHistory } }) => ({
+  ({
+    loading,
+    alertCenter: {
+      comments = [],
+      logs = [],
+      email,
+      attachments,
+      taskHistory: { reportHistory, answerHistory },
+    },
+  }) => ({
     loading: loading.effects,
     comments,
     logs,
     email,
     attachments,
-    taskHistory,
+    reportHistory,
+    answerHistory,
   }),
 )(AlertDetail);
