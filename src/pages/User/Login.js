@@ -2,8 +2,8 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime: 2019-12-17 10:08:09
- * @LastEditors: mus
+ * @LastEditTime : 2020-01-07 09:59:16
+ * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -13,6 +13,7 @@ import router from 'umi/router';
 import { Alert } from 'antd';
 import LoginComponent from '@/components/Login';
 import styles from './Login.less';
+import { setStore } from '@/utils/store';
 
 const { UserName, Password, Submit } = LoginComponent;
 
@@ -60,6 +61,7 @@ class Login extends Component {
           }
           const item = response.bcjson.items[0];
           localStorage.setItem('loginName', item.name);
+          setStore({ name: 'userId', content: item.employeeId });
           router.push('/');
         },
       });

@@ -2,7 +2,7 @@
  * @Author: liangchaoshun
  * @Date: 2020-01-04 13:58:42
  * @Last Modified by: liangchaoshun
- * @Last Modified time: 2020-01-06 22:01:29
+ * @Last Modified time: 2020-01-07 17:17:10
  * @Description: 报表设计器的分页组件
  *
  * ---------------------------------------
@@ -35,12 +35,14 @@ function ReportPager(props) {
   const {
     inlineBlock, // 是否为行内块元素
     showTotal, // 是否显示总记录数
+    totalPage: tpage, // 总页数，【字符串]
     totalRecord = VALUE_DEFAULT, // 总记录数
-    totalPage = VALUE_DEFAULT, // 总页数
     showPageSize, // 是否显示每页条数选项
     pageChageCallback, // 页码|每页条数 改变后的回调
     pageSizeArr = [10, 20, 30], // 每页条数选项
   } = props;
+
+  const totalPage = parseInt(tpage, 10) || VALUE_DEFAULT; // 总页数，【数字】
 
   const [currPage, setCurrPage] = useState(1); // 当前页码，默认 1
   const [pageSize, setPageSize] = useState(10); // 每页条数，默认 10
@@ -49,15 +51,15 @@ function ReportPager(props) {
 
   // componentDidMount
   useEffect(() => {
-    // console.log('reportPager componentDidMount effect: ', currPage, pageSize);
-    if (totalPage === VALUE_DEFAULT || totalPage === 1) {
+    // console.log('reportPager DidMount effect: ', currPage, pageSize);
+    if (totalPage === VALUE_DEFAULT || +totalPage === 1) {
       setIsDiableNAE(true); // 如果没数据或者只有一页时，禁用 下一页 和 尾页 按钮
     }
   }, []);
 
   // componentDidUpdate
   useEffect(() => {
-    // console.log('reportPager componentDidUpdate effect: ', currPage, pageSize);
+    // console.log('reportPager DidUpdate effect: ', currPage, pageSize);
 
     // 处理按钮状态：禁用 | 开启
     if (currPage === 1) {
@@ -76,11 +78,11 @@ function ReportPager(props) {
     if (currPage) {
       // 不为空
       if (/^[1-9]+$/.test(currPage)) {
-        pageChageCallback({ pageSize, pageNumber: currPage }); // callback
+        pageChageCallback({ pageSize: `${pageSize}`, pageNumber: `${currPage}` }); // callback
       } else {
         message.error(
           <span style={{ color: '#f4374c' }}>
-            Page format errors, enter a number greater than zero
+            Page format error, please enter a number greater than 0
           </span>,
         );
       }

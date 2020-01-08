@@ -781,8 +781,8 @@ export default class ToolBar extends Component {
                 </Button>
               </div>
             </div>
-            <div className={styles.divider} />
-            <div className={styles.group}>
+            <div className={styles.divider} style={{ marginRight: 12 }} />
+            {/* <div className={styles.group}>
               <div style={{ display: 'inline-block' }}>
                 <div className="mb4">
                   <Button className="btn mr6" onClick={() => {}}>
@@ -807,7 +807,7 @@ export default class ToolBar extends Component {
                   </Button>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className={styles.group}>
               <Button
                 className={classNames(
