@@ -781,7 +781,7 @@ export default class ToolBar extends Component {
                 </Button>
               </div>
             </div>
-            <div className={styles.divider} style={{ marginRight: 12 }} />
+            <div className={styles.divider} style={{ marginLeft: 12 }} />
             {/* <div className={styles.group}>
               <div style={{ display: 'inline-block' }}>
                 <div className="mb4">

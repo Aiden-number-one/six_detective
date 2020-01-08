@@ -117,7 +117,7 @@ export default props => {
               )(
                 <Select>
                   {params.map(value => (
-                    <Option key={value.field_data_name}>{value.field_data_name}</Option>
+                    <Option key={value.parameter_name}>{value.parameter_name}</Option>
                   ))}
                 </Select>,
               )}
@@ -216,11 +216,13 @@ export default props => {
         expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
       >
         <Panel header={<FormattedMessage id="report-designer.check" />} key="1">
-          <Form>
-            {getFieldDecorator(
-              'roleName',
-              {},
-            )(<Checkbox>{<FormattedMessage id="report-designer.allownull" />}</Checkbox>)}
+          <Form colon={false}>
+            <Form.Item label={<FormattedMessage id="report-designer.allownull" />} {...formLayout}>
+              {getFieldDecorator('widgetIsNull', {
+                initialValue: true,
+                valuePropName: 'checked',
+              })(<Checkbox />)}
+            </Form.Item>
           </Form>
         </Panel>
       </Collapse>

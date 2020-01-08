@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-05 09:43:41
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-06 16:07:13
+ * @LastEditTime : 2020-01-07 22:11:46
  */
 
 // import fetch from '@/utils/request.default';
@@ -15,6 +15,12 @@ export default {
   },
   effects: {},
   reducers: {
+    setCustomSearchData(state, action) {
+      return {
+        ...state,
+        customSearchData: action.payload,
+      };
+    },
     addCustomSearchData(state, action) {
       return {
         ...state,
