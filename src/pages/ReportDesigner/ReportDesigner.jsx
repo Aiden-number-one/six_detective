@@ -19,10 +19,9 @@ const { Sider, Content } = Layout;
 
 // 公式集
 const formularSet = [
-  { name: 'SUM', type: 'Math', desc: 'SUM(number1, number2,...)' },
-  { name: 'MAX', type: 'Math', desc: 'MAX(number1, number2,...)' },
-  { name: 'AVERAGE', type: 'Math', desc: 'AVERAGE(number1, number2,...)' },
-  { name: 'MID', type: 'Finacial', desc: 'MID(number1, number2,...)' },
+  { name: 'SUM', type: 'Math and Tig', desc: 'SUM(number1, number2,...)' },
+  { name: 'MAX', type: 'Math and Tig', desc: 'MAX(number1, number2,...)' },
+  { name: 'AVERAGE', type: 'Statistical', desc: 'AVERAGE(number1, number2,...)' },
 ];
 
 @connect(({ loading, reportDesigner }) => {
