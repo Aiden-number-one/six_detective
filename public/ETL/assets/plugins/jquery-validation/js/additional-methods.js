@@ -466,7 +466,7 @@ $.validator.addMethod("urlOremailCheck", function(value) {
 		} else {
 			return true;
 		}
-	}, $.validator.format("请输入数字、字母和下划线"));
+	}, $.validator.format("Please input numbers, letters and underscores."));
 	//判断是否是身份证
 	$.validator.addMethod("IsIdCheck", function(value, identi) {
 		if (value) {

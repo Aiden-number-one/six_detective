@@ -864,17 +864,18 @@ Graphic.prototype.createXmlDoc = function () {
 	};
 
 	var xmlDoc;
-	try //Internet Explorer
+	// try //Internet Explorer
+	// {
+	// 	xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+	// }
+	// catch (e) {
+	try //Firefox, Mozilla, Opera, etc.
 	{
-		xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+		xmlDoc = document.implementation.createDocument("", "", null);
 	} catch (e) {
-		try //Firefox, Mozilla, Opera, etc.
-		{
-			xmlDoc = document.implementation.createDocument("", "", null);
-		} catch (e) {
-			alert(e.message);
-		}
+		alert(e.message);
 	}
+	// }
 	var newPI = xmlDoc.createProcessingInstruction("xml", 'version=\"1.0\" encoding=\"utf-8\"');
 	xmlDoc.appendChild(newPI);
 
@@ -1469,20 +1470,21 @@ Graphic.prototype.reappearXmlDoc = function () {
 
 Graphic.prototype.getXmlDocs = function (text) {
 	var xmlDoc;
-	try //Internet Explorer
+	// try //Internet Explorer
+	// {
+	// 	xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+	// 	xmlDoc.async = "false";
+	// 	xmlDoc.loadXML(text);
+	// }
+	// catch (e) {
+	try //Firefox, Mozilla, Opera, etc.
 	{
-		xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-		xmlDoc.async = "false";
-		xmlDoc.loadXML(text);
+		var parser = new DOMParser();
+		xmlDoc = parser.parseFromString(text, "text/xml");
 	} catch (e) {
-		try //Firefox, Mozilla, Opera, etc.
-		{
-			var parser = new DOMParser();
-			xmlDoc = parser.parseFromString(text, "text/xml");
-		} catch (e) {
-			alert(e.message);
-		}
+		alert(e.message);
 	}
+	// }
 	return xmlDoc;
 };
 

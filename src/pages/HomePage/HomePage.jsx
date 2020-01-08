@@ -69,7 +69,9 @@ export default class HomePage extends PureComponent {
     // 获取All Claim alert total
     dispatch({
       type: 'allAlert/getAllClaimAlertCount',
-      payload: {},
+      payload: {
+        isClaimed: 1,
+      },
     });
     // 获取All processing alert total
     dispatch({
@@ -971,8 +973,15 @@ export default class HomePage extends PureComponent {
           payload: {
             market,
           },
-          callback: () => {
-            this.renderMarketRoseChart();
+          callback: values => {
+            const marketRose = [];
+            values.forEach(item => {
+              marketRose.push({
+                label: item.biCategory,
+                value: Number(item.count),
+              });
+            });
+            this.state.marketRoseChart.changeData(marketRose);
           },
         });
       }
@@ -1032,6 +1041,7 @@ export default class HomePage extends PureComponent {
     // ${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`);
     //   }
     // });
+    this.setState({ marketRoseChart });
   };
 
   // 渲染 processing stage 条形图
@@ -1276,7 +1286,13 @@ export default class HomePage extends PureComponent {
                         >
                           This Week
                         </span>
-                        <RangePicker format="DD-MM-YYYY" />
+                        <RangePicker
+                          format="DD-MM-YYYY"
+                          onChange={dates => {
+                            const startDate = moment(dates[0]).format('YYYYMMDD');
+                            const endDate = moment(dates[1]).format('YYYYMMDD');
+                          }}
+                        />
                       </div>
                     </div>
                     {/* ALTER ALL */}
@@ -1303,7 +1319,7 @@ export default class HomePage extends PureComponent {
                               <span>
                                 {(allAlertCount === 0
                                   ? allAlertCount
-                                  : allClaimAlertCount / allAlertCount
+                                  : (allClaimAlertCount / allAlertCount) * 100
                                 ).toFixed(2)}
                                 %
                               </span>
@@ -1319,7 +1335,7 @@ export default class HomePage extends PureComponent {
                               <span>
                                 {(allAlertCount === 0
                                   ? allAlertCount
-                                  : allProcessingAlertCount / allAlertCount
+                                  : (allProcessingAlertCount / allAlertCount) * 100
                                 ).toFixed(2)}
                                 %
                               </span>
@@ -1354,7 +1370,7 @@ export default class HomePage extends PureComponent {
                               <span>
                                 {(allAlertCount === 0
                                   ? allAlertCount
-                                  : perClaimAlertCount / allAlertCount
+                                  : (perClaimAlertCount / allAlertCount) * 100
                                 ).toFixed(2)}
                                 %
                               </span>
@@ -1370,7 +1386,7 @@ export default class HomePage extends PureComponent {
                               <span>
                                 {(allAlertCount === 0
                                   ? allAlertCount
-                                  : perProcessingAlertCount / allAlertCount
+                                  : (perProcessingAlertCount / allAlertCount) * 100
                                 ).toFixed(2)}
                                 %
                               </span>
