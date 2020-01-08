@@ -19,6 +19,7 @@ import {
   epColumns,
   proudctColumns,
   caCodeColumns,
+  newAccountColumns,
   NewAccountTaskItem,
 } from './components';
 
@@ -26,9 +27,9 @@ const taskColumnsMap = {
   301: epColumns,
   302: proudctColumns,
   303: caCodeColumns,
-  321: epColumns,
-  322: epColumns,
-  323: epColumns,
+  321: newAccountColumns,
+  322: newAccountColumns,
+  323: newAccountColumns,
 };
 
 const TaskItemMap = {
@@ -50,7 +51,16 @@ function CustomEmpty({ className = '', style = {} }) {
   );
 }
 
-function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email, attachments }) {
+function AlertDetail({
+  dispatch,
+  loading,
+  alert,
+  comments,
+  logs,
+  email,
+  attachments,
+  taskHistory,
+}) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
   const [activeKey, setActiveKey] = useState('1');
@@ -154,6 +164,15 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
     });
     setEmailVisible(false);
   }
+
+  function handleTaskHistory(taskId) {
+    dispatch({
+      type: 'alertCenter/fetchTaskHistory',
+      payload: {
+        taskId,
+      },
+    });
+  }
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -222,7 +241,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
                   </Row>
                 }
               >
-                <TaskItem task={pane} />
+                <TaskItem task={pane} onHistory={handleTaskHistory} taskHistory={taskHistory} />
                 <div align="right">
                   <TaskBtn task={pane} />
                 </div>
@@ -268,10 +287,13 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
   );
 }
 
-export default connect(({ loading, alertCenter: { comments, logs, email, attachments } }) => ({
-  loading: loading.effects,
-  comments,
-  logs,
-  email,
-  attachments,
-}))(AlertDetail);
+export default connect(
+  ({ loading, alertCenter: { comments, logs, email, attachments, taskHistory } }) => ({
+    loading: loading.effects,
+    comments,
+    logs,
+    email,
+    attachments,
+    taskHistory,
+  }),
+)(AlertDetail);

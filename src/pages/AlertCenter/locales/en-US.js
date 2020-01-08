@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:34:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-03 09:32:37
+ * @LastEditTime : 2020-01-08 09:32:45
  */
 export default {
   'alert-center.alert-id': 'Alert Id',
@@ -15,9 +15,9 @@ export default {
   'alert-center.owner': 'Owner',
   'alert-center.status': 'Status',
   'alert-center.items-total': 'Items Total',
-  'alert-center.submission-time': 'SUBMISSION TIME',
+  'alert-center.submission-time': 'Submission Time',
   'alert-center.submitter': 'SUBMITTER',
-  'alert-center.submitter-code': 'Submission Code',
+  'alert-center.submitter-code': 'Submitter Code',
   'alert-center.submitter-name': 'Submitter Name',
   'alert-center.description': 'ALERT DESCRIPTION',
   'alert-center.actions': 'Actions',

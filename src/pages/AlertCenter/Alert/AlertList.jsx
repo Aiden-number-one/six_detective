@@ -231,7 +231,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
     });
   }
   return (
-    <div className={styles['list-container']}>
+    <div className={styles['alert-container']}>
       <div className={styles.list}>
         <AlertBtn
           loading={loading}

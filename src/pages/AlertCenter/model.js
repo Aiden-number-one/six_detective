@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-05 00:07:54
+ * @LastEditTime : 2020-01-07 20:12:04
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -65,9 +65,11 @@ export async function assignAlertItem({ taskIds, userId }) {
 export async function closeAlert({ alertIds = [] }) {
   return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
 }
-// export async function getAttachments({ alertId }) {
-//   return request('set_template_generate', { data: { alertId, operType: 'emaiByAlert' } });
-// }
+export async function getTaskHistory({ taskId }) {
+  return request('get_history_list_for_item_detail', {
+    data: { taskId: taskId.toString() },
+  });
+}
 export async function exportAlert({ fileType }) {
   return request('set_data_file_export', {
     data: {
@@ -97,6 +99,7 @@ export default {
     claimInfos: [],
     email: [],
     attachments: [],
+    taskHistory: {},
   },
   reducers: {
     save(state, { payload }) {
@@ -156,6 +159,12 @@ export default {
       return {
         ...state,
         attachments: payload.attachments,
+      };
+    },
+    saveTaskHistory(state, { payload }) {
+      return {
+        ...state,
+        taskHistory: payload.taskHistory,
       };
     },
   },
@@ -384,6 +393,20 @@ export default {
         throw new Error(err);
       }
       message.success(msg);
+    },
+    *fetchTaskHistory({ payload }, { call, put }) {
+      const { err, items } = yield call(getTaskHistory, {
+        taskId: payload.taskId,
+      });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'taskHistory',
+        payload: {
+          taskHistory: items,
+        },
+      });
     },
   },
 };
