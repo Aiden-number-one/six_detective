@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React, { Component } from 'react';
+import { connect } from 'dva';
 import { SketchPicker } from 'react-color';
 import classNames from 'classnames';
 import { Button, Select, Menu, Icon, Dropdown, Popover } from 'antd';
@@ -11,8 +12,10 @@ import IconFont from '@/components/IconFont';
 
 const { Option } = Select;
 const ButtonGroup = Button.Group;
-
-export default class ToolBar extends Component {
+@connect(({ reportDesigner }) => ({
+  showFmlModal: reportDesigner.showFmlModal,
+}))
+class ToolBar extends Component {
   state = {
     // 默认白色背景
     backgroundColor: '#fff',
@@ -255,6 +258,15 @@ export default class ToolBar extends Component {
         ))}
       </Menu>
     );
+  };
+
+  // 显示处理公式的模态框
+  showFormularModal = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/triggerFmlModal',
+      payload: { showModalBool: true },
+    });
   };
 
   render() {
@@ -781,7 +793,7 @@ export default class ToolBar extends Component {
                 </Button>
               </div>
             </div>
-            <div className={styles.divider} style={{ marginRight: 12 }} />
+            <div className={styles.divider} style={{ marginLeft: 12 }} />
             {/* <div className={styles.group}>
               <div style={{ display: 'inline-block' }}>
                 <div className="mb4">
@@ -848,6 +860,20 @@ export default class ToolBar extends Component {
                   <p>Picture</p>
                 </div>
               </Button>
+              <Button
+                className={classNames(
+                  'btn',
+                  'btn2Report',
+                  'mr6',
+                  this.props.formatPainter && 'active',
+                )}
+                onClick={this.showFormularModal}
+              >
+                <div className={styles.topBottom}>
+                  <IconFont type="icon_function" />
+                  <p>Function</p>
+                </div>
+              </Button>
             </div>
           </div>
         </div>
@@ -855,3 +881,5 @@ export default class ToolBar extends Component {
     );
   }
 }
+
+export default ToolBar;

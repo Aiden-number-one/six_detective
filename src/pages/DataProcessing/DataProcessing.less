@@ -2,6 +2,14 @@
 .dataProcessingWraper {
   // padding: 10px;
   // background: #fff;
+  .alert-table-row {
+    // background-color: #f2f6f8;
+    :global {
+      td:first-child {
+        border-left: 1px solid @errorColor;
+      }
+    }
+  }
   :global {
     .ant-table-wrapper {
       max-height: 400px;
@@ -75,22 +83,22 @@
   // background-color: @warningColor !important;
   background-color: #f2f6f8;
 }
-.table-active::after {
-  // position: absolute;
-  // top: 0;
-  // right: 0;
-  // bottom: 0;
-  float: right;
-  clear: both;
-  width: 0;
-  height: 0;
-  margin-top: 12px;
-  // background-color: #fff;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-left: 8px solid @primaryColor;
-  content: '';
-}
+// .table-active::after {
+//   // position: absolute;
+//   // top: 0;
+//   // right: 0;
+//   // bottom: 0;
+//   float: right;
+//   clear: both;
+//   width: 0;
+//   height: 0;
+//   margin-top: 12px;
+//   // background-color: #fff;
+//   border-top: 8px solid transparent;
+//   border-bottom: 8px solid transparent;
+//   border-left: 8px solid @primaryColor;
+//   content: '';
+// }
 
 .processingWraper {
   :global {
@@ -101,4 +109,18 @@
       }
     }
   }
+}
+.alert-icon-wraper {
+  margin-right: 20px;
+  cursor: pointer;
+}
+.alert-icon {
+  font-size: 12px;
+  vertical-align: middle;
+  // cursor: pointer;
+}
+.active-icon {
+  color: @primaryColor;
+  font-size: 12px;
+  vertical-align: middle;
 }
