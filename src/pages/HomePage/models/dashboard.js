@@ -2,7 +2,7 @@
  * @Description: quick menu
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-06 19:39:38
+ * @LastEditTime : 2020-01-07 15:54:07
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -91,7 +91,7 @@ export default {
           type: 'setMarketDataByCategory',
           payload: response.bcjson.items,
         });
-        if (callback) callback();
+        if (callback) callback(response.bcjson.items);
       }
     },
     *getProcessingStageData({ payload }, { call, put }) {

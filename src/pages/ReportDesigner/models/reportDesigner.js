@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-07 09:35:56
+ * @LastEditTime : 2020-01-07 11:00:11
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -67,6 +67,30 @@ export default {
       return {
         ...state,
         dataSetPrivateList: action.payload,
+      };
+    },
+    modifyDataSetPrivate(state, action) {
+      const { dataSetId, props = {} } = action.payload;
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      const { query, dataset_name, dataset_type } = props;
+      const { dataSetPrivateList } = state;
+      const newdataSetPrivateList = dataSetPrivateList.map(value => {
+        if (value.dataset_id === dataSetId) {
+          return {
+            ...value,
+            dataset_name,
+            dataset_type,
+            query: {
+              ...value.query,
+              ...query,
+            },
+          };
+        }
+        return value;
+      });
+      return {
+        ...state,
+        dataSetPrivateList: newdataSetPrivateList,
       };
     },
     // 设置数据集的列
