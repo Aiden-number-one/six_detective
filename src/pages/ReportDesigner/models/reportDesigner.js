@@ -31,6 +31,7 @@ export default {
     dataSetPrivateList: [], // 私有数据集
     spreadsheetOtherProps: [], // spreadSheet的其他属性
     cellPosition: 'A1', // 当前的单元格
+    showFmlModal: false, // 是否显示处理公式的模态框
   },
   reducers: {
     // 删除私有数据集相关
@@ -148,6 +149,15 @@ export default {
       return {
         ...state,
         cellPosition,
+      };
+    },
+
+    // 显示或隐藏处理公式的模态框
+    triggerFmlModal(state, action) {
+      const { showModalBool } = action.payload;
+      return {
+        ...state,
+        showFmlModal: showModalBool,
       };
     },
   },

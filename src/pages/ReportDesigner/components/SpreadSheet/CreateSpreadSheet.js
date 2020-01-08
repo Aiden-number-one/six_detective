@@ -123,6 +123,10 @@ export default WrapperComponent =>
           // ----- 普通右键菜单-end -----
         },
         hooks: {
+          calloutFormularPanel(params) {
+            // 双击类型为公式的单元格，调出面板
+            callbackProps.calloutFormularPanel(params);
+          },
           afterDrop(params) {
             // 拖拽放置后的回调
             callbackProps.afterDrop(params);

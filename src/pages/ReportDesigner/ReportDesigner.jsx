@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import classNames from 'classnames';
 import { setLocale, formatMessage } from 'umi/locale';
 import { DndProvider, DropTarget } from 'react-dnd';
-import { Layout, Drawer, Modal, Spin } from 'antd';
+import { Layout, Drawer, Modal, Input, Button, Spin } from 'antd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { createCellPos } from '@/utils/utils';
 import { setCellTypeAndValue, getCellStringByIndex } from './utils';
@@ -16,13 +16,32 @@ import DatasetModify from './components/DatasetModify';
 import styles from './ReportDesigner.less';
 
 const { Sider, Content } = Layout;
-@connect(({ loading }) => ({
-  loading:
-    loading.effects['privateDataSetEdit/getField'] ||
-    loading.effects['reportDesigner/packageTemplate'],
-}))
+
+// 公式集
+const formularSet = [
+  { name: 'SUM', type: 'Math', desc: 'SUM(number1, number2,...)' },
+  { name: 'MAX', type: 'Math', desc: 'MAX(number1, number2,...)' },
+  { name: 'AVERAGE', type: 'Math', desc: 'AVERAGE(number1, number2,...)' },
+  { name: 'MID', type: 'Finacial', desc: 'MID(number1, number2,...)' },
+];
+
+@connect(({ loading, reportDesigner }) => {
+  const { showFmlModal, cellPosition } = reportDesigner;
+  return {
+    showFmlModal,
+    cellPosition,
+    loading:
+      loading.effects['privateDataSetEdit/getField'] ||
+      loading.effects['reportDesigner/packageTemplate'],
+  };
+})
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.formulaInputRef = React.createRef();
+  }
+
   state = {
     display: false, // 查询区域是否显示
     leftSideCollapse: false, // 左边sideBar展开收起
@@ -30,6 +49,13 @@ export default class ReportDesigner extends PureComponent {
     displayDraw: false, // 是否显示抽屉
     displayDropSelect: false, // 是否显示DropSelect
     displayDelete: false, // 是否显示私有删除框
+    formularValue: '', // 输入公式以校验
+    formularCheckLoading: false, // 校验公式格式时 loading
+    formularSearchValue: '', // 输入公式以搜索
+    fmlFormatErr: false, // 公式格式错误
+    currFormulaArr: [], // 当前展示的公式集
+    currFmlTypeIndex: -1, // 当前选中的公式类
+    formularDesc: '', // 当前选中公式的描述
   };
 
   componentWillMount() {
@@ -53,6 +79,7 @@ export default class ReportDesigner extends PureComponent {
       {
         afterSelection: this.afterSelection,
         afterDrop: this.afterDropSpreadSheet, // drop钩子函数
+        calloutFormularPanel: this.calloutFormularPanel, // 调出编辑公式的模态框
       },
     );
     // 若有reportId，则调用接口查询报表设计器相关信息
@@ -88,6 +115,14 @@ export default class ReportDesigner extends PureComponent {
   afterDropSpreadSheet = dropPosition => {
     // 获取到拖动的区域
     this.dropPosition = dropPosition;
+  };
+
+  // 双击类型为公式的单元格，弹出公式处理模态框
+  calloutFormularPanel = args => {
+    // console.log('Reportdesigner -> ', args);
+    const { text } = args;
+    this.setState({ formularValue: text });
+    this.showOrHideFormulaModal(true);
   };
 
   // react-dnd的拖拽区域
@@ -195,6 +230,92 @@ export default class ReportDesigner extends PureComponent {
     });
   };
 
+  // 显示或隐藏处理公式的模态框
+  showOrHideFormulaModal = bool => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/triggerFmlModal',
+      payload: { showModalBool: bool },
+    });
+  };
+
+  // 公式模态框：确认
+  fmlConfirm = () => {
+    const { cellPosition } = this.props;
+    const { formularValue } = this.state;
+    this.checkFormularFormat(() => {
+      // 验证格式
+      const fmlInputInst = this.formulaInputRef.current;
+      const fmlFormatErr = fmlInputInst.props.className.includes(styles['formula-format-error']);
+      const refineFmlValue = /^=/.test(formularValue) ? formularValue : `=${formularValue}`;
+      // console.log('fmlConfirm -> ', refineFmlValue, cellPosition, fmlFormatErr);
+      if (!fmlFormatErr) {
+        this.showOrHideFormulaModal(false);
+        setCellTypeAndValue('formula', refineFmlValue, cellPosition);
+        this.setState({ formularValue: '', formularSearchValue: '' });
+      }
+    });
+  };
+
+  // 公式模态框：取消
+  fmlCancel = () => {
+    console.log('fmlCancel');
+    this.showOrHideFormulaModal(false);
+  };
+
+  // 公式输入框
+  formulaInputChange = ev => {
+    const { value: formularValue } = ev.target;
+    this.setState({ formularValue });
+  };
+
+  // 校验公式格式
+  checkFormularFormat = callback => {
+    const { formularValue } = this.state;
+    const formulaRegExp = /^=?[A-Z]+\(.*\)$/; // 公式的整体校验正则
+    this.setState({ formularCheckLoading: true }, () => {
+      const bool = formulaRegExp.test(formularValue); // 格式校验结果
+      // console.log('checkFormularFormat -> ', formularValue, bool);
+      this.setState(
+        {
+          fmlFormatErr: !bool,
+          formularCheckLoading: false,
+        },
+        () => {
+          if (typeof callback === 'function') callback();
+        },
+      );
+    });
+  };
+
+  // 输入搜索公式
+  formularSearchInputChange = ev => {
+    const { value } = ev.target;
+    // console.log('formularSearchInputChange: ', value);
+    const currFormulaArr = formularSet.filter(item => item.name.includes(value.toUpperCase()));
+
+    this.setState({ currFormulaArr, formularSearchValue: value });
+  };
+
+  // 选择公式分类
+  pickupFormularType = (type, index) => {
+    const currFormulaArr = formularSet.filter(item => item.type === type);
+    this.setState({
+      currFormulaArr,
+      currFmlTypeIndex: index,
+    });
+  };
+
+  // 选择公式
+  pickupFormular = (formularObj, index) => {
+    const { name, desc } = formularObj;
+    this.setState({
+      currFmlIndex: index,
+      formularDesc: desc,
+      formularValue: `${name}()`,
+    });
+  };
+
   render() {
     const {
       display,
@@ -202,8 +323,16 @@ export default class ReportDesigner extends PureComponent {
       rightSideCollapse,
       displayDropSelect,
       displayDelete,
+      formularValue,
+      formularCheckLoading,
+      formularSearchValue,
+      fmlFormatErr,
+      currFormulaArr,
+      currFmlTypeIndex,
+      currFmlIndex,
+      formularDesc,
     } = this.state;
-    const { setCellCallback, dispatch, setCellType, loading = false } = this.props;
+    const { setCellCallback, dispatch, setCellType, showFmlModal, loading = false } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
       saveReportTemplate: this.saveReportTemplate, // 保存报表模板
@@ -228,6 +357,7 @@ export default class ReportDesigner extends PureComponent {
     const datasetModifyProps = {
       currentSelectDataSetOtherInfo: this.currentSelectDataSetOtherInfo, // 编辑数据集所需要的参数
     };
+    const formularTypeArr = [...new Set(formularSet.map(v => v.type))]; // 公式类型的数组
     return (
       <DndProvider backend={HTML5Backend}>
         <Spin spinning={loading}>
@@ -302,6 +432,74 @@ export default class ReportDesigner extends PureComponent {
               </div>
             </div>
           </div>
+          <Modal
+            width={423}
+            closable={false}
+            okText="Confirm"
+            title="Inert Function"
+            visible={showFmlModal}
+            onOk={this.fmlConfirm}
+            onCancel={this.fmlCancel}
+            wrapClassName={styles['formula-modal']}
+          >
+            <div className={styles['formula-input-tip']}>
+              Please Enter Formula into assigned column:
+            </div>
+            <div style={{ padding: '0 10px' }}>
+              <div className={styles['formula-check-container']}>
+                <Input
+                  value={formularValue}
+                  ref={this.formulaInputRef}
+                  onChange={this.formulaInputChange}
+                  className={`${fmlFormatErr ? styles['formula-format-error'] : ''} aaa bbb ccc`}
+                />
+                <Button
+                  type="primary"
+                  loading={formularCheckLoading}
+                  onClick={this.checkFormularFormat}
+                >
+                  Check Validity
+                </Button>
+              </div>
+              <div className={styles['formula-search-tip']}>Search Function (S):</div>
+              <Input value={formularSearchValue} onChange={this.formularSearchInputChange} />
+              <div style={{ marginTop: '5px' }}>
+                <span className={styles['formula-type']}>Function Type:</span>
+                <span className={styles['formula-name']}>Function Name:</span>
+              </div>
+
+              <div className={`${styles['formula-hub']} clearfix`}>
+                <div className={styles['formula-hub-left']}>
+                  <ul>
+                    {formularTypeArr.map((formularType, i) => (
+                      <li
+                        key={formularType}
+                        className={currFmlTypeIndex === i ? styles.curr : ''}
+                        onClick={() => this.pickupFormularType(formularType, i)}
+                      >
+                        {formularType}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className={styles['formula-hub-right']}>
+                  <ul>
+                    {currFormulaArr.map((item, i) => (
+                      <li
+                        key={item.name}
+                        className={currFmlIndex === i ? styles.curr : ''}
+                        onClick={() => this.pickupFormular(item, i)}
+                      >
+                        {item.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className={styles['formula-desc']}>{formularDesc}</div>
+            </div>
+          </Modal>
         </Spin>
       </DndProvider>
     );

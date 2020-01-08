@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import router from 'umi/router';
-import { Table, Row, Col, Button, Input, Radio, Drawer, Typography } from 'antd';
+import { Table, Row, Col, Button, Input, Radio, Drawer } from 'antd';
 import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
@@ -14,14 +14,13 @@ import btnStyles from '@/pages/DataImportLog/index.less';
 
 const { Column } = Table;
 const { Search } = Input;
-const { Paragraph } = Typography;
 
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
 function TabBtn({ changeTab, selectedCurrentTask }) {
   return (
-    <Row>
+    <Row className={styles.tabBtnBox}>
       <Col span={24}>
         <Radio.Group
           key={selectedCurrentTask}
@@ -48,16 +47,14 @@ function TaskBtn({
 }) {
   return (
     <Row>
-      <Col span={12}>
+      <Col span={24} align="right">
         <Search
           key={urlTaskCode}
           placeholder="search"
           defaultValue={urlTaskCode}
           onSearch={value => searchTask(selectedCurrentTask, value)}
-          style={{ width: 264 }}
+          style={{ width: 264, verticalAlign: 'middle', marginRight: '10px' }}
         />
-      </Col>
-      <Col span={12} align="right">
         {selectedCurrentTask !== 'his' && (
           <>
             <button
@@ -397,41 +394,33 @@ function ProcessList({
           },
         })}
       >
-        <Column align="center" dataIndex="taskCode" title="Task Code" />
+        <Column align="center" dataIndex="taskCode" title="Task Code" width="9%" />
         <Column
+          ellipsis
           align="left"
           dataIndex="classification"
           title="Classification"
-          width="25%"
-          render={(text, record) => (
-            <Paragraph ellipsis={{ rows: 2, expandable: false }}>{record.classification}</Paragraph>
-          )}
+          width="20%"
         />
-        <Column align="center" dataIndex="submitterName" title="Submitter Name" />
-        <Column
-          align="left"
-          dataIndex="details"
-          title="Details"
-          width="15%"
-          render={(text, record) => (
-            <Paragraph ellipsis={{ rows: 2, expandable: false }}>{record.details}</Paragraph>
-          )}
-        />
+        <Column align="left" dataIndex="submitterName" title="Submitter Name" width="15%" />
+        <Column ellipsis align="left" dataIndex="details" title="Details" width="15%" />
         <Column
           align="center"
           dataIndex="updateDate"
-          title="Update Date"
+          title="Generation Date"
           render={(text, record) =>
             record.updateDate && moment(record.updateDate).format(timestampFormat)
           }
+          width="15%"
         />
-        <Column dataIndex="owner" title="Owner" align="center" />
-        <Column align="center" dataIndex="statusDesc" title="Status" />
+        <Column dataIndex="owner" title="Owner" align="center" width="9%" />
+        <Column align="center" dataIndex="statusDesc" title="Status" width="9%" />
         {selectedCurrentTask !== 'his' ? (
           <Column
             align="center"
             dataIndex="action"
             title="Actions"
+            width="8%"
             render={(text, record) => (
               <Row className={styles.btns}>
                 <IconFont

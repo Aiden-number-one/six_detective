@@ -43,24 +43,27 @@
     .ant-radio-button-wrapper {
       width: 85px;
       height: 30px;
-      color: rgba(16, 65, 108, 1);
+      color: #464c51;
       font-weight: 500;
       font-size: 9px;
       font-family: Avenir, sans-serif;
       text-align: center;
-      background: rgba(244, 244, 244, 1);
+      background: #fff;
       border: none;
-      border-radius: 2px;
+      border-radius: unset;
     }
     .ant-radio-button-wrapper:first-child {
       border: none;
     }
     .ant-radio-group-solid
       .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-      background: rgba(13, 135, 212, 1);
-      border-radius: 2px;
+      color: #464c51;
+      background: #fff;
+      border-bottom: 2px solid #0d87d4;
+      border-radius: unset;
       box-shadow: unset;
     }
+
     .proLayout .ant-input-disabled,
     .ant-drawer-right .ant-input-disabled,
     .ant-popover-inner-content .ant-input-disabled {
@@ -75,7 +78,7 @@
       line-height: 30px;
     }
     .ant-radio-button-wrapper:not(:first-child)::before {
-      background-color: @borderColorBase;
+      background-color: #fff !important;
     }
     .ant-form-item-label {
       width: 220px;
@@ -157,10 +160,24 @@
         width: 220px;
         margin: 0;
         margin-left: 5px;
+        color: #464c51;
+        font-weight: 500;
+        font-size: 14px;
+        font-family: Avenir, sans-serif;
       }
+      // p:nth-child(1) {
+      //   opacity:0.7;
+      // }
       p:nth-child(2) {
         width: 240px;
       }
+      // .selectsItem {
+      //   width: 50%;
+      //   overflow: hidden;
+      //   white-space: nowrap;
+      //   text-overflow: ellipsis;
+
+      // }
     }
   }
 
