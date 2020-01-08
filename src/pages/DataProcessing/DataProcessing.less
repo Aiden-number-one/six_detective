@@ -6,7 +6,7 @@
     // background-color: #f2f6f8;
     :global {
       td:first-child {
-        border-left: 1px solid @errorColor;
+        // border-left: 1px solid @errorColor;
       }
     }
   }
@@ -115,7 +115,8 @@
   cursor: pointer;
 }
 .alert-icon {
-  font-size: 12px;
+  color: @errorColor;
+  font-size: 14px;
   vertical-align: middle;
   // cursor: pointer;
 }
@@ -123,4 +124,12 @@
   color: @primaryColor;
   font-size: 12px;
   vertical-align: middle;
+}
+.lines-ellipsis {
+  display: -webkit-box;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }

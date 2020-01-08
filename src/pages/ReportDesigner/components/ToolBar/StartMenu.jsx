@@ -6,15 +6,21 @@ import classNames from 'classnames';
 import { Button, Select, Menu, Icon, Dropdown, Popover } from 'antd';
 import { borderMenu } from './menu';
 import { fontSizeSelect, fontFamilySelect } from './select';
+import { getColIndexRowIndex } from '../../utils';
 import CustomizeIcon from '../CustomizeIcon';
 import styles from './index.less';
 import IconFont from '@/components/IconFont';
 
 const { Option } = Select;
 const ButtonGroup = Button.Group;
-@connect(({ reportDesigner }) => ({
-  showFmlModal: reportDesigner.showFmlModal,
-}))
+
+@connect(({ reportDesigner }) => {
+  const { showFmlModal, cellPosition } = reportDesigner;
+  return {
+    showFmlModal,
+    cellPosition,
+  };
+})
 class ToolBar extends Component {
   state = {
     // 默认白色背景
@@ -267,6 +273,33 @@ class ToolBar extends Component {
       type: 'reportDesigner/triggerFmlModal',
       payload: { showModalBool: true },
     });
+  };
+
+  // 小数位递增/递减
+  inOrDecreaseDecimal = action => {
+    const { cellPosition, setCellType } = this.props;
+    const [ri, ci] = getColIndexRowIndex(cellPosition);
+    // eslint-disable-next-line no-underscore-dangle
+    const cell = window.xsObj._getCell({ ri, ci });
+    let tail = 0;
+    if (cell && cell.cellProps && cell.cellProps.scale) {
+      tail = parseInt(cell.cellProps.scale, 10); // 替换为旧值
+    }
+
+    if (action === 'increase') {
+      // 递增
+      tail += 1;
+    } else {
+      // 递减
+      tail = tail >= 1 ? tail - 1 : 0;
+    }
+    // 设置
+    setCellType('cellType', {
+      cellType: 'numeric',
+      format: '100.00',
+      scale: `${tail}`,
+    });
+    // console.log('inOrDecreaseDecimal -> ', action, cell, tail);
   };
 
   render() {
@@ -782,14 +815,36 @@ class ToolBar extends Component {
                 </Popover>
               </div>
               <div>
-                <Button className="btn mr6">
+                <Button
+                  className="btn mr6"
+                  onClick={() => setCellType('cellType', this.cellTypeMap['currency￥'])}
+                >
                   <IconFont type="iconrenminbi" />
                 </Button>
-                <Button className="btn mr6">
+                <Button
+                  className="btn mr6"
+                  onClick={() => setCellType('cellType', this.cellTypeMap.percentage)}
+                >
                   <IconFont type="iconpercent-solid" />
                 </Button>
-                <Button className="btn mr6">
-                  <IconFont type="iconjisuan" />
+                {/* 格式化为三位一逗号 */}
+                <Button
+                  className="btn mr6"
+                  onClick={() =>
+                    setCellType('cellType', {
+                      cellType: 'numeric',
+                      format: '1,000.00',
+                      scale: '2',
+                    })
+                  }
+                >
+                  <IconFont type="icon_commastylex" />
+                </Button>
+                <Button className="btn mr6" onClick={() => this.inOrDecreaseDecimal('increase')}>
+                  <IconFont type="icon_increasedecimalx" />
+                </Button>
+                <Button className="btn mr6" onClick={() => this.inOrDecreaseDecimal('decrease')}>
+                  <IconFont type="icon_decreasedecimalx" />
                 </Button>
               </div>
             </div>
@@ -834,7 +889,7 @@ class ToolBar extends Component {
                   <p>Link</p>
                 </div>
               </Button>
-              <Button
+              {/* <Button
                 className={classNames(
                   'btn',
                   'btn2Report',
@@ -859,7 +914,7 @@ class ToolBar extends Component {
                   <IconFont type="iconfilesearch" />
                   <p>Picture</p>
                 </div>
-              </Button>
+              </Button> */}
               <Button
                 className={classNames(
                   'btn',

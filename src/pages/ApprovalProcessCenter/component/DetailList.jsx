@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Form, Radio, Select, List, Table } from 'antd';
 import moment from 'moment';
+import { timestampFormat } from '@/pages/DataImportLog/constants';
 
 import styles from '../index.less';
 
@@ -563,7 +564,14 @@ function NewAccound({
               rowKey="reportHistory"
               pagination={false}
             >
-              <Column align="center" dataIndex="reportedTime" title="Reported Time" />
+              <Column
+                align="center"
+                dataIndex="reportedTime"
+                title="Reported Time"
+                render={(text, record) =>
+                  record.reportedTime && moment(record.reportedTime).format(timestampFormat)
+                }
+              />
               <Column
                 align="center"
                 dataIndex="reportedAccountName"
@@ -593,13 +601,20 @@ function NewAccound({
               rowKey="answerHistory"
               pagination={false}
             >
-              <Column align="center" dataIndex="answeredTime" title="Answered Time" />
-              <Column align="center" dataIndex="answeredFullBIName" title="Answered Full BI Name" />
+              <Column
+                align="center"
+                dataIndex="answeredTime"
+                title="Answered Time"
+                render={(text, record) =>
+                  record.answeredTime && moment(record.answeredTime).format(timestampFormat)
+                }
+              />
+              <Column align="center" dataIndex="answeredFullBiName" title="Answered Full BI Name" />
               <Column align="center" dataIndex="answeredCategory" title="Answered Category" />
-              <Column align="center" dataIndex="matchedBICode" title="Matched BI Code" />
+              <Column align="center" dataIndex="matchedBiCode" title="Matched BI Code" />
               <Column align="center" dataIndex="matchedOmnCode" title="Matched OMN Code" />
-              <Column align="center" dataIndex="answeredFullTOName" title="Answered Full TO Name" />
-              <Column align="center" dataIndex="matchedTO" title="Matched TO" />
+              <Column align="center" dataIndex="answeredFullToName" title="Answered Full TO Name" />
+              <Column align="center" dataIndex="matchedTo" title="Matched TO" />
             </Table>
           </div>
         </List.Item>
@@ -608,7 +623,7 @@ function NewAccound({
             <div>
               <Form.Item label="Confirmed BI">
                 {getFieldDecorator('confirmBiCode', {
-                  rules: [{ required: true, message: 'Confirmed BI is missing' }],
+                  rules: [{ required: !!isShowForm, message: 'Confirmed BI is missing' }],
                   initialValue: detailData.confirmBiCode,
                 })(
                   isShowForm ? (
@@ -622,8 +637,29 @@ function NewAccound({
                           label={item.confirmBiName}
                           key={item.confirmBiCategory}
                         >
-                          <p style={{ float: 'left' }}>{item.confirmBiCode}</p>
-                          <p style={{ float: 'right' }}>{item.confirmBiName}</p>
+                          <span
+                            style={{
+                              float: 'left',
+                              width: '50%',
+                              overflow: 'hidden',
+                              whiteSpace: 'nowrap',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {item.confirmBiCode}
+                          </span>
+                          <span
+                            style={{
+                              float: 'right',
+                              width: '50%',
+                              textAlign: 'right',
+                              overflow: 'hidden',
+                              whiteSpace: 'nowrap',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {item.confirmBiName}
+                          </span>
                         </Option>
                       ))}
                     </Select>
@@ -646,7 +682,7 @@ function NewAccound({
             <div>
               <Form.Item label="Confirmed TO">
                 {getFieldDecorator('confirmToCode', {
-                  rules: [{ required: true, message: 'Confirmed TO is missing' }],
+                  rules: [{ required: !!isShowForm, message: 'Confirmed TO is missing' }],
                   initialValue: detailData.confirmToCode,
                 })(
                   isShowForm ? (
@@ -661,8 +697,29 @@ function NewAccound({
                             label={item.confirmToName}
                             key={item.confirmToCategory}
                           >
-                            <span style={{ float: 'left' }}>{item.confirmToCode}</span>
-                            <span style={{ float: 'right' }}>{item.confirmToName}</span>
+                            <span
+                              style={{
+                                float: 'left',
+                                width: '50%',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                              }}
+                            >
+                              {item.confirmToCode}
+                            </span>
+                            <span
+                              style={{
+                                float: 'right',
+                                width: '50%',
+                                textAlign: 'right',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                              }}
+                            >
+                              {item.confirmToName}
+                            </span>
                           </Option>
                         ))}
                     </Select>

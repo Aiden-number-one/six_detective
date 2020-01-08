@@ -9,12 +9,14 @@ import styles from './AuditTrailLogging.less';
 import { timeFormat } from '@/utils/filter';
 import SearchForm from './components/SearchForm';
 import IconFont from '@/components/IconFont';
+import { downloadFile } from '@/pages/DataImportLog/constants';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
 @connect(({ auditLog, loading }) => ({
   loading: loading.effects,
   getAuditLogListData: auditLog.data,
+  dataExport: auditLog.dataExport,
 }))
 class AuditTrailLogging extends Component {
   state = {
@@ -361,17 +363,17 @@ class AuditTrailLogging extends Component {
       isPage: 'true',
       apiName: 'bayconnect.superlop.get_system_log_list',
     };
-    dispatch(
-      {
-        type: 'auditLog/getDataExport',
-        payload: param,
-      },
-      () => {
+    dispatch({
+      type: 'auditLog/getDataExport',
+      payload: param,
+      callback: () => {
+        console.log('this.props.dataExport===', this.props.dataExport);
         this.setState({
           exportDataVisible: false,
         });
+        downloadFile(this.props.dataExport);
       },
-    );
+    });
   };
 
   exportDataCancel = () => {
