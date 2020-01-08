@@ -2,6 +2,14 @@
 .dataProcessingWraper {
   // padding: 10px;
   // background: #fff;
+  .alert-table-row {
+    background-color: #f2f6f8;
+    :global {
+      td:first-child {
+        border-left: 1px solid @errorColor;
+      }
+    }
+  }
   :global {
     .ant-table-wrapper {
       max-height: 400px;
@@ -115,11 +123,4 @@
   color: @primaryColor;
   font-size: 12px;
   vertical-align: middle;
-}
-.alert-table-row {
-  :global {
-    td:first-child {
-      border-left: 1px solid @errorColor;
-    }
-  }
 }
