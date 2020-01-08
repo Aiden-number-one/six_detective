@@ -29,6 +29,7 @@ export default class DataProcessing extends Component {
       alertIds: '',
       market: '',
       authBypass: false,
+      alertBypassStatus: [],
       dataProcessingVisible: false,
       dataAlertVisible: false,
       dataProcessingFlag: false,
@@ -67,7 +68,7 @@ export default class DataProcessing extends Component {
           dataIndex: 'alertName',
           key: 'alertName',
           ellipsis: true,
-          width: '40%',
+          width: '35%',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.numberOfAlert' }),
@@ -126,7 +127,7 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterName' }),
           dataIndex: 'submitterName',
           key: 'submitterName',
-          width: '40%',
+          width: '35%',
           ellipsis: true,
         },
       ],
@@ -226,6 +227,16 @@ export default class DataProcessing extends Component {
     dispatch({
       type: 'dataProcessing/getDataProcessingItem',
       payload: params,
+      callback: () => {
+        const { dataProcessingItemData } = this.props;
+        const alertBypassStatus = dataProcessingItemData.items.filter(
+          element => element.bypassStatus === '0',
+        );
+        console.log('alertBypassStatus====', alertBypassStatus);
+        this.setState({
+          alertBypassStatus,
+        });
+      },
     });
   };
 
@@ -413,21 +424,25 @@ export default class DataProcessing extends Component {
       alertType,
       checkedAll,
       alertIndeterminate,
+      alertBypassStatus,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
       selectedRowKeys,
       columnTitle: (
         <Fragment>
-          <Checkbox
-            checked={checkedAll}
-            indeterminate={alertIndeterminate}
-            onChange={this.onSelectChangeAll}
-          ></Checkbox>
-          <span style={{ marginLeft: '5px' }}>ByPass</span>
+          {alertBypassStatus.length > 0 && (
+            <Checkbox
+              checked={checkedAll}
+              indeterminate={alertIndeterminate}
+              onChange={this.onSelectChangeAll}
+            ></Checkbox>
+          )}
+          <span style={{ marginLeft: '5px' }}>Bypass</span>
         </Fragment>
       ),
       onChange: this.onSelectChange,
+      selections: false,
     };
     return (
       <Fragment>
@@ -509,19 +524,21 @@ export default class DataProcessing extends Component {
                 </div>
                 <div className={styles.cutOff}></div>
                 <div className={styles.dataItemTable}>
-                  <div className={styles.tableTop}>
-                    <Button
-                      onClick={this.onBypass}
-                      type="primary"
-                      className="btn-usual"
-                      disabled={!authBypass}
-                    >
+                  <div
+                    className={styles.tableTop}
+                    style={
+                      authBypass && alertBypassStatus.length > 0
+                        ? { visibility: 'visible' }
+                        : { visibility: 'hidden' }
+                    }
+                  >
+                    <Button onClick={this.onBypass} type="primary" className="btn-usual">
                       {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
                     </Button>
                   </div>
                   <Table
                     loading={loading['codeList/getCodeItemList']}
-                    rowSelection={rowSelection}
+                    rowSelection={alertBypassStatus.length > 0 ? rowSelection : null}
                     dataSource={dataProcessingItemData.items}
                     pagination={false}
                     columns={this.state.columns}
