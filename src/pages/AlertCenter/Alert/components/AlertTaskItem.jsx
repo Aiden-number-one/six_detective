@@ -44,7 +44,7 @@ export function ProductTaskItem({
   },
 }) {
   return (
-    <GrDescriptions>
+    <GrDescriptions labelWidth="33%">
       <GrDescriptions.Item label="Market *">{MARKET}</GrDescriptions.Item>
       <GrDescriptions.Item label="HKEX DCASS Code *">{EXTERNAL_PRODUCT_CODE}</GrDescriptions.Item>
       <GrDescriptions.Item label="Is CA Code? *">{isCACodeMap[+IS_CA_CODE]}</GrDescriptions.Item>
@@ -86,7 +86,7 @@ export function CaCodeTaskItem({
   },
 }) {
   return (
-    <GrDescriptions column={1}>
+    <GrDescriptions labelWidth="25%">
       <GrDescriptions.Item label="Market *">{MARKET}</GrDescriptions.Item>
       <GrDescriptions.Item label="HKEX DCASS Code *">{EXTERNAL_PRODUCT_CODE}</GrDescriptions.Item>
       <GrDescriptions.Item label="Is CA Code? *">{isCACodeMap[+IS_CA_CODE]}</GrDescriptions.Item>

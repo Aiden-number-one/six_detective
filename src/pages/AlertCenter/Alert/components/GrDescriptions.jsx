@@ -11,9 +11,9 @@ const renderItem = ({ children, label, colon, labelWidth = '20%' } = {}) => (
   </li>
 );
 
-export const GrDescriptions = ({ children = [], colon }) => (
+export const GrDescriptions = ({ children = [], labelWidth, colon }) => (
   <ul className={styles['gr-descriptions']}>
-    {children.map(child => child && renderItem({ colon, ...child.props }))}
+    {children.map(child => child && renderItem({ colon, labelWidth, ...child.props }))}
   </ul>
 );
 
