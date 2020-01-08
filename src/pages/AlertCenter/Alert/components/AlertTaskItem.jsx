@@ -101,7 +101,7 @@ export function CaCodeTaskItem({
     </GrDescriptions>
   );
 }
-export function NewAccountTaskItem({ task, loading, reportHistory, answerHistory }) {
+export function NewAccountTaskItem({ task }) {
   const {
     MARKET,
     SUBMITTER_CODE,
@@ -120,10 +120,14 @@ export function NewAccountTaskItem({ task, loading, reportHistory, answerHistory
     PREV_IS_REPORT_ANY_POSITION,
     CONFIRM_IS_WATCH,
     REMARK,
+    reportHistory,
+    answerHistory,
+    historyLoading,
   } = task;
 
   return (
     <GrDescriptions labelWidth="25%">
+      <GrDescriptions.Item label="taskId *">{task.TASK_ID}</GrDescriptions.Item>
       <GrDescriptions.Item label="Market *">{MARKET}</GrDescriptions.Item>
       <GrDescriptions.Item label="Submitter Code *">{SUBMITTER_CODE}</GrDescriptions.Item>
       <GrDescriptions.Item label="Submitter Name *">{SUBMITTER_NAME}</GrDescriptions.Item>
@@ -138,16 +142,18 @@ export function NewAccountTaskItem({ task, loading, reportHistory, answerHistory
           dataSource={reportHistory}
           rowKey="chgId"
           style={{ marginTop: 10 }}
-          loading={loading}
+          loading={historyLoading}
           pagination={false}
           bordered
         >
+          <Column align="center" dataIndex="chgId" title="Reported ID" />
           <Column
             align="center"
             dataIndex="reportedTime"
             title="Reported Time"
             render={text => moment(text).format(timestampFormat)}
           />
+
           <Column align="center" dataIndex="reportedAccountName" title="Reported Account Name" />
           <Column align="center" dataIndex="reportedBiName" title="Reported BI Name" />
           <Column align="center" dataIndex="reportedToName" title="Reported TO Name" />
@@ -159,10 +165,11 @@ export function NewAccountTaskItem({ task, loading, reportHistory, answerHistory
           dataSource={answerHistory}
           rowKey="answerId"
           style={{ marginTop: 10 }}
-          loading={loading}
+          loading={historyLoading}
           pagination={false}
           bordered
         >
+          <Column align="center" dataIndex="answerId" title="Answered ID" />
           <Column align="center" dataIndex="answeredTime" title="Answered Time" />
           <Column align="center" dataIndex="answeredFullBiName" title="Answered Full BI Name" />
           <Column align="center" dataIndex="answeredBiCategory" title="Answered BI Category" />

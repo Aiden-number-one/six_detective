@@ -20,6 +20,10 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
 
   function handleClose() {
     form.resetFields();
+    setSubmitter({});
+    setSubmitters([]);
+    setSubmitterTotal(0);
+    setSubmitterPage(1);
     onCancel();
   }
 
@@ -129,7 +133,7 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
             </Select>,
           )}
         </Form.Item>
-        <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
+        <Form.Item label={<FormattedMessage id="data-import.submitter-name" />}>
           {getFieldDecorator('submitterName', {
             initialValue: currentSubmitter.submitterName,
             rules: [
@@ -140,16 +144,16 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
             ],
           })(<Input disabled placeholder="please input submmitter name" />)}
         </Form.Item>
-        <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
+        <Form.Item label={<FormattedMessage id="data-import.file-type" />}>
           {getFieldDecorator('submissionReport', {
             rules: [
               {
                 required: true,
-                message: 'Please select submission report!',
+                message: 'Please select file-type!',
               },
             ],
           })(
-            <Select placeholder="please select submission report" allowClear>
+            <Select placeholder="please select file-type" allowClear>
               {SUBMISSION_REPORT.map(report => (
                 <Option key={report}>{report}</Option>
               ))}
@@ -203,7 +207,7 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
       <div className={styles['bottom-btns']}>
         <Button onClick={handleClose}>Cancel</Button>
         <Button type="primary" loading={loading['lop/importByManual']} onClick={handleCommit}>
-          Commit
+          Upload
         </Button>
       </div>
     </Drawer>

@@ -59,8 +59,7 @@ function AlertDetail({
   logs,
   email,
   attachments,
-  reportHistory,
-  answerHistory,
+  taskHistory: { reportHistory, answerHistory },
 }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
@@ -69,7 +68,7 @@ function AlertDetail({
 
   const taskColumns = taskColumnsMap[+alert.alertTypeId];
   const TaskItem = TaskItemMap[+alert.alertTypeId];
-  const isAttachmentsVisible = [321, 322, 323].includes(+alert.alertTypeId);
+  const isNewAccountType = [321, 322, 323].includes(+alert.alertTypeId);
 
   useEffect(() => {
     const { alertId } = alert;
@@ -90,7 +89,7 @@ function AlertDetail({
       },
     });
     // show attachments
-    if (isAttachmentsVisible) {
+    if (isNewAccountType) {
       dispatch({
         type: 'alertCenter/fetchAttachments',
         payload: {
@@ -112,42 +111,34 @@ function AlertDetail({
   }
 
   function handleAddItem(pane) {
-    const isEqual = item => item.ALERT_ITEM_ID === pane.ALERT_ITEM_ID;
+    const isEqual = item => item.TASK_ID === pane.TASK_ID;
     if (panes.find(isEqual)) {
       // update item
       setPanes(panes.map(p => (isEqual(p) ? pane : p)));
     } else {
+      handleHistory(pane);
       // add pane
       setPanes([pane, ...panes]);
-      // task item history list
-      if ([321, 322, 323].includes(+alert.alertTypeId)) {
-        dispatch({
-          type: 'alertCenter/fetchTaskHistory',
-          payload: {
-            taskId: pane.TASK_ID,
-          },
-        });
-      }
     }
-    setActiveKey(pane.ALERT_ITEM_ID.toString());
+    setActiveKey(pane.TASK_ID.toString());
   }
 
   function handleRemoveItem(e, pane) {
     e.stopPropagation();
     let lastIndex;
     let curActiveKey = activeKey;
-    const targetKey = pane.ALERT_ITEM_ID;
+    const targetKey = pane.TASK_ID;
     panes.forEach((item, i) => {
-      if (item.ALERT_ITEM_ID === targetKey) {
+      if (item.TASK_ID === targetKey) {
         lastIndex = i - 1;
       }
     });
 
-    setPanes(panes.filter(item => item.ALERT_ITEM_ID !== targetKey));
+    setPanes(panes.filter(item => item.TASK_ID !== targetKey));
 
     if (panes.length && activeKey === targetKey.toString()) {
       if (lastIndex >= 0) {
-        curActiveKey = panes[lastIndex].ALERT_ITEM_ID.toString();
+        curActiveKey = panes[lastIndex].TASK_ID.toString();
       } else {
         curActiveKey = '2';
       }
@@ -175,6 +166,17 @@ function AlertDetail({
     setEmailVisible(false);
   }
 
+  function handleHistory(task) {
+    // task item history list
+    if (isNewAccountType) {
+      dispatch({
+        type: 'alertCenter/fetchTaskHistory',
+        payload: {
+          taskId: task.TASK_ID,
+        },
+      });
+    }
+  }
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -227,14 +229,15 @@ function AlertDetail({
             </TabPane>
           )}
           {+alert.itemsTotal !== 0 &&
+            panes &&
             panes.map(pane => (
               <TabPane
                 className={styles['tab-content']}
                 style={{ minHeight: 350 }}
-                key={pane.ALERT_ITEM_ID.toString()}
+                key={pane.TASK_ID.toString()}
                 tab={
                   <Row type="flex" justify="space-between" align="middle">
-                    <span>Alert Item </span>
+                    <span>Alert Item</span>
                     <Icon
                       type="close"
                       style={{ marginLeft: 12, fontSize: 12 }}
@@ -243,12 +246,7 @@ function AlertDetail({
                   </Row>
                 }
               >
-                <TaskItem
-                  task={pane}
-                  loading={loading['alertCenter/fetchTaskHistory']}
-                  reportHistory={reportHistory}
-                  answerHistory={answerHistory}
-                />
+                <TaskItem task={{ ...pane, reportHistory, answerHistory }} />
                 <div align="right">
                   <TaskBtn task={pane} />
                 </div>
@@ -295,22 +293,12 @@ function AlertDetail({
 }
 
 export default connect(
-  ({
-    loading,
-    alertCenter: {
-      comments = [],
-      logs = [],
-      email,
-      attachments,
-      taskHistory: { reportHistory, answerHistory },
-    },
-  }) => ({
+  ({ loading, alertCenter: { comments = [], logs = [], email, attachments, taskHistory } }) => ({
     loading: loading.effects,
     comments,
     logs,
     email,
     attachments,
-    reportHistory,
-    answerHistory,
+    taskHistory,
   }),
 )(AlertDetail);

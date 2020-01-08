@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-08 12:36:48
+ * @LastEditTime : 2020-01-08 17:03:56
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -162,7 +162,6 @@ export default {
       };
     },
     saveTaskHistory(state, { payload }) {
-      console.log(payload.taskHistory);
       return {
         ...state,
         taskHistory: payload.taskHistory,

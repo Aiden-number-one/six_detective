@@ -32,11 +32,11 @@ const MarketFormItem = ({ getFieldDecorator }) => (
 );
 
 const SubmissionReportFormItem = ({ getFieldDecorator }) => (
-  <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
+  <Form.Item label={<FormattedMessage id="data-import.file-type" />}>
     {getFieldDecorator('submissionReport', {
       initialValue: '',
     })(
-      <Select placeholder="please select submission report" allowClear>
+      <Select placeholder="please select file-type" allowClear>
         <Option value="">All</Option>
         {SUBMISSION_REPORT.map(report => (
           <Option key={report}>{report}</Option>
@@ -53,13 +53,13 @@ const SubmitterCodeFormItem = ({ getFieldDecorator }) => (
 );
 
 const SubmitterNameFormItem = ({ getFieldDecorator }) => (
-  <Form.Item label={<FormattedMessage id="data-import.lop.submitter-name" />}>
+  <Form.Item label={<FormattedMessage id="data-import.submitter-name" />}>
     {getFieldDecorator('submitterName')(<Input placeholder="please input submitter name" />)}
   </Form.Item>
 );
 
 const FileTypeFormItem = ({ getFieldDecorator }) => (
-  <Form.Item label={<FormattedMessage id="data-import.market.file-type" />}>
+  <Form.Item label={<FormattedMessage id="data-import.file-type" />}>
     {getFieldDecorator('fileType', {
       initialValue: '',
     })(

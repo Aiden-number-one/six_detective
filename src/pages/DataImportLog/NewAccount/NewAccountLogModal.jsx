@@ -1,17 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Drawer, Form, Input, Upload, Icon, Button, Table, Select, Alert } from 'antd';
+import {
+  Drawer,
+  Form,
+  Input,
+  Upload,
+  Icon,
+  Button,
+  Table,
+  Select,
+  Alert,
+  Popover,
+  Typography,
+} from 'antd';
 
 import styles from '../index.less';
 
 const { Column } = Table;
 const { Option } = Select;
+const { Text } = Typography;
 
+const tipMsg = 'Please press "Parse Files" button to display the files';
 const warningMsg = 'Please validate before upload. If information is incorrect,please edit.';
 
 const isLt5M = size => size / 1024 / 1024 < 5;
 
 const EditableContext = React.createContext();
+
+function ErrorList({ dataSource }) {
+  return (
+    <Popover
+      placement="bottomLeft"
+      overlayClassName={styles['account-error-container']}
+      content={
+        <ul>
+          {dataSource.map(text => (
+            <li key={text}>
+              <Text ellipsis style={{ width: '96%' }} title={text}>
+                {text}
+              </Text>
+            </li>
+          ))}
+        </ul>
+      }
+    >
+      <div className={styles['account-error']}>
+        <Icon type="exclamation-circle" theme="filled" className={styles.icon} />
+        <span>Error is found...</span>
+      </div>
+    </Popover>
+  );
+}
 
 function EditableCell({ editing, dataIndex, title, record, children, ...restProps }) {
   return (
@@ -138,8 +177,17 @@ function EditableFileTable({ fileUid, fileList, form, onEdit, onCancel, onSave, 
   );
 }
 
-function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFiles, onUpload }) {
+function NewAccountLogManualModal({
+  form,
+  visible,
+  parseLoading,
+  parseFiles,
+  onCancel,
+  onParseFiles,
+  onUpload,
+}) {
   const [fileUid, setFileUid] = useState('');
+  const [isTipVisible, setTipVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [validFiles, setValidFiles] = useState([]);
@@ -159,7 +207,7 @@ function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFi
 
       const errs = parseFiles
         .filter(file => file.flag === 'F')
-        .map(file => `${file.fileName}, ${file.detail}`);
+        .map(file => `${file.fileName}, ${file.detail}.`);
 
       setValidFiles(files);
       setParseErrs(errs);
@@ -180,7 +228,7 @@ function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFi
         submitterCode: '',
       })),
     ]);
-
+    setTipVisible(true);
     return false;
   }
 
@@ -188,6 +236,7 @@ function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFi
     setValidFiles([]);
     setParseErrs([]);
     onParseFiles(fileList.map(item => item.file));
+    setTipVisible(false);
   }
   function handleSave(uid) {
     form.validateFields((err, values) => {
@@ -226,12 +275,15 @@ function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFi
   function allUploadFinish() {
     setLoading(false);
     form.resetFields();
+    handleCancelModal();
+  }
+
+  function handleCancelModal() {
     setFileList([]);
     setValidFiles([]);
     setParseErrs([]);
-    onHide();
+    onCancel();
   }
-
   async function handleCommit() {
     form.validateFields(async err => {
       if (!err) {
@@ -251,9 +303,10 @@ function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFi
       title={<FormattedMessage id="data-import.new-account.manual-upload" />}
       width={750}
       closable={false}
+      className={styles['drawer-container']}
       bodyStyle={{ paddingBottom: 60, paddingTop: 10 }}
       visible={visible}
-      onClose={onHide}
+      onClose={handleCancelModal}
     >
       <Alert message={warningMsg} type="warning" showIcon banner />
       <Form layout="vertical">
@@ -301,16 +354,8 @@ function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFi
           )}
         </Form.Item>
       </Form>
-      {parseErrs.length > 0 && (
-        <ul className={styles['account-error']}>
-          {parseErrs.map(text => (
-            <li key={text}>
-              <Icon type="close-circle" className={styles.icon} />
-              {text}
-            </li>
-          ))}
-        </ul>
-      )}
+      {isTipVisible && <div className={styles.tip}>{tipMsg}</div>}
+      {parseErrs.length > 0 && <ErrorList dataSource={parseErrs} />}
       {validFiles.length > 0 && (
         <EditableFileTable
           form={form}
@@ -323,8 +368,13 @@ function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFi
         />
       )}
       <div className={styles['bottom-btns']}>
-        <Button onClick={onHide}>Cancel</Button>
-        <Button type="primary" disabled={!fileList.length} onClick={handleParseFiles}>
+        <Button onClick={handleCancelModal}>Cancel</Button>
+        <Button
+          type="primary"
+          disabled={!fileList.length}
+          loading={parseLoading}
+          onClick={handleParseFiles}
+        >
           Parse Files
         </Button>
         <Button
@@ -333,7 +383,7 @@ function NewAccountLogManualModal({ form, visible, parseFiles, onHide, onParseFi
           disabled={!validFiles.length}
           onClick={handleCommit}
         >
-          Commit
+          Upload
         </Button>
       </div>
     </Drawer>

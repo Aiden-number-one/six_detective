@@ -76,9 +76,9 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total, parseFil
         <FilterForm formType={2} loading={loading} onParams={handleParams} />
         <NewAccountLogModal
           visible={visible}
-          loading={loading}
-          onHide={() => setVisible(false)}
+          parseLoading={loading['newAccount/fetchParseFiles']}
           parseFiles={parseFiles}
+          onCancel={() => setVisible(false)}
           onUpload={handleUpload}
           onParseFiles={handleFilesParse}
         />
