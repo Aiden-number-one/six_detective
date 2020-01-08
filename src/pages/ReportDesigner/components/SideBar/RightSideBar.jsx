@@ -78,6 +78,44 @@ export default class RightSideBar extends PureComponent {
     siderBarType: 'cell',
   };
 
+  // 修改数据集的自定义类型的中的value
+  modifyCustomerType = (customList, modifyIndex, modifyValue) => {
+    // 修改自定义数据集中的相关内容
+    const { customSearchData, dispatch } = this.props;
+    const currentCustom = [...customList];
+    // eslint-disable-next-line no-param-reassign
+    currentCustom[modifyIndex].value = modifyValue;
+    dispatch({
+      type: 'formArea/changeCustomSearchData',
+      payload: {
+        index: customSearchData.find(value => value.active).i,
+        props: {
+          customList: currentCustom,
+        },
+      },
+    });
+  };
+
+  // 控制数据集的自定义类型
+  addCustomerType = () => {
+    // 新增自定义类型
+    const { customSearchData, dispatch } = this.props;
+    const current = customSearchData.find(value => value.active) || {};
+    const currentCustom = current.custom || [];
+    currentCustom.push({
+      value: '',
+    });
+    dispatch({
+      type: 'formArea/changeCustomSearchData',
+      payload: {
+        index: customSearchData.find(value => value.active).i,
+        props: {
+          customList: currentCustom,
+        },
+      },
+    });
+  };
+
   // 切换rightSiderBar
   changeSiderBarType = siderBarType => {
     this.setState({
@@ -125,6 +163,9 @@ export default class RightSideBar extends PureComponent {
     // 控件的props
     const widgetProps = {
       currentWidge: customSearchData.find(value => value.active) || {},
+      dataSetPrivateList, // 私有数据集，用于展示field
+      modifyCustomerType: this.modifyCustomerType,
+      addCustomerType: this.addCustomerType,
     };
     // 表单的props
     const formProps = {

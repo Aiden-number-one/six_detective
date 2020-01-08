@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Collapse, Icon, Form, Input, Select, Checkbox, Radio } from 'antd';
 import { FormattedMessage } from 'umi/locale';
+import _ from 'lodash';
 import styles from './index.less';
 
 const { Content } = Layout;
@@ -14,7 +15,15 @@ const formLayout = {
 };
 
 export default props => {
-  const { getFieldDecorator, currentWidge = {} } = props;
+  const {
+    getFieldDecorator,
+    currentWidge = {},
+    dataSetPrivateList,
+    modifyCustomerType,
+    addCustomerType,
+  } = props;
+  const params = _.flattenDeep(dataSetPrivateList.map(value => value.query.parameters || []));
+  const { customList = [] } = currentWidge;
   return (
     <Content className={styles.content}>
       {/* 控件设置基本信息 */}
@@ -102,7 +111,16 @@ export default props => {
             </Form.Item>
             {/* 表字段 */}
             <Form.Item label={<FormattedMessage id="report-designer.field" />} {...formLayout}>
-              {getFieldDecorator('widgetKey', {})(<Input />)}
+              {getFieldDecorator(
+                'widgetKey',
+                {},
+              )(
+                <Select>
+                  {params.map(value => (
+                    <Option key={value.field_data_name}>{value.field_data_name}</Option>
+                  ))}
+                </Select>,
+              )}
             </Form.Item>
           </Form>
         </Panel>
@@ -123,26 +141,69 @@ export default props => {
             <Form colon={false}>
               {/* 来源于 */}
               <Form.Item label={<FormattedMessage id="report-designer.from" />} {...formLayout}>
-                {getFieldDecorator('roleName', {})(<Select />)}
+                {getFieldDecorator(
+                  'sourceType',
+                  {},
+                )(
+                  <Select>
+                    <Option value="dataset">Data Set</Option>
+                    <Option value="custom">Custom</Option>
+                    <Option value="table">Table</Option>
+                  </Select>,
+                )}
               </Form.Item>
-              {/* 数据源 */}
-              <Form.Item
-                label={<FormattedMessage id="report-designer.datasource" />}
-                {...formLayout}
-              >
-                {getFieldDecorator('roleName', {})(<Select />)}
-              </Form.Item>
-              {/* 数据集 */}
-              <Form.Item label={<FormattedMessage id="report-designer.dataset" />} {...formLayout}>
-                {getFieldDecorator('roleName', {})(<Select />)}
-              </Form.Item>
-              {/* 数据字段 */}
-              <Form.Item
-                label={<FormattedMessage id="report-designer.datacolumn" />}
-                {...formLayout}
-              >
-                {getFieldDecorator('roleName', {})(<Select />)}
-              </Form.Item>
+              {currentWidge.sourceType === 'table' && (
+                <>
+                  {/* 数据源 */}
+                  <Form.Item
+                    label={<FormattedMessage id="report-designer.datasource" />}
+                    {...formLayout}
+                  >
+                    {getFieldDecorator('datasource', {})(<Select />)}
+                  </Form.Item>
+                  {/* 数据集 */}
+                  <Form.Item
+                    label={<FormattedMessage id="report-designer.dataset" />}
+                    {...formLayout}
+                  >
+                    {getFieldDecorator('dataset', {})(<Select />)}
+                  </Form.Item>
+                  {/* 数据字段 */}
+                  <Form.Item
+                    label={<FormattedMessage id="report-designer.datacolumn" />}
+                    {...formLayout}
+                  >
+                    {getFieldDecorator('datacolumn', {})(<Select />)}
+                  </Form.Item>
+                </>
+              )}
+              {currentWidge.sourceType === 'dataset' && (
+                <>
+                  {/* 数据集 */}
+                  <Form.Item
+                    label={<FormattedMessage id="report-designer.dataset" />}
+                    {...formLayout}
+                  >
+                    {getFieldDecorator('dataset', {})(<Select />)}
+                  </Form.Item>
+                  {/* 数据字段 */}
+                  <Form.Item
+                    label={<FormattedMessage id="report-designer.datacolumn" />}
+                    {...formLayout}
+                  >
+                    {getFieldDecorator('datacolumn', {})(<Select />)}
+                  </Form.Item>
+                </>
+              )}
+              {currentWidge.sourceType === 'custom' &&
+                customList.map((value, index) => (
+                  <Input
+                    value={value.value}
+                    onChange={e => {
+                      modifyCustomerType(customList, index, e.target.value);
+                    }}
+                  />
+                ))}
             </Form>
           </Panel>
         </Collapse>

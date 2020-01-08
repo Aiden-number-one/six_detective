@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { PureComponent } from 'react';
-import { Row, Col, Button, Form, Input, Select } from 'antd';
+import { Row, Col, Button, Form, Input, Select, message } from 'antd';
 import { connect } from 'dva';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import styles from './index.less';
@@ -51,11 +51,50 @@ export default class DatasetModify extends PureComponent {
     });
   }
 
-  onSave = () => {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: ''
-    // });
+  // 进行数据集编辑保存
+  onSave = async e => {
+    e.preventDefault();
+    const {
+      dispatch,
+      variableList,
+      form: { validateFieldsAndScroll },
+      currentSelectDataSetOtherInfo,
+      onClose,
+    } = this.props;
+    const fields = await dispatch({
+      type: 'privateDataSetEdit/getField',
+      payload: {
+        commandText: this.sql,
+        datasourceId: currentSelectDataSetOtherInfo.datasourceId,
+      },
+    });
+    if (!Array.isArray(fields)) {
+      message.warn(fields);
+      return false;
+    }
+    validateFieldsAndScroll((err, values) => {
+      if (err) {
+        return;
+      }
+      // 内部json保存完毕，进行保存接口
+      dispatch({
+        type: 'reportDesigner/modifyDataSetPrivate',
+        payload: {
+          dataSetId: currentSelectDataSetOtherInfo.datasetId,
+          props: {
+            dataset_name: values.datasetName,
+            dataset_type: values.datasetType,
+            fields,
+            query: {
+              parameters: variableList,
+              command_text: this.sql,
+            },
+          },
+        },
+      });
+      onClose();
+    });
+    return true;
   };
 
   // 获取参数设置
@@ -90,6 +129,7 @@ export default class DatasetModify extends PureComponent {
       form: { getFieldDecorator },
       currentSelectDataSetOtherInfo = {},
       variableList = [],
+      onClose,
     } = this.props;
     return (
       <div className={styles.modifyDataSet}>
@@ -116,8 +156,8 @@ export default class DatasetModify extends PureComponent {
               initialValue: currentSelectDataSetOtherInfo.datasetType,
             })(
               <Select placeholder="Please Input Name of Data Set">
-                <Option value="sql">SQL</Option>
-                <Option value="storedprocedure">Stored Procedure</Option>
+                <Option value="SQL">SQL</Option>
+                <Option value="PROCEDURE">Stored Procedure</Option>
               </Select>,
             )}
           </Form.Item>
@@ -193,7 +233,7 @@ export default class DatasetModify extends PureComponent {
           }}
         >
           <Col>
-            <Button onClick={this.onCancel} style={{ marginRight: 10 }}>
+            <Button onClick={onClose} style={{ marginRight: 10 }}>
               CANCEL
             </Button>
             <Button type="primary" onClick={this.onSave}>

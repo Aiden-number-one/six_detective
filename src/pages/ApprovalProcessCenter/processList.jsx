@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import router from 'umi/router';
-import { Table, Row, Col, Button, Input, Radio, Drawer } from 'antd';
+import { Table, Row, Col, Button, Input, Radio, Drawer, Typography } from 'antd';
 import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
@@ -14,14 +14,15 @@ import btnStyles from '@/pages/DataImportLog/index.less';
 
 const { Column } = Table;
 const { Search } = Input;
+const { Paragraph } = Typography;
 
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
 function TabBtn({ changeTab, selectedCurrentTask }) {
   return (
-    <Row className={styles.btns} style={{ marginBottom: '15px' }}>
-      <Col span={12}>
+    <Row>
+      <Col span={24}>
         <Radio.Group
           key={selectedCurrentTask}
           defaultValue={selectedCurrentTask}
@@ -46,8 +47,17 @@ function TaskBtn({
   exportAlert,
 }) {
   return (
-    <Row className={alertStyle.btns}>
+    <Row>
       <Col span={12}>
+        <Search
+          key={urlTaskCode}
+          placeholder="search"
+          defaultValue={urlTaskCode}
+          onSearch={value => searchTask(selectedCurrentTask, value)}
+          style={{ width: 264 }}
+        />
+      </Col>
+      <Col span={12} align="right">
         {selectedCurrentTask !== 'his' && (
           <>
             <button
@@ -68,24 +78,10 @@ function TaskBtn({
             </button>
           </>
         )}
-
-        {/* <Button disabled={!selectedKeys.length} onClick={() => setTaskWithdraw(selectedKeys)}>
-          <IconFont type="iconicon_withdraw1 " className={styles['btn-icon']} />
-          Withdraw
-        </Button> */}
         <button type="button" disabled={!selectedKeys.length} onClick={exportAlert}>
           <IconFont type="iconexport" className={alertStyle['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </button>
-      </Col>
-      <Col span={12} align="right">
-        <Search
-          key={urlTaskCode}
-          placeholder="search"
-          defaultValue={urlTaskCode}
-          onSearch={value => searchTask(selectedCurrentTask, value)}
-          style={{ width: 264 }}
-        />
       </Col>
     </Row>
   );
@@ -170,9 +166,12 @@ function ProcessList({
         if (items[0].ownerId) {
           const loginName = localStorage.getItem('loginName');
           const isYou = loginName === items[0].ownerId;
+          if (isYou) {
+            throw new Error('You have claimed the task');
+          }
           setIsBatch(false);
           setClickTaskCode(taskCode);
-          setClaimContent(`This task has been claimed by [${isYou ? 'you' : items[0].ownerId}]
+          setClaimContent(`This task has been claimed by [${items[0].ownerId}]
           Do you confirm to re-claim?`);
           setConfirmVisible(true);
         } else {
@@ -195,6 +194,11 @@ function ProcessList({
             setClaimContent(`some tasks has been claimed,
       Do you confirm to re-claim?`);
           } else {
+            const loginName = localStorage.getItem('loginName');
+            const isYou = loginName === items[0].ownerId;
+            if (isYou) {
+              throw new Error('You have claimed the task');
+            }
             setClaimContent(`This task has been claimed,
       Do you confirm to re-claim?`);
           }
@@ -309,32 +313,41 @@ function ProcessList({
           </Button>
         </div>
       </Drawer>
-      <TabBtn
-        changeTab={selectedTasks => {
-          setUrlCode('');
-          setSelectedKeys([]);
-          setSelectedTasks(selectedTasks);
-          setCurrentTaskType(selectedTasks);
-          dispatch({
-            type: 'approvalCenter/fetch',
-            payload: {
-              type: selectedTasks,
-            },
-          });
-        }}
-        selectedCurrentTask={selectedCurrentTask}
-      />
-      <TaskBtn
-        selectedKeys={selectedKeys}
-        selectedCurrentTask={selectedCurrentTask}
-        searchTask={searchTask}
-        claimOk={claimOk}
-        checkOwner={checkOwner}
-        setTaskAssign={setTaskAssign}
-        checkAssign={checkAssign}
-        setVisible={setVisible}
-        urlTaskCode={urlCode}
-      />
+      <div>
+        <Row className={alertStyle.btns}>
+          <Col span={10}>
+            <TabBtn
+              changeTab={selectedTasks => {
+                setUrlCode('');
+                setSelectedKeys([]);
+                setSelectedTasks(selectedTasks);
+                setCurrentTaskType(selectedTasks);
+                dispatch({
+                  type: 'approvalCenter/fetch',
+                  payload: {
+                    type: selectedTasks,
+                  },
+                });
+              }}
+              selectedCurrentTask={selectedCurrentTask}
+            />
+          </Col>
+          <Col span={14} align="right">
+            <TaskBtn
+              selectedKeys={selectedKeys}
+              selectedCurrentTask={selectedCurrentTask}
+              searchTask={searchTask}
+              claimOk={claimOk}
+              checkOwner={checkOwner}
+              setTaskAssign={setTaskAssign}
+              checkAssign={checkAssign}
+              setVisible={setVisible}
+              urlTaskCode={urlCode}
+            />
+          </Col>
+        </Row>
+      </div>
+
       <Table
         border
         dataSource={tasks}
@@ -384,20 +397,35 @@ function ProcessList({
           },
         })}
       >
-        <Column align="center" dataIndex="taskCode" title="Task Code" width="10%" />
-        <Column align="left" dataIndex="classification" title="Classification" width="25" />
-        <Column align="center" dataIndex="submitterName" title="Submitter Name" width="15%" />
-        <Column align="center" dataIndex="details" title="Details" width="10%" />
+        <Column align="center" dataIndex="taskCode" title="Task Code" />
+        <Column
+          align="left"
+          dataIndex="classification"
+          title="Classification"
+          width="25%"
+          render={(text, record) => (
+            <Paragraph ellipsis={{ rows: 2, expandable: false }}>{record.classification}</Paragraph>
+          )}
+        />
+        <Column align="center" dataIndex="submitterName" title="Submitter Name" />
+        <Column
+          align="left"
+          dataIndex="details"
+          title="Details"
+          width="15%"
+          render={(text, record) => (
+            <Paragraph ellipsis={{ rows: 2, expandable: false }}>{record.details}</Paragraph>
+          )}
+        />
         <Column
           align="center"
           dataIndex="updateDate"
           title="Update Date"
-          width="15%"
           render={(text, record) =>
             record.updateDate && moment(record.updateDate).format(timestampFormat)
           }
         />
-        <Column dataIndex="owner" title="Owner" />
+        <Column dataIndex="owner" title="Owner" align="center" />
         <Column align="center" dataIndex="statusDesc" title="Status" />
         {selectedCurrentTask !== 'his' ? (
           <Column

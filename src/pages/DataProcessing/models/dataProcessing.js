@@ -3,17 +3,19 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-06 21:19:11
+ * @LastEditTime : 2020-01-07 10:56:32
  */
 import Service from '@/utils/Service';
 
-const { getDataProcessing } = Service;
+const { getDataProcessing, startProcessing } = Service;
 const codeMaintenance = {
   namespace: 'dataProcessing',
   state: {
     data: [],
     itemData: [],
     itemsByPassData: {},
+    startProcessingData: {},
+    marketData: [],
   },
   effects: {
     *getDataProcessing({ payload, callback }, { call, put }) {
@@ -57,6 +59,33 @@ const codeMaintenance = {
         throw new Error(response.bcjson.msg);
       }
     },
+    *startProcessing({ payload }, { call, put }) {
+      const response = yield call(startProcessing, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'startProcessing',
+            payload: response.bcjson.items,
+          });
+        }
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
+    },
+    *getMarket({ payload, callback }, { call, put }) {
+      const response = yield call(getDataProcessing, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'market',
+            payload: response.bcjson.items,
+          });
+          callback();
+        }
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
@@ -75,6 +104,18 @@ const codeMaintenance = {
       return {
         ...state,
         itemsByPassData: action.payload,
+      };
+    },
+    startProcessing(state, action) {
+      return {
+        ...state,
+        startProcessingData: action.payload,
+      };
+    },
+    market(state, action) {
+      return {
+        ...state,
+        marketData: action.payload,
       };
     },
   },

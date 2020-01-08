@@ -24,7 +24,7 @@ class ReportDesignerPreview extends Component {
   }
 
   // 获取数据
-  fetchData = ({ pageNumber = 1, pageSize = 10 } = { pageNumber: 1 }) => {
+  fetchData = ({ pageNumber = '1', pageSize = '10' } = { pageNumber: '1', pageSize: '10' }) => {
     // 若有reportId，则调用接口查询报表设计器相关信息
     const {
       dispatch,
