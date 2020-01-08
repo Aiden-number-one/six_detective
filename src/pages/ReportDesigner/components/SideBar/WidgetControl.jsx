@@ -111,10 +111,9 @@ export default props => {
             </Form.Item>
             {/* 表字段 */}
             <Form.Item label={<FormattedMessage id="report-designer.field" />} {...formLayout}>
-              {getFieldDecorator(
-                'widgetKey',
-                {},
-              )(
+              {getFieldDecorator('widgetKey', {
+                initialValue: currentWidge.widgetKey,
+              })(
                 <Select>
                   {params.map(value => (
                     <Option key={value.parameter_name}>{value.parameter_name}</Option>

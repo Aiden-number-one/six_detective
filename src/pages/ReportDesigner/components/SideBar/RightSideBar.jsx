@@ -24,7 +24,9 @@ const { Sider } = Layout;
     // 便利得到result
     const result = {};
     Object.entries(allFields).forEach(([key, value]) => {
-      result[key] = value.value;
+      if (value.value !== undefined) {
+        result[key] = value.value;
+      }
     });
     // 若单元格设置区域，则进行以下操作
     if (allFields.cell) {
@@ -61,12 +63,13 @@ const { Sider } = Layout;
     }
     const { customSearchData } = props;
     if (allFields.widgetType && customSearchData.length > 0) {
-      // 若单元格为控件设置的操作，则进行以下操作
+      const currentCustomSearchData = customSearchData.find(value => value.active);
+      // 若为控件设置的操作，则进行以下操作
       dispatch({
         type: 'formArea/changeCustomSearchData',
         payload: {
-          index: customSearchData.find(value => value.active).i,
-          props: result,
+          index: currentCustomSearchData.i,
+          props: { ...currentCustomSearchData, ...result },
         },
       });
     }
@@ -127,11 +130,24 @@ export default class RightSideBar extends PureComponent {
   resetFields = () => {
     const {
       form: { resetFields },
+      customSearchData,
     } = this.props;
-    if (this.cellPosition !== this.props.cellPosition && this.cellPosition) {
+    const { siderBarType } = this.state;
+    const customSearchDataIndex = customSearchData.find(value => value.active)
+      ? customSearchData.find(value => value.active).i
+      : undefined;
+    if (
+      this.cellPosition !== this.props.cellPosition &&
+      this.cellPosition &&
+      siderBarType === 'cell'
+    ) {
+      resetFields();
+    }
+    if (customSearchDataIndex !== this.customSearchDataIndex && siderBarType === 'query') {
       resetFields();
     }
     this.cellPosition = this.props.cellPosition;
+    this.customSearchDataIndex = customSearchDataIndex;
   };
 
   render() {
