@@ -115,8 +115,10 @@ class ReportDesignerPreview extends Component {
     const {
       previewData: { items = [] },
     } = this.props;
-    const [tableData, rowCount] = items; // 考虑 undefined
-    const { totalRowCount: totalRecord } = rowCount || {}; // 总的记录数
+    const [tableData, rowCountAndTemplateArea] = items; // 考虑 undefined
+    // 总的记录数及templateArea
+    const { totalRowCount: totalRecord, templateArea = {} } = rowCountAndTemplateArea || {};
+    const { customSearchData = [] } = templateArea;
     const { totalPage, content = '<div></div>', style: styleRules } = tableData || {};
     // console.log('preview: ', items);
     if (styleRules) {
@@ -148,7 +150,7 @@ class ReportDesignerPreview extends Component {
         </div>
 
         <div className={less['filter-condition']}>
-          <Row>
+          {/* <Row>
             <div className={less['dropdown-item']}>
               <span className={less['dropdown-label']}>Product Category</span>
               <Select placeholder="Drink" onChange={this.onCategoryChange}>
@@ -190,7 +192,7 @@ class ReportDesignerPreview extends Component {
               <Radio value="monthly">Monthly Report</Radio>
               <Radio value="annual">Annual Report</Radio>
             </Radio.Group>
-          </Row>
+          </Row> */}
           <Row className={less['search-btn-row']}>
             <Button type="primary" icon="search" onClick={this.search}>
               Search

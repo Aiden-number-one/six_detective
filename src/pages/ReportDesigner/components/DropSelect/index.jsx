@@ -87,7 +87,7 @@ export default class DropSelect extends Component {
                     return (
                       <div
                         className={classNames(styles.item)}
-                        key={item.taskId}
+                        key={item.datasetName + item.createDatatime}
                         onClick={e => {
                           e.stopPropagation();
                           this.onClick(item);
