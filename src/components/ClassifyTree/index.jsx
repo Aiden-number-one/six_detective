@@ -2,8 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
- * @LastEditors  : mus
- * @LastEditTime : 2020-01-06 11:15:23
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-08 10:25:24
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -435,7 +435,7 @@ class ClassifyTree extends Component {
                     checked={customeBtnIds.includes(currentKey)}
                     onChange={this.onChangeChecked}
                   >
-                    <IconFont type="icon-anniu" className={styles.btnIcon} />
+                    <IconFont type="icon-auth-button" className={styles.btnIcon} />
                     <span>{currentName}</span>
                   </Checkbox>
                 )}

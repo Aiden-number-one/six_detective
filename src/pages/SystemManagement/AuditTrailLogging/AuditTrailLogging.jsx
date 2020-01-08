@@ -28,6 +28,7 @@ class AuditTrailLogging extends Component {
     functionName: undefined,
     updatedBy: undefined,
     exportDataVisible: false,
+    exportTypes: [],
     functionNameOptions: [
       { key: '', value: '', title: 'All' },
       { key: '1', value: '1', title: 'Name One' },
@@ -353,8 +354,9 @@ class AuditTrailLogging extends Component {
 
   exportDataConfirm = () => {
     const { dispatch } = this.props;
+    const { exportTypes } = this.state;
     const param = {
-      fileType: '1',
+      fileType: exportTypes.join(','),
       apiVersion: 'v2.0',
       isPage: 'true',
       apiName: 'bayconnect.superlop.get_system_log_list',
@@ -451,6 +453,12 @@ class AuditTrailLogging extends Component {
     });
   };
 
+  onChangeExport = newExportTypes => {
+    this.setState({
+      exportTypes: newExportTypes,
+    });
+  };
+
   operatorReset = () => {
     this.auditLogForm.current.resetFields();
   };
@@ -537,11 +545,11 @@ class AuditTrailLogging extends Component {
           okText={formatMessage({ id: 'app.common.save' })}
         >
           <div>
-            <Checkbox.Group>
-              <Checkbox value={1}>csv</Checkbox>
-              <Checkbox value={2}>xlsx</Checkbox>
-              <Checkbox value={3}>docx</Checkbox>
-              <Checkbox value={4}>pdf</Checkbox>
+            <Checkbox.Group onChange={this.onChangeExport}>
+              <Checkbox value={1}>xlsx</Checkbox>
+              <Checkbox value={2}>docx</Checkbox>
+              <Checkbox value={3}>pdf</Checkbox>
+              <Checkbox value={4}>csv</Checkbox>
             </Checkbox.Group>
           </div>
         </Modal>

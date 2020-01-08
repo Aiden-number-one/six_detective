@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import classnames from 'classnames';
-import { Row, Col, Button, Table, Select, Modal, Progress } from 'antd';
+import Antd, { Row, Col, Button, Table, Select, Modal, Progress } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
@@ -38,8 +38,20 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          width: 80,
+          align: 'right',
           render: (res, recode, index) => (
-            <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+            <Fragment>
+              {recode.isClosedIntraday === '1' && (
+                <Antd.Tooltip
+                  title="pending tasks for today"
+                  className={styles['alert-icon-wraper']}
+                >
+                  <IconFont type="icon-alertlist" className={styles['alert-icon']} />
+                </Antd.Tooltip>
+              )}
+              <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+            </Fragment>
           ),
         },
         {
@@ -56,7 +68,29 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'systemManagement.dataProcessing.numberOfAlert' }),
           dataIndex: 'numberOfAlert',
           key: 'numberOfAlert',
+          render: (res, recode) => (
+            <Fragment>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>{recode.numberOfAlert}</span>
+                {recode.alertType === this.state.alertType && (
+                  <IconFont type="icon-arrow-right" className={styles['active-icon']} />
+                )}
+              </div>
+            </Fragment>
+          ),
         },
+        // {
+        //   title: '',
+        //   dataIndex: '',
+        //   key: '',
+        //   render: (res, recode) => (
+        //     <Fragment>
+        //       {recode.alertType === this.state.alertType && (
+        //           <IconFont type="icon-arrow-right" className={styles['active-icon']} />
+        //       )}
+        //     </Fragment>
+        //   ),
+        // },
       ],
       columns: [
         // {
@@ -353,11 +387,12 @@ export default class DataProcessing extends Component {
                   <Table
                     loading={loading['dataProcessing/getDataProcessing']}
                     style={{ marginTop: '6px' }}
-                    // eslint-disable-next-line no-confusing-arrow
+                    eslint-disable-next-line
+                    no-confusing-arrow
                     rowClassName={record =>
                       classnames({
                         [styles['table-active']]: record.alertType === alertType,
-                        [styles['table-alert']]: record.isClosedIntraday === '1',
+                        [styles['alert-table-row']]: record.isClosedIntraday === '1',
                       })
                     }
                     dataSource={dataProcessingData.items}
