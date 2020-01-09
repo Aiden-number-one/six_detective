@@ -48,7 +48,7 @@ define(function (require, exports, module) {
             } else if (length > 1) {
                 toastr.info("Please select a record");
             } else {
-                $("#J_add_plan_modal .modal-header h4").text("修改调度计划");
+                $("#J_add_plan_modal .modal-header h4").text("Edit Schedule Plan");
                 $(".J_form_basc_submit").attr("id", "J_form_basc_submit_edit");
                 App.setFormData("J_form_basc", obj);
                 if (obj.executeTime) {
