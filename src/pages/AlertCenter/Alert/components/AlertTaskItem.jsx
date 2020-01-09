@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Table } from 'antd';
 import moment from 'moment';
 import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
@@ -101,7 +101,7 @@ export function CaCodeTaskItem({
     </GrDescriptions>
   );
 }
-export function NewAccountTaskItem({ task }) {
+export function NewAccountTaskItem({ task, taskHistory, loading }) {
   const {
     MARKET,
     SUBMITTER_CODE,
@@ -120,14 +120,10 @@ export function NewAccountTaskItem({ task }) {
     PREV_IS_REPORT_ANY_POSITION,
     CONFIRM_IS_WATCH,
     REMARK,
-    reportHistory,
-    answerHistory,
-    historyLoading,
   } = task;
 
   return (
     <GrDescriptions labelWidth="25%">
-      <GrDescriptions.Item label="taskId *">{task.TASK_ID}</GrDescriptions.Item>
       <GrDescriptions.Item label="Market *">{MARKET}</GrDescriptions.Item>
       <GrDescriptions.Item label="Submitter Code *">{SUBMITTER_CODE}</GrDescriptions.Item>
       <GrDescriptions.Item label="Submitter Name *">{SUBMITTER_NAME}</GrDescriptions.Item>
@@ -139,10 +135,10 @@ export function NewAccountTaskItem({ task }) {
       <GrDescriptions.Item label="Previous TO Name *">{PREV_TO_NAME}</GrDescriptions.Item>
       <GrDescriptions.Item label="Report History *" direction="column">
         <Table
-          dataSource={reportHistory}
+          dataSource={[]}
           rowKey="chgId"
           style={{ marginTop: 10 }}
-          loading={historyLoading}
+          loading={loading}
           pagination={false}
           bordered
         >
@@ -162,10 +158,10 @@ export function NewAccountTaskItem({ task }) {
       <GrDescriptions.Item label="Received Answer *">{ANSWER_STATUS}</GrDescriptions.Item>
       <GrDescriptions.Item label="Answer History *" direction="column">
         <Table
-          dataSource={answerHistory}
+          dataSource={[]}
           rowKey="answerId"
           style={{ marginTop: 10 }}
-          loading={historyLoading}
+          loading={loading}
           pagination={false}
           bordered
         >

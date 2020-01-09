@@ -6,7 +6,7 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Icon } from 'antd';
 import IconFont from '@/components/IconFont';
 import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
-import { getAuthority } from '@/utils/authority';
+import { getStore } from '@/utils/store';
 import { ClaimModal, CloseModal, ExportModal } from './components/AlertListModal';
 import { AlertListBtns } from './components/AlertListBtns';
 import ColumnTitle from '../ColumnTitle';
@@ -29,8 +29,8 @@ function AlertList({ dispatch, loading, alerts, total }) {
   const [conditions, setConditions] = useState([]);
 
   const isAuth = useMemo(() => {
-    const auth = getAuthority();
-    return auth && auth.authDiscontinue;
+    const userInfo = getStore('userInfo');
+    return userInfo && userInfo.isSuperAdmin;
   }, []);
 
   useEffect(() => {

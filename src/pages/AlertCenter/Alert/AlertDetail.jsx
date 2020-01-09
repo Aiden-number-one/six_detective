@@ -59,7 +59,7 @@ function AlertDetail({
   logs,
   email,
   attachments,
-  taskHistory: { reportHistory, answerHistory },
+  taskHistory,
 }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
@@ -116,7 +116,7 @@ function AlertDetail({
       // update item
       setPanes(panes.map(p => (isEqual(p) ? pane : p)));
     } else {
-      // handleHistory(pane);
+      handleHistory(pane);
       // add pane
       setPanes([pane, ...panes]);
     }
@@ -246,7 +246,11 @@ function AlertDetail({
                   </Row>
                 }
               >
-                <TaskItem task={{ ...pane, reportHistory, answerHistory }} />
+                <TaskItem
+                  task={pane}
+                  taskHistory={taskHistory}
+                  loading={loading['alertCenter/fetchTaskHistory']}
+                />
                 <div align="right">
                   <TaskBtn task={pane} />
                 </div>
