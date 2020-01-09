@@ -1,1 +1,10 @@
-define(function(require,exports,module){var n=require("./datasource-changeShow"),o={load:function(){n._load()}};$(function(){}),module.exports=o});
+define(function (require, exports, module) {
+  var showContent = require("./datasource-changeShow");
+  var init = {
+    load: function load() {
+      showContent._load(); //加载页面数据
+    }
+  };
+  $(function () {});
+  module.exports = init;
+});
