@@ -18,6 +18,7 @@ const { Search } = Input;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 10;
 
+// tab组件
 function TabBtn({ changeTab, selectedCurrentTask }) {
   return (
     <Row className={styles.tabBtnBox}>
@@ -36,6 +37,8 @@ function TabBtn({ changeTab, selectedCurrentTask }) {
     </Row>
   );
 }
+
+// 按钮组件
 function TaskBtn({
   selectedKeys,
   selectedCurrentTask,
@@ -141,7 +144,7 @@ function ProcessList({
     }
   }, []);
 
-  // default task
+  // default task 初始化
   useEffect(() => {
     if (tasks && tasks.length > 0) {
       const [firstTasks] = tasks;
@@ -153,6 +156,7 @@ function ProcessList({
     }
   }, [tasks]);
 
+  // 认领任务
   async function claimTask(taskCode) {
     await dispatch({
       type: 'approvalCenter/fetchJudgeDetail',
@@ -178,6 +182,7 @@ function ProcessList({
     });
   }
 
+  // 判断是否已认领
   async function checkOwner(taskCode) {
     await dispatch({
       type: 'approvalCenter/fetchJudgeDetail',
@@ -208,6 +213,7 @@ function ProcessList({
     });
   }
 
+  // 批量认领
   function claimOk(taskCode) {
     setUrlCode('');
     dispatch({
@@ -228,6 +234,7 @@ function ProcessList({
     });
   }
 
+  // 任务分配前检查此任务是否已经认领，否则没有资格分配
   async function checkAssign(taskCode) {
     const loginName = localStorage.getItem('loginName');
     await dispatch({
@@ -249,6 +256,7 @@ function ProcessList({
     });
   }
 
+  // 分配任务
   function setTaskAssign(taskCode) {
     setVisible(false);
     dispatch({
@@ -269,6 +277,7 @@ function ProcessList({
     });
   }
 
+  // search 搜索
   function searchTask(taskType, value) {
     dispatch({
       type: 'approvalCenter/fetch',
