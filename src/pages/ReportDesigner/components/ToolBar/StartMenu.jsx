@@ -256,6 +256,31 @@ class ToolBar extends Component {
         </Menu>
       );
     }
+    if (type === 'eraser') {
+      return (
+        <Menu>
+          {[
+            {
+              name: 'Clear Style',
+              params: 'clearStyle',
+            },
+            {
+              name: 'Clear All',
+              params: 'clearAll',
+            },
+          ].map(({ name, params }) => (
+            <Menu.Item
+              key={name}
+              onClick={() => {
+                // editRowColumn(operatype, value);
+              }}
+            >
+              {name}
+            </Menu.Item>
+          ))}
+        </Menu>
+      );
+    }
     return (
       <Menu
         onClick={() => {
