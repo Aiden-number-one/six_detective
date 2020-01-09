@@ -287,11 +287,15 @@ export default WrapperComponent =>
 
     // 设置cellType
     setCellType = (property, value) => {
+      console.log('setCellType: ', property, value);
       const {
         sheet,
         sheet: { cellTypeChange },
       } = this.spreadSheet;
       cellTypeChange.call(sheet, property, value);
+      // setTimeout(() => {
+      //   console.log('fetch -> ', sheet.data.getCell(3, 3));
+      // }, 2000);
     };
 
     // 得到cell属性

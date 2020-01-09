@@ -29,6 +29,8 @@ export default class DataProcessing extends Component {
       alertIds: '',
       market: '',
       authBypass: false,
+      alertBypassStatus: [],
+      isBypass: false,
       dataProcessingVisible: false,
       dataAlertVisible: false,
       dataProcessingFlag: false,
@@ -60,16 +62,20 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'systemManagement.dataProcessing.market' }),
           dataIndex: 'market',
           key: 'market',
+          ellipsis: true,
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertName' }),
           dataIndex: 'alertName',
           key: 'alertName',
+          ellipsis: true,
+          width: '35%',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.numberOfAlert' }),
           dataIndex: 'numberOfAlert',
           key: 'numberOfAlert',
+          ellipsis: true,
           render: (res, recode) => (
             <Fragment>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -200,6 +206,7 @@ export default class DataProcessing extends Component {
         this.setState(
           {
             alertType: dataProcessingData.items[0] && dataProcessingData.items[0].alertType,
+            isBypass: !!(dataProcessingData.items[0].isClosedIntraday === '1'),
             inspectDataVisible: true,
           },
           () => {
@@ -222,6 +229,16 @@ export default class DataProcessing extends Component {
     dispatch({
       type: 'dataProcessing/getDataProcessingItem',
       payload: params,
+      callback: () => {
+        const { dataProcessingItemData } = this.props;
+        const alertBypassStatus = dataProcessingItemData.items.filter(
+          element => element.bypassStatus === '0',
+        );
+        console.log('alertBypassStatus====', alertBypassStatus);
+        this.setState({
+          alertBypassStatus,
+        });
+      },
     });
   };
 
@@ -251,8 +268,10 @@ export default class DataProcessing extends Component {
     this.setState(
       {
         alertType: record.alertType,
+        isBypass: !!(record.isClosedIntraday === '1'),
       },
       () => {
+        console.log('this.state.isBypass===', this.state.isBypass);
         this.queryDataProcessingItem();
       },
     );
@@ -409,21 +428,26 @@ export default class DataProcessing extends Component {
       alertType,
       checkedAll,
       alertIndeterminate,
+      alertBypassStatus,
+      isBypass,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
       selectedRowKeys,
       columnTitle: (
         <Fragment>
-          <Checkbox
-            checked={checkedAll}
-            indeterminate={alertIndeterminate}
-            onChange={this.onSelectChangeAll}
-          ></Checkbox>
-          <span style={{ marginLeft: '5px' }}>ByPass</span>
+          {alertBypassStatus.length > 0 && (
+            <Checkbox
+              checked={checkedAll}
+              indeterminate={alertIndeterminate}
+              onChange={this.onSelectChangeAll}
+            ></Checkbox>
+          )}
+          <span style={{ marginLeft: '5px' }}>Bypass</span>
         </Fragment>
       ),
       onChange: this.onSelectChange,
+      selections: false,
     };
     return (
       <Fragment>
@@ -464,35 +488,6 @@ export default class DataProcessing extends Component {
                     total={dataProcessingData.totalCount}
                     pageSize={page.pageSize}
                   /> */}
-                  <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
-                    {/* <Col>
-                  <span>Trade Date</span>
-                  <RangePicker
-                    format="YYYY-MM-DD"
-                    placeholder={['Start Date', 'End Date']}
-                    style={{ width: '180px' }}
-                  />
-                </Col> */}
-                    <Col>
-                      <span>Market</span>
-                      <Select
-                        placeholder="Please Select"
-                        style={{ width: '120px' }}
-                        onChange={this.onChangeMarkt}
-                      >
-                        {functionNameOptions.map(item => (
-                          <Option key={item.key} value={item.value}>
-                            {item.title}
-                          </Option>
-                        ))}
-                      </Select>
-                    </Col>
-                    <Col>
-                      <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
-                        Start Processing
-                      </Button>
-                    </Col>
-                  </Row>
                   <Modal
                     icon=""
                     title={formatMessage({ id: 'app.common.confirm' })}
@@ -534,19 +529,21 @@ export default class DataProcessing extends Component {
                 </div>
                 <div className={styles.cutOff}></div>
                 <div className={styles.dataItemTable}>
-                  <div className={styles.tableTop}>
-                    <Button
-                      onClick={this.onBypass}
-                      type="primary"
-                      className="btn-usual"
-                      disabled={!authBypass}
-                    >
+                  <div
+                    className={styles.tableTop}
+                    style={
+                      authBypass && alertBypassStatus.length > 0 && isBypass
+                        ? { visibility: 'visible' }
+                        : { visibility: 'hidden' }
+                    }
+                  >
+                    <Button onClick={this.onBypass} type="primary" className="btn-usual">
                       {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
                     </Button>
                   </div>
                   <Table
                     loading={loading['codeList/getCodeItemList']}
-                    rowSelection={rowSelection}
+                    rowSelection={alertBypassStatus.length > 0 && isBypass ? rowSelection : null}
                     dataSource={dataProcessingItemData.items}
                     pagination={false}
                     columns={this.state.columns}
@@ -620,6 +617,36 @@ export default class DataProcessing extends Component {
                   <span>The last time of data processing is at 10:55 on 12/12/2019</span>
                 </li>
               </ul> */}
+              <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
+                {/* <Col>
+                  <span>Trade Date</span>
+                  <RangePicker
+                    format="YYYY-MM-DD"
+                    placeholder={['Start Date', 'End Date']}
+                    style={{ width: '180px' }}
+                  />
+                </Col> */}
+                <Col>
+                  <span>Market</span>
+                  <Select
+                    placeholder="Please Select"
+                    allowClear
+                    style={{ width: '120px' }}
+                    onChange={this.onChangeMarkt}
+                  >
+                    {functionNameOptions.map(item => (
+                      <Option key={item.key} value={item.value}>
+                        {item.title}
+                      </Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col>
+                  <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
+                    Start Processing
+                  </Button>
+                </Col>
+              </Row>
               <Chart className={styles.chart} height={400} data={dataCharts} scale={cols} forceFit>
                 <span>The last time of data processing is at 10:55 on 12/12/2019</span>
                 <Axis name="year" />
