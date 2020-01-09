@@ -26,6 +26,7 @@ export default class DataProcessing extends Component {
     super();
     this.state = {
       alertType: '',
+      activeIndex: 0,
       alertIds: '',
       market: '',
       authBypass: false,
@@ -51,7 +52,7 @@ export default class DataProcessing extends Component {
                   title="pending tasks for today"
                   className={styles['alert-icon-wraper']}
                 >
-                  <IconFont type="icon-alertlist" className={styles['alert-icon']} />
+                  <IconFont type="icon-tips" className={styles['alert-icon']} />
                 </Antd.Tooltip>
               )}
               <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
@@ -112,6 +113,38 @@ export default class DataProcessing extends Component {
         //   ),
         // },
         {
+          title: () =>
+            this.state.alertBypassStatus.length > 0 &&
+            this.state.isBypass && (
+              <Fragment>
+                {this.state.alertBypassStatus.length > 0 && this.state.isBypass && (
+                  <Checkbox
+                    checked={this.state.checkedAll}
+                    indeterminate={this.state.alertIndeterminate}
+                    onChange={this.onSelectChangeAll}
+                  ></Checkbox>
+                )}
+                <span style={{ marginLeft: '5px' }}>Bypass</span>
+              </Fragment>
+            ),
+          dataIndex: 'index',
+          key: 'index',
+          render: (res, recode, index) => (
+            <Fragment>
+              {recode.bypassStatus === '0' ? (
+                <Checkbox
+                  checked={this.state.selectedRowKeys.some(
+                    element => element.alertId === recode.alertId,
+                  )}
+                  onChange={event => this.onSelectChange(event, recode)}
+                ></Checkbox>
+              ) : (
+                <IconFont type="icon-bypass" className={styles['bypass-icon']} />
+              )}
+            </Fragment>
+          ),
+        },
+        {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
           dataIndex: 'alertOwner',
           key: 'alertOwner',
@@ -132,6 +165,7 @@ export default class DataProcessing extends Component {
           ellipsis: true,
         },
       ],
+      tempColumns: [],
       functionNameOptions: [],
       selectedRowKeys: [],
       intradays: [],
@@ -232,12 +266,50 @@ export default class DataProcessing extends Component {
       payload: params,
       callback: () => {
         const { dataProcessingItemData } = this.props;
+        const { isBypass, columns } = this.state;
         const alertBypassStatus = dataProcessingItemData.items.filter(
           element => element.bypassStatus === '0',
         );
         console.log('alertBypassStatus====', alertBypassStatus);
+        if (alertBypassStatus.length <= 0 || !isBypass) {
+          const { tempColumns } = this.state;
+          const newColumns = Object.assign([], columns);
+          let newTempColumns = Object.assign([], tempColumns);
+          let activeIndex = -1;
+          for (let i = 0; i < newColumns.length; i += 1) {
+            if (newColumns[i].key === 'index') {
+              activeIndex = i;
+            }
+          }
+          if (activeIndex > -1) {
+            newTempColumns = newColumns.splice(activeIndex, 1);
+          }
+          this.setState({
+            columns: newColumns,
+            tempColumns: newTempColumns,
+          });
+        } else {
+          const { tempColumns } = this.state;
+          let activeIndex = -1;
+          for (let i = 0; i < columns.length; i += 1) {
+            if (columns[i].key === 'index') {
+              activeIndex = i;
+            }
+          }
+          if (tempColumns.length > 0 && activeIndex <= -1) {
+            const newColumns = Object.assign([], columns);
+            newColumns.unshift(tempColumns[0]);
+            this.setState({
+              columns: newColumns,
+            });
+          }
+        }
         this.setState({
           alertBypassStatus,
+          alertIndeterminate: false,
+          checkedAll: false,
+          selectedRowKeys: [],
+          alertIds: [],
         });
       },
     });
@@ -265,10 +337,12 @@ export default class DataProcessing extends Component {
     });
   };
 
-  connectDataProcessing = record => {
+  connectDataProcessing = (record, index) => {
+    console.log('record===', record, index);
     this.setState(
       {
         alertType: record.alertType,
+        activeIndex: index,
         isBypass: !!(record.isClosedIntraday === '1'),
       },
       () => {
@@ -282,14 +356,25 @@ export default class DataProcessing extends Component {
     this.queryDataProcessing();
   };
 
-  onSelectChange = (selectedRowKeys, selectedRows) => {
+  onSelectChange = (checkedValue, selectedRows) => {
+    console.log('selectedRowKeys, selectedRows=', checkedValue, selectedRows);
+    const { selectedRowKeys } = this.state;
+    const newSelectedRowKeys = Object.assign([], selectedRowKeys);
+    if (checkedValue.target.checked) {
+      newSelectedRowKeys.push(selectedRows);
+    } else {
+      newSelectedRowKeys.splice(newSelectedRowKeys.indexOf(selectedRows), 1);
+    }
     const { dataProcessingItemData } = this.props;
-    if (selectedRowKeys.length === dataProcessingItemData.items.length) {
+    const bypassItems = dataProcessingItemData.items.filter(
+      element => element.bypassStatus === '0',
+    );
+    if (newSelectedRowKeys.length === bypassItems.length) {
       this.setState({
         checkedAll: true,
         alertIndeterminate: false,
       });
-    } else if (selectedRowKeys.length > 0) {
+    } else if (newSelectedRowKeys.length > 0) {
       this.setState({
         alertIndeterminate: true,
         checkedAll: false,
@@ -301,19 +386,27 @@ export default class DataProcessing extends Component {
       });
     }
     const alertIds = [];
-    selectedRows.forEach(element => alertIds.push(element.alertId));
-    this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {});
+    newSelectedRowKeys.forEach(element => alertIds.push(element.alertId));
+    // this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {});
+    this.setState({
+      selectedRowKeys: newSelectedRowKeys,
+      alertIds: alertIds.join(','),
+    });
   };
 
   onSelectChangeAll = checkedValue => {
+    console.log('checkedValue====', checkedValue);
     const { dataProcessingItemData } = this.props;
-    const selectedRowKeys = dataProcessingItemData.items.map((element, index) => index);
+    const selectedRowKeys = dataProcessingItemData.items.filter(
+      element => element.bypassStatus === '0',
+    );
     const alertIds = [];
     this.setState({
       checkedAll: checkedValue.target.checked,
+      alertIndeterminate: false,
     });
     if (checkedValue.target.checked) {
-      dataProcessingItemData.items.forEach(element => alertIds.push(element.alertId));
+      selectedRowKeys.forEach(element => alertIds.push(element.alertId));
       this.setState({ selectedRowKeys, alertIds: alertIds.join(',') });
     } else {
       this.setState({
@@ -345,7 +438,7 @@ export default class DataProcessing extends Component {
       const { dispatch } = this.props;
       const { market } = this.state;
       const params = {
-        user_id: getStore('userId'),
+        user_id: getStore('userInfo').employeeId,
         market,
       };
       dispatch({
@@ -427,6 +520,7 @@ export default class DataProcessing extends Component {
       dataCharts,
       cols,
       alertType,
+      activeIndex,
       checkedAll,
       alertIndeterminate,
       alertBypassStatus,
@@ -465,18 +559,20 @@ export default class DataProcessing extends Component {
                     style={{ marginTop: '6px' }}
                     eslint-disable-next-line
                     no-confusing-arrow
-                    rowClassName={record =>
+                    rowClassName={(record, index) =>
                       classnames({
-                        [styles['table-active']]: record.alertType === alertType,
+                        [styles['table-active']]:
+                          record.alertType === alertType && index === activeIndex,
                         [styles['alert-table-row']]: record.isClosedIntraday === '1',
                       })
                     }
+                    rowKey={row => row.index}
                     dataSource={dataProcessingData.items}
                     columns={this.state.codeColumns}
                     pagination={false}
-                    onRow={record => ({
+                    onRow={(record, index) => ({
                       onClick: () => {
-                        this.connectDataProcessing(record);
+                        this.connectDataProcessing(record, index);
                       }, // 点击行
                     })}
                   ></Table>
@@ -544,7 +640,8 @@ export default class DataProcessing extends Component {
                   </div>
                   <Table
                     loading={loading['codeList/getCodeItemList']}
-                    rowSelection={alertBypassStatus.length > 0 && isBypass ? rowSelection : null}
+                    rowKey="index"
+                    rowSelection={alertBypassStatus.length > 0 && isBypass ? null : null}
                     dataSource={dataProcessingItemData.items}
                     pagination={false}
                     columns={this.state.columns}
