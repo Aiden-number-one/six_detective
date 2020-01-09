@@ -438,7 +438,7 @@ export default class DataProcessing extends Component {
       const { dispatch } = this.props;
       const { market } = this.state;
       const params = {
-        user_id: getStore('userId'),
+        user_id: getStore('userInfo').employeeId,
         market,
       };
       dispatch({
@@ -566,6 +566,7 @@ export default class DataProcessing extends Component {
                         [styles['alert-table-row']]: record.isClosedIntraday === '1',
                       })
                     }
+                    rowKey={row => row.index}
                     dataSource={dataProcessingData.items}
                     columns={this.state.codeColumns}
                     pagination={false}
@@ -639,6 +640,7 @@ export default class DataProcessing extends Component {
                   </div>
                   <Table
                     loading={loading['codeList/getCodeItemList']}
+                    rowKey="index"
                     rowSelection={alertBypassStatus.length > 0 && isBypass ? null : null}
                     dataSource={dataProcessingItemData.items}
                     pagination={false}
