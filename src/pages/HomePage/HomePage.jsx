@@ -15,7 +15,7 @@ import styles from './HomePage.less';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
-@connect(({ allAlert, perAlert, information, dashboard }) => ({
+@connect(({ allAlert, perAlert, information, dashboard, approval }) => ({
   allAlterData: allAlert.allAlterData, // 全部的alert的数据
   allAlertCount: allAlert.allAlertCount, // 全部alert总数
   allOutstandingALertCount: allAlert.allOutstandingALertCount, // 全部未认领的alert的总数
@@ -26,12 +26,14 @@ const { RangePicker } = DatePicker;
   perClosedAlertCount: perAlert.perClosedAlertCount, // personal Closed Alert 总数
   informationData: information.informationData, // information Data
   myAlertData: perAlert.myAlertData, // My Alert 的表格数据
-  fileCountData: dashboard.fileCountData,
-  marketData: dashboard.marketData, // dashboard marketData
-  marketDataByCategory: dashboard.marketDataByCategory, //
+  fileCountData: dashboard.fileCountData, // submission status
+  marketData: dashboard.marketData, // 全部 marketData
+  marketDataByCategory: dashboard.marketDataByCategory, // 单个marketData
   processingStageData: dashboard.processingStageData, //
   lateReportFileCount: dashboard.lateReportFileCount, //
   outstandingReportFileCount: dashboard.outstandingReportFileCount, //
+  allApprovalData: approval.allApprovalData,
+  perApprovalData: approval.perApprovalData,
 }))
 export default class HomePage extends PureComponent {
   state = {
@@ -54,8 +56,9 @@ export default class HomePage extends PureComponent {
         this.renderAlterAllChart(data);
       },
     });
+    // 获取alert 统计数据
     this.getAlertData();
-    // 获取My alert的数据
+    // 获取My alert表格的数据
     dispatch({
       type: 'perAlert/getMyAlert',
       payload: {
@@ -74,7 +77,7 @@ export default class HomePage extends PureComponent {
         });
       },
     });
-    // 获取information
+    // 获取information 列表数据
     dispatch({
       type: 'information/getInformation',
       payload: {
@@ -83,6 +86,7 @@ export default class HomePage extends PureComponent {
         dataTable: 'SLOP_BIZ.V_INFO',
       },
     });
+    // 获取dashboard相关数据
     dispatch({
       type: 'dashboard/getFileCountByDate',
       payload: {},
@@ -101,7 +105,99 @@ export default class HomePage extends PureComponent {
       type: 'dashboard/getProcessingStageData',
       payload: {},
     });
+    // 获取approval process全部数据
+    dispatch({
+      type: 'approval/getAllApproval',
+      payload: {},
+    });
+    // 获取approval process个人数据
+    dispatch({
+      type: 'approval/getPerApproval',
+      payload: {},
+    });
   }
+
+  getApprovalData = (params = {}) => {
+    const { dispatch } = this.props;
+    // 获取approval process全部数据
+    dispatch({
+      type: 'approval/getAllApproval',
+      payload: {
+        ...params,
+      },
+      callback: datas => {
+        const ApprovalAll = [];
+        if (datas[0] && datas[0].userInfo && datas[0].userInfo[0]) {
+          datas.forEach(item => {
+            ApprovalAll.push({
+              label: item.userId,
+              type: 'CLAIMED',
+              value: item.userClaimedNum,
+            });
+          });
+          datas.forEach(item => {
+            ApprovalAll.push({
+              label: item.userId,
+              type: 'PROCESSING',
+              value: item.userProcessingNum,
+            });
+          });
+          // eslint-disable-next-line no-unused-expressions
+          this.state.approvalAllChart && this.state.approvalAllChart.changeData(ApprovalAll);
+        } else {
+          // eslint-disable-next-line no-unused-expressions
+          this.state.approvalAllChart && this.state.approvalAllChart.changeData([]);
+        }
+      },
+    });
+    // 获取approval process个人数据
+    dispatch({
+      type: 'approval/getPerApproval',
+      payload: {
+        ...params,
+      },
+      callback: datas => {
+        if (
+          datas[0] &&
+          (!!datas[0].allOutstandingNum ||
+            !!datas[0].myClaimedNum ||
+            !!datas[0].myProcessingNum ||
+            !!datas[0].myFinishedNum)
+        ) {
+          const ApprovalPersonal = [
+            { label: 'Outstanding', value: datas[0].allOutstandingNum },
+            { label: 'Calimed', value: datas[0].myClaimedNum },
+            { label: 'Processing', value: datas[0].myProcessingNum },
+            { label: 'Finished', value: datas[0].myFinishedNum },
+          ];
+          // eslint-disable-next-line no-unused-expressions
+          this.state.approvalPersonalChart &&
+            this.state.approvalPersonalChart.changeData(ApprovalPersonal);
+        } else {
+          // eslint-disable-next-line no-unused-expressions
+          this.state.approvalPersonalChart && this.state.approvalPersonalChart.changeData([]);
+        }
+        if (
+          datas[0] &&
+          (!!datas[0].myApprovedNum || !!datas[0].myRejectedNum || !!datas[0].myTerminatedNum)
+        ) {
+          const { myApprovedNum, myRejectedNum, myTerminatedNum } = datas[0];
+          const count = myApprovedNum + myRejectedNum + myTerminatedNum;
+          const ApprovalPersonalPie = [
+            { label: 'Approved', value: myApprovedNum, percent: myApprovedNum / count },
+            { label: 'Rejected', value: myRejectedNum, percent: myRejectedNum / count },
+            { label: 'Terminated', value: myTerminatedNum, percent: myTerminatedNum / count },
+          ];
+          // eslint-disable-next-line no-unused-expressions
+          this.state.approvalPersonalPieChart &&
+            this.state.approvalPersonalPieChart.changeData(ApprovalPersonalPie);
+        } else {
+          // eslint-disable-next-line no-unused-expressions
+          this.state.approvalPersonalPieChart && this.state.approvalPersonalPieChart.changeData([]);
+        }
+      },
+    });
+  };
 
   getAlertData = (params = {}) => {
     const { dispatch } = this.props;
@@ -239,6 +335,7 @@ export default class HomePage extends PureComponent {
       processingStageData,
       lateReportFileCount,
       outstandingReportFileCount,
+      allApprovalData,
     } = this.props;
     const { currentTradeDate, lastTradeDate } = fileCountData[0];
     const currentDate = Object.keys(currentTradeDate)[0];
@@ -265,7 +362,9 @@ export default class HomePage extends PureComponent {
     if (activeKey === '2') {
       setTimeout(() => {
         if (document.getElementById('ApprovalAll') && renderProcess) {
-          this.renderApprovalAllChart();
+          if (allApprovalData[0] && allApprovalData[0].userInfo && allApprovalData[0].userInfo[0]) {
+            this.renderApprovalAllChart();
+          }
           this.setState({
             renderProcess: false,
           });
@@ -522,33 +621,35 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval All柱状图
   renderApprovalAllChart = () => {
-    // const ApprovalAll = [];
-    // data.forEach(item => {
-    //   ApprovalAll.push({
-    //     label: item.userName, // 纵坐标
-    //     type: 'CLAIMED', // 分类
-    //     value: item.claimedCount, // 已认领数
-    //   });
-    // });
-    // data.forEach(item => {
-    //   ApprovalAll.push({
-    //     label: item.userName, // 纵坐标
-    //     type: 'PROCESSING', // 分类
-    //     value: item.processingCount, // 处理中数
-    //   });
-    // });
-    const ApprovalAll = [
-      { label: 'Outstanding', type: 'CLAIMED', value: 2800 },
-      { label: 'Alan', type: 'CLAIMED', value: 1800 },
-      { label: 'Outstanding', type: 'PROCESSING', value: 2260 },
-      { label: 'Alan', type: 'PROCESSING', value: 1300 },
-      { label: 'Thomas', type: 'CLAIMED', value: 950 },
-      { label: 'Thomas', type: 'PROCESSING', value: 900 },
-      { label: 'Alex', type: 'CLAIMED', value: 500 },
-      { label: 'Alex', type: 'PROCESSING', value: 390 },
-      { label: 'Fri.', type: 'CLAIMED', value: 170 },
-      { label: 'Fri.', type: 'PROCESSING', value: 100 },
-    ];
+    const { allApprovalData } = this.props;
+    const { userInfo } = allApprovalData[0];
+    const ApprovalAll = [];
+    userInfo.forEach(item => {
+      ApprovalAll.push({
+        label: item.userId,
+        type: 'CLAIMED',
+        value: item.userClaimedNum,
+      });
+    });
+    userInfo.forEach(item => {
+      ApprovalAll.push({
+        label: item.userId,
+        type: 'PROCESSING',
+        value: item.userProcessingNum,
+      });
+    });
+    // const ApprovalAll = [
+    //   { label: 'Outstanding', type: 'CLAIMED', value: 2800 },
+    //   { label: 'Alan', type: 'CLAIMED', value: 1800 },
+    //   { label: 'Outstanding', type: 'PROCESSING', value: 2260 },
+    //   { label: 'Alan', type: 'PROCESSING', value: 1300 },
+    //   { label: 'Thomas', type: 'CLAIMED', value: 950 },
+    //   { label: 'Thomas', type: 'PROCESSING', value: 900 },
+    //   { label: 'Alex', type: 'CLAIMED', value: 500 },
+    //   { label: 'Alex', type: 'PROCESSING', value: 390 },
+    //   { label: 'Fri.', type: 'CLAIMED', value: 170 },
+    //   { label: 'Fri.', type: 'PROCESSING', value: 100 },
+    // ];
     const approvalAllChart = new G2.Chart({
       container: 'ApprovalAll',
       forceFit: true,
@@ -619,6 +720,7 @@ export default class HomePage extends PureComponent {
         );
       }
     });
+    this.setState({ approvalAllChart });
   };
 
   // 渲染Approval Personal柱状图
@@ -630,11 +732,12 @@ export default class HomePage extends PureComponent {
     //   perClosedAlertCount,
     // } = this.props;
     // Approval Personal 的条形图
+    const { perApprovalData } = this.props;
     const ApprovalPersonal = [
-      { label: 'Outstanding', value: 1 },
-      { label: 'Calimed', value: 2 },
-      { label: 'Processing', value: 3 },
-      { label: 'Finished', value: 4 },
+      { label: 'Outstanding', value: perApprovalData[0].allOutstandingNum },
+      { label: 'Calimed', value: perApprovalData[0].myClaimedNum },
+      { label: 'Processing', value: perApprovalData[0].myProcessingNum },
+      { label: 'Finished', value: perApprovalData[0].myFinishedNum },
     ];
     const approvalPersonalChart = new G2.Chart({
       container: 'ApprovalPersonal',
@@ -696,10 +799,11 @@ export default class HomePage extends PureComponent {
         // eslint-disable-next-line no-underscore-dangle
         const alertStatusDesc = clickData._origin.label;
         router.push(
-          `/homepage/Approval-Process-Center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`,
+          `/homepage/Approval-Process-Center?taskType=myTask&alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`,
         );
       }
     });
+    this.setState({ approvalPersonalChart });
   };
 
   // 渲染Approval Personal饼图
@@ -711,10 +815,13 @@ export default class HomePage extends PureComponent {
     //   perClosedAlertCount,
     // } = this.props;
     // Approval Personal 的饼图图
+    const { perApprovalData } = this.props;
+    const { myApprovedNum, myRejectedNum, myTerminatedNum } = perApprovalData[0];
+    const count = myApprovedNum + myRejectedNum + myTerminatedNum;
     const ApprovalPersonalPie = [
-      { label: 'Approved', value: 3, percent: 0.3 },
-      { label: 'Rejected', value: 3, percent: 0.3 },
-      { label: 'Terminated', value: 4, percent: 0.4 },
+      { label: 'Approved', value: myApprovedNum, percent: myApprovedNum / count },
+      { label: 'Rejected', value: myRejectedNum, percent: myRejectedNum / count },
+      { label: 'Terminated', value: myTerminatedNum, percent: myTerminatedNum / count },
     ];
     const approvalPersonalPieChart = new G2.Chart({
       container: 'ApprovalPersonalPie',
@@ -785,6 +892,7 @@ export default class HomePage extends PureComponent {
     // ${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`);
     //   }
     // });
+    this.setState({ approvalPersonalPieChart });
   };
 
   // 渲染Submission Status饼图
@@ -1253,6 +1361,9 @@ export default class HomePage extends PureComponent {
       marketDataByCategory,
       processingStageData,
 
+      allApprovalData,
+      perApprovalData,
+
       dispatch,
     } = this.props;
 
@@ -1292,7 +1403,15 @@ export default class HomePage extends PureComponent {
       });
     }
 
-    const { alertState, textActive, approvalState, approvalTextActive, targetData } = this.state;
+    const {
+      alertState,
+      textActive,
+      approvalState,
+      approvalTextActive,
+      targetData,
+      proStartDate,
+      proEndDate,
+    } = this.state;
 
     return (
       <div>
@@ -1725,7 +1844,13 @@ export default class HomePage extends PureComponent {
                                 approvalState: 'ALL',
                               },
                               () => {
-                                this.renderApprovalAllChart(allAlterData);
+                                if (
+                                  allApprovalData[0] &&
+                                  allApprovalData[0].userInfo &&
+                                  allApprovalData[0].userInfo[0]
+                                ) {
+                                  this.renderApprovalAllChart();
+                                }
                               },
                             );
                           }}
@@ -1743,8 +1868,23 @@ export default class HomePage extends PureComponent {
                                 approvalState: 'PER',
                               },
                               () => {
-                                this.renderApprovalPerChart();
-                                this.renderApprovalPerPieChart();
+                                if (
+                                  perApprovalData[0] &&
+                                  (!!perApprovalData[0].allOutstandingNum ||
+                                    !!perApprovalData[0].myClaimedNum ||
+                                    !!perApprovalData[0].myProcessingNum ||
+                                    !!perApprovalData[0].myFinishedNum)
+                                ) {
+                                  this.renderApprovalPerChart();
+                                }
+                                if (
+                                  perApprovalData[0] &&
+                                  (!!perApprovalData[0].myApprovedNum ||
+                                    !!perApprovalData[0].myRejectedNum ||
+                                    !!perApprovalData[0].myTerminatedNum)
+                                ) {
+                                  this.renderApprovalPerPieChart();
+                                }
                               },
                             );
                           }}
@@ -1759,9 +1899,24 @@ export default class HomePage extends PureComponent {
                             approvalTextActive === 'Today' ? styles.textActive : '',
                           )}
                           onClick={() => {
-                            this.setState({
-                              approvalTextActive: 'Today',
-                            });
+                            this.setState(
+                              {
+                                approvalTextActive: 'Today',
+                              },
+                              () => {
+                                const startDate = moment().format('YYYYMMDD');
+                                const endDate = moment().format('YYYYMMDD');
+                                const params = {
+                                  startDate,
+                                  endDate,
+                                };
+                                this.setState({
+                                  proStartDate: startDate,
+                                  proEndDate: endDate,
+                                });
+                                this.getApprovalData(params);
+                              },
+                            );
                           }}
                         >
                           Today
@@ -1772,14 +1927,71 @@ export default class HomePage extends PureComponent {
                             approvalTextActive === 'Week' ? styles.textActive : '',
                           )}
                           onClick={() => {
-                            this.setState({
-                              approvalTextActive: 'Week',
-                            });
+                            this.setState(
+                              {
+                                approvalTextActive: 'Week',
+                              },
+                              () => {
+                                const startDate = moment(
+                                  new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
+                                ).format('YYYYMMDD');
+                                const endDate = moment().format('YYYYMMDD');
+                                const params = {
+                                  startDate,
+                                  endDate,
+                                };
+                                this.setState({
+                                  proStartDate: startDate,
+                                  proEndDate: endDate,
+                                });
+                                this.getApprovalData(params);
+                              },
+                            );
                           }}
                         >
                           This Week
                         </span>
-                        <RangePicker style={{ width: 300 }} format="DD-MM-YYYY" />
+                        <RangePicker
+                          style={{ width: 300 }}
+                          format="DD-MMM-YYYY"
+                          onChange={dates => {
+                            const params = {};
+                            if (dates[0]) {
+                              const startDate = moment(dates[0]).format('YYYYMMDD');
+                              const endDate = moment(dates[1]).format('YYYYMMDD');
+                              this.setState({
+                                proStartDate: startDate,
+                                proEndDate: endDate,
+                              });
+                              params.startDate = startDate;
+                              params.endDate = endDate;
+                            } else {
+                              if (textActive === 'Today') {
+                                const startDate = moment().format('YYYYMMDD');
+                                const endDate = moment().format('YYYYMMDD');
+                                params.startDate = startDate;
+                                params.endDate = endDate;
+                                this.setState({
+                                  proStartDate: startDate,
+                                  proEndDate: endDate,
+                                });
+                              }
+                              if (textActive === 'Week') {
+                                const startDate = moment(
+                                  new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
+                                ).format('YYYYMMDD');
+                                const endDate = moment().format('YYYYMMDD');
+                                params.startDate = startDate;
+                                params.endDate = endDate;
+                                this.setState({
+                                  proStartDate: startDate,
+                                  proEndDate: endDate,
+                                });
+                              }
+                            }
+                            this.getApprovalData(params);
+                          }}
+                        />
                       </div>
                     </div>
                     {/* ALTER ALL */}
@@ -1789,17 +2001,23 @@ export default class HomePage extends PureComponent {
                           <div className={styles.redBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>Total</span>
-                              <span className={styles.value}>{allAlertCount}</span>
+                              <span className={styles.value}>
+                                {allApprovalData[0] ? allApprovalData[0].allTotalNum : 0}
+                              </span>
                             </div>
                             <div className={styles.rightBlock}>
                               <span className={styles.title}>Outstanding</span>
-                              <span className={styles.value}>{allOutstandingALertCount}</span>
+                              <span className={styles.value}>
+                                {allApprovalData[0] ? allApprovalData[0].allOutstandingNum : 0}
+                              </span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>Claimed</span>
-                              <span className={styles.value}>{allClaimAlertCount}</span>
+                              <span className={styles.value}>
+                                {allApprovalData[0] ? allApprovalData[0].allClaimedNum : 0}
+                              </span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
@@ -1810,9 +2028,11 @@ export default class HomePage extends PureComponent {
                                   right: 13,
                                 }}
                               >
-                                {(allAlertCount === 0
-                                  ? allAlertCount
-                                  : allClaimAlertCount / allAlertCount
+                                {(allApprovalData[0] && !!allApprovalData[0].allTotalNum
+                                  ? (allApprovalData[0].allClaimedNum /
+                                      allApprovalData[0].allTotalNum) *
+                                    100
+                                  : 0
                                 ).toFixed(2)}
                                 %
                               </span>
@@ -1821,7 +2041,9 @@ export default class HomePage extends PureComponent {
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>Processing</span>
-                              <span className={styles.value}>{allProcessingAlertCount}</span>
+                              <span className={styles.value}>
+                                {allApprovalData[0] ? allApprovalData[0].allProcessingNum : 0}
+                              </span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
@@ -1832,16 +2054,38 @@ export default class HomePage extends PureComponent {
                                   right: 13,
                                 }}
                               >
-                                {(allAlertCount === 0
-                                  ? allAlertCount
-                                  : allProcessingAlertCount / allAlertCount
+                                {(allApprovalData[0] && !!allApprovalData[0].allTotalNum
+                                  ? (allApprovalData[0].allProcessingNum /
+                                      allApprovalData[0].allTotalNum) *
+                                    100
+                                  : 0
                                 ).toFixed(2)}
                                 %
                               </span>
                             </div>
                           </div>
                         </div>
-                        <div id="ApprovalAll" style={{ minHeight: 250 }}></div>
+                        {!(
+                          allApprovalData[0] &&
+                          allApprovalData[0].userInfo &&
+                          allApprovalData[0].userInfo[0]
+                        ) && (
+                          <div className={styles.empty} style={{ height: 250 }}>
+                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                          </div>
+                        )}
+                        <div
+                          id="ApprovalAll"
+                          style={{
+                            display: !(
+                              allApprovalData[0] &&
+                              allApprovalData[0].userInfo &&
+                              allApprovalData[0].userInfo[0]
+                            )
+                              ? 'none'
+                              : 'block',
+                          }}
+                        ></div>
                       </>
                     )}
                     {/* ALTER PERSONAL */}
@@ -1851,17 +2095,23 @@ export default class HomePage extends PureComponent {
                           <div className={styles.redBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>Total</span>
-                              <span className={styles.value}>{allAlertCount}</span>
+                              <span className={styles.value}>
+                                {perApprovalData[0] ? perApprovalData[0].allTotalNum : 0}
+                              </span>
                             </div>
                             <div className={styles.rightBlock}>
                               <span className={styles.title}>Outstanding</span>
-                              <span className={styles.value}>{allOutstandingALertCount}</span>
+                              <span className={styles.value}>
+                                {perApprovalData[0] ? perApprovalData[0].allOutstandingNum : 0}
+                              </span>
                             </div>
                           </div>
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>Claimed</span>
-                              <span className={styles.value}>{perClaimAlertCount}</span>
+                              <span className={styles.value}>
+                                {perApprovalData[0] ? perApprovalData[0].myClaimedNum : 0}
+                              </span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
@@ -1872,9 +2122,11 @@ export default class HomePage extends PureComponent {
                                   right: 13,
                                 }}
                               >
-                                {(allAlertCount === 0
-                                  ? allAlertCount
-                                  : perClaimAlertCount / allAlertCount
+                                {(perApprovalData[0] && !!perApprovalData[0].allTotalNum
+                                  ? (perApprovalData[0].myClaimedNum /
+                                      perApprovalData[0].allTotalNum) *
+                                    100
+                                  : 0
                                 ).toFixed(2)}
                                 %
                               </span>
@@ -1883,7 +2135,9 @@ export default class HomePage extends PureComponent {
                           <div className={styles.blackBox}>
                             <div className={styles.leftBlock}>
                               <span className={styles.title}>Processing</span>
-                              <span className={styles.value}>{perProcessingAlertCount}</span>
+                              <span className={styles.value}>
+                                {perApprovalData[0] ? perApprovalData[0].myProcessingNum : 0}
+                              </span>
                             </div>
                             <div className={styles.rightBlock}>
                               <img src={ring} alt="" width={70} />
@@ -1894,9 +2148,11 @@ export default class HomePage extends PureComponent {
                                   right: 13,
                                 }}
                               >
-                                {(allAlertCount === 0
-                                  ? allAlertCount
-                                  : perProcessingAlertCount / allAlertCount
+                                {(perApprovalData[0] && !!perApprovalData[0].allTotalNum
+                                  ? (perApprovalData[0].myProcessingNum /
+                                      perApprovalData[0].allTotalNum) *
+                                    100
+                                  : 0
                                 ).toFixed(2)}
                                 %
                               </span>
@@ -1908,8 +2164,56 @@ export default class HomePage extends PureComponent {
                             display: 'flex',
                           }}
                         >
-                          <div id="ApprovalPersonal" style={{ flex: 3, minHeight: 250 }}></div>
-                          <div id="ApprovalPersonalPie" style={{ flex: 2, minHeight: 250 }}></div>
+                          {!(
+                            perApprovalData[0] &&
+                            (!!perApprovalData[0].allOutstandingNum ||
+                              !!perApprovalData[0].myClaimedNum ||
+                              !!perApprovalData[0].myProcessingNum ||
+                              !!perApprovalData[0].myFinishedNum)
+                          ) && (
+                            <div className={styles.empty} style={{ height: 250, flex: 3 }}>
+                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                            </div>
+                          )}
+                          <div
+                            id="ApprovalPersonal"
+                            style={{
+                              flex: 3,
+                              display: !(
+                                perApprovalData[0] &&
+                                (!!perApprovalData[0].allOutstandingNum ||
+                                  !!perApprovalData[0].myClaimedNum ||
+                                  !!perApprovalData[0].myProcessingNum ||
+                                  !!perApprovalData[0].myFinishedNum)
+                              )
+                                ? 'none'
+                                : 'block',
+                            }}
+                          ></div>
+                          {!(
+                            perApprovalData[0] &&
+                            (!!perApprovalData[0].myApprovedNum ||
+                              !!perApprovalData[0].myRejectedNum ||
+                              !!perApprovalData[0].myTerminatedNum)
+                          ) && (
+                            <div className={styles.empty} style={{ height: 250, flex: 2 }}>
+                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                            </div>
+                          )}
+                          <div
+                            id="ApprovalPersonalPie"
+                            style={{
+                              flex: 2,
+                              display: !(
+                                perApprovalData[0] &&
+                                (!!perApprovalData[0].myApprovedNum ||
+                                  !!perApprovalData[0].myRejectedNum ||
+                                  !!perApprovalData[0].myTerminatedNum)
+                              )
+                                ? 'none'
+                                : 'block',
+                            }}
+                          ></div>
                         </div>
                       </>
                     )}

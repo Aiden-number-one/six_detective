@@ -2,10 +2,12 @@
  * @Description: 首页相关接口
  * @Author: lan
  * @Date: 2019-11-28 14:18:22
- * @LastEditTime : 2020-01-06 18:11:33
+ * @LastEditTime : 2020-01-09 14:38:06
  * @LastEditors  : lan
  */
 export default {
+  getAllApproval: 'get_all_approval_process_summary', // all approval
+  getPerApproval: 'get_personal_approval_process_summary', // all approval
   getLateReportFileCount: 'get_late_report_file_count_by_trade_date', //
   getOutstandingReportFileCount: 'get_outstanding_report_file_count_by_trade_date', //
   getProcessingStageData: 'get_file_count_group_by_proc_status', //
