@@ -26,6 +26,7 @@ export default class DataProcessing extends Component {
     super();
     this.state = {
       alertType: '',
+      activeIndex: 0,
       alertIds: '',
       market: '',
       authBypass: false,
@@ -51,7 +52,7 @@ export default class DataProcessing extends Component {
                   title="pending tasks for today"
                   className={styles['alert-icon-wraper']}
                 >
-                  <IconFont type="icon-alertlist" className={styles['alert-icon']} />
+                  <IconFont type="icon-tips" className={styles['alert-icon']} />
                 </Antd.Tooltip>
               )}
               <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
@@ -306,6 +307,7 @@ export default class DataProcessing extends Component {
         this.setState({
           alertBypassStatus,
           alertIndeterminate: false,
+          checkedAll: false,
           selectedRowKeys: [],
           alertIds: [],
         });
@@ -335,10 +337,12 @@ export default class DataProcessing extends Component {
     });
   };
 
-  connectDataProcessing = record => {
+  connectDataProcessing = (record, index) => {
+    console.log('record===', record, index);
     this.setState(
       {
         alertType: record.alertType,
+        activeIndex: index,
         isBypass: !!(record.isClosedIntraday === '1'),
       },
       () => {
@@ -516,6 +520,7 @@ export default class DataProcessing extends Component {
       dataCharts,
       cols,
       alertType,
+      activeIndex,
       checkedAll,
       alertIndeterminate,
       alertBypassStatus,
@@ -554,18 +559,19 @@ export default class DataProcessing extends Component {
                     style={{ marginTop: '6px' }}
                     eslint-disable-next-line
                     no-confusing-arrow
-                    rowClassName={record =>
+                    rowClassName={(record, index) =>
                       classnames({
-                        [styles['table-active']]: record.alertType === alertType,
+                        [styles['table-active']]:
+                          record.alertType === alertType && index === activeIndex,
                         [styles['alert-table-row']]: record.isClosedIntraday === '1',
                       })
                     }
                     dataSource={dataProcessingData.items}
                     columns={this.state.codeColumns}
                     pagination={false}
-                    onRow={record => ({
+                    onRow={(record, index) => ({
                       onClick: () => {
-                        this.connectDataProcessing(record);
+                        this.connectDataProcessing(record, index);
                       }, // 点击行
                     })}
                   ></Table>
