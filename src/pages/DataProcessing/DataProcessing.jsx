@@ -112,18 +112,20 @@ export default class DataProcessing extends Component {
         //   ),
         // },
         {
-          title: () => (
-            <Fragment>
-              {this.state.alertBypassStatus.length > 0 && this.state.isBypass && (
-                <Checkbox
-                  checked={this.state.checkedAll}
-                  indeterminate={this.state.alertIndeterminate}
-                  onChange={this.onSelectChangeAll}
-                ></Checkbox>
-              )}
-              <span style={{ marginLeft: '5px' }}>Bypass</span>
-            </Fragment>
-          ),
+          title: () =>
+            this.state.alertBypassStatus.length > 0 &&
+            this.state.isBypass && (
+              <Fragment>
+                {this.state.alertBypassStatus.length > 0 && this.state.isBypass && (
+                  <Checkbox
+                    checked={this.state.checkedAll}
+                    indeterminate={this.state.alertIndeterminate}
+                    onChange={this.onSelectChangeAll}
+                  ></Checkbox>
+                )}
+                <span style={{ marginLeft: '5px' }}>Bypass</span>
+              </Fragment>
+            ),
           dataIndex: 'index',
           key: 'index',
           render: (res, recode, index) => (
@@ -162,6 +164,7 @@ export default class DataProcessing extends Component {
           ellipsis: true,
         },
       ],
+      tempColumns: [],
       functionNameOptions: [],
       selectedRowKeys: [],
       intradays: [],
@@ -262,10 +265,44 @@ export default class DataProcessing extends Component {
       payload: params,
       callback: () => {
         const { dataProcessingItemData } = this.props;
+        const { isBypass, columns } = this.state;
         const alertBypassStatus = dataProcessingItemData.items.filter(
           element => element.bypassStatus === '0',
         );
         console.log('alertBypassStatus====', alertBypassStatus);
+        if (alertBypassStatus.length <= 0 || !isBypass) {
+          const { tempColumns } = this.state;
+          const newColumns = Object.assign([], columns);
+          let newTempColumns = Object.assign([], tempColumns);
+          let activeIndex = -1;
+          for (let i = 0; i < newColumns.length; i += 1) {
+            if (newColumns[i].key === 'index') {
+              activeIndex = i;
+            }
+          }
+          if (activeIndex > -1) {
+            newTempColumns = newColumns.splice(activeIndex, 1);
+          }
+          this.setState({
+            columns: newColumns,
+            tempColumns: newTempColumns,
+          });
+        } else {
+          const { tempColumns } = this.state;
+          let activeIndex = -1;
+          for (let i = 0; i < columns.length; i += 1) {
+            if (columns[i].key === 'index') {
+              activeIndex = i;
+            }
+          }
+          if (tempColumns.length > 0 && activeIndex <= -1) {
+            const newColumns = Object.assign([], columns);
+            newColumns.unshift(tempColumns[0]);
+            this.setState({
+              columns: newColumns,
+            });
+          }
+        }
         this.setState({
           alertBypassStatus,
           alertIndeterminate: false,
