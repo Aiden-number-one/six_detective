@@ -1,3 +1,11 @@
+/*
+ * @Des: 报表设计器
+ * @Author: liangchaoshun
+ * @Email: liangchaoshun@szkingdom.com
+ * @Date: 2020-01-08 21:25:00
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-09 11:26:18
+ */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
@@ -24,16 +32,13 @@ const formularSet = [
   { name: 'AVERAGE', type: 'Statistical', desc: 'AVERAGE(number1, number2,...)' },
 ];
 
-@connect(({ loading, reportDesigner }) => {
-  const { showFmlModal, cellPosition } = reportDesigner;
-  return {
-    showFmlModal,
-    cellPosition,
-    loading:
-      loading.effects['privateDataSetEdit/getField'] ||
-      loading.effects['reportDesigner/packageTemplate'],
-  };
-})
+@connect(({ loading, reportDesigner }) => ({
+  showFmlModal: reportDesigner.showFmlModal,
+  cellPosition: reportDesigner.cellPosition,
+  loading:
+    loading.effects['privateDataSetEdit/getField'] ||
+    loading.effects['reportDesigner/packageTemplate'],
+}))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
   constructor(props) {
@@ -258,7 +263,7 @@ export default class ReportDesigner extends PureComponent {
 
   // 公式模态框：取消
   fmlCancel = () => {
-    console.log('fmlCancel');
+    // console.log('fmlCancel');
     this.showOrHideFormulaModal(false);
   };
 

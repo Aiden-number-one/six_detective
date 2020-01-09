@@ -14,13 +14,10 @@ import IconFont from '@/components/IconFont';
 const { Option } = Select;
 const ButtonGroup = Button.Group;
 
-@connect(({ reportDesigner }) => {
-  const { showFmlModal, cellPosition } = reportDesigner;
-  return {
-    showFmlModal,
-    cellPosition,
-  };
-})
+@connect(({ reportDesigner }) => ({
+  showFmlModal: reportDesigner.showFmlModal,
+  cellPosition: reportDesigner.cellPosition,
+}))
 class ToolBar extends Component {
   state = {
     // 默认白色背景
