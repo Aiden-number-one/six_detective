@@ -640,7 +640,7 @@ export default class DataProcessing extends Component {
                   </div>
                   <Table
                     loading={loading['codeList/getCodeItemList']}
-                    rowKey="index"
+                    rowKey={row => row.alertId.toString()}
                     rowSelection={alertBypassStatus.length > 0 && isBypass ? null : null}
                     dataSource={dataProcessingItemData.items}
                     pagination={false}
