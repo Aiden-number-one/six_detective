@@ -137,7 +137,13 @@ export default props => {
                     (() => {
                       if (currentWidge.sourceType === 'custom') {
                         return (
-                          <Select>
+                          <Select
+                            mode={
+                              (currentWidge.widgetType === 'selectmultiple' ||
+                                currentWidge.widgetType === 'checkbox') &&
+                              'multiple'
+                            }
+                          >
                             {customList.map(optionData => (
                               <Option key={optionData.key}>{optionData.value}</Option>
                             ))}
