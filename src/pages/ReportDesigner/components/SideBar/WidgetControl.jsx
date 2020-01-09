@@ -1,5 +1,16 @@
 import React from 'react';
-import { Layout, Collapse, Icon, Form, Input, Select, Checkbox, Radio, Button } from 'antd';
+import {
+  Layout,
+  Collapse,
+  Icon,
+  Form,
+  Input,
+  Select,
+  Checkbox,
+  Radio,
+  Button,
+  InputNumber,
+} from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import _ from 'lodash';
 import IconFont from '@/components/IconFont';
@@ -23,6 +34,8 @@ export default props => {
     addCustomerType,
     deleteOrModifyCustomerType,
     dataSetPublicList,
+    dispatch,
+    defaultValueDatasetType,
   } = props;
   const params = _.flattenDeep(dataSetPrivateList.map(value => value.query.parameters || []));
   const { customList = [] } = currentWidge;
@@ -65,6 +78,7 @@ export default props => {
               <Form.Item style={{ display: 'inline-block', width: '50%', paddingLeft: 4 }}>
                 {getFieldDecorator('widgetNameVisible', {
                   initialValue: currentWidge.widgetNameVisible,
+                  valuePropName: 'checked',
                 })(<Checkbox>{<FormattedMessage id="report-designer.visible" />}</Checkbox>)}
               </Form.Item>
             </Form.Item>
@@ -109,7 +123,40 @@ export default props => {
               label={<FormattedMessage id="report-designer.defaultvalue" />}
               {...formLayout}
             >
-              {getFieldDecorator('widgetDefault', {})(<Input />)}
+              {getFieldDecorator('widgetDefault', {
+                initialValue: currentWidge.widgetDefault,
+              })(
+                <>
+                  {/* 若类型为Input类型 */}
+                  {currentWidge.widgetType === 'input' && <Input />}
+                  {/* 若类型为Select/MutiSelect/Radio/CheckBox类型 */}
+                  {(currentWidge.widgetType === 'select' ||
+                    currentWidge.widgetType === 'selectmultiple' ||
+                    currentWidge.widgetType === 'radio' ||
+                    currentWidge.widgetType === 'checkbox') &&
+                    (() => {
+                      if (currentWidge.sourceType === 'custom') {
+                        return (
+                          <Select>
+                            {customList.map(optionData => (
+                              <Option key={optionData.key}>{optionData.value}</Option>
+                            ))}
+                          </Select>
+                        );
+                      }
+                      if (currentWidge.sourceType === 'dataset') {
+                        return (
+                          <Select>
+                            {(defaultValueDatasetType[currentWidge.datacolumn] || []).map(data => (
+                              <Option key={data}>{data}</Option>
+                            ))}
+                          </Select>
+                        );
+                      }
+                      return <Select />;
+                    })()}
+                </>,
+              )}
             </Form.Item>
             {/* 表字段 */}
             <Form.Item label={<FormattedMessage id="report-designer.field" />} {...formLayout}>
@@ -148,7 +195,7 @@ export default props => {
                   <Select>
                     <Option value="dataset">Data Set</Option>
                     <Option value="custom">Custom</Option>
-                    <Option value="table">Table</Option>
+                    {/* <Option value="table">Table</Option> */}
                   </Select>,
                 )}
               </Form.Item>
@@ -187,7 +234,13 @@ export default props => {
                     {getFieldDecorator('datasetName', {
                       initialValue: currentWidge.datasetName,
                     })(
-                      <Select>
+                      <Select
+                        onChange={() => {
+                          // TODO: 后期优化
+                          currentWidge.datacolumn = undefined;
+                          currentWidge.widgetDefault = undefined;
+                        }}
+                      >
                         {dataSetPublicList.map(value => (
                           <Option key={value.datasetId}>{value.datasetName}</Option>
                         ))}
@@ -202,7 +255,17 @@ export default props => {
                     {getFieldDecorator('datacolumn', {
                       initialValue: currentWidge.datacolumn,
                     })(
-                      <Select>
+                      <Select
+                        onChange={value => {
+                          dispatch({
+                            type: 'formArea/getDataSetColumnValue',
+                            payload: {
+                              datasetId: currentWidge.datasetName,
+                              fieldName: value,
+                            },
+                          });
+                        }}
+                      >
                         {(dataSetPublicList.find(
                           value => value.datasetId === currentWidge.datasetName,
                         )
@@ -263,6 +326,34 @@ export default props => {
                 valuePropName: 'checked',
               })(<Checkbox />)}
             </Form.Item>
+            {currentWidge.widgetType === 'input' && (
+              <>
+                <Form.Item label="Max Length" {...formLayout}>
+                  {getFieldDecorator('maxLength', {
+                    initialValue: currentWidge.maxLength,
+                  })(<InputNumber />)}
+                </Form.Item>
+                <Form.Item label="Min Length" {...formLayout}>
+                  {getFieldDecorator('minLength', {
+                    initialValue: currentWidge.maxLength,
+                  })(<InputNumber />)}
+                </Form.Item>
+              </>
+            )}
+            {currentWidge.widgetType === 'inputnumber' && (
+              <>
+                <Form.Item label="Max" {...formLayout}>
+                  {getFieldDecorator('maxNumber', {
+                    initialValue: currentWidge.maxLength,
+                  })(<InputNumber />)}
+                </Form.Item>
+                <Form.Item label="Min" {...formLayout}>
+                  {getFieldDecorator('minNumber', {
+                    initialValue: currentWidge.maxLength,
+                  })(<InputNumber />)}
+                </Form.Item>
+              </>
+            )}
           </Form>
         </Panel>
       </Collapse>
