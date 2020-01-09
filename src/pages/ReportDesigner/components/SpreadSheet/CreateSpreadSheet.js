@@ -2,8 +2,8 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2020-01-03 16:32:54
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-09 11:27:27
+ * @LastEditors  : liangchaoshun
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -287,15 +287,12 @@ export default WrapperComponent =>
 
     // 设置cellType
     setCellType = (property, value) => {
-      console.log('setCellType: ', property, value);
+      // console.log('setCellType: ', property, value);
       const {
         sheet,
         sheet: { cellTypeChange },
       } = this.spreadSheet;
       cellTypeChange.call(sheet, property, value);
-      // setTimeout(() => {
-      //   console.log('fetch -> ', sheet.data.getCell(3, 3));
-      // }, 2000);
     };
 
     // 得到cell属性
