@@ -1,1 +1,49 @@
-var AppTodo=function(){function t(){App.getViewPort().width<=992?$(".todo-project-list-content").addClass("collapse"):$(".todo-project-list-content").removeClass("collapse").css("height","auto")}return{init:function(){$(".todo-taskbody-due").datepicker({rtl:App.isRTL(),orientation:"left",autoclose:!0}),$(".todo-taskbody-tags").select2({tags:["Testing","Important","Info","Pending","Completed","Requested","Approved"]}),t(),App.addResizeHandler(function(){t()})}}}();jQuery(document).ready(function(){AppTodo.init()});
+/**
+Todo Module
+**/
+var AppTodo = function () {
+
+    // private functions & variables
+
+    var _initComponents = function _initComponents() {
+
+        // init datepicker
+        $('.todo-taskbody-due').datepicker({
+            rtl: App.isRTL(),
+            orientation: "left",
+            autoclose: true
+        });
+
+        // init tags        
+        $(".todo-taskbody-tags").select2({
+            tags: ["Testing", "Important", "Info", "Pending", "Completed", "Requested", "Approved"]
+        });
+    };
+
+    var _handleProjectListMenu = function _handleProjectListMenu() {
+        if (App.getViewPort().width <= 992) {
+            $('.todo-project-list-content').addClass("collapse");
+        } else {
+            $('.todo-project-list-content').removeClass("collapse").css("height", "auto");
+        }
+    };
+
+    // public functions
+    return {
+
+        //main function
+        init: function init() {
+            _initComponents();
+            _handleProjectListMenu();
+
+            App.addResizeHandler(function () {
+                _handleProjectListMenu();
+            });
+        }
+
+    };
+}();
+
+jQuery(document).ready(function () {
+    AppTodo.init();
+});

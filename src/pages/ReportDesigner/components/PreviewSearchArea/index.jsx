@@ -4,13 +4,14 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 22:27:04
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-09 01:43:53
+ * @LastEditTime : 2020-01-09 09:23:48
  */
 import React, { PureComponent } from 'react';
-import { Form, Input, Select, MonthPicker } from 'antd';
+import { Form, Input, Select, DatePicker } from 'antd';
 import _ from 'lodash';
 
 const { Option } = Select;
+const { MonthPicker, RangePicker } = DatePicker;
 
 class PreviewSearchArea extends PureComponent {
   render() {
@@ -108,6 +109,20 @@ class PreviewSearchArea extends PureComponent {
                     },
                   ],
                 })(<MonthPicker />)}
+              </Form.Item>
+            );
+          }
+          if (widgetType === 'datepickeryyyymmdd') {
+            return (
+              <Form.Item label={widgetName}>
+                {getFieldDecorator(widgetKey, {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Required',
+                    },
+                  ],
+                })(<DatePicker />)}
               </Form.Item>
             );
           }
