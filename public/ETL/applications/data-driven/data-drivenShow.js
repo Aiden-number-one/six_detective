@@ -56,6 +56,7 @@ define(function (require, exports, module) {
       var items = data.bcjson;
       if (items.flag == "1") {
         toastr.success("Succeed");
+        showContent.get_Driven_List();
       } else {
         toastr.error(items.msg);
       }

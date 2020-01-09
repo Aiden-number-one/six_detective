@@ -198,19 +198,23 @@ define(function (require, exports, module) {
 
         // hover左侧树
         $("body").on("mouseenter", this.tree + " .jstree-anchor", function () {
-            var level = $(this).closest("li").attr("aria-level");
-            if ($(this).find(".jstree-operate").length === 1) {
-                return;
-            }
-            if (level === "1") {
-                $(this).append("<div class=\"jstree-operate\"><a name=\"add\" title=\"ADD\"><i class=\"glyphicon glyphicon-plus\" style=\"color:#464C51;\"></i></a><a name=\"edit\" title=\"EDIT\"><i class=\"glyphicon glyphicon-pencil\" style=\"color:#464C51;\"></i></a></div>");
-            } else if (level === "2") {
-                $(this).append("<div class=\"jstree-operate\"><a name=\"add\" title=\"ADD\"><i class=\"glyphicon glyphicon-plus\" style=\"color:#464C51;\"></i></a><a name=\"edit\" title=\"EDIT\"><i class=\"glyphicon glyphicon-pencil\" style=\"color:#464C51;\"></i></a><a name=\"del\" title=\"DELETE\"><i class=\"glyphicon glyphicon-trash\" style=\"color:#464C51;\"></i></a></div>");
-            } else if (level === "3") {
-                $(this).append("<div class=\"jstree-operate\"><a name=\"add\" title=\"ADD\"><i class=\"glyphicon glyphicon-plus\" style=\"color:#464C51;\"></i></a><a name=\"edit\" title=\"EDIT\"><i class=\"glyphicon glyphicon-pencil\" style=\"color:#464C51;\"></i></a><a name=\"del\" title=\"DELETE\"><i class=\"glyphicon glyphicon-trash\" style=\"color:#464C51;\"></i></a></div>");
-            } else {
-                $(this).append("<div class=\"jstree-operate\"><a name=\"edit\" title=\"EDIT\"><i class=\"glyphicon glyphicon-pencil\" style=\"color:#464C51;\"></i></a><a name=\"del\" title=\"DELTTE\"><i class=\"glyphicon glyphicon-trash\" style=\"color:#464C51;\"></i></a></div></div>");
-            }
+            var _this3 = this;
+
+            setTimeout(function () {
+                var level = $(_this3).closest("li").attr("aria-level");
+                if ($(_this3).find(".jstree-operate").length === 1) {
+                    return;
+                }
+                if (level === "1") {
+                    $(_this3).append("<div class=\"jstree-operate\"><a name=\"add\" title=\"ADD\"><i class=\"glyphicon glyphicon-plus\" style=\"color:#464C51;\"></i></a><a name=\"edit\" title=\"EDIT\"><i class=\"glyphicon glyphicon-pencil\" style=\"color:#464C51;\"></i></a></div>");
+                } else if (level === "2") {
+                    $(_this3).append("<div class=\"jstree-operate\"><a name=\"add\" title=\"ADD\"><i class=\"glyphicon glyphicon-plus\" style=\"color:#464C51;\"></i></a><a name=\"edit\" title=\"EDIT\"><i class=\"glyphicon glyphicon-pencil\" style=\"color:#464C51;\"></i></a><a name=\"del\" title=\"DELETE\"><i class=\"glyphicon glyphicon-trash\" style=\"color:#464C51;\"></i></a></div>");
+                } else if (level === "3") {
+                    $(_this3).append("<div class=\"jstree-operate\"><a name=\"add\" title=\"ADD\"><i class=\"glyphicon glyphicon-plus\" style=\"color:#464C51;\"></i></a><a name=\"edit\" title=\"EDIT\"><i class=\"glyphicon glyphicon-pencil\" style=\"color:#464C51;\"></i></a><a name=\"del\" title=\"DELETE\"><i class=\"glyphicon glyphicon-trash\" style=\"color:#464C51;\"></i></a></div>");
+                } else {
+                    $(_this3).append("<div class=\"jstree-operate\"><a name=\"edit\" title=\"EDIT\"><i class=\"glyphicon glyphicon-pencil\" style=\"color:#464C51;\"></i></a><a name=\"del\" title=\"DELTTE\"><i class=\"glyphicon glyphicon-trash\" style=\"color:#464C51;\"></i></a></div></div>");
+                }
+            }, 0);
         });
         $("body").on("mouseenter", this.tree + " .jstree-operate", function () {
             $(this).css('z-index', 10000);

@@ -14,13 +14,10 @@ import IconFont from '@/components/IconFont';
 const { Option } = Select;
 const ButtonGroup = Button.Group;
 
-@connect(({ reportDesigner }) => {
-  const { showFmlModal, cellPosition } = reportDesigner;
-  return {
-    showFmlModal,
-    cellPosition,
-  };
-})
+@connect(({ reportDesigner }) => ({
+  showFmlModal: reportDesigner.showFmlModal,
+  cellPosition: reportDesigner.cellPosition,
+}))
 class ToolBar extends Component {
   state = {
     // 默认白色背景
@@ -48,11 +45,26 @@ class ToolBar extends Component {
 
   cellType = [
     {
-      label: '日期(yyyy-MM-dd)',
+      label: 'general',
+      key: 'text',
+      value: 'text',
+    },
+    {
+      label: 'number',
+      key: 'numeric',
+      value: 'numeric',
+    },
+    {
+      label: 'percentage',
+      key: 'percentage',
+      value: 'percentage',
+    },
+    {
+      label: 'date',
       key: 'dateyyyy-MM-dd',
       value: 'dateyyyy-MM-dd',
     },
-    {
+    /* {
       label: '日期时间',
       key: 'datetimeyyyy-MM-dd hh:mm:ss',
       value: 'datetimeyyyy-MM-dd hh:mm:ss',
@@ -61,11 +73,6 @@ class ToolBar extends Component {
       label: '时间',
       key: 'timehh:mm:ss',
       value: 'timehh:mm:ss',
-    },
-    {
-      label: '文本',
-      key: 'text',
-      value: 'text',
     },
     {
       label: '货币($)',
@@ -83,15 +90,10 @@ class ToolBar extends Component {
       value: 'permillage',
     },
     {
-      label: '百分比',
-      key: 'percentage',
-      value: 'percentage',
-    },
-    {
       label: '勾选框',
       key: 'checkbox',
       value: 'checkbox',
-    },
+    }, */
   ];
 
   cellTypeMap = {
@@ -99,6 +101,19 @@ class ToolBar extends Component {
       cellType: 'date',
       format: 'yyyy-MM-dd',
       type: 'date',
+    },
+    text: {
+      cellType: 'text',
+    },
+    numeric: {
+      cellType: 'numeric',
+      format: '123',
+    },
+    percentage: {
+      cellType: 'numeric',
+      format: '0.00%',
+      scale: '2',
+      type: 'percentage',
     },
     'datetimeyyyy-MM-dd hh:mm:ss': {
       cellType: 'datetime',
@@ -109,9 +124,6 @@ class ToolBar extends Component {
       cellType: 'time',
       format: 'hh:mm:ss',
       type: 'time',
-    },
-    text: {
-      cellType: 'text',
     },
     currency$: {
       cellType: 'numeric',
@@ -130,12 +142,6 @@ class ToolBar extends Component {
       format: '0.00%',
       scale: '2',
       type: 'permillage',
-    },
-    percentage: {
-      cellType: 'numeric',
-      format: '0.00%',
-      scale: '2',
-      type: 'percentage',
     },
     checkbox: {
       cellType: 'checkbox',

@@ -208,7 +208,7 @@ $.extend({
 
                 var gopage_info = [];
                 if (this.isGoPage) {
-                    gopage_info.push("<label class='inline-block' style='vertical-align: top;line-height: 50px;margin: 0 10px;'> " + $.i18n.map['Jump-to'] + " <input name='pager_number' value=" + this.currentPage + " type='text' style='height: 26px;line-height: 20px;vertical-align: middle;width: 45px;text-align: center;'> " + $.i18n.map['Page'] + " </label><button name='pager_number_btn' class='btn green' style='vertical-align: top;margin-top: 10px; min-width: 78px; height: 27px;'>" + $.i18n.map['CONFIRM'] + "</button></div>");
+                    gopage_info.push("<label class='inline-block' style='vertical-align: top;line-height: 50px;margin: 0 10px;'> " + $.i18n.map['Jump-to'] + " <input name='pager_number' value=" + this.currentPage + " type='text' style='height: 26px;line-height: 20px;vertical-align: middle;width: 45px;text-align: center;'> " + $.i18n.map['Page'] + " </label></div>");
                 }
 
                 if (this.totalPage <= 8) {
