@@ -187,7 +187,7 @@ function NewAccountLogManualModal({
   onUpload,
 }) {
   const [fileUid, setFileUid] = useState('');
-  const [isTipVisible, setTipVisible] = useState(true);
+  const [isTipVisible, setTipVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [validFiles, setValidFiles] = useState([]);

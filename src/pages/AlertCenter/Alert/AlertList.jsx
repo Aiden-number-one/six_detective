@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -6,6 +6,7 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Icon } from 'antd';
 import IconFont from '@/components/IconFont';
 import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
+import { getAuthority } from '@/utils/authority';
 import { ClaimModal, CloseModal, ExportModal } from './components/AlertListModal';
 import ColumnTitle from '../ColumnTitle';
 import AlertDetail from './AlertDetail';
@@ -21,7 +22,9 @@ function AlertBtn({
   claimAlerts,
   closeAlerts,
   exportAlerts,
+  closeAlertsByAdmin,
 }) {
+  const auth = useMemo(() => getAuthority(), []);
   return (
     <Row className={styles.btns} type="flex" justify="space-between" align="middle">
       <Col className={styles['page-name']}>
@@ -54,6 +57,12 @@ function AlertBtn({
           <IconFont type="iconexport" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </button>
+        {auth && auth.authDiscontinue && (
+          <button type="button" disabled={disabled} onClick={closeAlertsByAdmin}>
+            <IconFont type="iconclose-circle" className={styles['btn-icon']} />
+            <FormattedMessage id="alert-center.discontinue" />
+          </button>
+        )}
       </Col>
     </Row>
   );
@@ -232,6 +241,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
       },
     });
   }
+  function handleCloseAlertsByAdmin() {}
   return (
     <div className={styles['list-container']}>
       <div className={styles.list}>
@@ -242,6 +252,7 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
           isBatchAction={isBatchAction}
           claimAlerts={() => claimAlerts()}
           closeAlerts={() => showCloseModal()}
+          closeAlertsByAdmin={handleCloseAlertsByAdmin}
         />
         <ClaimModal
           visible={claimVisible}
@@ -362,6 +373,13 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
           <Column
             dataIndex="alertStatusDesc"
             title={<FormattedMessage id="alert-center.status" />}
+            render={text => {
+              if (text) {
+                const users = text.split(',');
+                return users.length > 1 ? <span title={text}>Multiple</span> : text;
+              }
+              return text;
+            }}
           />
           <Column
             dataIndex="action"

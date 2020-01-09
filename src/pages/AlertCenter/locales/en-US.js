@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:34:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-08 09:32:45
+ * @LastEditTime : 2020-01-09 09:41:07
  */
 export default {
   'alert-center.alert-id': 'Alert Id',
@@ -24,6 +24,7 @@ export default {
   'alert-center.claim': 'Claim',
   'alert-center.close': 'Close',
   'alert-center.export': 'Export',
+  'alert-center.discontinue': 'Discontinue',
   'alert-center.assign': 'Assign',
   'alert-center.market': 'Market',
   'alert-center.ep-name': 'EP Name',

@@ -116,7 +116,7 @@ function AlertDetail({
       // update item
       setPanes(panes.map(p => (isEqual(p) ? pane : p)));
     } else {
-      handleHistory(pane);
+      // handleHistory(pane);
       // add pane
       setPanes([pane, ...panes]);
     }
