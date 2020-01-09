@@ -179,6 +179,7 @@ export default class DataProcessing extends Component {
   }
 
   componentDidMount() {
+    console.log('getAuthority===', getAuthority());
     this.getMarket();
     this.setState({
       authBypass: getAuthority().authBypass,

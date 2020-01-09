@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-08 17:30:48
+ * @LastEditTime : 2020-01-09 10:28:31
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -169,13 +169,11 @@ class ClassifyTree extends Component {
     setTimeout(() => {
       const { checkedKeys, all, btnIds } = this.props;
       const { menuList } = this.state;
-      setTimeout(() => {
-        this.setState({
-          checkedKeys,
-          customeBtnIds: btnIds,
-        });
-        this.props.onSelect(menuList[0] && menuList[0][this.props.treeKey.currentKey]);
-      }, 1000);
+      this.setState({
+        checkedKeys,
+        customeBtnIds: btnIds,
+      });
+      this.props.onSelect(menuList[0] && menuList[0][this.props.treeKey.currentKey]);
       if (all) {
         console.log('menuList======', menuList);
         this.compareAllChecked();
@@ -292,7 +290,6 @@ class ClassifyTree extends Component {
 
   onSelect = selectedKeys => {
     const key = selectedKeys[0];
-
     this.props.onSelect(key);
   };
 
@@ -388,7 +385,6 @@ class ClassifyTree extends Component {
         if (children && showTitle) {
           return (
             <TreeNode
-              // selectable={false}
               key={currentKey}
               title={
                 <TitleMessage
@@ -417,6 +413,7 @@ class ClassifyTree extends Component {
           // <Fragment>
           <TreeNode
             checkable={!currentKey.includes('btn')}
+            selectable={!currentKey.includes('btn')}
             className={currentKey.includes('btn') ? styles.btnClass : ''}
             key={currentKey}
             title={
@@ -452,7 +449,7 @@ class ClassifyTree extends Component {
   };
 
   onChangeChecked = value => {
-    console.log('value=======', value);
+    value.stopPropagation();
     const { customeBtnIds, checkedKeys } = this.state;
     const btnIds = Object.assign([], customeBtnIds);
     if (value.target.checked) {
