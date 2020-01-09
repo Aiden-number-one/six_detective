@@ -110,7 +110,7 @@ function AlertList({ dispatch, loading, alerts, total }) {
     } else {
       // check latest alert status
       const users = await dispatch({
-        type: 'alertCenter/claim',
+        type: 'alertCenter/claimMany',
         payload: {
           alertIds: selectedRows.map(item => item.alertId),
         },
@@ -161,9 +161,9 @@ function AlertList({ dispatch, loading, alerts, total }) {
     setCloseVisible(false);
   }
 
-  async function closeByAdmin() {
+  async function discontinueAlert() {
     await dispatch({
-      type: 'alertCenter/closeByAdmin',
+      type: 'alertCenter/discontinue',
       payload: {
         alertIds: selectedRows.map(item => item.alertId),
       },
@@ -173,10 +173,6 @@ function AlertList({ dispatch, loading, alerts, total }) {
 
   function handleExport() {}
 
-  function handleDiscontinueAlerts() {
-    showCloseModal();
-    setDiscontinue(true);
-  }
   // filter methods
   async function handleCommit(tableColumn, updatedConditions = []) {
     setConditions(updatedConditions);
@@ -203,13 +199,16 @@ function AlertList({ dispatch, loading, alerts, total }) {
     <div className={styles['list-container']}>
       <div className={styles.list}>
         <AlertListBtns
-          loading={loading}
           isAuth={isAuth}
-          disabled={!selectedRows.length}
           isBatchAction={isBatchAction}
+          loading={loading['alertCenter/claim']}
+          disabled={!selectedRows.length}
           claimAlerts={() => claimAlerts()}
           closeAlerts={() => showCloseModal()}
-          closeAlertsByAdmin={handleDiscontinueAlerts}
+          onDiscontinue={() => {
+            showCloseModal();
+            setDiscontinue(true);
+          }}
         />
         <ClaimModal
           visible={claimVisible}
@@ -221,9 +220,9 @@ function AlertList({ dispatch, loading, alerts, total }) {
         <CloseModal
           visible={closeVisible}
           onCancel={() => setCloseVisible(false)}
-          onOk={isDiscontinue ? closeByAdmin : closeAlert}
+          onOk={isDiscontinue ? discontinueAlert : closeAlert}
           content={closeContent}
-          loading={loading[`alertCenter/${isDiscontinue ? 'closeByAdmin' : 'close'}`]}
+          loading={loading[`alertCenter/${isDiscontinue ? 'discontinue' : 'close'}`]}
         />
         <ExportModal
           visible={exportVisible}

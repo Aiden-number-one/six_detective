@@ -8,12 +8,12 @@ import styles from '../../index.less';
 export function AlertListBtns({
   disabled,
   loading,
-  isAuth,
   isBatchAction,
+  isAuth,
   claimAlerts,
   closeAlerts,
   exportAlerts,
-  closeAlertsByAdmin,
+  onDiscontinue,
 }) {
   return (
     <Row className={styles.btns} type="flex" justify="space-between" align="middle">
@@ -29,9 +29,9 @@ export function AlertListBtns({
           type="button"
           disabled={disabled}
           onClick={claimAlerts}
-          className={loading['alertCenter/claim'] ? styles.loading : ''}
+          className={loading ? styles.loading : ''}
         >
-          {isBatchAction && !disabled && loading['alertCenter/claim'] ? (
+          {isBatchAction && !disabled && loading ? (
             <Icon type="loading" className={styles['btn-icon']} />
           ) : (
             <IconFont type="iconqizhi" className={styles['btn-icon']} />
@@ -52,7 +52,7 @@ export function AlertListBtns({
             type="button"
             className={styles.discontinue}
             disabled={disabled}
-            onClick={closeAlertsByAdmin}
+            onClick={onDiscontinue}
           >
             <IconFont type="iconclose-circle" className={styles['btn-icon']} />
             <FormattedMessage id="alert-center.discontinue" />

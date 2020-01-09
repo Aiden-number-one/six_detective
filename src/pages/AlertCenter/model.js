@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-09 14:24:14
+ * @LastEditTime : 2020-01-09 15:46:01
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -64,6 +64,9 @@ export async function assignAlertItem({ taskIds, userId }) {
 }
 export async function closeAlert({ alertIds = [] }) {
   return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
+}
+export async function discontinueAlert({ alertIds = [] }) {
+  return request('set_alert_discontinue', { data: { alertIds: alertIds.join(',') } });
 }
 export async function getTaskHistory({ taskId }) {
   return request('get_history_list_for_item_detail', {
@@ -329,6 +332,13 @@ export default {
       message.success(msg);
       return '';
     },
+    // claim many or check alert status
+    *claimMany({ payload }, { call, put }) {
+      return yield put({
+        type: 'claim',
+        payload,
+      });
+    },
     // claim alert(s) which has been claimed
     *reClaim({ payload }, { call, put }) {
       const { err, msg, items } = yield call(claimAlert, {
@@ -352,10 +362,13 @@ export default {
         type: 'fetch',
       });
     },
-    *closeByAdmin({ payload }, { call, put }) {
+    *discontinue({ payload }, { call, put }) {
+      const { err } = yield call(discontinueAlert, payload);
+      if (err) {
+        throw new Error(err);
+      }
       yield put({
-        type: 'close',
-        payload,
+        type: 'fetch',
       });
     },
     *export({ payload }, { call }) {
