@@ -593,7 +593,7 @@ export default class DataProcessing extends Component {
                   <Modal
                     icon=""
                     title={formatMessage({ id: 'app.common.confirm' })}
-                    visible={dataProcessingVisible}
+                    visible={dataProcessingVisible && false}
                     className={styles.processingWraper}
                     onOk={this.dataProcessingConfirm}
                     onCancel={this.dataProcessingCancel}
@@ -748,6 +748,21 @@ export default class DataProcessing extends Component {
                   <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
                     Start Processing
                   </Button>
+                </Col>
+                <Col>
+                  {dataProcessingFlag ? (
+                    <div>
+                      <Progress percent={50} status="active" />
+                      <p style={{ textAlign: 'left' }}>
+                        Processed：<span>1234</span> records
+                      </p>
+                      <p style={{ textAlign: 'left' }}>
+                        Pending to process：<span>1234</span> records
+                      </p>
+                    </div>
+                  ) : (
+                    <span></span>
+                  )}
                 </Col>
               </Row>
               <Chart className={styles.chart} height={400} data={dataCharts} scale={cols} forceFit>
