@@ -13,6 +13,7 @@ import styles from './index.less';
 
 const { Sider } = Layout;
 const { TreeNode } = Tree;
+let resetControl = false;
 
 @connect(({ reportDesigner, formArea }) => ({
   cellPosition: reportDesigner.cellPosition,
@@ -21,9 +22,14 @@ const { TreeNode } = Tree;
   teamplateAreaObj: reportDesigner.teamplateAreaObj,
   customSearchData: formArea.customSearchData,
   dataSetPublicList: reportDesigner.dataSetPublicList,
+  defaultValueDatasetType: formArea.defaultValueDatasetType,
 }))
 @Form.create({
   onFieldsChange(props, changedFields, allFields) {
+    if (resetControl) {
+      resetControl = false;
+      return;
+    }
     const { dispatch } = props;
     // 便利得到result
     const result = {};
@@ -195,6 +201,7 @@ export default class RightSideBar extends PureComponent {
       resetFields();
     }
     if (customSearchDataIndex !== this.customSearchDataIndex && siderBarType === 'query') {
+      resetControl = true;
       resetFields();
     }
     this.cellPosition = this.props.cellPosition;
@@ -204,15 +211,16 @@ export default class RightSideBar extends PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
-      cellPosition,
-      rightSideCollapse,
-      changeRightSideBar,
-      dataSetPrivateList,
+      cellPosition, // 单元格位置
+      rightSideCollapse, // 右边的面板
+      changeRightSideBar, // 隐藏或显示右边的面板
+      dataSetPrivateList, // 私有数据集列表
       dispatch,
-      spreadsheetOtherProps,
-      teamplateAreaObj,
-      customSearchData,
-      dataSetPublicList,
+      spreadsheetOtherProps, // spreadSheet的otherProps的集合（包含：数据集的一些属性等等）
+      teamplateAreaObj, // 报表模板数据
+      customSearchData, // 查询条件相关数据
+      dataSetPublicList, // 公共数据集列表
+      defaultValueDatasetType, // 查询条件select类型->数据来源于数据集类->数据集某个字段的所有项
     } = this.props;
     this.resetFields();
     const { siderBarType } = this.state;
@@ -235,6 +243,8 @@ export default class RightSideBar extends PureComponent {
       addCustomerType: this.addCustomerType,
       deleteOrModifyCustomerType: this.deleteOrModifyCustomerType,
       dataSetPublicList,
+      dispatch,
+      defaultValueDatasetType,
     };
     // 表单的props
     const formProps = {

@@ -94,6 +94,7 @@ function ProcessDetail({
     }
   }, [task]);
 
+  // 提交，通过，回退的校验
   function submitDrawer(type) {
     setSubmitType(type);
     if (type === 'reject') {
@@ -114,6 +115,7 @@ function ProcessDetail({
     }
   }
 
+  // 提交，通过，回退接口
   function submitOrApproveTask(type) {
     let valueData = {};
     let isErr = true;
@@ -228,6 +230,9 @@ function ProcessDetail({
   // 撤销
   function setTaskWithdraw() {
     console.log('comment----', comment);
+    // if (!comment) {
+    //   throw new Error('Comment cannot be empty when you withdraw');
+    // }
     dispatch({
       type: 'approvalCenter/setTaskWithdraw',
       payload: {
@@ -256,6 +261,7 @@ function ProcessDetail({
     setConfirmBiCategory(value);
   }
 
+  // 保存任务详情
   function saveTask() {
     let valueData = {};
     let isErr = true;
@@ -347,6 +353,7 @@ function ProcessDetail({
     }
   }
 
+  // 上传附件
   function handleUpAttachments(info) {
     let fileList = [...info.fileList];
     // limit 5 files
@@ -363,7 +370,7 @@ function ProcessDetail({
     console.log('fileList--->', fileList);
     setUpAttachements(fileList);
   }
-
+  // 删除附件
   function handleRemove(file) {
     setUpAttachements(upAttachments.filter(item => item.uid !== file.uid));
   }
@@ -398,7 +405,12 @@ function ProcessDetail({
               />
             }
           >
-            <TabPane className={styles['tab-content']} closable={false} tab="Task Detail" key="">
+            <TabPane
+              className={isFullscreen ? styles['tab-content'] : styles['tab-scroll-content']}
+              closable={false}
+              tab="Task Detail"
+              key=""
+            >
               <DetailList
                 ref={newDetailForm}
                 saveTask={saveTask}

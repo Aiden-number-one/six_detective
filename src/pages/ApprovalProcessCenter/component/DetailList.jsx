@@ -36,7 +36,7 @@ function NewEP({ detailData, oldValueList, isShowForm, getFieldDecorator }) {
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="EP Name">
                 {getFieldDecorator('epName', {
                   rules: [{ required: !!isShowForm, message: 'Please input epName!' }],
@@ -44,7 +44,7 @@ function NewEP({ detailData, oldValueList, isShowForm, getFieldDecorator }) {
                 })(<Input disabled={!isShowForm} />)}
               </Form.Item>
             </div>
-            <p>{oldValueList.epName}</p>
+            <div className={styles.oldValueBox}>{oldValueList.epName}</div>
           </div>
         </List.Item>
       </List>
@@ -86,7 +86,7 @@ function NewProduct({
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Is CA Code ?">
                 {getFieldDecorator('isCaCode', {
                   rules: [{ required: !!isShowForm }],
@@ -107,7 +107,7 @@ function NewProduct({
                 )}
               </Form.Item>
             </div>
-            <p>{oldValueList.isCaCode}</p>
+            <div className={styles.oldValueBox}>{oldValueList.isCaCode}</div>
           </div>
         </List.Item>
         <List.Item>
@@ -119,7 +119,7 @@ function NewProduct({
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Product Description">
                 {getFieldDecorator('productDesc', {
                   rules: [{ required: !!isShowForm, message: 'Please input Product Description!' }],
@@ -127,12 +127,12 @@ function NewProduct({
                 })(<Input disabled={!isShowForm} />)}
               </Form.Item>
             </div>
-            <p>{oldValueList.productDesc}</p>
+            <div className={styles.oldValueBox}>{oldValueList.productDesc}</div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Product Category" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
                 {getFieldDecorator('productCategory', {
                   rules: [
@@ -154,12 +154,12 @@ function NewProduct({
                 )}
               </Form.Item>
             </div>
-            <p>{oldValueList.productCategory}</p>
+            <div>{oldValueList.productCategory}</div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Futures or Option" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
                 {getFieldDecorator('contractNature', {
                   rules: [{ required: !!isShowForm, message: 'Please select Futures or Option!' }],
@@ -179,12 +179,12 @@ function NewProduct({
                 )}
               </Form.Item>
             </div>
-            <p>{oldValueList.contractNature}</p>
+            <div className={styles.oldValueBox}>{oldValueList.contractNature}</div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Product Group">
                 {getFieldDecorator('productGroup', {
                   rules: [{ required: !!isShowForm, message: 'Please select Product Group!' }],
@@ -204,12 +204,12 @@ function NewProduct({
                 )}
               </Form.Item>
             </div>
-            <p>{oldValueList.productGroup}</p>
+            <div className={styles.oldValueBox}>{oldValueList.productGroup}</div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item
                 label="Template Code(Last Trade Day)"
                 labelCol={{ span: 9 }}
@@ -238,12 +238,12 @@ function NewProduct({
                 )}
               </Form.Item>
             </div>
-            <p>{oldValueList.ltdTmplCode}</p>
+            <div className={styles.oldValueBox}>{oldValueList.ltdTmplCode}</div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item
                 label="Template Code(Position Limit)"
                 labelCol={{ span: 9 }}
@@ -272,12 +272,12 @@ function NewProduct({
                 )}
               </Form.Item>
             </div>
-            <p>{oldValueList.plTmplCode}</p>
+            <div className={styles.oldValueBox}>{oldValueList.plTmplCode}</div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item
                 label="Template Code(Reportable Limit)"
                 labelCol={{ span: 9 }}
@@ -306,12 +306,12 @@ function NewProduct({
                 )}
               </Form.Item>
             </div>
-            <p>{oldValueList.rlTmplCode}</p>
+            <div className={styles.oldValueBox}>{oldValueList.rlTmplCode}</div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Is Calculate PD ?" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
                 {getFieldDecorator('isCalculatePd', {
                   rules: [{ required: !!isShowForm }],
@@ -335,14 +335,14 @@ function NewProduct({
                 )}
               </Form.Item>
             </div>
-            <p>{oldValueList.isCalculatePd}</p>
+            <div className={styles.oldValueBox}>{oldValueList.isCalculatePd}</div>
           </div>
         </List.Item>
         {radioPdValue === 'Yes' ? (
           <>
             <List.Item>
               <div className={styles.ListItem}>
-                <div>
+                <div className={styles.formBox}>
                   <Form.Item
                     label="Size Factor for Calculate PD"
                     labelCol={{ span: 9 }}
@@ -359,12 +359,12 @@ function NewProduct({
                     })(<Input type="number" disabled={!isShowForm} />)}
                   </Form.Item>
                 </div>
-                <p>{oldValueList.sizeFactor}</p>
+                <div className={styles.oldValueBox}>{oldValueList.sizeFactor}</div>
               </div>
             </List.Item>
             <List.Item>
               <div className={styles.ListItem}>
-                <div>
+                <div className={styles.formBox}>
                   <Form.Item
                     label="Weighting Factor for Calculate PD"
                     labelCol={{ span: 9 }}
@@ -381,7 +381,7 @@ function NewProduct({
                     })(<Input type="number" disabled={!isShowForm} />)}
                   </Form.Item>
                 </div>
-                <p>{oldValueList.weightFactor}</p>
+                <div className={styles.oldValueBox}>{oldValueList.weightFactor}</div>
               </div>
             </List.Item>
           </>
@@ -417,7 +417,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Is CA Code ?">
                 {getFieldDecorator('isCaCode', {
                   rules: [{ required: !!isShowForm }],
@@ -438,7 +438,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
                 )}
               </Form.Item>
             </div>
-            <p>{oldValueList.isCaCode}</p>
+            <div className={styles.oldValueBox}>{oldValueList.isCaCode}</div>
           </div>
         </List.Item>
         <List.Item>
@@ -470,7 +470,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Remark">
                 {getFieldDecorator('remark', {
                   rules: [{ required: !!isShowForm, message: 'Please input Remark!' }],
@@ -478,7 +478,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
                 })(isShowForm ? <TextArea /> : <Input disabled />)}
               </Form.Item>
             </div>
-            <p>{oldValueList.remark}</p>
+            <div className={styles.oldValueBox}>{oldValueList.remark}</div>
           </div>
         </List.Item>
       </List>
@@ -619,8 +619,8 @@ function NewAccound({
           </div>
         </List.Item>
         <List.Item>
-          <div className={styles.ListItem}>
-            <div>
+          <div className={styles.ListItem} style={{ marginTop: '10px' }}>
+            <div className={styles.formBox}>
               <Form.Item label="Confirmed BI">
                 {getFieldDecorator('confirmBiCode', {
                   rules: [{ required: !!isShowForm, message: 'Confirmed BI is missing' }],
@@ -638,6 +638,7 @@ function NewAccound({
                           key={item.confirmBiCategory}
                         >
                           <span
+                            title={item.confirmBiCode}
                             style={{
                               float: 'left',
                               width: '50%',
@@ -649,6 +650,7 @@ function NewAccound({
                             {item.confirmBiCode}
                           </span>
                           <span
+                            title={item.confirmBiName}
                             style={{
                               float: 'right',
                               width: '50%',
@@ -669,17 +671,19 @@ function NewAccound({
                 )}
               </Form.Item>
             </div>
-            <Form.Item label="">
-              {getFieldDecorator('confirmBiName', {
-                rules: [{ required: !!isShowForm, message: 'Confirmed BI is missing' }],
-                initialValue: detailData.confirmBiName,
-              })(<Input style={{ width: '200px', marginLeft: '20px' }} disabled={!isShowForm} />)}
-            </Form.Item>
+            <div className={styles.confirmBiToBox}>
+              <Form.Item label="">
+                {getFieldDecorator('confirmBiName', {
+                  rules: [{ required: !!isShowForm, message: 'Confirmed BI is missing' }],
+                  initialValue: detailData.confirmBiName,
+                })(<Input disabled={!isShowForm} />)}
+              </Form.Item>
+            </div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Confirmed TO">
                 {getFieldDecorator('confirmToCode', {
                   rules: [{ required: !!isShowForm, message: 'Confirmed TO is missing' }],
@@ -698,6 +702,7 @@ function NewAccound({
                             key={item.confirmToCategory}
                           >
                             <span
+                              title={item.confirmToCode}
                               style={{
                                 float: 'left',
                                 width: '50%',
@@ -709,6 +714,7 @@ function NewAccound({
                               {item.confirmToCode}
                             </span>
                             <span
+                              title={item.confirmToName}
                               style={{
                                 float: 'right',
                                 width: '50%',
@@ -729,17 +735,19 @@ function NewAccound({
                 )}
               </Form.Item>
             </div>
-            <Form.Item label="">
-              {getFieldDecorator('confirmToName', {
-                rules: [{ required: !!isShowForm, message: 'Confirmed TO is missing' }],
-                initialValue: detailData.confirmToName,
-              })(<Input style={{ width: '200px', marginLeft: '20px' }} disabled={!isShowForm} />)}
-            </Form.Item>
+            <div className={styles.confirmBiToBox}>
+              <Form.Item label="">
+                {getFieldDecorator('confirmToName', {
+                  rules: [{ required: !!isShowForm, message: 'Confirmed TO is missing' }],
+                  initialValue: detailData.confirmToName,
+                })(<Input disabled={!isShowForm} />)}
+              </Form.Item>
+            </div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Report Any Position">
                 {getFieldDecorator('reportAnyPosition', {
                   rules: [{ required: !!isShowForm, message: 'Report Any Position is missing' }],
@@ -764,7 +772,7 @@ function NewAccound({
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Watch">
                 {getFieldDecorator('watch', {
                   rules: [{ required: !!isShowForm, message: 'Watch is missing' }],
@@ -789,7 +797,7 @@ function NewAccound({
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <div>
+            <div className={styles.formBox}>
               <Form.Item label="Remark">
                 {getFieldDecorator('remark', {
                   rules: [{ required: !!isShowForm, message: 'remark is missing' }],
