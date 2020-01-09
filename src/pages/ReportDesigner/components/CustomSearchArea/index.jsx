@@ -4,12 +4,12 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-08 13:42:28
+ * @LastEditTime : 2020-01-08 18:43:25
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
-// import { Icon } from 'antd';
+import uuidv1 from 'uuid/v1';
 import { DropTarget } from 'react-dnd';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import IconFont from '@/components/IconFont';
@@ -117,7 +117,7 @@ const targetSpec = {
     const { type: widgetType } = monitor.getItem();
     const newSearchData = {
       widgetType, // 控件类型
-      widgetName: '', // 控件名称
+      widgetName: 'Untitled', // 控件名称
       widgetNameVisible: true, // 标签名称是否可见
       widgetPlaceholder: '', // 控件placeholder
       widgetDes: '', // 控件描述
@@ -133,7 +133,7 @@ const targetSpec = {
       displayState: 'normal', // 展示控件状态
       initialValue: undefined, // 初始值
       // grid-layout相关
-      i: customSearchData.length.toString(),
+      i: uuidv1(),
       x: (customSearchData.length * 2) % 12,
       y: Infinity,
       w: 2,

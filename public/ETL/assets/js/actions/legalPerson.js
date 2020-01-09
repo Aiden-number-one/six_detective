@@ -1,1 +1,108 @@
-define(function(require,exports,module){var l={};function i(a){var e=document.querySelectorAll('[data-toggle="link"]');if(e){for(var t={sysType:a,legalerCode:sessionStorage.getItem(location.hash.substr(1,location.hash.length))+""},s=0;s<e.length;s++)"quick-add"===e[s].dataset.type&&(t.type=e[s].dataset.type);$('[data-type="quick-add"]').attr("data-params",JSON.stringify(t))}}l.genUIAfterRequestDataReturn=function(a,e,t){if(Array.isArray(e.bcjson.items)&&0===e.bcjson.items.length)toastr.error("请先配置法人信息！");else if(Array.isArray(e.bcjson.items)&&0<e.bcjson.items.length){var s=e.bcjson.items;$(".J_legalPersonTabs").empty(),null===sessionStorage.getItem(location.hash.substr(1,location.hash.length))&&sessionStorage.setItem(location.hash.substr(1,location.hash.length),s[0].paramId),i(a);for(var n=0;n<s.length;n++)0===n?$(".J_legalPersonTabs").append('<label class="btn red btn-outline btn-circle btn-sm active" data-paramid='+s[n].paramId+' title="'+s[n].comment+" - "+s[n].paramValue+" - "+s[n].paramId+'"><input type="radio" name="options" class="toggle">'+s[n].comment+"</label>"):$(".J_legalPersonTabs").append('<label class="btn red btn-outline btn-circle btn-sm" data-paramid='+s[n].paramId+' title="'+s[n].comment+" - "+s[n].paramValue+" - "+s[n].paramId+'"><input type="radio" name="options" class="toggle">'+s[n].comment+"</label>");var o=document.querySelectorAll(".J_legalPersonTabs label");o=Array.from(o);for(n=0;n<o.length;n++)null!==sessionStorage.getItem(location.hash.substr(1,location.hash.length))&&o[n].dataset.paramid===sessionStorage.getItem(location.hash.substr(1,location.hash.length))&&($(o[n]).addClass("active"),$(o[n]).siblings().removeClass("active"));t(),$(".J_legalPersonTabs label").click(function(){sessionStorage.setItem(location.hash.substr(1,location.hash.length),$(this).data("paramid")),i(a),App.blockUI({target:".page-content",animate:!0}),window.setTimeout(function(){App.unblockUI(".page-content")},500),t(),"SIPF"==a?$(".page-sipf-task-config .tab_location_change a label.active").click():"GPZY"==a?$(".page-gpzy-task-config .tab_location_change a label.active").click():"CSFC"==a&&$(".page-csfc-task-config .tab_location_change a label.active").click()})}},l.getLegalPersons=function(e,t){var s=!1,a=localStorage.getItem(e+"legalerInfo");if(a){var n=JSON.parse(a);l.genUIAfterRequestDataReturn(e,n,t),s=!0}var o={sysType:e};$.kingdom.doKoauthAdminAPI("kingdom.krcs.get_biz_sys_legaler_code_list","v4.0",o,function(a){"1"===a.bcjson.flag&&a.bcjson.items&&(s||l.genUIAfterRequestDataReturn(e,a,t),localStorage.setItem(e+"legalerInfo",JSON.stringify(a)))})},module.exports=l});
+define(function (require, exports, module) {
+
+    var legalPerson = {};
+
+    function setDataParams(sysType) {
+        var linkEles = document.querySelectorAll('[data-toggle="link"]');
+        if (linkEles) {
+            var params = {
+                sysType: sysType,
+                legalerCode: sessionStorage.getItem(location.hash.substr(1, location.hash.length)) + ''
+            };
+            for (var item = 0; item < linkEles.length; item++) {
+                if (linkEles[item].dataset.type === 'quick-add') {
+                    params.type = linkEles[item].dataset.type;
+                }
+            }
+            $('[data-type="quick-add"]').attr('data-params', JSON.stringify(params));
+        }
+    }
+
+    legalPerson.genUIAfterRequestDataReturn = function (sysType, data, fallback) {
+        if (Array.isArray(data.bcjson.items) && data.bcjson.items.length === 0) {
+            toastr.error('请先配置法人信息！');
+        } else if (Array.isArray(data.bcjson.items) && data.bcjson.items.length > 0) {
+            var items = data.bcjson.items;
+            $('.J_legalPersonTabs').empty();
+            if (sessionStorage.getItem(location.hash.substr(1, location.hash.length)) === null) {
+                sessionStorage.setItem(location.hash.substr(1, location.hash.length), items[0].paramId);
+            }
+            setDataParams(sysType);
+
+            for (var i = 0; i < items.length; i++) {
+                if (i === 0) {
+                    $('.J_legalPersonTabs').append('<label class="btn red btn-outline btn-circle btn-sm active" data-paramid=' + items[i].paramId + ' title="' + items[i].comment + ' - ' + items[i].paramValue + ' - ' + items[i].paramId + '"><input type="radio" name="options" class="toggle">' + items[i].comment + '</label>');
+                } else {
+                    $('.J_legalPersonTabs').append('<label class="btn red btn-outline btn-circle btn-sm" data-paramid=' + items[i].paramId + ' title="' + items[i].comment + ' - ' + items[i].paramValue + ' - ' + items[i].paramId + '"><input type="radio" name="options" class="toggle">' + items[i].comment + '</label>');
+                }
+            }
+
+            var tabItems = document.querySelectorAll('.J_legalPersonTabs label');
+            tabItems = Array.from(tabItems);
+            for (var i = 0; i < tabItems.length; i++) {
+                if (sessionStorage.getItem(location.hash.substr(1, location.hash.length)) !== null) {
+                    if (tabItems[i].dataset.paramid === sessionStorage.getItem(location.hash.substr(1, location.hash.length))) {
+                        $(tabItems[i]).addClass('active');
+                        $(tabItems[i]).siblings().removeClass('active');
+                        // $(tabItems[i]).click();
+                    }
+                }
+            };
+
+            fallback();
+
+            // 法人标签页切换
+            $('.J_legalPersonTabs label').click(function () {
+                // legalPersonCode = $(this).data('paramid');
+                sessionStorage.setItem(location.hash.substr(1, location.hash.length), $(this).data('paramid'));
+                setDataParams(sysType);
+
+                App.blockUI({
+                    target: '.page-content',
+                    animate: true
+                });
+                window.setTimeout(function () {
+                    App.unblockUI('.page-content');
+                }, 500);
+
+                fallback();
+                if (sysType == "SIPF") {
+                    $('.page-sipf-task-config .tab_location_change a label.active').click();
+                } else if (sysType == "GPZY") {
+                    $('.page-gpzy-task-config .tab_location_change a label.active').click();
+                } else if (sysType == "CSFC") {
+                    $('.page-csfc-task-config .tab_location_change a label.active').click();
+                }
+            });
+        }
+    };
+
+    legalPerson.getLegalPersons = function (sysType, fallback) {
+
+        //增加缓存，加速界面显示
+        var isUpdate = false;
+
+        var dataString = localStorage.getItem(sysType + "legalerInfo");
+        if (dataString) {
+            var data2 = JSON.parse(dataString);
+            legalPerson.genUIAfterRequestDataReturn(sysType, data2, fallback);
+            isUpdate = true; //页面加载后，更新为ＴＲＵＥ
+        }
+
+        var paramsMap = {
+            sysType: sysType
+        };
+        $.kingdom.doKoauthAdminAPI("kingdom.krcs.get_biz_sys_legaler_code_list", "v4.0", paramsMap, function (data) {
+            if (data.bcjson.flag === '1' && data.bcjson.items) {
+                if (!isUpdate) {
+                    //界面更新过后，此次不再更新界面
+                    legalPerson.genUIAfterRequestDataReturn(sysType, data, fallback);
+                }
+
+                localStorage.setItem(sysType + "legalerInfo", JSON.stringify(data));
+            }
+        });
+    };
+
+    module.exports = legalPerson;
+});

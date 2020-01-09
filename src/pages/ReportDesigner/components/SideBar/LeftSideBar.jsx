@@ -29,7 +29,8 @@ export default class LeftSideBar extends PureComponent {
     dispatch({
       type: 'reportDesigner/getPublicDataSet',
       payload: {
-        sqlName: '',
+        pageNumber: '1',
+        pageSize: '999',
       },
     });
   };

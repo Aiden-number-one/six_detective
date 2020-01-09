@@ -4,16 +4,17 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-28 17:03:03
+ * @LastEditTime : 2020-01-09 01:24:43
  */
 import Service from '@/utils/Service';
 
-const { getReportTemplateDataQuery, getReportDataFile } = Service;
+const { getReportTemplateDataQuery, getReportDataFile, getMetadataTablePerform } = Service;
 
 export default {
   namespace: 'reportDesignPreview',
   state: {
     previewData: {},
+    dataSetColumn: {},
   },
   reducers: {
     // 保存报表预览数据
@@ -23,17 +24,59 @@ export default {
         previewData: action.payload,
       };
     },
+    changeDataSetColumn(state, action) {
+      return {
+        ...state,
+        dataSetColumn: action.payload,
+      };
+    },
   },
   effects: {
+    // 获取数据集下的表的字段的值
+    *getDataSetColumnValue({ payload }, { call, put, all }) {
+      const selectOptionArray = yield all(
+        payload.map(value => call(getMetadataTablePerform, { param: value })),
+      );
+      const dataSetColumn = {};
+      selectOptionArray.forEach(value => {
+        if (value.bcjson.flag === '1' && value.bcjson.items.length > 0) {
+          const key = Object.keys(value.bcjson.items[0])[0];
+          dataSetColumn[key] = value.bcjson.items.map(item => item[key]);
+        }
+      });
+      yield put({
+        type: 'changeDataSetColumn',
+        payload: dataSetColumn,
+      });
+    },
     // 查询报表预览
     *getReportTemplateDataQuery({ payload }, { call, put }) {
       const response = yield call(getReportTemplateDataQuery, {
         param: payload,
       });
-      yield put({
-        type: 'savePreviewData',
-        payload: response.bcjson,
-      });
+      if (response.bcjson.flag === '1') {
+        // 存放预览数据
+        yield put({
+          type: 'savePreviewData',
+          payload: response.bcjson,
+        });
+        const [tableData, rowCountAndTemplateArea] = response.bcjson.items;
+        const { templateArea = {} } = rowCountAndTemplateArea || {};
+        const { customSearchData = [] } = templateArea;
+        // Option需要从接口获取
+        const datasetOption = customSearchData
+          .filter(value => value.sourceType === 'dataset')
+          .map(value => ({
+            datasetId: value.datasetName,
+            fieldName: value.datacolumn,
+          }));
+        yield put({
+          type: 'getDataSetColumnValue',
+          payload: datasetOption,
+        });
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
     },
 
     // 导出报表文件

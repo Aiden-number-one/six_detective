@@ -1,7 +1,8 @@
 import React from 'react';
-import { Layout, Collapse, Icon, Form, Input, Select, Checkbox, Radio } from 'antd';
+import { Layout, Collapse, Icon, Form, Input, Select, Checkbox, Radio, Button } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import _ from 'lodash';
+import IconFont from '@/components/IconFont';
 import styles from './index.less';
 
 const { Content } = Layout;
@@ -19,8 +20,9 @@ export default props => {
     getFieldDecorator,
     currentWidge = {},
     dataSetPrivateList,
-    modifyCustomerType,
     addCustomerType,
+    deleteOrModifyCustomerType,
+    dataSetPublicList,
   } = props;
   const params = _.flattenDeep(dataSetPrivateList.map(value => value.query.parameters || []));
   const { customList = [] } = currentWidge;
@@ -140,10 +142,9 @@ export default props => {
             <Form colon={false}>
               {/* 来源于 */}
               <Form.Item label={<FormattedMessage id="report-designer.from" />} {...formLayout}>
-                {getFieldDecorator(
-                  'sourceType',
-                  {},
-                )(
+                {getFieldDecorator('sourceType', {
+                  initialValue: currentWidge.sourceType,
+                })(
                   <Select>
                     <Option value="dataset">Data Set</Option>
                     <Option value="custom">Custom</Option>
@@ -165,14 +166,14 @@ export default props => {
                     label={<FormattedMessage id="report-designer.dataset" />}
                     {...formLayout}
                   >
-                    {getFieldDecorator('dataset', {})(<Select />)}
+                    {getFieldDecorator('table', {})(<Select />)}
                   </Form.Item>
                   {/* 数据字段 */}
                   <Form.Item
                     label={<FormattedMessage id="report-designer.datacolumn" />}
                     {...formLayout}
                   >
-                    {getFieldDecorator('datacolumn', {})(<Select />)}
+                    {getFieldDecorator('tablecolumn', {})(<Select />)}
                   </Form.Item>
                 </>
               )}
@@ -183,26 +184,66 @@ export default props => {
                     label={<FormattedMessage id="report-designer.dataset" />}
                     {...formLayout}
                   >
-                    {getFieldDecorator('dataset', {})(<Select />)}
+                    {getFieldDecorator('datasetName', {
+                      initialValue: currentWidge.datasetName,
+                    })(
+                      <Select>
+                        {dataSetPublicList.map(value => (
+                          <Option key={value.datasetId}>{value.datasetName}</Option>
+                        ))}
+                      </Select>,
+                    )}
                   </Form.Item>
                   {/* 数据字段 */}
                   <Form.Item
                     label={<FormattedMessage id="report-designer.datacolumn" />}
                     {...formLayout}
                   >
-                    {getFieldDecorator('datacolumn', {})(<Select />)}
+                    {getFieldDecorator('datacolumn', {
+                      initialValue: currentWidge.datacolumn,
+                    })(
+                      <Select>
+                        {(dataSetPublicList.find(
+                          value => value.datasetId === currentWidge.datasetName,
+                        )
+                          ? dataSetPublicList.find(
+                              value => value.datasetId === currentWidge.datasetName,
+                            ).datasetFields
+                          : []
+                        ).map(value => (
+                          <Option key={value.field_data_name}>{value.field_data_name}</Option>
+                        ))}
+                      </Select>,
+                    )}
                   </Form.Item>
                 </>
               )}
-              {currentWidge.sourceType === 'custom' &&
-                customList.map((value, index) => (
-                  <Input
-                    value={value.value}
-                    onChange={e => {
-                      modifyCustomerType(customList, index, e.target.value);
-                    }}
+              {currentWidge.sourceType === 'custom' && (
+                <div className={styles.customerButt}>
+                  {customList.map((value, index) => (
+                    <div key={value.key}>
+                      <Input
+                        value={value.value}
+                        onChange={e => {
+                          deleteOrModifyCustomerType(index, 'modify', e.target.value);
+                        }}
+                      />
+                      <IconFont
+                        type="icon-delete"
+                        onClick={() => {
+                          deleteOrModifyCustomerType(index, 'delete');
+                        }}
+                      />
+                    </div>
+                  ))}
+                  <Button
+                    className={styles.dash}
+                    type="dashed"
+                    icon="plus"
+                    onClick={addCustomerType}
                   />
-                ))}
+                </div>
+              )}
             </Form>
           </Panel>
         </Collapse>
