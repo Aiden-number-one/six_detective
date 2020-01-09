@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import classnames from 'classnames';
-import { Row, Col, Button, Table, Select, Modal, Progress } from 'antd';
+import Antd, { Row, Col, Button, Table, Select, Modal, Progress, Checkbox } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
@@ -29,34 +29,76 @@ export default class DataProcessing extends Component {
       alertIds: '',
       market: '',
       authBypass: false,
+      alertBypassStatus: [],
+      isBypass: false,
       dataProcessingVisible: false,
       dataAlertVisible: false,
       dataProcessingFlag: false,
       inspectDataVisible: false,
+      checkedAll: false,
+      alertIndeterminate: false,
       codeColumns: [
         {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
+          width: 80,
+          align: 'right',
           render: (res, recode, index) => (
-            <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+            <Fragment>
+              {recode.isClosedIntraday === '1' && (
+                <Antd.Tooltip
+                  title="pending tasks for today"
+                  className={styles['alert-icon-wraper']}
+                >
+                  <IconFont type="icon-alertlist" className={styles['alert-icon']} />
+                </Antd.Tooltip>
+              )}
+              <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
+            </Fragment>
           ),
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.market' }),
           dataIndex: 'market',
           key: 'market',
+          ellipsis: true,
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertName' }),
           dataIndex: 'alertName',
           key: 'alertName',
+          ellipsis: true,
+          width: '35%',
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.numberOfAlert' }),
           dataIndex: 'numberOfAlert',
           key: 'numberOfAlert',
+          ellipsis: true,
+          render: (res, recode) => (
+            <Fragment>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>{recode.numberOfAlert}</span>
+                {recode.alertType === this.state.alertType && (
+                  <IconFont type="icon-arrow-right" className={styles['active-icon']} />
+                )}
+              </div>
+            </Fragment>
+          ),
         },
+        // {
+        //   title: '',
+        //   dataIndex: '',
+        //   key: '',
+        //   render: (res, recode) => (
+        //     <Fragment>
+        //       {recode.alertType === this.state.alertType && (
+        //           <IconFont type="icon-arrow-right" className={styles['active-icon']} />
+        //       )}
+        //     </Fragment>
+        //   ),
+        // },
       ],
       columns: [
         // {
@@ -73,16 +115,21 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
           dataIndex: 'alertOwner',
           key: 'alertOwner',
+          ellipsis: true,
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterCode' }),
           dataIndex: 'submitterCode',
           key: 'submitterCode',
+          width: '25%',
+          ellipsis: true,
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterName' }),
           dataIndex: 'submitterName',
           key: 'submitterName',
+          width: '35%',
+          ellipsis: true,
         },
       ],
       functionNameOptions: [],
@@ -159,6 +206,7 @@ export default class DataProcessing extends Component {
         this.setState(
           {
             alertType: dataProcessingData.items[0] && dataProcessingData.items[0].alertType,
+            isBypass: !!(dataProcessingData.items[0].isClosedIntraday === '1'),
             inspectDataVisible: true,
           },
           () => {
@@ -181,6 +229,16 @@ export default class DataProcessing extends Component {
     dispatch({
       type: 'dataProcessing/getDataProcessingItem',
       payload: params,
+      callback: () => {
+        const { dataProcessingItemData } = this.props;
+        const alertBypassStatus = dataProcessingItemData.items.filter(
+          element => element.bypassStatus === '0',
+        );
+        console.log('alertBypassStatus====', alertBypassStatus);
+        this.setState({
+          alertBypassStatus,
+        });
+      },
     });
   };
 
@@ -210,8 +268,10 @@ export default class DataProcessing extends Component {
     this.setState(
       {
         alertType: record.alertType,
+        isBypass: !!(record.isClosedIntraday === '1'),
       },
       () => {
+        console.log('this.state.isBypass===', this.state.isBypass);
         this.queryDataProcessingItem();
       },
     );
@@ -222,13 +282,44 @@ export default class DataProcessing extends Component {
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys, selectedRows);
+    const { dataProcessingItemData } = this.props;
+    if (selectedRowKeys.length === dataProcessingItemData.items.length) {
+      this.setState({
+        checkedAll: true,
+        alertIndeterminate: false,
+      });
+    } else if (selectedRowKeys.length > 0) {
+      this.setState({
+        alertIndeterminate: true,
+        checkedAll: false,
+      });
+    } else {
+      this.setState({
+        alertIndeterminate: false,
+        checkedAll: false,
+      });
+    }
     const alertIds = [];
     selectedRows.forEach(element => alertIds.push(element.alertId));
-    this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {
-      // console.log('alertIds===', this.state.alertIds);
-      // this.alertItemsByPass()
+    this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {});
+  };
+
+  onSelectChangeAll = checkedValue => {
+    const { dataProcessingItemData } = this.props;
+    const selectedRowKeys = dataProcessingItemData.items.map((element, index) => index);
+    const alertIds = [];
+    this.setState({
+      checkedAll: checkedValue.target.checked,
     });
+    if (checkedValue.target.checked) {
+      dataProcessingItemData.items.forEach(element => alertIds.push(element.alertId));
+      this.setState({ selectedRowKeys, alertIds: alertIds.join(',') });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        alertIds: [],
+      });
+    }
   };
 
   onChangeMarkt = (value, key) => {
@@ -335,10 +426,28 @@ export default class DataProcessing extends Component {
       dataCharts,
       cols,
       alertType,
+      checkedAll,
+      alertIndeterminate,
+      alertBypassStatus,
+      isBypass,
     } = this.state;
     const rowSelection = {
+      columnWidth: 100,
       selectedRowKeys,
+      columnTitle: (
+        <Fragment>
+          {alertBypassStatus.length > 0 && (
+            <Checkbox
+              checked={checkedAll}
+              indeterminate={alertIndeterminate}
+              onChange={this.onSelectChangeAll}
+            ></Checkbox>
+          )}
+          <span style={{ marginLeft: '5px' }}>Bypass</span>
+        </Fragment>
+      ),
       onChange: this.onSelectChange,
+      selections: false,
     };
     return (
       <Fragment>
@@ -353,11 +462,12 @@ export default class DataProcessing extends Component {
                   <Table
                     loading={loading['dataProcessing/getDataProcessing']}
                     style={{ marginTop: '6px' }}
-                    // eslint-disable-next-line no-confusing-arrow
+                    eslint-disable-next-line
+                    no-confusing-arrow
                     rowClassName={record =>
                       classnames({
                         [styles['table-active']]: record.alertType === alertType,
-                        [styles['table-alert']]: record.isClosedIntraday === '1',
+                        [styles['alert-table-row']]: record.isClosedIntraday === '1',
                       })
                     }
                     dataSource={dataProcessingData.items}
@@ -378,35 +488,6 @@ export default class DataProcessing extends Component {
                     total={dataProcessingData.totalCount}
                     pageSize={page.pageSize}
                   /> */}
-                  <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
-                    {/* <Col>
-                  <span>Trade Date</span>
-                  <RangePicker
-                    format="YYYY-MM-DD"
-                    placeholder={['Start Date', 'End Date']}
-                    style={{ width: '180px' }}
-                  />
-                </Col> */}
-                    <Col>
-                      <span>Market</span>
-                      <Select
-                        placeholder="Please Select"
-                        style={{ width: '120px' }}
-                        onChange={this.onChangeMarkt}
-                      >
-                        {functionNameOptions.map(item => (
-                          <Option key={item.key} value={item.value}>
-                            {item.title}
-                          </Option>
-                        ))}
-                      </Select>
-                    </Col>
-                    <Col>
-                      <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
-                        Start Processing
-                      </Button>
-                    </Col>
-                  </Row>
                   <Modal
                     icon=""
                     title={formatMessage({ id: 'app.common.confirm' })}
@@ -448,19 +529,21 @@ export default class DataProcessing extends Component {
                 </div>
                 <div className={styles.cutOff}></div>
                 <div className={styles.dataItemTable}>
-                  <div className={styles.tableTop}>
-                    <Button
-                      onClick={this.onBypass}
-                      type="primary"
-                      className="btn-usual"
-                      disabled={!authBypass}
-                    >
+                  <div
+                    className={styles.tableTop}
+                    style={
+                      authBypass && alertBypassStatus.length > 0 && isBypass
+                        ? { visibility: 'visible' }
+                        : { visibility: 'hidden' }
+                    }
+                  >
+                    <Button onClick={this.onBypass} type="primary" className="btn-usual">
                       {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
                     </Button>
                   </div>
                   <Table
                     loading={loading['codeList/getCodeItemList']}
-                    rowSelection={rowSelection}
+                    rowSelection={alertBypassStatus.length > 0 && isBypass ? rowSelection : null}
                     dataSource={dataProcessingItemData.items}
                     pagination={false}
                     columns={this.state.columns}
@@ -534,6 +617,36 @@ export default class DataProcessing extends Component {
                   <span>The last time of data processing is at 10:55 on 12/12/2019</span>
                 </li>
               </ul> */}
+              <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
+                {/* <Col>
+                  <span>Trade Date</span>
+                  <RangePicker
+                    format="YYYY-MM-DD"
+                    placeholder={['Start Date', 'End Date']}
+                    style={{ width: '180px' }}
+                  />
+                </Col> */}
+                <Col>
+                  <span>Market</span>
+                  <Select
+                    placeholder="Please Select"
+                    allowClear
+                    style={{ width: '120px' }}
+                    onChange={this.onChangeMarkt}
+                  >
+                    {functionNameOptions.map(item => (
+                      <Option key={item.key} value={item.value}>
+                        {item.title}
+                      </Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col>
+                  <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
+                    Start Processing
+                  </Button>
+                </Col>
+              </Row>
               <Chart className={styles.chart} height={400} data={dataCharts} scale={cols} forceFit>
                 <span>The last time of data processing is at 10:55 on 12/12/2019</span>
                 <Axis name="year" />

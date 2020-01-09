@@ -19,7 +19,7 @@ const umiOptions = {
 
 // 自定义规则，写这里
 const customRules = {
-  "@typescript-eslint/no-unused-vars": "warn"
+  '@typescript-eslint/no-unused-vars': 'off',
 }
 
 // 合并规则

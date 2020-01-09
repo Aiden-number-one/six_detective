@@ -1,1 +1,935 @@
-var _extends=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var o=arguments[t];for(var n in o)Object.prototype.hasOwnProperty.call(o,n)&&(e[n]=o[n])}return e};define(function(require,exports,module){require("plugins/jstree/dist/jstree"),require("plugins/jstree/dist/themes/default/style.css"),require("plugins/select2/js/select2.js"),require("plugins/select2/css/select2.css"),require("plugins/select2/css/select2-compatible.css"),require("assets/js/global/tableTree"),require("assets/js/global/tableTree1");var r={};function n(e){var t=[{id:"1",pId:"-1",columns:{Name:"资料管理",Type:"",Description:"",Action:{formatter:function(){return'<a name="export" title="EXPORT">EXPORT</a>'}}},children:[]}];for(var o in e){var n={id:o,pId:"1",attr:{objectType:e[o][0].objectType},columns:{Name:e[o][0].objectTypeName,Type:"",Description:"",Action:{formatter:function(){return'<a name="export" title="EXPORT">EXPORT</a>'}}},children:[]};t[0].children.push(n)}for(var r=t[0].children,c=0,a=r.length;c<a;c++){var p=[],i=!0,s=!1,l=void 0;try{function d(){var d=u.value;for(var e in d)d[e]=d[e].replace(/\"/g,"&quot;"),d[e]=d[e].replace(/\'/g,"&apos;");if(console.log(d.objectName),d.folderName)!function(){function e(o){if(d.folderId=i[o]||"",d.folderName=a[o]||"",d.parentFolderId=i[0],0===o)l=(s=(0<p.length&&p.map(function(e){return e.id===d.folderId[o]}).includes(!0)||p.push({id:i[o],pId:d.objectType,attr:{obj:JSON.stringify(d)},columns:{Name:a[o],Type:"",Description:"",Action:{formatter:function(){return'<a name="export" title="EXPORT">EXPORT</a>'}}},children:[]}),p),i[o]);else if(o<a.length){var n=void 0,e=void 0;if(s.map(function(e,t){if(e.id===i[o-1])return n=t}),0<(e=s[n].children).length){var t=!1;e.map(function(e){return e.id===i[o]&&(t=!0)}),l=(s=(t||e.push({id:i[o],pId:l,attr:{obj:JSON.stringify(d)},columns:{Name:a[o],Type:"",Description:"",Action:{formatter:function(){return'<a name="export" title="EXPORT">EXPORT</a>'}}},children:[]}),e),i[o])}else e.push({id:i[o],pId:l,attr:{obj:JSON.stringify(d)},columns:{Name:a[o],Type:"",Description:"",Action:{formatter:function(){return'<a name="export" title="EXPORT">EXPORT</a>'}}},children:[]}),s=e,l=i[o]}else{var r=void 0,c=void 0;s.map(function(e,t){if(e.id===i[o-1])return r=t}),c=s[r].children,d.folderIds="",c.push({id:d.objectId,pId:l,attr:{obj:JSON.stringify(d)},columns:{Name:d.objectName,Type:d.objectClassTypeName,Description:d.objectDesc,Action:{formatter:function(){return'<a name="export" title="EXPORT">EXPORT</a>'}}},children:[]})}}for(var a=d.folderName.split("/"),i=d.folderIds.split(","),s=[],l="",t=0;t<=a.length;t++)e(t);r[c].children=p}();else{var t={id:d.objectId,pId:d.objectType,attr:{obj:JSON.stringify(d)},columns:{Name:d.objectName,Type:d.objectClassTypeName,Description:d.objectDesc,Action:{formatter:function(){return'<a name="export" title="EXPORT">EXPORT</a>'}}},children:[]};r[c].children.push(t)}}for(var u,m=e[r[c].id][Symbol.iterator]();!(i=(u=m.next()).done);i=!0)d()}catch(e){s=!0,l=e}finally{try{!i&&m.return&&m.return()}finally{if(s)throw l}}}return t}r._load=function(){r.getDataSourceList(),r.getList(),r.initForm(),App.handleDateTimePickers()},r.unScroll=function(){var t=$(document).scrollTop();$(document).on("scroll.unable",function(e){$(document).scrollTop(t)})},r.reScroll=function(){$(document).off("scroll.unable")},r.getList=function(){var e=App.getFormParams("J_export_list_form");$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_config_export_list","v4.0",e,function(e){if("1"==e.bcjson.flag){var t=e.bcjson.items;if(0===t.length)return void $("#J_source_tree").html('<div class="no-data">No Data</div>');var o=n(t[0]);$("#J_table_tree").tableTree({checkbox:!0,data:o}).openNode("1"),$("#J_table_tree thead tr th:first-child").css("width","50px"),$("#J_table_tree thead tr th:nth-child(2)").css("text-indent","100px")}})},r.filterCondition=function(){return checkedLevel2=$("#J_table_tree [level=2] [type=checkbox]:checked"),checkedLevel1=$("#J_table_tree [level=1] [type=checkbox]:checked"),level2=$("#J_table_tree [level=2] [type=checkbox]"),checkedAll=$("#J_table_tree [type=checkbox]:checked"),arr3=[],arr2=[],checkedLevel2&&$.each(checkedLevel2,function(){arr2.push($(this).closest("tr").attr("key"))}),checkedAll.length&&$.each(checkedAll,function(){var e="",t=$(this).closest("tr");if($(this).attr("obj")&&(e=JSON.parse($(this).attr("obj"))),e&&!e.folderName){var o=void 0,n=void 0;if(n=(o=e.parentFolderId?$("#J_table_tree [key="+e.parentFolderId+"] [type=checkbox]").closest("tr").attr("pkey"):t.attr("pkey"),$("#J_table_tree [key="+o+"] [type=checkbox]:checked").attr("objecttype")),!arr2.includes(n)){var r=e,c=r.objectType,a=r.objectClassTypeName,i=r.objectId,s=r.objectTypeName,l=r.objectName,d=r.tableName,p=r.columnsId,u=r.objectClassType,m=r.folderId,f=r.folderIds;arr3.push({objectType:c,objectId:i,objectName:l,tableName:d,columnsId:p,objectClassType:u,folderId:m,objectTypeName:s,objectClassTypeName:a,folderIds:f})}}}),checkedLevel2.length&&$.each(checkedLevel2,function(){var e=$(this).attr("objecttype");arr2.includes(e)||arr2.push(e)}),0<checkedLevel1.length&&level2.length&&$.each(level2,function(){var e=$(this).attr("objecttype");arr2.includes(e)||arr2.push(e)}),objectType=arr2.join(","),{objectType:objectType,objectList:JSON.stringify(arr3)}},r.filterConditionImport=function(c){var e=$("#execDbConnection_"+c+" [level=3] [type=checkbox]:checked"),a=($("#execDbConnection_"+c+" [level=2] [type=checkbox]:checked"),$("#execDbConnection_"+c+" [level=1] [type=checkbox]:checked"),$("#execDbConnection_"+c+" [level=2] [type=checkbox]"),[]);return e.length&&$.each(e,function(){var e=JSON.parse($(this).attr("obj")),t=$(this).closest("tr").attr("pkey"),o=($("#execDbConnection_"+c+" [key="+t+"] [type=checkbox]:checked").attr("objecttype"),e.objectType),n=e.objectId,r=e.folderIds;a.push({objectType:o,objectId:n,folderIds:r})}),{configList:JSON.stringify(a)}},r.export=function(e){App.blockUI({boxed:!0,message:"Processing..."}),$.kingdom.doKoauthAdminAPI("bayconnect.superlop.export_sys_config","v4.0",e,function(e){"1"==e.bcjson.flag?($("#J_export_success_modal").modal("show"),$("#J_edit_fileName_modal").modal("hide")):toastr.error(e.bcjson.msg),App.unblockUI()})},r.import=function(e){App.blockUI({boxed:!0,message:"Processing..."}),$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_config_info_import_v2","v4.0",e,function(e){"1"==e.bcjson.flag?(toastr.success(e.bcjson.msg),$("#J_import_modal").modal("hide")):toastr.error(e.bcjson.msg),App.unblockUI()})},r.downloadFile=function(o){return new Promise(function(t,e){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.file_info","v4.0",o,function(e){"1"==e.bcjson.flag?t(e):(App.unblockUI(),toastr.error(e.bcjson.msg))})})},r.downloadFile2=function(e){var t="/retl/rest/admin/v4.0/bayconnect.superlop.file_download.json?p="+encodeURI(JSON.stringify(e));try{var o=document.createElement("a");o.href=t,o.download=t,o.click(),App.unblockUI()}catch(e){console.error(e)}},r.reExport=function(e){App.blockUI({boxed:!0,message:"Processing..."}),$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_re_download_sys_config","v4.0",e,function(e){"1"==e.bcjson.flag?(r.getExportList(),$("#J_export_success_modal").modal("show"),$("#J_edit_fileName_modal").modal("hide")):toastr.error(e.bcjson.msg),App.unblockUI()})},r.getImportList=function(){App.blockUI({boxed:!0,message:"Processing..."}),$.kingdom.uploadWithApi("J_import_form","get_sys_config_import_list",function(e){if(App.unblockUI(),"1"==e.bcjson.flag){toastr.success(e.bcjson.msg);var n=e.bcjson.items;$("#J_import_modal .nav-tabs").html(""),$("#J_import_modal .tab-content").html(""),r.deZipPaths=[],$.each(n,function(e,t){r.deZipPaths.push(t.deZipPath),$("#J_import_modal .nav-tabs").append(' <li>\n                    <a href="#tab_3_'+e+'" data-toggle="tab" aria-expanded="true">'+t.fileName+" </a>\n                </li>"),$("#J_import_modal .tab-content").append('\n                <div class="tab-pane" id="tab_3_'+e+'"> \n                <div class="row">\n                 <div class="form-group" >\n                    <div style="padding: 0 20px 0 80px;">\n                    <div class="col-md-11" style="max-height: 400px;overflow:auto;">\n                    <table id="execDbConnection_'+e+'"  class="table table-hover table-tree" style="max-height:800px;over-flow:auto">\n                    </table>\n                  </div>\n                 </div>\n                        </div>\n                </div> \n                </div>\n                ');var o=function(e){var t=[{id:"1",pId:"-1",columns:{Name:"资料管理",Type:"",Description:""},children:[]}];for(var o in e){var n={id:o,pId:"1",attr:{objectType:e[o][0].objectType},columns:{Name:e[o][0].objectTypeName,Type:e[o][0].objectClassTypeName,Description:e[o][0].objectDesc},children:[]};t[0].children.push(n)}for(var r=t[0].children,c=0,a=r.length;c<a;c++){var i=!0,s=!1,l=void 0;try{for(var d,p=e[r[c].id][Symbol.iterator]();!(i=(d=p.next()).done);i=!0){var u=d.value,m={id:u.objectId,pId:u.objectType,attr:{obj:JSON.stringify(u)},columns:{Name:u.objectName,Type:u.objectClassTypeName,Description:u.objectDesc},children:[]};r[c].children.push(m)}}catch(e){s=!0,l=e}finally{try{!i&&p.return&&p.return()}finally{if(s)throw l}}}return t}(n[e].configInfoList);$("#execDbConnection_"+e).TableTree1({checkbox:!0,data:o}).openNode("1"),$("#execDbConnection_"+e+" thead tr th:nth-child(2)").css("text-indent","100px")}),$("#J_import_modal .nav-tabs li").eq(0).addClass("active").css("margin-left","80px"),$("#J_import_modal .tab-content .tab-pane").eq(0).addClass("active")}else toastr.error(e.bcjson.msg)})},r.getDataSourceList=function(){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_source_config","v4.0",{},function(e){if("1"==e.bcjson.flag){var t=e.bcjson.items,o=[{id:"",text:""}];if(t&&0<t.length){var n=!0,r=!1,c=void 0;try{for(var a,i=t[Symbol.iterator]();!(n=(a=i.next()).done);n=!0){var s=a.value;o.push({id:s.connectionId,text:s.connectionName})}}catch(e){r=!0,c=e}finally{try{!n&&i.return&&i.return()}finally{if(r)throw c}}}$("[name=execDbConnectionId]").select2({data:o,placeholder:"- Please Select -"})}})},r.getExportList=function(e){var t={};t=_extends(t,e),$.kingdom.getList({apiName:"bayconnect.superlop.get_sys_config_import_log",apiVision:"v4.0",params:t,tableId:"J_export_list",pageId:"J_export_page",formName:"J_export_form",template:"database-import/template/export-list.handlebars",cb:r.getExportList})},r.del=function(e){App.blockUI({boxed:!0,message:"处理中..."}),$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_sys_config_data_log_del","v4.0",e,function(e){"1"==e.bcjson.flag?(toastr.success(e.bcjson.msg),r.getExportList()):toastr.error(e.bcjson.msg),App.unblockUI()})},r.downloadLog=function(e,t){var o=new Blob([t],{type:"txt"}),n=document.getElementById("downloadFtsetBtn");null==n&&((n=document.createElement("a")).id="downloadFtsetBtn",n.style.display="none",n.target="_blank",document.body.appendChild(n));try{var r=window.URL||window.webkitURL;n.href=r.createObjectURL(o),n.download=e,"function"==typeof navigator.msSaveBlob&&navigator.msSaveBlob(o,e),n.click()}catch(e){console.error(e)}},r.timestampToTime=function(){var e=new Date;return e.getFullYear()+(e.getMonth()+1<10?"0"+(e.getMonth()+1):e.getMonth()+1)+(e.getDate()<10?"0"+e.getDate():e.getDate())+(e.getHours()<10?"0"+e.getHours():e.getHours())+(e.getMinutes()<10?"0"+e.getMinutes():e.getMinutes())+(e.getSeconds()<10?"0"+e.getSeconds():e.getSeconds())},r.initForm=function(){$("#J_edit_fileName").validate({debug:!0,errorElement:"span",errorClass:"help-block",focusInvalid:!1,rules:{fileName:{required:!0,isEditFileName:!0}},invalidHandler:function(){},highlight:function(e){$(e).closest(".form-group").addClass("has-error")},success:function(e){e.closest(".form-group").removeClass("has-error"),e.remove()},errorPlacement:function(e,t){e.insertAfter(t)},submitHandler:function(){}}),$("#J_reExport_edit_fileName").validate({debug:!0,errorElement:"span",errorClass:"help-block",focusInvalid:!1,rules:{fileName:{required:!0,isEditFileName:!0}},invalidHandler:function(){},highlight:function(e){$(e).closest(".form-group").addClass("has-error")},success:function(e){e.closest(".form-group").removeClass("has-error"),e.remove()},errorPlacement:function(e,t){e.insertAfter(t)},submitHandler:function(){}}),$.validator.addMethod("isEditFileName",function(e,t){return!!/^[^\\\/:\*\?\"\<\>\|]{0,50}$/.test(e)},'名称不超过50个字符且不能包含以下字符：\\ / : * ? " <> | ')},module.exports=r});
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+/**
+ * @Author:      limin01
+ * @DateTime:    2018-12-12 11:28:50
+ * @Description: Description
+ * @Last Modified by: lanjianyan
+ * @Last Modified time: 2019-04-08 15:02:59
+ */
+define(function (require, exports, module) {
+    require("plugins/jstree/dist/jstree");
+    require("plugins/jstree/dist/themes/default/style.css");
+
+    require("plugins/select2/js/select2.js");
+    require("plugins/select2/css/select2.css");
+    require("plugins/select2/css/select2-compatible.css");
+    require("assets/js/global/tableTree");
+    require("assets/js/global/tableTree1");
+    var showContent = {};
+    showContent._load = function () {
+        showContent.getDataSourceList();
+        showContent.getList();
+        showContent.initForm();
+        App.handleDateTimePickers();
+    };
+    //禁止浏览器滑动
+    showContent.unScroll = function () {
+        var top = $(document).scrollTop();
+        $(document).on('scroll.unable', function (e) {
+            $(document).scrollTop(top);;
+        });
+    };
+    // 浏览器滑动
+    showContent.reScroll = function () {
+        $(document).off('scroll.unable');
+    };
+    // 如果需要分细类，请把注释放开
+    function gene(items) {
+        var data = [{
+            id: "1",
+            pId: "-1",
+            columns: {
+                "Name": "资料管理",
+                // "文件夹": "",
+                "Type": "",
+                "Description": "",
+                "Action": {
+                    formatter: function formatter() {
+                        return "<a name=\"export\" title=\"EXPORT\">EXPORT</a>";
+                    }
+                }
+            },
+            children: []
+        }];
+
+        for (var i in items) {
+            var obj = {
+                id: i,
+                pId: "1",
+                attr: {
+                    objectType: items[i][0].objectType
+                },
+                columns: {
+                    "Name": items[i][0].objectTypeName,
+                    // "文件夹": "",
+                    "Type": "",
+                    "Description": "",
+                    "Action": {
+                        formatter: function formatter() {
+                            return "<a name=\"export\" title=\"EXPORT\">EXPORT</a>";
+                        }
+                    }
+                },
+                children: []
+            };
+            data[0].children.push(obj);
+        };
+
+        var children = data[0].children;
+
+        var o = {}; // 储存第三级的children
+        for (var _i = 0, len = children.length; _i < len; _i++) {
+            // let arr = []; // 校验是否重复
+            var _obj = [];
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                var _loop = function _loop() {
+                    var item = _step.value;
+
+                    for (var x in item) {
+                        item[x] = item[x].replace(/\"/g, "&quot;"); // 双引号转义
+                        item[x] = item[x].replace(/\'/g, "&apos;"); // 单引号转义
+                    }
+                    console.log(item.objectName);
+                    if (item.folderName) {
+                        (function () {
+                            // 如果存在文件夹
+                            var folder = item.folderName.split("/");
+                            var folderId = item.folderIds.split(",");
+                            var cacheObj = []; //用于循环时保存children
+                            var pId = "";
+
+                            var _loop2 = function _loop2(j) {
+                                item.folderId = folderId[j] || "";
+                                item.folderName = folder[j] || "";
+                                item.parentFolderId = folderId[0];
+                                if (j === 0) {
+                                    //第一级文件夹
+                                    if (_obj.length > 0) {
+                                        //如果已有数据
+                                        if (_obj.map(function (e) {
+                                            //判断文件夹是否已经存在
+                                            if (e.id === item.folderId[j]) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }).includes(true)) {
+                                            cacheObj = _obj;
+                                            pId = folderId[j];
+                                        } else {
+                                            // 不存在则添加
+                                            _obj.push({
+                                                id: folderId[j],
+                                                pId: item.objectType,
+                                                attr: {
+                                                    obj: JSON.stringify(item)
+                                                },
+                                                columns: {
+                                                    "Name": folder[j],
+                                                    // "文件夹": "",
+                                                    "Type": "",
+                                                    "Description": "",
+                                                    "Action": {
+                                                        formatter: function formatter() {
+                                                            return "<a name=\"export\" title=\"EXPORT\">EXPORT</a>";
+                                                        }
+                                                    }
+                                                },
+                                                children: []
+                                            });
+                                            cacheObj = _obj;
+                                            pId = folderId[j];
+                                        }
+                                    } else {
+                                        // 如果没数据则直接添加
+                                        _obj.push({
+                                            id: folderId[j],
+                                            pId: item.objectType,
+                                            attr: {
+                                                obj: JSON.stringify(item)
+                                            },
+                                            columns: {
+                                                "Name": folder[j],
+                                                // "文件夹": "",
+                                                "Type": "",
+                                                "Description": "",
+                                                "Action": {
+                                                    formatter: function formatter() {
+                                                        return "<a name=\"export\" title=\"EXPORT\">EXPORT</a>";
+                                                    }
+                                                }
+                                            },
+                                            children: []
+                                        });
+                                        cacheObj = _obj;
+                                        pId = folderId[j];
+                                    }
+                                } else if (j < folder.length) {
+                                    // 第二。。级文件夹
+                                    var num = void 0,
+                                        child = void 0;
+                                    cacheObj.map(function (value, index) {
+                                        if (value.id === folderId[j - 1]) {
+                                            num = index;
+                                            return index;
+                                        }
+                                    }); //判断应该添加到第几个child里面
+                                    child = cacheObj[num].children;
+                                    // 1和第一层一样的Action
+                                    if (child.length > 0) {
+                                        var isnew = false;
+                                        child.map(function (e) {
+                                            if (e.id === folderId[j]) {
+                                                isnew = true;
+                                                return true;
+                                            }
+                                            return false;
+                                        });
+                                        if (isnew) {
+                                            cacheObj = child;
+                                            pId = folderId[j];
+                                        } else {
+                                            child.push({
+                                                id: folderId[j],
+                                                pId: pId,
+                                                attr: {
+                                                    obj: JSON.stringify(item)
+                                                },
+                                                columns: {
+                                                    "Name": folder[j],
+                                                    // "文件夹": "",
+                                                    "Type": "",
+                                                    "Description": "",
+                                                    "Action": {
+                                                        formatter: function formatter() {
+                                                            return "<a name=\"export\" title=\"EXPORT\">EXPORT</a>";
+                                                        }
+                                                    }
+                                                },
+                                                children: []
+                                            });
+                                            cacheObj = child;
+                                            pId = folderId[j];
+                                        }
+                                    } else {
+                                        child.push({
+                                            id: folderId[j],
+                                            pId: pId,
+                                            attr: {
+                                                obj: JSON.stringify(item)
+                                            },
+                                            columns: {
+                                                "Name": folder[j],
+                                                // "文件夹": "",
+                                                "Type": "",
+                                                "Description": "",
+                                                "Action": {
+                                                    formatter: function formatter() {
+                                                        return "<a name=\"export\" title=\"EXPORT\">EXPORT</a>";
+                                                    }
+                                                }
+                                            },
+                                            children: []
+                                        });
+                                        cacheObj = child;
+                                        pId = folderId[j];
+                                    }
+                                } else {
+                                    // 文件夹添加完毕  添加任务层
+                                    var _num = void 0,
+                                        _child = void 0;
+                                    cacheObj.map(function (value, index) {
+                                        if (value.id === folderId[j - 1]) {
+                                            _num = index;
+                                            return index;
+                                        }
+                                    });
+                                    _child = cacheObj[_num].children;
+                                    item.folderIds = "";
+                                    _child.push({
+                                        id: item.objectId,
+                                        pId: pId,
+                                        attr: {
+                                            obj: JSON.stringify(item)
+                                        },
+                                        columns: {
+                                            "Name": item.objectName,
+                                            // "文件夹": "",
+                                            "Type": item.objectClassTypeName,
+                                            "Description": item.objectDesc,
+                                            "Action": {
+                                                formatter: function formatter() {
+                                                    return "<a name=\"export\" title=\"EXPORT\">EXPORT</a>";
+                                                }
+                                            }
+                                        },
+                                        children: []
+                                    });
+                                }
+                            };
+
+                            for (var j = 0; j <= folder.length; j++) {
+                                _loop2(j);
+                            }
+                            children[_i].children = _obj;
+                        })();
+                    } else {
+                        //如果没有文件夹  直接添加任务层
+                        var _obj2 = {
+                            id: item.objectId,
+                            pId: item.objectType,
+                            attr: {
+                                obj: JSON.stringify(item)
+                            },
+                            columns: {
+                                "Name": item.objectName,
+                                // "文件夹": item.folderName,
+                                "Type": item.objectClassTypeName,
+                                "Description": item.objectDesc,
+                                "Action": {
+                                    formatter: function formatter() {
+                                        return "<a name=\"export\" title=\"EXPORT\">EXPORT</a>";
+                                    }
+                                }
+                            },
+                            children: []
+                        };
+                        children[_i].children.push(_obj2);
+                    }
+                };
+
+                for (var _iterator = items[children[_i].id][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    _loop();
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+        }
+        return data;
+    }
+    //导入弹框树处理数据函数
+    function gene1(items) {
+        var data = [{
+            id: "1",
+            pId: "-1",
+            columns: {
+                "Name": "资料管理",
+                "Type": "",
+                "Description": ""
+            },
+            children: []
+        }];
+
+        for (var i in items) {
+            var obj = {
+                id: i,
+                pId: "1",
+                attr: {
+                    objectType: items[i][0].objectType
+                },
+                columns: {
+                    "Name": items[i][0].objectTypeName,
+                    // "文件夹": item.folderName,
+                    "Type": items[i][0].objectClassTypeName,
+                    "Description": items[i][0].objectDesc
+                },
+                children: []
+            };
+            data[0].children.push(obj);
+        };
+
+        var children = data[0].children;
+
+        var o = {}; // 储存第三级的children
+        for (var _i2 = 0, len = children.length; _i2 < len; _i2++) {
+            // let arr = []; // 校验是否重复
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = items[children[_i2].id][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var _item = _step2.value;
+
+                    var _obj3 = {
+                        id: _item.objectId,
+                        pId: _item.objectType,
+                        attr: {
+                            obj: JSON.stringify(_item)
+                        },
+                        columns: {
+                            "Name": _item.objectName,
+                            // "文件夹": "",
+                            "Type": _item.objectClassTypeName,
+                            "Description": _item.objectDesc
+                        },
+                        children: []
+                    };
+                    // if (!arr.includes(obj.id)) {
+                    children[_i2].children.push(_obj3);
+                    //     arr.push(obj.id);
+                    // }
+                    // if (item.objectClassType) {
+                    //     if (o.hasOwnProperty(item.objectClassType)) {
+                    //         o[item.objectClassType].push({
+                    //             id: item.objectId,
+                    //             pId: item.objectClassType,
+                    //             columns: {
+                    //                 "Name": item.objectName,
+                    //                 "文件夹": item.folderName,
+                    //                 "Type": item.objectClassTypeName,
+                    //                 "Description": item.objectDesc,
+                    //                 "Action": format(),
+                    //             },
+                    //         });
+                    //     } else {
+                    //         o[item.objectClassType] = [{
+                    //             id: item.objectId,
+                    //             pId: item.objectClassType,
+                    //             columns: {
+                    //                 "Name": item.objectName,
+                    //                 "文件夹": item.folderName,
+                    //                 "Type": item.objectClassTypeName,
+                    //                 "Description": item.objectDesc,
+                    //                 "Action": format(),
+                    //             },
+                    //         }];
+                    //     }
+                    // }
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
+        }
+
+        // for (let i = 0, len = children.length; i < len; i++) {
+        //     for (let item of children[i].children) {
+        //         if (o.hasOwnProperty(item.id)) {
+        //             item.children = o[item.id];
+        //         }
+        //     }
+        // }
+
+        return data;
+    }
+
+    showContent.getList = function () {
+        var params = App.getFormParams("J_export_list_form");
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_config_export_list", "v4.0", params, function (data) {
+            if (data.bcjson.flag == "1") {
+                var items = data.bcjson.items;
+                if (items.length === 0) {
+                    $("#J_source_tree").html("<div class=\"no-data\">No Data</div>");
+                    return;
+                } else {
+                    var data_ = gene(items[0]);
+                    $("#J_table_tree").tableTree({
+                        checkbox: true,
+                        data: data_
+                    }).openNode("1"); // 默认展开一级
+                    $("#J_table_tree thead tr th:first-child").css("width", "50px");
+                    $("#J_table_tree thead tr th:nth-child(2)").css("text-indent", "100px");
+                }
+            }
+        });
+    };
+    // 过滤传参 规则： 如果第二级全选，则只传父级 objectType ，不全选，传子类 objectList ，逗号隔开
+    showContent.filterCondition = function () {
+        // let checkedLevel3 = $("#J_table_tree [level=3] [type=checkbox]:checked"), // 选中的level3
+        checkedLevel2 = $("#J_table_tree [level=2] [type=checkbox]:checked"), // 选中的level2
+        checkedLevel1 = $("#J_table_tree [level=1] [type=checkbox]:checked"), // 选中的level1
+        level2 = $("#J_table_tree [level=2] [type=checkbox]"), // 所有的level2
+        checkedAll = $("#J_table_tree [type=checkbox]:checked"), // 所有被选中的checkBoxed
+        arr3 = [], // 单个的数据集 array 
+        arr2 = [];
+        if (checkedLevel2) {
+            $.each(checkedLevel2, function () {
+                arr2.push($(this).closest('tr').attr("key"));
+            });
+        }
+
+        checkedAll.length && $.each(checkedAll, function () {
+            var obj = "",
+                tr = $(this).closest('tr');
+            if ($(this).attr("obj")) {
+                obj = JSON.parse($(this).attr("obj"));
+            }
+            if (obj) {
+                if (!obj.folderName) {
+                    var pkey = void 0,
+                        ot = void 0;
+                    if (obj.parentFolderId) {
+                        pkey = $("#J_table_tree [key=" + obj.parentFolderId + "] [type=checkbox]").closest('tr').attr("pkey"), ot = $("#J_table_tree [key=" + pkey + "] [type=checkbox]:checked").attr("objecttype"); // 如果父级勾选 传父级的objecttype
+                    } else {
+                        pkey = tr.attr("pkey");
+                        ot = $("#J_table_tree [key=" + pkey + "] [type=checkbox]:checked").attr("objecttype"); // 如果父级勾选 传父级的objecttype
+                    }
+
+                    if (!arr2.includes(ot)) {
+                        var _obj4 = obj,
+                            _objectType = _obj4.objectType,
+                            objectClassTypeName = _obj4.objectClassTypeName,
+                            objectId = _obj4.objectId,
+                            objectTypeName = _obj4.objectTypeName,
+                            objectName = _obj4.objectName,
+                            tableName = _obj4.tableName,
+                            columnsId = _obj4.columnsId,
+                            objectClassType = _obj4.objectClassType,
+                            folderId = _obj4.folderId,
+                            folderIds = _obj4.folderIds;
+
+                        arr3.push({
+                            objectType: _objectType,
+                            objectId: objectId,
+                            objectName: objectName,
+                            tableName: tableName,
+                            columnsId: columnsId,
+                            objectClassType: objectClassType,
+                            folderId: folderId,
+                            objectTypeName: objectTypeName,
+                            objectClassTypeName: objectClassTypeName,
+                            folderIds: folderIds
+                        });
+                    }
+                }
+            }
+        });
+        // checkedLevel3.length && 
+        //     $.each(checkedLevel3, function() {
+        //         let obj = JSON.parse($(this).attr("obj")),
+        //             tr = $(this).closest('tr'),
+        //             pkey = tr.attr("pkey"),
+        //             ot = $(`#J_table_tree [key=${pkey}] [type=checkbox]:checked`).attr("objecttype"); // 如果父级勾选 传父级的objecttype
+        //         // 全选
+        //             if (!arr2.includes(ot)) {
+        //                 if(!obj.folderName){
+        //                     let { objectType,objectClassTypeName, objectId,objectTypeName, objectName, tableName, columnsId, objectClassType, folderId,folderIds} = obj;
+        //                     arr3.push({
+        //                         objectType,
+        //                         objectId,
+        //                         objectName,
+        //                         tableName,
+        //                         columnsId,
+        //                         objectClassType,
+        //                         folderId,
+        //                         objectTypeName,
+        //                         objectClassTypeName,
+        //                         folderIds
+        //                     });
+        //                 }
+        //             }       
+        //     });
+
+
+        checkedLevel2.length && $.each(checkedLevel2, function () {
+            var ot = $(this).attr("objecttype");
+            if (!arr2.includes(ot)) {
+                arr2.push(ot);
+            }
+        });
+
+        if (checkedLevel1.length > 0) {
+            level2.length && $.each(level2, function () {
+                var ot = $(this).attr("objecttype");
+                if (!arr2.includes(ot)) {
+                    arr2.push(ot);
+                }
+            });
+        }
+
+        objectType = arr2.join(",");
+        return {
+            objectType: objectType,
+            objectList: JSON.stringify(arr3)
+        };
+    };
+    // 过滤传参 规则： 如果第二级全选，则只传父级 objectType ，不全选，传子类 objectList ，逗号隔开
+    showContent.filterConditionImport = function (i) {
+        var checkedLevel3 = $("#execDbConnection_" + i + " [level=3] [type=checkbox]:checked"),
+            // 选中的level3
+        checkedLevel2 = $("#execDbConnection_" + i + " [level=2] [type=checkbox]:checked"),
+            // 选中的level2
+        checkedLevel1 = $("#execDbConnection_" + i + " [level=1] [type=checkbox]:checked"),
+            // 选中的level1
+        level2 = $("#execDbConnection_" + i + " [level=2] [type=checkbox]"),
+            // 所有的level2
+        arr3 = [],
+            // 单个的数据集 array 
+        arr2 = [];
+        // if (checkedLevel2) {
+        //     $.each(checkedLevel2, function() {
+        //         arr2.push($(this).closest('tr').attr("key"));
+        //     })
+        // }
+        checkedLevel3.length && $.each(checkedLevel3, function () {
+            var obj = JSON.parse($(this).attr("obj")),
+                tr = $(this).closest('tr'),
+                pkey = tr.attr("pkey"),
+                ot = $("#execDbConnection_" + i + " [key=" + pkey + "] [type=checkbox]:checked").attr("objecttype"); // 如果父级勾选 传父级的objecttype
+            // 全选
+            // if (!arr2.includes(ot)) {
+            var objectType = obj.objectType,
+                objectId = obj.objectId,
+                folderIds = obj.folderIds;
+
+            arr3.push({
+                objectType: objectType,
+                objectId: objectId,
+                folderIds: folderIds
+            });
+            // }
+        });
+
+        // checkedLevel2.length &&
+        //     $.each(checkedLevel2, function() {
+        //         let ot = $(this).attr("objecttype");
+        //         if (!arr2.includes(ot)) {
+        //             arr2.push(ot);
+        //         }
+        //     })
+
+        // if (checkedLevel1.length > 0) {
+        //     level2.length &&
+        //         $.each(level2, function() {
+        //             let ot = $(this).attr("objecttype");
+        //             if (!arr2.includes(ot)) {
+        //                 arr2.push(ot);
+        //             }
+        //         })
+        // }
+
+        // objectType = arr2.join(",");
+        return {
+            configList: JSON.stringify(arr3)
+        };
+    };
+    // EXPORT
+    showContent.export = function (params) {
+        App.blockUI({
+            boxed: true,
+            message: "Processing..."
+        });
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.export_sys_config", "v4.0", params, function (data) {
+            if (data.bcjson.flag == "1") {
+                $("#J_export_success_modal").modal('show');
+                $("#J_edit_fileName_modal").modal("hide");
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+            App.unblockUI();
+        });
+    };
+    // 导入
+    showContent.import = function (params) {
+        App.blockUI({
+            boxed: true,
+            message: "Processing..."
+        });
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_config_info_import_v2", "v4.0", params, function (data) {
+            if (data.bcjson.flag == "1") {
+                toastr.success(data.bcjson.msg);
+                $("#J_import_modal").modal("hide");
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+            App.unblockUI();
+        });
+    };
+
+    // 校验文件并获取
+    showContent.downloadFile = function (params) {
+        return new Promise(function (resolve, reject) {
+            $.kingdom.doKoauthAdminAPI("bayconnect.superlop.file_info", "v4.0", params, function (data) {
+                if (data.bcjson.flag == "1") {
+                    resolve(data);
+                } else {
+                    App.unblockUI();
+                    toastr.error(data.bcjson.msg);
+                }
+            });
+        });
+    };
+
+    // 下载文件
+    showContent.downloadFile2 = function (params) {
+        var url = "/retl/rest/admin/v4.0/bayconnect.superlop.file_download.json?p=" + encodeURI(JSON.stringify(params));
+        try {
+            var a = document.createElement("a");
+            a.href = url, a.download = url, a.click();
+            App.unblockUI();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+    // 重新EXPORT文件
+    showContent.reExport = function (params) {
+        App.blockUI({
+            boxed: true,
+            message: "Processing..."
+        });
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_re_download_sys_config", "v4.0", params, function (data) {
+            if (data.bcjson.flag == "1") {
+                showContent.getExportList();
+                $("#J_export_success_modal").modal('show');
+                $("#J_edit_fileName_modal").modal("hide");
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+            App.unblockUI();
+        });
+    };
+    // 导入列表获取
+    showContent.getImportList = function () {
+        App.blockUI({
+            boxed: true,
+            message: "Processing..."
+        });
+        $.kingdom.uploadWithApi("J_import_form", "get_sys_config_import_list", function (data) {
+            App.unblockUI();
+            if (data.bcjson.flag == "1") {
+                toastr.success(data.bcjson.msg);
+                var items = data.bcjson.items;
+                $("#J_import_modal .nav-tabs").html("");
+                $("#J_import_modal .tab-content").html("");
+                showContent.deZipPaths = [];
+                $.each(items, function (i, item) {
+                    showContent.deZipPaths.push(item.deZipPath);
+                    $("#J_import_modal .nav-tabs").append(" <li>\n                    <a href=\"#tab_3_" + i + "\" data-toggle=\"tab\" aria-expanded=\"true\">" + item.fileName + " </a>\n                </li>");
+                    $("#J_import_modal .tab-content").append("\n                <div class=\"tab-pane\" id=\"tab_3_" + i + "\"> \n                <div class=\"row\">\n                 <div class=\"form-group\" >\n                    <div style=\"padding: 0 20px 0 80px;\">\n                    <div class=\"col-md-11\" style=\"max-height: 400px;overflow:auto;\">\n                    <table id=\"execDbConnection_" + i + "\"  class=\"table table-hover table-tree\" style=\"max-height:800px;over-flow:auto\">\n                    </table>\n                  </div>\n                 </div>\n                        </div>\n                </div> \n                </div>\n                ");
+                    var data_ = gene1(items[i].configInfoList);
+                    $("#execDbConnection_" + i).TableTree1({
+                        checkbox: true,
+                        data: data_
+                    }).openNode("1"); // 默认展开一级
+                    $("#execDbConnection_" + i + " thead tr th:nth-child(2)").css("text-indent", "100px");
+                });
+                $("#J_import_modal .nav-tabs li").eq(0).addClass("active").css("margin-left", "80px");
+                $("#J_import_modal .tab-content .tab-pane").eq(0).addClass("active");
+                // showContent.deZipPath = data.bcjson.items[0].deZipPath;
+                // let data_ = gene1(data.bcjson.items[0].configInfoList);
+                // $("#execDbConnection").TableTree1({
+                //     checkbox: true,
+                //     data: data_,
+                // }).openNode("1"); // 默认展开一级
+                // $("#execDbConnection thead tr th:nth-child(2)").css("text-indent", "100px");
+                // $("#J_import_modal").modal('hide');
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+        });
+    };
+
+    // 查询数据连接 
+    showContent.getDataSourceList = function () {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_source_config", "v4.0", {}, function (data) {
+            if (data.bcjson.flag == "1") {
+                var items = data.bcjson.items;
+                var arr = [{
+                    id: "",
+                    text: ""
+                }];
+                if (items && items.length > 0) {
+                    var _iteratorNormalCompletion3 = true;
+                    var _didIteratorError3 = false;
+                    var _iteratorError3 = undefined;
+
+                    try {
+                        for (var _iterator3 = items[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                            var _item2 = _step3.value;
+
+                            arr.push({
+                                id: _item2.connectionId,
+                                text: _item2.connectionName
+                            });
+                        }
+                    } catch (err) {
+                        _didIteratorError3 = true;
+                        _iteratorError3 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                                _iterator3.return();
+                            }
+                        } finally {
+                            if (_didIteratorError3) {
+                                throw _iteratorError3;
+                            }
+                        }
+                    }
+                }
+                // 数据连接
+                $("[name=execDbConnectionId]").select2({
+                    data: arr,
+                    placeholder: '- Please Select -'
+                });
+            }
+        });
+    };
+
+    showContent.getExportList = function (params) {
+        var _params = {}; // 这里用来传特殊参数
+        _params = _extends(_params, params);
+        $.kingdom.getList({
+            apiName: "bayconnect.superlop.get_sys_config_import_log",
+            apiVision: "v4.0",
+            params: _params,
+            tableId: "J_export_list",
+            pageId: "J_export_page",
+            formName: "J_export_form",
+            template: "database-import/template/export-list.handlebars",
+            cb: showContent.getExportList
+        });
+    };
+
+    // 保存
+    showContent.del = function (params) {
+        App.blockUI({
+            boxed: true,
+            message: "处理中..."
+        });
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_sys_config_data_log_del", "v4.0", params, function (data) {
+            if (data.bcjson.flag == "1") {
+                toastr.success(data.bcjson.msg);
+                showContent.getExportList();
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+            App.unblockUI();
+        });
+    };
+
+    //下载错误日志
+    showContent.downloadLog = function (filename, content) {
+        var blob = new Blob([content], { type: 'txt' });
+        var a = document.getElementById('downloadFtsetBtn');
+        if (a == undefined) {
+            a = document.createElement('a');
+            a.id = 'downloadFtsetBtn';
+            a.style.display = 'none';
+            a.target = '_blank';
+            document.body.appendChild(a);
+        }
+        try {
+            var URL = window.URL || window.webkitURL;
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
+            if (typeof navigator.msSaveBlob == "function") {
+                //IE
+                navigator.msSaveBlob(blob, filename);
+            }
+            a.click();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+    /**
+     * @description: 获取当前时间戳
+     * @param {type} 
+     * @return: 
+     * @Author: xiaojun
+     * @Date: 2019-07-02 13:26:28
+     */
+    showContent.timestampToTime = function () {
+        var date = new Date();
+        var Y = date.getFullYear();
+        var M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+        var D = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+        var h = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        var m = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        var s = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        return Y + M + D + h + m + s;
+    };
+    // 所有表单校验配置
+    showContent.initForm = function () {
+        // 
+        $('#J_edit_fileName').validate({
+            debug: true,
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                fileName: {
+                    required: true,
+                    isEditFileName: true
+                }
+            },
+            invalidHandler: function invalidHandler(event, validator) {//display error alert on form submit
+                // $('.alert-danger', $('.login-form')).show();
+            },
+            highlight: function highlight(element) {
+                // hightlight error inputs
+                $(element).closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            success: function success(label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function errorPlacement(error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function submitHandler(form) {}
+        });
+        $('#J_reExport_edit_fileName').validate({
+            debug: true,
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                fileName: {
+                    required: true,
+                    isEditFileName: true
+                }
+            },
+            invalidHandler: function invalidHandler(event, validator) {//display error alert on form submit
+                // $('.alert-danger', $('.login-form')).show();
+            },
+            highlight: function highlight(element) {
+                // hightlight error inputs
+                $(element).closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            success: function success(label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function errorPlacement(error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function submitHandler(form) {}
+        });
+        $.validator.addMethod("isEditFileName", function (value, element) {
+            var res = /^[^\\\/:\*\?\"\<\>\|]{0,50}$/;
+            if (res.test(value)) {
+                return true;
+            } else {
+                return false;
+            }
+        }, "\u540D\u79F0\u4E0D\u8D85\u8FC750\u4E2A\u5B57\u7B26\u4E14\u4E0D\u80FD\u5305\u542B\u4EE5\u4E0B\u5B57\u7B26\uFF1A\\ / : * ? \" <> | ");
+    };
+    module.exports = showContent;
+});

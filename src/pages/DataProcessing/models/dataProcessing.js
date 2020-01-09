@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-07 10:56:32
+ * @LastEditTime : 2020-01-08 20:19:33
  */
 import Service from '@/utils/Service';
 
@@ -32,7 +32,7 @@ const codeMaintenance = {
         throw new Error(response.bcjson.msg);
       }
     },
-    *getDataProcessingItem({ payload }, { call, put }) {
+    *getDataProcessingItem({ payload, callback }, { call, put }) {
       const response = yield call(getDataProcessing, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -40,6 +40,7 @@ const codeMaintenance = {
             type: 'getItemDatas',
             payload: response.bcjson,
           });
+          callback();
         }
       } else {
         throw new Error(response.bcjson.msg);

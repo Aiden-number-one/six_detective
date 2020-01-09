@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-07 11:00:11
+ * @LastEditTime : 2020-01-07 22:12:11
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -14,6 +14,7 @@ import {
   getTemplateAreaCellPartXml,
   getColColumnXml,
   getDataSetXml,
+  getCustomSearchDataXml,
 } from '../utils';
 
 const { getDataSet, getReportTemplateContent, setReportTemplateContent } = Service;
@@ -30,6 +31,7 @@ export default {
     dataSetPrivateList: [], // 私有数据集
     spreadsheetOtherProps: [], // spreadSheet的其他属性
     cellPosition: 'A1', // 当前的单元格
+    showFmlModal: false, // 是否显示处理公式的模态框
   },
   reducers: {
     // 删除私有数据集相关
@@ -149,6 +151,15 @@ export default {
         cellPosition,
       };
     },
+
+    // 显示或隐藏处理公式的模态框
+    triggerFmlModal(state, action) {
+      const { showModalBool } = action.payload;
+      return {
+        ...state,
+        showFmlModal: showModalBool,
+      };
+    },
   },
   effects: {
     // 组装reportTemplateContent
@@ -161,13 +172,15 @@ export default {
         teamplateAreaObj,
         originTemplateAreaObj,
         spreadsheetOtherProps,
-      ] = yield select(({ reportDesigner }) => [
+        customSearchData,
+      ] = yield select(({ reportDesigner, formArea }) => [
         reportDesigner.reportId, // 报表模板id
         reportDesigner.reportName, // 报表模板name
         reportDesigner.dataSetPrivateList, // 私有数据集
         reportDesigner.teamplateAreaObj, // 报表模板区域数据
         reportDesigner.originTemplateAreaObj, // 报表模板区域原始数据
         reportDesigner.spreadsheetOtherProps, // 单元格otherProps
+        formArea.customSearchData, // 查询条件区域
       ]);
       // 得到单元格的相关xml
       const templateAreaXml = getTemplateAreaCellPartXml(teamplateAreaObj, spreadsheetOtherProps);
@@ -175,6 +188,7 @@ export default {
       const colsColumnsXml = getColColumnXml(teamplateAreaObj);
       // 得到数据集相关的xml
       const datasetXml = getDataSetXml(dataSetPrivateList);
+      // 得到查询条件相关
       const reportTemplateContentObj = {
         report_id: reportId, // 新建为空
         report_name: reportName,
@@ -187,7 +201,8 @@ export default {
           width="595" height="842" orientation="portrait" html-report-align="left" bg-image=""
           html-interval-refresh-value="0" column-enabled="false"></paper></ureport>`,
           originTemplateAreaObj,
-          spreadsheetOtherProps,
+          spreadsheetOtherProps, // 单元格的一些问题相关 例如：数据集相关、公式相关
+          customSearchData,
         },
       };
       const response = yield call(setReportTemplateContent, {
@@ -238,6 +253,11 @@ export default {
           yield put({
             type: 'setSpreadsheetOtherProps',
             payload: reportTemplateContent.templateArea.spreadsheetOtherProps || [],
+          });
+          // 处理查询区域部分
+          yield put({
+            type: 'formArea/setCustomSearchData',
+            payload: reportTemplateContent.templateArea.customSearchData || [],
           });
           // 处理私有数据集
           yield put({

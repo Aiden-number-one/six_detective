@@ -1,1 +1,335 @@
-var _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},_extends=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var i in n)Object.prototype.hasOwnProperty.call(n,i)&&(t[i]=n[i])}return t};function TableTree(t){var e=1<arguments.length&&void 0!==arguments[1]?arguments[1]:{};this.element=t,this.menus="",this.ths=e.checkbox?["<th>全选</th>"]:[],this.trs=[],this.isTheadRendered=!1,this.index=0;this.options=_extends({indentSize:20,openAll:!1,checkbox:!1,widthScale:1},e);var n=this.element.width();this.widthPercentage=(n-40)*this.options.widthScale/Object.keys(this.options.data[0].columns).length+"px",this.init(),this.bindEvent()}TableTree.prototype.init=function(){var t=this.generateTableTree("id","pId",this.options.data);this.element.html(t),App.initUniform()},TableTree.prototype.format=function(t){return"object"===(void 0===t?"undefined":_typeof(t))&&t?t.formatter():t},TableTree.prototype.formatTitle=function(t){return"object"===(void 0===t?"undefined":_typeof(t))?"":t},TableTree.prototype.renderTd=function(t,e,n){return this.isFirstTd?(this.isFirstTd=!1,'<td style="max-width: '+this.widthPercentage+'" class="ellipsis" title=\''+this.formatTitle(e[t])+'\'> \n\t                <span class="table-row-indent indent-level-0" style="padding-left: '+this.index*this.options.indentSize+'px;"></span>\n\t                <span class="table-row-expand-icon '+(n?"table-row-collapsed":"table-row-spaced")+'"></span>\n\t                '+this.format(e[t])+" \n\t            </td>"):'<td style="max-width: '+this.widthPercentage+'" class="ellipsis" title=\''+this.formatTitle(e[t])+"'> "+this.format(e[t])+" </td>"},TableTree.prototype.renderTdCheckbox=function(t){return this.options.checkbox?'<td class="width40">\n                        <input type="checkbox" '+t+" />\n                    </td>":""},TableTree.prototype.generateTableTree=function(t,e,n){var i=!0,o=!1,r=void 0;try{for(var s,a=n[Symbol.iterator]();!(i=(s=a.next()).done);i=!0){var d=s.value;this.index++;var l="",h=d.hasOwnProperty("children")&&0<d.children.length;this.isFirstTd=!0;var c="";if(d.hasOwnProperty("attr")){var p=d.attr;for(var y in p)c+=y+"='"+p[y]+"' "}for(var f in d.columns)this.isTheadRendered||this.ths.push('<th class="t-l"> '+f+" </th>"),l+=this.renderTd(f,d.columns,h);this.isTheadRendered=!0,this.trs.push('<tr key="'+d[t].replace(/ /g,"")+'" pKey="'+d[e].replace(/ /g,"")+'" level="'+this.index+'" style="display: '+(1===this.index?"table-row":"none")+'">\n\t\t\t\t\t\t'+this.renderTdCheckbox(c)+"\n\t\t\t\t\t\t"+l+"\n\t\t\t\t\t</tr>"),h&&this.generateTableTree(t,e,d.children),this.index--}}catch(t){o=!0,r=t}finally{try{!i&&a.return&&a.return()}finally{if(o)throw r}}return"<thead>\n                <tr>\n                    "+this.ths.join(",")+"\n                </tr>\n            </thead>\n            <tbody>\n            \t"+this.trs.join(",")+"\n           \t<tbody>"},TableTree.prototype.openNode=function(t){var e=!(1<arguments.length&&void 0!==arguments[1])||arguments[1],n=$('[key="'+t+'"]'),i=$('[pkey="'+t+'"]'),o=this;i.show(),e&&n.find(".table-row-expand-icon").removeClass("table-row-collapsed").addClass("table-row-expanded"),$.each(i,function(){var t=0<$(this).find(".table-row-expanded").length,e=$(this).attr("key");t&&o.openNode(e,!1)})},TableTree.prototype.closeNode=function(t){var e=!(1<arguments.length&&void 0!==arguments[1])||arguments[1],n=$('[key="'+t+'"]'),i=$('[pkey="'+t+'"]'),o=this;i.hide(),e&&n.find(".table-row-expand-icon").removeClass("table-row-expanded").addClass("table-row-collapsed"),$.each(i,function(){var t=0<$(this).find(".table-row-expanded").length,e=$(this).attr("key");t&&o.closeNode(e,!1)})},TableTree.prototype.bindEvent=function(){var r=this;this.element.find(".table-row-expand-icon").click(function(){var t=$(this).hasClass("table-row-collapsed"),e=$(this).closest("tr").attr("key");t?r.openNode(e):r.closeNode(e)}),this.element.find("tbody tr input[type=checkbox]:not(.make-switch)").change(function(){var t=$(this).is(":checked"),e=$(this).closest("tr").attr("key"),n=$(this).closest("tr").attr("pkey");!function e(n,t){r.element.find("tbody tr[pkey='"+t+"']").each(function(){$(this).find("input[type=checkbox]:not(.make-switch)").prop("checked",n);var t=$(this).attr("key");e(n,t),n?$(this).addClass("active"):$(this).removeClass("active")})}(t,e),function t(e,n){if("-1"!==n){var i=e;e&&r.element.find("tbody tr[pkey='"+n+"']").each(function(){$(this).find("input[type=checkbox]:not(.make-switch)").prop("checked")||(i=!1)}),i?r.element.find("tbody tr[key='"+n+"']").addClass("active"):r.element.find("tbody tr[key='"+n+"']").removeClass("active"),r.element.find("tbody tr[key='"+n+"'] input[type=checkbox]:not(.make-switch)").prop("checked",i);var o=r.element.find("tbody tr[key='"+n+"']").attr("pkey");t(i,o)}}(t,n),t?$(this).closest("tr").addClass("active"):$(this).closest("tr").removeClass("active"),jQuery.uniform.update()})},$.fn.tableTree=function(t){return new TableTree(this,t)};
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+/**
+ * @Author:      limin01
+ * @DateTime:    2018-12-11 15:05:20
+ * @Description: 表格树形
+ * @Last Modified by:   lanjianyan 
+ * @Last Modified time: 2019-04-08 10:57:05 
+ */
+function TableTree(element) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    this.element = element;
+    this.menus = "";
+    this.ths = options.checkbox ? ['<th>全选</th>'] : []; // 表头
+    this.trs = []; // 行
+    this.isTheadRendered = false; // 表头是否渲染过
+    this.index = 0; // 当前li的层级
+    var defaultOptions = {
+        indentSize: 20, // 缩进
+        openAll: false, // 全选
+        checkbox: false, // 勾选框
+        widthScale: 1 // 宽度的增大缩小比例 number类型（如果宽度不够宽，可设置为1.5）
+    };
+    this.options = _extends(defaultOptions, options);
+    var elementWidth = this.element.width();
+    this.widthPercentage = (elementWidth - 40) * this.options.widthScale / Object.keys(this.options.data[0].columns).length + 'px';
+    this.init();
+    this.bindEvent();
+}
+
+TableTree.prototype.init = function () {
+    var html = this.generateTableTree("id", "pId", this.options.data);
+    this.element.html(html);
+    App.initUniform();
+};
+
+// format
+TableTree.prototype.format = function (argument) {
+    if ((typeof argument === 'undefined' ? 'undefined' : _typeof(argument)) === "object" && argument) {
+        return argument.formatter();
+    } else {
+        return argument;
+    }
+};
+
+TableTree.prototype.formatTitle = function (argument) {
+    if ((typeof argument === 'undefined' ? 'undefined' : _typeof(argument)) === "object") {
+        return "";
+    } else {
+        return argument;
+    }
+};
+
+// 渲染td 默认展开全部; 后续可添加配置
+TableTree.prototype.renderTd = function (i, columns, hasChildren) {
+    if (this.isFirstTd) {
+        this.isFirstTd = false;
+        return '<td style="max-width: ' + this.widthPercentage + '" class="ellipsis" title=\'' + this.formatTitle(columns[i]) + '\'> \n\t                <span class="table-row-indent indent-level-0" style="padding-left: ' + this.index * this.options.indentSize + 'px;"></span>\n\t                <span class="table-row-expand-icon ' + (hasChildren ? "table-row-collapsed" : "table-row-spaced") + '"></span>\n\t                ' + this.format(columns[i]) + ' \n\t            </td>';
+    } else {
+        return '<td style="max-width: ' + this.widthPercentage + '" class="ellipsis" title=\'' + this.formatTitle(columns[i]) + '\'> ' + this.format(columns[i]) + ' </td>';
+    }
+};
+
+TableTree.prototype.renderTdCheckbox = function (attrs) {
+    if (this.options.checkbox) {
+        return '<td class="width40">\n                        <input type="checkbox" ' + attrs + ' />\n                    </td>';
+    } else {
+        return "";
+    }
+};
+
+// TableTree.prototype.renderThCheckbox = function() {
+//     if (this.options.checkbox) {
+//         return `<th class="width40">
+//                     <input type="checkbox" class="group-checkable" />
+//                 </th>`
+//     } else {
+//         return "";
+//     }
+// }
+
+/*
+ 	function: 生成html
+ 	@id: 当前id
+ 	@pId: 父级Id
+ 	@data: 数据
+*/
+/**/
+TableTree.prototype.generateTableTree = function (id, pId, data) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var item = _step.value;
+
+            this.index++;
+            // 循环列，解析表头和表格
+            var tds = ""; // 表格单元格
+            var hasChildren = item.hasOwnProperty("children") && item.children.length > 0;
+            this.isFirstTd = true;
+            var attrs = ""; // 自定义属性
+            if (item.hasOwnProperty('attr')) {
+                var attr = item.attr;
+                for (var i in attr) {
+                    attrs += i + '=\'' + attr[i] + '\' ';
+                }
+            }
+            for (var _i in item.columns) {
+                if (!this.isTheadRendered) {
+                    this.ths.push('<th class="t-l"> ' + _i + ' </th>');
+                }
+                tds += this.renderTd(_i, item.columns, hasChildren);
+            }
+            this.isTheadRendered = true;
+            this.trs.push('<tr key="' + item[id].replace(/ /g, "") + '" pKey="' + item[pId].replace(/ /g, "") + '" level="' + this.index + '" style="display: ' + (this.index === 1 ? "table-row" : "none") + '">\n\t\t\t\t\t\t' + this.renderTdCheckbox(attrs) + '\n\t\t\t\t\t\t' + tds + '\n\t\t\t\t\t</tr>');
+            if (hasChildren) {
+                this.generateTableTree(id, pId, item.children);
+            }
+            this.index--;
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    return '<thead>\n                <tr>\n                    ' + this.ths.join(',') + '\n                </tr>\n            </thead>\n            <tbody>\n            \t' + this.trs.join(',') + '\n           \t<tbody>';
+};
+
+// 打开节点 key: 节点的key； isChangeIcon: 是否改变图标
+TableTree.prototype.openNode = function (key) {
+    var isChangeIcon = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+    var node = $('[key="' + key + '"]'); // tr
+    var childNode = $('[pkey="' + key + '"]'); // 子集tr
+    var _this = this;
+    childNode.show();
+    isChangeIcon && node.find(".table-row-expand-icon").removeClass("table-row-collapsed").addClass("table-row-expanded");
+    $.each(childNode, function () {
+        var isExpanded = $(this).find(".table-row-expanded").length > 0 ? true : false; // 状态是否为展开（-号）
+        var key = $(this).attr("key");
+        if (isExpanded) {
+            _this.openNode(key, false);
+        }
+    });
+};
+
+// 关闭节点 key: 节点的key； isChangeIcon: 是否改变图标
+TableTree.prototype.closeNode = function (key) {
+    var isChangeIcon = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+    var node = $('[key="' + key + '"]'); // tr
+    var childNode = $('[pkey="' + key + '"]'); // 子集tr
+    var _this = this;
+    childNode.hide();
+    isChangeIcon && node.find(".table-row-expand-icon").removeClass("table-row-expanded").addClass("table-row-collapsed");
+    $.each(childNode, function () {
+        var isExpanded = $(this).find(".table-row-expanded").length > 0 ? true : false; // 状态是否为展开（-号）
+        var key = $(this).attr("key");
+        if (isExpanded) {
+            _this.closeNode(key, false);
+        }
+    });
+};
+
+TableTree.prototype.bindEvent = function () {
+    var _this = this;
+    this.element.find(".table-row-expand-icon").click(function () {
+        var isCollapsed = $(this).hasClass("table-row-collapsed"); // 状态是否为关闭（+号）
+        var key = $(this).closest("tr").attr("key"); // 当前tr
+        if (isCollapsed) {
+            _this.openNode(key);
+        } else {
+            _this.closeNode(key);
+        }
+    });
+
+    // 改变下级选中状态
+    function changeChildrenCheckedStatus(checked, key) {
+        _this.element.find('tbody tr[pkey=\'' + key + '\']').each(function () {
+            $(this).find("input[type=checkbox]:not(.make-switch)").prop("checked", checked);
+            var newKey = $(this).attr('key');
+            changeChildrenCheckedStatus(checked, newKey);
+            // 添加active样式
+            if (checked) {
+                $(this).addClass("active");
+            } else {
+                $(this).removeClass("active");
+            }
+        });
+    }
+
+    // 改变上级选中状态
+    function changeParentsCheckedStatus(checked, pkey) {
+        if (pkey === "-1") {
+            return;
+        }
+        var isAllChecked = checked; // 同类是否全选
+        // 如果是选中了 则判断同类是否都选中 
+        if (checked) {
+            _this.element.find('tbody tr[pkey=\'' + pkey + '\']').each(function () {
+                if (!$(this).find("input[type=checkbox]:not(.make-switch)").prop("checked")) {
+                    isAllChecked = false;
+                    return;
+                }
+            });
+        }
+        // 添加active样式
+        if (isAllChecked) {
+            _this.element.find('tbody tr[key=\'' + pkey + '\']').addClass("active");
+        } else {
+            _this.element.find('tbody tr[key=\'' + pkey + '\']').removeClass("active");
+        }
+        _this.element.find('tbody tr[key=\'' + pkey + '\'] input[type=checkbox]:not(.make-switch)').prop("checked", isAllChecked);
+        var newPkey = _this.element.find('tbody tr[key=\'' + pkey + '\']').attr('pkey');
+        changeParentsCheckedStatus(isAllChecked, newPkey);
+    }
+
+    this.element.find('tbody tr input[type=checkbox]:not(.make-switch)').change(function () {
+        var checked = $(this).is(":checked");
+        var key = $(this).closest('tr').attr('key');
+        var pkey = $(this).closest('tr').attr('pkey');
+        // 改变下级选中状态
+        changeChildrenCheckedStatus(checked, key);
+        // 改变上级选中状态
+        changeParentsCheckedStatus(checked, pkey);
+        // 添加active样式
+        if (checked) {
+            $(this).closest('tr').addClass("active");
+        } else {
+            $(this).closest('tr').removeClass("active");
+        }
+        jQuery.uniform.update();
+    });
+};
+
+$.fn.tableTree = function (options) {
+    return new TableTree(this, options);
+};
+// 调用方式
+// $("#J_table_tree").tableTree({
+//     openAll: true,
+//     data: [{
+//         id: "0",
+//         pId: "-1",
+//         columns: {
+//             "name": "Limin",
+//             age: "24",
+//             address: "Sichuan",
+//         },
+//         children: [{
+//             id: "01",
+//             pId: "0",
+//             columns: {
+//                 name: "Limin",
+//                 age: "24",
+//                 address: "Sichuan",
+//             },
+//         }, {
+//             id: "02",
+//             pId: "0",
+//             columns: {
+//                 name: "Limin",
+//                 age: "24",
+//                 address: "Sichuan",
+//             },
+//             children: [{
+//                 id: "021",
+//                 pId: "02",
+//                 columns: {
+//                     name: "Limin",
+//                     age: "24",
+//                     address: "Sichuan",
+//                 },
+//                 children: [{
+//                     id: "0211",
+//                     pId: "021",
+//                     columns: {
+//                         name: "Limin",
+//                         age: "24",
+//                         address: "Sichuan",
+//                     },
+//                 }],
+//             }],
+//         }, {
+//             id: "03",
+//             pId: "0",
+//             columns: {
+//                 name: "Limin",
+//                 age: "24",
+//                 address: "Sichuan",
+//             },
+//             children: [{
+//                 id: "031",
+//                 pId: "03",
+//                 columns: {
+//                     name: "Limin",
+//                     age: "24",
+//                     address: "Sichuan",
+//                 },
+//                 children: [{
+//                     id: "0311",
+//                     pId: "031",
+//                     columns: {
+//                         name: "Limin",
+//                         age: "24",
+//                         address: "Sichuan",
+//                     },
+//                 }, {
+//                     id: "0312",
+//                     pId: "031",
+//                     columns: {
+//                         name: "Limin",
+//                         age: "24",
+//                         address: "Sichuan",
+//                     },
+//                 }],
+//             }],
+//         }]
+//     }]
+// });

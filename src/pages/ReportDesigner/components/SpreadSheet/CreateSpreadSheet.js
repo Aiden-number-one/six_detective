@@ -123,6 +123,10 @@ export default WrapperComponent =>
           // ----- 普通右键菜单-end -----
         },
         hooks: {
+          calloutFormularPanel(params) {
+            // 双击类型为公式的单元格，调出面板
+            callbackProps.calloutFormularPanel(params);
+          },
           afterDrop(params) {
             // 拖拽放置后的回调
             callbackProps.afterDrop(params);
@@ -283,11 +287,15 @@ export default WrapperComponent =>
 
     // 设置cellType
     setCellType = (property, value) => {
+      console.log('setCellType: ', property, value);
       const {
         sheet,
         sheet: { cellTypeChange },
       } = this.spreadSheet;
       cellTypeChange.call(sheet, property, value);
+      // setTimeout(() => {
+      //   console.log('fetch -> ', sheet.data.getCell(3, 3));
+      // }, 2000);
     };
 
     // 得到cell属性

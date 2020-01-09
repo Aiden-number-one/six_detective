@@ -1,1 +1,111 @@
-if("undefined"==typeof jQuery)throw new Error("kweb.kdata requires jQuery");seajs&&define(function(require,exports,module){var u=require("json2"),g=g||{};g.context="/krcs",g.ajax=$.ajax,g.uuid=function(){function e(){return(65536*(1+Math.random())|0).toString(16).substring(1)}return e()+e()+"-"+e()+"-"+e()+"-"+e()+"-"+e()+e()+e()},g.dateFormat=function(e){var t=new Date,n={"Y+":t.getYear(),"M+":t.getMonth()+1,"d+":t.getDate(),"h+":t.getHours(),"m+":t.getMinutes(),"s+":t.getSeconds(),"q+":Math.floor((t.getMonth()+3)/3),S:t.getMilliseconds()};for(var o in/(y+)/.test(e)&&(e=e.replace(RegExp.$1,(t.getFullYear()+"").substr(4-RegExp.$1.length))),n)new RegExp("("+o+")").test(e)&&(e=e.replace(RegExp.$1,1==RegExp.$1.length?n[o]:("00"+n[o]).substr((""+n[o]).length)));return e},g.getFrontApiJsonAsync=function(e,t,n,o){var s=g.context+"/rest/"+$.trim(t)+"/"+$.trim(e)+".json";g.getAsync(s,e,t,n,o)},g.getBackApiJsonAsync=function(e,t,n,o){var s=g.context+"/rest/admin/"+$.trim(t)+"/"+$.trim(e)+".json";g.getAsync(s,e,t,n,o)},g.getAsync=function(e,t,n,o,s){g.getJsonData("get",e,!0,t,n,o,s)},g.getSync=function(e,t,n,o,s){g.getJsonData("get",e,!1,t,n,o,s)},g.postAsync=function(e,t,n,o,s){g.getJsonData("post",e,!0,t,n,o,s)},g.postSync=function(e,t,n,o,s){g.getJsonData("post",e,!1,t,n,o,s)},g.getJsonData=function(e,t,n,o,s,a,r){var i={};i.p=u.stringify(a||{}),i._ts=(new Date).getTime();var c=g.dateFormat("YYYY-MM-dd hh:mm:ss.S");g.ajax({type:e,url:t,dataType:"json",data:i,async:n,beforeSend:function(e){e.setRequestHeader("X-Kweb-Menu-Id",window.location.pathname+window.location.hash),e.setRequestHeader("X-Kweb-Op-Id","????op_id1122333"),e.setRequestHeader("X-Kweb-Req-Trace-Id",g.uuid()),e.setRequestHeader("X-Kweb-Location-Href",document.location.href),e.setRequestHeader("X-Kweb-Timestamp",c),e.setRequestHeader("X-Kweb-Sign",$.md5(c+i.p)),e.setRequestHeader("X-Kweb-Api-Name",$.trim(o)),e.setRequestHeader("X-Kweb-Api-Version",$.trim(s))}}).done(function(e){e&&e.bcjson&&e.bcjson.flag&&"0"==e.bcjson.flag&&console&&console.info(window.location.href," --\x3e ",e);r&&r(e)})},module.exports=g});
+//
+//window.hdata = window.hdata || {} ;
+
+if (typeof jQuery === "undefined") {
+    throw new Error("kweb.kdata requires jQuery");
+}
+
+//kingdom module wrapper =======================
+if (seajs) {
+    define(function (require, exports, module) {
+        // require("jquery");
+        var JSON = require("json2");
+
+        var kdata = kdata || {};
+
+        kdata.context = "/krcs";
+
+        kdata.ajax = $.ajax;
+
+        kdata.uuid = function () {
+            function S4() {
+                return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+            }
+            return S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4();
+        };
+
+        kdata.dateFormat = function (fmt) {
+            //author: meizz   
+            var that = new Date();
+            var o = {
+                "Y+": that.getYear(),
+                "M+": that.getMonth() + 1, //月份   
+                "d+": that.getDate(), //日   
+                "h+": that.getHours(), //小时   
+                "m+": that.getMinutes(), //分   
+                "s+": that.getSeconds(), //秒   
+                "q+": Math.floor((that.getMonth() + 3) / 3), //季度   
+                "S": that.getMilliseconds() //毫秒   
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (that.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o) {
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+            }return fmt;
+        };
+
+        kdata.getFrontApiJsonAsync = function (apiName, apiVersion, params, cbfunc) {
+            var url = kdata.context + "/rest/" + $.trim(apiVersion) + "/" + $.trim(apiName) + ".json";
+            kdata.getAsync(url, apiName, apiVersion, params, cbfunc);
+        };
+        kdata.getBackApiJsonAsync = function (apiName, apiVersion, params, cbfunc) {
+            var url = kdata.context + "/rest/admin/" + $.trim(apiVersion) + "/" + $.trim(apiName) + ".json";
+            kdata.getAsync(url, apiName, apiVersion, params, cbfunc);
+        };
+
+        kdata.getAsync = function (url, apiName, apiVersion, params, cbfunc) {
+            kdata.getJsonData("get", url, true, apiName, apiVersion, params, cbfunc);
+        };
+        kdata.getSync = function (url, apiName, apiVersion, params, cbfunc) {
+            kdata.getJsonData("get", url, false, apiName, apiVersion, params, cbfunc);
+        };
+
+        kdata.postAsync = function (url, apiName, apiVersion, params, cbfunc) {
+            kdata.getJsonData("post", url, true, apiName, apiVersion, params, cbfunc);
+        };
+        kdata.postSync = function (url, apiName, apiVersion, params, cbfunc) {
+            kdata.getJsonData("post", url, false, apiName, apiVersion, params, cbfunc);
+        };
+
+        kdata.getJsonData = function (method, url, async, apiName, apiVersion, param, cbfunc) {
+
+            var ajaxParam = {};
+            ajaxParam.p = JSON.stringify(param || {});
+            ajaxParam._ts = new Date().getTime();
+            var timestamp = kdata.dateFormat("YYYY-MM-dd hh:mm:ss.S");
+            kdata.ajax({
+
+                type: method,
+                url: url,
+                dataType: 'json',
+                data: ajaxParam,
+                async: async,
+                beforeSend: function beforeSend(request) {
+                    request.setRequestHeader("X-Kweb-Menu-Id", window.location.pathname + window.location.hash);
+                    request.setRequestHeader("X-Kweb-Op-Id", "????op_id1122333");
+                    request.setRequestHeader("X-Kweb-Req-Trace-Id", kdata.uuid());
+                    request.setRequestHeader("X-Kweb-Location-Href", document.location.href);
+
+                    request.setRequestHeader("X-Kweb-Timestamp", timestamp);
+                    request.setRequestHeader("X-Kweb-Sign", $.md5(timestamp + ajaxParam.p));
+
+                    request.setRequestHeader("X-Kweb-Api-Name", $.trim(apiName));
+                    request.setRequestHeader("X-Kweb-Api-Version", $.trim(apiVersion));
+                }
+            }).done(function (data) {
+
+                if (data && data.bcjson && data.bcjson.flag) {
+                    var flag = data.bcjson.flag;
+                    if (flag == "0" && console) {
+                        console.info(window.location.href, " --> ", data);
+                    }
+                }
+
+                if (cbfunc) {
+                    cbfunc(data);
+                }
+            });
+        };
+
+        module.exports = kdata;
+    });
+}

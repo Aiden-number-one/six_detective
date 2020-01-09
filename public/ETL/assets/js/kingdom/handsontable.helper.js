@@ -1,1 +1,897 @@
-if("undefined"==typeof jQuery)throw new Error("jquery.kingdom requires jQuery");$.extend({handsontable:{valueExchange:function(e){var l="文本框";if("input"==e.cellType)switch(e.inputType){case"text_255":l="文本（<255字符）";break;case"text_500":l="文本（<500字符）";break;case"text_1000":l="文本（<1000字符）";break;case"text_4000":l="文本（<4000字符）";break;case"text_clob":l="文本（>4000字符）";break;case"int":l="整数";break;case"number_2":l="金额（2位小数）";break;case"number_4":l="金额（4位小数）";break;case"ratio_1":l="百分比（x）％";break;case"ratio_100":l="百分比（x*100）％";break;case"ratio_1000":l="千分比（x*1000）‰";break;case"date":l="日期";break;case"select":l="下拉选择框";break;default:l=""}return l},boxType:function(e,l,t){var a=l.inputType;switch((a=a.split("_"))[0]){case"text":e.type="text";var o=new RegExp("^.{0,"+a[1]+"}$");e.validator=o;break;case"number":e.type="numeric";var r=a[1];if(!r){e.format="0,0";break}for(var c=0<r?"0,0":"0,0.",n=0;n<r;n++)c+="0";e.format=c;break;case"ratio":e.type="numeric","1"==a[1]?e.format="0,0.00P":"100"==a[1]?e.format="0,0.00%":"1000"==a[1]&&(e.format="0,0.00‰");break;case"date":e.type="date",e.dateFormat="YYYY-MM-DD",e.correctFormat=!0,e.defaultDate="",e.datePickerConfig={i18n:{months:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],weekdays:["日","一","二","三","四","五","六"],weekdaysShort:["日","一","二","三","四","五","六"]}};break;case"select":e.editor="select",e.type="dropdown",t&&(e.selectOptions=t[l.cellTableField]);break;default:e.type="text"}return e},setReportData:function(e,o,t,r,c){var n,i,l=new Array,a=[],s=[],w={tableType:t.tableType};if("list-business"==t.tableType){var u=new Array,d=0,h=0,p={},f={};(F={}).dataArray=new Array,o&&($.each(e,function(e,a){"select"==a.inputType&&$.each(o,function(e,l){var t=a.cellTableField;r&&r[t]&&(l[t]=r[t][l[t]])})}),$.each(o,function(e,l){F.dataArray.push(l)}));var R=new Array,g={},C=F.dataArray,y=0,b=0;$.each(e,function(e,l){if("input"==l.cellType)return t.startRow=l.cellRow,!1}),$.each(e,function(e,l){if(t.startRow==l.cellRow)n=l.rowHeights,i=l.colWidths,"1"==l.STARTROW&&(y=e),"1"==l.ENDROW&&(b=e);else if(t.startRow<l.cellRow)return!1});for(var m=e.length,T=0;T<m;){if((k=e[T]).cellRow<t.startRow)g[k.cellRow+"|"+k.cellCol]=k,R.push(k),T++;else if(t.startRow==k.cellRow)if(C&&0<C.length){for(var I=0;I<C.length;I++)for(var v=y;v<=b;v++){(S=$.extend({},e[v])).cellRow=S.cellRow+I,v==y&&(g[S.cellRow+"|"+S.cellCol+"rowId"]=C[I].rowId),S.cellTableValue=C[I][S.cellTableField],g[S.cellRow+"|"+S.cellCol]=S,R.push(S)}T=T+b-y+1}else g[k.cellRow+"|"+k.cellCol]=k,R.push(k),T++;else k.cellRow>t.startRow&&(0!=C.length&&(k.cellRow=k.cellRow+C.length-1),g[k.cellRow+"|"+k.cellCol]=k,R.push(k),T++)}$.each(R,function(e,l){if(l.rowHeight&&(p[l.cellRow]=l.rowHeight<24?24:l.rowHeight),l.colWidth&&(f[l.cellCol]=1.33*l.colWidth),0==l.cellRow&&(d+=0==l.mergedColCount?1:l.mergedColCount),1<l.mergedRowCount||1<l.mergedColCount){var t={};t.row=l.cellRow,t.col=l.cellCol,t.rowspan=l.mergedRowCount?l.mergedRowCount:1,t.colspan=l.mergedColCount?l.mergedColCount:1,u.push(t)}h=l.cellRow+(l.mergedRowCount?l.mergedRowCount:1)}),n?a=n.split(","):$.each(p,function(e,l){a.push(l)}),i?s=i.split(","):$.each(f,function(e,l){s.push(l)});for(T=0;T<h;T++){l[T]=new Array;for(var A=0;A<d;A++){(D=g[T+"|"+A])?"show"==D.cellType?l[T][A]=D.fieldShowText:"templateSets"==t.type?l[T][A]=t.inputTypeMap[D.inputTypeDict]:l[T][A]=D.cellTableValue:l[T][A]=""}}if(w.newMap=g,w.dataStartRow=t.startRow,0<F.dataArray.length)var M=F.dataArray.length;else M=1;return w.ishjRow=t.startRow+M,w.mergeCells=u,w.sumCol=d,w.sumRow=h,w.dataArrays=l,w.rowHeights=a,w.colWidths=s,w}if("list"==t.tableType){u=new Array;var F,j={};d=0,h=0,p={},f={};(F={}).dataArray=new Array,F.hjdataArray,o&&($.each(e,function(e,a){"select"==a.inputType&&$.each(o,function(e,l){var t=a.cellTableField;r&&r[t]&&(l[t]=r[t][l[t]])})}),$.each(o,function(e,l){"1"==l.ISHJ?F.hjdataArray=l:F.dataArray.push(l)}));R=new Array,g={},C=F.dataArray,y=0,b=0;t.startRow||$.each(e,function(e,l){if("input"==l.cellType)return t.startRow=l.cellRow,!1}),$.each(e,function(e,l){if(t.startRow==l.cellRow)"1"==l.STARTROW&&(y=e),"1"==l.ENDROW&&(b=e),n=l.rowHeights,i=l.colWidths,c&&c[l.cellRow+"|"+l.cellCol]&&(l.autoFormulaMap=c[l.cellRow+"|"+l.cellCol]);else if(t.startRow+1==l.cellRow)c&&c[l.cellRow+"|"+l.cellCol]&&(l.autoFormulaMap=c[l.cellRow+"|"+l.cellCol]);else if(t.startRow+1<l.cellRow)return!1});for(m=e.length,T=0;T<m;){var k;if((k=e[T]).cellRow<t.startRow)g[k.cellRow+"|"+k.cellCol]=k,R.push(k),T++;else if(t.startRow==k.cellRow)if(C&&0<C.length){for(I=0;I<C.length;I++)for(v=y;v<=b;v++){var S;(S=$.extend({},e[v])).cellRow=S.cellRow+I,v==y&&(g[S.cellRow+"|"+S.cellCol+"rowId"]=C[I].rowId),S.cellTableValue=C[I][S.cellTableField],g[S.cellRow+"|"+S.cellCol]=S,R.push(S),S.fieldFormula&&(S.resultCell=!0,S.borderStyle+="background-color:#efdcdc !important;",j[S.cellTableField]=S)}T=T+b-y+1}else k.fieldFormula&&((j[k.cellTableField]=k).resultCell=!0,k.borderStyle+="background-color:#efdcdc !important;"),g[k.cellRow+"|"+k.cellCol]=k,R.push(k),T++;else k.cellRow>t.startRow&&(0!=C.length&&(k.cellRow=k.cellRow+C.length-1),"1"==k.ishj&&(w.ishjRow=k.cellRow,g[k.cellRow+"|0ishj"]="1","input"==k.cellType&&(F.hjdataArray&&(g[k.cellRow+"|0rowId"]=F.hjdataArray.rowId,k.cellTableValue=F.hjdataArray[k.cellTableField]),k.fieldFormula&&((j[k.cellRow+"|"+k.cellTableField]=k).resultCell=!0,k.borderStyle+="background-color:#efdcdc !important;"))),g[k.cellRow+"|"+k.cellCol]=k,R.push(k),T++)}console.log(R),$.each(R,function(e,l){if(l.rowHeight&&(p[l.cellRow]=l.rowHeight<24?24:l.rowHeight),l.colWidth&&(f[l.cellCol]=1.33*l.colWidth),0==l.cellRow&&(d+=0==l.mergedColCount?1:l.mergedColCount),1<l.mergedRowCount||1<l.mergedColCount){var t={};t.row=l.cellRow,t.col=l.cellCol,t.rowspan=l.mergedRowCount?l.mergedRowCount:1,t.colspan=l.mergedColCount?l.mergedColCount:1,u.push(t)}h=l.cellRow+(l.mergedRowCount?l.mergedRowCount:1)}),n?a=n.split(","):$.each(p,function(e,l){a.push(l)}),i?s=i.split(","):$.each(f,function(e,l){s.push(l)});for(T=0;T<h;T++){l[T]=new Array;for(A=0;A<d;A++){(D=g[T+"|"+A])?"show"==D.cellType?l[T][A]=D.fieldShowText:(l[T][A]=D.cellTableValue,"templateSets"==t.type?l[T][A]=t.inputTypeMap[D.inputTypeDict]:l[T][A]=D.cellTableValue):l[T][A]=""}}if(w.newMap=g,w.formulaMap=j,w.dataStartRow=t.startRow,w.ishj=!0,!w.ishjRow){if(w.ishj=!1,0<F.dataArray.length)M=F.dataArray.length;else M=1;w.ishjRow=t.startRow+M}return w.mergeCells=u,w.sumCol=d,w.sumRow=h,w.dataArrays=l,w.rowHeights=a,w.colWidths=s,console.log(l),w}l=new Array,u=new Array,g={};var x={};j={},d=0,h=0,p={},f={};if(o&&1==o.length){C=o[0];g["0|0rowId"]=C.rowId,$.each(e,function(e,a){"select"==a.inputType&&$.each(o,function(e,l){var t=a.cellTableField;r&&r[t]&&(l[t]=r[t][l[t]])})})}$.each(e,function(e,l){n=l.rowHeights,i=l.colWidths,l.rowHeight&&(p[l.cellRow]=l.rowHeight<24?24:l.rowHeight),l.colWidth&&(f[l.cellCol]=1.33*l.colWidth),0==l.cellRow&&(d+=0==l.mergedColCount?1:l.mergedColCount);var t={};(1<l.mergedRowCount||1<l.mergedColCount)&&(t.row=l.cellRow,t.col=l.cellCol,t.rowspan=l.mergedRowCount?l.mergedRowCount:1,t.colspan=l.mergedColCount?l.mergedColCount:1,u.push(t));var a=l.cellRow+"|"+l.cellCol;"input"==l.cellType&&(x[l.cellTableField]=l,o&&1==o.length&&(l.cellTableValue=C[l.cellTableField]),l.fieldFormula&&((j[l.cellTableField]=l).resultCell=!0,l.borderStyle+="background-color:#efdcdc !important;"),c&&c[a]&&(l.autoFormulaMap=c[a])),g[a]=l,h=l.cellRow+(l.mergedRowCount?l.mergedRowCount:1)}),n?a=n.split(","):$.each(p,function(e,l){a.push(l)}),i?s=i.split(","):$.each(f,function(e,l){s.push(l)});for(T=0;T<h;T++){l[T]=new Array;for(A=0;A<d;A++){var D;(D=g[T+"|"+A])?"show"==D.cellType?l[T][A]=D.fieldShowText:"templateSets"==t.type?l[T][A]=t.inputTypeMap[D.inputTypeDict]:l[T][A]=D.cellTableValue:l[T][A]=""}}return w.newMap=g,w.cellFieldMap=x,w.formulaMap=j,w.mergeCells=u,w.sumCol=d,w.sumRow=h,w.dataArrays=l,w.rowHeights=a,w.colWidths=s,w},getReportData:function(e){var l=new Array,n=e.TransferDictItems;if("list-business"==e.tableType){for(var t=e.dataStartRow,a=hotInstance.countRows(),o=e.ishjRow,r=t;r<o;r++){var c=hotInstance.getDataAtRow(r);u=new Object;for(var i=0;i<c.length;i++){var s=hotInstance.getCellMeta(r,i);if(p=hotInstance.getCellMeta(r,i).cellTableField)if(c[i])if("select"==s.editor){var w=n[p];u[p]=w[c[i]]}else!c[i]&&0!=c[i]||(u[p]=c[i]);else 0==c[i]&&(u[p]=c[i])}u.rowId=hotInstance.getCellMeta(r,0).rowId,"{}"!=JSON.stringify(u)&&l.push(u)}return l}if("list"==e.tableType){var u;for(t=e.dataStartRow,a=e.ishj?e.ishjRow+1:e.ishjRow,r=t;r<a;r++){var d=r,h=hotInstance.getCellMeta(d,0).ishj;c=hotInstance.getDataAtRow(r);if(u=new Object,1==h){for(i=0;i<c.length;i++){(p=hotInstance.getCellMeta(d,i).cellTableField)&&(c[i]?"合计"!=c[i]&&"-"!=c[i]&&(u[p]=c[i]):0==c[i]&&(u[p]=c[i]))}u.rowId=hotInstance.getCellMeta(d,0).rowId,u.ISHJ="1",l.push(u);break}for(i=0;i<c.length;i++){var p=(s=hotInstance.getCellMeta(d,i)).cellTableField,f=s.editor;if(p)if(c[i])if("select"==f){w=n[p];u[p]=w[c[i]]}else u[p]=c[i];else 0==c[i]&&(u[p]=c[i])}u.rowId=hotInstance.getCellMeta(d,0).rowId,"{}"!=JSON.stringify(u)&&l.push(u)}return l}var R=e.newMap,g=hotInstance.getData();return dataMapItem=new Object,$.each(R,function(e,l){if(l&&"input"==l.cellType){var t=l.cellRow,a=l.cellCol,o=g[t][a],r=hotInstance.getCellMeta(t,a).editor;if(l.cellTableField&&o||0==o)if("select"==r){var c=n[l.cellTableField];dataMapItem[l.cellTableField]=c[o]}else dataMapItem[l.cellTableField]=o}}),dataMapItem.rowId=hotInstance.getCellMeta(0,0).rowId,l.push(dataMapItem),l},getReportDataForBigData:function(e,l){var t=new Array,a=e.TransferDictItems;if("list-business"==e.tableType)return null;if("list"!=e.tableType)return null;var o,r=e.dataStartRow,c=e.ishj?e.ishjRow+1:e.ishjRow;if(!(l<r||c<=l)){var n=l,i=n,s=hotInstance.getCellMeta(i,0).ishj,w=hotInstance.getDataAtRow(n);if((o=new Object).addRowIndex=l-r+"",1==s){for(var u=0;u<w.length;u++){(h=hotInstance.getCellMeta(i,u).cellTableField)&&(w[u]?"合计"!=w[u]&&"-"!=w[u]&&(o[h]=w[u]):0===w[u]&&(o[h]=0))}o.rowId=hotInstance.getCellMeta(i,0).rowId,o.ISHJ="1",t.push(o)}else{for(u=0;u<w.length;u++){var d=hotInstance.getCellMeta(i,u),h=d.cellTableField,p=d.editor;if(h)if(w[u])if("select"==p){var f=a[h];o[h]=f[w[u]]}else o[h]=w[u];else 0===w[u]&&(o[h]=0)}o.rowId=hotInstance.getCellMeta(i,0).rowId,"{}"!=JSON.stringify(o)&&t.push(o)}return t}}}}),seajs&&define(function(require,exports,module){module.exports=jQuery.handsontable});
+if (typeof jQuery === "undefined") {
+    throw new Error("jquery.kingdom requires jQuery");
+}
+
+$.extend({
+    handsontable: {
+        valueExchange: function valueExchange(v_cell) {
+            var tmpValue = '文本框';
+            if (v_cell.cellType == 'input') {
+                switch (v_cell.inputType) {
+                    case "text_255":
+                        tmpValue = "文本（<255字符）";
+                        break;
+                    case "text_500":
+                        tmpValue = "文本（<500字符）";
+                        break;
+                    case "text_1000":
+                        tmpValue = "文本（<1000字符）";
+                        break;
+                    case "text_4000":
+                        tmpValue = "文本（<4000字符）";
+                        break;
+                    case "text_clob":
+                        tmpValue = "文本（>4000字符）";
+                        break;
+                    case "int":
+                        tmpValue = "整数";
+                        break;
+                    case "number_2":
+                        tmpValue = "金额（2位小数）";
+                        break;
+                    case "number_4":
+                        tmpValue = "金额（4位小数）";
+                        break;
+                    case "ratio_1":
+                        tmpValue = "百分比（x）％";
+                        break;
+                    case "ratio_100":
+                        tmpValue = "百分比（x*100）％";
+                        break;
+                    case "ratio_1000":
+                        tmpValue = "千分比（x*1000）‰";
+                        break;
+                    case "date":
+                        tmpValue = "日期";
+                        break;
+                    case "select":
+                        tmpValue = "下拉选择框";
+                        break;
+                    default:
+                        tmpValue = "";
+                        break;
+                }
+            }
+            return tmpValue;
+        },
+        boxType: function boxType(cellProperties, keyItem, dictItemObj) {
+            //格式控制inputType，inputTypeDict
+            //格式控制inputType，inputTypeDict
+            var inputType = keyItem.inputType;
+            inputType = inputType.split('_');
+            var str = inputType[0];
+
+            switch (str) {
+                case 'text':
+                    cellProperties.type = 'text';
+                    var exp = new RegExp("^.{0," + inputType[1] + "}$");
+                    cellProperties.validator = exp;
+                    break;
+                case 'number':
+                    cellProperties.type = 'numeric';
+                    var precision = inputType[1];
+                    if (!precision) {
+                        cellProperties.format = '0,0';
+                        break;
+                    }
+                    var format = precision > 0 ? '0,0' : '0,0.';
+                    for (var i = 0; i < precision; i++) {
+                        format += '0';
+                    }
+                    cellProperties.format = format;
+                    break;
+                case 'ratio':
+                    cellProperties.type = 'numeric';
+                    if (inputType[1] == '1') {
+                        cellProperties.format = '0,0.00P'; //1->1.00%
+                    } else if (inputType[1] == '100') {
+                        cellProperties.format = '0,0.00%'; //1->100.00%
+                    } else if (inputType[1] == '1000') {
+                        cellProperties.format = '0,0.00‰'; //1->1.00‰
+                    }
+                    break;
+                case 'date':
+                    cellProperties.type = 'date';
+                    cellProperties.dateFormat = 'YYYY-MM-DD';
+                    cellProperties.correctFormat = true;
+                    cellProperties.defaultDate = '';
+                    cellProperties.datePickerConfig = {
+                        i18n: {
+                            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                            weekdays: ['日', '一', '二', '三', '四', '五', '六'],
+                            weekdaysShort: ['日', '一', '二', '三', '四', '五', '六']
+                        }
+                    };
+                    break;
+                case 'select':
+                    cellProperties.editor = 'select';
+                    cellProperties.type = 'dropdown';
+                    if (dictItemObj) {
+                        cellProperties.selectOptions = dictItemObj[keyItem.cellTableField];
+                    }
+                    //由于下拉选择和具体值不一致
+                    // cellProperties.selectOptions = {'1':'其他','资产证券化产品':'2'};
+                    break;
+                default:
+                    cellProperties.type = 'text';
+                    break;
+            }
+            return cellProperties;
+        },
+        setReportData: function setReportData(items, reportData, requireParams, dictItems, cellpos) {
+            var dataArrays = new Array();
+
+            //数据保留key值
+            var _rowHeights = [];
+            var _colWidths = [];
+            //模板设置的行高和列宽
+            var rowHeights, colWidths;
+            var sets = {
+                tableType: requireParams.tableType
+            };
+            //台账业务表没有合计
+            if (requireParams.tableType == 'list-business') {
+                var mergeCells = new Array();
+                var sumCol = 0,
+                    sumRow = 0;
+                var rowHeightMap = {};
+                var colWidthMap = {};
+                var dataParam = {};
+                dataParam.dataArray = new Array();
+
+                if (reportData) {
+
+                    //转义reportDate字典值
+                    $.each(items, function (i, item) {
+                        if (item.inputType == 'select') {
+                            $.each(reportData, function (j, report) {
+                                var filed = item.cellTableField;
+                                if (dictItems && dictItems[filed]) {
+                                    report[filed] = dictItems[filed][report[filed]];
+                                }
+                            });
+                        }
+                    });
+
+                    $.each(reportData, function (j, reportData) {
+                        //获取字段数据
+                        dataParam.dataArray.push(reportData);
+                    });
+                }
+
+                var newItems = new Array();
+                var newMap = {};
+                // if(dataParam.dataArray.length>0){
+                var rowdatas = dataParam.dataArray;
+                var STARTROW = 0; //数据开始索引
+                var ENDROW = 0; //数据结束索引
+                //获取startRow
+                $.each(items, function (i, item) {
+                    if (item.cellType == 'input') {
+                        requireParams.startRow = item.cellRow;
+                        return false;
+                    }
+                });
+                $.each(items, function (i, item) {
+                    //获取数据开始和结束索引
+                    if (requireParams.startRow == item.cellRow) {
+                        rowHeights = item.rowHeights;
+                        colWidths = item.colWidths;
+                        if (item.STARTROW == '1') STARTROW = i;
+                        if (item.ENDROW == '1') ENDROW = i;
+                    } else if (requireParams.startRow < item.cellRow) {
+                        return false;
+                    }
+                });
+                // $.each(items, function(i, item) {
+                var itemsLength = items.length;
+                for (var i = 0; i < itemsLength;) {
+                    var item = items[i];
+                    if (item.cellRow < requireParams.startRow) {
+                        newMap[item.cellRow + '|' + item.cellCol] = item;
+                        newItems.push(item);
+                        i++;
+                    } else {
+                        if (requireParams.startRow == item.cellRow) {
+                            if (rowdatas && rowdatas.length > 0) {
+                                //数据组装
+                                for (var l = 0; l < rowdatas.length; l++) {
+                                    for (var m = STARTROW; m <= ENDROW; m++) {
+                                        var temp = $.extend({}, items[m]);
+                                        temp.cellRow = temp.cellRow + l;
+                                        if (m == STARTROW) {
+                                            //数据行第一列增加rowid,表示这是修改，而不是新增
+                                            newMap[temp.cellRow + '|' + temp.cellCol + 'rowId'] = rowdatas[l]['rowId'];
+                                        }
+
+                                        temp.cellTableValue = rowdatas[l][temp.cellTableField];
+                                        newMap[temp.cellRow + '|' + temp.cellCol] = temp;
+                                        newItems.push(temp);
+                                    }
+                                }
+                                i = i + ENDROW - STARTROW + 1;
+                            } else {
+                                newMap[item.cellRow + '|' + item.cellCol] = item;
+                                newItems.push(item);
+                                i++;
+                            }
+                        } else if (item.cellRow > requireParams.startRow) {
+
+                            if (rowdatas.length != 0) {
+                                item.cellRow = item.cellRow + rowdatas.length - 1;
+                            }
+                            newMap[item.cellRow + '|' + item.cellCol] = item;
+                            newItems.push(item);
+                            i++;
+                        }
+                    }
+                };
+                // }
+
+                $.each(newItems, function (i, item) {
+                    if (item['rowHeight']) {
+                        rowHeightMap[item.cellRow] = item['rowHeight'] < 24 ? 24 : item['rowHeight'];
+                    }
+                    if (item['colWidth']) {
+                        colWidthMap[item.cellCol] = item['colWidth'] * 1.33;
+                    }
+                    if (item.cellRow == 0) {
+                        //总列数
+                        sumCol = sumCol + (item.mergedColCount == 0 ? 1 : item.mergedColCount);
+                    }
+
+                    if (item.mergedRowCount > 1 || item.mergedColCount > 1) {
+                        var cells = {};
+                        cells.row = item.cellRow;
+                        cells.col = item.cellCol;
+                        cells.rowspan = item.mergedRowCount ? item.mergedRowCount : 1;
+                        cells.colspan = item.mergedColCount ? item.mergedColCount : 1;
+                        mergeCells.push(cells);
+                    }
+                    //行是从0开始
+                    //流表加上几条数据行
+                    sumRow = item.cellRow + (item.mergedRowCount ? item.mergedRowCount : 1);
+                });
+                // rowHeights,colWidths
+                if (rowHeights) {
+                    _rowHeights = rowHeights.split(',');
+                } else {
+                    $.each(rowHeightMap, function (k, v) {
+                        _rowHeights.push(v);
+                    });
+                }
+
+                if (colWidths) {
+                    _colWidths = colWidths.split(',');
+                } else {
+                    $.each(colWidthMap, function (k, v) {
+                        _colWidths.push(v);
+                    });
+                }
+
+                // for(var i=0;i<sets.sumRow;i++){
+                for (var i = 0; i < sumRow; i++) {
+                    dataArrays[i] = new Array();
+                    for (var j = 0; j < sumCol; j++) {
+                        var mapItem = newMap[i + '|' + j];
+                        if (mapItem) {
+                            if (mapItem.cellType == 'show') {
+                                dataArrays[i][j] = mapItem.fieldShowText;
+                            } else {
+                                if (requireParams.type == 'templateSets') {
+                                    dataArrays[i][j] = requireParams.inputTypeMap[mapItem.inputTypeDict];
+                                } else {
+                                    dataArrays[i][j] = mapItem.cellTableValue;
+                                }
+                            }
+                        } else {
+                            dataArrays[i][j] = '';
+                        }
+                    }
+                }
+
+                //数据起始行
+                sets.newMap = newMap; //newMap[0|0]={...}单元格对象
+                sets.dataStartRow = requireParams.startRow;
+                if (dataParam.dataArray.length > 0) {
+                    var number = dataParam.dataArray.length;
+                } else {
+                    var number = 1;
+                }
+                sets.ishjRow = requireParams.startRow + number; //虽然没有合计行，但是为了插入操作
+                sets.mergeCells = mergeCells;
+                sets.sumCol = sumCol;
+                sets.sumRow = sumRow;
+                sets.dataArrays = dataArrays;
+                sets.rowHeights = _rowHeights;
+                sets.colWidths = _colWidths;
+                return sets;
+            } else if (requireParams.tableType == 'list') {
+                var mergeCells = new Array();
+                var formulaMap = {}; //公式map集合{'f8':item}
+                var sumCol = 0,
+                    sumRow = 0;
+                var rowHeightMap = {};
+                var colWidthMap = {};
+                var dataParam = {};
+                dataParam.dataArray = new Array();
+                dataParam.hjdataArray;
+
+                if (reportData) {
+                    //转义reportDate字典值
+                    $.each(items, function (i, item) {
+                        if (item.inputType == 'select') {
+                            $.each(reportData, function (j, report) {
+                                var filed = item.cellTableField;
+                                if (dictItems && dictItems[filed]) {
+                                    report[filed] = dictItems[filed][report[filed]];
+                                }
+                            });
+                        }
+                    });
+
+                    $.each(reportData, function (i, item) {
+                        if (item.ISHJ == '1') {
+                            //流表数据行
+                            dataParam.hjdataArray = item;
+                        } else {
+                            //流表合计行必须一行
+                            dataParam.dataArray.push(item);
+                        }
+                        //获取字段数据
+                        //dataParam.dataArray.push(reportData[i]);
+                    });
+                }
+
+                var newItems = new Array();
+                var newMap = {};
+                // if(dataParam.dataArray.length>0){
+                var rowdatas = dataParam.dataArray;
+                var STARTROW = 0; //数据开始索引
+                var ENDROW = 0; //数据结束索引
+
+                if (!requireParams.startRow) {
+                    //如果startRow为空
+                    //获取startRow
+                    $.each(items, function (i, item) {
+                        if (item.cellType == 'input') {
+                            requireParams.startRow = item.cellRow;
+                            return false;
+                        }
+                    });
+                }
+                $.each(items, function (i, item) {
+                    //获取数据开始和结束索引
+                    if (requireParams.startRow == item.cellRow) {
+                        if (item.STARTROW == '1') STARTROW = i;
+                        if (item.ENDROW == '1') ENDROW = i;
+                        rowHeights = item.rowHeights;
+                        colWidths = item.colWidths;
+                        if (cellpos && cellpos[item.cellRow + '|' + item.cellCol]) {
+                            item.autoFormulaMap = cellpos[item.cellRow + '|' + item.cellCol];
+                        }
+                    } else if (requireParams.startRow + 1 == item.cellRow) {
+                        //合计行的公式
+                        if (cellpos && cellpos[item.cellRow + '|' + item.cellCol]) {
+                            item.autoFormulaMap = cellpos[item.cellRow + '|' + item.cellCol];
+                        }
+                    } else if (requireParams.startRow + 1 < item.cellRow) {
+                        return false;
+                    }
+                });
+                // $.each(items, function(i, item) {
+                var itemsLength = items.length;
+                for (var i = 0; i < itemsLength;) {
+                    var item = items[i];
+                    if (item.cellRow < requireParams.startRow) {
+                        newMap[item.cellRow + '|' + item.cellCol] = item;
+                        newItems.push(item);
+                        i++;
+                    } else {
+                        //数据开始行开始，组装数据
+                        if (requireParams.startRow == item.cellRow) {
+                            if (rowdatas && rowdatas.length > 0) {
+                                //数据组装
+                                for (var l = 0; l < rowdatas.length; l++) {
+                                    for (var m = STARTROW; m <= ENDROW; m++) {
+                                        var temp = $.extend({}, items[m]);
+                                        temp.cellRow = temp.cellRow + l; //增加行数
+                                        if (m == STARTROW) {
+                                            //数据行第一列增加rowid,表示这是修改，而不是新增
+                                            newMap[temp.cellRow + '|' + temp.cellCol + 'rowId'] = rowdatas[l]['rowId'];
+                                        }
+                                        temp.cellTableValue = rowdatas[l][temp.cellTableField];
+                                        newMap[temp.cellRow + '|' + temp.cellCol] = temp;
+                                        newItems.push(temp);
+                                        if (temp.fieldFormula) {
+                                            //加入公式map
+                                            temp.resultCell = true;
+                                            temp.borderStyle += 'background-color:#efdcdc !important;';
+                                            formulaMap[temp.cellTableField] = temp;
+                                        }
+                                    }
+                                }
+                                i = i + ENDROW - STARTROW + 1;
+                            } else {
+                                if (item.fieldFormula) {
+                                    //加入公式map
+                                    formulaMap[item.cellTableField] = item;
+                                    item.resultCell = true;
+                                    item.borderStyle += 'background-color:#efdcdc !important;';
+                                }
+                                newMap[item.cellRow + '|' + item.cellCol] = item;
+                                newItems.push(item);
+                                i++;
+                            }
+                        } else if (item.cellRow > requireParams.startRow) {
+                            if (rowdatas.length != 0) {
+                                item.cellRow = item.cellRow + rowdatas.length - 1;
+                            }
+
+                            if (item.ishj == '1') {
+                                sets.ishjRow = item.cellRow;
+                                newMap[item.cellRow + '|0ishj'] = '1';
+                                if (item.cellType == 'input') {
+                                    if (dataParam.hjdataArray) {
+                                        //合计组装
+                                        //在数据行下一列就当做合计行处理
+                                        newMap[item.cellRow + '|0rowId'] = dataParam.hjdataArray['rowId'];
+                                        item.cellTableValue = dataParam.hjdataArray[item.cellTableField];
+                                    }
+                                    if (item.fieldFormula) {
+                                        //加入公式map
+                                        formulaMap[item.cellRow + '|' + item.cellTableField] = item;
+                                        item.resultCell = true;
+                                        item.borderStyle += 'background-color:#efdcdc !important;';
+                                    }
+                                }
+                            }
+
+                            newMap[item.cellRow + '|' + item.cellCol] = item;
+                            newItems.push(item);
+                            i++;
+                        }
+                    }
+                };
+                // }
+
+                console.log(newItems);
+
+                $.each(newItems, function (i, item) {
+                    if (item['rowHeight']) {
+                        rowHeightMap[item.cellRow] = item['rowHeight'] < 24 ? 24 : item['rowHeight'];
+                    }
+                    if (item['colWidth']) {
+                        colWidthMap[item.cellCol] = item['colWidth'] * 1.33;
+                    }
+                    if (item.cellRow == 0) {
+                        //总列数
+                        sumCol = sumCol + (item.mergedColCount == 0 ? 1 : item.mergedColCount);
+                    }
+
+                    if (item.mergedRowCount > 1 || item.mergedColCount > 1) {
+                        var cells = {};
+                        cells.row = item.cellRow;
+                        cells.col = item.cellCol;
+                        cells.rowspan = item.mergedRowCount ? item.mergedRowCount : 1;
+                        cells.colspan = item.mergedColCount ? item.mergedColCount : 1;
+                        mergeCells.push(cells);
+                    }
+                    //行是从0开始
+                    //流表加上几条数据行
+                    sumRow = item.cellRow + (item.mergedRowCount ? item.mergedRowCount : 1);
+                });
+
+                // rowHeights,colWidths
+                if (rowHeights) {
+                    _rowHeights = rowHeights.split(',');
+                } else {
+                    $.each(rowHeightMap, function (k, v) {
+                        _rowHeights.push(v);
+                    });
+                }
+
+                if (colWidths) {
+                    _colWidths = colWidths.split(',');
+                } else {
+                    $.each(colWidthMap, function (k, v) {
+                        _colWidths.push(v);
+                    });
+                }
+
+                // for(var i=0;i<sets.sumRow;i++){
+                for (var i = 0; i < sumRow; i++) {
+                    dataArrays[i] = new Array();
+                    for (var j = 0; j < sumCol; j++) {
+                        var mapItem = newMap[i + '|' + j];
+                        if (mapItem) {
+                            if (mapItem.cellType == 'show') {
+                                dataArrays[i][j] = mapItem.fieldShowText;
+                            } else {
+                                dataArrays[i][j] = mapItem.cellTableValue;
+                                if (requireParams.type == 'templateSets') {
+                                    dataArrays[i][j] = requireParams.inputTypeMap[mapItem.inputTypeDict];
+                                } else {
+                                    dataArrays[i][j] = mapItem.cellTableValue;
+                                }
+                            }
+                        } else {
+                            dataArrays[i][j] = '';
+                        }
+                    }
+                }
+
+                //数据起始行
+                sets.newMap = newMap; //newMap[0|0]={...}单元格对象
+                sets.formulaMap = formulaMap;
+                sets.dataStartRow = requireParams.startRow;
+                //ishjRow不是一定就有合计行，而是表明流表的数据结束行
+                sets.ishj = true; //,默认有合计行
+                if (!sets.ishjRow) {
+                    sets.ishj = false;
+                    if (dataParam.dataArray.length > 0) {
+                        var number = dataParam.dataArray.length;
+                    } else {
+                        var number = 1;
+                    }
+                    //没有合计行数据，但是需要保留数据行的下一行
+                    sets.ishjRow = requireParams.startRow + number;
+                }
+                sets.mergeCells = mergeCells;
+                sets.sumCol = sumCol;
+                sets.sumRow = sumRow;
+                sets.dataArrays = dataArrays;
+                sets.rowHeights = _rowHeights;
+                sets.colWidths = _colWidths;
+                console.log(dataArrays);
+                return sets;
+            } else {
+                //格表组装
+                var dataArrays = new Array();
+                var mergeCells = new Array();
+                var newMap = {}; //显示{'0|0':item,'0|1':item}
+                var cellFieldMap = {}; //x显示{'a1':{row:0,col:0}}
+                var formulaMap = {}; //公式map集合{'f8':item}
+                var sumCol = 0;
+                var sumRow = 0;
+                var rowHeightMap = {};
+                var colWidthMap = {};
+                //每条数据的下标位置
+
+
+                if (reportData && reportData.length == 1) {
+                    var rowdatas = reportData[0];
+                    newMap['0|0rowId'] = rowdatas['rowId'];
+                    //转义reportDate字典值
+                    $.each(items, function (i, item) {
+                        if (item.inputType == 'select') {
+                            $.each(reportData, function (j, report) {
+                                var filed = item.cellTableField;
+                                if (dictItems && dictItems[filed]) {
+                                    report[filed] = dictItems[filed][report[filed]];
+                                }
+                            });
+                        }
+                    });
+                }
+
+                $.each(items, function (i, item) {
+                    rowHeights = item.rowHeights;
+                    colWidths = item.colWidths;
+                    if (item['rowHeight']) {
+                        rowHeightMap[item.cellRow] = item['rowHeight'] < 24 ? 24 : item['rowHeight'];
+                    }
+                    if (item['colWidth']) {
+                        colWidthMap[item.cellCol] = item['colWidth'] * 1.33;
+                    }
+
+                    if (item.cellRow == 0) {
+                        //总列数
+                        sumCol = sumCol + (item.mergedColCount == 0 ? 1 : item.mergedColCount);
+                    }
+                    var cells = {};
+                    if (item.mergedRowCount > 1 || item.mergedColCount > 1) {
+                        cells.row = item.cellRow;
+                        cells.col = item.cellCol;
+                        cells.rowspan = item.mergedRowCount ? item.mergedRowCount : 1;
+                        cells.colspan = item.mergedColCount ? item.mergedColCount : 1;
+                        mergeCells.push(cells);
+                    }
+                    //key:value字段
+                    var key = item.cellRow + '|' + item.cellCol;
+                    if (item.cellType == 'input') {
+                        cellFieldMap[item.cellTableField] = item;
+                        if (reportData && reportData.length == 1) {
+                            item.cellTableValue = rowdatas[item.cellTableField];
+                        }
+                        if (item.fieldFormula) {
+                            //加入公式map
+                            formulaMap[item.cellTableField] = item;
+                            item.resultCell = true;
+                            item.borderStyle += 'background-color:#efdcdc !important;';
+                        }
+
+                        if (cellpos && cellpos[key]) {
+                            item.autoFormulaMap = cellpos[key];
+                        }
+                    }
+                    newMap[key] = item;
+                    //行是从0开始
+                    sumRow = item.cellRow + (item.mergedRowCount ? item.mergedRowCount : 1);
+                });
+
+                // rowHeights,colWidths
+                if (rowHeights) {
+                    _rowHeights = rowHeights.split(',');
+                } else {
+                    $.each(rowHeightMap, function (k, v) {
+                        _rowHeights.push(v);
+                    });
+                }
+
+                if (colWidths) {
+                    _colWidths = colWidths.split(',');
+                } else {
+                    $.each(colWidthMap, function (k, v) {
+                        _colWidths.push(v);
+                    });
+                }
+
+                for (var i = 0; i < sumRow; i++) {
+                    dataArrays[i] = new Array();
+                    for (var j = 0; j < sumCol; j++) {
+                        var mapItem = newMap[i + '|' + j];
+                        if (mapItem) {
+                            if (mapItem.cellType == 'show') {
+                                dataArrays[i][j] = mapItem.fieldShowText;
+                            } else {
+                                if (requireParams.type == 'templateSets') {
+                                    dataArrays[i][j] = requireParams.inputTypeMap[mapItem.inputTypeDict];
+                                } else {
+                                    dataArrays[i][j] = mapItem.cellTableValue;
+                                }
+                            }
+                        } else {
+                            dataArrays[i][j] = '';
+                        }
+                    }
+                }
+
+                sets.newMap = newMap; //填充数据后的表结构
+                sets.cellFieldMap = cellFieldMap;
+                sets.formulaMap = formulaMap;
+                sets.mergeCells = mergeCells;
+                sets.sumCol = sumCol;
+                sets.sumRow = sumRow;
+                sets.dataArrays = dataArrays;
+                sets.rowHeights = _rowHeights;
+                sets.colWidths = _colWidths;
+                return sets;
+            }
+        },
+        getReportData: function getReportData(sets) {
+            var dataMap = new Array();
+            var dictItems = sets.TransferDictItems;
+            if (sets.tableType == 'list-business') {
+                var dataStartRow = sets.dataStartRow;
+                var dataEndRow = hotInstance.countRows(); //总行数8,其实只有到7列
+                var ishjRow = sets.ishjRow;
+                var dataItem;
+                //此处必须以合计行结尾（不然会把填报说明的数据带过来）
+                for (var i = dataStartRow; i < ishjRow; i++) {
+                    var rowData = hotInstance.getDataAtRow(i);
+                    //获取可视数据
+                    var newRowDate = [];
+                    dataItem = new Object();
+                    for (var j = 0; j < rowData.length; j++) {
+                        var cellMeta = hotInstance.getCellMeta(i, j);
+                        var cellTableField = hotInstance.getCellMeta(i, j)['cellTableField'];
+                        if (cellTableField) {
+                            if (rowData[j]) {
+                                //业务台账表格没有合计行，所以取消判断
+                                // if(rowData[j]!='合计'&&rowData[j]!='-'){
+                                if (cellMeta.editor == 'select') {
+                                    var dictItem = dictItems[cellTableField];
+                                    dataItem[cellTableField] = dictItem[rowData[j]];
+                                } else {
+                                    if (rowData[j] || rowData[j] == 0) {
+                                        //排除null/undifined
+                                        dataItem[cellTableField] = rowData[j];
+                                    }
+                                }
+                                // }
+                            } else if (rowData[j] == 0) {
+                                dataItem[cellTableField] = rowData[j];
+                            }
+
+                            // if(cellMeta.editor == 'select'){
+                            //     var dictItem = dictItems[cellTableField];
+                            //     dataItem[cellTableField] = dictItem[rowData[j]];
+                            // }else{
+                            //     if(rowData[j] || rowData[j]==0){//排除null/undifined
+                            //         dataItem[cellTableField] = rowData[j];
+                            //     }
+                            // }
+                        }
+                    }
+                    dataItem['rowId'] = hotInstance.getCellMeta(i, 0)['rowId'];
+                    if (JSON.stringify(dataItem) != "{}") {
+                        //以免多余的行空
+                        dataMap.push(dataItem);
+                    }
+                }
+                return dataMap;
+            } else if (sets.tableType == 'list') {
+                var dataStartRow = sets.dataStartRow;
+                //流表结构会变化，所以这个地方动态获取
+                // var dataEndRow = hotInstance.countRows();//总行数8,其实只有到7列
+                //sets.ishj有合计行的话，循环到合计下一行，否则就是标记的备注行
+                var dataEndRow = sets.ishj ? sets.ishjRow + 1 : sets.ishjRow;
+                var dataItem;
+                for (var i = dataStartRow; i < dataEndRow; i++) {
+                    var row = i;
+                    var ishj = hotInstance.getCellMeta(row, 0)['ishj'];
+                    var rowData = hotInstance.getDataAtRow(i);
+                    dataItem = new Object();
+                    if (ishj == 1) {
+                        //合计行
+                        //计算合计数据
+                        for (var j = 0; j < rowData.length; j++) {
+                            var cellTableField = hotInstance.getCellMeta(row, j)['cellTableField'];
+
+                            if (cellTableField) {
+                                if (rowData[j]) {
+                                    if (rowData[j] != '合计' && rowData[j] != '-') {
+                                        dataItem[cellTableField] = rowData[j];
+                                    }
+                                } else if (rowData[j] == 0) {
+                                    dataItem[cellTableField] = rowData[j];
+                                }
+                            }
+                        }
+                        dataItem['rowId'] = hotInstance.getCellMeta(row, 0)['rowId'];
+                        dataItem['ISHJ'] = '1';
+                        dataMap.push(dataItem);
+                        //有合计行直接结束？有问题。直接把cellTableField
+                        //放到Cellmeta中
+                        break;
+                    } else {
+                        //数据行
+                        for (var j = 0; j < rowData.length; j++) {
+                            var cellMeta = hotInstance.getCellMeta(row, j);
+                            var cellTableField = cellMeta['cellTableField'];
+                            var cellType = cellMeta['editor'];
+                            if (cellTableField) {
+                                if (rowData[j]) {
+                                    //合计行的合计字段才判断
+                                    // if(rowData[j]!='合计'&&rowData[j]!='-'){
+                                    if (cellType == 'select') {
+                                        var dictItem = dictItems[cellTableField];
+                                        dataItem[cellTableField] = dictItem[rowData[j]];
+                                    } else {
+                                        dataItem[cellTableField] = rowData[j];
+                                    }
+                                    // }
+                                } else if (rowData[j] == 0) {
+                                    dataItem[cellTableField] = rowData[j];
+                                }
+                            }
+                        }
+                        dataItem['rowId'] = hotInstance.getCellMeta(row, 0)['rowId'];
+                        if (JSON.stringify(dataItem) != "{}") {
+                            //以免多余的行空
+                            dataMap.push(dataItem);
+                        }
+                    }
+                }
+                return dataMap;
+            } else {
+                var newMap = sets.newMap;
+                var allData = hotInstance.getData();
+                dataMapItem = new Object();
+                $.each(newMap, function (i, item) {
+                    if (item && item.cellType == 'input') {
+                        var row = item.cellRow;
+                        var col = item.cellCol;
+                        var dataItem = allData[row][col];
+                        var cellType = hotInstance.getCellMeta(row, col)['editor'];
+                        if (item.cellTableField && dataItem || dataItem == 0) {
+                            if (cellType == 'select') {
+                                var dictItem = dictItems[item.cellTableField];
+                                dataMapItem[item.cellTableField] = dictItem[dataItem];
+                            } else {
+                                dataMapItem[item.cellTableField] = dataItem;
+                            }
+                        }
+                    }
+                });
+                dataMapItem['rowId'] = hotInstance.getCellMeta(0, 0)['rowId'];
+                dataMap.push(dataMapItem);
+                return dataMap;
+            }
+        },
+        getReportDataForBigData: function getReportDataForBigData(sets, CurrentIndex) {
+            var dataMap = new Array();
+            var dictItems = sets.TransferDictItems;
+            if (sets.tableType == 'list-business') {
+                return null;
+            } else if (sets.tableType == 'list') {
+                var dataStartRow = sets.dataStartRow;
+                //流表结构会变化，所以这个地方动态获取
+                // var dataEndRow = hotInstance.countRows();//总行数8,其实只有到7列
+                //sets.ishj有合计行的话，循环到合计下一行，否则就是标记的备注行
+                var dataEndRow = sets.ishj ? sets.ishjRow + 1 : sets.ishjRow;
+                var dataItem;
+                if (CurrentIndex < dataStartRow || CurrentIndex >= dataEndRow) {
+                    //在数据行外范围
+                    return;
+                }
+                var i = CurrentIndex;
+                var row = i;
+                var ishj = hotInstance.getCellMeta(row, 0)['ishj'];
+                var rowData = hotInstance.getDataAtRow(i);
+                dataItem = new Object();
+                dataItem.addRowIndex = CurrentIndex - dataStartRow + '';
+                if (ishj == 1) {
+                    //合计行
+                    //计算合计数据
+                    for (var j = 0; j < rowData.length; j++) {
+                        var cellTableField = hotInstance.getCellMeta(row, j)['cellTableField'];
+
+                        if (cellTableField) {
+                            if (rowData[j]) {
+                                if (rowData[j] != '合计' && rowData[j] != '-') {
+                                    dataItem[cellTableField] = rowData[j];
+                                }
+                            } else if (rowData[j] === 0) {
+                                dataItem[cellTableField] = 0;
+                            }
+                        }
+                    }
+                    dataItem['rowId'] = hotInstance.getCellMeta(row, 0)['rowId'];
+                    dataItem['ISHJ'] = '1';
+                    dataMap.push(dataItem);
+                    //有合计行直接结束？有问题。直接把cellTableField
+                    //放到Cellmeta中
+                } else {
+                    //数据行
+                    for (var j = 0; j < rowData.length; j++) {
+                        var cellMeta = hotInstance.getCellMeta(row, j);
+                        var cellTableField = cellMeta['cellTableField'];
+                        var cellType = cellMeta['editor'];
+                        if (cellTableField) {
+                            if (rowData[j]) {
+                                //合计行的合计字段才判断
+                                // if(rowData[j]!='合计'&&rowData[j]!='-'){
+                                if (cellType == 'select') {
+                                    var dictItem = dictItems[cellTableField];
+                                    dataItem[cellTableField] = dictItem[rowData[j]];
+                                } else {
+                                    dataItem[cellTableField] = rowData[j];
+                                }
+                                // }
+                            } else if (rowData[j] === 0) {
+                                dataItem[cellTableField] = 0;
+                            }
+                        }
+                    }
+                    dataItem['rowId'] = hotInstance.getCellMeta(row, 0)['rowId'];
+                    if (JSON.stringify(dataItem) != "{}") {
+                        //以免多余的行空
+                        dataMap.push(dataItem);
+                    }
+                }
+                return dataMap;
+            } else {
+                return null;
+            }
+        }
+    }
+});
+
+//kingdom module wrapper =======================
+if (seajs) {
+    define(function (require, exports, module) {
+        module.exports = jQuery.handsontable;
+    });
+}

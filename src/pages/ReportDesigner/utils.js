@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-07 10:31:25
+ * @LastEditTime : 2020-01-07 21:38:32
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -146,6 +146,17 @@ export function getColColumnXml(contentDetail) {
     colColumnCel += `<column col-number="${(index + 1).toString()}" width="${value.toString()}"/>`;
   });
   return colColumnCel;
+}
+
+/**
+ * @description: 生成查询区域的xml部分
+ * @param {type} param
+ * @return: return
+ * @Author: mus
+ * @Date: 2020-01-07 21:35:01
+ */
+export function getCustomSearchDataXml(customSearchData) {
+  // let customeSearchXml = '';
 }
 
 /**

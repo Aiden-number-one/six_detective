@@ -9,12 +9,14 @@ import styles from './AuditTrailLogging.less';
 import { timeFormat } from '@/utils/filter';
 import SearchForm from './components/SearchForm';
 import IconFont from '@/components/IconFont';
+import { downloadFile } from '@/pages/DataImportLog/constants';
 
 const NewSearchForm = Form.create({})(SearchForm);
 
 @connect(({ auditLog, loading }) => ({
   loading: loading.effects,
   getAuditLogListData: auditLog.data,
+  dataExport: auditLog.dataExport,
 }))
 class AuditTrailLogging extends Component {
   state = {
@@ -28,6 +30,7 @@ class AuditTrailLogging extends Component {
     functionName: undefined,
     updatedBy: undefined,
     exportDataVisible: false,
+    exportTypes: [],
     functionNameOptions: [
       { key: '', value: '', title: 'All' },
       { key: '1', value: '1', title: 'Name One' },
@@ -353,23 +356,24 @@ class AuditTrailLogging extends Component {
 
   exportDataConfirm = () => {
     const { dispatch } = this.props;
+    const { exportTypes } = this.state;
     const param = {
-      fileType: '1',
+      fileType: exportTypes.join(','),
       apiVersion: 'v2.0',
       isPage: 'true',
       apiName: 'bayconnect.superlop.get_system_log_list',
     };
-    dispatch(
-      {
-        type: 'auditLog/getDataExport',
-        payload: param,
-      },
-      () => {
+    dispatch({
+      type: 'auditLog/getDataExport',
+      payload: param,
+      callback: () => {
+        console.log('this.props.dataExport===', this.props.dataExport);
         this.setState({
           exportDataVisible: false,
         });
+        downloadFile(this.props.dataExport);
       },
-    );
+    });
   };
 
   exportDataCancel = () => {
@@ -448,6 +452,12 @@ class AuditTrailLogging extends Component {
   onChangeCheckbox = newCheckedValues => {
     this.setState({
       checkedValues: newCheckedValues,
+    });
+  };
+
+  onChangeExport = newExportTypes => {
+    this.setState({
+      exportTypes: newExportTypes,
     });
   };
 
@@ -537,11 +547,11 @@ class AuditTrailLogging extends Component {
           okText={formatMessage({ id: 'app.common.save' })}
         >
           <div>
-            <Checkbox.Group>
-              <Checkbox value={1}>csv</Checkbox>
-              <Checkbox value={2}>xlsx</Checkbox>
-              <Checkbox value={3}>docx</Checkbox>
-              <Checkbox value={4}>pdf</Checkbox>
+            <Checkbox.Group onChange={this.onChangeExport}>
+              <Checkbox value={1}>xlsx</Checkbox>
+              <Checkbox value={2}>docx</Checkbox>
+              <Checkbox value={3}>pdf</Checkbox>
+              <Checkbox value={4}>csv</Checkbox>
             </Checkbox.Group>
           </div>
         </Modal>

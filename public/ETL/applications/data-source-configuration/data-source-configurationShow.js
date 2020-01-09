@@ -1,1 +1,1322 @@
-var _extends=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var o in n)Object.prototype.hasOwnProperty.call(n,o)&&(t[o]=n[o])}return t};define(function(require,exports,module){var showContent={};require("plugins/jstree/dist/jstree"),require("plugins/drag/kd_drag.js"),require("plugins/jstree/dist/themes/default/style.css"),require("plugins/select2/js/select2.js"),require("plugins/select2/css/select2.css"),require("plugins/bootstrap-fileinput/bootstrap-fileinput.js"),require("plugins/bootstrap-fileinput/bootstrap-fileinput.css"),showContent.load=function(){App.initCheckableTable($("#connect-data-result")),showContent.initForm(),showContent.get_source_connect_List(),showContent.getCurrentTreeData=[],showContent.getConnectTypeData=[],showContent.targetTable=null,$.kingdom.getDict("ROLLBACK_FLAG","[name=rollbackFlag]"),$.kingdom.getDict("BEFORE_RULE","[name=beforeRule]")},showContent.get_source_connect_List=function(t){var e=t?{connectionName:t}:{};$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_source_config","v4.0",e,function(t){var o=t.bcjson.items||t.bcjson;"1"==t.bcjson.flag&&o&&require.async("./template/data-source-configuration-list.handlebars",function(t){if($(".data-source-configuration-list").html(t(o)),!o[0])return!1;var e=o[0].connectionName,n=o[0].connectionType;$(".data-source-r-header").find("strong").html(e),$(".data-source-r-header").find("span").html(n),$(".data-source-configuration-list li:first-child").click()})})},showContent.getUser=function(t){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_schemas_from_tables_info","v4.0",t,function(t){var e=t.bcjson.items||t.bcjson;"1"==t.bcjson.flag&&e&&require.async("./template/data-source-configuration-option.handlebars",function(t){$("#J_dsc_list_detail #schemName").html("<option value=''>- Please select a type -</option>"+t(e))})})},showContent.getConnectType=function(n){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_driver_info","v4.0",{},function(t){var e=t.bcjson.items||t.bcjson;showContent.list=e,"1"==t.bcjson.flag&&e&&(showContent.getConnectTypeData=e,require.async("./template/connect-type-list.handlebars",function(t){$("#connection_type").html(t(e)),App.clearForm("data-connect-add-form"),$("#data-connect-add-form input[name='principal']").closest(".form-group").addClass("hide"),$("#J_dsc_commonType_add input[name=jdbc_string]").val(e[0]&&e[0].urlInfo),showContent.currentUrlInfo=e[0]&&e[0].urlInfo,"MySQL"===n?n="Mysql":"Excel"===n?n="XLS文件":"CSV"===n?n="TXT/CSV文件":"星环INCEPTOR"===n?n="星环Inceptor":"CDH"===n&&$("#data-connect-add-form input[name='principal']").closest(".form-group").removeClass("hide"),$.each(e,function(t,e){e.driverName.toUpperCase()===n.toUpperCase()&&$("#data-connect-add-form input[name='db_port']").val(e.dbPort)}),$($("#connection_type").find("option[driverName='"+n+"']")[0]).attr("selected","true").change()}))})},showContent.getConnectType_edit=function(n){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_driver_info","v4.0",{},function(t){var e=t.bcjson.items||t.bcjson;showContent.list=e,showContent.data=e,"1"==t.bcjson.flag&&e&&(showContent.getConnectTypeData=e,require.async("./template/connect-type-list.handlebars",function(t){$("#connection_type_edit").html(t(e)),$($("#connection_type_edit").find("option[driverName='"+n+"']")[0]).attr("selected","true")}))})},showContent.qry_connect_data=function(t){var e={connection_id:$(".data-source-configuration-list .click-add-background").attr("connection_id")};e=_extends(e,t),$.kingdom.getList({apiName:"bayconnect.superlop.get_metadata_table_info",apiVision:"v4.0",params:e,tableId:"connect-data-result",formName:"data-source-configuration-form",pageId:"dsc-pages",template:"data-source-configuration/template/data-source-configuration-datasourcedetail.handlebars",cb:showContent.qry_connect_data})},showContent.testDataConnectList=function(t){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_source_connect_test","v4.0",t,function(t){App.unblockUI();var e=t.bcjson;"0"==e.flag?toastr.error(e.msg):toastr.success(e.msg)})},showContent.addDataConnectList=function(t){var e=$.extend({opType:"ADD"},t);$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_data_source_config","v4.0",e,function(t){App.unblockUI();var e=t.bcjson;"0"==e.flag?toastr.error(e.msg):(toastr.success(e.msg),App.clearForm("data-connect-add-form"),showContent.get_source_connect_List())})},showContent.editDataConnectList=function(t){var e=$.extend({opType:"UPD"},t);$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_data_source_config","v4.0",e,function(t){App.unblockUI();var e=t.bcjson;"0"==e.flag?toastr.error(e.msg):(toastr.success(e.msg),showContent.get_source_connect_List())})},showContent.deleteDataConnect=function(t){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_data_source_config","v4.0",t,function(t){App.unblockUI();var e=t.bcjson;"0"==e.flag?toastr.error(e.msg):(toastr.success(e.msg),showContent.get_source_connect_List())})},showContent.getImportDataSource=function(t){var e={connection_id:t};$("#J_tree_import").jstree("destroy"),$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_db_metadata_schemas","v4.0",e,function(t){App.unblockUI();var e=t.bcjson.items;showContent.getCurrentTreeData=e,showContent.generateTree(e)})},showContent.listImport=function(n){return new Promise(function(e,t){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_table_export_info","v4.0",n,function(t){"1"==t.bcjson.flag?e(t):(App.unblockUI(),toastr.error(t.bcjson.msg))})})},showContent.listImport2=function(n,t){return new Promise(function(e,t){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.file_info","v4.0",n,function(t){"1"==t.bcjson.flag?e(t):(App.unblockUI(),toastr.error(t.bcjson.msg))})})},showContent.listImport3=function(t,e){var n="/superlop/restv2/admin/v2.0/bayconnect.superlop.file_download_quick.json?fileClass="+t.fileClass+"&filePath="+t.filePath;try{var o=document.createElement("a");o.href=n,o.download=!0,o.click(),App.unblockUI()}catch(t){console.error(t)}},showContent.generateTree=function(t,e){var n=[];if(!t)return!1;$.each(t,function(t,o){var a=[];$.each(o.tableList,function(t,e){var n={};"TABLE"===e.tableType?n.text=e.tableName+"<span style='font-size:12px;font-weight:100;'>（Table）</span>":n.text=e.tableName+"<span style='font-size:12px;font-weight:100;'>（View）</span>",n.id="child-"+o.schemaName+"-"+t,n.children=!1,"TABLE"===e.tableType?n.icon="glyphicon glyphicon-list-alt":n.icon="glyphicon glyphicon-modal-window","Y"===e.isExist&&(n.a_attr={class:"is-exit-table"}),a.push(n)});var e={text:o.schemaName+"<span style='font-size:12px;font-weight:100;'>（"+o.tableCounts+"）</span>",id:"parent"+t,children:a};n.push(e)}),$("#J_tree_import").jstree("destroy"),$("#J_tree_import").jstree({ui:{theme_name:"checkbox"},core:{themes:{responsive:!1},check_callback:!0,data:n,multiple:!1,dblclick_toggle:!1},types:{default:{icon:"glyphicon glyphicon-user"}},plugins:["types","checkbox","themes","html_data"],checkbox:{keep_selected_style:!1,three_state:!0,tie_selection:!1}}).on("loaded.jstree",function(){e&&$("#J_tree_import").jstree("open_all")})},showContent.saveTableList=function(){var t=$(".data-source-configuration-list .click-add-background").attr("connection_id"),e=$.kingdom.uniqueArray($("#J_tree_import").jstree("get_checked")),a=[];$.each(e,function(t,e){if(-1<e.indexOf("child")){var n=$("#"+e+" a").text().split("（")[0],o=$("#"+e).closest(".jstree-children").parent("li").find("a:eq(0)").text().split("（")[0];a.push(o+"."+n)}});var n={connection_id:t,tables_info:a.join(",")};App.blockUI({boxed:!0,message:"Saving..."}),$(".blockPage").css("z-index","9999999999999"),$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_db_metadata","v4.0",n,function(t){if(App.unblockUI(),"1"===t.bcjson.flag){toastr.success("Saved Successfully"),$(".modal-header button.close").click();var e={pageNumber:"1"};showContent.qry_connect_data(e),showContent.getUser({connection_id:showContent.connect_id})}else toastr.error(t.bcjson.msg)})},showContent.getCheckBoxTableid=function(){var t=$(".data-source-configuration-list .click-add-background").attr("connection_id"),e=$("#connect-data-result .checked"),o=[];return $.each(e,function(t,e){if(0<$(e).find("group-checkable").length)return!1;var n=$(e).closest("td").data("tableid");o.push(n)}),{connection_id:t,tables_id:o.join(",")}},showContent.deleteTableList=function(t,e){var n={};if(t){var o=$(".data-source-configuration-list .click-add-background").attr("connection_id");n.connection_id=o,n.tables_id=e}else if(!(n=showContent.getCheckBoxTableid()))return App.unblockUI(),!1;$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_metadata_tables_del","v4.0",n,function(t){if(App.unblockUI(),"1"===t.bcjson.flag){toastr.success(t.bcjson.msg);var e={pageNumber:"1"};showContent.qry_connect_data(e),showContent.getUser({connection_id:showContent.connect_id})}else toastr.error(t.bcjson.msg)})},showContent.metadataTablesUpd=function(){var t=showContent.getCheckBoxTableid();if(!t)return App.unblockUI(),!1;$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_metadata_tables_upd","v4.0",t,function(t){if(App.unblockUI(),"1"===t.bcjson.flag){toastr.success("Update successfully");var e={pageNumber:"1"};showContent.qry_connect_data(e),showContent.getUser({connection_id:showContent.connect_id})}else toastr.error(t.bcjson.msg)})},showContent.tableRecordcountUpd=function(){var t=showContent.getCheckBoxTableid();if(!t)return App.unblockUI(),!1;$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_table_recordcount_upd","v4.0",t,function(t){if(App.unblockUI(),"1"===t.bcjson.flag){toastr.success("Succeed");var e={pageNumber:"1"};showContent.qry_connect_data(e),showContent.getUser({connection_id:showContent.connect_id})}else toastr.error(t.bcjson.msg)})},showContent.metadataTablesUpdBatch=function(t){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_metadata_tables_upd","v4.0",t,function(t){App.unblockUI(),"1"===t.bcjson.flag?(toastr.success("Batch update successfully"),showContent.qry_connect_data(),showContent.getUser({connection_id:showContent.connect_id})):toastr.error(t.bcjson.msg)})},showContent.tableRecordcountUpdBatch=function(t){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_table_recordcount_upd","v4.0",t,function(t){App.unblockUI(),"1"===t.bcjson.flag?(toastr.success("Batch update successfully"),showContent.qry_connect_data(),showContent.getUser({connection_id:showContent.connect_id})):toastr.error(t.bcjson.msg)})},showContent.getTabColumnInfo=function(t){var e={};e.table_id=t,$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_column_info","v4.0",e,function(t){var e=t.bcjson.items||t.bcjson;"1"==t.bcjson.flag&&e&&require.async("./template/tab-column-info-list.handlebars",function(t){$("#des-showtable-info-2-table-body").html(t(e))})})},showContent.previewAction=function(t,e){var n={};n.connection_id=$(".data-source-configuration-list .click-add-background").attr("connection_id"),n.schema=t,n.table_name=e,$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_table_perform","v4.0",n,function(t){var e="<th></th>",n="",o=t.bcjson.items||t.bcjson;if("1"==t.bcjson.flag&&o[0]){for(var a in o[0])e=e+"<th> "+a+"</th>";$("#des-showtable-info-3-thead-tr").html(o[0]?e:"");var i=1,c=!0,r=!1,s=void 0;try{for(var l,d=o[Symbol.iterator]();!(c=(l=d.next()).done);c=!0){var u=l.value,f="";for(var p in f=f+"<td class='t-c'> "+i+"</td>",i++,u)f=f+"<td> "+u[p]+"</td>";n=n+"<tr>"+f+"</tr>"}}catch(t){r=!0,s=t}finally{try{!c&&d.return&&d.return()}finally{if(r)throw s}}$("#des-showtable-info-3-table-body").html(n),$("#des-showtable-info-3-table").removeAttr("style")}else $("#des-showtable-info-3-table").css("display","none"),$("#des-showtable-info-3-table").closest("div").append("<div style='text-align: center;font-size: 14px;margin-top: 20px;'>No Data</div>")})},showContent.initForm=function(){$("#data-connect-add-form").validate({debug:!0,errorElement:"span",errorClass:"help-block",focusInvalid:!1,rules:{connection_type:{required:!0},connection_name:{required:!0,maxlength:64},server:{required:!0},db_port:{required:!0},db_user:{required:!0},db_database:{required:!0},db_password:{required:!0},jdbc_string:{required:!0},max_connect_count:{numCheck:!0}},invalidHandler:function(){},highlight:function(t){$(t).closest(".form-group").addClass("has-error")},success:function(t){t.closest(".form-group").removeClass("has-error"),t.remove()},errorPlacement:function(t,e){t.insertAfter(e)},submitHandler:function(){}}),$("#data-connect-edit-form").validate({debug:!0,errorElement:"span",errorClass:"help-block",focusInvalid:!1,rules:{connection_type_edit:{required:!0},connection_name_edit:{required:!0},server:{required:!0},db_port:{required:!0},db_user:{required:!0},db_database:{required:!0},db_password:{required:!0},jdbc_string:{required:!0},max_connect_count:{numCheck:!0}},invalidHandler:function(){},highlight:function(t){$(t).closest(".form-group").addClass("has-error")},success:function(t){t.closest(".form-group").removeClass("has-error"),t.remove()},errorPlacement:function(t,e){t.insertAfter(e)},submitHandler:function(){}})},showContent.shouldUpdateCheck=function(){var n=0;return $.each(showContent.filterMainTree,function(t,e){e&&n++}),showContent.filterMainTreeAmount++,showContent.filterMainTreeAmount<=n},showContent.upLoad=function(fileName,fileType){var options={url:window.location.origin+"/superlop/restv2/admin/v2.0/bayconnect.superlop.file_upload.json",type:"POST",dataType:"json",success:function success(data){App.unblockUI(),"string"==typeof data&&(data=eval("("+data+")")),$("#J_mock_form_collection_form input[name='fileName']").val(fileName),$("#J_mock_form_collection_form input[name='fileUrl']").val(data.bcjson.msg);var html='<li><div><i style="padding-right: 10px" class="glyphicon glyphicon-file"></i><span type='+fileType+" fileurl="+data.bcjson.msg+">"+fileName+'</span><i style="float: right" class="glyphicon glyphicon-trash"></i></div></li>';$("#data-source-configuration .excel-choose-block-inside ul").append(html),$("#data-source-configuration .excel-bottom span span").html($("#data-source-configuration .excel-choose-block-inside ul li").length),1===$("#data-source-configuration .excel-choose-block-inside ul li").length&&showContent.getExcelContentList()},error:function(){toastr.info("Fail"),App.unblockUI()}};$("#J_mock_form_collection_form").ajaxSubmit(options)},showContent.getExcelContentList=function(){if(0===$("#data-source-configuration .excel-choose-block-inside ul li span").length)return!1;var t={fileUrl:$("#data-source-configuration .excel-choose-block-inside ul li span:eq(0)").attr("fileurl"),fileType:$("#data-source-configuration .excel-choose-block-inside ul li span:eq(0)").attr("type")};$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_file_content_info","v4.0",t,function(t){if("1"===t.bcjson.flag){showContent.tableHead=[];var e=t.bcjson.items[0],n='<th class="t-c">序号</th>',o='<th style="width:80px;">指定表头</th><th class="t-c">序号</th>',a=0;for(var i in e)n=n+"<th>"+e[i]+"</th>",o=o+"<th>F"+a+"</th>",a++,showContent.tableHead.push(e[i]);n="<tr>"+n+"</tr>",o="<tr>"+o+"</tr>";var c=[].concat(t.bcjson.items);t.bcjson.items.shift();var r=t.bcjson.items,s="",l=0,d=!0,u=!1,f=void 0;try{for(var p,h=r[Symbol.iterator]();!(d=(p=h.next()).done);d=!0){var _=p.value,m=0,g='<td class="t-c">'+ ++l+"</td>";for(var b in _)g=g+"<td> "+_[b]+"</td>",m++;m===a&&(s=s+"<tr>"+g+"</tr>")}}catch(t){u=!0,f=t}finally{try{!d&&h.return&&h.return()}finally{if(u)throw f}}var v="",y=0,C=!0,w=!1,k=void 0;try{for(var A,j=c[Symbol.iterator]();!(C=(A=j.next()).done);C=!0){var x=A.value,I=0,J='<td class="t-c" class="t-c"><input type="checkbox"></td><td class="t-c">'+ ++y+"</td>";for(var T in x)J=J+"<td> "+x[T]+"</td>",I++;I===a&&(v=v+"<tr>"+J+"</tr>")}}catch(t){w=!0,k=t}finally{try{!C&&j.return&&j.return()}finally{if(w)throw k}}$("#J_dsc_produce_head").html(n),$("#J_dsc_produce_body").html(s),$("#J_dsc_produce_head_option").html(o),$("#J_dsc_produce_body_option").html(v),$("#J_dsc_produce_head").closest(".table-scrollable").removeClass("hide"),App.initCheckableTable($("#J_dsc_produce_table"))}else toastr.info("生成表失败")})},showContent.getExcelFileTypeData=function(t){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_file_data_source_info","v4.0",t,function(t){var e=t.bcjson.items||t.bcjson;if("1"==t.bcjson.flag&&e[0]){$("#J_excel_add_tab1 input[name=connectionName]").val(e[0].connectionName);var n='<li><div><i style="padding-right: 10px" class="glyphicon glyphicon-file"></i><span type='+e[0].fileType+" fileurl="+e[0].fileUrl+">"+e[0].fileName+'</span><i style="float: right" class="glyphicon glyphicon-trash"></i></div></li>';$("#data-source-configuration .excel-choose-block-inside ul").append(n),$("#data-source-configuration .excel-bottom span span").html($("#data-source-configuration .excel-choose-block-inside ul li").length),showContent.getExcelContentList(),App.setFormData("J_excel_add_tab2_form",e[0]),showContent.getDataSourceList(function(){showContent.targetTable=e[0].targetTable,$("#J_select2_dcs_target_data_connect").val(e[0].targetConnectionId).change()});var o=JSON.parse(e[0].mappingInfo).mappingColumn;if(0<(showContent.dataFildItems=o).length){var a=!0,i=!1,c=void 0;try{for(var r,s=o[Symbol.iterator]();!(a=(r=s.next()).done);a=!0){var l=r.value;l.rowsCount=o.length,l.columnName=l.targetColumn}}catch(t){i=!0,c=t}finally{try{!a&&s.return&&s.return()}finally{if(i)throw c}}require.async("./template/data-field-list-2.handlebars",function(t){$("#J_dsc_field_map_body").html(t(o)),showContent.haddleDataField_2.edit(o),App.initCheckableTable($("#J_dsc_field_map_table"))})}}else toastr.info("数据异常，暂时无法修改")})},showContent.getExcelFileDetail=function(t){$.kingdom.getList({apiName:"bayconnect.superlop.get_file_data_source_info",apiVision:"v4.0",params:t,tableId:"J_file_data_result",pageId:"J_file_data_result_page",formName:"data-source-configuration-form",template:"data-source-configuration/template/data-source-configuration-datasourcedetail-file.handlebars"})},showContent.getExcelSingleFileDetail=function(i){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_target_table_data_info","v4.0",i,function(t){var e=t.bcjson.items||t.bcjson;if("1"==t.bcjson.flag&&e){var c=0;$.each(e,function(t,e){var n=0;for(var o in e)e[o]&&c<++n&&(c=n)});var o="<tr currentpreparams="+JSON.stringify(i)+">";$.each(e[0],function(t,e){if(e){var n=e.match(/head:\{(.*)\}/);n=n?n[1]:e,o+="<th>"+n+"</th>"}});for(var n=c-(o.split("<th>").length-1),a=0;a<n;a++)o+="<th></th>";o+="<th class='t-c'>操作</th>",o+="</tr>";var r="";e.shift(),$.each(e,function(t,e){var n="<tr currentdata="+JSON.stringify(e)+">",o="";$.each(e,function(t,e){e&&(o+="<td currentkey="+t+">"+e+"</td>")});var a=c-(o.split("</td>").length-1);if(a!==c){for(var i=0;i<a;i++)o+="<td></td>";o+="<td class='t-c'><a href='javascript:;'>编辑</a></td>"}r+=n+=o+"</tr>"}),$("#J_single_file_data_result_head").html(o),$("#J_single_file_data_result_body").html(r)}else toastr.info("数据异常,无法查看")})},showContent.editExcelSingleFileDetail=function(n){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_target_table_data","v4.0",n,function(t){App.unblockUI();var e=t.bcjson.items||t.bcjson;"1"==t.bcjson.flag&&e?(delete n.dataInfo,showContent.getExcelSingleFileDetail(n)):toastr.info("保存失败")})},showContent.getDataSourceList=function(l){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_source_config","v4.0",{},function(t){if("1"==t.bcjson.flag){var e=t.bcjson.items,n=[{id:"",text:""}];if(e&&0<e.length){var o=!0,a=!1,i=void 0;try{for(var c,r=e[Symbol.iterator]();!(o=(c=r.next()).done);o=!0){var s=c.value;'<option value="'+s.connectionId+'"">'+s.connectionName+"</option>",n.push({id:s.connectionId,text:s.connectionName})}}catch(t){a=!0,i=t}finally{try{!o&&r.return&&r.return()}finally{if(a)throw i}}}$("#J_select2_dcs_target_data_connect").select2({data:n,placeholder:"- Please select a type -"}),"function"==typeof l&&l()}})},showContent.getTableList=function(t,d,u,f){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_table_info","v4.0",t,function(t){if("1"==t.bcjson.flag){var e=t.bcjson.items,n=[{id:"",text:""}],o=[];if(e){var a=!0,i=!1,c=void 0;try{for(var r,s=e[Symbol.iterator]();!(a=(r=s.next()).done);a=!0){var l=r.value;n.push({id:l.tableId,text:l.schemName+"."+l.tableName+"("+l.mdType+")"}),o.push({id:l.tableId,text:l.schemName+"."+l.tableName})}}catch(t){i=!0,c=t}finally{try{!a&&s.return&&s.return()}finally{if(i)throw c}}}$(d).empty().clearInputs(),$(d).select2({data:n,placeholder:"- Please select a type -",tags:u}),$(d).data("origin",o),"function"==typeof f&&f()}})},showContent.getDataField_2=function(t,l){$.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_column_info","v4.0",t,function(t){if("1"==t.bcjson.flag){var e=t.bcjson.items;if(0===e.length)return void toastr.info("没有查询到映射字段");var n=0,o=!0,a=!1,i=void 0;try{for(var c,r=e[Symbol.iterator]();!(o=(c=r.next()).done);o=!0){var s=c.value;s.rowsCount=e.length,s.tableHeader=showContent.tableHead[n],n++}}catch(t){a=!0,i=t}finally{try{!o&&r.return&&r.return()}finally{if(a)throw i}}require.async("./template/data-field-list-2.handlebars",function(t){$("#J_dsc_field_map_body").html(t(e)),showContent.haddleDataField_2.init(e),App.initCheckableTable($("#J_dsc_field_map_table")),"function"==typeof l&&l()})}})},showContent.haddleDataField_2={init:function(t){var e='<select class="form-control input-sm">';e+='<option value="">--Please select a type--</option>';var n=!0,o=!1,a=void 0;try{for(var i,c=t[Symbol.iterator]();!(n=(i=c.next()).done);n=!0){var r=i.value;e+='<option value="'+r.columnName+'">'+r.columnName+"</option>"}}catch(t){o=!0,a=t}finally{try{!n&&c.return&&c.return()}finally{if(o)throw a}}e+="</select>",$.each($("#J_dsc_field_map_body [data-type=target]"),function(){var t=$.trim($(this).html());t&&$(this).html(e).attr("inited","inited").children().val(t)})},edit:function(t){var e='<select class="form-control input-sm">';e+='<option value="">--Please select a type--</option>';var n=!0,o=!1,a=void 0;try{for(var i,c=t[Symbol.iterator]();!(n=(i=c.next()).done);n=!0){var r=i.value;e+='<option value="'+r.columnName+'">'+r.columnName+"</option>"}}catch(t){o=!0,a=t}finally{try{!n&&c.return&&c.return()}finally{if(o)throw a}}e+="</select>",$.each($("#J_dsc_field_map_body [data-type=target]:not([inited])"),function(){var t=$.trim($(this).html());t&&$(this).html(e).attr("inited","inited").children().val(t)})},refresh:function(){$.each($("#J_dsc_field_map_body tr td[data-type]"),function(){var t=$(this).data("origin");$(this).children().val(t)})},getRow:function(){return $("#J_dsc_field_map_body tr").length},delCheckedRow:function(){$.each($("#J_dsc_field_map_body input[type=checkbox]:checked"),function(t){$(this).closest("tr").remove()}),showContent.haddleDataField_2.reorder()},reorder:function(){$.each($("#J_dsc_field_map_body tr"),function(t){$(this).find("td:first").text(t+1),$(this).find("td[data-type=import]").html(" 第 "+(t+1)+" 列 ")})},getData:function(){var a=new Array;return $.each($("#J_dsc_field_map_body tr"),function(t){var e,n=$(this).find("[data-type=target] select").val(),o={no:e=(t+1).toString(),sourceColumn:e,targetColumn:n};n&&a.push(o)}),JSON.stringify({mappingColumn:a})}},showContent.hideShowBlock=function(t){$("#data-source-configuration #J_dsc_back_to_list").addClass("hide"),$("#data-source-configuration #J_dsc_list_detail,#data-source-configuration #J_dsc_commonType_add,#data-source-configuration #J_dsc_fileType_add,#data-source-configuration #J_dsc_file_list_detail,#data-source-configuration #J_dsc_file_list_single_detail,#data-source-configuration #J_dsc_commonType_edit").addClass("hide"),$("#data-source-configuration "+t).removeClass("hide")},showContent.clearFileBlock=function(){$("#J_excel_add_tab1 input[name='connectionName']").val(""),$("#J_dsc_clear_file").click(),App.clearForm("J_excel_add_tab2_form"),$(".select2-hidden-accessible").empty().clearInputs(),$("#J_dsc_field_map_body").html(""),$("#data-source-configuration #J_dsc_pre_step").click(),$("#data-source-configuration #J_dsc_pre_step").click()},module.exports=showContent});
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+/*
+ * @Author: Sean Mu 
+ * @Date: 2018-09-25 11:07:42 
+ * @Last Modified by: lanjianyan
+ * @Last Modified time: 2019-04-18 17:19:18
+ */
+
+define(function (require, exports, module) {
+    var showContent = {};
+    require("plugins/jstree/dist/jstree");
+    require("plugins/drag/kd_drag.js");
+    require("plugins/jstree/dist/themes/default/style.css");
+    require("plugins/select2/js/select2.js");
+    require("plugins/select2/css/select2.css");
+    require("plugins/bootstrap-fileinput/bootstrap-fileinput.js");
+    require("plugins/bootstrap-fileinput/bootstrap-fileinput.css");
+    showContent.load = function () {
+        App.initCheckableTable($("#connect-data-result"));
+        showContent.initForm();
+        showContent.get_source_connect_List();
+        showContent.getCurrentTreeData = [];
+        showContent.getConnectTypeData = [];
+        showContent.targetTable = null; // 存放目标对象 (Excel类，数据回显时使用)
+
+        //初始化字典操作
+        $.kingdom.getDict("ROLLBACK_FLAG", "[name=rollbackFlag]"); // 数据抽取任务->目标->提交方式
+        $.kingdom.getDict("BEFORE_RULE", "[name=beforeRule]"); // 数据抽取任务->目标->目标写入前操作
+    };
+    // 获取数据源数据
+    showContent.get_source_connect_List = function (val) {
+        var paramsMap = val ? { connectionName: val } : {};
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_source_config", "v4.0", paramsMap, function (data) {
+            var items = data.bcjson.items || data.bcjson;
+            if (data.bcjson.flag == "1" && items) {
+                require.async("./template/data-source-configuration-list.handlebars", function (compiled) {
+                    $(".data-source-configuration-list").html(compiled(items));
+                    if (!items[0]) {
+                        return false;
+                    }
+                    var connectionName = items[0].connectionName;
+                    var connectionType = items[0].connectionType;
+                    $(".data-source-r-header").find("strong").html(connectionName);
+                    $(".data-source-r-header").find("span").html(connectionType);
+                    $(".data-source-configuration-list li:first-child").click();
+                });
+            }
+        });
+    };
+    // 获取所属用户下拉框
+    showContent.getUser = function (params) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_schemas_from_tables_info", "v4.0", params, function (data) {
+            var items = data.bcjson.items || data.bcjson;
+            if (data.bcjson.flag == "1" && items) {
+                require.async("./template/data-source-configuration-option.handlebars", function (compiled) {
+                    $("#J_dsc_list_detail #schemName").html("<option value=''>- Please select a type -</option>" + compiled(items));
+                });
+            }
+        });
+    };
+    // 获取驱动类型
+    showContent.getConnectType = function (typeName) {
+        var paramsMap = {};
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_driver_info", "v4.0", paramsMap, function (data) {
+            var items = data.bcjson.items || data.bcjson;
+            showContent.list = items;
+            if (data.bcjson.flag == "1" && items) {
+                showContent.getConnectTypeData = items;
+                require.async("./template/connect-type-list.handlebars", function (compiled) {
+                    $("#connection_type").html(compiled(items));
+                    //第一次进入则url模板
+                    App.clearForm("data-connect-add-form");
+                    $("#data-connect-add-form input[name='principal']").closest(".form-group").addClass("hide");
+                    $("#J_dsc_commonType_add input[name=jdbc_string]").val(items[0] && items[0].urlInfo);
+                    showContent.currentUrlInfo = items[0] && items[0].urlInfo;
+                    if (typeName === "MySQL") {
+                        typeName = "Mysql";
+                    } else if (typeName === "Excel") {
+                        typeName = "XLS文件";
+                    } else if (typeName === "CSV") {
+                        typeName = "TXT/CSV文件";
+                    } else if (typeName === "星环INCEPTOR") {
+                        typeName = "星环Inceptor";
+                    } else if (typeName === "CDH") {
+                        $("#data-connect-add-form input[name='principal']").closest(".form-group").removeClass("hide");
+                    }
+                    $.each(items, function (i, item) {
+                        if (item.driverName.toUpperCase() === typeName.toUpperCase()) {
+                            $("#data-connect-add-form input[name='db_port']").val(item.dbPort);
+                        }
+                    });
+                    $($("#connection_type").find("option[driverName='" + typeName + "']")[0]).attr("selected", "true").change();
+                });
+            }
+        });
+    };
+    //  获取修改弹框中驱动类型
+    showContent.getConnectType_edit = function (params) {
+        var paramsMap = {};
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_driver_info", "v4.0", paramsMap, function (data) {
+            var items = data.bcjson.items || data.bcjson;
+            showContent.list = items;
+            showContent.data = items;
+            if (data.bcjson.flag == "1" && items) {
+                showContent.getConnectTypeData = items;
+                require.async("./template/connect-type-list.handlebars", function (compiled) {
+                    $("#connection_type_edit").html(compiled(items));
+                    $($("#connection_type_edit").find("option[driverName='" + params + "']")[0]).attr("selected", "true");
+                });
+            }
+        });
+    };
+
+    //  获取数据源结果
+    showContent.qry_connect_data = function (params) {
+        var connection_id = $(".data-source-configuration-list .click-add-background").attr("connection_id");
+        var _params = {
+            connection_id: connection_id
+        }; // 这里用来传特殊参数
+        _params = _extends(_params, params);
+        $.kingdom.getList({
+            apiName: "bayconnect.superlop.get_metadata_table_info",
+            apiVision: "v4.0",
+            params: _params,
+            tableId: "connect-data-result",
+            formName: "data-source-configuration-form",
+            pageId: "dsc-pages",
+            template: "data-source-configuration/template/data-source-configuration-datasourcedetail.handlebars",
+            cb: showContent.qry_connect_data
+        });
+    };
+
+    //  测试数据连接提交
+    showContent.testDataConnectList = function (params) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_source_connect_test", "v4.0", params, function (data) {
+            App.unblockUI();
+            var items = data.bcjson;
+            if (items.flag == "0") {
+                toastr.error(items.msg);
+            } else {
+                toastr.success(items.msg);
+            }
+        });
+    };
+    // 新增连接数据/编辑连接数据
+    showContent.addDataConnectList = function (params) {
+        var paramsMap = $.extend({ opType: "ADD" }, params);
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_data_source_config", "v4.0", paramsMap, function (data) {
+            App.unblockUI();
+            var items = data.bcjson;
+            if (items.flag == "0") {
+                toastr.error(items.msg);
+            } else {
+                //新增后清空以前数据
+                //$("#addReceivbleForm input").val("");
+                toastr.success(items.msg);
+                App.clearForm("data-connect-add-form");
+                showContent.get_source_connect_List();
+            }
+        });
+    };
+    // 修改连接数据
+    showContent.editDataConnectList = function (params) {
+        var paramsMap = $.extend({ opType: "UPD" }, params);
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_data_source_config", "v4.0", paramsMap, function (data) {
+            App.unblockUI();
+
+            var items = data.bcjson;
+            if (items.flag == "0") {
+                toastr.error(items.msg);
+            } else {
+                //新增后清空以前数据
+                //$("#addReceivbleForm input").val("");
+                toastr.success(items.msg);
+                showContent.get_source_connect_List();
+            }
+        });
+    };
+    // 删除连接数据
+    showContent.deleteDataConnect = function (params) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_data_source_config", "v4.0", params, function (data) {
+            App.unblockUI();
+            var items = data.bcjson;
+            if (items.flag == "0") {
+                toastr.error(items.msg);
+            } else {
+                //新增后清空以前数据
+                //$("#addReceivbleForm input").val("");
+                toastr.success(items.msg);
+                showContent.get_source_connect_List();
+            }
+        });
+    };
+
+    //查询导入元数据问题
+    showContent.getImportDataSource = function (connection_id) {
+        var params = {
+            connection_id: connection_id
+        };
+        $("#J_tree_import").jstree("destroy");
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_db_metadata_schemas", "v4.0", params, function (data) {
+
+            //取消交互
+            App.unblockUI();
+
+            var items = data.bcjson.items;
+            showContent.getCurrentTreeData = items;
+            showContent.generateTree(items);
+        });
+    };
+    // 获取文件地址
+    showContent.listImport = function (params) {
+        return new Promise(function (resolve, reject) {
+            $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_table_export_info", "v4.0", params, function (data) {
+                if (data.bcjson.flag == "1") {
+                    resolve(data);
+                } else {
+                    App.unblockUI();
+                    toastr.error(data.bcjson.msg);
+                }
+            });
+        });
+    };
+    // 获取downloadToken
+    showContent.listImport2 = function (params, i) {
+        return new Promise(function (resolve, reject) {
+            $.kingdom.doKoauthAdminAPI("bayconnect.superlop.file_info", "v4.0", params, function (data) {
+                if (data.bcjson.flag == "1") {
+                    resolve(data);
+                } else {
+                    App.unblockUI();
+                    toastr.error(data.bcjson.msg);
+                }
+            });
+        });
+    };
+    // 下载文件
+    showContent.listImport3 = function (params, i) {
+        var url = "/superlop/restv2/admin/v2.0/bayconnect.superlop.file_download_quick.json?fileClass=" + params.fileClass + "&filePath=" + params.filePath;
+        // p=" + encodeURI(JSON.stringify(params));
+        try {
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = true;
+            a.click();
+            App.unblockUI();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    //生成数操作
+    showContent.generateTree = function (items, isSearch) {
+        var mainTreeData = [];
+        if (!items) {
+            return false;
+        }
+        $.each(items, function (index, value) {
+            var children = [];
+            // value.tableList.length > 5000 ? [].concat(value.tableList).slice(0,30) : 
+            $.each(value.tableList, function (childIndex, childValue) {
+                var obj = {};
+                if (childValue.tableType === "TABLE") {
+                    obj.text = childValue.tableName + "<span style='font-size:12px;font-weight:100;'>（Table）</span>";
+                } else {
+                    obj.text = childValue.tableName + "<span style='font-size:12px;font-weight:100;'>（View）</span>";
+                }
+                obj.id = "child-" + value.schemaName + "-" + childIndex;
+                obj.children = false;
+                if (childValue.tableType === "TABLE") {
+                    obj.icon = "glyphicon glyphicon-list-alt";
+                } else {
+                    obj.icon = "glyphicon glyphicon-modal-window";
+                }
+                if (childValue.isExist === "Y") {
+                    obj.a_attr = { "class": "is-exit-table" };
+                }
+                children.push(obj);
+            });
+            var obj = {
+                text: value.schemaName + "<span style='font-size:12px;font-weight:100;'>（" + value.tableCounts + "）</span>",
+                id: "parent" + index,
+                children: children
+            };
+            mainTreeData.push(obj);
+        });
+        $("#J_tree_import").jstree("destroy");
+        $("#J_tree_import").jstree({
+            ui: {
+                theme_name: "checkbox"
+            },
+            core: {
+                themes: {
+                    responsive: false
+                },
+                check_callback: !0,
+                data: mainTreeData,
+                multiple: false,
+                dblclick_toggle: false //禁用tree的双击展开
+            },
+            types: {
+                default: {
+                    icon: "glyphicon glyphicon-user"
+                }
+            },
+            plugins: ["types", "checkbox", "themes", "html_data"],
+            checkbox: {
+                keep_selected_style: false, //是否默认选中
+                three_state: true, //父子级别级联选择
+                tie_selection: false
+            }
+        }).on("loaded.jstree", function () {
+            if (isSearch) {
+                $("#J_tree_import").jstree("open_all");
+            }
+        });
+    };
+
+    //进行数据保存
+    showContent.saveTableList = function () {
+        var connection_id = $(".data-source-configuration-list .click-add-background").attr("connection_id");
+        var node = $.kingdom.uniqueArray($("#J_tree_import").jstree("get_checked"));
+        var selectData = [];
+        $.each(node, function (index, value) {
+            if (value.indexOf("child") > -1) {
+                var tableName = $("#" + value + " a").text().split("（")[0];
+                var schemaIdName = $("#" + value).closest(".jstree-children").parent("li").find("a:eq(0)").text().split("（")[0];
+                selectData.push(schemaIdName + "." + tableName);
+            }
+        });
+        var params = {
+            connection_id: connection_id,
+            tables_info: selectData.join(",")
+        };
+
+        App.blockUI({
+            boxed: true,
+            message: "Saving..."
+        });
+        //保证blockUI在modal的上层
+        $(".blockPage").css("z-index", "9999999999999");
+
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_db_metadata", "v4.0", params, function (data) {
+            App.unblockUI();
+            if (data.bcjson.flag === "1") {
+                toastr.success("Saved Successfully");
+
+                //modal弹出框消失
+                $(".modal-header button.close").click();
+
+                //查询出新增过的新的列表
+                var paramsSend = {};
+                paramsSend.pageNumber = "1";
+                showContent.qry_connect_data(paramsSend);
+                showContent.getUser({ "connection_id": showContent.connect_id });
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+        });
+    };
+
+    //获取选中的checkbox中的tableid及当前的connection_id
+    showContent.getCheckBoxTableid = function () {
+        var connection_id = $(".data-source-configuration-list .click-add-background").attr("connection_id");
+        var checkedDom = $("#connect-data-result .checked");
+
+        var tableArray = [];
+        $.each(checkedDom, function (index, value) {
+            //如果是表头全选checkbox则跳过
+            if ($(value).find("group-checkable").length > 0) {
+                return false;
+            }
+            var tableid = $(value).closest("td").data("tableid");
+            tableArray.push(tableid);
+        });
+        var params = {
+            connection_id: connection_id,
+            tables_id: tableArray.join(",")
+        };
+        return params;
+    };
+
+    //进行数据删除
+    showContent.deleteTableList = function (isRightActionDelete, tableid) {
+        var params = {};
+        if (isRightActionDelete) {
+            var connection_id = $(".data-source-configuration-list .click-add-background").attr("connection_id");
+            params.connection_id = connection_id;
+            params.tables_id = tableid;
+        } else {
+            params = showContent.getCheckBoxTableid();
+            if (!params) {
+                App.unblockUI();
+                return false;
+            }
+        }
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_metadata_tables_del", "v4.0", params, function (data) {
+            App.unblockUI();
+            if (data.bcjson.flag === "1") {
+                toastr.success(data.bcjson.msg);
+
+                //查询删除后的新的列表
+                var paramsSend = {};
+                paramsSend.pageNumber = "1";
+                showContent.qry_connect_data(paramsSend);
+                showContent.getUser({ "connection_id": showContent.connect_id });
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+        });
+    };
+
+    //进行同步表结构
+    showContent.metadataTablesUpd = function () {
+        var params = showContent.getCheckBoxTableid();
+        if (!params) {
+            App.unblockUI();
+            return false;
+        }
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_metadata_tables_upd", "v4.0", params, function (data) {
+            App.unblockUI();
+            if (data.bcjson.flag === "1") {
+                toastr.success("Update successfully");
+
+                //查询同步后的新的列表
+                var paramsSend = {};
+                paramsSend.pageNumber = "1";
+                showContent.qry_connect_data(paramsSend);
+                showContent.getUser({ "connection_id": showContent.connect_id });
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+        });
+    };
+
+    //进行更新表记录行数
+    showContent.tableRecordcountUpd = function () {
+        var params = showContent.getCheckBoxTableid();
+        if (!params) {
+            App.unblockUI();
+            return false;
+        }
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_table_recordcount_upd", "v4.0", params, function (data) {
+            App.unblockUI();
+            if (data.bcjson.flag === "1") {
+                toastr.success("Succeed");
+
+                //查询删除后的新的列表
+                var paramsSend = {};
+                paramsSend.pageNumber = "1";
+                showContent.qry_connect_data(paramsSend);
+                showContent.getUser({ "connection_id": showContent.connect_id });
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+        });
+    };
+
+    //进行批量同步表结构
+    showContent.metadataTablesUpdBatch = function (params) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_metadata_tables_upd", "v4.0", params, function (data) {
+            App.unblockUI();
+            if (data.bcjson.flag === "1") {
+                toastr.success("Batch update successfully");
+                showContent.qry_connect_data();
+                showContent.getUser({ "connection_id": showContent.connect_id });
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+        });
+    };
+
+    //进行批量同步表结构
+    showContent.tableRecordcountUpdBatch = function (params) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_table_recordcount_upd", "v4.0", params, function (data) {
+            App.unblockUI();
+            if (data.bcjson.flag === "1") {
+                toastr.success("Batch update successfully");
+                showContent.qry_connect_data();
+                showContent.getUser({ "connection_id": showContent.connect_id });
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
+        });
+    };
+    //获取第二个tab页的列信息
+    showContent.getTabColumnInfo = function (tableId) {
+        var paramsMap = {};
+        paramsMap.table_id = tableId;
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_column_info", "v4.0", paramsMap, function (data) {
+            var items = data.bcjson.items || data.bcjson;
+            if (data.bcjson.flag == "1" && items) {
+                require.async("./template/tab-column-info-list.handlebars", function (compiled) {
+                    $("#des-showtable-info-2-table-body").html(compiled(items));
+                });
+            }
+        });
+    };
+
+    //预览操作
+    showContent.previewAction = function (schema, table_name) {
+        var paramsMap = {};
+        paramsMap.connection_id = $(".data-source-configuration-list .click-add-background").attr("connection_id");
+        paramsMap.schema = schema;
+        paramsMap.table_name = table_name;
+
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_table_perform", "v4.0", paramsMap, function (data) {
+            var tableHeader = "<th></th>";
+            var tableBody = "";
+            var items = data.bcjson.items || data.bcjson;
+            if (data.bcjson.flag == "1" && items[0]) {
+                for (var singleHeaderName in items[0]) {
+                    tableHeader = tableHeader + "<th> " + singleHeaderName + "</th>";
+                }
+
+                //获取列表头部html
+                $("#des-showtable-info-3-thead-tr").html(items[0] ? tableHeader : "");
+
+                var index = 1;
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var singleData = _step.value;
+
+                        var columnData = "";
+                        columnData = columnData + "<td class='t-c'> " + index + "</td>";
+                        index++;
+
+                        for (var insideObj in singleData) {
+                            columnData = columnData + "<td> " + singleData[insideObj] + "</td>";
+                        }
+                        tableBody = tableBody + "<tr>" + columnData + "</tr>";
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+
+                $("#des-showtable-info-3-table-body").html(tableBody);
+                $("#des-showtable-info-3-table").removeAttr("style");
+            } else {
+                $("#des-showtable-info-3-table").css("display", "none");
+                $("#des-showtable-info-3-table").closest("div").append("<div style='text-align: center;font-size: 14px;margin-top: 20px;'>No Data</div>");
+            }
+        });
+    };
+
+    //表单校验
+    showContent.initForm = function () {
+        $("#data-connect-add-form").validate({
+            debug: true,
+            errorElement: "span", //default input error message container
+            errorClass: "help-block", // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                connection_type: {
+                    required: true
+                },
+                connection_name: {
+                    required: true,
+                    maxlength: 64
+                },
+                server: {
+                    required: true
+                },
+                db_port: {
+                    required: true
+                },
+                db_user: {
+                    required: true
+                },
+                db_database: {
+                    required: true
+                },
+                db_password: {
+                    required: true
+                },
+                jdbc_string: {
+                    required: true
+                },
+                max_connect_count: {
+                    numCheck: true
+                }
+            },
+            invalidHandler: function invalidHandler(event, validator) {
+                //display error alert on form submit
+                // $('.alert-danger', $('.login-form')).show();
+            },
+            highlight: function highlight(element) {
+                // hightlight error inputs
+                $(element).closest(".form-group").addClass("has-error"); // set error class to the control group
+            },
+            success: function success(label) {
+                label.closest(".form-group").removeClass("has-error");
+                label.remove();
+            },
+            errorPlacement: function errorPlacement(error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function submitHandler(form) {}
+        });
+        $("#data-connect-edit-form").validate({
+            debug: true,
+            errorElement: "span", //default input error message container
+            errorClass: "help-block", // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                connection_type_edit: {
+                    required: true
+                },
+                connection_name_edit: {
+                    required: true
+                },
+                server: {
+                    required: true
+                },
+                db_port: {
+                    required: true
+                },
+                db_user: {
+                    required: true
+                },
+                db_database: {
+                    required: true
+                },
+                db_password: {
+                    required: true
+                },
+                jdbc_string: {
+                    required: true
+                },
+                max_connect_count: {
+                    numCheck: true
+                }
+            },
+            invalidHandler: function invalidHandler(event, validator) {
+                //display error alert on form submit
+                // $('.alert-danger', $('.login-form')).show();
+            },
+            highlight: function highlight(element) {
+                // hightlight error inputs
+                $(element).closest(".form-group").addClass("has-error"); // set error class to the control group
+            },
+            success: function success(label) {
+                label.closest(".form-group").removeClass("has-error");
+                label.remove();
+            },
+            errorPlacement: function errorPlacement(error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function submitHandler(form) {}
+        });
+    };
+
+    //判断是否需要更新checkbox
+    showContent.shouldUpdateCheck = function () {
+        var trueAmount = 0;
+        $.each(showContent.filterMainTree, function (index, value) {
+            if (value) {
+                trueAmount++;
+            }
+        });
+        showContent.filterMainTreeAmount++;
+        return showContent.filterMainTreeAmount <= trueAmount;
+
+        // if (showContent.filterMainTreeAmount > trueAmount) {
+        //     return false;
+        // } else {
+        //     return true;
+        // }
+    };
+
+    //上传图片
+    showContent.upLoad = function (fileName, fileType) {
+
+        //addtrue 用于判断是否从增添驱动弹出框中上传
+        var options = {
+            url: window.location.origin + "/superlop/restv2/admin/v2.0/bayconnect.superlop.file_upload.json",
+            type: "POST",
+            dataType: "json",
+            success: function success(data) {
+                App.unblockUI();
+                if (typeof data == "string") {
+                    data = eval("(" + data + ")");
+                }
+                $("#J_mock_form_collection_form input[name='fileName']").val(fileName);
+                $("#J_mock_form_collection_form input[name='fileUrl']").val(data.bcjson.msg);
+                var html = '<li><div><i style="padding-right: 10px" class="glyphicon glyphicon-file"></i><span type=' + fileType + ' fileurl=' + data.bcjson.msg + '>' + fileName + '</span><i style="float: right" class="glyphicon glyphicon-trash"></i></div></li>';
+                $("#data-source-configuration .excel-choose-block-inside ul").append(html);
+                $("#data-source-configuration .excel-bottom span span").html($("#data-source-configuration .excel-choose-block-inside ul li").length);
+
+                //临时代码，后期要改
+                if ($("#data-source-configuration .excel-choose-block-inside ul li").length === 1) {
+                    showContent.getExcelContentList();
+                }
+            },
+            error: function error(e) {
+                toastr.info("Fail");
+                App.unblockUI();
+            }
+        };
+        $("#J_mock_form_collection_form").ajaxSubmit(options);
+    };
+
+    //获取excel内容
+    showContent.getExcelContentList = function () {
+        //若无文件，则不获取当前excel的内容
+        if ($("#data-source-configuration .excel-choose-block-inside ul li span").length === 0) {
+            return false;
+        }
+        var fileUrl = $("#data-source-configuration .excel-choose-block-inside ul li span:eq(0)").attr("fileurl");
+        var fileType = $("#data-source-configuration .excel-choose-block-inside ul li span:eq(0)").attr("type");
+        var paramsMap = { fileUrl: fileUrl, fileType: fileType };
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_file_content_info", "v4.0", paramsMap, function (data) {
+            if (data.bcjson.flag === "1") {
+
+                showContent.tableHead = [];
+
+                //生成表头
+                var headData = data.bcjson.items[0];
+                var theadFirst = '<th class="t-c">序号</th>';
+                var theadOption = '<th style="width:80px;">指定表头</th><th class="t-c">序号</th>';
+                var num = 0;
+                for (var headItems in headData) {
+                    theadFirst = theadFirst + "<th>" + headData[headItems] + "</th>";
+                    theadOption = theadOption + "<th>F" + num + "</th>";
+                    num++;
+                    showContent.tableHead.push(headData[headItems]);
+                }
+                theadFirst = "<tr>" + theadFirst + "</tr>";
+                theadOption = "<tr>" + theadOption + "</tr>";
+
+                var newItems = [].concat(data.bcjson.items);
+                data.bcjson.items.shift();
+
+                //把第一行作为表头 -> 表内容
+                var headBody = data.bcjson.items;
+                var tableBodyFirst = "";
+                var columnIndex = 0;
+                var _iteratorNormalCompletion2 = true;
+                var _didIteratorError2 = false;
+                var _iteratorError2 = undefined;
+
+                try {
+                    for (var _iterator2 = headBody[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        var singleData = _step2.value;
+
+                        var index = 0;
+                        columnIndex++;
+                        // '<td class="hide t-c" class="t-c"><input type="checkbox"></td>';
+                        var columnData = '<td class="t-c">' + columnIndex + '</td>';
+                        for (var insideObj in singleData) {
+                            columnData = columnData + "<td> " + singleData[insideObj] + "</td>";
+                            index++;
+                        }
+                        if (index === num) {
+                            tableBodyFirst = tableBodyFirst + "<tr>" + columnData + "</tr>";
+                        }
+                    }
+
+                    //指定表头 -> 表内容
+                } catch (err) {
+                    _didIteratorError2 = true;
+                    _iteratorError2 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                            _iterator2.return();
+                        }
+                    } finally {
+                        if (_didIteratorError2) {
+                            throw _iteratorError2;
+                        }
+                    }
+                }
+
+                var tableBodyOption = '';
+                var columnIndex1 = 0;
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
+
+                try {
+                    for (var _iterator3 = newItems[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                        var singleData1 = _step3.value;
+
+                        var index1 = 0;
+                        columnIndex1++;
+                        var columnData1 = '<td class="t-c" class="t-c"><input type="checkbox"></td><td class="t-c">' + columnIndex1 + '</td>';
+                        for (var insideObj1 in singleData1) {
+                            columnData1 = columnData1 + "<td> " + singleData1[insideObj1] + "</td>";
+                            index1++;
+                        }
+                        if (index1 === num) {
+                            tableBodyOption = tableBodyOption + "<tr>" + columnData1 + "</tr>";
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError3 = true;
+                    _iteratorError3 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                            _iterator3.return();
+                        }
+                    } finally {
+                        if (_didIteratorError3) {
+                            throw _iteratorError3;
+                        }
+                    }
+                }
+
+                $("#J_dsc_produce_head").html(theadFirst);
+                $("#J_dsc_produce_body").html(tableBodyFirst);
+                $("#J_dsc_produce_head_option").html(theadOption);
+                $("#J_dsc_produce_body_option").html(tableBodyOption);
+                $("#J_dsc_produce_head").closest(".table-scrollable").removeClass("hide");
+                App.initCheckableTable($("#J_dsc_produce_table"));
+            } else {
+                toastr.info("生成表失败");
+            }
+        });
+    };
+
+    //excel类型的数据回显
+    showContent.getExcelFileTypeData = function (paramsMap) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_file_data_source_info", "v4.0", paramsMap, function (data) {
+            var items = data.bcjson.items || data.bcjson;
+            if (data.bcjson.flag == "1" && items[0]) {
+
+                //tab1页面回显
+
+                //连接名称
+                $("#J_excel_add_tab1 input[name=connectionName]").val(items[0].connectionName);
+
+                //文件excel显示
+                var html = '<li><div><i style="padding-right: 10px" class="glyphicon glyphicon-file"></i><span type=' + items[0].fileType + ' fileurl=' + items[0].fileUrl + '>' + items[0].fileName + '</span><i style="float: right" class="glyphicon glyphicon-trash"></i></div></li>';
+                $("#data-source-configuration .excel-choose-block-inside ul").append(html);
+                $("#data-source-configuration .excel-bottom span span").html($("#data-source-configuration .excel-choose-block-inside ul li").length);
+                showContent.getExcelContentList();
+
+                //tab2页面回显
+                App.setFormData("J_excel_add_tab2_form", items[0]);
+                showContent.getDataSourceList(function () {
+                    showContent.targetTable = items[0].targetTable;
+                    $("#J_select2_dcs_target_data_connect").val(items[0].targetConnectionId).change();
+                });
+
+                //tab3字段映射
+                var dataFildItems = JSON.parse(items[0].mappingInfo).mappingColumn;
+                showContent.dataFildItems = dataFildItems;
+                if (dataFildItems.length > 0) {
+                    var _iteratorNormalCompletion4 = true;
+                    var _didIteratorError4 = false;
+                    var _iteratorError4 = undefined;
+
+                    try {
+                        for (var _iterator4 = dataFildItems[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                            var item = _step4.value;
+
+                            item.rowsCount = dataFildItems.length;
+                            item.columnName = item.targetColumn;
+                        }
+                    } catch (err) {
+                        _didIteratorError4 = true;
+                        _iteratorError4 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                                _iterator4.return();
+                            }
+                        } finally {
+                            if (_didIteratorError4) {
+                                throw _iteratorError4;
+                            }
+                        }
+                    }
+
+                    require.async("./template/data-field-list-2.handlebars", function (compiled) {
+                        $("#J_dsc_field_map_body").html(compiled(dataFildItems));
+                        showContent.haddleDataField_2.edit(dataFildItems);
+                        App.initCheckableTable($("#J_dsc_field_map_table"));
+                    });
+                }
+            } else {
+                toastr.info("数据异常，暂时无法修改");
+            }
+        });
+    };
+
+    //excel查询列表信息
+    showContent.getExcelFileDetail = function (paramsMap) {
+        $.kingdom.getList({
+            apiName: "bayconnect.superlop.get_file_data_source_info",
+            apiVision: "v4.0",
+            params: paramsMap,
+            tableId: "J_file_data_result",
+            pageId: "J_file_data_result_page",
+            formName: "data-source-configuration-form",
+            template: "data-source-configuration/template/data-source-configuration-datasourcedetail-file.handlebars"
+        });
+    };
+
+    /**
+     * params：此数据连接id、文件类型、文件路径、文件名
+     * des：获取当前数据连接中，其中一个文件的表详情
+     */
+    showContent.getExcelSingleFileDetail = function (paramsMap) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_target_table_data_info", "v4.0", paramsMap, function (data) {
+            var items = data.bcjson.items || data.bcjson;
+            if (data.bcjson.flag == "1" && items) {
+
+                //获取返回数据中，单个数据的最大长度（即非null数据的个数）。
+                var maxLength = 0;
+                $.each(items, function (index, item) {
+                    var currentIndex = 0;
+                    for (var singItem in item) {
+                        if (!!item[singItem]) {
+                            currentIndex++;
+                            if (maxLength < currentIndex) {
+                                maxLength = currentIndex;
+                            }
+                        }
+                    }
+                });
+
+                //处理表格头部头部
+                var head = "<tr currentpreparams=" + JSON.stringify(paramsMap) + ">";
+                $.each(items[0], function (index, item) {
+                    //若此item为null则不显示
+                    if (!!item) {
+                        var headName = item.match(/head:\{(.*)\}/);
+                        headName = headName ? headName[1] : item;
+                        head += "<th>" + headName + "</th>";
+                    }
+                });
+                //根据最大长度进行补长度操作
+                var needFillAmount = maxLength - (head.split("<th>").length - 1);
+                for (var i = 0; i < needFillAmount; i++) {
+                    head += "<th></th>";
+                }
+                //增添操作字段
+                head += "<th class='t-c'>操作</th>";
+                head += "</tr>";
+                //处理table的body
+                var body = "";
+                items.shift();
+                $.each(items, function (index, item) {
+                    var singleTr = "<tr currentdata=" + JSON.stringify(item) + ">";
+                    var singleTd = "";
+                    $.each(item, function (index, item) {
+                        if (!!item) {
+                            singleTd += "<td currentkey=" + index + ">" + item + "</td>";
+                        }
+                    });
+                    //根据最大长度进行补长度操作
+                    var needFillAmount = maxLength - (singleTd.split("</td>").length - 1);
+                    if (needFillAmount !== maxLength) {
+                        for (var i = 0; i < needFillAmount; i++) {
+                            singleTd += "<td></td>";
+                        }
+                        //增添操作字段
+                        singleTd += "<td class='t-c'><a href='javascript:;'>编辑</a></td>";
+                    }
+
+                    singleTr += singleTd + "</tr>";
+                    body += singleTr;
+                });
+                $("#J_single_file_data_result_head").html(head);
+                $("#J_single_file_data_result_body").html(body);
+            } else {
+                toastr.info("数据异常,无法查看");
+            }
+        });
+    };
+
+    /**
+    * params：此数据连接id、文件类型、文件路径、文件名、修改的数据集合
+    * des：修改当前数据连接中，其中一个文件的表内的数据
+    */
+    showContent.editExcelSingleFileDetail = function (paramsMap) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.set_target_table_data", "v4.0", paramsMap, function (data) {
+            App.unblockUI();
+            var items = data.bcjson.items || data.bcjson;
+            if (data.bcjson.flag == "1" && items) {
+                delete paramsMap.dataInfo;
+                showContent.getExcelSingleFileDetail(paramsMap);
+            } else {
+                toastr.info("保存失败");
+            }
+        });
+    };
+
+    // 查询数据连接 （目标表和源表）通用
+    showContent.getDataSourceList = function (cb) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_data_source_config", "v4.0", {}, function (data) {
+            if (data.bcjson.flag == "1") {
+                var items = data.bcjson.items;
+                var str = "";
+                var arr = [{
+                    id: "",
+                    text: ""
+                }];
+                if (items && items.length > 0) {
+                    var _iteratorNormalCompletion5 = true;
+                    var _didIteratorError5 = false;
+                    var _iteratorError5 = undefined;
+
+                    try {
+                        for (var _iterator5 = items[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                            var item = _step5.value;
+
+                            str += "<option value=\"" + item.connectionId + "\"\">" + item.connectionName + "</option>";
+                            arr.push({
+                                id: item.connectionId,
+                                text: item.connectionName
+                            });
+                        }
+                    } catch (err) {
+                        _didIteratorError5 = true;
+                        _iteratorError5 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                                _iterator5.return();
+                            }
+                        } finally {
+                            if (_didIteratorError5) {
+                                throw _iteratorError5;
+                            }
+                        }
+                    }
+                }
+                // 导入文本 目标数据源
+                $("#J_select2_dcs_target_data_connect").select2({
+                    data: arr,
+                    placeholder: '- Please select a type -'
+                });
+
+                typeof cb === "function" && cb();
+            }
+        });
+    };
+
+    // 查询数据表 通用
+    showContent.getTableList = function (params, selector, isTags, cb) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_table_info", "v4.0", params, function (data) {
+            if (data.bcjson.flag == "1") {
+                var items = data.bcjson.items;
+                var arr = [{
+                    id: "",
+                    text: ""
+                }];
+                var arr2 = [];
+                if (items) {
+                    var _iteratorNormalCompletion6 = true;
+                    var _didIteratorError6 = false;
+                    var _iteratorError6 = undefined;
+
+                    try {
+                        for (var _iterator6 = items[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                            var item = _step6.value;
+
+                            arr.push({
+                                id: item.tableId,
+                                text: item.schemName + "." + item.tableName + "(" + item.mdType + ")"
+                            });
+                            arr2.push({
+                                id: item.tableId,
+                                text: item.schemName + "." + item.tableName
+                            });
+                        }
+                    } catch (err) {
+                        _didIteratorError6 = true;
+                        _iteratorError6 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                                _iterator6.return();
+                            }
+                        } finally {
+                            if (_didIteratorError6) {
+                                throw _iteratorError6;
+                            }
+                        }
+                    }
+                }
+                $(selector).empty().clearInputs();
+                $(selector).select2({
+                    data: arr,
+                    placeholder: '- Please select a type -',
+                    tags: isTags // 是否允许手动输入
+                });
+                // 把原始值放到data属性上 为了比较是否手动输入
+                $(selector).data("origin", arr2);
+                // 回调赋值
+                typeof cb === "function" && cb();
+            }
+        });
+    };
+
+    // 导入文本->字段映射->获取字段
+    showContent.getDataField_2 = function (params, cb) {
+        $.kingdom.doKoauthAdminAPI("bayconnect.superlop.get_metadata_column_info", "v4.0", params, function (data) {
+            if (data.bcjson.flag == "1") {
+                var items = data.bcjson.items;
+                if (items.length === 0) {
+                    toastr.info("没有查询到映射字段");
+                    return;
+                }
+                var index = 0;
+                var _iteratorNormalCompletion7 = true;
+                var _didIteratorError7 = false;
+                var _iteratorError7 = undefined;
+
+                try {
+                    for (var _iterator7 = items[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+                        var item = _step7.value;
+
+                        item.rowsCount = items.length;
+                        item.tableHeader = showContent.tableHead[index];
+                        index++;
+                    }
+                } catch (err) {
+                    _didIteratorError7 = true;
+                    _iteratorError7 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion7 && _iterator7.return) {
+                            _iterator7.return();
+                        }
+                    } finally {
+                        if (_didIteratorError7) {
+                            throw _iteratorError7;
+                        }
+                    }
+                }
+
+                require.async("./template/data-field-list-2.handlebars", function (compiled) {
+                    $("#J_dsc_field_map_body").html(compiled(items));
+                    showContent.haddleDataField_2.init(items);
+                    App.initCheckableTable($("#J_dsc_field_map_table"));
+                    typeof cb === "function" && cb();
+                });
+            }
+        });
+    };
+
+    // 导入文本->字段映射-> 插入的字段 操作处理
+    showContent.haddleDataField_2 = {
+        // 初始化
+        init: function init(items) {
+            var html_t = "<select class=\"form-control input-sm\">";
+            html_t += "<option value=\"\">--Please select a type--</option>";
+            var _iteratorNormalCompletion8 = true;
+            var _didIteratorError8 = false;
+            var _iteratorError8 = undefined;
+
+            try {
+                for (var _iterator8 = items[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+                    var item = _step8.value;
+
+                    html_t += "<option value=\"" + item.columnName + "\">" + item.columnName + "</option>";
+                }
+            } catch (err) {
+                _didIteratorError8 = true;
+                _iteratorError8 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion8 && _iterator8.return) {
+                        _iterator8.return();
+                    }
+                } finally {
+                    if (_didIteratorError8) {
+                        throw _iteratorError8;
+                    }
+                }
+            }
+
+            html_t += "</select>";
+
+            $.each($("#J_dsc_field_map_body [data-type=target]"), function () {
+                var text = $.trim($(this).html());
+                if (text) {
+                    $(this).html(html_t).attr("inited", "inited").children().val(text);
+                }
+            });
+        },
+        // 编辑赋值
+        edit: function edit(items) {
+            var html_t = "<select class=\"form-control input-sm\">";
+            html_t += "<option value=\"\">--Please select a type--</option>";
+            var _iteratorNormalCompletion9 = true;
+            var _didIteratorError9 = false;
+            var _iteratorError9 = undefined;
+
+            try {
+                for (var _iterator9 = items[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+                    var item = _step9.value;
+
+                    html_t += "<option value=\"" + item.columnName + "\">" + item.columnName + "</option>";
+                }
+            } catch (err) {
+                _didIteratorError9 = true;
+                _iteratorError9 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion9 && _iterator9.return) {
+                        _iterator9.return();
+                    }
+                } finally {
+                    if (_didIteratorError9) {
+                        throw _iteratorError9;
+                    }
+                }
+            }
+
+            html_t += "</select>";
+
+            $.each($("#J_dsc_field_map_body [data-type=target]:not([inited])"), function () {
+                var text = $.trim($(this).html());
+                if (text) {
+                    $(this).html(html_t).attr("inited", "inited").children().val(text);
+                }
+            });
+        },
+        // 重置字段值
+        refresh: function refresh() {
+            $.each($("#J_dsc_field_map_body tr td[data-type]"), function () {
+                var origin = $(this).data("origin");
+                $(this).children().val(origin);
+            });
+        },
+        // 获取行数
+        getRow: function getRow() {
+            return $("#J_dsc_field_map_body tr").length;
+        },
+        // 删除选中行
+        delCheckedRow: function delCheckedRow() {
+            $.each($("#J_dsc_field_map_body input[type=checkbox]:checked"), function (i) {
+                $(this).closest("tr").remove();
+            });
+            showContent.haddleDataField_2.reorder();
+        },
+        // 重新排序
+        reorder: function reorder() {
+            $.each($("#J_dsc_field_map_body tr"), function (i) {
+                $(this).find("td:first").text(i + 1);
+                $(this).find("td[data-type=import]").html(" \u7B2C " + (i + 1) + " \u5217 ");
+            });
+        },
+        // 获取数据集
+        getData: function getData() {
+            var arr = new Array();
+            $.each($("#J_dsc_field_map_body tr"), function (i) {
+                var targetColumn = $(this).find("[data-type=target] select").val(),
+
+                // len = $("#J_dsc_field_map_body tr").length,
+                no = "";
+                no = (i + 1).toString();
+                var obj = {
+                    no: no,
+                    sourceColumn: no,
+                    targetColumn: targetColumn
+                    // 字段有映射才传入
+                };if (targetColumn) {
+                    arr.push(obj);
+                }
+            });
+            return JSON.stringify({ "mappingColumn": arr });
+        }
+    };
+
+    //隐藏或显示block -> 新增非excel、文件类;数据库类;连接详情类;修改类;
+    showContent.hideShowBlock = function (selector) {
+
+        $("#data-source-configuration #J_dsc_back_to_list").addClass("hide");
+
+        $("#data-source-configuration #J_dsc_list_detail," + "#data-source-configuration #J_dsc_commonType_add," + "#data-source-configuration #J_dsc_fileType_add," + "#data-source-configuration #J_dsc_file_list_detail," + "#data-source-configuration #J_dsc_file_list_single_detail," + "#data-source-configuration #J_dsc_commonType_edit").addClass("hide");
+        $("#data-source-configuration " + selector).removeClass("hide");
+    };
+
+    //清除excel表单数据
+    showContent.clearFileBlock = function () {
+        //tab1
+        $("#J_excel_add_tab1 input[name='connectionName']").val("");
+        $("#J_dsc_clear_file").click();
+
+        //tab2
+        App.clearForm("J_excel_add_tab2_form");
+        $(".select2-hidden-accessible").empty().clearInputs();
+
+        //tab3
+        $("#J_dsc_field_map_body").html("");
+
+        //返回第一步
+        $("#data-source-configuration #J_dsc_pre_step").click();
+        $("#data-source-configuration #J_dsc_pre_step").click();
+    };
+
+    //追加代码
+    // showContent.appendNode = function(){
+    //     var ref = $('#J_tree_import').jstree(true);
+    //     ref.create_node("#parent0",{"children": [],"icon": "glyphicon glyphicon-list-alt","id": "child-APPQOSSYS-10","text": "WLM_CLASSIFIER_PLAN<span style='font-size:12px;font-weight:100;'>（表）</span>"},"last", false, false)
+    // }
+
+    module.exports = showContent;
+});

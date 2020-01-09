@@ -4,11 +4,13 @@ import { Icon, Row, Select, Radio, DatePicker, Button } from 'antd';
 
 import less from './ReportPreview.less';
 import ReportPager from './ReportPager';
+import PreviewSearchArea from './components/PreviewSearchArea';
 
 @connect(({ reportDesignPreview }) => {
-  const { previewData = {} } = reportDesignPreview;
+  const { previewData = {}, dataSetColumn = {} } = reportDesignPreview;
   return {
     previewData,
+    dataSetColumn,
   };
 })
 class ReportDesignerPreview extends Component {
@@ -20,11 +22,18 @@ class ReportDesignerPreview extends Component {
   }
 
   componentDidMount() {
+    // 获取预览数据
     this.fetchData();
   }
 
   // 获取数据
-  fetchData = ({ pageNumber = '1', pageSize = '10' } = { pageNumber: '1', pageSize: '10' }) => {
+  fetchData = (
+    { pageNumber = '1', pageSize = '10', parameters = '' } = {
+      pageNumber: '1',
+      pageSize: '10',
+      parameters: '',
+    },
+  ) => {
     // 若有reportId，则调用接口查询报表设计器相关信息
     const {
       dispatch,
@@ -39,6 +48,7 @@ class ReportDesignerPreview extends Component {
         reportId,
         pageNumber,
         pageSize,
+        parameters,
       },
     });
   };
@@ -107,16 +117,23 @@ class ReportDesignerPreview extends Component {
 
   // 条件搜索 TODO:
   search = () => {
-    console.log('条件搜索 - 待办');
+    this.formRef.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.fetchData({ parameters: JSON.stringify(values) });
+      }
+    });
   };
 
   render() {
     const { dimenRadio } = this.state;
     const {
       previewData: { items = [] },
+      dataSetColumn, // 当选项来源于数据集时，select中option的数据来源
     } = this.props;
-    const [tableData, rowCount] = items; // 考虑 undefined
-    const { totalRowCount: totalRecord } = rowCount || {}; // 总的记录数
+    const [tableData, rowCountAndTemplateArea] = items; // 考虑 undefined
+    // 总的记录数及templateArea
+    const { totalRowCount: totalRecord, templateArea = {} } = rowCountAndTemplateArea || {};
+    const { customSearchData = [] } = templateArea;
     const { totalPage, content = '<div></div>', style: styleRules } = tableData || {};
     // console.log('preview: ', items);
     if (styleRules) {
@@ -148,49 +165,13 @@ class ReportDesignerPreview extends Component {
         </div>
 
         <div className={less['filter-condition']}>
-          <Row>
-            <div className={less['dropdown-item']}>
-              <span className={less['dropdown-label']}>Product Category</span>
-              <Select placeholder="Drink" onChange={this.onCategoryChange}>
-                <Select.Option value="coca">Coca-cola</Select.Option>
-                <Select.Option value="nongfu">NongFu</Select.Option>
-              </Select>
-            </div>
-            <div className={less['dropdown-item']}>
-              <span className={less['dropdown-label']}>Supplier</span>
-              <Select placeholder="Brand Name" onChange={this.onSupplierChange}>
-                <Select.Option value="addi">Addidas</Select.Option>
-                <Select.Option value="nike">Nike</Select.Option>
-              </Select>
-            </div>
-            <div className={less['dropdown-item']}>
-              <span className={less['dropdown-label']}>Order Payment Status</span>
-              <Select placeholder="Paid Status" onChange={this.onPayStatusChange}>
-                <Select.Option value="paid">Paid</Select.Option>
-                <Select.Option value="unpaid">UnPaid</Select.Option>
-              </Select>
-            </div>
-            <div className={less['dropdown-item']}>
-              <span className={less['dropdown-label']}>Start Date</span>
-              <DatePicker />
-            </div>
-            <div className={less['dropdown-item']}>
-              <span className={less['dropdown-label']}>End Date</span>
-              <DatePicker />
-            </div>
-          </Row>
-          <Row className={less['dimen-row']}>
-            <span className={less['dimen-title']}>Dimension of Statistics</span>
-            <Radio.Group
-              value={dimenRadio}
-              className={less['radio-opts']}
-              onChange={this.filterRadioChange}
-            >
-              <Radio value="daily">Daily Report</Radio>
-              <Radio value="monthly">Monthly Report</Radio>
-              <Radio value="annual">Annual Report</Radio>
-            </Radio.Group>
-          </Row>
+          <PreviewSearchArea
+            wrappedComponentRef={inst => {
+              this.formRef = inst;
+            }}
+            customSearchData={customSearchData}
+            dataSetColumn={dataSetColumn}
+          />
           <Row className={less['search-btn-row']}>
             <Button type="primary" icon="search" onClick={this.search}>
               Search
