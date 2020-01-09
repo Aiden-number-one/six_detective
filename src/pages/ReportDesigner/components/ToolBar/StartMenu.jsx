@@ -562,7 +562,7 @@ class ToolBar extends Component {
                   <IconFont type="iconxiahuaxian1" />
                 </Button>
                 <ButtonGroup className="btn-group mr6">
-                  <Popover content="边框" {...popoverProps}>
+                  <Popover content="Border" {...popoverProps}>
                     <Button className="btn" onClick={() => {}}>
                       <IconFont type="iconborder-none-solid" />
                     </Button>
@@ -820,7 +820,7 @@ class ToolBar extends Component {
             <div className={styles.divider} />
             <div className={styles.group}>
               <div className="mb4">
-                <Popover content="数字格式" {...popoverProps}>
+                <Popover content="Format" {...popoverProps}>
                   <Select
                     className="select"
                     style={{ width: '139px' }}

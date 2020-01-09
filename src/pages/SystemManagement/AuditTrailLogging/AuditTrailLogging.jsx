@@ -355,10 +355,17 @@ class AuditTrailLogging extends Component {
   };
 
   exportDataConfirm = () => {
-    const { dispatch } = this.props;
     const { exportTypes } = this.state;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const exportType of exportTypes) {
+      this.goExport(exportType);
+    }
+  };
+
+  goExport = exportType => {
+    const { dispatch } = this.props;
     const param = {
-      fileType: exportTypes.join(','),
+      fileType: exportType,
       apiVersion: 'v2.0',
       isPage: 'true',
       apiName: 'bayconnect.superlop.get_system_log_list',
