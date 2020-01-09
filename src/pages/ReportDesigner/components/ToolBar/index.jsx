@@ -1,3 +1,11 @@
+/*
+ * @Des: 头部工具栏
+ * @Author: mus
+ * @Email: mus@szkingdom.com
+ * @Date: 2020-01-07 09:36:59
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-09 09:39:28
+ */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
 import classNames from 'classnames';

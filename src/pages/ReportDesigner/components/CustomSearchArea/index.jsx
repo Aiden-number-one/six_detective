@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-08 18:43:25
+ * @LastEditTime : 2020-01-09 11:30:21
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -18,15 +18,15 @@ import styles from './index.less';
 const ResponsiveReactGridLayout = WidthProvider(RGL);
 
 const iconMap = {
-  input: 'iconTx',
-  inputnumber: 'iconx',
-  datepickeryyyy: 'iconicon_calenderx',
-  datepickeryyyymm: 'iconicon_calenderx',
+  input: 'iconTextboxx',
+  inputnumber: 'iconiconicon_numbersx',
+  datepickeryyyy: 'iconicon_yyx',
+  datepickeryyyymm: 'iconicon_yymmx',
   datepickeryyyymmdd: 'iconicon_calenderx',
-  select: 'iconxialadanxuanx',
-  selectmultiple: 'iconxialaduoxuanx',
-  radio: 'icondanxuanx',
-  checkbox: 'iconduoxuanx',
+  select: 'iconicon_xialadanxuanx',
+  selectmultiple: 'iconicon_xialaduoxuanx',
+  radio: 'radio',
+  checkbox: 'checkbox',
 };
 
 class CustomSearchArea extends PureComponent {

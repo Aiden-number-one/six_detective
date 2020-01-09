@@ -551,7 +551,12 @@ export default class DataProcessing extends Component {
             {inspectDataVisible && (
               <div className={styles.dataTableWraper}>
                 <div className={styles.dataTable}>
-                  <Button type="primary" onClick={this.inspectData} className="btn-usual">
+                  <Button
+                    type="primary"
+                    onClick={this.inspectData}
+                    className="btn-usual"
+                    loading={loading['dataProcessing/getDataProcessing']}
+                  >
                     {formatMessage({ id: 'systemManagement.dataProcessing.inspectData' })}
                   </Button>
                   <Table
@@ -639,8 +644,8 @@ export default class DataProcessing extends Component {
                     </Button>
                   </div>
                   <Table
-                    loading={loading['codeList/getCodeItemList']}
-                    rowKey="index"
+                    loading={loading['dataProcessing/getDataProcessingItem']}
+                    rowKey={row => row.alertId.toString()}
                     rowSelection={alertBypassStatus.length > 0 && isBypass ? null : null}
                     dataSource={dataProcessingItemData.items}
                     pagination={false}
