@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2020-01-09 11:27:27
+ * @LastEditTime : 2020-01-09 13:57:48
  * @LastEditors  : liangchaoshun
  * @Email: mus@szkingdom.com
  */
@@ -293,6 +293,11 @@ export default WrapperComponent =>
         sheet: { cellTypeChange },
       } = this.spreadSheet;
       cellTypeChange.call(sheet, property, value);
+      /* setTimeout(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const cell = window.xsObj._getCell({ ri: 3, ci: 3 });
+        console.log('setCellType -> cell: ', cell);
+      }, 2000); */
     };
 
     // 得到cell属性
