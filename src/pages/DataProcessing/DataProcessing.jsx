@@ -112,6 +112,36 @@ export default class DataProcessing extends Component {
         //   ),
         // },
         {
+          title: () => (
+            <Fragment>
+              {this.state.alertBypassStatus.length > 0 && this.state.isBypass && (
+                <Checkbox
+                  checked={this.state.checkedAll}
+                  indeterminate={this.state.alertIndeterminate}
+                  onChange={this.onSelectChangeAll}
+                ></Checkbox>
+              )}
+              <span style={{ marginLeft: '5px' }}>Bypass</span>
+            </Fragment>
+          ),
+          dataIndex: 'index',
+          key: 'index',
+          render: (res, recode, index) => (
+            <Fragment>
+              {recode.bypassStatus === '0' ? (
+                <Checkbox
+                  checked={this.state.selectedRowKeys.some(
+                    element => element.alertId === recode.alertId,
+                  )}
+                  onChange={event => this.onSelectChange(event, recode)}
+                ></Checkbox>
+              ) : (
+                <IconFont type="icon-bypass" className={styles['bypass-icon']} />
+              )}
+            </Fragment>
+          ),
+        },
+        {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
           dataIndex: 'alertOwner',
           key: 'alertOwner',
@@ -238,6 +268,9 @@ export default class DataProcessing extends Component {
         console.log('alertBypassStatus====', alertBypassStatus);
         this.setState({
           alertBypassStatus,
+          alertIndeterminate: false,
+          selectedRowKeys: [],
+          alertIds: [],
         });
       },
     });
@@ -282,14 +315,25 @@ export default class DataProcessing extends Component {
     this.queryDataProcessing();
   };
 
-  onSelectChange = (selectedRowKeys, selectedRows) => {
+  onSelectChange = (checkedValue, selectedRows) => {
+    console.log('selectedRowKeys, selectedRows=', checkedValue, selectedRows);
+    const { selectedRowKeys } = this.state;
+    const newSelectedRowKeys = Object.assign([], selectedRowKeys);
+    if (checkedValue.target.checked) {
+      newSelectedRowKeys.push(selectedRows);
+    } else {
+      newSelectedRowKeys.splice(newSelectedRowKeys.indexOf(selectedRows), 1);
+    }
     const { dataProcessingItemData } = this.props;
-    if (selectedRowKeys.length === dataProcessingItemData.items.length) {
+    const bypassItems = dataProcessingItemData.items.filter(
+      element => element.bypassStatus === '0',
+    );
+    if (newSelectedRowKeys.length === bypassItems.length) {
       this.setState({
         checkedAll: true,
         alertIndeterminate: false,
       });
-    } else if (selectedRowKeys.length > 0) {
+    } else if (newSelectedRowKeys.length > 0) {
       this.setState({
         alertIndeterminate: true,
         checkedAll: false,
@@ -301,19 +345,27 @@ export default class DataProcessing extends Component {
       });
     }
     const alertIds = [];
-    selectedRows.forEach(element => alertIds.push(element.alertId));
-    this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {});
+    newSelectedRowKeys.forEach(element => alertIds.push(element.alertId));
+    // this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {});
+    this.setState({
+      selectedRowKeys: newSelectedRowKeys,
+      alertIds: alertIds.join(','),
+    });
   };
 
   onSelectChangeAll = checkedValue => {
+    console.log('checkedValue====', checkedValue);
     const { dataProcessingItemData } = this.props;
-    const selectedRowKeys = dataProcessingItemData.items.map((element, index) => index);
+    const selectedRowKeys = dataProcessingItemData.items.filter(
+      element => element.bypassStatus === '0',
+    );
     const alertIds = [];
     this.setState({
       checkedAll: checkedValue.target.checked,
+      alertIndeterminate: false,
     });
     if (checkedValue.target.checked) {
-      dataProcessingItemData.items.forEach(element => alertIds.push(element.alertId));
+      selectedRowKeys.forEach(element => alertIds.push(element.alertId));
       this.setState({ selectedRowKeys, alertIds: alertIds.join(',') });
     } else {
       this.setState({
@@ -544,7 +596,7 @@ export default class DataProcessing extends Component {
                   </div>
                   <Table
                     loading={loading['codeList/getCodeItemList']}
-                    rowSelection={alertBypassStatus.length > 0 && isBypass ? rowSelection : null}
+                    rowSelection={alertBypassStatus.length > 0 && isBypass ? null : null}
                     dataSource={dataProcessingItemData.items}
                     pagination={false}
                     columns={this.state.columns}
