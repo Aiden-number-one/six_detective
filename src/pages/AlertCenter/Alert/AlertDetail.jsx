@@ -89,7 +89,7 @@ function AlertDetail({
       },
     });
     // show attachments
-    if (isNewAccountType) {
+    if (+alert.emailType === 111) {
       dispatch({
         type: 'alertCenter/fetchAttachments',
         payload: {

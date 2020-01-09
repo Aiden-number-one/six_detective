@@ -13,6 +13,7 @@ const IconStatus = ({ type, color, des }) => (
 export const statusMap = {
   1: ({ des }) => <IconStatus type="loading" color="#009cff" des={des} />,
   2: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
+  8: ({ des }) => <IconStatus type="exclamation-circle" color="#ffb81c" des={des} />,
   9: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
 };
 

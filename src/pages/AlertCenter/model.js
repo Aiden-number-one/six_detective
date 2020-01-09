@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-08 17:03:56
+ * @LastEditTime : 2020-01-09 14:24:14
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -96,7 +96,6 @@ export default {
     comments: [],
     logs: [],
     users: [],
-    claimInfos: [],
     email: [],
     attachments: [],
     taskHistory: {},
@@ -141,12 +140,6 @@ export default {
       return {
         ...state,
         users: payload.users,
-      };
-    },
-    reclaim(state, { payload }) {
-      return {
-        ...state,
-        claimInfos: payload.claimInfos,
       };
     },
     saveEmail(state, { payload }) {
@@ -317,25 +310,38 @@ export default {
         },
       });
     },
+    // claim or check alert status
     *claim({ payload }, { call, put }) {
-      const { err, msg, items } = yield call(claimAlert, payload);
+      const { err, msg, items } = yield call(claimAlert, {
+        alertIds: payload.alertIds,
+        isCoverClaim: 0,
+      });
       if (err) {
         throw new Error(err);
       }
 
       if (items && items.length > 0) {
-        yield put({
-          type: 'reclaim',
-          payload: {
-            claimInfos: items,
-          },
-        });
-      } else {
-        yield put({
-          type: 'fetch',
-        });
-        message.success(msg);
+        return items;
       }
+      yield put({
+        type: 'fetch',
+      });
+      message.success(msg);
+      return '';
+    },
+    // claim alert(s) which has been claimed
+    *reClaim({ payload }, { call, put }) {
+      const { err, msg, items } = yield call(claimAlert, {
+        alertIds: payload.alertIds,
+        isCoverClaim: 1,
+      });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'fetch',
+      });
+      message.success(msg);
     },
     *close({ payload }, { call, put }) {
       const { err } = yield call(closeAlert, payload);
@@ -344,6 +350,12 @@ export default {
       }
       yield put({
         type: 'fetch',
+      });
+    },
+    *closeByAdmin({ payload }, { call, put }) {
+      yield put({
+        type: 'close',
+        payload,
       });
     },
     *export({ payload }, { call }) {
