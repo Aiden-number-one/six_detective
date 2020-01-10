@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-09 10:28:31
+ * @LastEditTime : 2020-01-10 12:24:57
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -175,7 +175,6 @@ class ClassifyTree extends Component {
       });
       this.props.onSelect(menuList[0] && menuList[0][this.props.treeKey.currentKey]);
       if (all) {
-        console.log('menuList======', menuList);
         this.compareAllChecked();
         this.setState({
           checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
@@ -226,7 +225,6 @@ class ClassifyTree extends Component {
   compareAllChecked = () => {
     const { checkedKeys } = this.props;
     const { menuList } = this.state;
-    console.log('menuList==', menuList);
     const selectedKeys = this.setGridDataFromTree([], menuList);
     const newCheckedKeys = selectedKeys.map(element => element.menuid);
     // this.setState({
@@ -326,7 +324,6 @@ class ClassifyTree extends Component {
 
   setGridDataFromTree = (list = [], dataSource) => {
     const arrayList = list;
-    // if (!(Array.isArray(dataSource) && dataSource.length > 0)) return;
     dataSource.forEach(father => {
       arrayList.push(father);
       if (father.hasOwnProperty('children')) {
@@ -357,8 +354,6 @@ class ClassifyTree extends Component {
   };
 
   loop = (orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, operate) => {
-    // const [customeBtnIds, setCustomeBtnIds] = useState([])
-    // setCustomeBtnIds(btnIds)
     const { customeBtnIds } = this.state;
     return (
       orgsTree &&
