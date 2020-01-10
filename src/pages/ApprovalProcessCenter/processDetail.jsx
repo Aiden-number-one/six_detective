@@ -35,6 +35,7 @@ function ProcessDetail({
   task,
   detailItems,
   nextUsers,
+  nextGroup,
   taskHistoryList,
   logList,
   currentTaskType,
@@ -420,7 +421,7 @@ function ProcessDetail({
                 saveConfirmBiCategory={saveConfirmBiCategory}
               />
               <Drawer
-                title="Assign to"
+                title={`Assign to ( ${nextGroup} )`}
                 width={500}
                 visible={visible}
                 onClose={() => setVisible(false)}

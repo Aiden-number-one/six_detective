@@ -128,14 +128,14 @@ export default {
         taskGroup &&
         taskGroup[0].currentUsers &&
         taskGroup[0].currentUsers.map(item => ({
-          label: `${item} (${currentGroup})`,
+          label: item,
           value: item,
         }));
       const submitOrPassRadioList =
         taskGroup &&
         taskGroup[1].nextUsers &&
         taskGroup[1].nextUsers.map(item => ({
-          label: `${item} (${nextGroup})`,
+          label: item,
           value: item,
         }));
       return {
