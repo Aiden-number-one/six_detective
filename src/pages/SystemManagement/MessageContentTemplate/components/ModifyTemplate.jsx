@@ -1,11 +1,14 @@
+/*
+ * @Description: This is for Template's modify.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:16:24
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 12:16:27
+ */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message, Select } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-// import { routerRedux } from 'dva/router';
-// import styles from '../messageContentTemplate.less';
-
-// import ClassifyTree from '@/components/ClassifyTree';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -125,29 +128,23 @@ class ModifyTemplate extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      // defaultCheckedKeys: [],
-    };
+    this.state = {};
   }
 
-  componentDidMount() {
-    // const { updateFlag } = this.props;
-    // if (updateFlag) {
-    //   this.getMenuGrops();
-    // }
-  }
+  componentDidMount() {}
 
   onCancel = () => {
-    // this.props.history.push({
-    //   pathname: '/system-management/menu-user-group',
-    // });
     this.props.onCancel();
   };
 
+  /**
+   * @description: This is function for Save Template's modify.
+   * @param {type} null
+   * @return: undefined
+   */
   onSave = () => {
     const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
-      console.log('err=======', err);
       if (err) {
         return;
       }
@@ -160,16 +157,11 @@ class ModifyTemplate extends Component {
           type: values.type,
           keyWord: values.keyWord,
         };
-        // debugger
         dispatch({
           type: 'messageContentTemplate/newAlertUser',
           payload: param,
           callback: () => {
             message.success('success');
-            //   this.props.history.push({
-            //     pathname: '/system-management/menu-user-group',
-            //     params: values,
-            //   });
             this.props.onSave();
           },
         });
