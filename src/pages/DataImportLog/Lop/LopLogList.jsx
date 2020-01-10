@@ -8,9 +8,6 @@ import styles from '../index.less';
 
 const { Column } = Table;
 
-const submissionReport = formatMessage({ id: 'data-import.submission-report' });
-const processingStatus = formatMessage({ id: 'data-import.lop.processing-status' });
-
 const submissionChannelMap = {
   A: 'ECP',
   M: 'USER',
@@ -52,7 +49,7 @@ export default function({
         },
       }}
       expandedRowRender={record => (
-        <Descriptions column={3}>
+        <Descriptions column={2}>
           <Descriptions.Item label={<FormattedMessage id="data-import.submission-channel" />}>
             {submissionChannelMap[record.submissionChannel]}
           </Descriptions.Item>
@@ -62,7 +59,9 @@ export default function({
           <Descriptions.Item label={<FormattedMessage id="data-import.lop.latest-version" />}>
             {record.latestVersion}
           </Descriptions.Item>
-          <Descriptions.Item label={submissionReport}>{record.submissionReport}</Descriptions.Item>
+          <Descriptions.Item label={<FormattedMessage id="data-import.submission-report" />}>
+            {record.submissionReport}
+          </Descriptions.Item>
         </Descriptions>
       )}
     >
@@ -96,7 +95,7 @@ export default function({
       <Column
         align="center"
         dataIndex="processingStatusDesc"
-        title={<span title={processingStatus}>{processingStatus}</span>}
+        title={<FormattedMessage id="data-import.lop.processing-stage" />}
       />
       <Column
         align="center"
