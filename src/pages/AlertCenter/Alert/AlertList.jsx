@@ -204,7 +204,10 @@ function AlertList({ dispatch, loading, alerts, total }) {
           loading={loading['alertCenter/claim']}
           disabled={!selectedRows.length}
           claimAlerts={() => claimAlerts()}
-          closeAlerts={() => showCloseModal()}
+          closeAlerts={() => {
+            setDiscontinue(false);
+            showCloseModal();
+          }}
           onDiscontinue={() => {
             setDiscontinue(true);
             showCloseModal();

@@ -226,7 +226,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
             panes.map(pane => (
               <TabPane
                 className={styles['tab-content']}
-                style={{ minHeight: 350 }}
+                style={{ height: isFullscreen ? 'auto' : 360 }}
                 key={pane.TASK_ID.toString()}
                 tab={
                   <Row type="flex" justify="space-between" align="middle">

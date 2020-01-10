@@ -180,7 +180,7 @@ export function NewAccountTaskItem({ task, taskItemHistorys, loading }) {
             render={text => moment(text).format(timestampFormat)}
           />
           <Column dataIndex="answeredFullBiName" title="Answered Full BI Name" />
-          <Column dataIndex="answeredCategory" title="Answered Category" />
+          <Column dataIndex="answeredCategory" title="Answered BI Category" />
           <Column dataIndex="matchedBiCode" title="Matched BI Code" />
           <Column dataIndex="matchedOmnCode" title="Matched OMN Code" />
           <Column dataIndex="answeredFullToName" title="Answered Full TO Name" />
