@@ -125,6 +125,7 @@
       margin-right: 5px;
       // 统计模块
       .statisticalModule {
+        min-width: 644px;
         height: 418px;
         background-color: #fff;
         // 头部
@@ -254,7 +255,9 @@
       }
       // 待处理任务
       .pendingTasks {
-        height: 205px;
+        flex: 1;
+        min-width: 644px;
+        min-height: 205px;
         margin: 5px 0;
         background-color: #fff;
         :global {
@@ -279,7 +282,7 @@
         .more {
           margin-right: 20px;
           color: #0d87d4;
-          border-bottom: 1px solid #0d87d4;
+          // border-bottom: 1px solid #0d87d4;
           cursor: pointer;
         }
         .infoList {
@@ -315,6 +318,9 @@
             text-align: center;
             border-radius: 50%;
           }
+          .color0 {
+            background-color: #f4374c;
+          }
           .color1 {
             background-color: #fec642;
           }
@@ -329,12 +335,15 @@
       // submitStatus
       .submitStatus {
         display: flex;
+        min-width: 644px;
         height: 366px;
         background-color: #fff;
       }
       // outstandingCases
       .outstandingCases {
-        height: 257px;
+        flex: 1;
+        min-width: 644px;
+        min-height: 257px;
         margin: 5px 0;
         background-color: #fff;
       }
@@ -373,7 +382,9 @@
         }
       }
       .information {
-        height: 257px;
+        flex: 1;
+        min-width: 275px;
+        min-height: 257px;
         margin-top: 5px;
         padding: 5px;
         color: #464c51;
@@ -406,7 +417,9 @@
         background-color: #fff;
       }
       .processingStage {
-        height: 205px;
+        flex: 1;
+        min-width: 275px;
+        min-height: 205px;
         margin-top: 5px;
         background-color: #fff;
       }

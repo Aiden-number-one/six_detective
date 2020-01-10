@@ -16,25 +16,25 @@ const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
 @connect(({ allAlert, perAlert, information, dashboard, approval }) => ({
-  allAlterData: allAlert.allAlterData, // 全部的alert的数据
-  allAlertCount: allAlert.allAlertCount, // 全部alert总数
+  allAlterData: allAlert.allAlterData, // all alert的图表数据
+  allAlertCount: allAlert.allAlertCount, // all alert总数
   allOutstandingALertCount: allAlert.allOutstandingALertCount, // 全部未认领的alert的总数
   allClaimAlertCount: allAlert.allClaimAlertCount, // 全部已认领的alert总数
   allProcessingAlertCount: allAlert.allProcessingAlertCount, // 全部处理中的alert总数
   perClaimAlertCount: perAlert.perClaimAlertCount, //  personal Claim alert 总数
   perProcessingAlertCount: perAlert.perProcessingAlertCount, // personal Processing alert 总数
-  perClosedAlertCount: perAlert.perClosedAlertCount, // personal Closed Alert 总数
-  informationData: information.informationData, // information Data
+  perAlertData: perAlert.perAlertData, // Personal Alert 图表数据
+  informationData: information.informationData, // information table Data
   myAlertData: perAlert.myAlertData, // My Alert 的表格数据
-  fileCountData: dashboard.fileCountData, // submission status
-  marketData: dashboard.marketData, // 全部 marketData
-  marketDataByCategory: dashboard.marketDataByCategory, // 单个marketData
+  fileCountData: dashboard.fileCountData, // submission status 图表数据
+  marketData: dashboard.marketData, // 全部 marketData 图表数据
+  marketDataByCategory: dashboard.marketDataByCategory, // 单个marketData图表数据
   processingStageData: dashboard.processingStageData, //
   lateReportFileCount: dashboard.lateReportFileCount, //
   outstandingReportFileCount: dashboard.outstandingReportFileCount, //
-  allApprovalData: approval.allApprovalData,
-  perApprovalData: approval.perApprovalData,
-  allTaskData: approval.allTaskData,
+  allApprovalData: approval.allApprovalData, // 全部流程图表相关数据
+  perApprovalData: approval.perApprovalData, // 个人流程相关数据
+  allTaskData: approval.allTaskData, // my Task表格数据
 }))
 export default class HomePage extends PureComponent {
   state = {
@@ -57,9 +57,14 @@ export default class HomePage extends PureComponent {
         this.renderAlterAllChart(data);
       },
     });
+    // 获取个人 alert柱状图数据
+    dispatch({
+      type: 'perAlert/getPerAlertData',
+      payload: {},
+    });
     // 获取alert 统计数据
     this.getAlertData();
-    // 获取My alert表格的数据
+    // 获取alert表格的数据
     dispatch({
       type: 'perAlert/getMyAlert',
       payload: {
@@ -67,6 +72,7 @@ export default class HomePage extends PureComponent {
         pageSize: 4,
       },
     });
+    // 获取ALL Task表格数据
     dispatch({
       type: 'approval/getAllTask',
       payload: {
@@ -136,16 +142,17 @@ export default class HomePage extends PureComponent {
         ...params,
       },
       callback: datas => {
+        // 更新图表 如果重新获取的数据不为空 则重新渲染图表
         const ApprovalAll = [];
         if (datas[0] && datas[0].userInfo && datas[0].userInfo[0]) {
-          datas.forEach(item => {
+          datas[0].userInfo.forEach(item => {
             ApprovalAll.push({
               label: item.userId,
               type: 'CLAIMED',
               value: item.userClaimedNum,
             });
           });
-          datas.forEach(item => {
+          datas[0].userInfo.forEach(item => {
             ApprovalAll.push({
               label: item.userId,
               type: 'PROCESSING',
@@ -155,6 +162,7 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-unused-expressions
           this.state.approvalAllChart && this.state.approvalAllChart.changeData(ApprovalAll);
         } else {
+          // 更新图表 如果重新获取的数据为空 则清空图表
           // eslint-disable-next-line no-unused-expressions
           this.state.approvalAllChart && this.state.approvalAllChart.changeData([]);
         }
@@ -174,6 +182,7 @@ export default class HomePage extends PureComponent {
             !!datas[0].myProcessingNum ||
             !!datas[0].myFinishedNum)
         ) {
+          // 更新图表 如果重新获取的数据不为空 则重新渲染图表
           const ApprovalPersonal = [
             { label: 'Outstanding', value: datas[0].allOutstandingNum },
             { label: 'Calimed', value: datas[0].myClaimedNum },
@@ -184,6 +193,7 @@ export default class HomePage extends PureComponent {
           this.state.approvalPersonalChart &&
             this.state.approvalPersonalChart.changeData(ApprovalPersonal);
         } else {
+          // 更新图表 如果重新获取的数据为空 则清空图表
           // eslint-disable-next-line no-unused-expressions
           this.state.approvalPersonalChart && this.state.approvalPersonalChart.changeData([]);
         }
@@ -191,6 +201,7 @@ export default class HomePage extends PureComponent {
           datas[0] &&
           (!!datas[0].myApprovedNum || !!datas[0].myRejectedNum || !!datas[0].myTerminatedNum)
         ) {
+          // 更新图表 如果重新获取的数据不为空 则重新渲染图表
           const { myApprovedNum, myRejectedNum, myTerminatedNum } = datas[0];
           const count = myApprovedNum + myRejectedNum + myTerminatedNum;
           const ApprovalPersonalPie = [
@@ -202,6 +213,7 @@ export default class HomePage extends PureComponent {
           this.state.approvalPersonalPieChart &&
             this.state.approvalPersonalPieChart.changeData(ApprovalPersonalPie);
         } else {
+          // 更新图表 如果重新获取的数据不为空 则清空图表
           // eslint-disable-next-line no-unused-expressions
           this.state.approvalPersonalPieChart && this.state.approvalPersonalPieChart.changeData([]);
         }
@@ -255,22 +267,16 @@ export default class HomePage extends PureComponent {
       },
     });
     // 获取个人 Alert Closed total
-    dispatch({
-      type: 'perAlert/getPerClosedAlterCount',
-      payload: {
-        ...params,
-      },
-    });
+    // dispatch({
+    //   type: 'perAlert/getPerClosedAlterCount',
+    //   payload: {
+    //     ...params,
+    //   },
+    // });
   };
 
   getAlertDataByDate = (params = {}) => {
-    const {
-      dispatch,
-      allOutstandingALertCount,
-      perClaimAlertCount,
-      perProcessingAlertCount,
-      perClosedAlertCount,
-    } = this.props;
+    const { dispatch } = this.props;
     // 获取All alert 条形图数据
     dispatch({
       type: 'allAlert/getAllAlterData',
@@ -305,35 +311,37 @@ export default class HomePage extends PureComponent {
       },
     });
     this.getAlertData(params);
-    setTimeout(() => {
-      if (
-        allOutstandingALertCount === 0 &&
-        perClaimAlertCount === 0 &&
-        perProcessingAlertCount === 0 &&
-        perClosedAlertCount === 0
-      ) {
-        // eslint-disable-next-line no-unused-expressions
-        this.state.alterPersonalChart && this.state.alterPersonalChart.changeData([]);
-      } else {
-        // Alter Personal 的条形图
-        const AlterPersonal = [
-          { label: 'Outstanding', value: allOutstandingALertCount },
-          { label: 'Calimed', value: perClaimAlertCount },
-          { label: 'Processing', value: perProcessingAlertCount },
-          { label: 'Finished', value: perClosedAlertCount },
-        ];
-        // eslint-disable-next-line no-unused-expressions
-        this.state.alterPersonalChart && this.state.alterPersonalChart.changeData(AlterPersonal);
-      }
-    }, 0);
+    dispatch({
+      type: 'perAlert/getPerAlertData',
+      payload: {
+        ...params,
+      },
+      callback: data => {
+        // getPerAlertData
+        if (
+          !data[0] ||
+          (data[0] &&
+            data[0].Claimed === 0 &&
+            data[0].Finished === 0 &&
+            data[0].Outstanding === 0 &&
+            data[0].Processing === 0)
+        ) {
+          // eslint-disable-next-line no-unused-expressions
+          this.state.alterPersonalChart && this.state.alterPersonalChart.changeData([]);
+        } else {
+          // Alter Personal 的条形图
+          const AlterPersonal = [
+            { label: 'Outstanding', value: data[0].Outstanding },
+            { label: 'Calimed', value: data[0].Claimed },
+            { label: 'Processing', value: data[0].Processing },
+            { label: 'Finished', value: data[0].Finished },
+          ];
+          // eslint-disable-next-line no-unused-expressions
+          this.state.alterPersonalChart && this.state.alterPersonalChart.changeData(AlterPersonal);
+        }
+      },
+    });
   };
-
-  // componentDidUpdate() {
-  //   const { allAlterData } = this.props;
-  //   if (allAlterData[0]) {
-  //     this.renderAlterAllChart(allAlterData);
-  //   }
-  // }
 
   // tabs 切换
   onTabsChange = activeKey => {
@@ -426,11 +434,6 @@ export default class HomePage extends PureComponent {
     return dataList;
   };
 
-  // 渲染allClaimed
-  // renderAllClaimed = data => {
-  //   const
-  // }
-
   // 渲染Alter ALL条形图
   renderAlterAllChart = data => {
     // Alter ALL 的条形图
@@ -438,48 +441,40 @@ export default class HomePage extends PureComponent {
     data.forEach(item => {
       AlterAll.push({
         label: item.userName, // 纵坐标
-        type: 'CLAIMED', // 分类
+        type: 'Claimed', // 分类
         value: item.claimedCount, // 已认领数
       });
     });
     data.forEach(item => {
       AlterAll.push({
         label: item.userName, // 纵坐标
-        type: 'PROCESSING', // 分类
+        type: 'Processing', // 分类
         value: item.processingCount, // 处理中数
       });
     });
-    // AlterAll = [
-    //   { label: 'Outstanding', type: 'CLAIMED', value: 2800 },
-    //   { label: 'Alan', type: 'CLAIMED', value: 1800 },
-    //   { label: 'Outstanding', type: 'PROCESSING', value: 2260 },
-    //   { label: 'Alan', type: 'PROCESSING', value: 1300 },
-    //   { label: 'Thomas', type: 'CLAIMED', value: 950 },
-    //   { label: 'Thomas', type: 'PROCESSING', value: 900 },
-    //   { label: 'Alex', type: 'CLAIMED', value: 500 },
-    //   { label: 'Alex', type: 'PROCESSING', value: 390 },
-    //   { label: 'Fri.', type: 'CLAIMED', value: 170 },
-    //   { label: 'Fri.', type: 'PROCESSING', value: 100 },
-    // ];
     const alterAllChart = new G2.Chart({
       container: 'AlterAll', // div ID
       forceFit: true, // 是否自适应宽度
       height: 250, // 画布高度
-      padding: [20, 100, 20, 200], // 上下左右的padding
+      padding: [20, 120, 20, 100], // 上下左右的padding
     });
     alterAllChart.source(AlterAll);
     alterAllChart.legend({
-      position: 'left-top', // 设置图例的显示位置
+      position: 'right-top', // 设置图例的显示位置
       itemGap: 20, // 图例项之间的间距
+      offsetX: 20,
       label: {
         color: '#464C51', // 图例的字体颜色
+        fontSize: 12,
       },
+      marker: 'square',
     });
     // 柱图value坐标
     alterAllChart.axis('value', {
       position: 'right',
       label: {
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -496,6 +491,7 @@ export default class HomePage extends PureComponent {
       label: {
         offset: 12,
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -512,15 +508,16 @@ export default class HomePage extends PureComponent {
       .color('type', ['#F4374C', '#0D87D4'])
       .label('value', {
         textStyle: {
-          fill: '#464C51',
-          fontSize: 11,
+          fill: '#7F91A4',
+          fontSize: 12,
         },
-        offset: 10,
+        offset: 2,
       })
+      .size(15)
       .adjust([
         {
           type: 'dodge',
-          marginRatio: 1 / 32,
+          marginRatio: 0,
         },
       ]);
     alterAllChart.render();
@@ -544,18 +541,13 @@ export default class HomePage extends PureComponent {
 
   // 渲染Alter Personal条形图
   renderAlterPerChart = () => {
-    const {
-      allOutstandingALertCount,
-      perClaimAlertCount,
-      perProcessingAlertCount,
-      perClosedAlertCount,
-    } = this.props;
+    const { perAlertData } = this.props;
     // Alter Personal 的条形图
     const AlterPersonal = [
-      { label: 'Outstanding', value: allOutstandingALertCount },
-      { label: 'Calimed', value: perClaimAlertCount },
-      { label: 'Processing', value: perProcessingAlertCount },
-      { label: 'Finished', value: perClosedAlertCount },
+      { label: 'Outstanding', value: perAlertData[0].Outstanding },
+      { label: 'Calimed', value: perAlertData[0].Claimed },
+      { label: 'Processing', value: perAlertData[0].Processing },
+      { label: 'Finished', value: perAlertData[0].Finished },
     ];
     const alterPersonalChart = new G2.Chart({
       container: 'AlterPersonal',
@@ -569,6 +561,7 @@ export default class HomePage extends PureComponent {
       position: 'right',
       label: {
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -585,6 +578,7 @@ export default class HomePage extends PureComponent {
       label: {
         offset: 12,
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -600,13 +594,13 @@ export default class HomePage extends PureComponent {
       .color('#F4374C')
       .label('value', {
         textStyle: {
-          fill: '#464C51',
+          fill: '#7F91A4',
           fontSize: 12,
         },
         offset: 10,
       })
       .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
-      .size(15)
+      .size(20)
       .adjust([
         {
           type: 'dodge',
@@ -648,36 +642,27 @@ export default class HomePage extends PureComponent {
         value: item.userProcessingNum,
       });
     });
-    // const ApprovalAll = [
-    //   { label: 'Outstanding', type: 'CLAIMED', value: 2800 },
-    //   { label: 'Alan', type: 'CLAIMED', value: 1800 },
-    //   { label: 'Outstanding', type: 'PROCESSING', value: 2260 },
-    //   { label: 'Alan', type: 'PROCESSING', value: 1300 },
-    //   { label: 'Thomas', type: 'CLAIMED', value: 950 },
-    //   { label: 'Thomas', type: 'PROCESSING', value: 900 },
-    //   { label: 'Alex', type: 'CLAIMED', value: 500 },
-    //   { label: 'Alex', type: 'PROCESSING', value: 390 },
-    //   { label: 'Fri.', type: 'CLAIMED', value: 170 },
-    //   { label: 'Fri.', type: 'PROCESSING', value: 100 },
-    // ];
     const approvalAllChart = new G2.Chart({
       container: 'ApprovalAll',
       forceFit: true,
       height: 250,
-      padding: [20, 100, 20, 150],
+      padding: [20, 100, 20, 50],
     });
     approvalAllChart.source(ApprovalAll);
     approvalAllChart.legend({
-      position: 'left-top', // 设置图例的显示位置
+      position: 'right-top', // 设置图例的显示位置
       itemGap: 20, // 图例项之间的间距
       label: {
         color: '#464C51',
+        fontSize: 12,
       },
+      marker: 'square',
     });
     approvalAllChart.axis('value', {
       position: 'left',
       label: {
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -694,6 +679,7 @@ export default class HomePage extends PureComponent {
       label: {
         offset: 12,
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -705,15 +691,16 @@ export default class HomePage extends PureComponent {
       .color('type', ['#F4374C', '#0D87D4'])
       .label('value', {
         textStyle: {
-          fill: '#464C51',
-          fontSize: 11,
+          fill: '#7F91A4',
+          fontSize: 12,
         },
         offset: 10,
       })
+      .size(25)
       .adjust([
         {
           type: 'dodge',
-          marginRatio: 1 / 32,
+          marginRatio: 0,
         },
       ]);
     approvalAllChart.render();
@@ -735,13 +722,6 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval Personal柱状图
   renderApprovalPerChart = () => {
-    // const {
-    //   allOutstandingALertCount,
-    //   perClaimAlertCount,
-    //   perProcessingAlertCount,
-    //   perClosedAlertCount,
-    // } = this.props;
-    // Approval Personal 的条形图
     const { perApprovalData } = this.props;
     const ApprovalPersonal = [
       { label: 'Outstanding', value: perApprovalData[0].allOutstandingNum },
@@ -761,6 +741,7 @@ export default class HomePage extends PureComponent {
       position: 'left',
       label: {
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -777,6 +758,7 @@ export default class HomePage extends PureComponent {
       label: {
         offset: 12,
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -787,7 +769,7 @@ export default class HomePage extends PureComponent {
       .position('label*value')
       .label('value', {
         textStyle: {
-          fill: '#464C51',
+          fill: '#7F91A4',
           fontSize: 12,
         },
         offset: 10,
@@ -818,13 +800,6 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval Personal饼图
   renderApprovalPerPieChart = () => {
-    // const {
-    //   allOutstandingALertCount,
-    //   perClaimAlertCount,
-    //   perProcessingAlertCount,
-    //   perClosedAlertCount,
-    // } = this.props;
-    // Approval Personal 的饼图图
     const { perApprovalData } = this.props;
     const { myApprovedNum, myRejectedNum, myTerminatedNum } = perApprovalData[0];
     const count = myApprovedNum + myRejectedNum + myTerminatedNum;
@@ -853,23 +828,18 @@ export default class HomePage extends PureComponent {
     });
     approvalPersonalPieChart.legend({
       position: 'left-top',
-      // itemFormatter: (a, b) => {
-      //   console.log(a, b);
-      //   debugger
-      // }
+      label: {
+        color: '#464C51',
+        fontSize: 12,
+      },
     });
     approvalPersonalPieChart
       .intervalStack()
       .position('percent')
-      // .label('value', {
-      //   textStyle: {
-      //     fill: '#464C51',
-      //     fontSize: 12,
-      //   },
-      //   offset: 10,
-      // })
       .label('percent', {
         offset: -40,
+        color: '#464C51',
+        fontSize: 12,
       })
       .tooltip('label*percent', (label, percent) => {
         const value = `${percent * 100}%`;
@@ -884,24 +854,7 @@ export default class HomePage extends PureComponent {
         stroke: '#fff',
       });
     // .size(15)
-    // .adjust([
-    //   {
-    //     type: 'dodge',
-    //     marginRatio: 1 / 32,
-    //   },
-    // ]);
     approvalPersonalPieChart.render();
-    // approvalPersonalPieChart.on('interval:click', ev => {
-    //   const clickData = ev.data;
-    //   if (clickData) {
-    //     // eslint-disable-next-line no-underscore-dangle
-    //     const alertOwnerId = localStorage.getItem('loginName');
-    //     // eslint-disable-next-line no-underscore-dangle
-    //     const alertStatusDesc = clickData._origin.label;
-    //     router.push(`/homepage/Approval-Process-Center?alertOwnerId=
-    // ${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`);
-    //   }
-    // });
     this.setState({ approvalPersonalPieChart });
   };
 
@@ -970,7 +923,7 @@ export default class HomePage extends PureComponent {
           value,
         };
       })
-      .color('label', ['#10416C', '#F4374C'])
+      .color('label', ['#0D87D4', '#F4374C'])
       .style({
         lineWidth: 1,
         stroke: '#fff',
@@ -1087,7 +1040,7 @@ export default class HomePage extends PureComponent {
         },
         offset: 10,
       })
-      // .size(15)
+      .size(35)
       .adjust([
         {
           type: 'dodge',
@@ -1359,7 +1312,8 @@ export default class HomePage extends PureComponent {
 
       perClaimAlertCount, //  personal Claim alert 总数
       perProcessingAlertCount, // personal Processing alert 总数
-      perClosedAlertCount, // personal Closed Alert 总数
+      // perClosedAlertCount, // personal Closed Alert 总数
+      perAlertData,
 
       informationData,
       myAlertData,
@@ -1469,10 +1423,11 @@ export default class HomePage extends PureComponent {
                               },
                               () => {
                                 if (
-                                  allOutstandingALertCount !== 0 ||
-                                  perClaimAlertCount !== 0 ||
-                                  perProcessingAlertCount !== 0 ||
-                                  perClosedAlertCount !== 0
+                                  perAlertData[0] &&
+                                  (perAlertData[0].Claimed !== 0 ||
+                                    perAlertData[0].Finished !== 0 ||
+                                    perAlertData[0].Outstanding !== 0 ||
+                                    perAlertData[0].Processing !== 0)
                                 ) {
                                   this.renderAlterPerChart();
                                 }
@@ -1491,15 +1446,18 @@ export default class HomePage extends PureComponent {
                           )}
                           onClick={() => {
                             const { startDate, endDate } = this.state;
-                            this.setState({
-                              textActive: 'Today',
-                            });
-                            if (!startDate && !endDate) {
-                              const params = {
-                                period: 1,
-                              };
-                              this.getAlertDataByDate(params);
-                            }
+                            this.setState(
+                              {
+                                textActive: textActive === 'Today' ? '' : 'Today',
+                              },
+                              () => {
+                                const params = {};
+                                if (!startDate && !endDate && this.state.textActive === 'Today') {
+                                  params.period = 1;
+                                }
+                                this.getAlertDataByDate(params);
+                              },
+                            );
                           }}
                         >
                           Today
@@ -1511,15 +1469,18 @@ export default class HomePage extends PureComponent {
                           )}
                           onClick={() => {
                             const { startDate, endDate } = this.state;
-                            this.setState({
-                              textActive: 'Week',
-                            });
-                            if (!startDate && !endDate) {
-                              const params = {
-                                period: 2,
-                              };
-                              this.getAlertDataByDate(params);
-                            }
+                            this.setState(
+                              {
+                                textActive: textActive === 'Week' ? '' : 'Week',
+                              },
+                              () => {
+                                const params = {};
+                                if (!startDate && !endDate && this.state.textActive === 'Week') {
+                                  params.period = 2;
+                                }
+                                this.getAlertDataByDate(params);
+                              },
+                            );
                           }}
                         >
                           This Week
@@ -1689,22 +1650,26 @@ export default class HomePage extends PureComponent {
                           id="AlterPersonal"
                           style={{
                             display:
-                              allOutstandingALertCount === 0 &&
-                              perClaimAlertCount === 0 &&
-                              perProcessingAlertCount === 0 &&
-                              perClosedAlertCount === 0
-                                ? 'none'
-                                : 'block',
+                              perAlertData[0] &&
+                              (perAlertData[0].Claimed !== 0 ||
+                                perAlertData[0].Finished !== 0 ||
+                                perAlertData[0].Outstanding !== 0 ||
+                                perAlertData[0].Processing !== 0)
+                                ? 'block'
+                                : 'none',
                           }}
                         ></div>
-                        {allOutstandingALertCount === 0 &&
-                          perClaimAlertCount === 0 &&
-                          perProcessingAlertCount === 0 &&
-                          perClosedAlertCount === 0 && (
-                            <div className={styles.empty} style={{ height: 250 }}>
-                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                            </div>
-                          )}
+                        {!(
+                          perAlertData[0] &&
+                          (perAlertData[0].Claimed !== 0 ||
+                            perAlertData[0].Finished !== 0 ||
+                            perAlertData[0].Outstanding !== 0 ||
+                            perAlertData[0].Processing !== 0)
+                        ) && (
+                          <div className={styles.empty} style={{ height: 250 }}>
+                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                          </div>
+                        )}
                       </>
                     )}
                   </div>
@@ -1744,13 +1709,15 @@ export default class HomePage extends PureComponent {
                           <List
                             itemLayout="horizontal"
                             dataSource={allTaskData}
-                            renderItem={item => (
+                            renderItem={(item, index) => (
                               <List.Item>
                                 <span title={item.classification} className={styles.description}>
                                   {item.classification}
                                 </span>
-                                <span className={classNames(styles.user, styles.yellow)}>
-                                  {item.owner.match(/[A-Z]/g) && item.owner.match(/[A-Z]/g).join()}
+                                <span className={classNames(styles.user, styles[`color${index}`])}>
+                                  {item.owner &&
+                                    item.owner.match(/[A-Z]/g) &&
+                                    item.owner.match(/[A-Z]/g).join()}
                                 </span>
                                 <span className={styles.date}>
                                   {moment(item.updateDate).format(timestampFormat)}
@@ -1916,19 +1883,20 @@ export default class HomePage extends PureComponent {
                           onClick={() => {
                             this.setState(
                               {
-                                approvalTextActive: 'Today',
+                                approvalTextActive: approvalTextActive === 'Today' ? '' : 'Today',
                               },
                               () => {
-                                const startDate = moment().format('YYYYMMDD');
-                                const endDate = moment().format('YYYYMMDD');
-                                const params = {
-                                  startDate,
-                                  endDate,
-                                };
-                                this.setState({
-                                  proStartDate: startDate,
-                                  proEndDate: endDate,
-                                });
+                                const params = {};
+                                if (this.state.approvalTextActive === 'Today') {
+                                  const startDate = moment().format('YYYYMMDD');
+                                  const endDate = moment().format('YYYYMMDD');
+                                  params.startDate = startDate;
+                                  params.endDate = endDate;
+                                  this.setState({
+                                    proStartDate: startDate,
+                                    proEndDate: endDate,
+                                  });
+                                }
                                 this.getApprovalData(params);
                               },
                             );
@@ -1944,21 +1912,22 @@ export default class HomePage extends PureComponent {
                           onClick={() => {
                             this.setState(
                               {
-                                approvalTextActive: 'Week',
+                                approvalTextActive: approvalTextActive === 'Week' ? '' : 'Week',
                               },
                               () => {
-                                const startDate = moment(
-                                  new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
-                                ).format('YYYYMMDD');
-                                const endDate = moment().format('YYYYMMDD');
-                                const params = {
-                                  startDate,
-                                  endDate,
-                                };
-                                this.setState({
-                                  proStartDate: startDate,
-                                  proEndDate: endDate,
-                                });
+                                const params = {};
+                                if (this.state.approvalTextActive === 'Week') {
+                                  const startDate = moment(
+                                    new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
+                                  ).format('YYYYMMDD');
+                                  const endDate = moment().format('YYYYMMDD');
+                                  params.startDate = startDate;
+                                  params.endDate = endDate;
+                                  this.setState({
+                                    proStartDate: startDate,
+                                    proEndDate: endDate,
+                                  });
+                                }
                                 this.getApprovalData(params);
                               },
                             );
@@ -1981,7 +1950,7 @@ export default class HomePage extends PureComponent {
                               params.startDate = startDate;
                               params.endDate = endDate;
                             } else {
-                              if (textActive === 'Today') {
+                              if (approvalTextActive === 'Today') {
                                 const startDate = moment().format('YYYYMMDD');
                                 const endDate = moment().format('YYYYMMDD');
                                 params.startDate = startDate;
@@ -1991,7 +1960,7 @@ export default class HomePage extends PureComponent {
                                   proEndDate: endDate,
                                 });
                               }
-                              if (textActive === 'Week') {
+                              if (approvalTextActive === 'Week') {
                                 const startDate = moment(
                                   new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
                                 ).format('YYYYMMDD');
@@ -2272,7 +2241,9 @@ export default class HomePage extends PureComponent {
                                   {item.classification}
                                 </span>
                                 <span className={classNames(styles.user, styles[`color${index}`])}>
-                                  {item.owner.match(/[A-Z]/g) && item.owner.match(/[A-Z]/g).join()}
+                                  {item.owner &&
+                                    item.owner.match(/[A-Z]/g) &&
+                                    item.owner.match(/[A-Z]/g).join()}
                                 </span>
                                 <span className={styles.date}>
                                   {moment(item.updateDate).format(timestampFormat)}
@@ -2368,7 +2339,7 @@ export default class HomePage extends PureComponent {
                 <div className={styles.leftSide}>
                   {/* Submission status */}
                   <div className={styles.submitStatus}>
-                    <div style={{ flex: 2, minHeight: 250 }}>
+                    <div style={{ flex: '1 1', minHeight: 250 }}>
                       <h3 className={styles.groupTitle}>Submission Status</h3>
                       <div id="submissionStatusPie"></div>
                       {currentTradeDate &&
@@ -2380,7 +2351,7 @@ export default class HomePage extends PureComponent {
                           </div>
                         )}
                     </div>
-                    <div style={{ flex: 3, minHeight: 250 }}>
+                    <div style={{ flex: '1 1', minHeight: 250 }}>
                       <div id="submissionStatusBar"></div>
                       {!isRender && (
                         <div className={styles.empty} style={{ height: 300 }}>
