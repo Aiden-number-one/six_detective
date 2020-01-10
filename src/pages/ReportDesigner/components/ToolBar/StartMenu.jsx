@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { SketchPicker } from 'react-color';
 import classNames from 'classnames';
-import { Button, Select, Menu, Icon, Dropdown, Popover } from 'antd';
+import { Button, Select, Menu, Icon, Dropdown, Popover, Upload, message } from 'antd';
+import { convertXml } from '../SpreadSheet/spreadSheetUtil';
 import { borderMenu } from './menu';
 import { fontSizeSelect, fontFamilySelect } from './select';
-import { getColIndexRowIndex } from '../../utils';
+import { getColIndexRowIndex, setCellTypeAndValue } from '../../utils';
 import CustomizeIcon from '../CustomizeIcon';
 import styles from './index.less';
 import IconFont from '@/components/IconFont';
@@ -265,6 +266,10 @@ class ToolBar extends Component {
               params: 'clearStyle',
             },
             {
+              name: 'Clear Content',
+              params: 'clearContent',
+            },
+            {
               name: 'Clear All',
               params: 'clearAll',
             },
@@ -272,7 +277,25 @@ class ToolBar extends Component {
             <Menu.Item
               key={name}
               onClick={() => {
-                // editRowColumn(operatype, value);
+                const { cellPosition } = this.props;
+                if (params === 'clearStyle') {
+                  setCellStyle('clearformat');
+                }
+                if (params === 'clearContent') {
+                  setCellTypeAndValue({
+                    value: '',
+                    cellPosition,
+                  });
+                  // setCellStyle('clearContent');
+                }
+                if (params === 'clearAll') {
+                  setCellStyle('clearformat');
+                  setCellTypeAndValue({
+                    value: '',
+                    type: 'text',
+                    cellPosition,
+                  });
+                }
               }}
             >
               {name}
@@ -333,6 +356,30 @@ class ToolBar extends Component {
     // console.log('inOrDecreaseDecimal -> ', action, cell, tail);
   };
 
+  // 上传文件
+  importFileStatus = async info => {
+    if (info.file.status === 'done') {
+      const { dispatch } = this.props;
+      const url = info.file.response.bcjson.items.relativeUrl;
+      // 得到解析到的JSON串
+      const reportDefinition = await dispatch({
+        type: 'reportDesigner/importExcel',
+        payload: {
+          filePath: url,
+        },
+      });
+      if (reportDefinition) {
+        const spreadSheetObj = convertXml(JSON.parse(reportDefinition));
+        window.xsObj.instanceArray[window.xsObj.instanceArray.length - 1].data.setData(
+          spreadSheetObj,
+        );
+        window.xsObj.instanceArray[0].sheet.toolbar.change();
+      }
+    } else if (info.file.status === 'error') {
+      message.infp(`${info.file.name} file upload failed.`);
+    }
+  };
+
   render() {
     const { setCellStyle, setCellType, changeDisplaySearchArea, displayArea } = this.props;
     const { btnActiveStatus, backgroundColor, fontColor, cellType, paintformatActive } = this.state;
@@ -359,11 +406,14 @@ class ToolBar extends Component {
                 </div>
               </Button>
               <Button className={classNames('btn', 'btn2Report', 'mr6')}>
-                <div className={styles.topBottom}>
-                  <IconFont type="icondaoru" />
-                  <p>Import</p>
-                </div>
+                <Upload onChange={info => this.importFileStatus(info)} action="/upload">
+                  <div className={styles.topBottom}>
+                    <IconFont type="icondaoru" />
+                    <p>Import</p>
+                  </div>
+                </Upload>
               </Button>
+              {/* </Upload> */}
               <Button
                 className={classNames('btn', 'btn2Report', 'mr6', displayArea && 'active')}
                 onClick={changeDisplaySearchArea}
@@ -562,11 +612,9 @@ class ToolBar extends Component {
                   <IconFont type="iconxiahuaxian1" />
                 </Button>
                 <ButtonGroup className="btn-group mr6">
-                  <Popover content="Border" {...popoverProps}>
-                    <Button className="btn" onClick={() => {}}>
-                      <IconFont type="iconborder-none-solid" />
-                    </Button>
-                  </Popover>
+                  <Button className="btn" onClick={() => {}}>
+                    <IconFont type="iconborder-none-solid" />
+                  </Button>
                   <Dropdown
                     overlay={this.creatMenu(borderMenu, 'border')}
                     trigger={['click']}
@@ -641,14 +689,20 @@ class ToolBar extends Component {
                     </Button>
                   </Dropdown>
                 </ButtonGroup>
-                <Button
-                  className="btn"
-                  onClick={() => {
-                    setCellStyle('clearformat');
-                  }}
-                >
-                  <IconFont type="iconeraser-ps" />
-                </Button>
+                <ButtonGroup className="btn-group mr6">
+                  <Button className="btn">
+                    <IconFont type="iconeraser-ps" />
+                  </Button>
+                  <Dropdown
+                    overlay={this.creatMenu(borderMenu, 'eraser')}
+                    trigger={['click']}
+                    placement="bottomLeft"
+                  >
+                    <Button className="btn with-icon">
+                      <Icon type="caret-down" />
+                    </Button>
+                  </Dropdown>
+                </ButtonGroup>
               </div>
             </div>
             <div className={styles.divider} />

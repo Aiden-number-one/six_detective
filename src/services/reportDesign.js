@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-17 15:12:19
  * @LastEditors  : mus
- * @LastEditTime : 2019-12-27 15:29:33
+ * @LastEditTime : 2020-01-10 14:50:27
  */
 export default {
   getDataSet: 'get_dataset_list_query', // 获取数据集
@@ -14,4 +14,5 @@ export default {
   getReportTemplateDataQuery: 'set_report_template_data_query', // 进行报表模板查询-预览页面
   getReportDataFile: 'get_report_data_file', // 报表预览-导出文件
   getFieldList: 'get_report_template_dataset_field_list', // 根据sql得到相应的file
+  importExcel: 'set_excel_template_parse', // 导入Excel模版
 };
