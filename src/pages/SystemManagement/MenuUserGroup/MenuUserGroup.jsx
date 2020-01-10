@@ -1,9 +1,15 @@
+/*
+ * @Description: This menu's and button's auth management.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:15:57
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 11:08:07
+ */
 import React, { Component, Fragment } from 'react';
 import { Form, Table, Pagination, Button, Drawer, Modal } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-// import { routerRedux } from 'dva/router';
 import IconFont from '@/components/IconFont';
 
 import styles from './MenuUserGroup.less';
@@ -80,11 +86,6 @@ class MenuUserGroup extends Component {
   }
 
   newUser = () => {
-    // this.props.dispatch(
-    //   routerRedux.push({
-    //     pathname: '/system-management/user-maintenance/new-menu-user',
-    //   }),
-    // );
     this.setState({
       modifyVisible: true,
       groupTitle: 'New Menu Group',
@@ -132,13 +133,6 @@ class MenuUserGroup extends Component {
   };
 
   updateUser = (res, obj) => {
-    console.log('res, obj=', res, obj);
-    // this.props.dispatch(
-    //   routerRedux.push({
-    //     pathname: '/system-management/user-maintenance/modify-menu-user',
-    //     query: { groupId: obj.groupId },
-    //   }),
-    // );
     const groupMenuInfo = {
       groupId: obj.groupId,
       groupName: obj.groupName,
@@ -153,7 +147,6 @@ class MenuUserGroup extends Component {
   };
 
   deleteUser = (res, obj) => {
-    console.log('delete====', obj);
     const groupMenuInfo = {
       groupId: obj.groupId,
     };
@@ -215,14 +208,7 @@ class MenuUserGroup extends Component {
   };
 
   queryLog = () => {
-    // const { dispatch } = this.props;
-    // const params = {};
-    // dispatch({
-    //   type: 'menuUserGroup/getMenuUserGroup',
-    //   payload: params,
-    // });
     this.searchForm.current.validateFields((err, values) => {
-      console.log('values===', values);
       this.setState(
         {
           searchGroupName: values.groupName,
@@ -257,7 +243,7 @@ class MenuUserGroup extends Component {
   };
 
   /**
-   * @description: This is for query user list function.
+   * @description: This is for query Menu User list function.
    * @param {type} null
    * @return: undefined
    */
@@ -295,11 +281,6 @@ class MenuUserGroup extends Component {
     const { loading, menuUserGroup } = this.props;
     const { groupTitle, deleteVisible, groupMenuInfo, updateFlag } = this.state;
     const { columns, page, modifyVisible, delateTitle } = this.state;
-    // const rowSelection = {
-    //   onChange: (selectedRowKeys, selectedRows) => {
-    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    //   },
-    // };
     return (
       <PageHeaderWrapper>
         <div>
