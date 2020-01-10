@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-08 20:19:33
+ * @LastEditTime : 2020-01-10 16:32:35
  */
 import Service from '@/utils/Service';
 
@@ -60,7 +60,7 @@ const codeMaintenance = {
         throw new Error(response.bcjson.msg);
       }
     },
-    *startProcessing({ payload }, { call, put }) {
+    *startProcessing({ payload, callback }, { call, put }) {
       const response = yield call(startProcessing, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -68,6 +68,7 @@ const codeMaintenance = {
             type: 'startProcessing',
             payload: response.bcjson.items,
           });
+          callback();
         }
       } else {
         throw new Error(response.bcjson.msg);
