@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-09 15:46:01
+ * @LastEditTime : 2020-01-10 13:58:46
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -101,7 +101,6 @@ export default {
     users: [],
     email: [],
     attachments: [],
-    taskHistory: {},
   },
   reducers: {
     save(state, { payload }) {
@@ -155,12 +154,6 @@ export default {
       return {
         ...state,
         attachments: payload.attachments,
-      };
-    },
-    saveTaskHistory(state, { payload }) {
-      return {
-        ...state,
-        taskHistory: payload.taskHistory,
       };
     },
   },
@@ -420,16 +413,11 @@ export default {
       message.success(msg);
     },
     *fetchTaskHistory({ payload }, { call, put }) {
-      const { err, items } = yield call(getTaskHistory, payload);
+      const { err, items = {} } = yield call(getTaskHistory, payload);
       if (err) {
         throw new Error(err);
       }
-      yield put({
-        type: 'saveTaskHistory',
-        payload: {
-          taskHistory: items,
-        },
-      });
+      return items;
     },
   },
 };

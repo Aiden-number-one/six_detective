@@ -51,18 +51,10 @@ function CustomEmpty({ className = '', style = {} }) {
   );
 }
 
-function AlertDetail({
-  dispatch,
-  loading,
-  alert,
-  comments,
-  logs,
-  email,
-  attachments,
-  taskHistory,
-}) {
+function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachments }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
+  const [taskItemHistorys, setTaskItemHistorys] = useState([]);
   const [activeKey, setActiveKey] = useState('1');
   const [emailVisible, setEmailVisible] = useState(false);
 
@@ -110,15 +102,28 @@ function AlertDetail({
     });
   }
 
-  function handleAddItem(pane) {
+  async function handleAddItem(pane) {
     const isEqual = item => item.TASK_ID === pane.TASK_ID;
     if (panes.find(isEqual)) {
       // update item
       setPanes(panes.map(p => (isEqual(p) ? pane : p)));
     } else {
-      handleHistory(pane);
       // add pane
       setPanes([pane, ...panes]);
+      if (isNewAccountType) {
+        const { reportHistory, answerHistory } = await dispatch({
+          type: 'alertCenter/fetchTaskHistory',
+          payload: {
+            taskId: pane.TASK_ID,
+          },
+        });
+        if (!taskItemHistorys.find(isEqual)) {
+          setTaskItemHistorys([
+            { taskId: pane.TASK_ID, reportHistory, answerHistory },
+            ...taskItemHistorys,
+          ]);
+        }
+      }
     }
     setActiveKey(pane.TASK_ID.toString());
   }
@@ -166,17 +171,6 @@ function AlertDetail({
     setEmailVisible(false);
   }
 
-  function handleHistory(task) {
-    // task item history list
-    if (isNewAccountType) {
-      dispatch({
-        type: 'alertCenter/fetchTaskHistory',
-        payload: {
-          taskId: task.TASK_ID,
-        },
-      });
-    }
-  }
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -229,7 +223,6 @@ function AlertDetail({
             </TabPane>
           )}
           {+alert.itemsTotal !== 0 &&
-            panes &&
             panes.map(pane => (
               <TabPane
                 className={styles['tab-content']}
@@ -248,7 +241,7 @@ function AlertDetail({
               >
                 <TaskItem
                   task={pane}
-                  taskHistory={taskHistory}
+                  taskItemHistorys={taskItemHistorys}
                   loading={loading['alertCenter/fetchTaskHistory']}
                 />
                 <div align="right">
@@ -297,12 +290,11 @@ function AlertDetail({
 }
 
 export default connect(
-  ({ loading, alertCenter: { comments = [], logs = [], email, attachments, taskHistory } }) => ({
+  ({ loading, alertCenter: { comments = [], logs = [], email, attachments } }) => ({
     loading: loading.effects,
     comments,
     logs,
     email,
     attachments,
-    taskHistory,
   }),
 )(AlertDetail);

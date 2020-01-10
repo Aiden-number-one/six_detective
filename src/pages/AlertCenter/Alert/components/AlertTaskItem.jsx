@@ -101,7 +101,7 @@ export function CaCodeTaskItem({
     </GrDescriptions>
   );
 }
-export function NewAccountTaskItem({ task, taskHistory, loading }) {
+export function NewAccountTaskItem({ task, taskItemHistorys, loading }) {
   const {
     MARKET,
     SUBMITTER_CODE,
@@ -122,6 +122,15 @@ export function NewAccountTaskItem({ task, taskHistory, loading }) {
     REMARK,
   } = task;
 
+  const [reports, answers] = useMemo(() => {
+    const cur = taskItemHistorys.find(item => item.taskId === task.TASK_ID);
+    if (cur) {
+      const { reportHistory, answerHistory } = cur;
+      return [reportHistory, answerHistory];
+    }
+    return [];
+  }, [taskItemHistorys]);
+
   return (
     <GrDescriptions labelWidth="25%">
       <GrDescriptions.Item label="Market *">{MARKET}</GrDescriptions.Item>
@@ -135,14 +144,13 @@ export function NewAccountTaskItem({ task, taskHistory, loading }) {
       <GrDescriptions.Item label="Previous TO Name *">{PREV_TO_NAME}</GrDescriptions.Item>
       <GrDescriptions.Item label="Report History *" direction="column">
         <Table
-          dataSource={[]}
+          dataSource={reports}
           rowKey="chgId"
           style={{ marginTop: 10 }}
           loading={loading}
           pagination={false}
           bordered
         >
-          <Column align="center" dataIndex="chgId" title="Reported ID" />
           <Column
             align="center"
             dataIndex="reportedTime"
@@ -150,29 +158,28 @@ export function NewAccountTaskItem({ task, taskHistory, loading }) {
             render={text => moment(text).format(timestampFormat)}
           />
 
-          <Column align="center" dataIndex="reportedAccountName" title="Reported Account Name" />
-          <Column align="center" dataIndex="reportedBiName" title="Reported BI Name" />
-          <Column align="center" dataIndex="reportedToName" title="Reported TO Name" />
+          <Column dataIndex="reportedAccountName" title="Reported Account Name" />
+          <Column dataIndex="reportedBiName" title="Reported BI Name" />
+          <Column dataIndex="reportedToName" title="Reported TO Name" />
         </Table>
       </GrDescriptions.Item>
       <GrDescriptions.Item label="Received Answer *">{ANSWER_STATUS}</GrDescriptions.Item>
       <GrDescriptions.Item label="Answer History *" direction="column">
         <Table
-          dataSource={[]}
+          dataSource={answers}
           rowKey="answerId"
           style={{ marginTop: 10 }}
           loading={loading}
           pagination={false}
           bordered
         >
-          <Column align="center" dataIndex="answerId" title="Answered ID" />
           <Column align="center" dataIndex="answeredTime" title="Answered Time" />
-          <Column align="center" dataIndex="answeredFullBiName" title="Answered Full BI Name" />
-          <Column align="center" dataIndex="answeredBiCategory" title="Answered BI Category" />
-          <Column align="center" dataIndex="matchedBiCode" title="Matched BI Code" />
-          <Column align="center" dataIndex="matchedOmnCode" title="Matched OMN Code" />
-          <Column align="center" dataIndex="answeredFullToName" title="Answered Full TO Name" />
-          <Column align="center" dataIndex="matchedTo" title="Matched TO" />
+          <Column dataIndex="answeredFullBiName" title="Answered Full BI Name" />
+          <Column dataIndex="answeredBiCategory" title="Answered BI Category" />
+          <Column dataIndex="matchedBiCode" title="Matched BI Code" />
+          <Column dataIndex="matchedOmnCode" title="Matched OMN Code" />
+          <Column dataIndex="answeredFullToName" title="Answered Full TO Name" />
+          <Column dataIndex="matchedTo" title="Matched TO" />
         </Table>
       </GrDescriptions.Item>
       <GrDescriptions.Item label="Confirmed BI *">
