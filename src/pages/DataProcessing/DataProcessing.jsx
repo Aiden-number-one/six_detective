@@ -1,3 +1,10 @@
+/*
+ * @Description: This is Data Processing for Data Inspect and Processsing.
+ * @Author: dailinbo
+ * @Date: 2020-01-09 16:45:10
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 20:02:44
+ */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import classnames from 'classnames';
@@ -12,7 +19,6 @@ import { getAuthority } from '@/utils/authority';
 import { getStore } from '@/utils/store';
 
 const { Option } = Select;
-// const { RangePicker } = DatePicker;
 
 @connect(({ dataProcessing, loading }) => ({
   loading: loading.effects,
@@ -29,6 +35,7 @@ export default class DataProcessing extends Component {
       activeIndex: 0,
       alertIds: '',
       market: '',
+      selectedMarket: '0',
       authBypass: false,
       alertBypassStatus: [],
       isBypass: false,
@@ -88,30 +95,8 @@ export default class DataProcessing extends Component {
             </Fragment>
           ),
         },
-        // {
-        //   title: '',
-        //   dataIndex: '',
-        //   key: '',
-        //   render: (res, recode) => (
-        //     <Fragment>
-        //       {recode.alertType === this.state.alertType && (
-        //           <IconFont type="icon-arrow-right" className={styles['active-icon']} />
-        //       )}
-        //     </Fragment>
-        //   ),
-        // },
       ],
       columns: [
-        // {
-        //   title: formatMessage({ id: 'app.common.number' }),
-        //   dataIndex: 'index',
-        //   key: 'index',
-        //   render: (res, recode, index) => (
-        //     <span>
-        //       {(this.state.itemPage.pageNumber - 1) * this.state.itemPage.pageSize + index + 1}
-        //     </span>
-        //   ),
-        // },
         {
           title: () =>
             this.state.alertBypassStatus.length > 0 &&
@@ -173,10 +158,6 @@ export default class DataProcessing extends Component {
         pageNumber: 1,
         pageSize: 10,
       },
-      // itemPage: {
-      //   pageNumber: 1,
-      //   pageSize: 10,
-      // },
       dataCharts: [
         {
           year: 'Records Received from ECP',
@@ -218,25 +199,22 @@ export default class DataProcessing extends Component {
     this.setState({
       authBypass: getAuthority().authBypass,
     });
-    // this.queryDataProcessing();
   }
 
+  /**
+   * @description: This is a function for Inspect Data.
+   * @param {type} null
+   * @return: undefined
+   */
   queryDataProcessing = () => {
     const { dispatch } = this.props;
-    // const { page, codeName } = this.state;
     const params = {
-      // pageNumber: page.pageNumber.toString(),
-      // pageSize: page.pageSize.toString(),
       operType: 'queryAlertType',
-      // codeName,
     };
     dispatch({
       type: 'dataProcessing/getDataProcessing',
       payload: params,
       callback: () => {
-        // this.setState({
-        //   inspectDataVisible: true,
-        // });
         const { dataProcessingData } = this.props;
         this.setState(
           {
@@ -257,8 +235,6 @@ export default class DataProcessing extends Component {
     const { dispatch } = this.props;
     const params = {
       operType: 'queryAlertItems',
-      // pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
-      // pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
       alertType: `${this.state.alertType}`,
     };
     dispatch({
@@ -266,12 +242,12 @@ export default class DataProcessing extends Component {
       payload: params,
       callback: () => {
         const { dataProcessingItemData } = this.props;
-        const { isBypass, columns } = this.state;
+        const { isBypass, authBypass, columns } = this.state;
         const alertBypassStatus = dataProcessingItemData.items.filter(
           element => element.bypassStatus === '0',
         );
-        console.log('alertBypassStatus====', alertBypassStatus);
-        if (alertBypassStatus.length <= 0 || !isBypass) {
+        if (alertBypassStatus.length <= 0 || !isBypass || !authBypass) {
+          console.log('111');
           const { tempColumns } = this.state;
           const newColumns = Object.assign([], columns);
           let newTempColumns = Object.assign([], tempColumns);
@@ -289,6 +265,7 @@ export default class DataProcessing extends Component {
             tempColumns: newTempColumns,
           });
         } else {
+          console.log('222');
           const { tempColumns } = this.state;
           let activeIndex = -1;
           for (let i = 0; i < columns.length; i += 1) {
@@ -315,6 +292,11 @@ export default class DataProcessing extends Component {
     });
   };
 
+  /**
+   * @description: This is function for get Market.
+   * @param {type} null
+   * @return: undefined
+   */
   getMarket = () => {
     const { dispatch } = this.props;
     const params = {
@@ -325,20 +307,25 @@ export default class DataProcessing extends Component {
       type: 'dataProcessing/getMarket',
       payload: params,
       callback: () => {
-        console.log('this.props.marketData====', this.props.marketData);
+        const marktData = this.props.marketData.map(element => ({
+          key: element.dataId,
+          value: element.dictdataValue,
+          // value: element.dataId,
+          title: element.dictdataName,
+        }));
+        marktData.unshift({
+          key: 'all',
+          value: '0',
+          title: 'All',
+        });
         this.setState({
-          functionNameOptions: this.props.marketData.map(element => ({
-            key: element.dataId,
-            value: element.dictdataValue,
-            title: element.dictdataName,
-          })),
+          functionNameOptions: marktData,
         });
       },
     });
   };
 
   connectDataProcessing = (record, index) => {
-    console.log('record===', record, index);
     this.setState(
       {
         alertType: record.alertType,
@@ -346,18 +333,21 @@ export default class DataProcessing extends Component {
         isBypass: !!(record.isClosedIntraday === '1'),
       },
       () => {
-        console.log('this.state.isBypass===', this.state.isBypass);
         this.queryDataProcessingItem();
       },
     );
   };
 
+  /**
+   * @description: This is function for Inspect Data.
+   * @param {type} null
+   * @return: undefiend
+   */
   inspectData = () => {
     this.queryDataProcessing();
   };
 
   onSelectChange = (checkedValue, selectedRows) => {
-    console.log('selectedRowKeys, selectedRows=', checkedValue, selectedRows);
     const { selectedRowKeys } = this.state;
     const newSelectedRowKeys = Object.assign([], selectedRowKeys);
     if (checkedValue.target.checked) {
@@ -387,7 +377,6 @@ export default class DataProcessing extends Component {
     }
     const alertIds = [];
     newSelectedRowKeys.forEach(element => alertIds.push(element.alertId));
-    // this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {});
     this.setState({
       selectedRowKeys: newSelectedRowKeys,
       alertIds: alertIds.join(','),
@@ -395,7 +384,6 @@ export default class DataProcessing extends Component {
   };
 
   onSelectChangeAll = checkedValue => {
-    console.log('checkedValue====', checkedValue);
     const { dataProcessingItemData } = this.props;
     const selectedRowKeys = dataProcessingItemData.items.filter(
       element => element.bypassStatus === '0',
@@ -417,18 +405,40 @@ export default class DataProcessing extends Component {
   };
 
   onChangeMarkt = (value, key) => {
-    console.log('value', value, key);
-    this.setState({
-      market: value,
-    });
+    console.log('value===', value);
+    const { marketData } = this.props;
+    let markets = [];
+    if (value === '0') {
+      console.log('marketData===', marketData);
+      marketData.forEach(element => markets.push(element.dictdataValue));
+      markets = markets.join(',');
+    } else {
+      markets = value;
+    }
+    this.setState(
+      {
+        market: markets,
+        selectedMarket: value,
+      },
+      () => {
+        console.log('market==, selectedMarket===', this.state.market, value);
+      },
+    );
   };
 
+  /**
+   * @description: Thsi is function for start Data Processing
+   * @param {type} null
+   * @return: undefined
+   */
   startProcessing = () => {
     const { dataProcessingData } = this.props;
-    const isClosedIntraday = dataProcessingData.items.some(
-      element => element.isClosedIntraday === '1',
-    );
-    const intradays = dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
+    const isClosedIntraday =
+      dataProcessingData.items &&
+      dataProcessingData.items.some(element => element.isClosedIntraday === '1');
+    const intradays =
+      dataProcessingData.items &&
+      dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
     if (isClosedIntraday) {
       this.setState({
         intradays,
@@ -436,14 +446,20 @@ export default class DataProcessing extends Component {
       });
     } else {
       const { dispatch } = this.props;
-      const { market } = this.state;
+      const { market, selectedMarket } = this.state;
+      console.log('market, selectedMarket===', market, selectedMarket);
       const params = {
-        user_id: getStore('userInfo').employeeId,
+        // user_id: getStore('userInfo').employeeId,
+        // market,
+        operType: 'startProcess',
         market,
       };
       dispatch({
         type: 'dataProcessing/startProcessing',
         payload: params,
+        callback: () => {
+          console.log('startProcessingData===', this.props.startProcessingData);
+        },
       });
       this.setState({
         dataProcessingVisible: true,
@@ -477,7 +493,6 @@ export default class DataProcessing extends Component {
   };
 
   onBypass = () => {
-    // dataProcessingVisible: false,
     this.alertItemsByPass();
   };
 
@@ -485,8 +500,6 @@ export default class DataProcessing extends Component {
     const { dispatch } = this.props;
     const params = {
       operType: 'alertItemsByPass',
-      // pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
-      // pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
       alertIds: `${this.state.alertIds}`,
     };
     dispatch({
@@ -498,7 +511,12 @@ export default class DataProcessing extends Component {
     });
   };
 
-  goClertCenter = () => {
+  /**
+   * @description: This is function for go Alert Center.
+   * @param {type} null
+   * @return: undefined
+   */
+  goAlertCenter = () => {
     const { dataProcessingItemData } = this.props;
     const alertIds = dataProcessingItemData.items.map(element => element.alertId);
     router.push({ pathname: '/homepage/alert-center', query: { alertIds: alertIds.join(',') } });
@@ -507,8 +525,6 @@ export default class DataProcessing extends Component {
   render() {
     const { loading, dataProcessingData, dataProcessingItemData } = this.props;
     const {
-      // page,
-      // itemPage,
       inspectDataVisible,
       selectedRowKeys,
       functionNameOptions,
@@ -525,6 +541,7 @@ export default class DataProcessing extends Component {
       alertIndeterminate,
       alertBypassStatus,
       isBypass,
+      selectedMarket,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -578,7 +595,7 @@ export default class DataProcessing extends Component {
                     onRow={(record, index) => ({
                       onClick: () => {
                         this.connectDataProcessing(record, index);
-                      }, // 点击行
+                      },
                     })}
                   ></Table>
                   {/* <Pagination
@@ -666,7 +683,7 @@ export default class DataProcessing extends Component {
                       type="primary"
                       className="btn-usual"
                       style={{ height: '36px' }}
-                      onClick={this.goClertCenter}
+                      onClick={this.goAlertCenter}
                     >
                       Enter Alert Center
                     </Button>
@@ -689,51 +706,13 @@ export default class DataProcessing extends Component {
               </div>
             )}
             <div className={styles.dataProcessing}>
-              {/* <ul className={styles.startProcessingWraper}>
-                <li>
-                  <span>Records Received from ECP：</span>
-                  <span>12</span>
-                </li>
-                <li>
-                  <span>Records Imported by user：</span>
-                  <span>10</span>
-                </li>
-                <li>
-                  <span>TO Records Eliminated：</span>
-                  <span>8</span>
-                </li>
-                <li>
-                  <span>Duplicated Records Eliminated：</span>
-                  <span>6</span>
-                </li>
-                <li>
-                  <span>Late Submission：</span>
-                  <span>3</span>
-                </li>
-                <li>
-                  <span>Adjustment of Stock Options Records for Format Conversion：</span>
-                  <span>0</span>
-                </li>
-              </ul>
-              <ul className={styles.startProcessingWraper}>
-                <li>
-                  <span>The last time of data processing is at 10:55 on 12/12/2019</span>
-                </li>
-              </ul> */}
               <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
-                {/* <Col>
-                  <span>Trade Date</span>
-                  <RangePicker
-                    format="YYYY-MM-DD"
-                    placeholder={['Start Date', 'End Date']}
-                    style={{ width: '180px' }}
-                  />
-                </Col> */}
                 <Col>
                   <span>Market</span>
                   <Select
                     placeholder="Please Select"
                     allowClear
+                    value={selectedMarket}
                     style={{ width: '120px' }}
                     onChange={this.onChangeMarkt}
                   >

@@ -1,3 +1,10 @@
+/*
+ * @Description: This CodeMaintenance for get, add and modify Code.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:15:22
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 11:19:23
+ */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Button, Modal, Table, Drawer, Pagination } from 'antd';
@@ -5,9 +12,7 @@ import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 
-// import TableHeader from '@/components/TableHeader';
 import styles from './CodeMaintenance.less';
-// import { thisExpression } from '@babel/types';
 import SearchForm from './components/SearchForm';
 import ModifyCode from './components/ModifyCode';
 
@@ -25,8 +30,6 @@ class CodeMaintenance extends Component {
     codeVisible: false,
     deleteCodeItemVisible: false,
     codeName: '',
-    // eslint-disable-next-line react/no-unused-state
-    itemNameValue: '',
     columns: [
       {
         title: formatMessage({ id: 'app.common.number' }),
@@ -84,7 +87,6 @@ class CodeMaintenance extends Component {
         ),
       },
     ],
-    // eslint-disable-next-line key-spacing
     codeColumns: [
       {
         title: formatMessage({ id: 'app.common.number' }),
@@ -178,7 +180,6 @@ class CodeMaintenance extends Component {
     });
   };
 
-  // 删除
   deleteCodeItem = (res, recode) => {
     const updateCodeItemParams = {
       subitemId: recode.subitemId,
@@ -215,6 +216,11 @@ class CodeMaintenance extends Component {
     });
   };
 
+  /**
+   * @description: This is funciton for get Code List.
+   * @param {type} unll
+   * @return: undefined
+   */
   queryCodeList = () => {
     const { dispatch } = this.props;
     const { page, codeName } = this.state;
@@ -241,13 +247,11 @@ class CodeMaintenance extends Component {
     });
   };
 
-  itemNameChange = e => {
-    this.setState({
-      // eslint-disable-next-line react/no-unused-state
-      itemNameValue: e.target.value,
-    });
-  };
-
+  /**
+   * @description: This is function search Code
+   * @param {type} null
+   * @return: undefined
+   */
   queryCode = () => {
     this.searchForm.current.validateFields((err, values) => {
       if (err) {
@@ -305,7 +309,11 @@ class CodeMaintenance extends Component {
     );
   };
 
-  // 字典子项)
+  /**
+   * @description: This is function get Code Item.
+   * @param {type} null
+   * @return: undefined
+   */
   queryCodeItemList = () => {
     const { dispatch } = this.props;
     const params = {
@@ -378,7 +386,7 @@ class CodeMaintenance extends Component {
                 onRow={record => ({
                   onClick: () => {
                     this.connectCodeList(record);
-                  }, // 点击行
+                  },
                 })}
               ></Table>
               {codeListData && codeListData.length > 0 && (
@@ -413,7 +421,6 @@ class CodeMaintenance extends Component {
                   ></ModifyCode>
                 )}
               </Drawer>
-              {/* 删除 */}
               <Modal
                 title={formatMessage({ id: 'app.common.confirm' })}
                 visible={this.state.deleteCodeItemVisible}

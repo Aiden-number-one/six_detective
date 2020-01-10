@@ -40,12 +40,12 @@
     }
     .description {
       position: relative;
-      width: 180px;
+      width: 65%;
       max-height: 28px;
       margin-right: -1em;
       padding-right: 1em;
       overflow: hidden;
-      line-height: 13px;
+      line-height: 13.5px;
       text-align: justify;
       cursor: pointer;
       &::before {
@@ -92,7 +92,8 @@
       position: absolute;
       right: 15px;
       color: #0d87d4;
-      border-bottom: 1px solid #0d87d4;
+      font-weight: normal;
+      // border-bottom: 1px solid #0d87d4;
       cursor: pointer;
     }
   }
@@ -125,6 +126,7 @@
       margin-right: 5px;
       // 统计模块
       .statisticalModule {
+        min-width: 644px;
         height: 418px;
         background-color: #fff;
         // 头部
@@ -254,7 +256,9 @@
       }
       // 待处理任务
       .pendingTasks {
-        height: 205px;
+        flex: 1;
+        min-width: 644px;
+        min-height: 205px;
         margin: 5px 0;
         background-color: #fff;
         :global {
@@ -279,7 +283,7 @@
         .more {
           margin-right: 20px;
           color: #0d87d4;
-          border-bottom: 1px solid #0d87d4;
+          // border-bottom: 1px solid #0d87d4;
           cursor: pointer;
         }
         .infoList {
@@ -295,7 +299,7 @@
             }
           }
           .description {
-            max-width: 400px;
+            width: 60%;
             height: 20px;
             margin-left: 12px;
             overflow: hidden;
@@ -303,7 +307,7 @@
             cursor: pointer;
           }
           .date {
-            width: 92px;
+            width: 20%;
           }
           .user {
             width: 20px;
@@ -315,13 +319,16 @@
             text-align: center;
             border-radius: 50%;
           }
-          .yellow {
+          .color0 {
+            background-color: #f4374c;
+          }
+          .color1 {
             background-color: #fec642;
           }
-          .blue {
+          .color2 {
             background-color: #0d87d4;
           }
-          .green {
+          .color3 {
             background-color: #36bb3d;
           }
         }
@@ -329,12 +336,15 @@
       // submitStatus
       .submitStatus {
         display: flex;
+        min-width: 644px;
         height: 366px;
         background-color: #fff;
       }
       // outstandingCases
       .outstandingCases {
-        height: 257px;
+        flex: 1;
+        min-width: 644px;
+        min-height: 257px;
         margin: 5px 0;
         background-color: #fff;
       }
@@ -373,8 +383,11 @@
         }
       }
       .information {
-        height: 257px;
+        flex: 1;
+        min-width: 275px;
+        min-height: 257px;
         margin-top: 5px;
+        margin-bottom: 5px;
         padding: 5px;
         color: #464c51;
         font-size: 12px;
@@ -393,7 +406,7 @@
           font-size: 14px;
         }
         .date {
-          width: 70px;
+          width: 27%;
           margin-left: 5px;
           color: #7f91a4;
         }
@@ -406,7 +419,9 @@
         background-color: #fff;
       }
       .processingStage {
-        height: 205px;
+        flex: 1;
+        min-width: 275px;
+        min-height: 205px;
         margin-top: 5px;
         background-color: #fff;
       }

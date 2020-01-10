@@ -1,13 +1,15 @@
+/*
+ * @Description: This is modify Code Item.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:15:30
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 11:21:10
+ */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-// import { routerRedux } from 'dva/router';
-// import styles from '../AlertUserGroup.less';
 
-// import ClassifyTree from '@/components/ClassifyTree';
-
-// const { TextArea } = Input;
 class FormUser extends Component {
   constructor() {
     super();
@@ -100,6 +102,11 @@ class ModifySystem extends Component {
     this.props.onCancel();
   };
 
+  /**
+   * @description: This is function for Save modify.
+   * @param {type} null
+   * @return: undefined
+   */
   onSave = () => {
     const { dispatch, codeId, modifyFlag, updateCodeItemParams } = this.props;
     this.newUserRef.current.validateFields((err, values) => {

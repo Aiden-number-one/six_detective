@@ -1,7 +1,14 @@
+/*
+ * @Description: This is Audit Trail Logging for log.
+ * @Author: dailinbo
+ * @Date: 2019-12-30 12:12:26
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 15:49:19
+ */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Table, Pagination, Modal, Checkbox, Row, Col, message } from 'antd';
+import { Form, Table, Pagination, Modal, Checkbox, Radio, Row, Col, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -16,7 +23,7 @@ const NewSearchForm = Form.create({})(SearchForm);
 @connect(({ auditLog, loading }) => ({
   loading: loading.effects,
   getAuditLogListData: auditLog.data,
-  dataExport: auditLog.dataExport,
+  dataExport: auditLog.dataExportPath,
 }))
 class AuditTrailLogging extends Component {
   state = {
@@ -30,7 +37,7 @@ class AuditTrailLogging extends Component {
     functionName: undefined,
     updatedBy: undefined,
     exportDataVisible: false,
-    exportTypes: [],
+    exportType: 1,
     functionNameOptions: [
       { key: '', value: '', title: 'All' },
       { key: '1', value: '1', title: 'Name One' },
@@ -68,40 +75,31 @@ class AuditTrailLogging extends Component {
       {
         key: 'index',
         visible: true,
-        // fixed: 'left',
-        // width: 60,
       },
       {
         key: 'functionName',
         visible: true,
-        // fixed: 'left',
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'tableName',
         visible: true,
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'biToCode',
         visible: false,
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'productCode',
         visible: true,
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'effectiveTime',
         visible: true,
         className: 'columnsnone',
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'filedUpdated',
         visible: false,
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'updateType',
@@ -122,10 +120,8 @@ class AuditTrailLogging extends Component {
       {
         key: 'after',
         visible: false,
-        // fixed: 'right',
       },
     ],
-    // countColumns: 1,
     columns: [
       {
         index: 0,
@@ -133,7 +129,6 @@ class AuditTrailLogging extends Component {
         dataIndex: 'index',
         key: 'index',
         align: 'center',
-        // width: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
@@ -145,7 +140,6 @@ class AuditTrailLogging extends Component {
         key: 'functionName',
         ellipsis: true,
         align: 'left',
-        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 2,
@@ -155,7 +149,6 @@ class AuditTrailLogging extends Component {
         ellipsis: true,
         align: 'left',
         colSpan: 1,
-        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 3,
@@ -163,7 +156,6 @@ class AuditTrailLogging extends Component {
         dataIndex: 'biToCode',
         key: 'biToCode',
         align: 'left',
-        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 4,
@@ -171,7 +163,6 @@ class AuditTrailLogging extends Component {
         dataIndex: 'productCode',
         key: 'productCode',
         align: 'left',
-        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 5,
@@ -212,7 +203,6 @@ class AuditTrailLogging extends Component {
         dataIndex: 'updatedBy',
         key: 'updatedBy',
         align: 'left',
-        // width: 110,
       },
       {
         index: 10,
@@ -234,17 +224,16 @@ class AuditTrailLogging extends Component {
 
   auditLogForm = React.createRef();
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   return {
-  //     countColumns: prevState.columns.length,
-  //   };
-  // }
-
   componentDidMount() {
     this.filterColumns();
     this.getAuditLog();
   }
 
+  /**
+   * @description: This is function for init Columns.
+   * @param {type} null
+   * @return: undefined
+   */
   filterColumns = () => {
     const { columns, cuscomizeColumns } = this.state;
     const newColumns = columns.map(item => {
@@ -270,11 +259,9 @@ class AuditTrailLogging extends Component {
     });
     newColumns.forEach((element, index) => {
       if (index === 0) {
-        // element.fixed = 'left';
         element.width = 60;
       }
       if (index === newColumns.length - 1) {
-        // element.fixed = 'right';
         element.width = 120;
       }
     });
@@ -285,6 +272,11 @@ class AuditTrailLogging extends Component {
     });
   };
 
+  /**
+   * @description: This is function for get log list.
+   * @param {type} null
+   * @return: undefined
+   */
   getAuditLog = () => {
     const { logStartDate, logEndDate, functionName, updatedBy, page } = this.state;
     const param = {
@@ -355,11 +347,8 @@ class AuditTrailLogging extends Component {
   };
 
   exportDataConfirm = () => {
-    const { exportTypes } = this.state;
-    // eslint-disable-next-line no-restricted-syntax
-    for (const exportType of exportTypes) {
-      this.goExport(exportType);
-    }
+    const { exportType } = this.state;
+    this.goExport(exportType);
   };
 
   goExport = exportType => {
@@ -374,18 +363,36 @@ class AuditTrailLogging extends Component {
       type: 'auditLog/getDataExport',
       payload: param,
       callback: () => {
-        console.log('this.props.dataExport===', this.props.dataExport);
-        this.setState({
-          exportDataVisible: false,
-        });
-        downloadFile(this.props.dataExport);
+        this.loadFile(
+          this.props.dataExport &&
+            this.props.dataExport.substring(this.props.dataExport.lastIndexOf('.')),
+          this.props.dataExport,
+        );
       },
+    });
+  };
+
+  /**
+   * @description: This is a loading file for excel,pdf and csv.
+   * @param {type} fileClass: type, filePath: url
+   * @return: undefined
+   */
+  loadFile = (fileClass, filePath) => {
+    const url = `/superlop/restv2/admin/v2.0/bayconnect.superlop.file_download_quick.json?fileClass=${fileClass}&filePath=${filePath}`;
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = true;
+    a.click();
+    this.setState({
+      exportDataVisible: false,
+      exportType: 1,
     });
   };
 
   exportDataCancel = () => {
     this.setState({
       exportDataVisible: false,
+      exportType: 1,
     });
   };
 
@@ -422,18 +429,12 @@ class AuditTrailLogging extends Component {
     });
     newColumns.sort((o1, o2) => o1.index - o2.index);
     newColumns.forEach((element, index) => {
-      // if (Object.hasOwnProperty('fixed')) {
-      //   delete element.fixed;
-      // }
       element.fixed = '';
-      // element.width = `${100 / newColumns.length}%`
       element.width = '';
       if (index === 0) {
-        // element.fixed = 'left';
         element.width = 60;
       }
       if (newColumns.length > 5 && index === newColumns.length - 1) {
-        // element.fixed = 'right';
         element.width = 120;
       }
       if (newColumns.length > 5 && element.hasOwnProperty('date')) {
@@ -444,7 +445,6 @@ class AuditTrailLogging extends Component {
       columns: newColumns,
       checkedValues,
     });
-    console.log('newColumns===', newColumns);
   };
 
   customizeCancel = () => {
@@ -463,8 +463,9 @@ class AuditTrailLogging extends Component {
   };
 
   onChangeExport = newExportTypes => {
+    console.log('newExportTypes=', newExportTypes);
     this.setState({
-      exportTypes: newExportTypes,
+      exportType: newExportTypes.target.value,
     });
   };
 
@@ -482,6 +483,7 @@ class AuditTrailLogging extends Component {
       options,
       checkedValues,
       tempColumns,
+      exportType,
     } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
@@ -507,7 +509,7 @@ class AuditTrailLogging extends Component {
             dataSource={getAuditLogList}
             pagination={false}
             columns={this.state.columns}
-            rowKey={Math.random().toString()}
+            rowKey={row => row.logId}
             scroll={{ x: this.state.columns.length > 5 ? document.body.clientWidth : false }}
           />
           {getAuditLogList && getAuditLogList.length > 0 && (
@@ -554,12 +556,16 @@ class AuditTrailLogging extends Component {
           okText={formatMessage({ id: 'app.common.save' })}
         >
           <div>
-            <Checkbox.Group onChange={this.onChangeExport}>
-              <Checkbox value={1}>xlsx</Checkbox>
-              <Checkbox value={2}>docx</Checkbox>
-              <Checkbox value={3}>pdf</Checkbox>
-              <Checkbox value={4}>csv</Checkbox>
-            </Checkbox.Group>
+            <Radio.Group
+              onChange={this.onChangeExport}
+              defaultValue={exportType}
+              value={exportType}
+            >
+              <Radio value={1}>xlsx</Radio>
+              {/* <Radio value={2}>docx</Radio> */}
+              <Radio value={3}>pdf</Radio>
+              <Radio value={4}>csv</Radio>
+            </Radio.Group>
           </div>
         </Modal>
       </PageHeaderWrapper>
