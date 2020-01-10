@@ -1,7 +1,8 @@
 import React from 'react';
-import { Descriptions, Typography } from 'antd';
+import { Typography } from 'antd';
 import moment from 'moment';
 import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
+import { GrDescriptions } from './index';
 
 const { Paragraph } = Typography;
 
@@ -19,28 +20,28 @@ export default function({
   },
 }) {
   return (
-    <Descriptions column={1}>
-      <Descriptions.Item label="Alert ID">{alertNo}</Descriptions.Item>
-      <Descriptions.Item label="Alert Name">{alertName}</Descriptions.Item>
-      <Descriptions.Item label="Alert Type">{alertType}</Descriptions.Item>
+    <GrDescriptions colon>
+      <GrDescriptions.Item label="Alert ID">{alertNo}</GrDescriptions.Item>
+      <GrDescriptions.Item label="Alert Name">{alertName}</GrDescriptions.Item>
+      <GrDescriptions.Item label="Alert Type">{alertType}</GrDescriptions.Item>
       {tradeDate && (
-        <Descriptions.Item label="Trade Date">
+        <GrDescriptions.Item label="Trade Date">
           {moment(tradeDate).format(dateFormat)}
-        </Descriptions.Item>
+        </GrDescriptions.Item>
       )}
-      <Descriptions.Item label="Alert Timestamp">
+      <GrDescriptions.Item label="Alert Timestamp">
         {moment(alertTime, timestampFormat).format(timestampFormat)}
-      </Descriptions.Item>
+      </GrDescriptions.Item>
       {submissionTime && (
-        <Descriptions.Item label="Submission Time">
+        <GrDescriptions.Item label="Submission Time">
           {moment(submissionTime).format(timestampFormat)}
-        </Descriptions.Item>
+        </GrDescriptions.Item>
       )}
-      {submitter && <Descriptions.Item label="Submitter">{submitter}</Descriptions.Item>}
-      <Descriptions.Item label="Alert Description">
+      {submitter && <GrDescriptions.Item label="Submitter">{submitter}</GrDescriptions.Item>}
+      <GrDescriptions.Item label="Alert Description">
         <Paragraph ellipsis={{ rows: 3, expandable: true }}>{alertDesc}</Paragraph>
-      </Descriptions.Item>
-      <Descriptions.Item label="Alert Owner">{userName}</Descriptions.Item>
-    </Descriptions>
+      </GrDescriptions.Item>
+      <GrDescriptions.Item label="Alert Owner">{userName}</GrDescriptions.Item>
+    </GrDescriptions>
   );
 }

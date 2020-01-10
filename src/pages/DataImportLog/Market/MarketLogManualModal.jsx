@@ -54,7 +54,7 @@ function MarketLogManualModal({ form, visible, loading, onCancel, onUpload }) {
       onClose={handleClose}
     >
       <Form layout="vertical">
-        <Form.Item label={<FormattedMessage id="data-import.market.file" />}>
+        <Form.Item label={<FormattedMessage id="data-import.submission-report" />}>
           {getFieldDecorator('uploadFiles', {
             rules: [
               {
@@ -133,7 +133,7 @@ function MarketLogManualModal({ form, visible, loading, onCancel, onUpload }) {
             initialValue: upFile.market,
           })(<Input disabled placeholder="market" />)}
         </Form.Item>
-        <Form.Item label={<FormattedMessage id="data-import.market.file-type" />}>
+        <Form.Item label={<FormattedMessage id="data-import.file-type" />}>
           {getFieldDecorator('fileType', {
             initialValue: upFile.fileType,
           })(<Input disabled placeholder="file type" />)}
@@ -144,7 +144,7 @@ function MarketLogManualModal({ form, visible, loading, onCancel, onUpload }) {
           Cancel
         </Button>
         <Button type="primary" loading={loading} onClick={handleCommit}>
-          Commit
+          Upload
         </Button>
       </div>
     </Drawer>

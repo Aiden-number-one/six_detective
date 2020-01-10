@@ -7,6 +7,7 @@ export { default as AlertDownAttachments } from './AlertDownAttachments';
 export { default as AlertComment } from './AlertComment';
 export { default as AlertRichText } from './AlertRichText';
 export { default as AlertEmailModal } from './AlertEmailModal';
+export { GrDescriptions } from './GrDescriptions';
 export { TaskBtn } from './AlertTask';
-export { epColumns, proudctColumns, caCodeColumns } from './AlertTaskColumns';
+export { epColumns, proudctColumns, caCodeColumns, newAccountColumns } from './AlertTaskColumns';
 export { EpTaskItem, ProductTaskItem, CaCodeTaskItem, NewAccountTaskItem } from './AlertTaskItem';

@@ -1,11 +1,11 @@
 import React from 'react';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import AlertList from './AlertList';
+// import styles from '../index.less';
 
 export default function() {
   return (
-    <PageHeaderWrapper>
+    <div>
       <AlertList />
-    </PageHeaderWrapper>
+    </div>
   );
 }
