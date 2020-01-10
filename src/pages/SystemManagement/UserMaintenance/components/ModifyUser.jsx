@@ -1,10 +1,15 @@
+/*
+ * @Description: This is for modify User.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:40:45
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 13:42:53
+ */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-// import { routerRedux } from 'dva/router';
 import styles from '../UserMaintenance.less';
-// import { passWordStrength } from '@/utils/utils';
 
 class FormUser extends Component {
   constructor() {
@@ -14,7 +19,6 @@ class FormUser extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    // const { alertUserGroups } = this.state;
     const { NewFlag, userInfo } = this.props;
     return (
       <Fragment>
@@ -55,7 +59,7 @@ class FormUser extends Component {
               />,
             )}
           </Form.Item>
-          {NewFlag && (
+          {/* {NewFlag && (
             <Form.Item
               label={formatMessage({ id: 'app.common.password' })}
               labelCol={{ span: 4 }}
@@ -74,7 +78,7 @@ class FormUser extends Component {
                 />,
               )}
             </Form.Item>
-          )}
+          )} */}
           {/* <Form.Item wrapperCol={{ span: 6, offset: 4 }}>
             {getFieldDecorator('locked', {
               rules: [
@@ -222,9 +226,6 @@ export default class ModifyUser extends Component {
   };
 
   onCancel = () => {
-    // this.props.history.push({
-    //   pathname: '/system-management/user-maintenance',
-    // });
     this.props.onCancel();
   };
 
@@ -269,14 +270,12 @@ export default class ModifyUser extends Component {
         message.warning('Please checked Alert User Group');
         return;
       }
-      // const passwordStrength = passWordStrength(values.userPwd);
       const { dispatch } = this.props;
       if (NewFlag) {
         const params = {
           userName: values.userName,
           userPwd: window.kddes.getDes(values.userPwd),
           groupIds: groupIds.join(','),
-          // userId: values.userId,
           alertIds: alertIds.join(','),
           accountLock,
         };
@@ -289,10 +288,6 @@ export default class ModifyUser extends Component {
               duration: 2,
             });
             this.props.onSave(true);
-            //   this.props.history.push({
-            //     pathname: '/system-management/user-maintenance',
-            //     params: values,
-            //   });
           },
         });
       } else {
@@ -313,10 +308,6 @@ export default class ModifyUser extends Component {
               duration: 2,
             });
             this.props.onSave(false);
-            //   this.props.history.push({
-            //     pathname: '/system-management/user-maintenance',
-            //     params: values,
-            //   });
           },
         });
       }
@@ -332,7 +323,7 @@ export default class ModifyUser extends Component {
         <Row>
           <Col offset={4}>
             <Checkbox onChange={this.onChangeLocked} checked={locedChecked}>
-              User Account Locked
+              User Account Disabled
             </Checkbox>
           </Col>
         </Row>

@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 13:18:49
+ * @LastEditTime : 2020-01-10 13:44:10
  */
 
 import React, { Component } from 'react';
@@ -60,7 +60,7 @@ class UserMaintenance extends Component {
         align: 'left',
       },
       {
-        title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
+        title: formatMessage({ id: 'systemManagement.userMaintenance.disabled' }),
         dataIndex: 'accountLock',
         key: 'accountLock',
         align: 'center',

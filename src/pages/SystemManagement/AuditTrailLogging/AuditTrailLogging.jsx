@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 12:09:00
+ * @LastEditTime : 2020-01-10 14:46:12
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -23,7 +23,7 @@ const NewSearchForm = Form.create({})(SearchForm);
 @connect(({ auditLog, loading }) => ({
   loading: loading.effects,
   getAuditLogListData: auditLog.data,
-  dataExport: auditLog.dataExport,
+  dataExport: auditLog.dataExportPath,
 }))
 class AuditTrailLogging extends Component {
   state = {
@@ -366,12 +366,26 @@ class AuditTrailLogging extends Component {
       type: 'auditLog/getDataExport',
       payload: param,
       callback: () => {
-        this.setState({
-          exportDataVisible: false,
-        });
-        downloadFile(this.props.dataExport);
+        this.loadFile(
+          this.props.dataExport &&
+            this.props.dataExport.substring(this.props.dataExport.lastIndexOf('.')),
+          this.props.dataExport,
+        );
       },
     });
+  };
+
+  /**
+   * @description: This is a loading file for excel,pdf and csv.
+   * @param {type} fileClass: type, filePath: url
+   * @return: undefined
+   */
+  loadFile = (fileClass, filePath) => {
+    const url = `/superlop/restv2/admin/v2.0/bayconnect.superlop.file_download_quick.json?fileClass=${fileClass}&filePath=${filePath}`;
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = true;
+    a.click();
   };
 
   exportDataCancel = () => {
