@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 16:21:43
+ * @LastEditTime : 2020-01-10 16:39:31
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -310,6 +310,7 @@ export default class DataProcessing extends Component {
           functionNameOptions: this.props.marketData.map(element => ({
             key: element.dataId,
             value: element.dictdataValue,
+            // value: element.dataId,
             title: element.dictdataName,
           })),
         });
@@ -422,12 +423,17 @@ export default class DataProcessing extends Component {
       const { dispatch } = this.props;
       const { market } = this.state;
       const params = {
-        user_id: getStore('userInfo').employeeId,
+        // user_id: getStore('userInfo').employeeId,
+        // market,
+        operType: 'startProcess',
         market,
       };
       dispatch({
         type: 'dataProcessing/startProcessing',
         payload: params,
+        callback: () => {
+          console.log('startProcessingData===', this.props.startProcessingData);
+        },
       });
       this.setState({
         dataProcessingVisible: true,
