@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { connect } from 'dva';
 import router from 'umi/router';
 
-import { dateFormat } from '@/pages/DataImportLog/constants';
+import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 import ring from '@/assets/images/ring.png';
 
@@ -34,6 +34,7 @@ const { RangePicker } = DatePicker;
   outstandingReportFileCount: dashboard.outstandingReportFileCount, //
   allApprovalData: approval.allApprovalData,
   perApprovalData: approval.perApprovalData,
+  allTaskData: approval.allTaskData,
 }))
 export default class HomePage extends PureComponent {
   state = {
@@ -64,6 +65,15 @@ export default class HomePage extends PureComponent {
       payload: {
         pageNumber: 1,
         pageSize: 4,
+      },
+    });
+    dispatch({
+      type: 'approval/getAllTask',
+      payload: {
+        pageNumber: '1',
+        pageSize: '4',
+        type: 'all',
+        taskCode: '',
       },
     });
     // 获取快捷菜单
@@ -934,11 +944,10 @@ export default class HomePage extends PureComponent {
         },
       },
     });
-    submissionStatusPieChart
-      .coord('theta', {
-        radius: 0.5,
-      })
-      .rotate(90);
+    submissionStatusPieChart.coord('theta', {
+      radius: 0.5,
+    });
+    // .rotate(90);
     submissionStatusPieChart.tooltip({
       showTitle: false,
     });
@@ -1037,6 +1046,7 @@ export default class HomePage extends PureComponent {
     submissionStatusBarChart.legend({
       position: 'top-right', // 设置图例的显示位置
       itemGap: 20, // 图例项之间的间距
+      offsetY: -10,
       label: {
         color: '#464C51',
       },
@@ -1353,6 +1363,7 @@ export default class HomePage extends PureComponent {
 
       informationData,
       myAlertData,
+      allTaskData,
 
       fileCountData,
       lateReportFileCount,
@@ -1720,7 +1731,7 @@ export default class HomePage extends PureComponent {
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
-                                  {moment(item.updateTime).format(dateFormat)}
+                                  {moment(item.updateTime).format(timestampFormat)}
                                 </span>
                               </List.Item>
                             )}
@@ -1732,14 +1743,18 @@ export default class HomePage extends PureComponent {
                         <div className={styles.infoList}>
                           <List
                             itemLayout="horizontal"
-                            dataSource={[{}, {}, {}]}
-                            renderItem={() => (
+                            dataSource={allTaskData}
+                            renderItem={item => (
                               <List.Item>
-                                <span title="" className={styles.description}>
-                                  NO. matches withexisting A/C NO. , with discrepancy in prA/C
+                                <span title={item.classification} className={styles.description}>
+                                  {item.classification}
                                 </span>
-                                <span className={classNames(styles.user, styles.yellow)}>TC</span>
-                                <span className={styles.date}>12/Nov/2019</span>
+                                <span className={classNames(styles.user, styles.yellow)}>
+                                  {item.owner.match(/[A-Z]/g) && item.owner.match(/[A-Z]/g).join()}
+                                </span>
+                                <span className={styles.date}>
+                                  {moment(item.updateDate).format(timestampFormat)}
+                                </span>
                               </List.Item>
                             )}
                           />
@@ -1815,7 +1830,7 @@ export default class HomePage extends PureComponent {
                             {item.informationDetail}
                           </span>
                           <span className={styles.date}>
-                            {moment(item.timestamp).format(dateFormat)}
+                            {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}
                           </span>
                         </List.Item>
                       )}
@@ -2237,7 +2252,7 @@ export default class HomePage extends PureComponent {
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
-                                  {moment(item.updateTime).format(dateFormat)}
+                                  {moment(item.updateTime).format(timestampFormat)}
                                 </span>
                                 <span className={classNames(styles.user, styles.yellow)}>TC</span>
                               </List.Item>
@@ -2250,14 +2265,18 @@ export default class HomePage extends PureComponent {
                         <div className={styles.infoList}>
                           <List
                             itemLayout="horizontal"
-                            dataSource={[{}, {}, {}]}
-                            renderItem={() => (
+                            dataSource={allTaskData}
+                            renderItem={(item, index) => (
                               <List.Item>
-                                <span title="" className={styles.description}>
-                                  NO. matches withexisting A/C NO. , with discrepancy in prA/C
+                                <span title={item.classification} className={styles.description}>
+                                  {item.classification}
                                 </span>
-                                <span className={styles.date}>12/Nov/2019</span>
-                                <span className={classNames(styles.user, styles.yellow)}>TC</span>
+                                <span className={classNames(styles.user, styles[`color${index}`])}>
+                                  {item.owner.match(/[A-Z]/g) && item.owner.match(/[A-Z]/g).join()}
+                                </span>
+                                <span className={styles.date}>
+                                  {moment(item.updateDate).format(timestampFormat)}
+                                </span>
                               </List.Item>
                             )}
                           />
@@ -2333,7 +2352,7 @@ export default class HomePage extends PureComponent {
                             {item.informationDetail}
                           </span>
                           <span className={styles.date}>
-                            {moment(item.timestamp).format(dateFormat)}
+                            {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}
                           </span>
                         </List.Item>
                       )}
@@ -2362,7 +2381,6 @@ export default class HomePage extends PureComponent {
                         )}
                     </div>
                     <div style={{ flex: 3, minHeight: 250 }}>
-                      <h3 className={styles.groupTitle}>Submission status of different markets</h3>
                       <div id="submissionStatusBar"></div>
                       {!isRender && (
                         <div className={styles.empty} style={{ height: 300 }}>
