@@ -45,6 +45,7 @@ export default function NewAccountLogList({
       }}
     >
       <Column
+        width="8%"
         align="center"
         dataIndex="market"
         title={<FormattedMessage id="data-import.market" />}
@@ -55,6 +56,8 @@ export default function NewAccountLogList({
         title={<FormattedMessage id="data-import.submitter-code" />}
       />
       <Column
+        ellipsis
+        width="24%"
         dataIndex="fileName"
         title={<FormattedMessage id="data-import.submission-report" />}
       />
@@ -63,8 +66,8 @@ export default function NewAccountLogList({
         dataIndex="submissionStatus"
         title={<FormattedMessage id="data-import.submission-status" />}
         render={(text, record) => {
-          const des = record.submissionStatus;
-          if ([1, 2, 9].includes(+text)) {
+          const des = record.statusMark;
+          if ([1, 2, 8, 9].includes(+text)) {
             const Status = statusMap[+text];
             return <Status des={des} />;
           }

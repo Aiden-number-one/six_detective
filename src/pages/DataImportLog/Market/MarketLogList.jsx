@@ -81,7 +81,7 @@ export default function({
         title={<FormattedMessage id="data-import.submission-status" />}
         render={(text, record) => {
           const des = record.statusMark;
-          if ([1, 2, 9].includes(+text)) {
+          if ([1, 2, 8, 9].includes(+text)) {
             const Status = statusMap[+text];
             return <Status des={des} />;
           }
