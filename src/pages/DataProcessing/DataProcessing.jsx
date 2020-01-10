@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 16:39:31
+ * @LastEditTime : 2020-01-10 20:02:44
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -35,6 +35,7 @@ export default class DataProcessing extends Component {
       activeIndex: 0,
       alertIds: '',
       market: '',
+      selectedMarket: '0',
       authBypass: false,
       alertBypassStatus: [],
       isBypass: false,
@@ -306,13 +307,19 @@ export default class DataProcessing extends Component {
       type: 'dataProcessing/getMarket',
       payload: params,
       callback: () => {
+        const marktData = this.props.marketData.map(element => ({
+          key: element.dataId,
+          value: element.dictdataValue,
+          // value: element.dataId,
+          title: element.dictdataName,
+        }));
+        marktData.unshift({
+          key: 'all',
+          value: '0',
+          title: 'All',
+        });
         this.setState({
-          functionNameOptions: this.props.marketData.map(element => ({
-            key: element.dataId,
-            value: element.dictdataValue,
-            // value: element.dataId,
-            title: element.dictdataName,
-          })),
+          functionNameOptions: marktData,
         });
       },
     });
@@ -398,9 +405,25 @@ export default class DataProcessing extends Component {
   };
 
   onChangeMarkt = (value, key) => {
-    this.setState({
-      market: value,
-    });
+    console.log('value===', value);
+    const { marketData } = this.props;
+    let markets = [];
+    if (value === '0') {
+      console.log('marketData===', marketData);
+      marketData.forEach(element => markets.push(element.dictdataValue));
+      markets = markets.join(',');
+    } else {
+      markets = value;
+    }
+    this.setState(
+      {
+        market: markets,
+        selectedMarket: value,
+      },
+      () => {
+        console.log('market==, selectedMarket===', this.state.market, value);
+      },
+    );
   };
 
   /**
@@ -410,10 +433,12 @@ export default class DataProcessing extends Component {
    */
   startProcessing = () => {
     const { dataProcessingData } = this.props;
-    const isClosedIntraday = dataProcessingData.items.some(
-      element => element.isClosedIntraday === '1',
-    );
-    const intradays = dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
+    const isClosedIntraday =
+      dataProcessingData.items &&
+      dataProcessingData.items.some(element => element.isClosedIntraday === '1');
+    const intradays =
+      dataProcessingData.items &&
+      dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
     if (isClosedIntraday) {
       this.setState({
         intradays,
@@ -421,7 +446,8 @@ export default class DataProcessing extends Component {
       });
     } else {
       const { dispatch } = this.props;
-      const { market } = this.state;
+      const { market, selectedMarket } = this.state;
+      console.log('market, selectedMarket===', market, selectedMarket);
       const params = {
         // user_id: getStore('userInfo').employeeId,
         // market,
@@ -515,6 +541,7 @@ export default class DataProcessing extends Component {
       alertIndeterminate,
       alertBypassStatus,
       isBypass,
+      selectedMarket,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -685,6 +712,7 @@ export default class DataProcessing extends Component {
                   <Select
                     placeholder="Please Select"
                     allowClear
+                    value={selectedMarket}
                     style={{ width: '120px' }}
                     onChange={this.onChangeMarkt}
                   >
