@@ -206,8 +206,8 @@ function AlertList({ dispatch, loading, alerts, total }) {
           claimAlerts={() => claimAlerts()}
           closeAlerts={() => showCloseModal()}
           onDiscontinue={() => {
-            showCloseModal();
             setDiscontinue(true);
+            showCloseModal();
           }}
         />
         <ClaimModal

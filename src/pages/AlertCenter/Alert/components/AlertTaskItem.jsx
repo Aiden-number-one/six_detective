@@ -173,9 +173,14 @@ export function NewAccountTaskItem({ task, taskItemHistorys, loading }) {
           pagination={false}
           bordered
         >
-          <Column align="center" dataIndex="answeredTime" title="Answered Time" />
+          <Column
+            align="center"
+            dataIndex="answeredTime"
+            title="Answered Time"
+            render={text => moment(text).format(timestampFormat)}
+          />
           <Column dataIndex="answeredFullBiName" title="Answered Full BI Name" />
-          <Column dataIndex="answeredBiCategory" title="Answered BI Category" />
+          <Column dataIndex="answeredCategory" title="Answered Category" />
           <Column dataIndex="matchedBiCode" title="Matched BI Code" />
           <Column dataIndex="matchedOmnCode" title="Matched OMN Code" />
           <Column dataIndex="answeredFullToName" title="Answered Full TO Name" />

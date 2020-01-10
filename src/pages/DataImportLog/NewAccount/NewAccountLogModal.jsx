@@ -12,6 +12,7 @@ import {
   Alert,
   Popover,
   Typography,
+  message,
 } from 'antd';
 
 import styles from '../index.less';
@@ -275,6 +276,7 @@ function NewAccountLogManualModal({
   function allUploadFinish() {
     setLoading(false);
     form.resetFields();
+    message.success('Uploaded Successfully');
     handleCancelModal();
   }
 
