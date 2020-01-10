@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 10:54:40
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-08 20:34:56
+ * @LastEditTime : 2020-01-10 10:21:33
  */
 export default {
   // common
@@ -32,6 +32,5 @@ export default {
   'data-import.market.description': 'Description',
   'data-import.market.manual-upload': 'MANUAL UPLOAD',
   // new account
-  'data-import.new-account.submission-time': 'Submission Time',
   'data-import.new-account.manual-upload': 'MANUAL IMPORT NEW ACCOUNT REPORT',
 };

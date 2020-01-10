@@ -74,7 +74,7 @@ export default function NewAccountLogList({
       <Column
         align="center"
         dataIndex="submissionTime"
-        title={<FormattedMessage id="data-import.new-account.submission-time" />}
+        title={<FormattedMessage id="data-import.submission-date" />}
         render={text => moment(text, 'YYYYMMDDhhmmss').format(timestampFormat)}
       />
       <Column
