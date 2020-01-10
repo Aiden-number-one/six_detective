@@ -1,3 +1,10 @@
+/*
+ * @Description: This is Email Parameter for setting Email.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:15:42
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 11:27:54
+ */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Form, Modal, message } from 'antd';
@@ -31,7 +38,6 @@ class EmailParameter extends Component {
 
   componentDidMount() {
     this.getEmailInit();
-    // console.log(this.props.getEmailListData);
   }
 
   handleOk = () => {
@@ -56,7 +62,6 @@ class EmailParameter extends Component {
     });
   };
 
-  // 修改
   updateEmail = (res, obj) => {
     const Obj = {
       mailHost: obj.mailHost,
@@ -69,9 +74,7 @@ class EmailParameter extends Component {
       {
         emailObj: Obj,
       },
-      () => {
-        console.log('emailObj=', this.state.emailObj);
-      },
+      () => {},
     );
   };
 
@@ -86,8 +89,6 @@ class EmailParameter extends Component {
         isopen: values.isopen,
         remark: values.remark,
       };
-      console.log('password==', window.kddes.getDes(values.mailPassword));
-      console.log('param===', param);
       dispatch({
         type: 'getEmail/addEmailDate',
         payload: param,
@@ -98,6 +99,11 @@ class EmailParameter extends Component {
     });
   };
 
+  /**
+   * @description: This is function for get Email list.
+   * @param {type} null
+   * @return: undefined
+   */
   getEmailInit = () => {
     const { dispatch } = this.props;
     const params = {};
@@ -111,16 +117,9 @@ class EmailParameter extends Component {
   };
 
   formatEmailObj = getEmailListData => {
-    console.log('getEmailListData=', getEmailListData);
-    // emailHost: '',
-    // emailPort: '',
-    // emailAddress: '',
-    // emailPassword: '',
-    // isopen: '',
     const emailObj = {};
     getEmailListData.map(element => {
       const paramKey = element.paramKey.split('.')[2];
-      console.log();
       switch (paramKey) {
         case 'host':
           emailObj.emailHost = element.paramRealValue;
@@ -151,13 +150,17 @@ class EmailParameter extends Component {
   };
 
   onSave = params => {
-    console.log('params=', params);
     this.setState({
       emailListData: params,
       visible: true,
     });
   };
 
+  /**
+   * @description: This is function for modify Email.
+   * @param {type} null
+   * @return: undefiend
+   */
   handleOk = () => {
     const { emailListData } = this.state;
     const { dispatch } = this.props;
@@ -194,7 +197,6 @@ class EmailParameter extends Component {
         <Fragment>
           <div>
             <div className={styles.emailWraper}>
-              {/* 修改 */}
               <NewModifyForm
                 ref={this.modifyForm}
                 emailObj={this.state.emailObj}

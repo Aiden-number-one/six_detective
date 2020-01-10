@@ -1,12 +1,15 @@
+/*
+ * @Description: This is setting auth for Alert User.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:14:56
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 11:11:38
+ */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-// import { element } from 'prop-types';
-// import { routerRedux } from 'dva/router';
 import styles from '../AlertUserGroup.less';
-
-// import ClassifyTree from '@/components/ClassifyTree';
 
 const { TextArea } = Input;
 class FormUser extends Component {
@@ -58,7 +61,6 @@ class FormUser extends Component {
           >
             {updateFlag && (
               <Fragment>
-                {/* <ul><li>Group Member</li></ul> */}
                 <ul className={styles.groupAlert}>
                   {getAlertData &&
                     getAlertData.map(item => <li key={item.userId}>{item.userName}</li>)}
@@ -85,9 +87,7 @@ class NewUser extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      // defaultCheckedKeys: [],
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -98,9 +98,6 @@ class NewUser extends Component {
   }
 
   onCancel = () => {
-    // this.props.history.push({
-    //   pathname: '/system-management/menu-user-group',
-    // });
     this.props.onCancel();
   };
 
@@ -115,16 +112,11 @@ class NewUser extends Component {
           alertName: values.groupName,
           alertDesc: values.groupDesc,
         };
-        // debugger
         dispatch({
           type: 'alertUserGroup/newAlertUser',
           payload: param,
           callback: () => {
             message.success('success');
-            //   this.props.history.push({
-            //     pathname: '/system-management/menu-user-group',
-            //     params: values,
-            //   });
             this.props.onSave(false);
           },
         });
@@ -167,6 +159,11 @@ class NewUser extends Component {
     });
   };
 
+  /**
+   * @description: This is function for get Alert list.
+   * @param {type} null
+   * @return: undefined.
+   */
   getAlertDataList = () => {
     const { dispatch, groupMenuInfo } = this.props;
     const params = {
