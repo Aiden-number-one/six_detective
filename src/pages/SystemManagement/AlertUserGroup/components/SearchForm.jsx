@@ -1,3 +1,10 @@
+/*
+ * @Description: This search Alert User.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:15:00
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 11:12:13
+ */
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { formatMessage } from 'umi/locale';
@@ -54,11 +61,6 @@ export default class SearchForm extends Component {
             </Form.Item>
           </Col>
         </Row>
-        {/* <div className="btnArea">
-          <Button type="primary" onClick={search}>
-            {formatMessage({ id: 'app.common.search' })}
-          </Button>
-        </div> */}
       </Form>
     );
   }

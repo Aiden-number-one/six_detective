@@ -48,7 +48,7 @@
       font-size: 9px;
       font-family: Avenir, sans-serif;
       text-align: center;
-      background: #fff;
+      background-color: #fff;
       border: none;
       border-radius: unset;
     }
@@ -61,7 +61,10 @@
       background: #fff;
       border-bottom: 2px solid #0d87d4;
       border-radius: unset;
-      box-shadow: unset;
+      box-shadow: unset !important;
+    }
+    :not(.ant-radio-button-wrapper-disabled).ant-radio-button-wrapper-checked {
+      box-shadow: unset !important;
     }
 
     .proLayout .ant-input-disabled,
@@ -101,6 +104,18 @@
     background-color: #fff;
     box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
   }
+  .tabBtnBox {
+    .page-name {
+      display: inline-block;
+      margin-right: 15px;
+      color: #464c51;
+      font-weight: 500;
+      > .icon {
+        margin-right: 6px;
+        font-size: 12px;
+      }
+    }
+  }
   .btns {
     .btn-icon {
       color: #464c51 !important;
@@ -128,7 +143,7 @@
     height: 380px;
     padding: 0 18px;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   .fullscreen {
     position: fixed;
@@ -142,7 +157,7 @@
     margin: 0;
     padding: 0 20px;
     overflow: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     background-color: #fff;
   }
   .ListBox {
@@ -167,6 +182,11 @@
       min-height: 40px;
       .formBox {
         width: 69%;
+        :global {
+          .ant-calendar-picker {
+            width: 100%;
+          }
+        }
       }
       .oldValueBox {
         height: 40px;

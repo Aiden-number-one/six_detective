@@ -1,3 +1,10 @@
+/*
+ * @Description: This is for search log.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:15:14
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 12:11:09
+ */
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col, DatePicker } from 'antd';
 import { formatMessage } from 'umi/locale';
@@ -50,19 +57,6 @@ export default class SearchForm extends Component {
             </Form.Item>
           </Col>
         </Row>
-        {/* <div className="btnArea">
-          <Button
-            type="primary"
-            onClick={exportData}
-            className="btn-usual"
-            style={{ height: '36px' }}
-          >
-            {formatMessage({ id: 'app.common.export' })}
-          </Button>
-          <Button type="primary" onClick={search}>
-            {formatMessage({ id: 'app.common.search' })}
-          </Button>
-        </div> */}
       </Form>
     );
   }

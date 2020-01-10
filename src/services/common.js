@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime : 2020-01-07 09:23:15
+ * @LastEditTime : 2020-01-10 16:30:21
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -78,6 +78,7 @@ export default {
   updateTemplate: `${prefix}set_template_update`,
   getSystemCode: `${prefix}get_system_code`,
   dataExport: `${prefix}set_data_file_export`,
+  exporting: `${prefix}file_download_quick`,
   getDataProcessing: `${prefix}get_data_process_info`,
-  startProcessing: `${prefix}slop_biz.p_i_data_processing`,
+  startProcessing: `${prefix}get_data_process_info`,
 };

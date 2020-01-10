@@ -1,11 +1,14 @@
+/*
+ * @Description: This is for System Parameter's modify.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:19:32
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 12:20:31
+ */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-// import { routerRedux } from 'dva/router';
-// import styles from '../AlertUserGroup.less';
-
-// import ClassifyTree from '@/components/ClassifyTree';
 
 const { TextArea } = Input;
 class FormUser extends Component {
@@ -100,10 +103,14 @@ class ModifySystem extends Component {
     this.props.onCancel();
   };
 
+  /**
+   * @description: This is funciton for Save System Parameter's modify.
+   * @param {type} null
+   * @return: undefined.
+   */
   onSave = () => {
     const { dispatch, paramObj } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
-      console.log('err=======', err, values);
       if (err) {
         return;
       }

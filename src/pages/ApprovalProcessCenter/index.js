@@ -10,16 +10,14 @@ export default function() {
   // const [alertItems, setAlertItems] = useState(null);
 
   return (
-    <PageHeaderWrapper>
-      <div className={styles['list-container']}>
-        <ProcessList
-          getTask={item => setTask(item)}
-          setCurrentTaskType={item => setCurrentTaskType(item)}
-          // getAlertItems={items => setAlertItems(items)}
-        />
-        {task && <ProcessDetail task={task} currentTaskType={currentTaskType} />}
-        {/* <ProcessDetail task={task} currentTaskType={currentTaskType}/> */}
-      </div>
-    </PageHeaderWrapper>
+    <div className={styles['list-container']}>
+      <ProcessList
+        getTask={item => setTask(item)}
+        setCurrentTaskType={item => setCurrentTaskType(item)}
+        // getAlertItems={items => setAlertItems(items)}
+      />
+      {task && <ProcessDetail task={task} currentTaskType={currentTaskType} />}
+      {/* <ProcessDetail task={task} currentTaskType={currentTaskType}/> */}
+    </div>
   );
 }

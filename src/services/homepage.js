@@ -2,10 +2,11 @@
  * @Description: 首页相关接口
  * @Author: lan
  * @Date: 2019-11-28 14:18:22
- * @LastEditTime : 2020-01-09 14:38:06
+ * @LastEditTime : 2020-01-10 13:40:23
  * @LastEditors  : lan
  */
 export default {
+  getAllTask: 'get_approval_task_list_page', // all Task
   getAllApproval: 'get_all_approval_process_summary', // all approval
   getPerApproval: 'get_personal_approval_process_summary', // all approval
   getLateReportFileCount: 'get_late_report_file_count_by_trade_date', //
@@ -24,5 +25,6 @@ export default {
   getAllProcessingAlertCount: 'get_processing_alert_count', // 全部处理中的alert数
   getPerProcessingAlertCount: 'get_processing_alert_count_by_user', // 个人处理中的alert数
   getClosedAlertCount: 'get_closed_alert_count', // 获取个人已关闭alert数
+  getPerAlertData: 'get_personal_alert_status', // 获取个人图表数据
   getInformation: 'get_table_page_list', // 获取information
 };

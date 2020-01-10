@@ -1,10 +1,9 @@
-/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 /*
  * @Description: This is for userMaintenance page.
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-31 15:00:00
+ * @LastEditTime : 2020-01-10 13:44:10
  */
 
 import React, { Component } from 'react';
@@ -61,7 +60,7 @@ class UserMaintenance extends Component {
         align: 'left',
       },
       {
-        title: formatMessage({ id: 'systemManagement.userMaintenance.lockedStatus' }),
+        title: formatMessage({ id: 'systemManagement.userMaintenance.disabled' }),
         dataIndex: 'accountLock',
         key: 'accountLock',
         align: 'center',
@@ -145,7 +144,7 @@ class UserMaintenance extends Component {
   };
 
   /**
-   * @description: This is for reset form function.
+   * @description: This is function for add User.
    * @param {type} null
    * @return: undefined
    */
@@ -204,7 +203,7 @@ class UserMaintenance extends Component {
   };
 
   /**
-   * @description: This is for lock user function.
+   * @description: This is function for delete User.
    * @param {type} null
    * @return: undefined
    */
@@ -249,7 +248,7 @@ class UserMaintenance extends Component {
   };
 
   /**
-   * @description: This is for query userinfo log function.
+   * @description: This is function for search userinfo.
    * @param {type} null
    * @return: undefined
    */
@@ -341,7 +340,6 @@ class UserMaintenance extends Component {
                 ></ModifyUser>
               )}
             </Drawer>
-            {/* delete */}
             <Modal
               title={formatMessage({ id: 'app.common.confirm' })}
               visible={this.state.deleteVisible}

@@ -1,10 +1,16 @@
+/*
+ * @Description: This is Message Content Template for template show and modify.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:16:17
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 12:13:27
+ */
 import React, { Component } from 'react';
 import { Form, Table, Pagination, Drawer, Modal } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
-// import { routerRedux } from 'dva/router';
 import { templateTypeFormat } from '@/utils/filter';
 
 import styles from './MessageContentTemplate.less';
@@ -121,7 +127,7 @@ export default class MessageContentTemplate extends Component {
   }
 
   componentDidMount() {
-    this.queryUserList();
+    this.queryTemplateList();
   }
 
   onClose = () => {
@@ -144,7 +150,7 @@ export default class MessageContentTemplate extends Component {
         page,
       },
       () => {
-        this.queryUserList();
+        this.queryTemplateList();
       },
     );
   };
@@ -170,7 +176,7 @@ export default class MessageContentTemplate extends Component {
       type: 'messageContentTemplate/updateTemplate',
       payload: params,
       callback: () => {
-        this.queryUserList();
+        this.queryTemplateList();
         this.setState({
           deleteVisible: false,
         });
@@ -186,9 +192,6 @@ export default class MessageContentTemplate extends Component {
 
   queryLog = () => {
     this.searchForm.current.validateFields((err, values) => {
-      // if (err) {
-      //   return;
-      // }
       this.setState(
         {
           searchTemplateName: values.templateName,
@@ -196,7 +199,7 @@ export default class MessageContentTemplate extends Component {
           searchType: values.type,
         },
         () => {
-          this.queryUserList();
+          this.queryTemplateList();
         },
       );
     });
@@ -218,17 +221,17 @@ export default class MessageContentTemplate extends Component {
         page,
       },
       () => {
-        this.queryUserList();
+        this.queryTemplateList();
       },
     );
   };
 
   /**
-   * @description: This is for query user list function.
+   * @description: This is for query Template list function.
    * @param {type} null
    * @return: undefined
    */
-  queryUserList = () => {
+  queryTemplateList = () => {
     const { dispatch } = this.props;
     const { searchTemplateName, searchTemplateId, searchType } = this.state;
     const params = {
@@ -254,7 +257,7 @@ export default class MessageContentTemplate extends Component {
         page,
       },
       () => {
-        this.queryUserList();
+        this.queryTemplateList();
       },
     );
   };
