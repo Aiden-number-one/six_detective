@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Form, Radio, Select, List, Table } from 'antd';
+import { Input, Form, Radio, Select, List, Table, DatePicker } from 'antd';
 import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 
@@ -9,6 +9,12 @@ const { TextArea } = Input;
 const { Option } = Select;
 const { Column } = Table;
 
+/*
+ * @detailData:NewEP任务详情显示的数据
+ * @oldValueList:原始值
+ * @isShowForm:是否可编辑
+ * @getFieldDecorator:表单控件
+ */
 function NewEP({ detailData, oldValueList, isShowForm, getFieldDecorator }) {
   return (
     <div className={styles.ListBox}>
@@ -51,6 +57,16 @@ function NewEP({ detailData, oldValueList, isShowForm, getFieldDecorator }) {
     </div>
   );
 }
+
+/*
+ * @detailData:NewProduct任务详情显示的数据
+ * @oldValueList:原始值
+ * @isShowForm:是否可编辑
+ * @getFieldDecorator:表单控件
+ * @setRadioCurrentValue:设置Is CA Code，Yes或者No
+ * @radioPdValue:Is Calculate PD的值，Yes or No
+ * @setRadioPdValue:设置Is Calculate PD,Yes或者No
+ */
 function NewProduct({
   detailData,
   oldValueList,
@@ -390,6 +406,14 @@ function NewProduct({
     </div>
   );
 }
+
+/*
+ * @detailData:CaCode任务详情显示的数据
+ * @oldValueList:原始值
+ * @isShowForm:是否可编辑
+ * @getFieldDecorator:表单控件
+ * @setRadioCurrentValue:设置Is CA Code，Yes或者No
+ */
 function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentValue, isShowForm }) {
   return (
     <div className={styles.ListBox}>
@@ -450,22 +474,38 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <p>Effective Date</p>
-            <p>
+            {/* <p>Effective Date</p> */}
+            {/* <p>
               {detailData.effectiveDate &&
                 moment(detailData.effectiveDate).format('DD-MMM-YYYY HH:mm:ss')}
-            </p>
-            <p>{oldValueList.effectiveDate}</p>
+            </p> */}
+            <div className={styles.formBox}>
+              <Form.Item label="Effective Date">
+                {getFieldDecorator('effectiveDate', {
+                  rules: [{ required: !!isShowForm, message: 'Effective Date is missing' }],
+                  initialValue: detailData.effectiveDate && moment(detailData.effectiveDate),
+                })(isShowForm ? <DatePicker format="DD-MMM-YYYY HH:mm:ss" /> : <Input disabled />)}
+              </Form.Item>
+            </div>
+            <div className={styles.oldValueBox}>{oldValueList.effectiveDate}</div>
           </div>
         </List.Item>
         <List.Item>
           <div className={styles.ListItem}>
-            <p>Expiry Date</p>
+            {/* <p>Expiry Date</p>
             <p>
               {detailData.expiryDate &&
                 moment(detailData.expiryDate).format('DD-MMM-YYYY HH:mm:ss')}
-            </p>
-            <p>{oldValueList.expiryDate}</p>
+            </p> */}
+            <div className={styles.formBox}>
+              <Form.Item label="Expiry Date">
+                {getFieldDecorator('expiryDate', {
+                  rules: [{ required: !!isShowForm, message: 'Expiry Date is missing' }],
+                  initialValue: detailData.expiryDate && moment(detailData.expiryDate),
+                })(isShowForm ? <DatePicker format="DD-MMM-YYYY HH:mm:ss" /> : <Input disabled />)}
+              </Form.Item>
+            </div>
+            <div className={styles.oldValueBox}>{oldValueList.expiryDate}</div>
           </div>
         </List.Item>
         <List.Item>
@@ -486,6 +526,13 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
   );
 }
 
+/*
+ * @detailData:CaCode任务详情显示的数据
+ * @isShowForm:是否可编辑
+ * @getFieldDecorator:表单控件
+ * @onChangeConfirmedToValue:ConfirmedTo变化的回调
+ * @onChangeConfirmedBiValue:ConfirmedBi变化的回调
+ */
 function NewAccound({
   detailData,
   isShowForm,
@@ -630,6 +677,7 @@ function NewAccound({
                     <Select
                       onChange={(value, name) => onChangeConfirmedBiValue(value, name)}
                       optionLabelProp="value"
+                      allowClear
                     >
                       {detailData.biCategoryList.map(item => (
                         <Option
@@ -693,6 +741,7 @@ function NewAccound({
                     <Select
                       onChange={(value, name) => onChangeConfirmedToValue(value, name)}
                       optionLabelProp="value"
+                      allowClear
                     >
                       {detailData.toCategoryList &&
                         detailData.toCategoryList.map(item => (
@@ -812,6 +861,13 @@ function NewAccound({
   );
 }
 
+/*
+ * @detailItem:任务详情data
+ * @task:当前列表选中的内容
+ * @form:表单控件
+ * @saveConfirmToCategory:保存confirmToCategory值
+ * @saveConfirmBiCategory:保存confirmBiCategory值
+ */
 function DetailForm({ form, task, detailItem, saveConfirmToCategory, saveConfirmBiCategory }) {
   const { getFieldDecorator } = form;
   const [radioCurrentValue, setRadioCurrentValue] = useState('No');
@@ -883,7 +939,7 @@ function DetailForm({ form, task, detailItem, saveConfirmToCategory, saveConfirm
   const isShowForm = detailData && detailData.isStarter;
   const isEditing = detailData && detailData.isEditing;
   // const isEditing = true;
-  console.log('alertType---->', alertType, detailList, isShowForm);
+  // console.log('alertType---->', alertType, detailList, isShowForm);
   useEffect(() => {
     setRadioCurrentValue(detailList.isCaCode);
   }, [detailList.isCaCode]);
@@ -892,16 +948,20 @@ function DetailForm({ form, task, detailItem, saveConfirmToCategory, saveConfirm
   }, [detailList.isCalculatePd]);
 
   function onChangeConfirmedToValue(value, name) {
-    form.setFieldsValue({
-      confirmToName: name.props.label,
-    });
-    saveConfirmToCategory(name.key);
+    if (name) {
+      form.setFieldsValue({
+        confirmToName: name.props.label,
+      });
+      saveConfirmToCategory(name.key);
+    }
   }
   function onChangeConfirmedBiValue(value, name) {
-    form.setFieldsValue({
-      confirmBiName: name.props.label,
-    });
-    saveConfirmBiCategory(name.key);
+    if (name) {
+      form.setFieldsValue({
+        confirmBiName: name.props.label,
+      });
+      saveConfirmBiCategory(name.key);
+    }
   }
 
   return (

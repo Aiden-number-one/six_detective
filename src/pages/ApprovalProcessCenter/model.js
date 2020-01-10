@@ -234,6 +234,9 @@ export default {
     },
     *setTaskWithdraw({ payload, callback }, { call }) {
       const { taskCode, comment } = payload || [];
+      if (comment.length === 0) {
+        throw new Error('Comment cannot be empty when you withdraw');
+      }
       const { msg, err } = yield call(setTaskWithdraw, { taskCode, comment });
       if (err) {
         throw new Error(err);
