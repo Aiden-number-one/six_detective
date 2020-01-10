@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:15:49
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 11:29:43
+ * @LastEditTime : 2020-01-10 15:31:42
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, Checkbox } from 'antd';
@@ -160,7 +160,10 @@ class NewUser extends Component {
             element.paramRealValue = values.emailAddress;
             break;
           case 'password':
-            element.paramRealValue = window.kddes.getDes(values.emailPassword);
+            element.paramRealValue =
+              element.paramRealValue === values.emailPassword
+                ? element.paramRealValue
+                : window.kddes.getDes(values.emailPassword);
             break;
           case 'status':
             element.paramRealValue = values.status ? '0' : '1';

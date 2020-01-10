@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 12:09:00
+ * @LastEditTime : 2020-01-10 15:49:19
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Table, Pagination, Modal, Checkbox, Row, Col, message } from 'antd';
+import { Form, Table, Pagination, Modal, Checkbox, Radio, Row, Col, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -23,7 +23,7 @@ const NewSearchForm = Form.create({})(SearchForm);
 @connect(({ auditLog, loading }) => ({
   loading: loading.effects,
   getAuditLogListData: auditLog.data,
-  dataExport: auditLog.dataExport,
+  dataExport: auditLog.dataExportPath,
 }))
 class AuditTrailLogging extends Component {
   state = {
@@ -37,7 +37,7 @@ class AuditTrailLogging extends Component {
     functionName: undefined,
     updatedBy: undefined,
     exportDataVisible: false,
-    exportTypes: [],
+    exportType: 1,
     functionNameOptions: [
       { key: '', value: '', title: 'All' },
       { key: '1', value: '1', title: 'Name One' },
@@ -347,11 +347,8 @@ class AuditTrailLogging extends Component {
   };
 
   exportDataConfirm = () => {
-    const { exportTypes } = this.state;
-    // eslint-disable-next-line no-restricted-syntax
-    for (const exportType of exportTypes) {
-      this.goExport(exportType);
-    }
+    const { exportType } = this.state;
+    this.goExport(exportType);
   };
 
   goExport = exportType => {
@@ -366,17 +363,36 @@ class AuditTrailLogging extends Component {
       type: 'auditLog/getDataExport',
       payload: param,
       callback: () => {
-        this.setState({
-          exportDataVisible: false,
-        });
-        downloadFile(this.props.dataExport);
+        this.loadFile(
+          this.props.dataExport &&
+            this.props.dataExport.substring(this.props.dataExport.lastIndexOf('.')),
+          this.props.dataExport,
+        );
       },
+    });
+  };
+
+  /**
+   * @description: This is a loading file for excel,pdf and csv.
+   * @param {type} fileClass: type, filePath: url
+   * @return: undefined
+   */
+  loadFile = (fileClass, filePath) => {
+    const url = `/superlop/restv2/admin/v2.0/bayconnect.superlop.file_download_quick.json?fileClass=${fileClass}&filePath=${filePath}`;
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = true;
+    a.click();
+    this.setState({
+      exportDataVisible: false,
+      exportType: 1,
     });
   };
 
   exportDataCancel = () => {
     this.setState({
       exportDataVisible: false,
+      exportType: 1,
     });
   };
 
@@ -447,8 +463,9 @@ class AuditTrailLogging extends Component {
   };
 
   onChangeExport = newExportTypes => {
+    console.log('newExportTypes=', newExportTypes);
     this.setState({
-      exportTypes: newExportTypes,
+      exportType: newExportTypes.target.value,
     });
   };
 
@@ -466,6 +483,7 @@ class AuditTrailLogging extends Component {
       options,
       checkedValues,
       tempColumns,
+      exportType,
     } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
@@ -491,7 +509,7 @@ class AuditTrailLogging extends Component {
             dataSource={getAuditLogList}
             pagination={false}
             columns={this.state.columns}
-            rowKey={Math.random().toString()}
+            rowKey={row => row.logId}
             scroll={{ x: this.state.columns.length > 5 ? document.body.clientWidth : false }}
           />
           {getAuditLogList && getAuditLogList.length > 0 && (
@@ -538,12 +556,16 @@ class AuditTrailLogging extends Component {
           okText={formatMessage({ id: 'app.common.save' })}
         >
           <div>
-            <Checkbox.Group onChange={this.onChangeExport}>
-              <Checkbox value={1}>xlsx</Checkbox>
-              <Checkbox value={2}>docx</Checkbox>
-              <Checkbox value={3}>pdf</Checkbox>
-              <Checkbox value={4}>csv</Checkbox>
-            </Checkbox.Group>
+            <Radio.Group
+              onChange={this.onChangeExport}
+              defaultValue={exportType}
+              value={exportType}
+            >
+              <Radio value={1}>xlsx</Radio>
+              {/* <Radio value={2}>docx</Radio> */}
+              <Radio value={3}>pdf</Radio>
+              <Radio value={4}>csv</Radio>
+            </Radio.Group>
           </div>
         </Modal>
       </PageHeaderWrapper>
