@@ -10,6 +10,7 @@ import Service from '@/utils/Service';
 const {
   getAllApproval, // 获取information
   getPerApproval,
+  getAllTask,
 } = Service;
 
 export default {
@@ -18,6 +19,7 @@ export default {
   state: {
     allApprovalData: [], // allApproval Data
     perApprovalData: [], // perApproval Data
+    allTaskData: [],
   },
 
   effects: {
@@ -43,6 +45,15 @@ export default {
         if (callback) callback(response.bcjson.items);
       }
     },
+    *getAllTask({ payload, callback }, { call, put }) {
+      const response = yield call(getAllTask, { param: payload });
+      if (response.bcjson.flag === '1') {
+        yield put({
+          type: 'setAllTask',
+          payload: response.bcjson.items,
+        });
+      }
+    },
   },
 
   reducers: {
@@ -56,6 +67,12 @@ export default {
       return {
         ...state,
         perApprovalData: action.payload,
+      };
+    },
+    setAllTask(state, action) {
+      return {
+        ...state,
+        allTaskData: action.payload,
       };
     },
   },
