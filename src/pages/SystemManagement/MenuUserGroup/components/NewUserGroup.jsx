@@ -1,3 +1,10 @@
+/*
+ * @Description: This is auth for menu and button.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:16:05
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 09:57:33
+ */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
 import { formatMessage } from 'umi/locale';
@@ -71,7 +78,6 @@ class NewUser extends Component {
     this.state = {
       selectedKeys: [],
       btnIds: [],
-      // defaultCheckedKeys: [],
     };
   }
 
@@ -83,9 +89,6 @@ class NewUser extends Component {
   }
 
   onCancel = () => {
-    // this.props.history.push({
-    //   pathname: '/system-management/menu-user-group',
-    // });
     this.props.onCancel();
   };
 
@@ -100,10 +103,6 @@ class NewUser extends Component {
         message.warning('Please checked Authorizing access to menus');
         return;
       }
-      // const newSelectedKeys = selectedKeys.map(element => element.substring(0, 3));
-      // let selectedKeysArray = Object.assign([], selectedKeys);
-      // newSelectedKeys.forEach(element => selectedKeysArray.push(element));
-      // selectedKeysArray = [...new Set(selectedKeysArray)];
       if (!updateFlag) {
         const param = {
           groupName: values.groupName,
@@ -118,10 +117,6 @@ class NewUser extends Component {
               content: 'save success',
               duration: 2,
             });
-            //   this.props.history.push({
-            //     pathname: '/system-management/menu-user-group',
-            //     params: values,
-            //   });
             this.props.onSave(false);
           },
         });
@@ -149,6 +144,11 @@ class NewUser extends Component {
     });
   };
 
+  /**
+   * @description: This is a function for get menugroup.
+   * @param {type} null
+   * @return: undefined
+   */
   getMenuGrops = () => {
     const { dispatch, groupMenuInfo } = this.props;
     const that = this;
@@ -188,6 +188,11 @@ class NewUser extends Component {
     console.log('value===', value);
   };
 
+  /**
+   * @description: This check menu and button for tree.
+   * @param {type} selectedKeyss: menu's auth, event, btnIds: button's auth.
+   * @return: undefined
+   */
   onCheck = (selectedKeyss, event, btnIds) => {
     let halfCheckedKeys = [];
     if (typeof event === 'boolean') {

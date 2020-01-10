@@ -47,10 +47,10 @@ export default function({ loading, onCommit }) {
         onChange={({ target: { value } }) => setComment(value)}
       />
       <Row className={styles['comment-commit']} type="flex" align="middle" justify="space-between">
-        <Col span={11} offset={1}>
+        <Col>
           <AlertPhrase postComment={c => setComment(`${comment}${c} `)} />
         </Col>
-        <Col span={6} align="right">
+        <Col>
           <Upload
             multiple
             action="/upload?fileClass=alert_comment"
@@ -61,11 +61,9 @@ export default function({ loading, onCommit }) {
           >
             <span className={styles['up-icon']} title="please select a file">
               <IconFont type="iconbiezhen" />
-              {upAttachments.length > 0 && upAttachments.length}
+              {upAttachments.length > 0 && <em>{upAttachments.length}</em>}
             </span>
           </Upload>
-        </Col>
-        <Col span={6} align="right">
           <Button
             type="primary"
             loading={loading}

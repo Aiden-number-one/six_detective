@@ -15,10 +15,10 @@ import btnStyles from '@/pages/DataImportLog/index.less';
 const { Column } = Table;
 const { Search } = Input;
 
-export const DEFAULT_PAGE = 1;
-export const DEFAULT_PAGE_SIZE = 10;
+export const DEFAULT_PAGE = 1; // 默认页
+export const DEFAULT_PAGE_SIZE = 10; // 一页默认显示条数
 
-// tab组件
+// tab切换组件
 function TabBtn({ changeTab, selectedCurrentTask }) {
   return (
     <Row className={styles.tabBtnBox}>
@@ -38,6 +38,15 @@ function TabBtn({ changeTab, selectedCurrentTask }) {
   );
 }
 
+/*
+ * @selectedKeys:列表复选框选中的值
+ * @selectedCurrentTask:当前任务tab类型，all、my、his
+ * @searchTask:搜索方法
+ * @checkOwner:查询owner，判断是否已认领的方法
+ * @checkAssign:任务分配前检查此任务是否已经认领方法
+ * @urlTaskCode:从alert center带过来的taskCode参数
+ * @exportAlert:导出方法
+ */
 // 按钮组件
 function TaskBtn({
   selectedKeys,
@@ -87,28 +96,38 @@ function TaskBtn({
   );
 }
 
+/*
+ * @loading:加载loading
+ * @tasks:在列表点击选中的任务
+ * @currentUsers:当前节点的审批人员
+ * @currentGroup:当前节点的审批角色
+ * @total:总条数
+ * @getTask:保存选择的列表行内容
+ * @setCurrentTaskType:设置当前tab类型
+ */
 function ProcessList({
   dispatch,
   loading,
   tasks,
   currentUsers,
+  currentGroup,
   total,
   getTask,
   setCurrentTaskType,
 }) {
-  const [selectedKeys, setSelectedKeys] = useState([]);
-  const [selectedCurrentTask, setSelectedTasks] = useState('all');
-  const [currentPage, setcurrentPage] = useState('1');
-  const [currentRow, setcurrentRow] = useState('1');
-  const [visible, setVisible] = useState(false);
-  const [radioValue, setRadioValue] = useState('');
-  const [confirmVisible, setConfirmVisible] = useState(false);
-  const [clickCurrentTaskCode, setClickTaskCode] = useState('');
-  const [claimContent, setClaimContent] = useState('');
-  const [urlCode, setUrlCode] = useState('');
-  const [isBatch, setIsBatch] = useState(false);
-  const urlTaskCode = GetQueryString('taskCode');
-  const urlIsEnd = GetQueryString('isEnd');
+  const [selectedKeys, setSelectedKeys] = useState([]); // 列表复选框选中的值
+  const [selectedCurrentTask, setSelectedTasks] = useState('all'); // 选中的tab选项
+  const [currentPage, setcurrentPage] = useState('1'); // 当前处在第几页
+  const [currentRow, setcurrentRow] = useState('1'); // 列表选择的行
+  const [visible, setVisible] = useState(false); // 弹窗显示隐藏控制
+  const [radioValue, setRadioValue] = useState(''); // 分配任务选择的人员
+  const [confirmVisible, setConfirmVisible] = useState(false); // 确认框弹窗显示
+  const [clickCurrentTaskCode, setClickTaskCode] = useState(''); // 选中的任务taskCode
+  const [claimContent, setClaimContent] = useState(''); // 设置弹窗的内容
+  const [urlCode, setUrlCode] = useState(''); // 设置从alert center 带过来的参数
+  const [isBatch, setIsBatch] = useState(false); // 是否是批量操作
+  const urlTaskCode = GetQueryString('taskCode'); // 获取alert center 带过来的参数,定位到当前条
+  const urlIsEnd = GetQueryString('isEnd'); // 获取 alert center 带过来的参数,流程是否结束，结束则跳转到历史
   useEffect(() => {
     setUrlCode(urlTaskCode);
     if (urlIsEnd) {
@@ -299,7 +318,7 @@ function ProcessList({
         comfirm={() => claimOk(isBatch ? selectedKeys : clickCurrentTaskCode)}
       />
       <Drawer
-        title="Assign to"
+        title={`Assign to ( ${currentGroup} )`}
         width={500}
         visible={visible}
         onClose={() => setVisible(false)}
@@ -449,10 +468,13 @@ function ProcessList({
   );
 }
 
-export default connect(({ loading, approvalCenter: { tasks, currentUsers, page, total } }) => ({
-  tasks,
-  page,
-  total,
-  currentUsers,
-  loading: loading.effects,
-}))(ProcessList);
+export default connect(
+  ({ loading, approvalCenter: { tasks, currentUsers, currentGroup, page, total } }) => ({
+    tasks,
+    page,
+    total,
+    currentUsers,
+    currentGroup,
+    loading: loading.effects,
+  }),
+)(ProcessList);

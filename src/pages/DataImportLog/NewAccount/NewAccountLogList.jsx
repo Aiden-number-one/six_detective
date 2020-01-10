@@ -45,6 +45,7 @@ export default function NewAccountLogList({
       }}
     >
       <Column
+        width="8%"
         align="center"
         dataIndex="market"
         title={<FormattedMessage id="data-import.market" />}
@@ -54,14 +55,19 @@ export default function NewAccountLogList({
         dataIndex="submitterCode"
         title={<FormattedMessage id="data-import.submitter-code" />}
       />
-      <Column dataIndex="fileName" title={<FormattedMessage id="data-import.file-name" />} />
+      <Column
+        ellipsis
+        width="24%"
+        dataIndex="fileName"
+        title={<FormattedMessage id="data-import.submission-report" />}
+      />
       <Column
         align="center"
         dataIndex="submissionStatus"
         title={<FormattedMessage id="data-import.submission-status" />}
         render={(text, record) => {
-          const des = record.submissionStatus;
-          if ([1, 2, 9].includes(+text)) {
+          const des = record.statusMark;
+          if ([1, 2, 8, 9].includes(+text)) {
             const Status = statusMap[+text];
             return <Status des={des} />;
           }
@@ -71,7 +77,7 @@ export default function NewAccountLogList({
       <Column
         align="center"
         dataIndex="submissionTime"
-        title={<FormattedMessage id="data-import.new-account.submission-time" />}
+        title={<FormattedMessage id="data-import.submission-date" />}
         render={text => moment(text, 'YYYYMMDDhhmmss').format(timestampFormat)}
       />
       <Column

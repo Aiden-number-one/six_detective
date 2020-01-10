@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-05 00:07:54
+ * @LastEditTime : 2020-01-09 15:46:01
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -65,9 +65,14 @@ export async function assignAlertItem({ taskIds, userId }) {
 export async function closeAlert({ alertIds = [] }) {
   return request('set_alert_close', { data: { alertIds: alertIds.join(',') } });
 }
-// export async function getAttachments({ alertId }) {
-//   return request('set_template_generate', { data: { alertId, operType: 'emaiByAlert' } });
-// }
+export async function discontinueAlert({ alertIds = [] }) {
+  return request('set_alert_discontinue', { data: { alertIds: alertIds.join(',') } });
+}
+export async function getTaskHistory({ taskId }) {
+  return request('get_history_list_for_item_detail', {
+    data: { taskId: taskId.toString() },
+  });
+}
 export async function exportAlert({ fileType }) {
   return request('set_data_file_export', {
     data: {
@@ -94,9 +99,9 @@ export default {
     comments: [],
     logs: [],
     users: [],
-    claimInfos: [],
     email: [],
     attachments: [],
+    taskHistory: {},
   },
   reducers: {
     save(state, { payload }) {
@@ -140,12 +145,6 @@ export default {
         users: payload.users,
       };
     },
-    reclaim(state, { payload }) {
-      return {
-        ...state,
-        claimInfos: payload.claimInfos,
-      };
-    },
     saveEmail(state, { payload }) {
       return {
         ...state,
@@ -156,6 +155,12 @@ export default {
       return {
         ...state,
         attachments: payload.attachments,
+      };
+    },
+    saveTaskHistory(state, { payload }) {
+      return {
+        ...state,
+        taskHistory: payload.taskHistory,
       };
     },
   },
@@ -308,28 +313,57 @@ export default {
         },
       });
     },
+    // claim or check alert status
     *claim({ payload }, { call, put }) {
-      const { err, msg, items } = yield call(claimAlert, payload);
+      const { err, msg, items } = yield call(claimAlert, {
+        alertIds: payload.alertIds,
+        isCoverClaim: 0,
+      });
       if (err) {
         throw new Error(err);
       }
 
       if (items && items.length > 0) {
-        yield put({
-          type: 'reclaim',
-          payload: {
-            claimInfos: items,
-          },
-        });
-      } else {
-        yield put({
-          type: 'fetch',
-        });
-        message.success(msg);
+        return items;
       }
+      yield put({
+        type: 'fetch',
+      });
+      message.success(msg);
+      return '';
+    },
+    // claim many or check alert status
+    *claimMany({ payload }, { call, put }) {
+      return yield put({
+        type: 'claim',
+        payload,
+      });
+    },
+    // claim alert(s) which has been claimed
+    *reClaim({ payload }, { call, put }) {
+      const { err, msg, items } = yield call(claimAlert, {
+        alertIds: payload.alertIds,
+        isCoverClaim: 1,
+      });
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'fetch',
+      });
+      message.success(msg);
     },
     *close({ payload }, { call, put }) {
       const { err } = yield call(closeAlert, payload);
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'fetch',
+      });
+    },
+    *discontinue({ payload }, { call, put }) {
+      const { err } = yield call(discontinueAlert, payload);
       if (err) {
         throw new Error(err);
       }
@@ -384,6 +418,18 @@ export default {
         throw new Error(err);
       }
       message.success(msg);
+    },
+    *fetchTaskHistory({ payload }, { call, put }) {
+      const { err, items } = yield call(getTaskHistory, payload);
+      if (err) {
+        throw new Error(err);
+      }
+      yield put({
+        type: 'saveTaskHistory',
+        payload: {
+          taskHistory: items,
+        },
+      });
     },
   },
 };

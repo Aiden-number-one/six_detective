@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -6,58 +6,16 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Icon } from 'antd';
 import IconFont from '@/components/IconFont';
 import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
+import { getStore } from '@/utils/store';
 import { ClaimModal, CloseModal, ExportModal } from './components/AlertListModal';
+import { AlertListBtns } from './components/AlertListBtns';
 import ColumnTitle from '../ColumnTitle';
 import AlertDetail from './AlertDetail';
 import styles from '../index.less';
 
 const { Column } = Table;
 
-function AlertBtn({
-  disabled,
-  loading,
-  isBatchAction,
-  isReClaim,
-  claimAlerts,
-  closeAlerts,
-  exportAlerts,
-}) {
-  return (
-    <Row className={styles.btns}>
-      <Col span={18}>
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={claimAlerts}
-          className={loading['alertCenter/claim'] ? styles.loading : ''}
-        >
-          {isBatchAction && !disabled && !isReClaim && loading['alertCenter/claim'] ? (
-            <Icon type="loading" className={styles['btn-icon']} />
-          ) : (
-            <IconFont type="iconqizhi" className={styles['btn-icon']} />
-          )}
-
-          <FormattedMessage id="alert-center.claim" />
-        </button>
-        <button type="button" disabled={disabled} onClick={closeAlerts}>
-          <IconFont type="iconclose-circle" className={styles['btn-icon']} />
-          <FormattedMessage id="alert-center.close" />
-        </button>
-        <button type="button" disabled={disabled} onClick={exportAlerts}>
-          <IconFont type="iconexport" className={styles['btn-icon']} />
-          <FormattedMessage id="alert-center.export" />
-        </button>
-      </Col>
-      <Col span={6} align="right">
-        <Link to="/homepage/information" className={styles.info}>
-          Information
-        </Link>
-      </Col>
-    </Row>
-  );
-}
-
-function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
+function AlertList({ dispatch, loading, alerts, total }) {
   const [alert, setAlert] = useState(null);
   const [claimVisible, setClaimVisible] = useState(false);
   const [claimContent, setClaimContent] = useState('');
@@ -66,10 +24,14 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
   const [exportVisible, setExportVisible] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isBatchAction, setBatchAction] = useState(false);
-  // reclaim state
-  const [isReClaim, setReClaim] = useState(false);
+  const [isDiscontinue, setDiscontinue] = useState(false);
   // header filter
   const [conditions, setConditions] = useState([]);
+
+  const isAuth = useMemo(() => {
+    const userInfo = getStore('userInfo');
+    return userInfo && userInfo.isSuperAdmin;
+  }, []);
 
   useEffect(() => {
     dispatch({
@@ -88,27 +50,6 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
     }
   }, [alerts]);
 
-  // check latest claim state
-  useEffect(() => {
-    if (claimInfos && claimInfos.length > 0) {
-      claimInfos.forEach(item => {
-        if (item.userName) {
-          const userNameArr = item.userName.split(',');
-
-          const text = isBatchAction ? (
-            <div>some alerts has been claimed</div>
-          ) : (
-            <div>
-              this alert has been claimed by {userNameArr.length > 1 ? 'others' : item.userName}
-            </div>
-          );
-          setClaimContent(text);
-          setClaimVisible(true);
-        }
-      });
-    }
-  }, [claimInfos]);
-
   function handlePageChange(page, pageSize) {
     dispatch({
       type: 'alertCenter/fetch',
@@ -122,58 +63,71 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
   function handleCancelClaim() {
     setClaimVisible(false);
     setBatchAction(false);
-    setReClaim(false);
   }
 
-  function claimAlert(record) {
+  // claim single alert
+  async function claimAlert(record) {
     setBatchAction(false);
     setAlert(record);
     if (record.userName) {
       const userNameArr = record.userName.split(',');
-      setClaimVisible(true);
       setClaimContent(
         <div>
-          this alert has been claimed by {userNameArr.length > 1 ? 'others' : record.userName}
+          This alert has been claimed by [{userNameArr.length > 1 ? 'others' : record.userName}]
         </div>,
       );
+      setClaimVisible(true);
     } else {
-      dispatch({
+      // check latest alert status
+      const users = await dispatch({
         type: 'alertCenter/claim',
         payload: {
           alertIds: [record.alertId],
-          isCoverClaim: 0,
         },
       });
+      if (users && users.length > 0) {
+        users.forEach(item => {
+          if (item.userName) {
+            const userNameArr = item.userName.split(',');
+            setClaimContent(
+              <div>
+                This alert has been claimed by [{userNameArr.length > 1 ? 'others' : item.userName}]
+              </div>,
+            );
+            setClaimVisible(true);
+          }
+        });
+      }
     }
   }
 
-  function claimAlerts() {
+  async function claimAlerts() {
     setBatchAction(true);
     const findAlert = selectedRows.find(item => item.userName);
     if (findAlert && findAlert.userName) {
       setClaimVisible(true);
-      setReClaim(true);
-      setClaimContent(<div>some alerts has been claimed</div>);
+      setClaimContent(<div>Some alerts has been claimed.</div>);
     } else {
-      setReClaim(false);
-      dispatch({
-        type: 'alertCenter/claim',
+      // check latest alert status
+      const users = await dispatch({
+        type: 'alertCenter/claimMany',
         payload: {
           alertIds: selectedRows.map(item => item.alertId),
-          isCoverClaim: 0,
         },
       });
+      if (users && users.length > 0) {
+        setClaimContent(<div>Some alerts has been claimed.</div>);
+        setClaimVisible(true);
+      }
     }
   }
 
   async function handleReClaim() {
-    setReClaim(true);
     const curAlertId = alert.alertId;
     await dispatch({
-      type: 'alertCenter/claim',
+      type: 'alertCenter/reClaim',
       payload: {
         alertIds: !isBatchAction ? [curAlertId] : selectedRows.map(item => item.alertId),
-        isCoverClaim: 1,
       },
     });
     setClaimVisible(false);
@@ -207,6 +161,16 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
     setCloseVisible(false);
   }
 
+  async function discontinueAlert() {
+    await dispatch({
+      type: 'alertCenter/discontinue',
+      payload: {
+        alertIds: selectedRows.map(item => item.alertId),
+      },
+    });
+    setCloseVisible(false);
+  }
+
   function handleExport() {}
 
   // filter methods
@@ -230,30 +194,35 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
       },
     });
   }
+
   return (
     <div className={styles['list-container']}>
       <div className={styles.list}>
-        <AlertBtn
-          loading={loading}
-          disabled={!selectedRows.length}
-          isReClaim={isReClaim}
+        <AlertListBtns
+          isAuth={isAuth}
           isBatchAction={isBatchAction}
+          loading={loading['alertCenter/claim']}
+          disabled={!selectedRows.length}
           claimAlerts={() => claimAlerts()}
           closeAlerts={() => showCloseModal()}
+          onDiscontinue={() => {
+            showCloseModal();
+            setDiscontinue(true);
+          }}
         />
         <ClaimModal
           visible={claimVisible}
           content={claimContent}
           onCancel={handleCancelClaim}
           onOk={handleReClaim}
-          loading={loading['alertCenter/claim']}
+          loading={loading['alertCenter/reClaim']}
         />
         <CloseModal
           visible={closeVisible}
           onCancel={() => setCloseVisible(false)}
-          onOk={closeAlert}
+          onOk={isDiscontinue ? discontinueAlert : closeAlert}
           content={closeContent}
-          loading={loading['alertCenter/close']}
+          loading={loading[`alertCenter/${isDiscontinue ? 'discontinue' : 'close'}`]}
         />
         <ExportModal
           visible={exportVisible}
@@ -261,7 +230,6 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
           onOk={handleExport}
         />
         <Table
-          border
           dataSource={alerts}
           rowKey="alertId"
           loading={loading['alertCenter/fetch']}
@@ -361,6 +329,13 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
           <Column
             dataIndex="alertStatusDesc"
             title={<FormattedMessage id="alert-center.status" />}
+            render={text => {
+              if (text) {
+                const users = text.split(',');
+                return users.length > 1 ? <span title={text}>Multiple</span> : text;
+              }
+              return text;
+            }}
           />
           <Column
             dataIndex="action"
@@ -372,11 +347,10 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
                 align="middle"
                 className={styles['icon-btns']}
               >
-                {loading['alertCenter/claim'] &&
-                alert &&
+                {alert &&
                 alert.alertId === record.alertId &&
                 !isBatchAction &&
-                !isReClaim ? (
+                loading['alertCenter/claim'] ? (
                   <Icon type="loading" />
                 ) : (
                   <button
@@ -409,13 +383,9 @@ function AlertList({ dispatch, loading, alerts, total, claimInfos }) {
   );
 }
 
-const mapStateToProps = ({
-  loading,
-  alertCenter: { alerts, alertItems, alertTotal, claimInfos },
-}) => ({
+const mapStateToProps = ({ loading, alertCenter: { alerts, alertItems = [], alertTotal } }) => ({
   alerts,
   alertItems,
-  claimInfos,
   total: alertTotal,
   loading: loading.effects,
 });

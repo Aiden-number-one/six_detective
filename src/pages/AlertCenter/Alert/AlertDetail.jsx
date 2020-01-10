@@ -19,6 +19,7 @@ import {
   epColumns,
   proudctColumns,
   caCodeColumns,
+  newAccountColumns,
   NewAccountTaskItem,
 } from './components';
 
@@ -26,9 +27,9 @@ const taskColumnsMap = {
   301: epColumns,
   302: proudctColumns,
   303: caCodeColumns,
-  321: epColumns,
-  322: epColumns,
-  323: epColumns,
+  321: newAccountColumns,
+  322: newAccountColumns,
+  323: newAccountColumns,
 };
 
 const TaskItemMap = {
@@ -50,7 +51,16 @@ function CustomEmpty({ className = '', style = {} }) {
   );
 }
 
-function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email, attachments }) {
+function AlertDetail({
+  dispatch,
+  loading,
+  alert,
+  comments,
+  logs,
+  email,
+  attachments,
+  taskHistory,
+}) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
   const [activeKey, setActiveKey] = useState('1');
@@ -58,7 +68,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
 
   const taskColumns = taskColumnsMap[+alert.alertTypeId];
   const TaskItem = TaskItemMap[+alert.alertTypeId];
-  const isAttachmentsVisible = [321, 322, 323].includes(+alert.alertTypeId);
+  const isNewAccountType = [321, 322, 323].includes(+alert.alertTypeId);
 
   useEffect(() => {
     const { alertId } = alert;
@@ -79,7 +89,7 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
       },
     });
     // show attachments
-    if (isAttachmentsVisible) {
+    if (+alert.emailType === 111) {
       dispatch({
         type: 'alertCenter/fetchAttachments',
         payload: {
@@ -101,33 +111,34 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
   }
 
   function handleAddItem(pane) {
-    const isEqual = item => item.ALERT_ITEM_ID === pane.ALERT_ITEM_ID;
+    const isEqual = item => item.TASK_ID === pane.TASK_ID;
     if (panes.find(isEqual)) {
       // update item
       setPanes(panes.map(p => (isEqual(p) ? pane : p)));
     } else {
+      handleHistory(pane);
       // add pane
       setPanes([pane, ...panes]);
     }
-    setActiveKey(pane.ALERT_ITEM_ID.toString());
+    setActiveKey(pane.TASK_ID.toString());
   }
 
   function handleRemoveItem(e, pane) {
     e.stopPropagation();
     let lastIndex;
     let curActiveKey = activeKey;
-    const targetKey = pane.ALERT_ITEM_ID;
+    const targetKey = pane.TASK_ID;
     panes.forEach((item, i) => {
-      if (item.ALERT_ITEM_ID === targetKey) {
+      if (item.TASK_ID === targetKey) {
         lastIndex = i - 1;
       }
     });
 
-    setPanes(panes.filter(item => item.ALERT_ITEM_ID !== targetKey));
+    setPanes(panes.filter(item => item.TASK_ID !== targetKey));
 
     if (panes.length && activeKey === targetKey.toString()) {
       if (lastIndex >= 0) {
-        curActiveKey = panes[lastIndex].ALERT_ITEM_ID.toString();
+        curActiveKey = panes[lastIndex].TASK_ID.toString();
       } else {
         curActiveKey = '2';
       }
@@ -153,6 +164,18 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
       },
     });
     setEmailVisible(false);
+  }
+
+  function handleHistory(task) {
+    // task item history list
+    if (isNewAccountType) {
+      dispatch({
+        type: 'alertCenter/fetchTaskHistory',
+        payload: {
+          taskId: task.TASK_ID,
+        },
+      });
+    }
   }
   return (
     <Row className={styles['detail-container']} gutter={10}>
@@ -206,14 +229,15 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
             </TabPane>
           )}
           {+alert.itemsTotal !== 0 &&
+            panes &&
             panes.map(pane => (
               <TabPane
                 className={styles['tab-content']}
                 style={{ minHeight: 350 }}
-                key={pane.ALERT_ITEM_ID.toString()}
+                key={pane.TASK_ID.toString()}
                 tab={
                   <Row type="flex" justify="space-between" align="middle">
-                    <span>Alert Item </span>
+                    <span>Alert Item</span>
                     <Icon
                       type="close"
                       style={{ marginLeft: 12, fontSize: 12 }}
@@ -222,7 +246,11 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
                   </Row>
                 }
               >
-                <TaskItem task={pane} />
+                <TaskItem
+                  task={pane}
+                  taskHistory={taskHistory}
+                  loading={loading['alertCenter/fetchTaskHistory']}
+                />
                 <div align="right">
                   <TaskBtn task={pane} />
                 </div>
@@ -268,10 +296,13 @@ function AlertDetail({ dispatch, loading, alert, comments = [], logs = [], email
   );
 }
 
-export default connect(({ loading, alertCenter: { comments, logs, email, attachments } }) => ({
-  loading: loading.effects,
-  comments,
-  logs,
-  email,
-  attachments,
-}))(AlertDetail);
+export default connect(
+  ({ loading, alertCenter: { comments = [], logs = [], email, attachments, taskHistory } }) => ({
+    loading: loading.effects,
+    comments,
+    logs,
+    email,
+    attachments,
+    taskHistory,
+  }),
+)(AlertDetail);

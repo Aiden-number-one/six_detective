@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-24 16:04:36
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-03 20:17:03
+ * @LastEditTime : 2020-01-07 15:01:04
  */
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -51,5 +51,16 @@ export const caCodeColumns = [
   {
     dataIndex: 'EXPIRY_DATE',
     title: formatMessage({ id: 'alert-center.expiry-date' }),
+  },
+];
+
+export const newAccountColumns = [
+  {
+    dataIndex: 'SUBMITTER_CODE',
+    title: formatMessage({ id: 'alert-center.submitter-code' }),
+  },
+  {
+    dataIndex: 'SUBMITTER_NAME',
+    title: formatMessage({ id: 'alert-center.submitter-name' }),
   },
 ];

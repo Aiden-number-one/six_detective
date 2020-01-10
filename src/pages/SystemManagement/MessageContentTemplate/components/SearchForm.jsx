@@ -1,3 +1,10 @@
+/*
+ * @Description: This is for Template's search.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:16:28
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 12:14:55
+ */
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col, Select } from 'antd';
 import { formatMessage } from 'umi/locale';
@@ -69,11 +76,6 @@ export default class SearchForm extends Component {
             </Form.Item>
           </Col>
         </Row>
-        {/* <div className="btnArea">
-          <Button type="primary" onClick={search}>
-            {formatMessage({ id: 'app.common.search' })}
-          </Button>
-        </div> */}
       </Form>
     );
   }

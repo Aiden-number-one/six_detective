@@ -4,10 +4,13 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-05 09:43:41
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-08 21:19:06
+ * @LastEditTime : 2020-01-09 14:49:34
  */
 import _ from 'lodash';
 import uuidv1 from 'uuid/v1';
+import Service from '@/utils/Service';
+
+const { getMetadataTablePerform } = Service;
 
 // import fetch from '@/utils/request.default';
 export default {
@@ -17,13 +20,36 @@ export default {
     datasourceList: [], // 获取数据源列表
     tableList: [], // 获取数据源表的列表
     tableColumnList: [], // 获取选中表的所有字段
+    defaultValueDatasetType: {}, // 若是数据集类型的话，默认值的optionData
   },
   effects: {
     // 获取所有数据源
     // 获取所有数据源下的所有表
     // 获取数据源表下的所有字段
+    // 获取数据集下的表的字段的值
+    *getDataSetColumnValue({ payload }, { call, put, select }) {
+      const response = yield call(getMetadataTablePerform, { param: payload });
+      const defaultValueDatasetType = yield select(
+        ({ formArea }) => formArea.defaultValueDatasetType,
+      );
+      const dataSetColumn = {};
+      if (response.bcjson.flag === '1' && response.bcjson.items.length > 0) {
+        const key = Object.keys(response.bcjson.items[0])[0];
+        dataSetColumn[key] = response.bcjson.items.map(item => item[key]);
+      }
+      yield put({
+        type: 'changeDataSetColumn',
+        payload: { ...defaultValueDatasetType, ...dataSetColumn },
+      });
+    },
   },
   reducers: {
+    changeDataSetColumn(state, action) {
+      return {
+        ...state,
+        defaultValueDatasetType: action.payload,
+      };
+    },
     setCustomSearchData(state, action) {
       return {
         ...state,

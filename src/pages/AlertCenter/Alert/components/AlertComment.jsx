@@ -33,7 +33,7 @@ function AlertAttachmentPop({ attachments }) {
       content={<AttachmentList attachments={attachments} />}
     >
       <IconFont type="iconbiezhen" />
-      {attachments.length}
+      <em>{attachments.length}</em>
     </Popover>
   );
 }
@@ -42,11 +42,9 @@ export default function({ comment: { id, commitTime, commentContent, fileList } 
   const attachments = fileList ? fileList.split(',') : [];
   return (
     <li key={id}>
-      <Row>
-        <Col span={18} style={{ color: '#0D87D4' }}>
-          {moment(commitTime).format(timestampFormat)}
-        </Col>
-        <Col span={5} offset={1} align="right">
+      <Row type="flex" justify="space-between" align="middle">
+        <Col className={styles.time}>{moment(commitTime).format(timestampFormat)}</Col>
+        <Col>
           {attachments.length > 0 && (
             <AlertAttachmentPop attachments={attachments.map(url => ({ url }))} />
           )}

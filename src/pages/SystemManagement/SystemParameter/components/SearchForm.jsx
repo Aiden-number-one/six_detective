@@ -1,3 +1,10 @@
+/*
+ * @Description: This is search for System Parameter.
+ * @Author: dailinbo
+ * @Date: 2019-12-24 15:19:36
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 12:21:05
+ */
 import React, { Component } from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { formatMessage } from 'umi/locale';
@@ -38,24 +45,6 @@ export default class SearchForm extends Component {
               </Button>
             </Form.Item>
           </Col>
-          {/* <div className="btnArea1"> */}
-          {/* <Button type="primary" onClick={search} style={{ marginTop: 28 }}>
-            <IconFont type="iconsousuo" style={{ color: '#fff' }} />
-            {formatMessage({ id: 'app.common.search' })}
-          </Button> */}
-          {/* </div> */}
-          {/* <Col xs={12} sm={12} lg={16}>
-            <Form.Item
-              label=" "
-            >
-              <div className="btnArea1">
-                <Button type="primary" onClick={search}>
-                  <IconFont type="iconsousuo" style={{ color: '#fff' }} />
-                  {formatMessage({ id: 'app.common.search' })}
-                </Button>
-              </div>
-            </Form.Item>
-          </Col> */}
         </Row>
       </Form>
     );

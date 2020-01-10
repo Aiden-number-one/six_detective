@@ -18,9 +18,7 @@ const { TextArea } = Input;
 // const { Column } = Table;
 // const { Paragraph, Text } = Typography;
 
-// export function TaskDes({ detailItem }) {
-//   return <div></div>;
-// }
+// 空内容组件
 function CustomEmpty({ className = '', style = {} }) {
   return (
     <Row className={className} style={style} type="flex" align="middle" justify="center">
@@ -29,29 +27,42 @@ function CustomEmpty({ className = '', style = {} }) {
   );
 }
 
+/*
+ * @loading:加载loading
+ * @task:在列表点击选中的任务
+ * @detailItems:任务详情
+ * @nextUsers:下一个节点的审批人员
+ * @nextGroup:下一个节点的审批角色
+ * @taskHistoryList:任务历史
+ * @logList:日志列表
+ * @currentTaskType:当前任务tab类型，all、my、his
+ */
 function ProcessDetail({
   dispatch,
   loading,
   task,
   detailItems,
   nextUsers,
+  nextGroup,
   taskHistoryList,
   logList,
   currentTaskType,
 }) {
-  const [isFullscreen, setFullscreen] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [radioValue, setRadioValue] = useState('');
-  const [submitType, setSubmitType] = useState('');
-  const [comment, setComment] = useState('');
-  const [confirmVisible, setConfirmVisible] = useState(false);
-  const [withdrawConfirmVisible, setWithdrawConfirmVisible] = useState(false);
-  const [upAttachments, setUpAttachements] = useState([]);
-  const [currentOwner, setIsCurrentOwner] = useState(true);
-  const [confirmToCategoryValue, setConfirmToCategory] = useState('');
-  const [confirmBiCategoryValue, setConfirmBiCategory] = useState('');
+  const [isFullscreen, setFullscreen] = useState(false); // 全屏控制
+  const [visible, setVisible] = useState(false); // 弹窗显示控制
+  const [radioValue, setRadioValue] = useState(''); // 提交、审核选择的人员
+  const [submitType, setSubmitType] = useState(''); // 通过类型，submit、pass、reject
+  const [comment, setComment] = useState(''); // 获取评论的内容
+  const [confirmVisible, setConfirmVisible] = useState(false); // 确认框提示控制
+  const [withdrawConfirmVisible, setWithdrawConfirmVisible] = useState(false); // 撤销确认框控制
+  const [upAttachments, setUpAttachements] = useState([]); // 附件内容
+  const [currentOwner, setIsCurrentOwner] = useState(true); // 是否是当前owner
+  const [confirmToCategoryValue, setConfirmToCategory] = useState(''); // 保存confirmToCategory
+  const [confirmBiCategoryValue, setConfirmBiCategory] = useState(''); // 保存confirmBiCategory
   const newDetailForm = React.createRef();
   const isLt5M = size => size / 1024 / 1024 < 5;
+
+  // 初始化 加载对应数据
   useEffect(() => {
     if (task) {
       dispatch({
@@ -201,7 +212,7 @@ function ProcessDetail({
           }
 
           Object.assign(taskValue, valueData);
-          console.log('Received values of form: ', values, valueData, taskValue);
+          // console.log('Received values of form: ', values, valueData, taskValue);
         }
       });
     }
@@ -229,7 +240,7 @@ function ProcessDetail({
 
   // 撤销
   function setTaskWithdraw() {
-    console.log('comment----', comment);
+    // console.log('comment----', comment);
     // if (!comment) {
     //   throw new Error('Comment cannot be empty when you withdraw');
     // }
@@ -342,7 +353,7 @@ function ProcessDetail({
         }
 
         Object.assign(taskValue, valueData);
-        console.log('Received values of form: ', values, valueData, taskValue);
+        // console.log('Received values of form: ', values, valueData, taskValue);
       }
     });
     if (isErr) {
@@ -367,7 +378,6 @@ function ProcessDetail({
       }
       return file;
     });
-    console.log('fileList--->', fileList);
     setUpAttachements(fileList);
   }
   // 删除附件
@@ -420,7 +430,7 @@ function ProcessDetail({
                 saveConfirmBiCategory={saveConfirmBiCategory}
               />
               <Drawer
-                title="Assign to"
+                title={`Assign to ( ${nextGroup} )`}
                 width={500}
                 visible={visible}
                 onClose={() => setVisible(false)}
