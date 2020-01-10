@@ -92,6 +92,7 @@ function ProcessList({
   loading,
   tasks,
   currentUsers,
+  currentGroup,
   total,
   getTask,
   setCurrentTaskType,
@@ -299,7 +300,7 @@ function ProcessList({
         comfirm={() => claimOk(isBatch ? selectedKeys : clickCurrentTaskCode)}
       />
       <Drawer
-        title="Assign to"
+        title={`Assign to ( ${currentGroup} )`}
         width={500}
         visible={visible}
         onClose={() => setVisible(false)}
@@ -449,10 +450,13 @@ function ProcessList({
   );
 }
 
-export default connect(({ loading, approvalCenter: { tasks, currentUsers, page, total } }) => ({
-  tasks,
-  page,
-  total,
-  currentUsers,
-  loading: loading.effects,
-}))(ProcessList);
+export default connect(
+  ({ loading, approvalCenter: { tasks, currentUsers, currentGroup, page, total } }) => ({
+    tasks,
+    page,
+    total,
+    currentUsers,
+    currentGroup,
+    loading: loading.effects,
+  }),
+)(ProcessList);

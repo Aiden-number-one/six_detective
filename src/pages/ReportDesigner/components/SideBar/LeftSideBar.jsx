@@ -17,7 +17,13 @@ const { TreeNode } = Tree;
   loading: loading.effects['reportDesigner/getPublicDataSet'],
 }))
 export default class LeftSideBar extends PureComponent {
-  state = {};
+  state = {
+    selectedKeys: [
+      'eb9cf630-302f-11ea-8208-e139d3d1e1b8ACCOUNT_TYPE',
+      'eb9cf630-302f-11ea-8208-e139d3d1e1b8PRODUCT_CODE',
+      'eb9cf630-302f-11ea-8208-e139d3d1e1b8DATA_ROW',
+    ], // 选中的树节点
+  };
 
   componentDidMount() {
     this.getPublicDataSet();
@@ -47,16 +53,18 @@ export default class LeftSideBar extends PureComponent {
   // 渲染树结构
   generateTree = treeData => {
     const { displayDraw, displayDeletePrivate } = this.props;
+    // console.log('treeData: ', treeData);
     return treeData.map(item => {
-      if (item.children) {
+      if (item.children && item.children.length) {
         return (
           <TreeNode
             key={item.key}
             title={
               <WrapperTitle
                 title={item.title}
-                isParent={item.otherInfo}
                 isLeaf={item.isLeaf} // 是否是叶子节点
+                selectable={item.isLeaf}
+                isParent={item.otherInfo}
                 displayDraw={() => {
                   displayDraw(item);
                 }}
@@ -77,6 +85,7 @@ export default class LeftSideBar extends PureComponent {
             <WrapperTitle
               title={item.title} // title
               isLeaf={item.isLeaf} // 是否是叶子节点
+              selectable={item.isLeaf}
               dragInfo={item.dragInfo}
             />
           }
@@ -90,6 +99,25 @@ export default class LeftSideBar extends PureComponent {
   //   // const { dispatch } = this.props;
   // };
 
+  selectTreeNode = (keys, ev) => {
+    const { selectedKeys } = this.state;
+    const {
+      nativeEvent: { ctrlKey, metaKey, target, currentTarget },
+    } = ev;
+    console.log('Trigger Select', keys, ev, `${ev.keyCode}`, target, currentTarget);
+    let newKeys = [];
+    if (ctrlKey || metaKey) {
+      newKeys = [...selectedKeys, ...keys];
+    } else {
+      newKeys = keys;
+    }
+    this.setState({ selectedKeys: newKeys }, () => {
+      setTimeout(() => {
+        console.log('after -> ', this.state.selectedKeys);
+      }, 500);
+    });
+  };
+
   render() {
     const {
       dataSetPublicList = [],
@@ -100,6 +128,7 @@ export default class LeftSideBar extends PureComponent {
       displayDropSelect,
       changedisplayDropSelect,
     } = this.props;
+    const { selectedKeys } = this.state;
     // 给予DropSelect的Props
     const dropSelectProps = {
       loading, // dropSelect的loading
@@ -138,7 +167,9 @@ export default class LeftSideBar extends PureComponent {
                 )}
               />
               <div className={styles.tree}>
-                <Tree>{this.generateTree(dataSetPrivateListTree)}</Tree>
+                <Tree selectedKeys={selectedKeys} onSelect={this.selectTreeNode}>
+                  {this.generateTree(dataSetPrivateListTree)}
+                </Tree>
               </div>
             </>
           )}
