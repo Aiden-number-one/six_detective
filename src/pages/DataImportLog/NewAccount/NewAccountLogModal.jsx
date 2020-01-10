@@ -282,6 +282,7 @@ function NewAccountLogManualModal({
     setFileList([]);
     setValidFiles([]);
     setParseErrs([]);
+    setTipVisible(false);
     onCancel();
   }
   async function handleCommit() {
