@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 14:46:12
+ * @LastEditTime : 2020-01-10 15:21:53
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Form, Table, Pagination, Modal, Checkbox, Row, Col, message } from 'antd';
+import { Form, Table, Pagination, Modal, Checkbox, Radio, Row, Col, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -37,7 +37,7 @@ class AuditTrailLogging extends Component {
     functionName: undefined,
     updatedBy: undefined,
     exportDataVisible: false,
-    exportTypes: [],
+    exportType: null,
     functionNameOptions: [
       { key: '', value: '', title: 'All' },
       { key: '1', value: '1', title: 'Name One' },
@@ -347,11 +347,8 @@ class AuditTrailLogging extends Component {
   };
 
   exportDataConfirm = () => {
-    const { exportTypes } = this.state;
-    // eslint-disable-next-line no-restricted-syntax
-    for (const exportType of exportTypes) {
-      this.goExport(exportType);
-    }
+    const { exportType } = this.state;
+    this.goExport(exportType);
   };
 
   goExport = exportType => {
@@ -461,8 +458,9 @@ class AuditTrailLogging extends Component {
   };
 
   onChangeExport = newExportTypes => {
+    console.log('newExportTypes=', newExportTypes);
     this.setState({
-      exportTypes: newExportTypes,
+      exportType: newExportTypes.target.value,
     });
   };
 
@@ -552,12 +550,12 @@ class AuditTrailLogging extends Component {
           okText={formatMessage({ id: 'app.common.save' })}
         >
           <div>
-            <Checkbox.Group onChange={this.onChangeExport}>
-              <Checkbox value={1}>xlsx</Checkbox>
-              <Checkbox value={2}>docx</Checkbox>
-              <Checkbox value={3}>pdf</Checkbox>
-              <Checkbox value={4}>csv</Checkbox>
-            </Checkbox.Group>
+            <Radio.Group onChange={this.onChangeExport}>
+              <Radio value={1}>xlsx</Radio>
+              {/* <Radio value={2}>docx</Radio> */}
+              <Radio value={3}>pdf</Radio>
+              <Radio value={4}>csv</Radio>
+            </Radio.Group>
           </div>
         </Modal>
       </PageHeaderWrapper>
