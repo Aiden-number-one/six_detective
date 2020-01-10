@@ -3,13 +3,14 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:40:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 13:42:53
+ * @LastEditTime : 2020-01-10 16:07:54
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from '../UserMaintenance.less';
+import { getAuthority } from '@/utils/authority';
 
 class FormUser extends Component {
   constructor() {
@@ -320,13 +321,15 @@ export default class ModifyUser extends Component {
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} NewFlag={NewFlag} userInfo={userInfo} />
-        <Row>
-          <Col offset={4}>
-            <Checkbox onChange={this.onChangeLocked} checked={locedChecked}>
-              User Account Disabled
-            </Checkbox>
-          </Col>
-        </Row>
+        {getAuthority().authLocked && (
+          <Row>
+            <Col offset={4}>
+              <Checkbox onChange={this.onChangeLocked} checked={locedChecked}>
+                User Account Disabled
+              </Checkbox>
+            </Col>
+          </Row>
+        )}
         <ul className={styles.userGroup}>
           <li>
             <h3 className={styles.groupTitle}>
