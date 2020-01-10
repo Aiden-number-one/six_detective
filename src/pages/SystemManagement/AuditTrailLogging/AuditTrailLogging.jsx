@@ -1,3 +1,10 @@
+/*
+ * @Description: This is Audit Trail Logging for log.
+ * @Author: dailinbo
+ * @Date: 2019-12-30 12:12:26
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 12:09:00
+ */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -68,40 +75,31 @@ class AuditTrailLogging extends Component {
       {
         key: 'index',
         visible: true,
-        // fixed: 'left',
-        // width: 60,
       },
       {
         key: 'functionName',
         visible: true,
-        // fixed: 'left',
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'tableName',
         visible: true,
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'biToCode',
         visible: false,
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'productCode',
         visible: true,
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'effectiveTime',
         visible: true,
         className: 'columnsnone',
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'filedUpdated',
         visible: false,
-        // width: ('20%' - 60) / (this.state.columns && this.state.columns.length),
       },
       {
         key: 'updateType',
@@ -122,10 +120,8 @@ class AuditTrailLogging extends Component {
       {
         key: 'after',
         visible: false,
-        // fixed: 'right',
       },
     ],
-    // countColumns: 1,
     columns: [
       {
         index: 0,
@@ -133,7 +129,6 @@ class AuditTrailLogging extends Component {
         dataIndex: 'index',
         key: 'index',
         align: 'center',
-        // width: 60,
         render: (res, recode, index) => (
           <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
         ),
@@ -145,7 +140,6 @@ class AuditTrailLogging extends Component {
         key: 'functionName',
         ellipsis: true,
         align: 'left',
-        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 2,
@@ -155,7 +149,6 @@ class AuditTrailLogging extends Component {
         ellipsis: true,
         align: 'left',
         colSpan: 1,
-        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 3,
@@ -163,7 +156,6 @@ class AuditTrailLogging extends Component {
         dataIndex: 'biToCode',
         key: 'biToCode',
         align: 'left',
-        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 4,
@@ -171,7 +163,6 @@ class AuditTrailLogging extends Component {
         dataIndex: 'productCode',
         key: 'productCode',
         align: 'left',
-        // width: ('100%' - 60) / this.state.countColumns,
       },
       {
         index: 5,
@@ -212,7 +203,6 @@ class AuditTrailLogging extends Component {
         dataIndex: 'updatedBy',
         key: 'updatedBy',
         align: 'left',
-        // width: 110,
       },
       {
         index: 10,
@@ -234,17 +224,16 @@ class AuditTrailLogging extends Component {
 
   auditLogForm = React.createRef();
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   return {
-  //     countColumns: prevState.columns.length,
-  //   };
-  // }
-
   componentDidMount() {
     this.filterColumns();
     this.getAuditLog();
   }
 
+  /**
+   * @description: This is function for init Columns.
+   * @param {type} null
+   * @return: undefined
+   */
   filterColumns = () => {
     const { columns, cuscomizeColumns } = this.state;
     const newColumns = columns.map(item => {
@@ -270,11 +259,9 @@ class AuditTrailLogging extends Component {
     });
     newColumns.forEach((element, index) => {
       if (index === 0) {
-        // element.fixed = 'left';
         element.width = 60;
       }
       if (index === newColumns.length - 1) {
-        // element.fixed = 'right';
         element.width = 120;
       }
     });
@@ -285,6 +272,11 @@ class AuditTrailLogging extends Component {
     });
   };
 
+  /**
+   * @description: This is function for get log list.
+   * @param {type} null
+   * @return: undefined
+   */
   getAuditLog = () => {
     const { logStartDate, logEndDate, functionName, updatedBy, page } = this.state;
     const param = {
@@ -374,7 +366,6 @@ class AuditTrailLogging extends Component {
       type: 'auditLog/getDataExport',
       payload: param,
       callback: () => {
-        console.log('this.props.dataExport===', this.props.dataExport);
         this.setState({
           exportDataVisible: false,
         });
@@ -422,18 +413,12 @@ class AuditTrailLogging extends Component {
     });
     newColumns.sort((o1, o2) => o1.index - o2.index);
     newColumns.forEach((element, index) => {
-      // if (Object.hasOwnProperty('fixed')) {
-      //   delete element.fixed;
-      // }
       element.fixed = '';
-      // element.width = `${100 / newColumns.length}%`
       element.width = '';
       if (index === 0) {
-        // element.fixed = 'left';
         element.width = 60;
       }
       if (newColumns.length > 5 && index === newColumns.length - 1) {
-        // element.fixed = 'right';
         element.width = 120;
       }
       if (newColumns.length > 5 && element.hasOwnProperty('date')) {
@@ -444,7 +429,6 @@ class AuditTrailLogging extends Component {
       columns: newColumns,
       checkedValues,
     });
-    console.log('newColumns===', newColumns);
   };
 
   customizeCancel = () => {
