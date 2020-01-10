@@ -2,7 +2,7 @@
  * @Description: all alert data
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-04 15:52:17
+ * @LastEditTime : 2020-01-10 14:28:04
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -11,7 +11,8 @@ const {
   getMyAlert, // 获取my alert data
   getAlertCount, // 获取个人警告数
   getPerProcessingAlertCount, // 个人处理中的alert数
-  getClosedAlertCount, // 个人已关闭alert数
+  // getClosedAlertCount, // 个人已关闭alert数
+  getPerAlertData,
 } = Service;
 
 export default {
@@ -22,6 +23,7 @@ export default {
     perProcessingAlertCount: 0, // personal Processing alert 总数
     perClosedAlertCount: 0, // personal Closed Alert 总数
     myAlertData: [], // my alert data
+    perAlertData: [], // peralertchartdata
   },
 
   effects: {
@@ -56,13 +58,24 @@ export default {
       }
     },
     // 获取个人的已关闭的alert的数据
-    *getPerClosedAlterCount({ payload }, { call, put }) {
-      const response = yield call(getClosedAlertCount, { param: payload });
+    // *getPerClosedAlterCount({ payload }, { call, put }) {
+    //   const response = yield call(getClosedAlertCount, { param: payload });
+    //   if (response.bcjson.flag === '1') {
+    //     if (response.bcjson.items) {
+    //       yield put({
+    //         type: 'savePerClosedAlterCount',
+    //         payload: response.bcjson.items[0].count,
+    //       });
+    //     }
+    //   }
+    // },
+    *getPerAlertData({ payload }, { call, put }) {
+      const response = yield call(getPerAlertData, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
-            type: 'savePerClosedAlterCount',
-            payload: response.bcjson.items[0].count,
+            type: 'savePerAlertData',
+            payload: response.bcjson.items,
           });
         }
       }
@@ -77,11 +90,18 @@ export default {
         myAlertData: action.payload,
       };
     },
+    // 保存个人图表数据
     // 保存per closed alert总数
-    savePerClosedAlterCount(state, action) {
+    // savePerClosedAlterCount(state, action) {
+    //   return {
+    //     ...state,
+    //     perClosedAlertCount: action.payload,
+    //   };
+    // },
+    savePerAlertData(state, action) {
       return {
         ...state,
-        perClosedAlertCount: action.payload,
+        perAlertData: action.payload,
       };
     },
     savePerClaimAlertCount(state, action) {
