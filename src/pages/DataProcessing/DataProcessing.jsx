@@ -1,9 +1,9 @@
 /*
- * @Description: This is a page for DataProcessing.
+ * @Description: This is Data Processing for Data Inspect and Processsing.
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 11:00:34
+ * @LastEditTime : 2020-01-10 12:29:33
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -19,7 +19,6 @@ import { getAuthority } from '@/utils/authority';
 import { getStore } from '@/utils/store';
 
 const { Option } = Select;
-// const { RangePicker } = DatePicker;
 
 @connect(({ dataProcessing, loading }) => ({
   loading: loading.effects,
@@ -95,30 +94,8 @@ export default class DataProcessing extends Component {
             </Fragment>
           ),
         },
-        // {
-        //   title: '',
-        //   dataIndex: '',
-        //   key: '',
-        //   render: (res, recode) => (
-        //     <Fragment>
-        //       {recode.alertType === this.state.alertType && (
-        //           <IconFont type="icon-arrow-right" className={styles['active-icon']} />
-        //       )}
-        //     </Fragment>
-        //   ),
-        // },
       ],
       columns: [
-        // {
-        //   title: formatMessage({ id: 'app.common.number' }),
-        //   dataIndex: 'index',
-        //   key: 'index',
-        //   render: (res, recode, index) => (
-        //     <span>
-        //       {(this.state.itemPage.pageNumber - 1) * this.state.itemPage.pageSize + index + 1}
-        //     </span>
-        //   ),
-        // },
         {
           title: () =>
             this.state.alertBypassStatus.length > 0 &&
@@ -180,10 +157,6 @@ export default class DataProcessing extends Component {
         pageNumber: 1,
         pageSize: 10,
       },
-      // itemPage: {
-      //   pageNumber: 1,
-      //   pageSize: 10,
-      // },
       dataCharts: [
         {
           year: 'Records Received from ECP',
@@ -225,7 +198,6 @@ export default class DataProcessing extends Component {
     this.setState({
       authBypass: getAuthority().authBypass,
     });
-    // this.queryDataProcessing();
   }
 
   /**
@@ -235,20 +207,13 @@ export default class DataProcessing extends Component {
    */
   queryDataProcessing = () => {
     const { dispatch } = this.props;
-    // const { page, codeName } = this.state;
     const params = {
-      // pageNumber: page.pageNumber.toString(),
-      // pageSize: page.pageSize.toString(),
       operType: 'queryAlertType',
-      // codeName,
     };
     dispatch({
       type: 'dataProcessing/getDataProcessing',
       payload: params,
       callback: () => {
-        // this.setState({
-        //   inspectDataVisible: true,
-        // });
         const { dataProcessingData } = this.props;
         this.setState(
           {
@@ -269,8 +234,6 @@ export default class DataProcessing extends Component {
     const { dispatch } = this.props;
     const params = {
       operType: 'queryAlertItems',
-      // pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
-      // pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
       alertType: `${this.state.alertType}`,
     };
     dispatch({
@@ -282,7 +245,6 @@ export default class DataProcessing extends Component {
         const alertBypassStatus = dataProcessingItemData.items.filter(
           element => element.bypassStatus === '0',
         );
-        console.log('alertBypassStatus====', alertBypassStatus);
         if (alertBypassStatus.length <= 0 || !isBypass) {
           const { tempColumns } = this.state;
           const newColumns = Object.assign([], columns);
@@ -342,7 +304,6 @@ export default class DataProcessing extends Component {
       type: 'dataProcessing/getMarket',
       payload: params,
       callback: () => {
-        console.log('this.props.marketData====', this.props.marketData);
         this.setState({
           functionNameOptions: this.props.marketData.map(element => ({
             key: element.dataId,
@@ -355,7 +316,6 @@ export default class DataProcessing extends Component {
   };
 
   connectDataProcessing = (record, index) => {
-    console.log('record===', record, index);
     this.setState(
       {
         alertType: record.alertType,
@@ -363,7 +323,6 @@ export default class DataProcessing extends Component {
         isBypass: !!(record.isClosedIntraday === '1'),
       },
       () => {
-        console.log('this.state.isBypass===', this.state.isBypass);
         this.queryDataProcessingItem();
       },
     );
@@ -374,7 +333,6 @@ export default class DataProcessing extends Component {
   };
 
   onSelectChange = (checkedValue, selectedRows) => {
-    console.log('selectedRowKeys, selectedRows=', checkedValue, selectedRows);
     const { selectedRowKeys } = this.state;
     const newSelectedRowKeys = Object.assign([], selectedRowKeys);
     if (checkedValue.target.checked) {
@@ -404,7 +362,6 @@ export default class DataProcessing extends Component {
     }
     const alertIds = [];
     newSelectedRowKeys.forEach(element => alertIds.push(element.alertId));
-    // this.setState({ selectedRowKeys, alertIds: alertIds.join(',') }, () => {});
     this.setState({
       selectedRowKeys: newSelectedRowKeys,
       alertIds: alertIds.join(','),
@@ -412,7 +369,6 @@ export default class DataProcessing extends Component {
   };
 
   onSelectChangeAll = checkedValue => {
-    console.log('checkedValue====', checkedValue);
     const { dataProcessingItemData } = this.props;
     const selectedRowKeys = dataProcessingItemData.items.filter(
       element => element.bypassStatus === '0',
@@ -434,7 +390,6 @@ export default class DataProcessing extends Component {
   };
 
   onChangeMarkt = (value, key) => {
-    console.log('value', value, key);
     this.setState({
       market: value,
     });
@@ -494,7 +449,6 @@ export default class DataProcessing extends Component {
   };
 
   onBypass = () => {
-    // dataProcessingVisible: false,
     this.alertItemsByPass();
   };
 
@@ -502,8 +456,6 @@ export default class DataProcessing extends Component {
     const { dispatch } = this.props;
     const params = {
       operType: 'alertItemsByPass',
-      // pageNumber: `${this.state.itemPage.pageNumber.toString()}` || '1',
-      // pageSize: `${this.state.itemPage.pageSize.toString()}` || '10',
       alertIds: `${this.state.alertIds}`,
     };
     dispatch({
@@ -524,8 +476,6 @@ export default class DataProcessing extends Component {
   render() {
     const { loading, dataProcessingData, dataProcessingItemData } = this.props;
     const {
-      // page,
-      // itemPage,
       inspectDataVisible,
       selectedRowKeys,
       functionNameOptions,
@@ -595,7 +545,7 @@ export default class DataProcessing extends Component {
                     onRow={(record, index) => ({
                       onClick: () => {
                         this.connectDataProcessing(record, index);
-                      }, // 点击行
+                      },
                     })}
                   ></Table>
                   {/* <Pagination
@@ -706,46 +656,7 @@ export default class DataProcessing extends Component {
               </div>
             )}
             <div className={styles.dataProcessing}>
-              {/* <ul className={styles.startProcessingWraper}>
-                <li>
-                  <span>Records Received from ECP：</span>
-                  <span>12</span>
-                </li>
-                <li>
-                  <span>Records Imported by user：</span>
-                  <span>10</span>
-                </li>
-                <li>
-                  <span>TO Records Eliminated：</span>
-                  <span>8</span>
-                </li>
-                <li>
-                  <span>Duplicated Records Eliminated：</span>
-                  <span>6</span>
-                </li>
-                <li>
-                  <span>Late Submission：</span>
-                  <span>3</span>
-                </li>
-                <li>
-                  <span>Adjustment of Stock Options Records for Format Conversion：</span>
-                  <span>0</span>
-                </li>
-              </ul>
-              <ul className={styles.startProcessingWraper}>
-                <li>
-                  <span>The last time of data processing is at 10:55 on 12/12/2019</span>
-                </li>
-              </ul> */}
               <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
-                {/* <Col>
-                  <span>Trade Date</span>
-                  <RangePicker
-                    format="YYYY-MM-DD"
-                    placeholder={['Start Date', 'End Date']}
-                    style={{ width: '180px' }}
-                  />
-                </Col> */}
                 <Col>
                   <span>Market</span>
                   <Select
