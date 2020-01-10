@@ -41,9 +41,6 @@
     > span:first-child {
       opacity: 0.7;
     }
-    > span:last-child {
-      flex: 1;
-    }
   }
   :global {
     .ant-table-content .ant-table-placeholder {
@@ -133,6 +130,11 @@
     padding: 10px;
     background-color: #fff;
     box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
+    :global {
+      .word-break {
+        word-break: break-all;
+      }
+    }
   }
 }
 
@@ -164,7 +166,9 @@
 .detail-container {
   margin-bottom: 20px;
   .tab-content {
+    height: 360px;
     padding: 10px;
+    overflow-y: auto;
   }
   .fullscreen {
     position: fixed;
@@ -177,7 +181,7 @@
     height: 100%;
     margin: 0;
     padding: 0 20px;
-    overflow: hidden;
+    overflow: auto;
     background-color: #fff;
   }
   :global {

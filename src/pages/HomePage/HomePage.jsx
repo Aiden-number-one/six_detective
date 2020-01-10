@@ -39,20 +39,47 @@ const { RangePicker } = DatePicker;
 export default class HomePage extends PureComponent {
   state = {
     alertState: 'ALL', // ALERT切换按钮
-    textActive: '', // ALERT today this week切换
+    textActive: 'Today', // ALERT today this week切换
     approvalState: 'ALL', // APPROVAL PROCESS切换按钮
-    approvalTextActive: '', // APPROVAL PROCESS today this week切换
+    approvalTextActive: 'Today', // APPROVAL PROCESS today this week切换
     targetData: [], // 快捷菜单
     renderProcess: true, // 是否渲染
     renderDashboard: true, // 是否渲染
+    activeKey: '1',
+    startDate: moment().format('YYYYMMDD'),
+    endDate: moment().format('YYYYMMDD'),
+    proStartDate: moment().format('YYYYMMDD'),
+    proEndDate: moment().format('YYYYMMDD'),
+
+    alterAllChart: '',
+    alterPersonalChart: '',
+    approvalAllChart: '',
+    approvalPersonalChart: '',
+    approvalPersonalPieChart: '',
+    submissionStatusPieChart: '',
+    submissionStatusBarChart: '',
+    marketPieChart: '',
+    marketRoseChart: '',
+    processingStageBarChart: '',
   };
 
   componentDidMount() {
+    const { startDate, endDate, proStartDate, proEndDate } = this.state;
+    const alertParams = {
+      startDate,
+      endDate,
+    };
+    const proParams = {
+      startDate: proStartDate,
+      endDate: proEndDate,
+    };
     const { dispatch } = this.props;
     // 获取All alert 条形图数据
     dispatch({
       type: 'allAlert/getAllAlterData',
-      payload: {},
+      payload: {
+        ...alertParams,
+      },
       callback: data => {
         this.renderAlterAllChart(data);
       },
@@ -60,10 +87,12 @@ export default class HomePage extends PureComponent {
     // 获取个人 alert柱状图数据
     dispatch({
       type: 'perAlert/getPerAlertData',
-      payload: {},
+      payload: {
+        ...alertParams,
+      },
     });
     // 获取alert 统计数据
-    this.getAlertData();
+    this.getAlertData(alertParams);
     // 获取alert表格的数据
     dispatch({
       type: 'perAlert/getMyAlert',
@@ -124,12 +153,16 @@ export default class HomePage extends PureComponent {
     // 获取approval process全部数据
     dispatch({
       type: 'approval/getAllApproval',
-      payload: {},
+      payload: {
+        ...proParams,
+      },
     });
     // 获取approval process个人数据
     dispatch({
       type: 'approval/getPerApproval',
-      payload: {},
+      payload: {
+        ...proParams,
+      },
     });
   }
 
@@ -355,9 +388,24 @@ export default class HomePage extends PureComponent {
       outstandingReportFileCount,
       allApprovalData,
     } = this.props;
-    const { currentTradeDate, lastTradeDate } = fileCountData[0];
-    const currentDate = Object.keys(currentTradeDate)[0];
-    const lastDate = Object.keys(lastTradeDate)[0];
+    let currentTradeDate;
+    let lastTradeDate;
+    let currentDate;
+    let lastDate;
+    if (fileCountData[0]) {
+      // eslint-disable-next-line prefer-destructuring
+      currentTradeDate = fileCountData[0].currentTradeDate;
+      // eslint-disable-next-line prefer-destructuring
+      lastTradeDate = fileCountData[0].lastTradeDate;
+    }
+    if (currentTradeDate) {
+      // eslint-disable-next-line prefer-destructuring
+      currentDate = Object.keys(currentTradeDate)[0];
+    }
+    if (lastTradeDate) {
+      // eslint-disable-next-line prefer-destructuring
+      lastDate = Object.keys(lastTradeDate)[0];
+    }
     let isRender = false;
     let isRender1 = false;
     lateReportFileCount.forEach(item => {
@@ -392,7 +440,13 @@ export default class HomePage extends PureComponent {
     if (activeKey === '3') {
       setTimeout(() => {
         if (renderDashboard) {
-          if (currentTradeDate[currentDate] !== 0 || lastTradeDate[lastDate] !== 0) {
+          if (
+            currentTradeDate &&
+            lastTradeDate &&
+            currentDate &&
+            lastDate &&
+            (currentTradeDate[currentDate] !== 0 || lastTradeDate[lastDate] !== 0)
+          ) {
             this.renderSubmissionStatusPieChart();
           }
           if (isRender) {
@@ -436,6 +490,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Alter ALL条形图
   renderAlterAllChart = data => {
+    const { startDate, endDate } = this.state;
     // Alter ALL 的条形图
     const AlterAll = [];
     data.forEach(item => {
@@ -530,7 +585,7 @@ export default class HomePage extends PureComponent {
         // eslint-disable-next-line no-underscore-dangle
         const alertStatusDesc = clickData._origin.type;
         router.push(
-          `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`,
+          `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&startDate=${startDate}&endDate=${endDate}`,
         );
       }
     });
@@ -541,6 +596,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Alter Personal条形图
   renderAlterPerChart = () => {
+    const { startDate, endDate } = this.state;
     const { perAlertData } = this.props;
     // Alter Personal 的条形图
     const AlterPersonal = [
@@ -616,7 +672,7 @@ export default class HomePage extends PureComponent {
         // eslint-disable-next-line no-underscore-dangle
         const alertStatusDesc = clickData._origin.label;
         router.push(
-          `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`,
+          `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&startDate=${startDate}&endDate=${endDate}`,
         );
       }
     });
@@ -625,6 +681,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval All柱状图
   renderApprovalAllChart = () => {
+    const { proStartDate, proEndDate } = this.state;
     const { allApprovalData } = this.props;
     const { userInfo } = allApprovalData[0];
     const ApprovalAll = [];
@@ -713,7 +770,7 @@ export default class HomePage extends PureComponent {
         // eslint-disable-next-line no-underscore-dangle
         const alertStatusDesc = clickData._origin.type;
         router.push(
-          `/homepage/Approval-Process-Center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`,
+          `/homepage/Approval-Process-Center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
         );
       }
     });
@@ -722,6 +779,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval Personal柱状图
   renderApprovalPerChart = () => {
+    const { proStartDate, proEndDate } = this.state;
     const { perApprovalData } = this.props;
     const ApprovalPersonal = [
       { label: 'Outstanding', value: perApprovalData[0].allOutstandingNum },
@@ -774,8 +832,8 @@ export default class HomePage extends PureComponent {
         },
         offset: 10,
       })
-      .color('label', ['#0D87D4'])
-      .size(15)
+      .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
+      .size(20)
       .adjust([
         {
           type: 'dodge',
@@ -791,7 +849,7 @@ export default class HomePage extends PureComponent {
         // eslint-disable-next-line no-underscore-dangle
         const alertStatusDesc = clickData._origin.label;
         router.push(
-          `/homepage/Approval-Process-Center?taskType=myTask&alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`,
+          `/homepage/Approval-Process-Center?taskType=myTask&alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
         );
       }
     });
@@ -804,9 +862,21 @@ export default class HomePage extends PureComponent {
     const { myApprovedNum, myRejectedNum, myTerminatedNum } = perApprovalData[0];
     const count = myApprovedNum + myRejectedNum + myTerminatedNum;
     const ApprovalPersonalPie = [
-      { label: 'Approved', value: myApprovedNum, percent: myApprovedNum / count },
-      { label: 'Rejected', value: myRejectedNum, percent: myRejectedNum / count },
-      { label: 'Terminated', value: myTerminatedNum, percent: myTerminatedNum / count },
+      {
+        label: 'Approved',
+        value: myApprovedNum,
+        percent: Number((myApprovedNum / count).toFixed(4)),
+      },
+      {
+        label: 'Rejected',
+        value: myRejectedNum,
+        percent: Number((myRejectedNum / count).toFixed(4)),
+      },
+      {
+        label: 'Terminated',
+        value: myTerminatedNum,
+        percent: Number((myTerminatedNum / count).toFixed(4)),
+      },
     ];
     const approvalPersonalPieChart = new G2.Chart({
       container: 'ApprovalPersonalPie',
@@ -907,6 +977,10 @@ export default class HomePage extends PureComponent {
     submissionStatusPieChart.legend({
       position: 'top-center',
       marker: 'square',
+      label: {
+        color: '#464C51',
+        fontSize: 12,
+      },
     });
     submissionStatusPieChart
       .intervalStack()
@@ -969,6 +1043,7 @@ export default class HomePage extends PureComponent {
         });
       }
     });
+    this.setState({ submissionStatusPieChart });
   };
 
   // 渲染Submission Status柱图
@@ -1002,12 +1077,14 @@ export default class HomePage extends PureComponent {
       offsetY: -10,
       label: {
         color: '#464C51',
+        fontSize: 12,
       },
     });
     submissionStatusBarChart.axis('value', {
       position: 'left',
       label: {
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -1024,6 +1101,7 @@ export default class HomePage extends PureComponent {
       label: {
         offset: 12,
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -1035,7 +1113,7 @@ export default class HomePage extends PureComponent {
       .color('type', ['#F4374C', '#0D87D4'])
       .label('value', {
         textStyle: {
-          fill: '#464C51',
+          fill: '#7F91A4',
           fontSize: 12,
         },
         offset: 10,
@@ -1109,7 +1187,7 @@ export default class HomePage extends PureComponent {
       .label('percent', {
         useHtml: true,
         htmlTemplate: (val, item) =>
-          `<div style="white-space:nowrap;text-align: center;">(${item.point.label})</div><div>${item.point.value}(${val})</div>`,
+          `<div style="white-space:nowrap;text-align: center;font-size:12px;">(${item.point.label})</div><div style="font-size:12px;">${item.point.value}(${val})</div>`,
       })
       .tooltip('label*percent', (label, percent) => {
         const value = `${(percent * 100).toFixed(2)}%`;
@@ -1149,6 +1227,7 @@ export default class HomePage extends PureComponent {
         });
       }
     });
+    this.setState({ marketPieChart });
   };
 
   // 渲染market南丁格尔玫瑰图
@@ -1161,14 +1240,6 @@ export default class HomePage extends PureComponent {
         value: Number(item.count),
       });
     });
-    // const marketRose = [
-    //   { label: 'Current Trade Day', value: 30 },
-    //   { label: 'Last trade date', value: 79 },
-    //   { label: 'Last trade date2', value: 79 },
-    //   { label: 'Last trade date3', value: 2 },
-    //   { label: 'Last trade date4', value: 93 },
-    //   { label: 'Last trade date5', value: 15 },
-    // ];
     const marketRoseChart = new G2.Chart({
       container: 'marketRose',
       forceFit: true,
@@ -1193,17 +1264,6 @@ export default class HomePage extends PureComponent {
       .position('label*value')
       .color('label', ['#10416C', '#0D87D4']);
     marketRoseChart.render();
-    // marketRoseChart.on('interval:click', ev => {
-    //   const clickData = ev.data;
-    //   if (clickData) {
-    //     // eslint-disable-next-line no-underscore-dangle
-    //     const alertOwnerId = localStorage.getItem('loginName');
-    //     // eslint-disable-next-line no-underscore-dangle
-    //     const alertStatusDesc = clickData._origin.label;
-    //     router.push(`/homepage/Approval-Process-Center?alertOwnerId=
-    // ${alertOwnerId}&alertStatusDesc=${alertStatusDesc}`);
-    //   }
-    // });
     this.setState({ marketRoseChart });
   };
 
@@ -1244,6 +1304,7 @@ export default class HomePage extends PureComponent {
       position: 'top-center', // 设置图例的显示位置
       label: {
         color: '#464C51', // 图例的字体颜色
+        fontSize: 12,
       },
     });
     processingStageBarChart.scale('value', {
@@ -1257,6 +1318,7 @@ export default class HomePage extends PureComponent {
       position: 'right',
       label: {
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -1274,6 +1336,7 @@ export default class HomePage extends PureComponent {
       label: {
         offset: 2,
         color: '#464C51',
+        fontSize: 12,
       },
       line: {
         lineWidth: 0.5, // 设置线的宽度
@@ -1300,6 +1363,7 @@ export default class HomePage extends PureComponent {
         offset: 2,
       });
     processingStageBarChart.render();
+    this.setState({ processingStageBarChart });
   };
 
   render() {
@@ -1376,8 +1440,12 @@ export default class HomePage extends PureComponent {
       targetData,
       proStartDate,
       proEndDate,
+      startDate,
+      endDate,
+      submissionStatusPieChart,
+      marketPieChart,
+      processingStageBarChart,
     } = this.state;
-
     return (
       <div>
         <div className={styles.homepage}>
@@ -1445,15 +1513,27 @@ export default class HomePage extends PureComponent {
                             textActive === 'Today' ? styles.textActive : '',
                           )}
                           onClick={() => {
-                            const { startDate, endDate } = this.state;
                             this.setState(
                               {
                                 textActive: textActive === 'Today' ? '' : 'Today',
                               },
                               () => {
                                 const params = {};
-                                if (!startDate && !endDate && this.state.textActive === 'Today') {
+                                if (this.state.textActive === 'Today') {
                                   params.period = 1;
+                                }
+                                if (this.state.textActive === 'Today') {
+                                  const startDate1 = moment().format('YYYYMMDD');
+                                  const endDate1 = moment().format('YYYYMMDD');
+                                  this.setState({
+                                    startDate: startDate1,
+                                    endDate: endDate1,
+                                  });
+                                } else {
+                                  this.setState({
+                                    startDate: '',
+                                    endDate: '',
+                                  });
                                 }
                                 this.getAlertDataByDate(params);
                               },
@@ -1468,15 +1548,29 @@ export default class HomePage extends PureComponent {
                             textActive === 'Week' ? styles.textActive : '',
                           )}
                           onClick={() => {
-                            const { startDate, endDate } = this.state;
                             this.setState(
                               {
                                 textActive: textActive === 'Week' ? '' : 'Week',
                               },
                               () => {
                                 const params = {};
-                                if (!startDate && !endDate && this.state.textActive === 'Week') {
+                                if (this.state.textActive === 'Week') {
                                   params.period = 2;
+                                }
+                                if (this.state.textActive === 'Week') {
+                                  const startDate1 = moment(
+                                    new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
+                                  ).format('YYYYMMDD');
+                                  const endDate1 = moment().format('YYYYMMDD');
+                                  this.setState({
+                                    startDate: startDate1,
+                                    endDate: endDate1,
+                                  });
+                                } else {
+                                  this.setState({
+                                    startDate: '',
+                                    endDate: '',
+                                  });
                                 }
                                 this.getAlertDataByDate(params);
                               },
@@ -1488,28 +1582,45 @@ export default class HomePage extends PureComponent {
                         <RangePicker
                           style={{ width: 300 }}
                           format="DD-MMM-YYYY"
+                          value={
+                            startDate
+                              ? [moment(startDate, 'YYYYMMDD'), moment(endDate, 'YYYYMMDD')]
+                              : undefined
+                          }
                           onChange={dates => {
                             const params = {};
                             if (dates[0]) {
-                              const startDate = moment(dates[0]).format('YYYYMMDD');
-                              const endDate = moment(dates[1]).format('YYYYMMDD');
+                              const today = moment().format('YYYYMMDD');
+                              const lastWeekDay = moment(
+                                new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
+                              ).format('YYYYMMDD');
+                              const startDate1 = moment(dates[0]).format('YYYYMMDD');
+                              const endDate1 = moment(dates[1]).format('YYYYMMDD');
+                              if (startDate1 === today && endDate1 === today) {
+                                this.setState({
+                                  textActive: 'Today',
+                                });
+                              } else if (startDate1 === lastWeekDay && endDate1 === today) {
+                                this.setState({
+                                  textActive: 'Week',
+                                });
+                              } else {
+                                this.setState({
+                                  textActive: '',
+                                });
+                              }
                               this.setState({
-                                startDate,
-                                endDate,
+                                startDate: startDate1,
+                                endDate: endDate1,
                               });
-                              params.startDate = startDate;
-                              params.endDate = endDate;
+                              params.startDate = startDate1;
+                              params.endDate = endDate1;
                             } else {
                               this.setState({
                                 startDate: '',
                                 endDate: '',
+                                textActive: '',
                               });
-                              if (textActive === 'Today') {
-                                params.period = 1;
-                              }
-                              if (textActive === 'Week') {
-                                params.period = 2;
-                              }
                             }
                             this.getAlertDataByDate(params);
                           }}
@@ -1676,8 +1787,28 @@ export default class HomePage extends PureComponent {
                   {/* Pending tasks */}
                   <div className={styles.pendingTasks}>
                     <Tabs
-                      defaultActiveKey="1"
-                      tabBarExtraContent={<span className={styles.more}>More</span>}
+                      // defaultActiveKey="1"
+                      activeKey={this.state.activeKey}
+                      tabBarExtraContent={
+                        <span
+                          className={styles.more}
+                          onClick={() => {
+                            if (this.state.activeKey === '1') {
+                              router.push('/homepage/alert-center');
+                            }
+                            if (this.state.activeKey === '2') {
+                              router.push('/homepage/Approval-Process-Center');
+                            }
+                          }}
+                        >
+                          More
+                        </span>
+                      }
+                      onChange={activeKey => {
+                        this.setState({
+                          activeKey,
+                        });
+                      }}
                     >
                       {/* ALERT */}
                       <TabPane tab="Alert" key="1">
@@ -1690,13 +1821,16 @@ export default class HomePage extends PureComponent {
                                 <span
                                   title={item.alertDesc}
                                   className={styles.description}
-                                  style={{ maxWidth: 500 }}
+                                  onClick={() => {
+                                    router.push(`/homepage/alert-center?alertId=${item.alertId}`);
+                                  }}
                                 >
                                   {item.alertDesc}
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
-                                  {moment(item.updateTime).format(timestampFormat)}
+                                  {item.updateTime &&
+                                    moment(item.updateTime).format(timestampFormat)}
                                 </span>
                               </List.Item>
                             )}
@@ -1711,7 +1845,15 @@ export default class HomePage extends PureComponent {
                             dataSource={allTaskData}
                             renderItem={(item, index) => (
                               <List.Item>
-                                <span title={item.details} className={styles.description}>
+                                <span
+                                  title={item.details}
+                                  className={styles.description}
+                                  onClick={() => {
+                                    router.push(
+                                      `/homepage/Approval-Process-Center?taskCode=${item.taskCode}`,
+                                    );
+                                  }}
+                                >
                                   {item.details}
                                 </span>
                                 <span className={classNames(styles.user, styles[`color${index}`])}>
@@ -1888,13 +2030,18 @@ export default class HomePage extends PureComponent {
                               () => {
                                 const params = {};
                                 if (this.state.approvalTextActive === 'Today') {
-                                  const startDate = moment().format('YYYYMMDD');
-                                  const endDate = moment().format('YYYYMMDD');
-                                  params.startDate = startDate;
-                                  params.endDate = endDate;
+                                  const startDate1 = moment().format('YYYYMMDD');
+                                  const endDate1 = moment().format('YYYYMMDD');
+                                  params.startDate = startDate1;
+                                  params.endDate = endDate1;
                                   this.setState({
-                                    proStartDate: startDate,
-                                    proEndDate: endDate,
+                                    proStartDate: startDate1,
+                                    proEndDate: endDate1,
+                                  });
+                                } else {
+                                  this.setState({
+                                    proStartDate: '',
+                                    proEndDate: '',
                                   });
                                 }
                                 this.getApprovalData(params);
@@ -1917,15 +2064,20 @@ export default class HomePage extends PureComponent {
                               () => {
                                 const params = {};
                                 if (this.state.approvalTextActive === 'Week') {
-                                  const startDate = moment(
+                                  const startDate1 = moment(
                                     new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
                                   ).format('YYYYMMDD');
-                                  const endDate = moment().format('YYYYMMDD');
-                                  params.startDate = startDate;
-                                  params.endDate = endDate;
+                                  const endDate1 = moment().format('YYYYMMDD');
+                                  params.startDate = startDate1;
+                                  params.endDate = endDate1;
                                   this.setState({
-                                    proStartDate: startDate,
-                                    proEndDate: endDate,
+                                    proStartDate: startDate1,
+                                    proEndDate: endDate1,
+                                  });
+                                } else {
+                                  this.setState({
+                                    proStartDate: '',
+                                    proEndDate: '',
                                   });
                                 }
                                 this.getApprovalData(params);
@@ -1938,40 +2090,45 @@ export default class HomePage extends PureComponent {
                         <RangePicker
                           style={{ width: 300 }}
                           format="DD-MMM-YYYY"
+                          value={
+                            proStartDate
+                              ? [moment(proStartDate, 'YYYYMMDD'), moment(proEndDate, 'YYYYMMDD')]
+                              : undefined
+                          }
                           onChange={dates => {
                             const params = {};
                             if (dates[0]) {
-                              const startDate = moment(dates[0]).format('YYYYMMDD');
-                              const endDate = moment(dates[1]).format('YYYYMMDD');
+                              const today = moment().format('YYYYMMDD');
+                              const lastWeekDay = moment(
+                                new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
+                              ).format('YYYYMMDD');
+                              const startDate1 = moment(dates[0]).format('YYYYMMDD');
+                              const endDate1 = moment(dates[1]).format('YYYYMMDD');
+                              if (startDate1 === today && endDate1 === today) {
+                                this.setState({
+                                  approvalTextActive: 'Today',
+                                });
+                              } else if (startDate1 === lastWeekDay && endDate1 === today) {
+                                this.setState({
+                                  approvalTextActive: 'Week',
+                                });
+                              } else {
+                                this.setState({
+                                  approvalTextActive: '',
+                                });
+                              }
                               this.setState({
-                                proStartDate: startDate,
-                                proEndDate: endDate,
+                                proStartDate: startDate1,
+                                proEndDate: endDate1,
                               });
-                              params.startDate = startDate;
-                              params.endDate = endDate;
+                              params.startDate = startDate1;
+                              params.endDate = endDate1;
                             } else {
-                              if (approvalTextActive === 'Today') {
-                                const startDate = moment().format('YYYYMMDD');
-                                const endDate = moment().format('YYYYMMDD');
-                                params.startDate = startDate;
-                                params.endDate = endDate;
-                                this.setState({
-                                  proStartDate: startDate,
-                                  proEndDate: endDate,
-                                });
-                              }
-                              if (approvalTextActive === 'Week') {
-                                const startDate = moment(
-                                  new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
-                                ).format('YYYYMMDD');
-                                const endDate = moment().format('YYYYMMDD');
-                                params.startDate = startDate;
-                                params.endDate = endDate;
-                                this.setState({
-                                  proStartDate: startDate,
-                                  proEndDate: endDate,
-                                });
-                              }
+                              this.setState({
+                                proStartDate: '',
+                                proEndDate: '',
+                                approvalTextActive: '',
+                              });
                             }
                             this.getApprovalData(params);
                           }}
@@ -2205,8 +2362,28 @@ export default class HomePage extends PureComponent {
                   {/* Pending tasks */}
                   <div className={styles.pendingTasks}>
                     <Tabs
-                      defaultActiveKey="1"
-                      tabBarExtraContent={<span className={styles.more}>More</span>}
+                      // defaultActiveKey="1"
+                      activeKey={this.state.activeKey}
+                      tabBarExtraContent={
+                        <span
+                          className={styles.more}
+                          onClick={() => {
+                            if (this.state.activeKey === '1') {
+                              router.push('/homepage/alert-center');
+                            }
+                            if (this.state.activeKey === '2') {
+                              router.push('/homepage/Approval-Process-Center');
+                            }
+                          }}
+                        >
+                          More
+                        </span>
+                      }
+                      onChange={activeKey => {
+                        this.setState({
+                          activeKey,
+                        });
+                      }}
                     >
                       {/* ALERT */}
                       <TabPane tab="Alert" key="1">
@@ -2216,14 +2393,20 @@ export default class HomePage extends PureComponent {
                             dataSource={myAlertData}
                             renderItem={item => (
                               <List.Item>
-                                <span title={item.alertDesc} className={styles.description}>
+                                <span
+                                  title={item.alertDesc}
+                                  className={styles.description}
+                                  onClick={() => {
+                                    router.push(`/homepage/alert-center?alertId=${item.alertId}`);
+                                  }}
+                                >
                                   {item.alertDesc}
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
-                                  {moment(item.updateTime).format(timestampFormat)}
+                                  {item.updateTime &&
+                                    moment(item.updateTime).format(timestampFormat)}
                                 </span>
-                                <span className={classNames(styles.user, styles.yellow)}>TC</span>
                               </List.Item>
                             )}
                           />
@@ -2237,7 +2420,15 @@ export default class HomePage extends PureComponent {
                             dataSource={allTaskData}
                             renderItem={(item, index) => (
                               <List.Item>
-                                <span title={item.details} className={styles.description}>
+                                <span
+                                  title={item.details}
+                                  className={styles.description}
+                                  onClick={() => {
+                                    router.push(
+                                      `/homepage/Approval-Process-Center?taskCode=${item.taskCode}`,
+                                    );
+                                  }}
+                                >
                                   {item.details}
                                 </span>
                                 <span className={classNames(styles.user, styles[`color${index}`])}>
@@ -2341,18 +2532,38 @@ export default class HomePage extends PureComponent {
                   <div className={styles.submitStatus}>
                     <div style={{ flex: '1 1', minHeight: 250 }}>
                       <h3 className={styles.groupTitle}>Submission Status</h3>
-                      <div id="submissionStatusPie"></div>
-                      {currentTradeDate &&
-                        currentTradeDate[currentDate] === 0 &&
-                        lastTradeDate &&
-                        lastTradeDate[lastDate] === 0 && (
-                          <div className={styles.empty} style={{ height: 300 }}>
-                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                          </div>
-                        )}
+                      <div
+                        id="submissionStatusPie"
+                        style={{
+                          display:
+                            !currentTradeDate ||
+                            !lastTradeDate ||
+                            !currentDate ||
+                            !lastDate ||
+                            (currentTradeDate &&
+                              currentDate &&
+                              currentTradeDate[currentDate] === 0) ||
+                            (lastTradeDate && lastDate && lastTradeDate[lastDate] === 0)
+                              ? 'none'
+                              : 'block',
+                        }}
+                      ></div>
+                      {(!currentTradeDate ||
+                        !lastTradeDate ||
+                        !currentDate ||
+                        !lastDate ||
+                        (currentTradeDate && currentDate && currentTradeDate[currentDate] === 0) ||
+                        (lastTradeDate && lastDate && lastTradeDate[lastDate] === 0)) && (
+                        <div className={styles.empty} style={{ height: 300 }}>
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        </div>
+                      )}
                     </div>
                     <div style={{ flex: '1 1', minHeight: 250 }}>
-                      <div id="submissionStatusBar"></div>
+                      <div
+                        id="submissionStatusBar"
+                        style={{ display: !isRender ? 'none' : 'block' }}
+                      ></div>
                       {!isRender && (
                         <div className={styles.empty} style={{ height: 300 }}>
                           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
@@ -2380,7 +2591,12 @@ export default class HomePage extends PureComponent {
                       >
                         Number of reported LOP holders in SEHK and HKFE
                       </h3>
-                      <div id="marketPie"></div>
+                      <div
+                        id="marketPie"
+                        style={{
+                          display: !marketData[0] ? 'none' : 'block',
+                        }}
+                      ></div>
                       {!marketData[0] && (
                         <div className={styles.empty} style={{ height: 180 }}>
                           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
@@ -2388,7 +2604,12 @@ export default class HomePage extends PureComponent {
                       )}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div id="marketRose"></div>
+                      <div
+                        id="marketRose"
+                        style={{
+                          display: !marketDataByCategory[0] ? 'none' : 'block',
+                        }}
+                      ></div>
                       {!marketDataByCategory[0] && (
                         <div className={styles.empty} style={{ height: 200 }}>
                           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
@@ -2399,7 +2620,12 @@ export default class HomePage extends PureComponent {
                   {/* Processing Stage */}
                   <div className={styles.processingStage}>
                     <h3 className={styles.groupTitle}>Processing Stage</h3>
-                    <div id="processingStageBar"></div>
+                    <div
+                      id="processingStageBar"
+                      style={{
+                        display: !isRender1 ? 'none' : 'block',
+                      }}
+                    ></div>
                     {!isRender1 && (
                       <div className={styles.empty} style={{ height: 170 }}>
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />

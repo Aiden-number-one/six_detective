@@ -9,7 +9,7 @@ import NewAccountLogModal from './NewAccountLogModal';
 import NewAccountLogList from './NewAccountLogList';
 import styles from '../index.less';
 
-function NewAccountLog({ dispatch, loading, logs, page: current, total, parseFiles }) {
+function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   const [visible, setVisible] = useState(false);
   const [searchParams, setSearchParams] = useState({
     market: defaultMarket,
@@ -33,8 +33,8 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total, parseFil
     dispatch({ type: 'newAccount/fetch', payload: { page, pageSize, ...searchParams } });
   }
 
-  function handleFilesParse(fileList) {
-    dispatch({
+  async function handleFilesParse(fileList) {
+    return dispatch({
       type: 'newAccount/fetchParseFiles',
       payload: fileList,
     });
@@ -77,7 +77,6 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total, parseFil
         <NewAccountLogModal
           visible={visible}
           parseLoading={loading['newAccount/fetchParseFiles']}
-          parseFiles={parseFiles}
           onCancel={() => setVisible(false)}
           onUpload={handleUpload}
           onParseFiles={handleFilesParse}
@@ -103,10 +102,9 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total, parseFil
   );
 }
 
-export default connect(({ loading, newAccount: { logs, page, total, parseFiles } }) => ({
+export default connect(({ loading, newAccount: { logs, page, total } }) => ({
   loading: loading.effects,
   logs,
   page,
   total,
-  parseFiles,
 }))(NewAccountLog);
