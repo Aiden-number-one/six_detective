@@ -104,6 +104,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
 
   async function handleAddItem(pane) {
     const isEqual = item => item.TASK_ID === pane.TASK_ID;
+    setActiveKey(pane.TASK_ID.toString());
     if (panes.find(isEqual)) {
       // update item
       setPanes(panes.map(p => (isEqual(p) ? pane : p)));
@@ -125,7 +126,6 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
         }
       }
     }
-    setActiveKey(pane.TASK_ID.toString());
   }
 
   function handleRemoveItem(e, pane) {
@@ -250,7 +250,9 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
               </TabPane>
             ))}
         </Tabs>
-        {attachments.length > 0 && <AlertDownAttachments attachments={attachments} />}
+        {+alert.emailType === 111 && attachments.length > 0 && (
+          <AlertDownAttachments attachments={attachments} />
+        )}
       </Col>
       <Col span={8}>
         <Tabs defaultActiveKey="1" className={styles['detail-comment']}>

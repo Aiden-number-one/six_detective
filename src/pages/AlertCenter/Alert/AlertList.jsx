@@ -260,6 +260,7 @@ function AlertList({ dispatch, loading, alerts, total }) {
           <Column
             align="center"
             dataIndex="alertNo"
+            className="word-break"
             title={
               <ColumnTitle
                 isNum={false}

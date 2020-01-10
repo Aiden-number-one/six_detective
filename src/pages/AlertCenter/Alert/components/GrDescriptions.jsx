@@ -7,7 +7,7 @@ const renderItem = ({ children, label, colon, labelWidth = '20%', direction = 'r
       {label}
       {colon && <em>:</em>}
     </span>
-    <span>{children}</span>
+    <span style={{ flex: direction === 'row' ? 1 : 'auto' }}>{children}</span>
   </li>
 );
 

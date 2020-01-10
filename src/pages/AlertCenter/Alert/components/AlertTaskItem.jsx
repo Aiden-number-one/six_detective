@@ -117,7 +117,7 @@ export function NewAccountTaskItem({ task, taskItemHistorys, loading }) {
     CONFIRM_BI_NAME,
     CONFIRM_TO_CODE,
     CONFIRM_TO_NAME,
-    PREV_IS_REPORT_ANY_POSITION,
+    CONFIRM_IS_REPORT_ANY_POSITION,
     CONFIRM_IS_WATCH,
     REMARK,
   } = task;
@@ -191,7 +191,7 @@ export function NewAccountTaskItem({ task, taskItemHistorys, loading }) {
         <span>{CONFIRM_TO_NAME}</span>
       </GrDescriptions.Item>
       <GrDescriptions.Item label="Report Any Position *">
-        {PREV_IS_REPORT_ANY_POSITION}
+        {CONFIRM_IS_REPORT_ANY_POSITION}
       </GrDescriptions.Item>
       <GrDescriptions.Item label="Watch *">{CONFIRM_IS_WATCH}</GrDescriptions.Item>
       <GrDescriptions.Item label="Remark *">{REMARK}</GrDescriptions.Item>
