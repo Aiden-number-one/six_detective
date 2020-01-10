@@ -1711,13 +1711,13 @@ export default class HomePage extends PureComponent {
                             dataSource={allTaskData}
                             renderItem={(item, index) => (
                               <List.Item>
-                                <span title={item.classification} className={styles.description}>
-                                  {item.classification}
+                                <span title={item.details} className={styles.description}>
+                                  {item.details}
                                 </span>
                                 <span className={classNames(styles.user, styles[`color${index}`])}>
                                   {item.owner &&
                                     item.owner.match(/[A-Z]/g) &&
-                                    item.owner.match(/[A-Z]/g).join()}
+                                    item.owner.match(/[A-Z]/g).join('')}
                                 </span>
                                 <span className={styles.date}>
                                   {moment(item.updateDate).format(timestampFormat)}
@@ -2237,13 +2237,13 @@ export default class HomePage extends PureComponent {
                             dataSource={allTaskData}
                             renderItem={(item, index) => (
                               <List.Item>
-                                <span title={item.classification} className={styles.description}>
-                                  {item.classification}
+                                <span title={item.details} className={styles.description}>
+                                  {item.details}
                                 </span>
                                 <span className={classNames(styles.user, styles[`color${index}`])}>
                                   {item.owner &&
                                     item.owner.match(/[A-Z]/g) &&
-                                    item.owner.match(/[A-Z]/g).join()}
+                                    item.owner.match(/[A-Z]/g).join('')}
                                 </span>
                                 <span className={styles.date}>
                                   {moment(item.updateDate).format(timestampFormat)}
