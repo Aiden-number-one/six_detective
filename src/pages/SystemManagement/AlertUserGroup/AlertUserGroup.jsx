@@ -1,10 +1,16 @@
+/*
+ * @Description: This is auth for Alert User Group.
+ * @Author: dailinbo
+ * @Date: 2020-01-06 14:48:56
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 11:07:39
+ */
 import React, { Component } from 'react';
 import { Form, Table, Pagination, Button, Drawer, Modal } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
-// import { routerRedux } from 'dva/router';
 
 import styles from './AlertUserGroup.less';
 import SearchForm from './components/SearchForm';
@@ -79,11 +85,6 @@ class AlertUserGroup extends Component {
   }
 
   newUser = () => {
-    // this.props.dispatch(
-    //   routerRedux.push({
-    //     pathname: '/system-management/user-maintenance/new-menu-user',
-    //   }),
-    // );
     this.setState({
       modifyVisible: true,
       groupTitle: 'New Alert User Group',
@@ -142,12 +143,6 @@ class AlertUserGroup extends Component {
   };
 
   updateUser = (res, obj) => {
-    // this.props.dispatch(
-    //   routerRedux.push({
-    //     pathname: '/system-management/user-maintenance/modify-menu-user',
-    //     query: { groupId: obj.groupId },
-    //   }),
-    // );
     const groupMenuInfo = {
       groupId: obj.groupId,
       groupName: obj.groupName,
@@ -197,12 +192,6 @@ class AlertUserGroup extends Component {
   };
 
   queryLog = () => {
-    // const { dispatch } = this.props;
-    // const params = {};
-    // dispatch({
-    //   type: 'menuUserGroup/getAlertUserGroup',
-    //   payload: params,
-    // });
     this.searchForm.current.validateFields((err, values) => {
       if (err) {
         return;
@@ -241,7 +230,7 @@ class AlertUserGroup extends Component {
   };
 
   /**
-   * @description: This is for query user list function.
+   * @description: This is for query alert user list function.
    * @param {type} null
    * @return: undefined
    */
@@ -283,11 +272,6 @@ class AlertUserGroup extends Component {
       <PageHeaderWrapper>
         <NewSearchForm search={this.queryLog} ref={this.searchForm}></NewSearchForm>
         <Drawer
-          // drawerStyle={
-          //   {
-          //     height: '200px',
-          //   }
-          // }
           closable={false}
           title={groupTitle}
           width={700}
@@ -322,9 +306,6 @@ class AlertUserGroup extends Component {
           </div>
           <Table
             loading={loading['menuUserGroup/getAlertUserGroup']}
-            // pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
-            // rowSelection={rowSelection}
-            // onChange={this.pageChange}
             dataSource={menuUserGroup.items}
             columns={columns}
             pagination={false}

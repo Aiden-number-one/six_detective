@@ -1,3 +1,10 @@
+/*
+ * @Description: This is a page for DataProcessing.
+ * @Author: dailinbo
+ * @Date: 2020-01-09 16:45:10
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-10 11:00:34
+ */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import classnames from 'classnames';
@@ -221,6 +228,11 @@ export default class DataProcessing extends Component {
     // this.queryDataProcessing();
   }
 
+  /**
+   * @description: This is a function for Inspect Data.
+   * @param {type} null
+   * @return: undefined
+   */
   queryDataProcessing = () => {
     const { dispatch } = this.props;
     // const { page, codeName } = this.state;
@@ -315,6 +327,11 @@ export default class DataProcessing extends Component {
     });
   };
 
+  /**
+   * @description: This is function for get Market.
+   * @param {type} null
+   * @return: undefined
+   */
   getMarket = () => {
     const { dispatch } = this.props;
     const params = {
