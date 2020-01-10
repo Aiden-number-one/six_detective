@@ -2,14 +2,9 @@ import React from 'react';
 import { Table, Icon } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import moment from 'moment';
-import { dateFormat, timestampFormat, pageSizeOptions } from '../constants';
+import { dateFormat, timestampFormat, pageSizeOptions, channelMap } from '../constants';
 
 const { Column } = Table;
-
-const channelMap = {
-  A: 'Auto Import',
-  M: 'Manual Import',
-};
 
 const IconStatus = ({ type, color, des }) => (
   <Icon type={type} style={{ color, fontSize: 16 }} title={des} />
@@ -18,6 +13,7 @@ const IconStatus = ({ type, color, des }) => (
 export const statusMap = {
   1: ({ des }) => <IconStatus type="loading" color="#009cff" des={des} />,
   2: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
+  8: ({ des }) => <IconStatus type="exclamation-circle" color="#ffb81c" des={des} />,
   9: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
 };
 
@@ -57,27 +53,32 @@ export default function({
         render={text => moment(text).format(dateFormat)}
       />
       <Column
+        width={100}
         align="center"
         dataIndex="market"
         title={<FormattedMessage id="data-import.market" />}
       />
-      <Column dataIndex="fileType" title={<FormattedMessage id="data-import.market.file-type" />} />
+      <Column
+        width={100}
+        dataIndex="fileType"
+        title={<FormattedMessage id="data-import.file-type" />}
+      />
       <Column
         align="center"
         dataIndex="uploadDate"
-        title={<FormattedMessage id="data-import.market.upload-date" />}
+        title={<FormattedMessage id="data-import.submission-date" />}
         render={text => moment(text, 'YYYYMMDDhhmmss').format(timestampFormat)}
       />
       <Column
         align="center"
         dataIndex="uploadChannel"
-        title={<FormattedMessage id="data-import.market.upload-channel" />}
+        title={<FormattedMessage id="data-import.submission-channel" />}
         render={text => channelMap[text]}
       />
       <Column
         align="center"
         dataIndex="status"
-        title={<FormattedMessage id="data-import.market.status" />}
+        title={<FormattedMessage id="data-import.submission-status" />}
         render={(text, record) => {
           const des = record.statusMark;
           if ([1, 2, 9].includes(+text)) {
@@ -88,6 +89,7 @@ export default function({
         }}
       />
       <Column
+        ellipsis
         dataIndex="description"
         title={<FormattedMessage id="data-import.market.description" />}
       />

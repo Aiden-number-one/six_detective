@@ -22,19 +22,12 @@ export const TaskBtn = ({ task }) => {
   );
 };
 
-function AlertTask({
-  dispatch,
-  loading,
-  alertItems,
-  users,
-  taskColumns,
-  onTaskRow,
-  alert: { alertTypeId, alertId, itemsTotal },
-}) {
+function AlertTask({ dispatch, loading, alertItems, users, taskColumns, onTaskRow, alert }) {
   const [visible, setVisible] = useState(false);
   const [selectedTaskIds, setSelectedTaskIds] = useState([]);
 
   useEffect(() => {
+    const { alertTypeId, alertId, itemsTotal } = alert;
     // no items
     if (+itemsTotal !== 0) {
       dispatch({
@@ -45,7 +38,7 @@ function AlertTask({
         },
       });
     }
-  }, [alertTypeId, alertId, itemsTotal]);
+  }, [alert]);
 
   // default selected that just one task
   useEffect(() => {
@@ -70,8 +63,8 @@ function AlertTask({
       payload: {
         userId,
         taskIds: selectedTaskIds,
-        alertTypeId,
-        alertId,
+        alertTypeId: alert.alertTypeId,
+        alertId: alert.alertId,
       },
     });
     setVisible(false);

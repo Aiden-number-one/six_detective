@@ -49,14 +49,39 @@
   }
 }
 
-.account-error {
-  margin: 0 0 10px;
-  padding: 0;
-  color: #f4374c;
-  > li {
-    padding: 2px 0;
+.drawer-container {
+  .account-error {
+    margin-bottom: 10px;
+    color: #f4374c;
     > .icon {
       margin-right: 6px;
+    }
+  }
+  .tip {
+    height: 150px;
+    line-height: 150px;
+    text-align: center;
+  }
+}
+.account-error-container {
+  ul {
+    width: 400px;
+    max-height: 150px;
+    margin: 0;
+    padding: 6px;
+    overflow-y: auto;
+    > li:hover {
+      span {
+        color: #f4374c;
+      }
+    }
+  }
+  :global {
+    .ant-popover-arrow {
+      display: block;
+    }
+    .ant-popover-inner {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
   }
 }

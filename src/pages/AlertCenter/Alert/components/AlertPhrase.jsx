@@ -15,6 +15,7 @@ export default function({ postComment }) {
     <Popover
       visible={phraseVisible}
       onVisibleChange={v => setPhraseVisible(v)}
+      overlayClassName={styles['phases-container']}
       placement="topRight"
       trigger="click"
       content={
@@ -27,7 +28,11 @@ export default function({ postComment }) {
         </ul>
       }
     >
-      <Button type="primary" onClick={() => setPhraseVisible(true)}>
+      <Button
+        type="primary"
+        onClick={() => setPhraseVisible(true)}
+        className={styles['phrase-btn']}
+      >
         <FormattedMessage id="alert-center.phrases" />
       </Button>
     </Popover>

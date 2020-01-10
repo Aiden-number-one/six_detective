@@ -2,7 +2,7 @@
  * @Description: app global config
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2020-01-07 21:41:45
+ * @LastEditTime : 2020-01-08 15:34:34
  * @LastEditors  : mus
  * @Description: umi 配置文件
  */
@@ -168,6 +168,7 @@ export default {
       // target: 'http://10.60.62.60:7567/superlop/restv2/admin/', // 季旋
       target: 'http://10.201.62.184:7567/superlop/restv2/admin/', // 线上
       // target: 'http://10.60.69.113:7567/superlop/restv2/admin/', // 测试
+      // target: 'http://10.60.62.2:7567/superlop/restv2/admin/', // 李庆
       // target: 'http://10.60.62.46:7567/superlop/restv2/admin/', // 线上
       // target: 'http://10.60.69.42:9092/bct-api-admin/', // Mock数据
       changeOrigin: true,

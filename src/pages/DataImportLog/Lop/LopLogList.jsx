@@ -53,7 +53,7 @@ export default function({
       }}
       expandedRowRender={record => (
         <Descriptions column={3}>
-          <Descriptions.Item label={<FormattedMessage id="data-import.lop.submission-channel" />}>
+          <Descriptions.Item label={<FormattedMessage id="data-import.submission-channel" />}>
             {submissionChannelMap[record.submissionChannel]}
           </Descriptions.Item>
           <Descriptions.Item label={<FormattedMessage id="data-import.lop.late-submission" />}>
@@ -61,9 +61,6 @@ export default function({
           </Descriptions.Item>
           <Descriptions.Item label={<FormattedMessage id="data-import.lop.latest-version" />}>
             {record.latestVersion}
-          </Descriptions.Item>
-          <Descriptions.Item label={<FormattedMessage id="data-import.lop.submission-channel" />}>
-            {record.submissionChannel}
           </Descriptions.Item>
           <Descriptions.Item label={submissionReport}>{record.submissionReport}</Descriptions.Item>
         </Descriptions>
@@ -82,7 +79,7 @@ export default function({
       />
       <Column
         dataIndex="submitterName"
-        title={<FormattedMessage id="data-import.lop.submitter-name" />}
+        title={<FormattedMessage id="data-import.submitter-name" />}
       />
       <Column
         align="center"
