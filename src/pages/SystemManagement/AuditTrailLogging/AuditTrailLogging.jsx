@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 15:21:53
+ * @LastEditTime : 2020-01-10 15:49:19
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -37,7 +37,7 @@ class AuditTrailLogging extends Component {
     functionName: undefined,
     updatedBy: undefined,
     exportDataVisible: false,
-    exportType: null,
+    exportType: 1,
     functionNameOptions: [
       { key: '', value: '', title: 'All' },
       { key: '1', value: '1', title: 'Name One' },
@@ -383,11 +383,16 @@ class AuditTrailLogging extends Component {
     a.href = url;
     a.download = true;
     a.click();
+    this.setState({
+      exportDataVisible: false,
+      exportType: 1,
+    });
   };
 
   exportDataCancel = () => {
     this.setState({
       exportDataVisible: false,
+      exportType: 1,
     });
   };
 
@@ -478,6 +483,7 @@ class AuditTrailLogging extends Component {
       options,
       checkedValues,
       tempColumns,
+      exportType,
     } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
@@ -503,7 +509,7 @@ class AuditTrailLogging extends Component {
             dataSource={getAuditLogList}
             pagination={false}
             columns={this.state.columns}
-            rowKey={Math.random().toString()}
+            rowKey={row => row.logId}
             scroll={{ x: this.state.columns.length > 5 ? document.body.clientWidth : false }}
           />
           {getAuditLogList && getAuditLogList.length > 0 && (
@@ -550,7 +556,11 @@ class AuditTrailLogging extends Component {
           okText={formatMessage({ id: 'app.common.save' })}
         >
           <div>
-            <Radio.Group onChange={this.onChangeExport}>
+            <Radio.Group
+              onChange={this.onChangeExport}
+              defaultValue={exportType}
+              value={exportType}
+            >
               <Radio value={1}>xlsx</Radio>
               {/* <Radio value={2}>docx</Radio> */}
               <Radio value={3}>pdf</Radio>
