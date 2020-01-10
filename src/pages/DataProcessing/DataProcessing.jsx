@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 12:29:33
+ * @LastEditTime : 2020-01-10 12:34:27
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -328,6 +328,11 @@ export default class DataProcessing extends Component {
     );
   };
 
+  /**
+   * @description: This is function for Inspect Data.
+   * @param {type} null
+   * @return: undefiend
+   */
   inspectData = () => {
     this.queryDataProcessing();
   };
@@ -395,6 +400,11 @@ export default class DataProcessing extends Component {
     });
   };
 
+  /**
+   * @description: Thsi is function for start Data Processing
+   * @param {type} null
+   * @return: undefined
+   */
   startProcessing = () => {
     const { dataProcessingData } = this.props;
     const isClosedIntraday = dataProcessingData.items.some(
@@ -467,7 +477,12 @@ export default class DataProcessing extends Component {
     });
   };
 
-  goClertCenter = () => {
+  /**
+   * @description: This is function for go Alert Center.
+   * @param {type} null
+   * @return: undefined
+   */
+  goAlertCenter = () => {
     const { dataProcessingItemData } = this.props;
     const alertIds = dataProcessingItemData.items.map(element => element.alertId);
     router.push({ pathname: '/homepage/alert-center', query: { alertIds: alertIds.join(',') } });
@@ -633,7 +648,7 @@ export default class DataProcessing extends Component {
                       type="primary"
                       className="btn-usual"
                       style={{ height: '36px' }}
-                      onClick={this.goClertCenter}
+                      onClick={this.goAlertCenter}
                     >
                       Enter Alert Center
                     </Button>
