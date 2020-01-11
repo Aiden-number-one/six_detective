@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 14:47:16
+ * @LastEditTime : 2020-01-11 20:17:48
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -17,6 +17,7 @@ import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
 import { getAuthority } from '@/utils/authority';
 import { getStore } from '@/utils/store';
+import { chartStatusFormat } from '@/utils/filter';
 
 const { Option } = Select;
 
@@ -26,6 +27,8 @@ const { Option } = Select;
   dataProcessingItemData: dataProcessing.itemData,
   startProcessingData: dataProcessing.startProcessingData,
   marketData: dataProcessing.marketData,
+  chartData: dataProcessing.chartData,
+  statusData: dataProcessing.statusData,
 }))
 export default class DataProcessing extends Component {
   constructor() {
@@ -160,42 +163,51 @@ export default class DataProcessing extends Component {
       },
       dataCharts: [
         {
+          title: 'ecpRecords',
           year: 'Records Received from ECP',
-          sales: 38,
+          sales: '',
         },
         {
+          title: 'importRecords',
           year: 'Records Imported by user',
-          sales: 52,
+          sales: '',
         },
         {
+          title: 'eliminatedRecords',
           year: 'TO Records Eliminated',
-          sales: 61,
+          sales: '',
         },
         {
+          title: 'eliminatedTotal',
           year: 'Duplicated Records Eliminated',
-          sales: 145,
+          sales: '',
         },
         {
+          title: 'lateRecords',
           year: 'Late Submission',
-          sales: 48,
+          sales: '',
         },
         {
+          title: 'adjustmentRecords',
           year: 'Adjustment of Stock Options Records for Format Conversion',
-          sales: 38,
+          sales: '',
         },
       ],
       cols: {
         sales: {
-          tickInterval: 20,
+          // tickInterval: 20,
           alias: 'processing',
         },
       },
+      dataStatus: null,
     };
   }
 
   componentDidMount() {
     console.log('getAuthority===', getAuthority());
     this.getMarket();
+    this.getChartData();
+    this.getStatusData();
     this.setState({
       authBypass: getAuthority().authBypass,
     });
@@ -446,6 +458,10 @@ export default class DataProcessing extends Component {
         dataAlertVisible: true,
       });
     } else {
+      this.setState({
+        dataProcessingVisible: true,
+        dataProcessingFlag: true,
+      });
       const { dispatch } = this.props;
       const { market, selectedMarket } = this.state;
       const params = {
@@ -459,11 +475,10 @@ export default class DataProcessing extends Component {
         payload: params,
         callback: () => {
           console.log('startProcessingData===', this.props.startProcessingData);
+          this.setState({
+            dataProcessingFlag: false,
+          });
         },
-      });
-      this.setState({
-        dataProcessingVisible: true,
-        dataProcessingFlag: true,
       });
     }
   };
@@ -522,6 +537,69 @@ export default class DataProcessing extends Component {
     router.push({ pathname: '/homepage/alert-center', query: { alertIds: alertIds.join(',') } });
   };
 
+  /**
+   * @description: This is a function for get Chart Data.
+   * @param {type} null
+   * @return: undefined
+   */
+  getChartData = () => {
+    const { dispatch } = this.props;
+    // dataCharts
+    const params = {};
+    dispatch({
+      type: 'dataProcessing/getProgressChart',
+      payload: params,
+      callback: () => {
+        const { chartData } = this.props;
+        const { dataCharts } = this.state;
+        const newChartData = chartData[0];
+        const newDataCharts = Object.assign([], dataCharts);
+        console.log('newChartData===', newChartData);
+        Object.keys(newChartData).forEach(element => {
+          newDataCharts.forEach((item, index) => {
+            if (item.title === `${element}`) {
+              newDataCharts[index].sales = newChartData[`${element}`];
+            }
+          });
+        });
+        // eslint-disable-next-line no-restricted-syntax
+        // for (const key in newChartData) {
+        //   newDataCharts.forEach((element, index) => {
+        //     if (element.title === key) {
+        //       newDataCharts[index].sales = newChartData[key];
+        //     }
+        //   });
+        // }
+        console.log('newDataCharts===================', newDataCharts);
+        this.setState({
+          dataCharts: newDataCharts,
+        });
+        console.log('chartData===', this.props.chartData);
+      },
+    });
+  };
+
+  getStatusData = () => {
+    const { dispatch } = this.props;
+    const params = {};
+    dispatch({
+      type: 'dataProcessing/getProgressStatus',
+      payload: params,
+      callback: () => {
+        console.log('statusData===', this.props.statusData);
+        console.log('this.props.statusData[0].status==', this.props.statusData[0].status);
+        this.setState(
+          {
+            dataStatus: this.props.statusData[0].status,
+          },
+          () => {
+            console.log('dataStatus=', this.state.dataStatus);
+          },
+        );
+      },
+    });
+  };
+
   render() {
     const { loading, dataProcessingData, dataProcessingItemData } = this.props;
     const {
@@ -542,6 +620,7 @@ export default class DataProcessing extends Component {
       alertBypassStatus,
       isBypass,
       selectedMarket,
+      dataStatus,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -733,16 +812,26 @@ export default class DataProcessing extends Component {
                     <div>
                       <Progress percent={50} status="active" />
                       <p style={{ textAlign: 'left' }}>
-                        Processed：<span>1234</span> records
+                        {/* Processed：<span>1234</span> records */}
+                        Processing...
                       </p>
-                      <p style={{ textAlign: 'left' }}>
+                      {/* <p style={{ textAlign: 'left' }}>
                         Pending to process：<span>1234</span> records
-                      </p>
+                      </p> */}
                     </div>
                   ) : (
                     <span></span>
                   )}
                 </Col>
+                {!dataProcessingFlag && (
+                  <Col>
+                    {dataStatus !== '1' ? (
+                      <span>{dataStatus && chartStatusFormat(dataStatus)}</span>
+                    ) : (
+                      <div className={styles['data-processing']}></div>
+                    )}
+                  </Col>
+                )}
               </Row>
               <Chart className={styles.chart} height={400} data={dataCharts} scale={cols} forceFit>
                 <span>The last time of data processing is at 10:55 on 12/12/2019</span>

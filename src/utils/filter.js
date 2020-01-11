@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-13 16:47:20
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-30 15:22:41
+ * @LastEditTime : 2020-01-11 19:01:28
  */
 import moment from 'moment';
 import { formatTimeString } from '@/utils/utils';
@@ -32,6 +32,16 @@ const templateTypeFormat = value => {
   return payWayMap[value] || 'stateless';
 };
 
+const chartStatusFormat = value => {
+  const payWayMap = {
+    0: 'unprocessed',
+    1: 'processing',
+    2: 'processed',
+    9: 'abnormity',
+  };
+  return payWayMap[value] || 'stateless';
+};
+
 const lockedFormat = value => (value === 'L' ? 'Y' : 'N');
 
 const timeFormat = time => {
@@ -40,4 +50,4 @@ const timeFormat = time => {
   return `${moment(strArr[0]).format('DD-MMM-YYYY')} ${strArr[1]}`;
 };
 
-export { userStatus, templateTypeFormat, timeFormat, lockedFormat };
+export { userStatus, templateTypeFormat, timeFormat, lockedFormat, chartStatusFormat };
