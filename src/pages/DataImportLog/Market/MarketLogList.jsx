@@ -11,6 +11,7 @@ const IconStatus = ({ type, color, des }) => (
 );
 
 export const statusMap = {
+  0: ({ des }) => <IconStatus type="clock-circle" des={des} />,
   1: ({ des }) => <IconStatus type="loading" color="#009cff" des={des} />,
   2: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
   8: ({ des }) => <IconStatus type="exclamation-circle" color="#ffb81c" des={des} />,
@@ -81,7 +82,7 @@ export default function({
         title={<FormattedMessage id="data-import.submission-status" />}
         render={(text, record) => {
           const des = record.statusMark;
-          if ([1, 2, 8, 9].includes(+text)) {
+          if ([0, 1, 2, 8, 9].includes(+text)) {
             const Status = statusMap[+text];
             return <Status des={des} />;
           }

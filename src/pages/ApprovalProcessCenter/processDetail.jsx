@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Row, Col, Input, Button, Drawer, Radio, Upload, Empty, Spin } from 'antd';
 import { connect } from 'dva';
+import moment from 'moment';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
 import styles from './index.less';
@@ -241,9 +242,6 @@ function ProcessDetail({
   // 撤销
   function setTaskWithdraw() {
     // console.log('comment----', comment);
-    // if (!comment) {
-    //   throw new Error('Comment cannot be empty when you withdraw');
-    // }
     dispatch({
       type: 'approvalCenter/setTaskWithdraw',
       payload: {
@@ -307,16 +305,32 @@ function ProcessDetail({
               weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
             };
           } else {
+            const effectiveDate = values.effectiveDate
+              ? moment(values.effectiveDate).format('YYYYMMDD')
+              : '';
+            const expiryDate = values.expiryDate
+              ? moment(values.expiryDate).format('YYYYMMDD')
+              : '';
             valueData = {
               isCaCode: values.isCaCode,
               remark: values.remark,
+              effectiveDate,
+              expiryDate,
             };
           }
         } else if (alertTypeValue === '303') {
           if (values.isCaCode === 'Yes') {
+            const effectiveDate = values.effectiveDate
+              ? moment(values.effectiveDate).format('YYYYMMDD')
+              : '';
+            const expiryDate = values.expiryDate
+              ? moment(values.expiryDate).format('YYYYMMDD')
+              : '';
             valueData = {
               isCaCode: values.isCaCode,
               remark: values.remark,
+              effectiveDate,
+              expiryDate,
             };
           } else {
             valueData = {
@@ -353,7 +367,7 @@ function ProcessDetail({
         }
 
         Object.assign(taskValue, valueData);
-        // console.log('Received values of form: ', values, valueData, taskValue);
+        console.log('Received values of form: ', values, valueData, taskValue);
       }
     });
     if (isErr) {

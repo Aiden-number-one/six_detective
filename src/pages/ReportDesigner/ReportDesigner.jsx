@@ -3,8 +3,8 @@
  * @Author: liangchaoshun
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
- * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-09 11:26:18
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-10 14:54:46
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -37,6 +37,7 @@ const formularSet = [
   cellPosition: reportDesigner.cellPosition,
   loading:
     loading.effects['privateDataSetEdit/getField'] ||
+    loading.effects['reportDesigner/importExcel'] ||
     loading.effects['reportDesigner/packageTemplate'],
 }))
 @SpreadSheet.createSpreadSheet
@@ -137,7 +138,11 @@ export default class ReportDesigner extends PureComponent {
     // eslint-disable-next-line no-underscore-dangle
     const { datasetName, fieldDataName } = dragInfo;
     // 设置当前单元格为数据集类型且设置其值
-    setCellTypeAndValue('dataSet', `${datasetName}.${fieldDataName}`, getCellStringByIndex(ri, ci));
+    setCellTypeAndValue({
+      type: 'dataSet',
+      value: `${datasetName}.${fieldDataName}`,
+      cellPosition: getCellStringByIndex(ri, ci),
+    });
     dispatch({
       type: 'reportDesigner/modifyTemplateArea',
       payload: {
@@ -255,7 +260,7 @@ export default class ReportDesigner extends PureComponent {
       // console.log('fmlConfirm -> ', refineFmlValue, cellPosition, fmlFormatErr);
       if (!fmlFormatErr) {
         this.showOrHideFormulaModal(false);
-        setCellTypeAndValue('formula', refineFmlValue, cellPosition);
+        setCellTypeAndValue({ type: 'formula', value: refineFmlValue, cellPosition });
         this.setState({ formularValue: '', formularSearchValue: '' });
       }
     });

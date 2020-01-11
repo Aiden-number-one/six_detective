@@ -23,6 +23,10 @@ function TabBtn({ changeTab, selectedCurrentTask }) {
   return (
     <Row className={styles.tabBtnBox}>
       <Col span={24}>
+        <div className={styles['page-name']}>
+          <IconFont type="icon-approval-process-title" className={styles.icon} />
+          <span>Approval process</span>
+        </div>
         <Radio.Group
           key={selectedCurrentTask}
           defaultValue={selectedCurrentTask}

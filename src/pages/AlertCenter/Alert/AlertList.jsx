@@ -204,10 +204,13 @@ function AlertList({ dispatch, loading, alerts, total }) {
           loading={loading['alertCenter/claim']}
           disabled={!selectedRows.length}
           claimAlerts={() => claimAlerts()}
-          closeAlerts={() => showCloseModal()}
-          onDiscontinue={() => {
+          closeAlerts={() => {
+            setDiscontinue(false);
             showCloseModal();
+          }}
+          onDiscontinue={() => {
             setDiscontinue(true);
+            showCloseModal();
           }}
         />
         <ClaimModal
@@ -260,6 +263,7 @@ function AlertList({ dispatch, loading, alerts, total }) {
           <Column
             align="center"
             dataIndex="alertNo"
+            className="word-break"
             title={
               <ColumnTitle
                 isNum={false}

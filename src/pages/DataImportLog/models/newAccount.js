@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-07 10:19:40
+ * @LastEditTime : 2020-01-10 20:26:12
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -57,7 +57,7 @@ export default {
   state: {
     logs: [],
     total: 0,
-    parseFiles: [],
+    // parseFiles: [],
   },
   reducers: {
     save(state, { payload }) {
@@ -69,12 +69,12 @@ export default {
         total,
       };
     },
-    saveParseFiles(state, { payload }) {
-      return {
-        ...state,
-        parseFiles: payload.parseFiles,
-      };
-    },
+    // saveParseFiles(state, { payload }) {
+    //   return {
+    //     ...state,
+    //     parseFiles: payload.parseFiles,
+    //   };
+    // },
   },
   effects: {
     *fetch({ payload = {} }, { call, put }) {
@@ -98,12 +98,13 @@ export default {
       if (err) {
         throw new Error(err);
       }
-      yield put({
-        type: 'saveParseFiles',
-        payload: {
-          parseFiles: items,
-        },
-      });
+      return items;
+      // yield put({
+      //   type: 'saveParseFiles',
+      //   payload: {
+      //     parseFiles: items,
+      //   },
+      // });
     },
     *importByManual({ payload }, { call }) {
       const { file, market, submitterCode, category } = payload;
