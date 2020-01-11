@@ -99,6 +99,7 @@ export default class HomePage extends PureComponent {
       payload: {
         pageNumber: 1,
         pageSize: 4,
+        dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
       },
     });
     // 获取ALL Task表格数据
@@ -282,7 +283,9 @@ export default class HomePage extends PureComponent {
     // 获取All processing alert total
     dispatch({
       type: 'allAlert/getAllProcessingAlertCount',
-      payload: {},
+      payload: {
+        ...params,
+      },
     });
     // 获取个人 Alert Claim total
     dispatch({
@@ -317,27 +320,9 @@ export default class HomePage extends PureComponent {
         ...params,
       },
       callback: data => {
-        if (data[0]) {
-          const AlterAll = [];
-          data.forEach(item => {
-            AlterAll.push({
-              label: item.userName, // 纵坐标
-              type: 'CLAIMED', // 分类
-              value: item.claimedCount, // 已认领数
-            });
-          });
-          data.forEach(item => {
-            AlterAll.push({
-              label: item.userName, // 纵坐标
-              type: 'PROCESSING', // 分类
-              value: item.processingCount, // 处理中数
-            });
-          });
-          if (this.state.alterAllChart) {
-            this.state.alterAllChart.changeData(AlterAll);
-          }
-        } else if (this.state.alterAllChart) {
-          this.state.alterAllChart.changeData([]);
+        if (this.state.alterAllChart) {
+          this.state.alterAllChart.clear();
+          this.renderAlterAllChart(data);
         }
       },
     });
@@ -490,94 +475,147 @@ export default class HomePage extends PureComponent {
   renderAlterAllChart = data => {
     const { startDate, endDate } = this.state;
     // Alter ALL 的条形图
-    const AlterAll = [];
-    data.forEach(item => {
-      AlterAll.push({
-        label: item.userName, // 纵坐标
-        type: 'Claimed', // 分类
-        value: item.claimedCount, // 已认领数
+    let alterAllChart;
+    if (this.state.alterAllChart) {
+      // eslint-disable-next-line prefer-destructuring
+      alterAllChart = this.state.alterAllChart;
+    } else {
+      alterAllChart = new G2.Chart({
+        container: 'AlterAll', // div ID
+        forceFit: true, // 是否自适应宽度
+        height: 250, // 画布高度
+        padding: [20, 120, 20, 100], // 上下左右的padding
       });
-    });
-    data.forEach(item => {
-      AlterAll.push({
-        label: item.userName, // 纵坐标
-        type: 'Processing', // 分类
-        value: item.processingCount, // 处理中数
+    }
+
+    let AlterAll = [];
+    if (data[0]) {
+      data.forEach(item => {
+        AlterAll.push({
+          label: item.userName, // 纵坐标
+          type: 'Claimed', // 分类
+          value: item.claimedCount, // 已认领数
+        });
       });
-    });
-    const alterAllChart = new G2.Chart({
-      container: 'AlterAll', // div ID
-      forceFit: true, // 是否自适应宽度
-      height: 250, // 画布高度
-      padding: [20, 120, 20, 100], // 上下左右的padding
-    });
-    alterAllChart.source(AlterAll);
-    alterAllChart.legend({
-      position: 'right-top', // 设置图例的显示位置
-      itemGap: 20, // 图例项之间的间距
-      offsetX: 20,
-      label: {
-        color: '#464C51', // 图例的字体颜色
-        fontSize: 12,
-      },
-      marker: 'square',
-    });
-    // 柱图value坐标
-    alterAllChart.axis('value', {
-      position: 'right',
-      label: {
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-      grid: {
-        lineStyle: {
-          stroke: '#D4DDE3',
-          lineWidth: 0.5,
-          lineDash: [0],
-        },
-      },
-    });
-    alterAllChart.axis('label', {
-      label: {
-        offset: 12,
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-    });
-    // 将柱图转为条形图
-    alterAllChart
-      .coord()
-      .transpose()
-      .scale(1, -1);
-    alterAllChart
-      .interval()
-      .position('label*value')
-      .color('type', ['#F4374C', '#0D87D4'])
-      .label('value', {
-        textStyle: {
-          fill: '#7F91A4',
+      data.forEach(item => {
+        AlterAll.push({
+          label: item.userName, // 纵坐标
+          type: 'Processing', // 分类
+          value: item.processingCount, // 处理中数
+        });
+      });
+      alterAllChart.source(AlterAll);
+      alterAllChart.legend({
+        position: 'top-center', // 设置图例的显示位置
+        label: {
+          color: '#464C51', // 图例的字体颜色
           fontSize: 12,
         },
-        offset: 2,
-      })
-      // eslint-disable-next-line consistent-return
-      .size('', () => {
-        if (AlterAll.length / 2 < 6) {
-          return 15;
-        }
-      })
-      .adjust([
-        {
-          type: 'dodge',
-          marginRatio: 0,
+        marker: 'square',
+      });
+      // 柱图value坐标
+      alterAllChart.axis('value', {
+        position: 'right',
+        label: {
+          color: '#464C51',
+          fontSize: 12,
         },
-      ]);
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+        grid: {
+          lineStyle: {
+            stroke: '#D4DDE3',
+            lineWidth: 0.5,
+            lineDash: [0],
+          },
+        },
+      });
+      alterAllChart.axis('label', {
+        label: {
+          offset: 12,
+          color: '#464C51',
+          fontSize: 12,
+        },
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+      });
+      // 将柱图转为条形图
+      alterAllChart
+        .coord()
+        .transpose()
+        .scale(1, -1);
+      alterAllChart
+        .interval()
+        .position('label*value')
+        .color('type', ['#F4374C', '#0D87D4'])
+        .label('value', {
+          textStyle: {
+            fill: '#7F91A4',
+            fontSize: 12,
+          },
+          offset: 2,
+        })
+        // eslint-disable-next-line consistent-return
+        .size('', () => {
+          if (AlterAll.length / 2 < 5) {
+            return 15;
+          }
+        })
+        .adjust([
+          {
+            type: 'dodge',
+            marginRatio: 0,
+          },
+        ]);
+    } else {
+      AlterAll = [
+        { label: 'Thomas.', type: 'Claimed', value: 2800 },
+        { label: 'Thomas.', type: 'Processing', value: 2260 },
+        { label: 'Alan.', type: 'Claimed', value: 1800 },
+        { label: 'Alan.', type: 'Processing', value: 1300 },
+        { label: 'Alex.', type: 'Claimed', value: 950 },
+        { label: 'Alex.', type: 'Processing', value: 900 },
+      ];
+      alterAllChart.source(AlterAll);
+      alterAllChart.legend(false);
+      alterAllChart.axis('value', {
+        position: 'right',
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+        grid: false,
+      });
+      alterAllChart.axis('label', {
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+      });
+      // 将柱图转为条形图
+      alterAllChart
+        .coord()
+        .transpose()
+        .scale(1, -1);
+      alterAllChart
+        .interval()
+        .position('label*value')
+        .color('type', ['#F4374C', '#0D87D4'])
+        // eslint-disable-next-line consistent-return
+        .size('', () => {
+          if (AlterAll.length / 2 < 5) {
+            return 15;
+          }
+        })
+        .adjust([
+          {
+            type: 'dodge',
+            marginRatio: 0,
+          },
+        ]);
+    }
     alterAllChart.render();
     alterAllChart.on('interval:click', ev => {
       // alertOwnerId
@@ -1524,15 +1562,14 @@ export default class HomePage extends PureComponent {
                               () => {
                                 const params = {};
                                 if (this.state.textActive === 'Today') {
-                                  params.period = 1;
-                                }
-                                if (this.state.textActive === 'Today') {
                                   const startDate1 = moment().format('YYYYMMDD');
                                   const endDate1 = moment().format('YYYYMMDD');
                                   this.setState({
                                     startDate: startDate1,
                                     endDate: endDate1,
                                   });
+                                  params.startDate = startDate1;
+                                  params.endDate = endDate1;
                                 } else {
                                   this.setState({
                                     startDate: '',
@@ -1559,9 +1596,6 @@ export default class HomePage extends PureComponent {
                               () => {
                                 const params = {};
                                 if (this.state.textActive === 'Week') {
-                                  params.period = 2;
-                                }
-                                if (this.state.textActive === 'Week') {
                                   const startDate1 = moment(
                                     new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
                                   ).format('YYYYMMDD');
@@ -1570,6 +1604,8 @@ export default class HomePage extends PureComponent {
                                     startDate: startDate1,
                                     endDate: endDate1,
                                   });
+                                  params.startDate = startDate1;
+                                  params.endDate = endDate1;
                                 } else {
                                   this.setState({
                                     startDate: '',
@@ -1584,7 +1620,7 @@ export default class HomePage extends PureComponent {
                           This Week
                         </span>
                         <RangePicker
-                          style={{ width: 300 }}
+                          style={{ width: 250 }}
                           format="DD-MMM-YYYY"
                           value={
                             startDate
@@ -1691,15 +1727,20 @@ export default class HomePage extends PureComponent {
                             </div>
                           </div>
                         </div>
-                        {!allAlterData[0] && (
-                          <div className={styles.empty} style={{ height: 250 }}>
-                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                          </div>
-                        )}
-                        <div
-                          id="AlterAll"
-                          style={{ display: !allAlterData[0] ? 'none' : 'block' }}
-                        ></div>
+                        <div style={{ position: 'relative', height: 250 }}>
+                          {!allAlterData[0] && (
+                            <div
+                              style={{
+                                width: '100%',
+                                height: 250,
+                                position: 'absolute',
+                                zIndex: 1,
+                                background: 'hsla(0,0%,100%,.7)',
+                              }}
+                            ></div>
+                          )}
+                          <div id="AlterAll"></div>
+                        </div>
                       </>
                     )}
                     {/* ALTER PERSONAL */}
@@ -1833,8 +1874,7 @@ export default class HomePage extends PureComponent {
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
-                                  {item.updateTime &&
-                                    moment(item.updateTime).format(timestampFormat)}
+                                  {item.alertTime && moment(item.alertTime).format(timestampFormat)}
                                 </span>
                               </List.Item>
                             )}
@@ -1866,7 +1906,8 @@ export default class HomePage extends PureComponent {
                                     item.owner.match(/[A-Z]/g).join('')}
                                 </span>
                                 <span className={styles.date}>
-                                  {moment(item.updateDate).format(timestampFormat)}
+                                  {item.updateDate &&
+                                    moment(item.updateDate).format(timestampFormat)}
                                 </span>
                               </List.Item>
                             )}
@@ -2092,7 +2133,7 @@ export default class HomePage extends PureComponent {
                           This Week
                         </span>
                         <RangePicker
-                          style={{ width: 300 }}
+                          style={{ width: 250 }}
                           format="DD-MMM-YYYY"
                           value={
                             proStartDate
@@ -2408,8 +2449,7 @@ export default class HomePage extends PureComponent {
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
-                                  {item.updateTime &&
-                                    moment(item.updateTime).format(timestampFormat)}
+                                  {item.alertTime && moment(item.alertTime).format(timestampFormat)}
                                 </span>
                               </List.Item>
                             )}
@@ -2441,7 +2481,8 @@ export default class HomePage extends PureComponent {
                                     item.owner.match(/[A-Z]/g).join('')}
                                 </span>
                                 <span className={styles.date}>
-                                  {moment(item.updateDate).format(timestampFormat)}
+                                  {item.updateDate &&
+                                    moment(item.updateDate).format(timestampFormat)}
                                 </span>
                               </List.Item>
                             )}

@@ -2,13 +2,13 @@
  * @Description: all alert data
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-10 14:28:04
+ * @LastEditTime : 2020-01-11 17:16:30
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
 
 const {
-  getMyAlert, // 获取my alert data
+  getInformation, // 获取my alert data
   getAlertCount, // 获取个人警告数
   getPerProcessingAlertCount, // 个人处理中的alert数
   // getClosedAlertCount, // 个人已关闭alert数
@@ -29,7 +29,7 @@ export default {
   effects: {
     // 获取my alert的数据
     *getMyAlert({ payload }, { call, put }) {
-      const response = yield call(getMyAlert, { param: payload });
+      const response = yield call(getInformation, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'saveMyAlert',
