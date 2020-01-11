@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 20:02:44
+ * @LastEditTime : 2020-01-11 10:34:48
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -247,7 +247,6 @@ export default class DataProcessing extends Component {
           element => element.bypassStatus === '0',
         );
         if (alertBypassStatus.length <= 0 || !isBypass || !authBypass) {
-          console.log('111');
           const { tempColumns } = this.state;
           const newColumns = Object.assign([], columns);
           let newTempColumns = Object.assign([], tempColumns);
@@ -265,7 +264,6 @@ export default class DataProcessing extends Component {
             tempColumns: newTempColumns,
           });
         } else {
-          console.log('222');
           const { tempColumns } = this.state;
           let activeIndex = -1;
           for (let i = 0; i < columns.length; i += 1) {
@@ -405,25 +403,18 @@ export default class DataProcessing extends Component {
   };
 
   onChangeMarkt = (value, key) => {
-    console.log('value===', value);
     const { marketData } = this.props;
     let markets = [];
     if (value === '0') {
-      console.log('marketData===', marketData);
       marketData.forEach(element => markets.push(element.dictdataValue));
       markets = markets.join(',');
     } else {
       markets = value;
     }
-    this.setState(
-      {
-        market: markets,
-        selectedMarket: value,
-      },
-      () => {
-        console.log('market==, selectedMarket===', this.state.market, value);
-      },
-    );
+    this.setState({
+      market: markets,
+      selectedMarket: value,
+    });
   };
 
   /**
@@ -447,7 +438,6 @@ export default class DataProcessing extends Component {
     } else {
       const { dispatch } = this.props;
       const { market, selectedMarket } = this.state;
-      console.log('market, selectedMarket===', market, selectedMarket);
       const params = {
         // user_id: getStore('userInfo').employeeId,
         // market,
@@ -708,7 +698,7 @@ export default class DataProcessing extends Component {
             <div className={styles.dataProcessing}>
               <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
                 <Col>
-                  <span>Market</span>
+                  <span style={{ marginRight: '5px' }}>Market</span>
                   <Select
                     placeholder="Please Select"
                     allowClear
