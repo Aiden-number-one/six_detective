@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 14:47:16
+ * @LastEditTime : 2020-01-11 21:58:13
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import classnames from 'classnames';
-import Antd, { Row, Col, Button, Table, Select, Modal, Progress, Checkbox } from 'antd';
+import Antd, { Row, Col, Button, Table, Select, Modal, Progress, Checkbox, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
@@ -17,6 +17,9 @@ import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
 import { getAuthority } from '@/utils/authority';
 import { getStore } from '@/utils/store';
+// import { chartStatusFormat } from '@/utils/filter';
+import { formatTimeString } from '@/utils/utils';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -26,6 +29,9 @@ const { Option } = Select;
   dataProcessingItemData: dataProcessing.itemData,
   startProcessingData: dataProcessing.startProcessingData,
   marketData: dataProcessing.marketData,
+  chartData: dataProcessing.chartData,
+  statusData: dataProcessing.statusData,
+  barData: dataProcessing.barData,
 }))
 export default class DataProcessing extends Component {
   constructor() {
@@ -160,35 +166,47 @@ export default class DataProcessing extends Component {
       },
       dataCharts: [
         {
+          title: 'ecpRecords',
           year: 'Records Received from ECP',
-          sales: 38,
+          sales: '',
         },
         {
+          title: 'importRecords',
           year: 'Records Imported by user',
-          sales: 52,
+          sales: '',
         },
         {
+          title: 'eliminatedRecords',
           year: 'TO Records Eliminated',
-          sales: 61,
+          sales: '',
         },
         {
+          title: 'eliminatedTotal',
           year: 'Duplicated Records Eliminated',
-          sales: 145,
+          sales: '',
         },
         {
+          title: 'lateRecords',
           year: 'Late Submission',
-          sales: 48,
+          sales: '',
         },
         {
+          title: 'adjustmentRecords',
           year: 'Adjustment of Stock Options Records for Format Conversion',
-          sales: 38,
+          sales: '',
         },
       ],
       cols: {
         sales: {
-          tickInterval: 20,
+          // tickInterval: 20,
           alias: 'processing',
         },
+      },
+      dataStatus: null,
+      processingBar: 0,
+      processedDate: {
+        t1: '',
+        t2: '',
       },
     };
   }
@@ -196,6 +214,8 @@ export default class DataProcessing extends Component {
   componentDidMount() {
     console.log('getAuthority===', getAuthority());
     this.getMarket();
+    this.getChartData();
+    this.getStatusData();
     this.setState({
       authBypass: getAuthority().authBypass,
     });
@@ -432,39 +452,73 @@ export default class DataProcessing extends Component {
    * @param {type} null
    * @return: undefined
    */
-  startProcessing = () => {
-    const { dataProcessingData } = this.props;
-    const isClosedIntraday =
-      dataProcessingData.items &&
-      dataProcessingData.items.some(element => element.isClosedIntraday === '1');
-    const intradays =
-      dataProcessingData.items &&
-      dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
-    if (isClosedIntraday) {
-      this.setState({
-        intradays,
-        dataAlertVisible: true,
-      });
-    } else {
-      const { dispatch } = this.props;
-      const { market, selectedMarket } = this.state;
-      const params = {
-        // user_id: getStore('userInfo').employeeId,
-        // market,
-        operType: 'startProcess',
-        market,
-      };
-      dispatch({
-        type: 'dataProcessing/startProcessing',
-        payload: params,
-        callback: () => {
-          console.log('startProcessingData===', this.props.startProcessingData);
-        },
-      });
-      this.setState({
-        dataProcessingVisible: true,
-        dataProcessingFlag: true,
-      });
+  startProcessing = async () => {
+    try {
+      await this.getStatusData();
+      const { dataProcessingData } = this.props;
+      const { dataStatus } = this.state;
+      if (dataStatus === '1') {
+        message.warning('There are other users processing');
+        return;
+      }
+      const isClosedIntraday =
+        dataProcessingData.items &&
+        dataProcessingData.items.some(element => element.isClosedIntraday === '1');
+      const intradays =
+        dataProcessingData.items &&
+        dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
+      if (isClosedIntraday) {
+        this.setState({
+          intradays,
+          dataAlertVisible: true,
+        });
+      } else {
+        this.setState({
+          dataProcessingVisible: true,
+          dataProcessingFlag: true,
+        });
+        const { dispatch } = this.props;
+        const { market, selectedMarket } = this.state;
+        const params = {
+          // user_id: getStore('userInfo').employeeId,
+          // market,
+          operType: 'startProcess',
+          market,
+        };
+        this.setInterval = setInterval(() => {
+          const { processingBar } = this.state;
+          console.log('processingBar===', processingBar);
+          this.getProcessing();
+          if (processingBar === 100) {
+            clearInterval(this.setInterval);
+            this.setState(
+              {
+                dataProcessingFlag: false,
+              },
+              () => {
+                this.setState({
+                  processingBar: 0,
+                });
+              },
+            );
+          }
+        }, 200);
+        setTimeout(() => {
+          dispatch({
+            type: 'dataProcessing/startProcessing',
+            payload: params,
+            callback: () => {
+              console.log('startProcessingData===', this.props.startProcessingData);
+              this.getChartData();
+              this.setState({
+                dataProcessingFlag: false,
+              });
+            },
+          });
+        }, 1000);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -522,6 +576,92 @@ export default class DataProcessing extends Component {
     router.push({ pathname: '/homepage/alert-center', query: { alertIds: alertIds.join(',') } });
   };
 
+  /**
+   * @description: This is a function for get Chart Data.
+   * @param {type} null
+   * @return: undefined
+   */
+  getChartData = () => {
+    const { dispatch } = this.props;
+    // dataCharts
+    const params = {};
+    dispatch({
+      type: 'dataProcessing/getProgressChart',
+      payload: params,
+      callback: () => {
+        const { chartData } = this.props;
+        const { dataCharts } = this.state;
+        const newChartData = chartData[0];
+        const newDataCharts = Object.assign([], dataCharts);
+        console.log('newChartData===', newChartData);
+        Object.keys(newChartData).forEach(element => {
+          newDataCharts.forEach((item, index) => {
+            if (item.title === `${element}`) {
+              newDataCharts[index].sales = newChartData[`${element}`];
+            }
+          });
+        });
+        // eslint-disable-next-line no-restricted-syntax
+        // for (const key in newChartData) {
+        //   newDataCharts.forEach((element, index) => {
+        //     if (element.title === key) {
+        //       newDataCharts[index].sales = newChartData[key];
+        //     }
+        //   });
+        // }
+        console.log('newDataCharts===================', newDataCharts);
+        this.setState({
+          dataCharts: newDataCharts,
+        });
+        console.log('chartData===', this.props.chartData);
+      },
+    });
+  };
+
+  getStatusData = () => {
+    const { dispatch } = this.props;
+    const params = {};
+    dispatch({
+      type: 'dataProcessing/getProgressStatus',
+      payload: params,
+      callback: () => {
+        const processedTime = formatTimeString(this.props.statusData[0].time);
+        const objTime = {};
+        const t1 = processedTime.split(' ')[0];
+        const t2 = processedTime.split(' ')[1];
+        objTime.t1 = moment(t1).format('DD/MMM/YYYY');
+        objTime.t2 = t2;
+        console.log('objTime====', objTime);
+        this.setState(
+          {
+            dataStatus: this.props.statusData[0].status,
+            processedDate: objTime,
+          },
+          () => {
+            console.log('dataStatus=', this.state.dataStatus);
+          },
+        );
+      },
+    });
+  };
+
+  getProcessing = () => {
+    const { dispatch } = this.props;
+    const params = {};
+    dispatch({
+      type: 'dataProcessing/getProgressBar',
+      payload: params,
+      callback: () => {
+        const { barData } = this.props;
+        console.log('barData===', this.props.barData[0]);
+        const barDataStr = barData[0].returnMap;
+        this.setState({
+          processingBar: Number(barDataStr.split('%')[0]),
+        });
+      },
+    });
+  };
+
   render() {
     const { loading, dataProcessingData, dataProcessingItemData } = this.props;
     const {
@@ -542,6 +682,9 @@ export default class DataProcessing extends Component {
       alertBypassStatus,
       isBypass,
       selectedMarket,
+      dataStatus,
+      processingBar,
+      processedDate,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -724,28 +867,48 @@ export default class DataProcessing extends Component {
                   </Select>
                 </Col>
                 <Col>
-                  <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
+                  <Button
+                    type="primary"
+                    className="btn-usual"
+                    onClick={this.startProcessing}
+                    disabled={!inspectDataVisible}
+                  >
                     Start Processing
                   </Button>
                 </Col>
                 <Col>
                   {dataProcessingFlag ? (
                     <div>
-                      <Progress percent={50} status="active" />
-                      <p style={{ textAlign: 'left' }}>
-                        Processed：<span>1234</span> records
-                      </p>
-                      <p style={{ textAlign: 'left' }}>
+                      <Progress
+                        percent={processingBar}
+                        successPercent={processingBar}
+                        // strokeWidth={150}
+                        style={{ width: '300px' }}
+                      />
+                      {/* <p style={{ textAlign: 'left' }}>
+                      </p> */}
+                      {/* <p style={{ textAlign: 'left' }}>
                         Pending to process：<span>1234</span> records
-                      </p>
+                      </p> */}
                     </div>
                   ) : (
                     <span></span>
                   )}
                 </Col>
+                {/* {!dataProcessingFlag && (
+                  <Col>
+                    {dataStatus !== '1' ? (
+                      <span>{dataStatus && chartStatusFormat(dataStatus)}</span>
+                    ) : (
+                      <div className={styles['data-processing']}></div>
+                    )}
+                  </Col>
+                )} */}
               </Row>
               <Chart className={styles.chart} height={400} data={dataCharts} scale={cols} forceFit>
-                <span>The last time of data processing is at 10:55 on 12/12/2019</span>
+                <span>
+                  The last time of data processing is at {processedDate.t2} on {processedDate.t1}
+                </span>
                 <Axis name="year" />
                 <Axis name="sales" line={{ stroke: '#d9d9d9' }} position="left" />
                 <Tooltip

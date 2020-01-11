@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { connect } from 'dva';
 
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { flatteningTree, formatTree } from '@/utils/utils';
 // import IconFont from '@/components/IconFont';
 
 import styles from './QuickMenu.less';
@@ -201,6 +202,9 @@ export default class QuickMenu extends PureComponent {
     const { targetKeys, targetData } = this.state;
 
     let menuSource = _.cloneDeep(menuData);
+    menuSource = flatteningTree(menuSource);
+    menuSource = menuSource.filter(item => !item.menuid.includes('btn'));
+    menuSource = formatTree(menuSource, 'menuid', 'parentmenuid');
     menuSource = this.TreeFolderTrans(menuSource);
 
     // 树扁平化

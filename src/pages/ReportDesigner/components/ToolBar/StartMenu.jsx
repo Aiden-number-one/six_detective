@@ -65,6 +65,11 @@ class ToolBar extends Component {
       key: 'dateyyyy-MM-dd',
       value: 'dateyyyy-MM-dd',
     },
+    {
+      label: 'currency￥',
+      key: 'currency￥',
+      value: 'currency￥',
+    },
     /* {
       label: '日期时间',
       key: 'datetimeyyyy-MM-dd hh:mm:ss',
@@ -79,11 +84,6 @@ class ToolBar extends Component {
       label: '货币($)',
       key: 'currency$',
       value: 'currency$',
-    },
-    {
-      label: '货币(￥)',
-      key: 'currency￥',
-      value: 'currency￥',
     },
     {
       label: '千分比',
@@ -102,21 +102,32 @@ class ToolBar extends Component {
       cellType: 'date',
       format: 'yyyy-MM-dd',
       type: 'date',
+      label: 'date',
     },
     text: {
       cellType: 'text',
+      label: 'text',
     },
     numeric: {
       cellType: 'numeric',
       format: '123',
+      label: 'numeric',
     },
     percentage: {
       cellType: 'numeric',
       format: '0.00%',
       scale: '2',
       type: 'percentage',
+      label: 'percentage',
     },
-    'datetimeyyyy-MM-dd hh:mm:ss': {
+    'currency￥': {
+      cellType: 'numeric',
+      format: '￥0,0.00',
+      scale: '2',
+      type: 'currency',
+      label: 'currency￥',
+    },
+    /* 'datetimeyyyy-MM-dd hh:mm:ss': {
       cellType: 'datetime',
       format: 'yyyy-MM-dd hh:mm:ss',
       type: 'datetime',
@@ -146,7 +157,7 @@ class ToolBar extends Component {
     },
     checkbox: {
       cellType: 'checkbox',
-    },
+    }, */
   };
 
   componentDidMount() {
@@ -394,6 +405,7 @@ class ToolBar extends Component {
       overflow: 'hidden',
       whiteSpace: 'nowrap',
     };
+    // console.log('state -> cellType: ', cellType);
     return (
       <>
         <div className={classNames(styles.tabs, 'card-container')}>
@@ -880,13 +892,15 @@ class ToolBar extends Component {
                     style={{ width: '139px' }}
                     defaultValue="1"
                     suffixIcon={<Icon type="caret-down" />}
-                    value={cellType.format ? cellType.format : undefined}
+                    // value={cellType.format ? cellType.format : undefined}
+                    value={
+                      // eslint-disable-next-line no-nested-ternary
+                      cellType.type ? cellType.type : cellType.label ? cellType.label : undefined
+                    }
                     size="small"
                     onChange={value => {
                       this.setState({
-                        cellType: {
-                          format: value,
-                        },
+                        cellType: { label: value },
                       });
                       setCellType('cellType', this.cellTypeMap[value]);
                     }}

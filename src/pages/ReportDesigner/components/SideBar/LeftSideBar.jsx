@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { Icon, Tree } from 'antd';
 import { DragSource } from 'react-dnd';
 import { FormattedMessage } from 'umi/locale';
+import isEqual from 'lodash/isEqual';
 import IconFont from '@/components/IconFont';
 import DropSelect from '../DropSelect';
 import styles from './index.less';
@@ -18,11 +19,8 @@ const { TreeNode } = Tree;
 }))
 export default class LeftSideBar extends PureComponent {
   state = {
-    selectedKeys: [
-      'eb9cf630-302f-11ea-8208-e139d3d1e1b8ACCOUNT_TYPE',
-      'eb9cf630-302f-11ea-8208-e139d3d1e1b8PRODUCT_CODE',
-      'eb9cf630-302f-11ea-8208-e139d3d1e1b8DATA_ROW',
-    ], // 选中的树节点
+    dragInfoSet: new Set(), // 选中树节点，暂存节点信息
+    selectedKeySet: new Set(), // 选中树节点的 key
   };
 
   componentDidMount() {
@@ -52,18 +50,18 @@ export default class LeftSideBar extends PureComponent {
 
   // 渲染树结构
   generateTree = treeData => {
+    const { dragInfoSet, selectedKeySet } = this.state;
     const { displayDraw, displayDeletePrivate } = this.props;
-    // console.log('treeData: ', treeData);
     return treeData.map(item => {
       if (item.children && item.children.length) {
         return (
           <TreeNode
             key={item.key}
+            selectable={item.isLeaf}
             title={
               <WrapperTitle
                 title={item.title}
                 isLeaf={item.isLeaf} // 是否是叶子节点
-                selectable={item.isLeaf}
                 isParent={item.otherInfo}
                 displayDraw={() => {
                   displayDraw(item);
@@ -79,14 +77,17 @@ export default class LeftSideBar extends PureComponent {
         );
       }
       return (
+        // 叶子节点
         <TreeNode
           key={item.key}
+          selectable={item.isLeaf}
+          className={selectedKeySet.has(item.key) ? styles['selected-node'] : ''} // 是否选中
           title={
             <WrapperTitle
               title={item.title} // title
               isLeaf={item.isLeaf} // 是否是叶子节点
-              selectable={item.isLeaf}
               dragInfo={item.dragInfo}
+              dragInfos={dragInfoSet}
             />
           }
         />
@@ -99,23 +100,54 @@ export default class LeftSideBar extends PureComponent {
   //   // const { dispatch } = this.props;
   // };
 
+  // 选择树节点
   selectTreeNode = (keys, ev) => {
-    const { selectedKeys } = this.state;
+    const { dragInfoSet, selectedKeySet } = this.state;
+    const nodeKey = keys[0]; // 当前的 key
     const {
-      nativeEvent: { ctrlKey, metaKey, target, currentTarget },
-    } = ev;
-    console.log('Trigger Select', keys, ev, `${ev.keyCode}`, target, currentTarget);
-    let newKeys = [];
+      nativeEvent: { ctrlKey, metaKey },
+      node: {
+        props: {
+          title: {
+            props: { dragInfo },
+          },
+        },
+      },
+    } = ev; // 保存节点的 key，高亮选中的节点
+    const newDragInfoSet = new Set([...dragInfoSet]); // 将选中的数据集信息存放在 state 中
+    const newSelectedKeySet = new Set([...selectedKeySet]); // 保存选中节点的 key ，用以高亮渲染选中的节点
+
     if (ctrlKey || metaKey) {
-      newKeys = [...selectedKeys, ...keys];
+      if (newDragInfoSet.size > 0) {
+        let isExist = false; // 是否已存在
+        // eslint-disable-next-line no-restricted-syntax
+        for (const item of newDragInfoSet) {
+          if (isEqual(item, dragInfo)) {
+            isExist = true;
+            newDragInfoSet.delete(item); // 删掉
+            newSelectedKeySet.delete(nodeKey); // 删除 key
+          }
+        }
+        if (!isExist) {
+          newDragInfoSet.add(dragInfo);
+          newSelectedKeySet.add(nodeKey);
+        }
+      } else {
+        newDragInfoSet.add(dragInfo);
+        newSelectedKeySet.add(nodeKey);
+      }
+      // 保存
+      this.setState({
+        dragInfoSet: newDragInfoSet,
+        selectedKeySet: newSelectedKeySet,
+      });
     } else {
-      newKeys = keys;
+      // 保存
+      this.setState({
+        selectedKeySet: new Set([nodeKey]),
+        dragInfoSet: new Set([dragInfo]),
+      });
     }
-    this.setState({ selectedKeys: newKeys }, () => {
-      setTimeout(() => {
-        console.log('after -> ', this.state.selectedKeys);
-      }, 500);
-    });
   };
 
   render() {
@@ -237,14 +269,17 @@ function Title({ title, isLeaf, displayDraw, connectDragSource, isParent, delete
 }
 
 const sourceSpec = {
-  beginDrag(
-    props,
-    // monitor,
-    // component
-  ) {
-    return {
-      dragInfo: props.dragInfo,
-    };
+  beginDrag(props /*  ,monitor, component */) {
+    const { dragInfo: singleInfo, dragInfos: multiInfo } = props;
+    let terminalInfo = new Set([singleInfo]);
+    if (multiInfo.size) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const item of multiInfo) {
+        if (isEqual(item, singleInfo)) terminalInfo = multiInfo;
+      }
+    }
+
+    return { dragInfo: terminalInfo };
   },
   // endDrag(props) {
   //   // props可包含 ConnList的所有
