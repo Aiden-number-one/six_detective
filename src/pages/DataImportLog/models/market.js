@@ -4,20 +4,27 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2019-12-27 19:45:28
+ * @LastEditTime : 2020-01-11 11:13:48
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-import { reqFormat as format } from '../constants';
+import { reqFormat as format, defaultPage, defaultPageSize } from '../constants';
 
 export async function getLogs(params = {}) {
-  const { page = 1, pageSize = 10, market, startDate, endDate, fileType } = params;
+  const {
+    page = defaultPage,
+    pageSize = defaultPageSize,
+    market,
+    startDate,
+    endDate,
+    fileType,
+  } = params;
   return request('get_md_proc_progress', {
     data: {
+      fileType,
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
       market: market && market.toString(),
-      fileType,
       tradeDateSt: startDate && startDate.format(format),
       tradeDateEt: endDate && endDate.format(format),
     },
@@ -38,23 +45,33 @@ export default {
   namespace: 'market',
   state: {
     logs: [],
-    page: 1,
+    page: defaultPage,
+    pageSize: defaultPageSize,
     total: 0,
   },
   reducers: {
     save(state, { payload }) {
-      const { logs, page = 1, total } = payload;
+      const { logs, page, pageSize, total } = payload;
       return {
         ...state,
         logs,
         page,
+        pageSize,
         total,
       };
     },
   },
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const { items, totalCount, err } = yield call(getLogs, payload);
+    *fetch({ payload }, { call, put, select }) {
+      const { page, pageSize: ps, ...rest } = payload;
+
+      const pageSize = yield select(({ market }) => ps || market.pageSize);
+
+      const { items, totalCount, err } = yield call(getLogs, {
+        page,
+        pageSize,
+        ...rest,
+      });
 
       if (err) {
         throw new Error(err);
