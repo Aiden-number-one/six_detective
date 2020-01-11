@@ -1,36 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
-import { Row, Col, Select, Input, Checkbox, Empty, Spin } from 'antd';
+import { Row, Col, Select, Input, Checkbox, Empty, Spin, Typography } from 'antd';
 import IconFont from '@/components/IconFont';
 import styles from './index.less';
 
 const { Option } = Select;
 const { Search } = Input;
+const { Text } = Typography;
 
-// const CONDITIONS = [
-//   { id: 1, name: 'EQUAL' },
-//   { id: 2, name: 'NOT EQUAL' },
-//   { id: 3, name: 'GREATER THAN' },
-//   { id: 4, name: 'GREATER THAN OR EQUAL' },
-//   { id: 5, name: 'LESS THAN' },
-//   { id: 6, name: 'LESS THAN OR EQUAL' },
-//   { id: 7, name: 'CONTAIN' },
-// ];
-
-const TextConditions = [
-  { id: 1, name: 'CONTAIN' },
-  { id: 2, name: 'EQUAL' },
-  { id: 3, name: 'NOT EQUAL' },
-];
-
-const NumConditions = [
+const types = [
   { id: 1, name: 'EQUAL' },
   { id: 2, name: 'NOT EQUAL' },
   { id: 3, name: 'GREATER THAN' },
   { id: 4, name: 'GREATER THAN OR EQUAL' },
   { id: 5, name: 'LESS THAN' },
   { id: 6, name: 'LESS THAN OR EQUAL' },
+  { id: 7, name: 'CONTAIN' },
 ];
+
+const textTypes = types.filter(({ id }) => id === 7 || id === 1 || id === 2);
+const numTypes = types.filter(({ id }) => id !== 7);
 
 export function FilterHeader({ disabled, onSort, onClear }) {
   return (
@@ -52,39 +41,27 @@ export function FilterHeader({ disabled, onSort, onClear }) {
   );
 }
 
-export function FilterType({ isNum, onChange }) {
+export function FilterType({ isNum, type, onChange }) {
+  const curTypes = isNum ? numTypes : textTypes;
+  const curType = curTypes.find(({ id }) => id === type);
+
   return (
     <div className={styles['filter-type']}>
-      {isNum ? (
-        <>
-          <span>NUM</span>
-          <Select ellipsis className={styles.type} onChange={val => onChange(val)}>
-            {NumConditions.map(({ id, name }) => (
-              <Option value={id} key={id}>
-                {name}
-              </Option>
-            ))}
-          </Select>
-        </>
-      ) : (
-        <>
-          <span>TEXT</span>
-          <Select ellipsis className={styles.type} onChange={val => onChange(val)}>
-            {TextConditions.map(({ id, name }) => (
-              <Option value={id} key={id}>
-                {name}
-              </Option>
-            ))}
-          </Select>
-        </>
-      )}
+      <span>{isNum ? 'NUM' : 'TEXT'}</span>
+      <Select ellipsis className={styles.type} value={curType.name} onChange={val => onChange(val)}>
+        {curTypes.map(({ id, name }) => (
+          <Option value={id} key={id}>
+            {name}
+          </Option>
+        ))}
+      </Select>
     </div>
   );
 }
 
 // type = [greater / less than] equal
-export function FilterSelect({ filterList, curColumn, conditions, onSelect }) {
-  const [curOption, setCurOption] = useState('');
+export function FilterSelect({ filterList, curColumn, conditions, onChange }) {
+  const [curOption, setCurOption] = useState(undefined);
   useEffect(() => {
     const curFilters = conditions.find(item => item.column === curColumn);
     if (curFilters) {
@@ -92,16 +69,12 @@ export function FilterSelect({ filterList, curColumn, conditions, onSelect }) {
       setCurOption(l.find(item => item === curOption));
     } else {
       // reset
-      setCurOption('');
+      setCurOption(undefined);
     }
   }, [filterList, curColumn, conditions]);
 
-  function onSearch(val) {
-    console.log('search:', val);
-  }
-
-  function onChange(value) {
-    onSelect(value);
+  function handleChange(value) {
+    onChange(value);
     setCurOption(value);
   }
 
@@ -111,12 +84,11 @@ export function FilterSelect({ filterList, curColumn, conditions, onSelect }) {
       <Select
         showSearch
         allowClear
-        placeholder="Select a item"
+        placeholder="please select a item"
         className={styles.select}
         optionFilterProp="children"
         value={curOption}
-        onChange={onChange}
-        onSearch={onSearch}
+        onChange={handleChange}
         filterOption={(input, option) =>
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
@@ -198,9 +170,11 @@ export function FilterCheckbox({ loading, filterList, onCheckedList, curColumn, 
               onChange={handleChange}
             >
               {searchList.map(item => (
-                <Row key={item}>
-                  <Checkbox value={item}>{item}</Checkbox>
-                </Row>
+                <Checkbox value={item} key={item} className="checkbox-item">
+                  <Text ellipsis title={item}>
+                    {item}
+                  </Text>
+                </Checkbox>
               ))}
             </Checkbox.Group>
           </div>

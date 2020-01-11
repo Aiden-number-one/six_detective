@@ -23,6 +23,7 @@ function ColumnTitle({
   const [visible, setVisible] = useState(false);
   const [filterType, setFilterType] = useState(defaultFilterType);
   const [checkedList, setCheckedList] = useState(filterItems);
+  const [selectedItem, setSelectedItem] = useState(''); // filterType == 1/3/4/5/6
 
   function handleVisibleChange(v) {
     setVisible(v);
@@ -38,6 +39,15 @@ function ColumnTitle({
     }
   }
 
+  function handleCheckList(val) {
+    setCheckedList(val);
+    setSelectedItem('');
+  }
+  function handleSelect(val) {
+    setSelectedItem(val);
+    setCheckedList([val]);
+  }
+
   async function handleClear() {
     await onCommit(curColumn);
     setCheckedList(filterItems);
@@ -46,14 +56,16 @@ function ColumnTitle({
   }
 
   async function handleSort(sort) {
-    await onSort(conditions, sort);
+    await onSort(curColumn, sort);
     setVisible(false);
   }
 
   async function handleOk() {
+    const isCheckbox = filterType === 2 || filterType === 7;
+    const value = isCheckbox ? checkedList : [selectedItem];
     const condition = {
       column: curColumn,
-      value: checkedList.toString(),
+      value: value.toString(),
       condition: filterType.toString(),
     };
     let updatedConditions = conditions;
@@ -73,8 +85,6 @@ function ColumnTitle({
     await onCommit(curColumn, updatedConditions);
     setVisible(false);
   }
-
-  function handleSelect() {}
 
   return (
     <Popover
@@ -99,7 +109,7 @@ function ColumnTitle({
                 filterList={filterItems}
                 curColumn={curColumn}
                 conditions={conditions}
-                onCheckedList={c => setCheckedList(c)}
+                onCheckedList={handleCheckList}
               />
             ) : (
               <FilterSelect
@@ -107,7 +117,7 @@ function ColumnTitle({
                 filterList={filterItems}
                 curColumn={curColumn}
                 conditions={conditions}
-                onSelect={handleSelect}
+                onChange={handleSelect}
               />
             )}
             <div className={styles['bottom-btns']}>
