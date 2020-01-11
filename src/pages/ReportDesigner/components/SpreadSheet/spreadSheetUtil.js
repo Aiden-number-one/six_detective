@@ -2,6 +2,93 @@ import { stringToNum } from '@/utils/utils';
 import { INITHEIGHT, INITWIDTH } from '../../utils';
 
 /**
+ * @description: 导入返回的xml
+ * @param {object} xmlObject xml相关的json串
+ * @return {object} spreadSheet类型所需要的JSON Object
+ * @Author: mus
+ * @Date: 2020-01-10 15:16:31
+ */
+export function convertXml(xmlObject) {
+  const { cells: xmlCell, columns: xmlColumns, rows: xmlRows } = xmlObject;
+  const resultObject = {
+    name: 'sheet1',
+    rows: {},
+    cols: {},
+    freeze: 'A1',
+    styles: [],
+    merges: [],
+    validations: [],
+    autofilter: [],
+  };
+  // 进行rows与cols的遍历
+  for (let i = 0; i < xmlRows.length; i += 1) {
+    resultObject.rows[i] = {
+      cells: {},
+    };
+    for (let j = 0; j < xmlColumns.length; j += 1) {
+      resultObject.rows[i].cells[j] = {};
+    }
+  }
+  xmlCell.forEach(cellValue => {
+    const {
+      rowNumber = 0,
+      columnNumber = 0,
+      value: { type = 'simple', value = '' },
+      cellStyle,
+    } = cellValue;
+    const typeMap = {
+      simple: 'text',
+    };
+    // 样式相关的结构
+    const {
+      align = 'left',
+      bold = false,
+      fontSize = 10,
+      forecolor = '0,0,0',
+      italic = false,
+      underline = false,
+      valign = 'middle',
+      bgcolor = '255,255,255',
+    } = cellStyle;
+    // 存放单元格的相关属性
+    const currentRows = resultObject.rows[rowNumber - 1] ? resultObject.rows[rowNumber - 1] : {};
+    const currentColumn = currentRows.cells;
+    resultObject.rows[rowNumber - 1].cells[columnNumber - 1] = {
+      text: value, // 数值
+      cellProps: {
+        cellType: typeMap[type], // 单元格类型
+      },
+      isEdit: true, // 是否可编辑
+      style: {
+        font: {
+          bold, // 加醋
+          italic, // 斜体
+        },
+        underline, // 下划线
+        bgcolor: `rgb(${bgcolor})`, // 背景颜色
+        color: `rgb(${forecolor})`, // 字体颜色
+        valign, // 垂直位置
+        align, // 水平位置
+      },
+    };
+    // 处理行相关属性
+    xmlRows.forEach(xmlRowsValue => {
+      const { height, rowNumber: rowNumberInside } = xmlRowsValue;
+      resultObject.rows[rowNumberInside - 1].height = height;
+    });
+    // 处理列相关属性
+    xmlColumns.forEach(xmlColumnsValue => {
+      const { width, columnNumber: columnNumberInside } = xmlColumnsValue;
+      const currentCols = resultObject.cols[columnNumberInside - 1] || {};
+    });
+    // 给rows、cols 添加len
+    resultObject.rows.len = xmlRows.length;
+    resultObject.cols.len = xmlColumns.length;
+  });
+  return resultObject;
+}
+
+/**
  * @description: 处理合并单元格相关
  * @param {array}  merges 合并单元格的原始数据
  * @return {array} 合并单元格的数组

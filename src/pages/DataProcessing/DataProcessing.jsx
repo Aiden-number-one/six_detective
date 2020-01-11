@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 16:39:31
+ * @LastEditTime : 2020-01-11 10:34:48
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -35,6 +35,7 @@ export default class DataProcessing extends Component {
       activeIndex: 0,
       alertIds: '',
       market: '',
+      selectedMarket: '0',
       authBypass: false,
       alertBypassStatus: [],
       isBypass: false,
@@ -246,7 +247,6 @@ export default class DataProcessing extends Component {
           element => element.bypassStatus === '0',
         );
         if (alertBypassStatus.length <= 0 || !isBypass || !authBypass) {
-          console.log('111');
           const { tempColumns } = this.state;
           const newColumns = Object.assign([], columns);
           let newTempColumns = Object.assign([], tempColumns);
@@ -264,7 +264,6 @@ export default class DataProcessing extends Component {
             tempColumns: newTempColumns,
           });
         } else {
-          console.log('222');
           const { tempColumns } = this.state;
           let activeIndex = -1;
           for (let i = 0; i < columns.length; i += 1) {
@@ -306,13 +305,19 @@ export default class DataProcessing extends Component {
       type: 'dataProcessing/getMarket',
       payload: params,
       callback: () => {
+        const marktData = this.props.marketData.map(element => ({
+          key: element.dataId,
+          value: element.dictdataValue,
+          // value: element.dataId,
+          title: element.dictdataName,
+        }));
+        marktData.unshift({
+          key: 'all',
+          value: '0',
+          title: 'All',
+        });
         this.setState({
-          functionNameOptions: this.props.marketData.map(element => ({
-            key: element.dataId,
-            value: element.dictdataValue,
-            // value: element.dataId,
-            title: element.dictdataName,
-          })),
+          functionNameOptions: marktData,
         });
       },
     });
@@ -398,8 +403,17 @@ export default class DataProcessing extends Component {
   };
 
   onChangeMarkt = (value, key) => {
+    const { marketData } = this.props;
+    let markets = [];
+    if (value === '0') {
+      marketData.forEach(element => markets.push(element.dictdataValue));
+      markets = markets.join(',');
+    } else {
+      markets = value;
+    }
     this.setState({
-      market: value,
+      market: markets,
+      selectedMarket: value,
     });
   };
 
@@ -410,10 +424,12 @@ export default class DataProcessing extends Component {
    */
   startProcessing = () => {
     const { dataProcessingData } = this.props;
-    const isClosedIntraday = dataProcessingData.items.some(
-      element => element.isClosedIntraday === '1',
-    );
-    const intradays = dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
+    const isClosedIntraday =
+      dataProcessingData.items &&
+      dataProcessingData.items.some(element => element.isClosedIntraday === '1');
+    const intradays =
+      dataProcessingData.items &&
+      dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
     if (isClosedIntraday) {
       this.setState({
         intradays,
@@ -421,7 +437,7 @@ export default class DataProcessing extends Component {
       });
     } else {
       const { dispatch } = this.props;
-      const { market } = this.state;
+      const { market, selectedMarket } = this.state;
       const params = {
         // user_id: getStore('userInfo').employeeId,
         // market,
@@ -515,6 +531,7 @@ export default class DataProcessing extends Component {
       alertIndeterminate,
       alertBypassStatus,
       isBypass,
+      selectedMarket,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -681,10 +698,11 @@ export default class DataProcessing extends Component {
             <div className={styles.dataProcessing}>
               <Row type="flex" gutter={30} style={{ marginTop: '10px' }}>
                 <Col>
-                  <span>Market</span>
+                  <span style={{ marginRight: '5px' }}>Market</span>
                   <Select
                     placeholder="Please Select"
                     allowClear
+                    value={selectedMarket}
                     style={{ width: '120px' }}
                     onChange={this.onChangeMarkt}
                   >

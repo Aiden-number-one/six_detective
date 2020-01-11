@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 16:32:35
+ * @LastEditTime : 2020-01-10 16:48:29
  */
 import Service from '@/utils/Service';
 
@@ -65,7 +65,7 @@ const codeMaintenance = {
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({
-            type: 'startProcessing',
+            type: 'getStartProcessing',
             payload: response.bcjson.items,
           });
           callback();
@@ -108,7 +108,7 @@ const codeMaintenance = {
         itemsByPassData: action.payload,
       };
     },
-    startProcessing(state, action) {
+    getStartProcessing(state, action) {
       return {
         ...state,
         startProcessingData: action.payload,

@@ -60,11 +60,11 @@ let resetControl = false;
         otherProps.dataSet.fieldDataName &&
         otherProps.elementType
       ) {
-        setCellTypeAndValue(
-          'dataSet',
-          `${otherProps.dataSet.datasetName}.${otherProps.dataSet.fieldDataName}`,
+        setCellTypeAndValue({
+          type: 'dataSet',
+          value: `${otherProps.dataSet.datasetName}.${otherProps.dataSet.fieldDataName}`,
           cellPosition,
-        );
+        });
       }
       dispatch({
         type: 'reportDesigner/modifyTemplateArea',
