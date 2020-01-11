@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 22:27:04
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-09 14:27:57
+ * @LastEditTime : 2020-01-11 14:25:01
  */
 import React, { PureComponent } from 'react';
 import { Form, Input, Select, DatePicker, Radio, Checkbox, Tooltip, Icon, InputNumber } from 'antd';
@@ -62,7 +62,7 @@ class PreviewSearchArea extends PureComponent {
               </Form.Item>
             );
           }
-          if (widgetType === 'input' && widgetKey && !displayNone) {
+          if (widgetType === 'inputnumber' && widgetKey && !displayNone) {
             return (
               <Form.Item label={widgetNameVisible ? widgetName : ''}>
                 {getFieldDecorator(widgetKey, {

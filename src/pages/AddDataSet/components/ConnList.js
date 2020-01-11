@@ -23,7 +23,10 @@ class ConnList extends PureComponent {
   }
 
   render() {
-    const { data, loadMore, activeKey } = this.props;
+    const { data, loadMore, activeKey, filterName } = this.props;
+    const filterData = data.filter(item =>
+      item.name.toLowerCase().includes(filterName.toLowerCase()),
+    );
     return (
       <ul
         id="sqlDataSetList"
@@ -37,8 +40,8 @@ class ConnList extends PureComponent {
           }
         }}
       >
-        {data && data[0] ? (
-          data.map((item, index) => (
+        {filterData && filterData[0] ? (
+          filterData.map((item, index) => (
             <DndProvider>
               <WrapperDropTarget
                 key={`${item.id + index}`}

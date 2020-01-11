@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 13:23:26
+ * @LastEditTime : 2020-01-11 17:40:56
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -180,7 +180,6 @@ class ClassifyTree extends Component {
         this.compareAllChecked();
         this.setState({
           checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
-          tempCheckedKeys: this.formatCheckedKeys(menuList, checkedKeys),
         });
       }
     }, 1000);
@@ -295,10 +294,20 @@ class ClassifyTree extends Component {
   };
 
   onCheck = (selectedKeys, info) => {
+    const { btnArray } = this.props;
     const { menuList, customeBtnIds } = this.state;
+    const newCustomeBtnIds = [];
+    btnArray.forEach(element => {
+      if (selectedKeys.some(item => item === element.parentmenuid)) {
+        if (customeBtnIds.indexOf(element.menuid) > -1) {
+          newCustomeBtnIds.push(element.menuid);
+        }
+      }
+    });
+    console.log('newCustomeBtnIds==', newCustomeBtnIds);
     const checkedKeys = this.setGridDataFromTree([], menuList);
     const newCheckedKeys = checkedKeys.map(element => element.menuid);
-    this.props.onCheck(selectedKeys, info, customeBtnIds);
+    this.props.onCheck(selectedKeys, info, newCustomeBtnIds);
     this.setState({
       checkedKeys: selectedKeys,
       tempCheckedKeys: selectedKeys.concat(info.halfCheckedKeys),
@@ -358,7 +367,7 @@ class ClassifyTree extends Component {
   };
 
   loop = (orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, operate) => {
-    const { customeBtnIds } = this.state;
+    const { customeBtnIds, checkedKeys } = this.state;
     return (
       orgsTree &&
       orgsTree.map(item => {
@@ -430,7 +439,10 @@ class ClassifyTree extends Component {
                 {currentKey.includes('btn') && (
                   <Checkbox
                     value={currentKey}
-                    checked={customeBtnIds.includes(currentKey)}
+                    checked={
+                      customeBtnIds.includes(currentKey) && checkedKeys.includes(item.parentmenuid)
+                    }
+                    disabled={!checkedKeys.includes(item.parentmenuid)}
                     onChange={this.onChangeChecked}
                   >
                     <IconFont type="icon-auth-button" className={styles.btnIcon} />
@@ -448,11 +460,7 @@ class ClassifyTree extends Component {
   };
 
   onChangeChecked = value => {
-    value.stopPropagation();
-    // const { checkedKeys } = this.props
     const { customeBtnIds, tempCheckedKeys } = this.state;
-    console.log('tempCheckedKeys===', tempCheckedKeys);
-    // console.log('checkedKeys=====================', checkedKeys)
     const btnIds = Object.assign([], customeBtnIds);
     if (value.target.checked) {
       btnIds.push(value.target.value);

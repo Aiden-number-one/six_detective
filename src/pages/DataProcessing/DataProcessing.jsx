@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 10:34:48
+ * @LastEditTime : 2020-01-11 14:47:16
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -316,8 +316,16 @@ export default class DataProcessing extends Component {
           value: '0',
           title: 'All',
         });
+        let markets = [];
+        if (this.state.selectedMarket === '0') {
+          this.props.marketData.forEach(element => markets.push(element.dictdataValue));
+          markets = markets.join(',');
+        } else {
+          markets = this.state.selectedMarket;
+        }
         this.setState({
           functionNameOptions: marktData,
+          market: markets,
         });
       },
     });
@@ -408,9 +416,11 @@ export default class DataProcessing extends Component {
     if (value === '0') {
       marketData.forEach(element => markets.push(element.dictdataValue));
       markets = markets.join(',');
+      console.log('markets===', markets);
     } else {
       markets = value;
     }
+    console.log('markets1111111===', markets);
     this.setState({
       market: markets,
       selectedMarket: value,

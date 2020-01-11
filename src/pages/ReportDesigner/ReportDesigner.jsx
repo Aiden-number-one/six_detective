@@ -4,7 +4,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-10 14:54:46
+ * @LastEditTime : 2020-01-11 12:10:37
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -76,8 +76,8 @@ export default class ReportDesigner extends PureComponent {
     initSheet(
       {
         view: {
-          // sheet的宽高
-          height: () => window.innerHeight - 104 - 111,
+          // sheet的宽高 （由窗口高度减去一级导航栏、二级导航栏）
+          height: () => window.innerHeight - 50 - 70,
           width: () => window.innerWidth - leftWidth,
         },
       },
@@ -412,7 +412,7 @@ export default class ReportDesigner extends PureComponent {
             </Modal>
             {/* 头部菜单栏 */}
             <ToolBar {...toolBarProps} />
-            <div className={styles.container} style={{ height: `${window.innerHeight - 104}px` }}>
+            <div className={styles.container}>
               <Layout className={classNames(styles.layout)}>
                 {/* 数据集区域 */}
                 <Sider width={leftSideCollapse ? 300 : 30}>
@@ -421,6 +421,17 @@ export default class ReportDesigner extends PureComponent {
                 {/* 报表区域 */}
                 <Content>
                   <div className={classNames(styles.main)}>
+                    {/* 右侧区域 */}
+                    <div
+                      id="rigthSideBar"
+                      className={classNames(styles.right)}
+                      style={{ width: rightSideCollapse ? '300px' : '30px' }}
+                    >
+                      <RightSideBar
+                        rightSideCollapse={rightSideCollapse}
+                        changeRightSideBar={this.changeRightSideBar}
+                      />
+                    </div>
                     {display && <CustomSearchArea />}
                     <div>
                       <WrapperDropContent afterDrop={this.afterDrop} />
@@ -428,17 +439,6 @@ export default class ReportDesigner extends PureComponent {
                   </div>
                 </Content>
               </Layout>
-              {/* 右侧区域 */}
-              <div
-                id="rigthSideBar"
-                className={classNames(styles.right)}
-                style={{ width: rightSideCollapse ? '300px' : '30px' }}
-              >
-                <RightSideBar
-                  rightSideCollapse={rightSideCollapse}
-                  changeRightSideBar={this.changeRightSideBar}
-                />
-              </div>
             </div>
           </div>
           <Modal

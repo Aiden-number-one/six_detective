@@ -2,10 +2,11 @@
  * @Description: 获取数据集分类树
  * @Author: lan
  * @Date: 2019-12-10 11:18:33
- * @LastEditTime : 2020-01-03 16:43:15
+ * @LastEditTime : 2020-01-11 15:51:25
  * @LastEditors  : lan
  */
 import { message } from 'antd';
+import { formatTree } from '@/utils/utils';
 import Service from '@/utils/Service';
 
 const { getClassifyTree } = Service;
@@ -40,7 +41,7 @@ export default {
     *getClassifyTree({ payload }, { call, put }) {
       const res = yield call(getClassifyTree, { param: payload });
       if (res && res.bcjson.flag === '1') {
-        const classifyTree = TreeFolderTrans(res.bcjson.items);
+        const classifyTree = TreeFolderTrans(formatTree(res.bcjson.items, 'folderId', 'parentId'));
         yield put({
           type: 'setClassifyTree',
           payload: classifyTree,

@@ -2,7 +2,7 @@
  * @Description: 111
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2019-12-24 15:05:35
+ * @LastEditTime : 2020-01-11 16:21:22
  * @LastEditors  : lan
  */
 import React from 'react';
@@ -21,6 +21,14 @@ export default React.memo(
           form.resetFields();
           toggleModal('save');
         });
+      };
+
+      checkName = (rule, value, callback) => {
+        if (value.includes('.')) {
+          callback('DataSet Name Cannot Contain "."');
+        } else {
+          callback();
+        }
       };
 
       render() {
@@ -54,13 +62,21 @@ export default React.memo(
             <Form onSubmit={this.handleSubmit}>
               <Form.Item {...Layout} label="DataSet Name">
                 {getFieldDecorator('sqlDataSetName', {
-                  rules: [{ required: true, message: 'Please Input' }],
+                  rules: [
+                    {
+                      required: true,
+                      message: 'DataSet Name is missing',
+                    },
+                    {
+                      validator: this.checkName,
+                    },
+                  ],
                   initialValue: isSaveOther ? `${sqlDataSetName}_copy` : sqlDataSetName,
-                })(<Input placeholder={formatMessage({ id: 'index.inputName' })} />)}
+                })(<Input placeholder="Please input DataSet Name" />)}
               </Form.Item>
               <Form.Item {...Layout} label="Folder">
                 {getFieldDecorator('folder', {
-                  rules: [{ required: true, message: 'Please select' }],
+                  rules: [{ required: true, message: 'Folder is missing' }],
                   initialValue: dataSet ? dataSet.folderId : undefined,
                 })(<TreeSelect treeData={classifyTree} placeholder="Please select" />)}
               </Form.Item>
