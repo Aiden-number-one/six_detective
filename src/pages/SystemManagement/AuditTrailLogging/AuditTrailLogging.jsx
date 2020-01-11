@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 15:49:19
+ * @LastEditTime : 2020-01-11 09:57:29
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -37,6 +37,8 @@ class AuditTrailLogging extends Component {
     functionName: undefined,
     updatedBy: undefined,
     exportDataVisible: false,
+    checkAll: false,
+    indeterminate: true,
     exportType: 1,
     functionNameOptions: [
       { key: '', value: '', title: 'All' },
@@ -59,10 +61,10 @@ class AuditTrailLogging extends Component {
         label: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         value: 'effectiveTime',
       },
-      {
-        label: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
-        value: 'filedUpdated',
-      },
+      // {
+      //   label: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
+      //   value: 'filedUpdated',
+      // },
       { label: formatMessage({ id: 'systemManagement.auditLog.updateType' }), value: 'updateType' },
       { label: formatMessage({ id: 'systemManagement.auditLog.logDate' }), value: 'logTime' },
       { label: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }), value: 'updatedBy' },
@@ -97,10 +99,10 @@ class AuditTrailLogging extends Component {
         visible: true,
         className: 'columnsnone',
       },
-      {
-        key: 'filedUpdated',
-        visible: false,
-      },
+      // {
+      //   key: 'filedUpdated',
+      //   visible: false,
+      // },
       {
         key: 'updateType',
         visible: false,
@@ -174,22 +176,22 @@ class AuditTrailLogging extends Component {
         date: true,
         render: (res, obj) => <span>{obj.effectiveTime && timeFormat(obj.effectiveTime)}</span>,
       },
+      // {
+      //   index: 6,
+      //   title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
+      //   dataIndex: 'filedUpdated',
+      //   key: 'filedUpdated',
+      //   align: 'left',
+      // },
       {
         index: 6,
-        title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
-        dataIndex: 'filedUpdated',
-        key: 'filedUpdated',
-        align: 'left',
-      },
-      {
-        index: 7,
         title: formatMessage({ id: 'systemManagement.auditLog.updateType' }),
         dataIndex: 'updateType',
         key: 'updateType',
         align: 'left',
       },
       {
-        index: 8,
+        index: 7,
         title: formatMessage({ id: 'systemManagement.auditLog.logDate' }),
         dataIndex: 'logTime',
         key: 'logTime',
@@ -198,21 +200,21 @@ class AuditTrailLogging extends Component {
         render: (res, obj) => <span>{obj.logTime && timeFormat(obj.logTime)}</span>,
       },
       {
-        index: 9,
+        index: 8,
         title: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
         align: 'left',
       },
       {
-        index: 10,
+        index: 9,
         title: formatMessage({ id: 'systemManagement.auditLog.before' }),
         dataIndex: 'before',
         key: 'before',
         align: 'left',
       },
       {
-        index: 11,
+        index: 10,
         title: formatMessage({ id: 'systemManagement.auditLog.after' }),
         dataIndex: 'after',
         key: 'after',
@@ -396,9 +398,17 @@ class AuditTrailLogging extends Component {
     });
   };
 
+  /**
+   * @description: This is a function that displays a custom table.
+   * @param {type} null
+   * @return: undefined
+   */
   customizeDisplay = () => {
+    const { options, checkedValues } = this.state;
     this.setState({
       customizeVisible: true,
+      indeterminate: !!checkedValues.length && checkedValues.length < options.length,
+      checkAll: checkedValues.length === options.length,
     });
   };
 
@@ -450,6 +460,9 @@ class AuditTrailLogging extends Component {
   customizeCancel = () => {
     const { columns } = this.state;
     const columnsValues = columns.map(element => element.key);
+    if (columnsValues.indexOf('index') > -1) {
+      columnsValues.splice(columnsValues.indexOf('index'), 1);
+    }
     this.setState({
       customizeVisible: false,
       checkedValues: columnsValues,
@@ -457,13 +470,25 @@ class AuditTrailLogging extends Component {
   };
 
   onChangeCheckbox = newCheckedValues => {
+    const { options } = this.state;
     this.setState({
       checkedValues: newCheckedValues,
+      indeterminate: !!newCheckedValues.length && newCheckedValues.length < options.length,
+      checkAll: newCheckedValues.length === options.length,
+    });
+  };
+
+  onCheckAllChange = e => {
+    const { options } = this.state;
+    const newOptions = options.map(element => element.value);
+    this.setState({
+      checkedValues: e.target.checked ? newOptions : [],
+      indeterminate: false,
+      checkAll: e.target.checked,
     });
   };
 
   onChangeExport = newExportTypes => {
-    console.log('newExportTypes=', newExportTypes);
     this.setState({
       exportType: newExportTypes.target.value,
     });
@@ -484,6 +509,8 @@ class AuditTrailLogging extends Component {
       checkedValues,
       tempColumns,
       exportType,
+      indeterminate,
+      checkAll,
     } = this.state;
     getAuditLogList = this.props.getAuditLogListData.items;
     const totalCount = this.props.getAuditLogListData && this.props.getAuditLogListData.totalCount;
@@ -539,6 +566,14 @@ class AuditTrailLogging extends Component {
               Alter the display of the orders table by selecting up to{' '}
               <font style={{ color: '#0D87D4' }}>{tempColumns.length - 1}</font> Cloumns
             </p>
+            <Checkbox
+              indeterminate={indeterminate}
+              onChange={this.onCheckAllChange}
+              checked={checkAll}
+              style={{ marginBottom: '5px' }}
+            >
+              All
+            </Checkbox>
             <Checkbox.Group
               options={options}
               value={checkedValues}
