@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 13:51:02
+ * @LastEditTime : 2020-01-11 14:22:49
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -357,7 +357,7 @@ class ClassifyTree extends Component {
   };
 
   loop = (orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, operate) => {
-    const { customeBtnIds } = this.state;
+    const { customeBtnIds, checkedKeys } = this.state;
     return (
       orgsTree &&
       orgsTree.map(item => {
@@ -429,7 +429,10 @@ class ClassifyTree extends Component {
                 {currentKey.includes('btn') && (
                   <Checkbox
                     value={currentKey}
-                    checked={customeBtnIds.includes(currentKey)}
+                    checked={
+                      customeBtnIds.includes(currentKey) && checkedKeys.includes(item.parentmenuid)
+                    }
+                    disabled={!checkedKeys.includes(item.parentmenuid)}
                     onChange={this.onChangeChecked}
                   >
                     <IconFont type="icon-auth-button" className={styles.btnIcon} />
