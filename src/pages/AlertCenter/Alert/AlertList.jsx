@@ -251,9 +251,6 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
           loading={loading['alertCenter/fetch']}
           rowClassName={record => (alert && record.alertId === alert.alertId ? 'table-active' : '')}
           rowSelection={{
-            getCheckboxProps: record => ({
-              disabled: +record.alertStatus === 1,
-            }),
             onChange(selectedRowKeys, sRows) {
               setSelectedRows(sRows);
             },
