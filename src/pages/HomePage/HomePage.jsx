@@ -180,29 +180,9 @@ export default class HomePage extends PureComponent {
         ...params,
       },
       callback: datas => {
-        // 更新图表 如果重新获取的数据不为空 则重新渲染图表
-        const ApprovalAll = [];
-        if (datas[0] && datas[0].userInfo && datas[0].userInfo[0]) {
-          datas[0].userInfo.forEach(item => {
-            ApprovalAll.push({
-              label: item.userId,
-              type: 'CLAIMED',
-              value: item.userClaimedNum,
-            });
-          });
-          datas[0].userInfo.forEach(item => {
-            ApprovalAll.push({
-              label: item.userId,
-              type: 'PROCESSING',
-              value: item.userProcessingNum,
-            });
-          });
-          // eslint-disable-next-line no-unused-expressions
-          this.state.approvalAllChart && this.state.approvalAllChart.changeData(ApprovalAll);
-        } else {
-          // 更新图表 如果重新获取的数据为空 则清空图表
-          // eslint-disable-next-line no-unused-expressions
-          this.state.approvalAllChart && this.state.approvalAllChart.changeData([]);
+        if (this.state.approvalAllChart) {
+          this.state.approvalAllChart.clear();
+          this.renderApprovalAllChart();
         }
       },
     });
@@ -213,47 +193,13 @@ export default class HomePage extends PureComponent {
         ...params,
       },
       callback: datas => {
-        if (
-          datas[0] &&
-          (!!datas[0].allOutstandingNum ||
-            !!datas[0].myClaimedNum ||
-            !!datas[0].myProcessingNum ||
-            !!datas[0].myFinishedNum)
-        ) {
-          // 更新图表 如果重新获取的数据不为空 则重新渲染图表
-          const ApprovalPersonal = [
-            { label: 'Outstanding', value: datas[0].allOutstandingNum },
-            { label: 'Calimed', value: datas[0].myClaimedNum },
-            { label: 'Processing', value: datas[0].myProcessingNum },
-            { label: 'Finished', value: datas[0].myFinishedNum },
-          ];
-          // eslint-disable-next-line no-unused-expressions
-          this.state.approvalPersonalChart &&
-            this.state.approvalPersonalChart.changeData(ApprovalPersonal);
-        } else {
-          // 更新图表 如果重新获取的数据为空 则清空图表
-          // eslint-disable-next-line no-unused-expressions
-          this.state.approvalPersonalChart && this.state.approvalPersonalChart.changeData([]);
+        if (this.state.approvalPersonalChart) {
+          this.state.approvalPersonalChart.clear();
+          this.renderApprovalPerChart();
         }
-        if (
-          datas[0] &&
-          (!!datas[0].myApprovedNum || !!datas[0].myRejectedNum || !!datas[0].myTerminatedNum)
-        ) {
-          // 更新图表 如果重新获取的数据不为空 则重新渲染图表
-          const { myApprovedNum, myRejectedNum, myTerminatedNum } = datas[0];
-          const count = myApprovedNum + myRejectedNum + myTerminatedNum;
-          const ApprovalPersonalPie = [
-            { label: 'Approved', value: myApprovedNum, percent: myApprovedNum / count },
-            { label: 'Rejected', value: myRejectedNum, percent: myRejectedNum / count },
-            { label: 'Terminated', value: myTerminatedNum, percent: myTerminatedNum / count },
-          ];
-          // eslint-disable-next-line no-unused-expressions
-          this.state.approvalPersonalPieChart &&
-            this.state.approvalPersonalPieChart.changeData(ApprovalPersonalPie);
-        } else {
-          // 更新图表 如果重新获取的数据不为空 则清空图表
-          // eslint-disable-next-line no-unused-expressions
-          this.state.approvalPersonalPieChart && this.state.approvalPersonalPieChart.changeData([]);
+        if (this.state.approvalPersonalPieChart) {
+          this.state.approvalPersonalPieChart.clear();
+          this.renderApprovalPerPieChart();
         }
       },
     });
@@ -392,9 +338,7 @@ export default class HomePage extends PureComponent {
     if (activeKey === '2') {
       setTimeout(() => {
         if (document.getElementById('ApprovalAll') && renderProcess) {
-          if (allApprovalData[0] && allApprovalData[0].userInfo && allApprovalData[0].userInfo[0]) {
-            this.renderApprovalAllChart();
-          }
+          this.renderApprovalAllChart();
           this.setState({
             renderProcess: false,
           });
@@ -465,11 +409,12 @@ export default class HomePage extends PureComponent {
         container: 'AlterAll', // div ID
         forceFit: true, // 是否自适应宽度
         height: 250, // 画布高度
-        padding: [20, 120, 20, 100], // 上下左右的padding
+        padding: [20, 50, 30, 100], // 上下左右的padding
       });
     }
 
     let AlterAll = [];
+    let count = 0;
     if (data[0]) {
       data.forEach(item => {
         AlterAll.push({
@@ -477,6 +422,9 @@ export default class HomePage extends PureComponent {
           type: 'Claimed', // 分类
           value: item.claimedCount, // 已认领数
         });
+        if (item.claimedCount > count) {
+          count = item.claimedCount;
+        }
       });
       data.forEach(item => {
         AlterAll.push({
@@ -484,8 +432,16 @@ export default class HomePage extends PureComponent {
           type: 'Processing', // 分类
           value: item.processingCount, // 处理中数
         });
+        if (item.claimedCount > count) {
+          count = item.processingCount;
+        }
       });
-      alterAllChart.source(AlterAll);
+      alterAllChart.source(AlterAll, {
+        value: {
+          // eslint-disable-next-line no-nested-ternary
+          max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+        },
+      });
       alterAllChart.legend({
         position: 'top-center', // 设置图例的显示位置
         label: {
@@ -539,11 +495,12 @@ export default class HomePage extends PureComponent {
           offset: 2,
         })
         // eslint-disable-next-line consistent-return
-        .size('', () => {
-          if (AlterAll.length / 2 < 5) {
-            return 15;
-          }
-        })
+        // .size('', () => {
+        //   if (AlterAll.length / 2 < 5) {
+        //     return 15;
+        //   }
+        //   return false;
+        // })
         .adjust([
           {
             type: 'dodge',
@@ -552,14 +509,18 @@ export default class HomePage extends PureComponent {
         ]);
     } else {
       AlterAll = [
-        { label: 'Thomas.', type: 'Claimed', value: 2800 },
-        { label: 'Thomas.', type: 'Processing', value: 2260 },
-        { label: 'Alan.', type: 'Claimed', value: 1800 },
-        { label: 'Alan.', type: 'Processing', value: 1300 },
-        { label: 'Alex.', type: 'Claimed', value: 950 },
-        { label: 'Alex.', type: 'Processing', value: 900 },
+        { label: 'Thomas.', type: 'Claimed', value: 4 },
+        { label: 'Thomas.', type: 'Processing', value: 3 },
+        { label: 'Alan.', type: 'Claimed', value: 2 },
+        { label: 'Alan.', type: 'Processing', value: 2 },
+        { label: 'Alex.', type: 'Claimed', value: 3 },
+        { label: 'Alex.', type: 'Processing', value: 4 },
       ];
-      alterAllChart.source(AlterAll);
+      alterAllChart.source(AlterAll, {
+        value: {
+          max: 5,
+        },
+      });
       alterAllChart.legend(false);
       alterAllChart.axis('value', {
         position: 'right',
@@ -585,11 +546,11 @@ export default class HomePage extends PureComponent {
         .position('label*value')
         .color('type', ['#F4374C', '#0D87D4'])
         // eslint-disable-next-line consistent-return
-        .size('', () => {
-          if (AlterAll.length / 2 < 5) {
-            return 15;
-          }
-        })
+        // .size('', () => {
+        //   if (AlterAll.length / 2 < 5) {
+        //     return 15;
+        //   }
+        // })
         .adjust([
           {
             type: 'dodge',
@@ -629,7 +590,7 @@ export default class HomePage extends PureComponent {
         container: 'AlterPersonal',
         forceFit: true,
         height: 250,
-        padding: [20, 100, 20, 100],
+        padding: [10, 50, 30, 100],
       });
     }
     if (
@@ -639,13 +600,24 @@ export default class HomePage extends PureComponent {
         perAlertData[0].Outstanding !== 0 ||
         perAlertData[0].Processing !== 0)
     ) {
+      let count = 0;
+      Object.keys(perAlertData[0]).forEach(item => {
+        if (perAlertData[0][item] > count) {
+          count = perAlertData[0][item];
+        }
+      });
       const AlterPersonal = [
         { label: 'Outstanding', value: perAlertData[0].Outstanding },
         { label: 'Calimed', value: perAlertData[0].Claimed },
         { label: 'Processing', value: perAlertData[0].Processing },
         { label: 'Finished', value: perAlertData[0].Finished },
       ];
-      alterPersonalChart.source(AlterPersonal);
+      alterPersonalChart.source(AlterPersonal, {
+        value: {
+          // eslint-disable-next-line no-nested-ternary
+          max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+        },
+      });
       alterPersonalChart.legend(false);
       alterPersonalChart.axis('value', {
         position: 'right',
@@ -699,12 +671,16 @@ export default class HomePage extends PureComponent {
         ]);
     } else {
       const AlterPersonal = [
-        { label: 'Outstanding', value: 10 },
-        { label: 'Calimed', value: 9 },
-        { label: 'Processing', value: 6 },
-        { label: 'Finished', value: 10 },
+        { label: 'Outstanding', value: 4 },
+        { label: 'Calimed', value: 3 },
+        { label: 'Processing', value: 2 },
+        { label: 'Finished', value: 4 },
       ];
-      alterPersonalChart.source(AlterPersonal);
+      alterPersonalChart.source(AlterPersonal, {
+        value: {
+          max: 5,
+        },
+      });
       alterPersonalChart.legend(false);
       alterPersonalChart.axis('value', {
         position: 'right',
@@ -756,83 +732,127 @@ export default class HomePage extends PureComponent {
   renderApprovalAllChart = () => {
     const { proStartDate, proEndDate } = this.state;
     const { allApprovalData } = this.props;
-    const { userInfo } = allApprovalData[0];
-    const ApprovalAll = [];
-    userInfo.forEach(item => {
-      ApprovalAll.push({
-        label: item.userId,
-        type: 'CLAIMED',
-        value: item.userClaimedNum,
+    let approvalAllChart;
+    if (this.state.approvalAllChart) {
+      // eslint-disable-next-line prefer-destructuring
+      approvalAllChart = this.state.approvalAllChart;
+    } else {
+      approvalAllChart = new G2.Chart({
+        container: 'ApprovalAll',
+        forceFit: true,
+        height: 250,
+        padding: [30, 100, 20, 50],
       });
-    });
-    userInfo.forEach(item => {
-      ApprovalAll.push({
-        label: item.userId,
-        type: 'PROCESSING',
-        value: item.userProcessingNum,
+    }
+    if (allApprovalData[0] && allApprovalData[0].userInfo && allApprovalData[0].userInfo[0]) {
+      const { userInfo } = allApprovalData[0];
+      const ApprovalAll = [];
+      userInfo.forEach(item => {
+        ApprovalAll.push({
+          label: item.userId,
+          type: 'CLAIMED',
+          value: item.userClaimedNum,
+        });
       });
-    });
-    const approvalAllChart = new G2.Chart({
-      container: 'ApprovalAll',
-      forceFit: true,
-      height: 250,
-      padding: [20, 100, 20, 50],
-    });
-    approvalAllChart.source(ApprovalAll);
-    approvalAllChart.legend({
-      position: 'right-top', // 设置图例的显示位置
-      itemGap: 20, // 图例项之间的间距
-      label: {
-        color: '#464C51',
-        fontSize: 12,
-      },
-      marker: 'square',
-    });
-    approvalAllChart.axis('value', {
-      position: 'left',
-      label: {
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-      grid: {
-        lineStyle: {
-          stroke: '#D4DDE3',
-          lineWidth: 0.5,
-          lineDash: [0],
-        },
-      },
-    });
-    approvalAllChart.axis('label', {
-      label: {
-        offset: 12,
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-    });
-    approvalAllChart
-      .interval()
-      .position('label*value')
-      .color('type', ['#F4374C', '#0D87D4'])
-      .label('value', {
-        textStyle: {
-          fill: '#7F91A4',
+      userInfo.forEach(item => {
+        ApprovalAll.push({
+          label: item.userId,
+          type: 'PROCESSING',
+          value: item.userProcessingNum,
+        });
+      });
+      approvalAllChart.source(ApprovalAll);
+      approvalAllChart.legend({
+        position: 'top-center', // 设置图例的显示位置
+        label: {
+          color: '#464C51',
           fontSize: 12,
         },
+        marker: 'square',
         offset: 10,
-      })
-      .size(25)
-      .adjust([
-        {
-          type: 'dodge',
-          marginRatio: 0,
+      });
+      approvalAllChart.axis('value', {
+        position: 'left',
+        label: {
+          color: '#464C51',
+          fontSize: 12,
         },
-      ]);
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+        grid: {
+          lineStyle: {
+            stroke: '#D4DDE3',
+            lineWidth: 0.5,
+            lineDash: [0],
+          },
+        },
+      });
+      approvalAllChart.axis('label', {
+        label: {
+          offset: 12,
+          color: '#464C51',
+          fontSize: 12,
+        },
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+      });
+      approvalAllChart
+        .interval()
+        .position('label*value')
+        .color('type', ['#F4374C', '#0D87D4'])
+        .label('value', {
+          textStyle: {
+            fill: '#7F91A4',
+            fontSize: 12,
+          },
+          offset: 10,
+        })
+        .size(25)
+        .adjust([
+          {
+            type: 'dodge',
+            marginRatio: 0,
+          },
+        ]);
+    } else {
+      const ApprovalAll = [
+        { label: 'Thomas.', type: 'Claimed', value: 4 },
+        { label: 'Thomas.', type: 'Processing', value: 3 },
+        { label: 'Alan.', type: 'Claimed', value: 2 },
+        { label: 'Alan.', type: 'Processing', value: 2 },
+        { label: 'Alex.', type: 'Claimed', value: 3 },
+        { label: 'Alex.', type: 'Processing', value: 4 },
+      ];
+      approvalAllChart.source(ApprovalAll);
+      approvalAllChart.legend(false);
+      approvalAllChart.axis('value', {
+        position: 'left',
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+        grid: false,
+      });
+      approvalAllChart.axis('label', {
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+      });
+      approvalAllChart
+        .interval()
+        .position('label*value')
+        .color('type', ['#F4374C', '#0D87D4'])
+        .size(25)
+        .adjust([
+          {
+            type: 'dodge',
+            marginRatio: 0,
+          },
+        ]);
+    }
     approvalAllChart.render();
     approvalAllChart.on('interval:click', ev => {
       // alertOwnerId
@@ -854,65 +874,113 @@ export default class HomePage extends PureComponent {
   renderApprovalPerChart = () => {
     const { proStartDate, proEndDate } = this.state;
     const { perApprovalData } = this.props;
-    const ApprovalPersonal = [
-      { label: 'Outstanding', value: perApprovalData[0].allOutstandingNum },
-      { label: 'Calimed', value: perApprovalData[0].myClaimedNum },
-      { label: 'Processing', value: perApprovalData[0].myProcessingNum },
-      { label: 'Finished', value: perApprovalData[0].myFinishedNum },
-    ];
-    const approvalPersonalChart = new G2.Chart({
-      container: 'ApprovalPersonal',
-      forceFit: true,
-      height: 250,
-      padding: [20, 50, 30, 50],
-    });
-    approvalPersonalChart.source(ApprovalPersonal);
-    approvalPersonalChart.legend(false);
-    approvalPersonalChart.axis('value', {
-      position: 'left',
-      label: {
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-      grid: {
-        lineStyle: {
-          stroke: '#D4DDE3',
-          lineWidth: 0.5,
-          lineDash: [0],
-        },
-      },
-    });
-    approvalPersonalChart.axis('label', {
-      label: {
-        offset: 12,
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-    });
-    approvalPersonalChart
-      .interval()
-      .position('label*value')
-      .label('value', {
-        textStyle: {
-          fill: '#7F91A4',
+    let approvalPersonalChart;
+    if (this.state.approvalPersonalChart) {
+      // eslint-disable-next-line prefer-destructuring
+      approvalPersonalChart = this.state.approvalPersonalChart;
+    } else {
+      approvalPersonalChart = new G2.Chart({
+        container: 'ApprovalPersonal',
+        forceFit: true,
+        height: 250,
+        padding: [20, 50, 30, 50],
+      });
+    }
+    if (
+      perApprovalData[0] &&
+      (!!perApprovalData[0].allOutstandingNum ||
+        !!perApprovalData[0].myClaimedNum ||
+        !!perApprovalData[0].myProcessingNum ||
+        !!perApprovalData[0].myFinishedNum)
+    ) {
+      const ApprovalPersonal = [
+        { label: 'Outstanding', value: perApprovalData[0].allOutstandingNum },
+        { label: 'Calimed', value: perApprovalData[0].myClaimedNum },
+        { label: 'Processing', value: perApprovalData[0].myProcessingNum },
+        { label: 'Finished', value: perApprovalData[0].myFinishedNum },
+      ];
+      approvalPersonalChart.source(ApprovalPersonal);
+      approvalPersonalChart.legend(false);
+      approvalPersonalChart.axis('value', {
+        position: 'left',
+        label: {
+          color: '#464C51',
           fontSize: 12,
         },
-        offset: 10,
-      })
-      .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
-      .size(20)
-      .adjust([
-        {
-          type: 'dodge',
-          marginRatio: 1 / 32,
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
         },
-      ]);
+        grid: {
+          lineStyle: {
+            stroke: '#D4DDE3',
+            lineWidth: 0.5,
+            lineDash: [0],
+          },
+        },
+      });
+      approvalPersonalChart.axis('label', {
+        label: {
+          offset: 12,
+          color: '#464C51',
+          fontSize: 12,
+        },
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+      });
+      approvalPersonalChart
+        .interval()
+        .position('label*value')
+        .label('value', {
+          textStyle: {
+            fill: '#7F91A4',
+            fontSize: 12,
+          },
+          offset: 10,
+        })
+        .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
+        .size(20)
+        .adjust([
+          {
+            type: 'dodge',
+            marginRatio: 1 / 32,
+          },
+        ]);
+    } else {
+      const ApprovalPersonal = [
+        { label: 'Outstanding', value: 4 },
+        { label: 'Calimed', value: 3 },
+        { label: 'Processing', value: 3 },
+        { label: 'Finished', value: 4 },
+      ];
+      approvalPersonalChart.source(ApprovalPersonal);
+      approvalPersonalChart.legend(false);
+      approvalPersonalChart.axis('value', {
+        position: 'left',
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+        grid: false,
+      });
+      approvalPersonalChart.axis('label', {
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+      });
+      approvalPersonalChart
+        .interval()
+        .position('label*value')
+        .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
+        .size(20)
+        .adjust([
+          {
+            type: 'dodge',
+            marginRatio: 1 / 32,
+          },
+        ]);
+    }
     approvalPersonalChart.render();
     approvalPersonalChart.on('interval:click', ev => {
       const clickData = ev.data;
@@ -932,71 +1000,122 @@ export default class HomePage extends PureComponent {
   // 渲染Approval Personal饼图
   renderApprovalPerPieChart = () => {
     const { perApprovalData } = this.props;
-    const { myApprovedNum, myRejectedNum, myTerminatedNum } = perApprovalData[0];
-    const count = myApprovedNum + myRejectedNum + myTerminatedNum;
-    const ApprovalPersonalPie = [
-      {
-        label: 'Approved',
-        value: myApprovedNum,
-        percent: Number((myApprovedNum / count).toFixed(4)),
-      },
-      {
-        label: 'Rejected',
-        value: myRejectedNum,
-        percent: Number((myRejectedNum / count).toFixed(4)),
-      },
-      {
-        label: 'Terminated',
-        value: myTerminatedNum,
-        percent: Number((myTerminatedNum / count).toFixed(4)),
-      },
-    ];
-    const approvalPersonalPieChart = new G2.Chart({
-      container: 'ApprovalPersonalPie',
-      forceFit: true,
-      height: 250,
-      padding: [20, 0, 20, 70],
-    });
-    approvalPersonalPieChart.source(ApprovalPersonalPie, {
-      percent: {
-        formatter: val => {
-          const value = `${val * 100}%`;
-          return value;
-        },
-      },
-    });
-    approvalPersonalPieChart.coord('theta');
-    approvalPersonalPieChart.tooltip({
-      showTitle: false,
-    });
-    approvalPersonalPieChart.legend({
-      position: 'left-top',
-      label: {
-        color: '#464C51',
-        fontSize: 12,
-      },
-    });
-    approvalPersonalPieChart
-      .intervalStack()
-      .position('percent')
-      .label('percent', {
-        offset: -40,
-        color: '#464C51',
-        fontSize: 12,
-      })
-      .tooltip('label*percent', (label, percent) => {
-        const value = `${percent * 100}%`;
-        return {
-          name: label,
-          value,
-        };
-      })
-      .color('label', ['#0D87D4', '#F4374C', '#10416C'])
-      .style({
-        lineWidth: 1,
-        stroke: '#fff',
+    let approvalPersonalPieChart;
+    if (this.state.approvalPersonalPieChart) {
+      // eslint-disable-next-line prefer-destructuring
+      approvalPersonalPieChart = this.state.approvalPersonalPieChart;
+    } else {
+      approvalPersonalPieChart = new G2.Chart({
+        container: 'ApprovalPersonalPie',
+        forceFit: true,
+        height: 250,
+        padding: [20, 0, 20, 70],
       });
-    // .size(15)
+    }
+    if (
+      perApprovalData[0] &&
+      (!!perApprovalData[0].myApprovedNum ||
+        !!perApprovalData[0].myRejectedNum ||
+        !!perApprovalData[0].myTerminatedNum)
+    ) {
+      const { myApprovedNum, myRejectedNum, myTerminatedNum } = perApprovalData[0];
+      const count = myApprovedNum + myRejectedNum + myTerminatedNum;
+      const ApprovalPersonalPie = [
+        {
+          label: 'Approved',
+          value: myApprovedNum,
+          percent: Number((myApprovedNum / count).toFixed(4)),
+        },
+        {
+          label: 'Rejected',
+          value: myRejectedNum,
+          percent: Number((myRejectedNum / count).toFixed(4)),
+        },
+        {
+          label: 'Terminated',
+          value: myTerminatedNum,
+          percent: Number((myTerminatedNum / count).toFixed(4)),
+        },
+      ];
+      approvalPersonalPieChart.source(ApprovalPersonalPie, {
+        percent: {
+          formatter: val => {
+            const value = `${val * 100}%`;
+            return value;
+          },
+        },
+      });
+      approvalPersonalPieChart.coord('theta');
+      approvalPersonalPieChart.tooltip({
+        showTitle: false,
+      });
+      approvalPersonalPieChart.legend({
+        position: 'left-top',
+        label: {
+          color: '#464C51',
+          fontSize: 12,
+        },
+      });
+      approvalPersonalPieChart
+        .intervalStack()
+        .position('percent')
+        .label('percent', {
+          offset: -40,
+          color: '#464C51',
+          fontSize: 12,
+        })
+        .tooltip('label*percent', (label, percent) => {
+          const value = `${percent * 100}%`;
+          return {
+            name: label,
+            value,
+          };
+        })
+        .color('label', ['#0D87D4', '#F4374C', '#10416C'])
+        .style({
+          lineWidth: 1,
+          stroke: '#fff',
+        });
+    } else {
+      const ApprovalPersonalPie = [
+        {
+          label: 'Approved',
+          value: 3,
+          percent: 0.3,
+        },
+        {
+          label: 'Rejected',
+          value: 4,
+          percent: 0.4,
+        },
+        {
+          label: 'Terminated',
+          value: 3,
+          percent: 0.3,
+        },
+      ];
+      approvalPersonalPieChart.source(ApprovalPersonalPie, {
+        percent: {
+          formatter: val => {
+            const value = `${val * 100}%`;
+            return value;
+          },
+        },
+      });
+      approvalPersonalPieChart.coord('theta');
+      approvalPersonalPieChart.tooltip({
+        showTitle: false,
+      });
+      approvalPersonalPieChart.legend(false);
+      approvalPersonalPieChart
+        .intervalStack()
+        .position('percent')
+        .color('label', ['#0D87D4', '#F4374C', '#10416C'])
+        .style({
+          lineWidth: 1,
+          stroke: '#fff',
+        });
+    }
     approvalPersonalPieChart.render();
     this.setState({ approvalPersonalPieChart });
   };
@@ -2031,15 +2150,10 @@ export default class HomePage extends PureComponent {
                             this.setState(
                               {
                                 approvalState: 'ALL',
+                                approvalAllChart: '',
                               },
                               () => {
-                                if (
-                                  allApprovalData[0] &&
-                                  allApprovalData[0].userInfo &&
-                                  allApprovalData[0].userInfo[0]
-                                ) {
-                                  this.renderApprovalAllChart();
-                                }
+                                this.renderApprovalAllChart();
                               },
                             );
                           }}
@@ -2055,25 +2169,12 @@ export default class HomePage extends PureComponent {
                             this.setState(
                               {
                                 approvalState: 'PER',
+                                approvalPersonalChart: '',
+                                approvalPersonalPieChart: '',
                               },
                               () => {
-                                if (
-                                  perApprovalData[0] &&
-                                  (!!perApprovalData[0].allOutstandingNum ||
-                                    !!perApprovalData[0].myClaimedNum ||
-                                    !!perApprovalData[0].myProcessingNum ||
-                                    !!perApprovalData[0].myFinishedNum)
-                                ) {
-                                  this.renderApprovalPerChart();
-                                }
-                                if (
-                                  perApprovalData[0] &&
-                                  (!!perApprovalData[0].myApprovedNum ||
-                                    !!perApprovalData[0].myRejectedNum ||
-                                    !!perApprovalData[0].myTerminatedNum)
-                                ) {
-                                  this.renderApprovalPerPieChart();
-                                }
+                                this.renderApprovalPerChart();
+                                this.renderApprovalPerPieChart();
                               },
                             );
                           }}
@@ -2271,27 +2372,24 @@ export default class HomePage extends PureComponent {
                             </div>
                           </div>
                         </div>
-                        {!(
-                          allApprovalData[0] &&
-                          allApprovalData[0].userInfo &&
-                          allApprovalData[0].userInfo[0]
-                        ) && (
-                          <div className={styles.empty} style={{ height: 250 }}>
-                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                          </div>
-                        )}
-                        <div
-                          id="ApprovalAll"
-                          style={{
-                            display: !(
-                              allApprovalData[0] &&
-                              allApprovalData[0].userInfo &&
-                              allApprovalData[0].userInfo[0]
-                            )
-                              ? 'none'
-                              : 'block',
-                          }}
-                        ></div>
+                        <div style={{ position: 'relative', height: 250 }}>
+                          {!(
+                            allApprovalData[0] &&
+                            allApprovalData[0].userInfo &&
+                            allApprovalData[0].userInfo[0]
+                          ) && (
+                            <div
+                              style={{
+                                width: '100%',
+                                height: 250,
+                                position: 'absolute',
+                                zIndex: 1,
+                                background: 'hsla(0,0%,100%,.7)',
+                              }}
+                            ></div>
+                          )}
+                          <div id="ApprovalAll"></div>
+                        </div>
                       </>
                     )}
                     {/* ALTER PERSONAL */}
@@ -2370,56 +2468,45 @@ export default class HomePage extends PureComponent {
                             display: 'flex',
                           }}
                         >
-                          {!(
-                            perApprovalData[0] &&
-                            (!!perApprovalData[0].allOutstandingNum ||
-                              !!perApprovalData[0].myClaimedNum ||
-                              !!perApprovalData[0].myProcessingNum ||
-                              !!perApprovalData[0].myFinishedNum)
-                          ) && (
-                            <div className={styles.empty} style={{ height: 250, flex: 3 }}>
-                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                            </div>
-                          )}
-                          <div
-                            id="ApprovalPersonal"
-                            style={{
-                              flex: 3,
-                              display: !(
-                                perApprovalData[0] &&
-                                (!!perApprovalData[0].allOutstandingNum ||
-                                  !!perApprovalData[0].myClaimedNum ||
-                                  !!perApprovalData[0].myProcessingNum ||
-                                  !!perApprovalData[0].myFinishedNum)
-                              )
-                                ? 'none'
-                                : 'block',
-                            }}
-                          ></div>
-                          {!(
-                            perApprovalData[0] &&
-                            (!!perApprovalData[0].myApprovedNum ||
-                              !!perApprovalData[0].myRejectedNum ||
-                              !!perApprovalData[0].myTerminatedNum)
-                          ) && (
-                            <div className={styles.empty} style={{ height: 250, flex: 2 }}>
-                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                            </div>
-                          )}
-                          <div
-                            id="ApprovalPersonalPie"
-                            style={{
-                              flex: 2,
-                              display: !(
-                                perApprovalData[0] &&
-                                (!!perApprovalData[0].myApprovedNum ||
-                                  !!perApprovalData[0].myRejectedNum ||
-                                  !!perApprovalData[0].myTerminatedNum)
-                              )
-                                ? 'none'
-                                : 'block',
-                            }}
-                          ></div>
+                          <div style={{ position: 'relative', flex: 3, height: 250 }}>
+                            {!(
+                              perApprovalData[0] &&
+                              (!!perApprovalData[0].allOutstandingNum ||
+                                !!perApprovalData[0].myClaimedNum ||
+                                !!perApprovalData[0].myProcessingNum ||
+                                !!perApprovalData[0].myFinishedNum)
+                            ) && (
+                              <div
+                                style={{
+                                  width: '100%',
+                                  height: 250,
+                                  position: 'absolute',
+                                  zIndex: 1,
+                                  background: 'hsla(0,0%,100%,.7)',
+                                }}
+                              ></div>
+                            )}
+                            <div id="ApprovalPersonal"></div>
+                          </div>
+                          <div style={{ position: 'relative', flex: 2, height: 250 }}>
+                            {!(
+                              perApprovalData[0] &&
+                              (!!perApprovalData[0].myApprovedNum ||
+                                !!perApprovalData[0].myRejectedNum ||
+                                !!perApprovalData[0].myTerminatedNum)
+                            ) && (
+                              <div
+                                style={{
+                                  width: '100%',
+                                  height: 250,
+                                  position: 'absolute',
+                                  zIndex: 1,
+                                  background: 'hsla(0,0%,100%,.7)',
+                                }}
+                              ></div>
+                            )}
+                            <div id="ApprovalPersonalPie"></div>
+                          </div>
                         </div>
                       </>
                     )}
