@@ -5,7 +5,7 @@ import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Icon } from 'antd';
 import IconFont from '@/components/IconFont';
-import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
+import { dateFormat, timestampFormat, pageSizeOptions } from '@/pages/DataImportLog/constants';
 import { getStore } from '@/utils/store';
 import { ClaimModal, CloseModal, ExportModal } from './components/AlertListModal';
 import { AlertListBtns } from './components/AlertListBtns';
@@ -248,6 +248,7 @@ function AlertList({ dispatch, loading, alerts, total }) {
           pagination={{
             total,
             showSizeChanger: true,
+            pageSizeOptions,
             showTotal(count) {
               return `Total ${count} items`;
             },
@@ -314,7 +315,7 @@ function AlertList({ dispatch, loading, alerts, total }) {
             render={text => moment(text, timestampFormat).format(timestampFormat)}
           />
           <Column
-            align="center"
+            align="right"
             dataIndex="itemsTotal"
             title={<FormattedMessage id="alert-center.items-total" />}
             render={text => +text}

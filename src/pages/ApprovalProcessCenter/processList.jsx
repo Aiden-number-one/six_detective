@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import router from 'umi/router';
-import { Table, Row, Col, Button, Input, Radio, Drawer } from 'antd';
+import { Table, Row, Col, Button, Input, Radio, Drawer, message } from 'antd';
 import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
@@ -59,7 +59,7 @@ function TaskBtn({
   checkOwner,
   checkAssign,
   urlTaskCode,
-  exportAlert,
+  dataFileExport,
 }) {
   return (
     <Row>
@@ -91,7 +91,11 @@ function TaskBtn({
             </button>
           </>
         )}
-        <button type="button" disabled={!selectedKeys.length} onClick={exportAlert}>
+        <button
+          type="button"
+          disabled={!selectedKeys.length}
+          onClick={() => dataFileExport(selectedKeys)}
+        >
           <IconFont type="iconexport" className={alertStyle['btn-icon']} />
           <FormattedMessage id="alert-center.export" />
         </button>
@@ -300,6 +304,31 @@ function ProcessList({
     });
   }
 
+  // 导出文件
+  function dataFileExport(taskCode) {
+    message.loading({ content: 'Exporting file...', key: 'Exporting', duration: 0 });
+    dispatch({
+      type: 'approvalCenter/approvalTaskExport',
+      payload: {
+        taskCode,
+      },
+      callback: filePath => downloadHerf(filePath),
+      callback2: () => exportingFileSuccess(),
+    });
+  }
+  function exportingFileSuccess() {
+    setTimeout(() => {
+      message.success({ content: 'Export success!', key: 'Exporting', duration: 2 });
+    }, 1000);
+  }
+  // 下载zip
+  function downloadHerf(filePath) {
+    const a = document.createElement('a');
+    a.href = `/download?filePath=${filePath}`;
+    a.download = true;
+    a.click();
+  }
+
   // search 搜索
   function searchTask(taskType, value) {
     dispatch({
@@ -369,6 +398,7 @@ function ProcessList({
               claimOk={claimOk}
               checkOwner={checkOwner}
               setTaskAssign={setTaskAssign}
+              dataFileExport={dataFileExport}
               checkAssign={checkAssign}
               setVisible={setVisible}
               urlTaskCode={urlCode}
@@ -456,7 +486,7 @@ function ProcessList({
             render={(text, record) => (
               <Row className={styles.btns}>
                 <IconFont
-                  type="iconqizhi"
+                  type="icon-claimx"
                   className={styles.icon}
                   title={formatMessage({ id: 'alert-center.claim' })}
                   onClick={() => {

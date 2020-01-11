@@ -3,11 +3,11 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 16:48:29
+ * @LastEditTime : 2020-01-11 17:56:55
  */
 import Service from '@/utils/Service';
 
-const { getDataProcessing, startProcessing } = Service;
+const { getDataProcessing, startProcessing, progressChart, progressStatus } = Service;
 const codeMaintenance = {
   namespace: 'dataProcessing',
   state: {
@@ -16,6 +16,8 @@ const codeMaintenance = {
     itemsByPassData: {},
     startProcessingData: {},
     marketData: [],
+    chartData: [],
+    statusData: {},
   },
   effects: {
     *getDataProcessing({ payload, callback }, { call, put }) {
@@ -88,6 +90,34 @@ const codeMaintenance = {
         throw new Error(response.bcjson.msg);
       }
     },
+    *getProgressChart({ payload, callback }, { call, put }) {
+      const response = yield call(progressChart, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'getChart',
+            payload: response.bcjson.items,
+          });
+          callback();
+        }
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
+    },
+    *getProgressStatus({ payload, callback }, { call, put }) {
+      const response = yield call(progressStatus, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'getStatus',
+            payload: response.bcjson.items,
+          });
+          callback();
+        }
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
@@ -118,6 +148,18 @@ const codeMaintenance = {
       return {
         ...state,
         marketData: action.payload,
+      };
+    },
+    getChart(state, action) {
+      return {
+        ...state,
+        chartData: action.payload,
+      };
+    },
+    getStatus(state, action) {
+      return {
+        ...state,
+        statusData: action.payload,
       };
     },
   },
