@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 21:51:59
+ * @LastEditTime : 2020-01-11 21:58:13
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -867,7 +867,12 @@ export default class DataProcessing extends Component {
                   </Select>
                 </Col>
                 <Col>
-                  <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
+                  <Button
+                    type="primary"
+                    className="btn-usual"
+                    onClick={this.startProcessing}
+                    disabled={!inspectDataVisible}
+                  >
                     Start Processing
                   </Button>
                 </Col>
