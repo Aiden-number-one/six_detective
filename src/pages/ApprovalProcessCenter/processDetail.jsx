@@ -478,10 +478,10 @@ function ProcessDetail({
                       <AlertComment
                         comment={{
                           id: item.id,
-                          commitTime: item.commentTime,
-                          commentContent: item.commentContent,
+                          time: item.commentTime,
+                          content: item.commentContent,
                           user: item.commentUserName,
-                          fileList: item.attachment,
+                          files: item.attachment,
                         }}
                         key={item.id}
                       />
