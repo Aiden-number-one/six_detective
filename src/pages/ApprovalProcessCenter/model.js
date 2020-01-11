@@ -80,6 +80,12 @@ export async function getApprovalTaskHistory({ taskCode }) {
   });
 }
 
+export async function approvalTaskExport({ taskCode }) {
+  return request('set_approval_task_data_file_export', {
+    data: { taskCode: taskCode.join(',') },
+  });
+}
+
 export default {
   namespace: 'approvalCenter',
   state: {
@@ -252,6 +258,17 @@ export default {
       }
       message.success(msg);
       callback();
+    },
+    *approvalTaskExport({ payload, callback, callback2 }, { call }) {
+      const { taskCode } = payload || [];
+      const { items, err } = yield call(approvalTaskExport, { taskCode });
+      if (err) {
+        // throw new Error(err);
+        message.warning({ content: 'Export failure!', key: 'Exporting' });
+        return;
+      }
+      callback(items);
+      callback2();
     },
     *featchTaskGroup({ payload }, { call, put }) {
       const { taskCode, type } = payload || [];
