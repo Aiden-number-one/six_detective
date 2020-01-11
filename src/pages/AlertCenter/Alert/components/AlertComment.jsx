@@ -5,7 +5,7 @@ import moment from 'moment';
 import IconFont from '@/components/IconFont';
 import { timestampFormat, downloadFile } from '@/pages/DataImportLog/constants';
 import styles from '@/pages/AlertCenter/index.less';
-import AlertDownAttachments from './AlertDownAttachments';
+import { AttachmentList } from './AlertDownAttachments';
 
 const { Paragraph } = Typography;
 
@@ -30,7 +30,7 @@ function AlertAttachmentPop({ attachments }) {
           />
         </div>
       }
-      content={<AlertDownAttachments attachments={attachments} />}
+      content={<AttachmentList attachments={attachments} />}
     >
       <IconFont type="iconbiezhen" />
       <em>{attachments.length}</em>
