@@ -2,7 +2,7 @@
  * @Description: all alert data
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-08 11:29:48
+ * @LastEditTime : 2020-01-11 15:07:07
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -70,13 +70,11 @@ export default {
     *getAllAlterData({ payload, callback }, { call, put }) {
       const response = yield call(getAllAlterData, { param: payload });
       if (response.bcjson.flag === '1') {
-        if (response.bcjson.items) {
-          yield put({
-            type: 'saveAllAlterData',
-            payload: response.bcjson.items,
-          });
-          if (callback) callback(response.bcjson.items);
-        }
+        yield put({
+          type: 'saveAllAlterData',
+          payload: response.bcjson.items,
+        });
+        if (callback) callback(response.bcjson.items);
       }
     },
   },

@@ -5,7 +5,7 @@ import moment from 'moment';
 import IconFont from '@/components/IconFont';
 import { timestampFormat, downloadFile } from '@/pages/DataImportLog/constants';
 import styles from '@/pages/AlertCenter/index.less';
-import { AttachmentList } from './AlertDownAttachments';
+import AlertDownAttachments from './AlertDownAttachments';
 
 const { Paragraph } = Typography;
 
@@ -30,7 +30,7 @@ function AlertAttachmentPop({ attachments }) {
           />
         </div>
       }
-      content={<AttachmentList attachments={attachments} />}
+      content={<AlertDownAttachments attachments={attachments} />}
     >
       <IconFont type="iconbiezhen" />
       <em>{attachments.length}</em>
@@ -38,12 +38,12 @@ function AlertAttachmentPop({ attachments }) {
   );
 }
 
-export default function({ comment: { id, commitTime, commentContent, fileList } }) {
-  const attachments = fileList ? fileList.split(',') : [];
+export default function({ comment: { id, time, content, user = 'anonymous', files } }) {
+  const attachments = files ? files.split(',') : [];
   return (
     <li key={id}>
       <Row type="flex" justify="space-between" align="middle">
-        <Col className={styles.time}>{moment(commitTime).format(timestampFormat)}</Col>
+        <Col className={styles.time}>{moment(time).format(timestampFormat)}</Col>
         <Col>
           {attachments.length > 0 && (
             <AlertAttachmentPop attachments={attachments.map(url => ({ url }))} />
@@ -51,7 +51,9 @@ export default function({ comment: { id, commitTime, commentContent, fileList } 
         </Col>
       </Row>
       <Row>
-        <Paragraph ellipsis={{ rows: 3, expandable: true }}>{commentContent}</Paragraph>
+        <Paragraph ellipsis={{ rows: 3, expandable: true }}>
+          ({user}){content}
+        </Paragraph>
       </Row>
     </li>
   );

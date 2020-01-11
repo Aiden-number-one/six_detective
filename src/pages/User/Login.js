@@ -2,8 +2,8 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime : 2020-01-09 15:57:21
- * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-11 16:00:47
+ * @LastEditors  : lan
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -111,7 +111,7 @@ class Login extends Component {
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'Error' }),
+                  message: 'User Name is missing',
                 },
               ]}
               style={{ height: 40 }}
@@ -122,7 +122,7 @@ class Login extends Component {
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'Error' }),
+                  message: 'Password is missing',
                 },
               ]}
               onPressEnter={e => {

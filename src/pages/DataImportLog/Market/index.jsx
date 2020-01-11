@@ -35,7 +35,13 @@ function MarketLog({ dispatch, loading, logs, page: current, total }) {
   }
 
   async function handleUpload(params) {
-    await dispatch({ type: 'market/importByManual', payload: params });
+    await dispatch({
+      type: 'market/importByManual',
+      payload: {
+        searchParams,
+        ...params,
+      },
+    });
     setVisible(false);
   }
   return (

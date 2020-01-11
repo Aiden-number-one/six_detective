@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:40:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 16:07:54
+ * @LastEditTime : 2020-01-11 17:37:46
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
@@ -275,7 +275,7 @@ export default class ModifyUser extends Component {
       if (NewFlag) {
         const params = {
           userName: values.userName,
-          userPwd: window.kddes.getDes(values.userPwd),
+          // userPwd: window.kddes.getDes(values.userPwd),
           groupIds: groupIds.join(','),
           alertIds: alertIds.join(','),
           accountLock,
@@ -321,7 +321,7 @@ export default class ModifyUser extends Component {
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} NewFlag={NewFlag} userInfo={userInfo} />
-        {getAuthority().authLocked && (
+        {getAuthority().authDisabled && (
           <Row>
             <Col offset={4}>
               <Checkbox onChange={this.onChangeLocked} checked={locedChecked}>

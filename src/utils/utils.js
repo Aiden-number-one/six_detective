@@ -4,8 +4,8 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2020-01-02 19:48:32
- * @LastEditors  : iron
+ * @LastEditTime : 2020-01-11 15:50:44
+ * @LastEditors  : dailinbo
  */
 
 import { components, menuIcons, iframe } from '@/utils/common';
@@ -190,6 +190,22 @@ export function formatTree(list, key = 'departmentId', pKey = 'parentDepartmentI
   });
 
   return tree;
+}
+
+export function flatteningTree(data) {
+  const dataList = [];
+  function flattening(tree) {
+    for (let i = 0; i < tree.length; i += 1) {
+      const node = tree[i];
+      const { menuid, parentmenuid, menuname, page, isShow, sortNo, updatetime } = node;
+      dataList.push({ menuid, parentmenuid, menuname, page, isShow, sortNo, updatetime });
+      if (node.children) {
+        flattening(node.children);
+      }
+    }
+  }
+  flattening(data);
+  return dataList;
 }
 
 // 日期时间 格式化(yyyy-MM-dd HH:mm:ss) 2015-12-04 14:27:29
