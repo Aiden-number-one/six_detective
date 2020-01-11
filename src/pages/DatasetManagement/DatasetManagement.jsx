@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-06 10:42:51
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-11 16:39:20
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -11,8 +11,10 @@ import { connect } from 'dva';
 import { Icon, Table, Drawer, Form, Button, Pagination, Menu, Dropdown } from 'antd';
 import _ from 'lodash';
 import router from 'umi/router';
+import moment from 'moment';
 import ClassifyTree from '@/components/ClassifyTree';
 import IconFont from '@/components/IconFont';
+import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
 import { formatTimeString } from '@/utils/utils';
 import styles from './DatasetManagement.less';
 import OperateTreeForm from './components/OperateTreeForm';
@@ -367,7 +369,9 @@ export default class DatasetManagement extends PureComponent {
         title: 'Modified at',
         dataIndex: 'updateDatetime',
         key: 'updateDatetime',
-        render: text => <span>{formatTimeString(text)}</span>,
+        render: text => (
+          <span>{text && moment(formatTimeString(text)).format(timestampFormat)}</span>
+        ),
       },
       {
         title: 'Operation',

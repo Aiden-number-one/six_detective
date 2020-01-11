@@ -2,7 +2,7 @@
  * @Description: 新增修改数据集分类树
  * @Author: lan
  * @Date: 2019-12-11 15:51:22
- * @LastEditTime : 2020-01-02 20:53:27
+ * @LastEditTime : 2020-01-11 16:39:37
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -48,10 +48,11 @@ export default class OperateTreeForm extends PureComponent {
               rules: [
                 {
                   required: true,
+                  message: 'Folder Name is missing',
                 },
               ],
               initialValue: nodeTree && nodeTree.folderName,
-            })(<Input />)}
+            })(<Input maxLength={64} />)}
           </Form.Item>
         )}
         <div

@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-07 11:05:04
+ * @LastEditTime : 2020-01-11 16:56:09
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -68,6 +68,7 @@ class AddDataSet extends PureComponent {
     tableView: 'data', // 切换预览数据或查看列数据
     pageNumber: '1', // 表格分页
     sql: '', // sql语句
+    filterName: '',
   };
 
   componentDidMount() {
@@ -422,7 +423,7 @@ class AddDataSet extends PureComponent {
         key: 'field_data_type',
       },
     ];
-    const { AlterDataSetName, pageNumber } = this.state; // 修改数据集名称切换, 表格分页器
+    const { AlterDataSetName, pageNumber, filterName } = this.state; // 修改数据集名称切换, 表格分页器
     const renderColumn = this.perfectColumn();
     return (
       <DndProvider backend={HTML5Backend}>
@@ -592,6 +593,7 @@ class AddDataSet extends PureComponent {
                 <ConnList
                   loadMore={this.loadMore}
                   data={datasetType === 'SQL' ? metaDataTableList : procedureDataList}
+                  filterName={filterName}
                   connection_id={
                     this.connection_id ||
                     (dataSourceList && dataSourceList[0] && dataSourceList[0].connectionId)
@@ -613,7 +615,15 @@ class AddDataSet extends PureComponent {
                       </Col>
                     </Row>
                   </Checkbox.Group>
-                  <Input className="noBorerComponent" placeholder="inputTableOrView" />
+                  <Input
+                    className="noBorerComponent"
+                    placeholder="inputTableOrView"
+                    onChange={e => {
+                      this.setState({
+                        filterName: e.target.value,
+                      });
+                    }}
+                  />
                 </div>
               </Sider>
               <Layout className={styles.layoutTable}>
