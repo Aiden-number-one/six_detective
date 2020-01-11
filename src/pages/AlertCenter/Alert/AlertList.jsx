@@ -27,6 +27,8 @@ function AlertList({ dispatch, loading, alerts, total }) {
   const [isDiscontinue, setDiscontinue] = useState(false);
   // header filter
   const [conditions, setConditions] = useState([]);
+  const [curTableColumn, setCurTableColumn] = useState('');
+  const [curSort, setCurSort] = useState('');
 
   const isAuth = useMemo(() => {
     const userInfo = getStore('userInfo');
@@ -49,16 +51,6 @@ function AlertList({ dispatch, loading, alerts, total }) {
       setAlert(null);
     }
   }, [alerts]);
-
-  function handlePageChange(page, pageSize) {
-    dispatch({
-      type: 'alertCenter/fetch',
-      payload: {
-        page,
-        pageSize,
-      },
-    });
-  }
 
   function handleCancelClaim() {
     setClaimVisible(false);
@@ -173,18 +165,35 @@ function AlertList({ dispatch, loading, alerts, total }) {
 
   function handleExport() {}
 
+  function handlePageChange(page, pageSize) {
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        page,
+        pageSize,
+        conditions,
+        currentColumn: curTableColumn,
+        sort: curSort,
+      },
+    });
+  }
+
   // filter methods
   async function handleCommit(tableColumn, updatedConditions = []) {
+    setCurTableColumn(tableColumn);
     setConditions(updatedConditions);
     dispatch({
       type: 'alertCenter/fetch',
       payload: {
         currentColumn: tableColumn,
-        conditions,
+        conditions: updatedConditions,
       },
     });
   }
+
   async function handleSort(tableColumn, sort) {
+    setCurTableColumn(tableColumn);
+    setCurSort(sort);
     dispatch({
       type: 'alertCenter/fetch',
       payload: {
