@@ -6,7 +6,7 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Icon } from 'antd';
 import IconFont from '@/components/IconFont';
 import { dateFormat, timestampFormat, pageSizeOptions } from '@/pages/DataImportLog/constants';
-import { getStore } from '@/utils/store';
+import { getAuthority } from '@/utils/authority';
 import { ClaimModal, CloseModal, ExportModal } from './components/AlertListModal';
 import { AlertListBtns } from './components/AlertListBtns';
 import ColumnTitle from '../ColumnTitle';
@@ -15,7 +15,7 @@ import styles from '../index.less';
 
 const { Column } = Table;
 
-function AlertList({ dispatch, loading, alerts, total }) {
+function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total }) {
   const [alert, setAlert] = useState(null);
   const [claimVisible, setClaimVisible] = useState(false);
   const [claimContent, setClaimContent] = useState('');
@@ -31,8 +31,8 @@ function AlertList({ dispatch, loading, alerts, total }) {
   const [curSort, setCurSort] = useState('');
 
   const isAuth = useMemo(() => {
-    const userInfo = getStore('userInfo');
-    return userInfo && userInfo.isSuperAdmin;
+    const auth = getAuthority() || {};
+    return auth.authDiscontinue;
   }, []);
 
   useEffect(() => {
@@ -187,6 +187,8 @@ function AlertList({ dispatch, loading, alerts, total }) {
       payload: {
         currentColumn: tableColumn,
         conditions: updatedConditions,
+        page: alertPage,
+        pageSize: alertPageSize,
       },
     });
   }
@@ -199,6 +201,8 @@ function AlertList({ dispatch, loading, alerts, total }) {
       payload: {
         currentColumn: tableColumn,
         conditions,
+        page: alertPage,
+        pageSize: alertPageSize,
         sort,
       },
     });
@@ -256,6 +260,8 @@ function AlertList({ dispatch, loading, alerts, total }) {
           }}
           pagination={{
             total,
+            current: alertPage,
+            pageSize: alertPageSize,
             showSizeChanger: true,
             pageSizeOptions,
             showTotal(count) {
@@ -271,7 +277,13 @@ function AlertList({ dispatch, loading, alerts, total }) {
           })}
         >
           <Column
-            align="center"
+            width={50}
+            ellipsis
+            dataIndex="no"
+            title="No."
+            render={(text, record, index) => (alertPage - 1) * alertPageSize + index + 1}
+          />
+          <Column
             dataIndex="alertNo"
             className="word-break"
             title={
@@ -324,12 +336,14 @@ function AlertList({ dispatch, loading, alerts, total }) {
             render={text => moment(text, timestampFormat).format(timestampFormat)}
           />
           <Column
+            width={100}
             align="right"
             dataIndex="itemsTotal"
             title={<FormattedMessage id="alert-center.items-total" />}
             render={text => +text}
           />
           <Column
+            width={120}
             dataIndex="userName"
             title={<FormattedMessage id="alert-center.owner" />}
             render={text => {
@@ -341,6 +355,7 @@ function AlertList({ dispatch, loading, alerts, total }) {
             }}
           />
           <Column
+            width={120}
             dataIndex="alertStatusDesc"
             title={<FormattedMessage id="alert-center.status" />}
             render={text => {
@@ -352,15 +367,11 @@ function AlertList({ dispatch, loading, alerts, total }) {
             }}
           />
           <Column
+            width={90}
             dataIndex="action"
             title={<FormattedMessage id="alert-center.actions" />}
             render={(text, record) => (
-              <Row
-                type="flex"
-                justify="space-around"
-                align="middle"
-                className={styles['icon-btns']}
-              >
+              <Row type="flex" align="middle" className={styles['icon-btns']}>
                 {alert &&
                 alert.alertId === record.alertId &&
                 !isBatchAction &&
@@ -373,7 +384,7 @@ function AlertList({ dispatch, loading, alerts, total }) {
                     title={formatMessage({ id: 'alert-center.claim' })}
                     onClick={() => claimAlert(record)}
                   >
-                    <IconFont type="iconqizhi" className={styles.icon} />
+                    <IconFont type="icon-claimx" className={styles.icon} />
                   </button>
                 )}
                 {/* never can close by manual */}
@@ -384,7 +395,7 @@ function AlertList({ dispatch, loading, alerts, total }) {
                     title={formatMessage({ id: 'alert-center.close' })}
                     onClick={() => showCloseModal(record)}
                   >
-                    <IconFont type="iconclose" className={styles.icon} />
+                    <IconFont type="icon-deletex" className={styles.icon} />
                   </button>
                 )}
               </Row>
@@ -397,9 +408,14 @@ function AlertList({ dispatch, loading, alerts, total }) {
   );
 }
 
-const mapStateToProps = ({ loading, alertCenter: { alerts, alertItems = [], alertTotal } }) => ({
+const mapStateToProps = ({
+  loading,
+  alertCenter: { alerts, alertItems = [], alertPage, alertPageSize, alertTotal },
+}) => ({
   alerts,
   alertItems,
+  alertPage,
+  alertPageSize,
   total: alertTotal,
   loading: loading.effects,
 });
