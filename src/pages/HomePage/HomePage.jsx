@@ -334,12 +334,10 @@ export default class HomePage extends PureComponent {
             });
           });
           if (this.state.alterAllChart) {
-            this.state.alterAllChart.source(AlterAll);
-            this.state.alterAllChart.repaint();
+            this.state.alterAllChart.changeData(AlterAll);
           }
         } else if (this.state.alterAllChart) {
-          this.state.alterAllChart.source([]);
-          this.state.alterAllChart.repaint();
+          this.state.alterAllChart.changeData([]);
         }
       },
     });
@@ -1042,8 +1040,9 @@ export default class HomePage extends PureComponent {
                 type: item.market,
               });
             });
-            this.state.submissionStatusBarChart.source(submissionStatusBar);
-            this.state.submissionStatusBarChart.repaint();
+            // eslint-disable-next-line no-unused-expressions
+            this.state.submissionStatusBarChart &&
+              this.state.submissionStatusBarChart.changeData(submissionStatusBar);
           },
         });
       }
@@ -1226,8 +1225,8 @@ export default class HomePage extends PureComponent {
                 value: Number(item.count),
               });
             });
-            this.state.marketRoseChart.source(marketRose);
-            this.state.marketRoseChart.repaint();
+            // eslint-disable-next-line no-unused-expressions
+            this.state.marketRoseChart && this.state.marketRoseChart.changeData(marketRose);
           },
         });
       }

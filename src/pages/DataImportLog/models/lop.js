@@ -4,14 +4,14 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-06 15:04:23
+ * @LastEditTime : 2020-01-11 12:31:47
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-import { reqFormat as format } from '../constants';
+import { reqFormat as format, defaultPage, defaultPageSize } from '../constants';
 
 export async function getLogs(params = {}) {
-  const { page = 1, pageSize = 10, startDate, endDate, ...rest } = params;
+  const { page = defaultPage, pageSize = defaultPageSize, startDate, endDate, ...rest } = params;
   return request('get_lop_proc_progress_list_page', {
     data: {
       pageNumber: page.toString(),
@@ -59,18 +59,27 @@ export default {
   },
   reducers: {
     save(state, { payload }) {
-      const { logs, page = 1, total } = payload;
+      const { logs, page1, pageSize, total } = payload;
       return {
         ...state,
         page,
         logs,
+        pageSize,
         total,
       };
     },
   },
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const { items, totalCount, err } = yield call(getLogs, payload);
+    *fetch({ payload }, { call, put, select }) {
+      const { page, pageSize: ps, ...rest } = payload;
+
+      const pageSize = yield select(({ lop }) => ps || lop.pageSize);
+
+      const { items, totalCount, err } = yield call(getLogs, {
+        page,
+        pageSize,
+        ...rest,
+      });
 
       if (err) {
         throw new Error(err);
@@ -80,17 +89,20 @@ export default {
         type: 'save',
         payload: {
           logs: items,
-          page: payload.page,
+          page,
+          pageSize,
           total: totalCount,
         },
       });
     },
-    *importByManual({ payload }, { call }) {
-      const { err, msg } = yield call(postManual, payload);
+    *importByManual({ payload }, { call, put }) {
+      const { searchParams, ...rest } = payload;
+      const { err, msg } = yield call(postManual, rest);
       if (err) {
         throw new Error(err);
       }
       message.success(msg);
+      yield put({ type: 'fetch', payload: searchParams });
     },
     *importByAuto({ payload }, { call, put }) {
       const { err, msg } = yield call(postAuto);

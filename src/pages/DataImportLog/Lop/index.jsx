@@ -39,7 +39,13 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
     dispatch({ type: 'lop/fetch', payload: { page, pageSize, ...searchParams } });
   }
   async function handleUpload(params) {
-    await dispatch({ type: 'lop/importByManual', payload: params });
+    await dispatch({
+      type: 'lop/importByManual',
+      payload: {
+        searchParams,
+        ...params,
+      },
+    });
     setVisible(false);
   }
   async function handleDownload(lopImpId) {
