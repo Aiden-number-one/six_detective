@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Tabs, Row, Col, Input, Button, Drawer, Radio, Upload, Empty, Spin } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import AlertComment from '@/pages/AlertCenter/Alert/components/AlertComment';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
 import styles from './index.less';
@@ -474,7 +475,16 @@ function ProcessDetail({
                 {taskHistoryList.length > 0 ? (
                   <ul className={styles['comment-list']}>
                     {taskHistoryList.map(item => (
-                      <TaskCommentHistory comment={item} key={item.id} />
+                      <AlertComment
+                        comment={{
+                          id: item.id,
+                          time: item.commentTime,
+                          content: item.commentContent,
+                          user: item.commentUserName,
+                          files: item.attachment,
+                        }}
+                        key={item.id}
+                      />
                     ))}
                   </ul>
                 ) : (
@@ -506,6 +516,7 @@ function ProcessDetail({
                         style={{ marginRight: '8px' }}
                       />
                       <Upload
+                        multiple
                         action="/upload?fileClass=WORKFLOW"
                         showUploadList={false}
                         beforeUpload={file => isLt5M(file.size)}
@@ -528,7 +539,7 @@ function ProcessDetail({
                         <>
                           {detailItems[0].isEditing ? (
                             <Button
-                              style={{ marginRight: '10px' }}
+                              style={{ marginRight: '10px', marginLeft: '4px' }}
                               type="primary"
                               onClick={saveTask}
                             >
@@ -543,7 +554,7 @@ function ProcessDetail({
                       ) : (
                         <>
                           <Button
-                            style={{ marginRight: '10px' }}
+                            style={{ marginRight: '10px', marginLeft: '4px' }}
                             type="primary"
                             onClick={() => submitDrawer('reject')}
                           >
