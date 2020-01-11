@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:40:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 16:07:54
+ * @LastEditTime : 2020-01-11 13:49:21
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
@@ -321,7 +321,7 @@ export default class ModifyUser extends Component {
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} NewFlag={NewFlag} userInfo={userInfo} />
-        {getAuthority().authLocked && (
+        {getAuthority().authDisabled && (
           <Row>
             <Col offset={4}>
               <Checkbox onChange={this.onChangeLocked} checked={locedChecked}>
