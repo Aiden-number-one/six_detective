@@ -568,7 +568,12 @@ export default class HomePage extends PureComponent {
         },
         offset: 2,
       })
-      .size(15)
+      // eslint-disable-next-line consistent-return
+      .size('', () => {
+        if (AlterAll.length / 2 < 6) {
+          return 15;
+        }
+      })
       .adjust([
         {
           type: 'dodge',

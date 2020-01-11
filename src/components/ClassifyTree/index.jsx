@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 12:24:57
+ * @LastEditTime : 2020-01-11 13:23:26
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -142,6 +142,7 @@ class ClassifyTree extends Component {
     expandedKeys: [],
     defaultCheckedKeys: [],
     checkedKeys: [],
+    tempCheckedKeys: [],
     customeBtnIds: [],
     autoExpandParent: true,
     allChecked: false,
@@ -172,12 +173,14 @@ class ClassifyTree extends Component {
       this.setState({
         checkedKeys,
         customeBtnIds: btnIds,
+        tempCheckedKeys: checkedKeys,
       });
       this.props.onSelect(menuList[0] && menuList[0][this.props.treeKey.currentKey]);
       if (all) {
         this.compareAllChecked();
         this.setState({
           checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
+          tempCheckedKeys: this.formatCheckedKeys(menuList, checkedKeys),
         });
       }
     }, 1000);
@@ -298,6 +301,7 @@ class ClassifyTree extends Component {
     this.props.onCheck(selectedKeys, info, customeBtnIds);
     this.setState({
       checkedKeys: selectedKeys,
+      tempCheckedKeys: selectedKeys.concat(info.halfCheckedKeys),
     });
     for (let i = 0; i < newCheckedKeys.length; i += 1) {
       if (newCheckedKeys[i].includes('btn')) {
@@ -445,7 +449,10 @@ class ClassifyTree extends Component {
 
   onChangeChecked = value => {
     value.stopPropagation();
-    const { customeBtnIds, checkedKeys } = this.state;
+    // const { checkedKeys } = this.props
+    const { customeBtnIds, tempCheckedKeys } = this.state;
+    console.log('tempCheckedKeys===', tempCheckedKeys);
+    // console.log('checkedKeys=====================', checkedKeys)
     const btnIds = Object.assign([], customeBtnIds);
     if (value.target.checked) {
       btnIds.push(value.target.value);
@@ -458,7 +465,7 @@ class ClassifyTree extends Component {
         customeBtnIds: btnIds,
       },
       () => {
-        this.props.onCheck(checkedKeys, false, btnIds);
+        this.props.onCheck(tempCheckedKeys, false, btnIds);
       },
     );
   };

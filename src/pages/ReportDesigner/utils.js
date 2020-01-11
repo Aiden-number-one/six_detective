@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-07 21:38:32
+ * @LastEditTime : 2020-01-10 21:11:21
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -352,23 +352,27 @@ export function getCellStringByIndex(rowIndex, colIndex) {
 
 /**
  * @description: 设置单元格属性类型及值
- * @param {type} param
+ * @param {object} object type value cellPosition
  * @return: return
  * @Author: mus
  * @Date: 2020-01-04 19:35:28
  */
-export function setCellTypeAndValue(type, value, cellPosition) {
+export function setCellTypeAndValue({ type, value, cellPosition }) {
   const [rowIndex, colIndex] = getColIndexRowIndex(cellPosition);
-  // eslint-disable-next-line no-underscore-dangle
-  window.xsObj._setCellType({
-    sheetName: 'sheet1',
-    rc: cellPosition,
-    cellType: type,
-  });
-  // eslint-disable-next-line no-underscore-dangle
-  window.xsObj._setCellText({
-    ri: Number(rowIndex),
-    ci: Number(colIndex),
-    text: value,
-  });
+  if (type !== undefined) {
+    // eslint-disable-next-line no-underscore-dangle
+    window.xsObj._setCellType({
+      sheetName: 'sheet1',
+      rc: cellPosition,
+      cellType: type,
+    });
+  }
+  if (value !== undefined) {
+    // eslint-disable-next-line no-underscore-dangle
+    window.xsObj._setCellText({
+      ri: Number(rowIndex),
+      ci: Number(colIndex),
+      text: value,
+    });
+  }
 }

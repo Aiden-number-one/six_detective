@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-07 22:12:11
+ * @LastEditTime : 2020-01-10 19:50:07
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -17,7 +17,7 @@ import {
   getCustomSearchDataXml,
 } from '../utils';
 
-const { getDataSet, getReportTemplateContent, setReportTemplateContent } = Service;
+const { getDataSet, getReportTemplateContent, setReportTemplateContent, importExcel } = Service;
 
 export default {
   namespace: 'reportDesigner',
@@ -233,6 +233,15 @@ export default {
         type: 'setDataSetPublicList',
         payload: dataSetList,
       });
+    },
+    // 进行模版的导入
+    *importExcel({ payload }, { call, put }) {
+      const response = yield call(importExcel, { param: payload });
+      if (response.bcjson.flag === '1') {
+        return response.bcjson.items[0].reportDefinition;
+      }
+      message.info(response.bcjson.msg);
+      return false;
     },
     // 查询报表模板
     *getReportTemplateContent({ payload }, { call, put }) {
