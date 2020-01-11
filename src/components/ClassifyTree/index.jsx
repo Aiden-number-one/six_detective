@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 13:23:26
+ * @LastEditTime : 2020-01-11 13:51:02
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -180,10 +180,9 @@ class ClassifyTree extends Component {
         this.compareAllChecked();
         this.setState({
           checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
-          tempCheckedKeys: this.formatCheckedKeys(menuList, checkedKeys),
         });
       }
-    }, 1000);
+    }, 500);
   }
 
   formatCheckedKeys = (menuList, checkedKeys) => {
@@ -448,11 +447,7 @@ class ClassifyTree extends Component {
   };
 
   onChangeChecked = value => {
-    value.stopPropagation();
-    // const { checkedKeys } = this.props
     const { customeBtnIds, tempCheckedKeys } = this.state;
-    console.log('tempCheckedKeys===', tempCheckedKeys);
-    // console.log('checkedKeys=====================', checkedKeys)
     const btnIds = Object.assign([], customeBtnIds);
     if (value.target.checked) {
       btnIds.push(value.target.value);
