@@ -2,7 +2,7 @@
  * @Description: all alert data
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-11 17:16:30
+ * @LastEditTime : 2020-01-11 18:29:58
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -69,15 +69,14 @@ export default {
     //     }
     //   }
     // },
-    *getPerAlertData({ payload }, { call, put }) {
+    *getPerAlertData({ payload, callback }, { call, put }) {
       const response = yield call(getPerAlertData, { param: payload });
       if (response.bcjson.flag === '1') {
-        if (response.bcjson.items) {
-          yield put({
-            type: 'savePerAlertData',
-            payload: response.bcjson.items,
-          });
-        }
+        yield put({
+          type: 'savePerAlertData',
+          payload: response.bcjson.items,
+        });
+        if (callback) callback();
       }
     },
   },
