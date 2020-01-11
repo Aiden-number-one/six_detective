@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 14:22:49
+ * @LastEditTime : 2020-01-11 16:35:00
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -294,10 +294,20 @@ class ClassifyTree extends Component {
   };
 
   onCheck = (selectedKeys, info) => {
+    const { btnArray } = this.props;
     const { menuList, customeBtnIds } = this.state;
+    const newCustomeBtnIds = [];
+    btnArray.forEach(element => {
+      if (selectedKeys.some(item => item === element.parentmenuid)) {
+        if (customeBtnIds.indexOf(element.menuid) > -1) {
+          newCustomeBtnIds.push(element.menuid);
+        }
+      }
+    });
+    console.log('newCustomeBtnIds==', newCustomeBtnIds);
     const checkedKeys = this.setGridDataFromTree([], menuList);
     const newCheckedKeys = checkedKeys.map(element => element.menuid);
-    this.props.onCheck(selectedKeys, info, customeBtnIds);
+    this.props.onCheck(selectedKeys, info, newCustomeBtnIds);
     this.setState({
       checkedKeys: selectedKeys,
       tempCheckedKeys: selectedKeys.concat(info.halfCheckedKeys),
