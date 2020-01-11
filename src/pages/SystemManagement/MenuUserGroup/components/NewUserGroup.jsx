@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 09:57:33
+ * @LastEditTime : 2020-01-11 13:16:00
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -94,6 +94,7 @@ class NewUser extends Component {
 
   onSave = () => {
     const { selectedKeys } = this.state;
+    console.log('selectedKeys===', selectedKeys);
     const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
       if (err) {
@@ -194,6 +195,8 @@ class NewUser extends Component {
    * @return: undefined
    */
   onCheck = (selectedKeyss, event, btnIds) => {
+    console.log('selectedKeyss================================111===', selectedKeyss);
+    console.log('event======', event);
     let halfCheckedKeys = [];
     if (typeof event === 'boolean') {
       halfCheckedKeys = [];

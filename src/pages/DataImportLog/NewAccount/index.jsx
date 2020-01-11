@@ -57,6 +57,8 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
 
     if (count === 0) {
       onFinish();
+      // update logs
+      dispatch({ type: 'newAccount/fetch', payload: searchParams });
     }
   }
   async function handleDownload(lopImpId) {

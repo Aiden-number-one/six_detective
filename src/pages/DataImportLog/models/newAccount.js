@@ -4,14 +4,21 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-10 20:26:12
+ * @LastEditTime : 2020-01-11 11:19:03
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-import { reqFormat as format } from '../constants';
+import { reqFormat as format, defaultPage, defaultPageSize } from '../constants';
 
 export async function getLogs(params = {}) {
-  const { page = 1, pageSize = 10, market, startDate, endDate, ...rest } = params;
+  const {
+    page = defaultPage,
+    pageSize = defaultPageSize,
+    market,
+    startDate,
+    endDate,
+    ...rest
+  } = params;
   return request('get_new_acc_lop_proc_progress', {
     data: {
       pageNumber: page.toString(),
@@ -56,29 +63,33 @@ export default {
   namespace: 'newAccount',
   state: {
     logs: [],
+    page: defaultPage,
+    pageSize: defaultPageSize,
     total: 0,
-    // parseFiles: [],
   },
   reducers: {
     save(state, { payload }) {
-      const { logs, page = 1, total } = payload;
+      const { logs, page, pageSize, total } = payload;
       return {
         ...state,
         logs,
         page,
+        pageSize,
         total,
       };
     },
-    // saveParseFiles(state, { payload }) {
-    //   return {
-    //     ...state,
-    //     parseFiles: payload.parseFiles,
-    //   };
-    // },
   },
   effects: {
-    *fetch({ payload = {} }, { call, put }) {
-      const { items, totalCount, err } = yield call(getLogs, payload);
+    *fetch({ payload = {} }, { call, put, select }) {
+      const { page, pageSize: ps, ...rest } = payload;
+
+      const pageSize = yield select(({ newAccount }) => ps || newAccount.pageSize);
+
+      const { items, totalCount, err } = yield call(getLogs, {
+        page,
+        pageSize,
+        ...rest,
+      });
 
       if (err) {
         throw new Error(err);
@@ -88,7 +99,8 @@ export default {
         type: 'save',
         payload: {
           logs: items,
-          page: payload.page,
+          page,
+          pageSize,
           total: totalCount,
         },
       });
@@ -99,12 +111,6 @@ export default {
         throw new Error(err);
       }
       return items;
-      // yield put({
-      //   type: 'saveParseFiles',
-      //   payload: {
-      //     parseFiles: items,
-      //   },
-      // });
     },
     *importByManual({ payload }, { call }) {
       const { file, market, submitterCode, category } = payload;
