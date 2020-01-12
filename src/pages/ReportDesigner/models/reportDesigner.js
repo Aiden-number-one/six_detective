@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-11 15:01:23
+ * @LastEditTime : 2020-01-13 00:52:09
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -14,7 +14,6 @@ import {
   getTemplateAreaCellPartXml,
   getColColumnXml,
   getDataSetXml,
-  getCustomSearchDataXml,
 } from '../utils';
 
 const { getDataSet, getReportTemplateContent, setReportTemplateContent, importExcel } = Service;
@@ -163,11 +162,10 @@ export default {
   },
   effects: {
     // 组装reportTemplateContent
-    *packageTemplate(_, { select, call, put }) {
+    *packageTemplate({ payload }, { select, call, put }) {
       // 报表模板ID Name 及 私有数据集
       const [
         reportId,
-        reportName,
         dataSetPrivateList,
         teamplateAreaObj,
         originTemplateAreaObj,
@@ -175,7 +173,6 @@ export default {
         customSearchData,
       ] = yield select(({ reportDesigner, formArea }) => [
         reportDesigner.reportId, // 报表模板id
-        reportDesigner.reportName, // 报表模板name
         reportDesigner.dataSetPrivateList, // 私有数据集
         reportDesigner.teamplateAreaObj, // 报表模板区域数据
         reportDesigner.originTemplateAreaObj, // 报表模板区域原始数据
@@ -191,7 +188,7 @@ export default {
       // 得到查询条件相关
       const reportTemplateContentObj = {
         report_id: reportId, // 新建为空
-        report_name: reportName,
+        report_name: payload.reportName,
         report_description: '', // 暂无
         report_version: 'v1.0', // 默认1.0
         datasets: dataSetPrivateList,
@@ -207,6 +204,7 @@ export default {
       };
       const response = yield call(setReportTemplateContent, {
         param: {
+          folderId: payload.folderId,
           report_id: reportId,
           reportTemplateContent: JSON.stringify(reportTemplateContentObj),
         },
@@ -216,6 +214,15 @@ export default {
           type: 'setReportId',
           payload: response.bcjson.items[0].reportTemplateContent.report_id,
         });
+        yield put({
+          type: 'changeReportName',
+          payload: response.bcjson.items[0].reportTemplateContent.report_name,
+        });
+        window.history.pushState(
+          null,
+          null,
+          `/report-designer?reportId=${response.bcjson.items[0].reportTemplateContent.report_id}`,
+        );
         message.info(response.bcjson.msg);
       } else {
         message.warn(response.bcjson.msg);

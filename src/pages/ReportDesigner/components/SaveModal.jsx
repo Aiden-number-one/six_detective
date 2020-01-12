@@ -4,66 +4,58 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-12 15:09:07
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-12 15:11:58
+ * @LastEditTime : 2020-01-12 19:13:31
  */
 
 import React from 'react';
-import { Drawer, Form, Input, TreeSelect, Button } from 'antd';
-import { formatMessage } from 'umi/locale';
+import { Form, Input, TreeSelect, Button } from 'antd';
+import { connect } from 'dva';
 
 export default React.memo(
-  Form.create()(
-    class extends React.Component {
-      handleSubmit = e => {
-        e.preventDefault();
-        const { form, toggleModal, saveSql } = this.props;
-        form.validateFields((err, fieldsValue) => {
-          if (err) return;
-          if (saveSql) saveSql(fieldsValue);
-          form.resetFields();
-          toggleModal('save');
-        });
-      };
-
-      render() {
-        const {
-          visible,
-          form,
-          toggleModal,
-          sqlDataSetName,
-          isSaveOther,
-          classifyTree,
-          dataSet,
-        } = this.props;
-        const { getFieldDecorator } = form;
-        const Layout = {
-          labelCol: { span: 9 },
-          wrapperCol: { span: 15 },
+  connect(({ reportDesigner, reportTree }) => ({
+    reportName: reportDesigner.reportName,
+    classifyTree: reportTree.classifyTree,
+  }))(
+    Form.create()(
+      class extends React.Component {
+        handleSubmit = e => {
+          e.preventDefault();
+          const { form, saveDrawDisplay, saveReportTemplate } = this.props;
+          form.validateFields((err, fieldsValue) => {
+            if (err) return;
+            form.resetFields();
+            saveReportTemplate(fieldsValue);
+            saveDrawDisplay(false);
+          });
         };
-        return (
-          <Drawer
-            visible={visible}
-            width={350}
-            title={isSaveOther ? 'Save As' : 'Save'}
-            wrapClassName="modal"
-            destroyOnClose
-            onClose={() => {
-              form.resetFields();
-              toggleModal('save');
-            }}
-            onOk={() => {}}
-          >
+
+        render() {
+          const {
+            form,
+            saveDrawDisplay,
+            isSaveOther,
+            classifyTree,
+            dataSet,
+            saveType,
+            reportName, // 报表名
+          } = this.props;
+          const { getFieldDecorator } = form;
+          const Layout = {
+            labelCol: { span: 6 },
+            wrapperCol: { span: 18 },
+          };
+          return (
             <Form onSubmit={this.handleSubmit}>
-              <Form.Item {...Layout} label="DataSet Name">
-                {getFieldDecorator('sqlDataSetName', {
+              <Form.Item {...Layout} label="Template Name">
+                {getFieldDecorator('reportName', {
                   rules: [{ required: true, message: 'Please Input' }],
-                  initialValue: isSaveOther ? `${sqlDataSetName}_copy` : sqlDataSetName,
-                })(<Input placeholder={formatMessage({ id: 'index.inputName' })} />)}
+                  initialValue: saveType === 'saveAs' ? `${reportName}_copy` : reportName,
+                })(<Input placeholder="Please Input" />)}
               </Form.Item>
               <Form.Item {...Layout} label="Folder">
-                {getFieldDecorator('folder', {
+                {getFieldDecorator('folderId', {
                   rules: [{ required: true, message: 'Please select' }],
-                  initialValue: dataSet ? dataSet.folderId : undefined,
+                  initialValue: saveType === 'saveAs' ? dataSet.folderId : undefined,
                 })(<TreeSelect treeData={classifyTree} placeholder="Please select" />)}
               </Form.Item>
               <div
@@ -80,20 +72,26 @@ export default React.memo(
               >
                 <Button
                   onClick={() => {
-                    toggleModal('save');
+                    saveDrawDisplay(false);
                   }}
                   style={{ marginRight: 8 }}
                 >
                   Cancel
                 </Button>
-                <Button htmlType="submit" type="primary">
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  onSubmit={() => {
+                    this.handleSubmit();
+                  }}
+                >
                   Submit
                 </Button>
               </div>
             </Form>
-          </Drawer>
-        );
-      }
-    },
+          );
+        }
+      },
+    ),
   ),
 );

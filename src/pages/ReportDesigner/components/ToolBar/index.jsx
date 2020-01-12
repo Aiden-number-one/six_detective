@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 09:36:59
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-09 09:39:28
+ * @LastEditTime : 2020-01-12 19:54:46
  */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
@@ -46,7 +46,7 @@ export default class ToolBar extends Component {
 
   render() {
     const { tabActive, reportNameType } = this.state;
-    const { reportName, saveReportTemplate, reportId } = this.props;
+    const { reportName, reportId, saveDrawDisplay } = this.props;
     return (
       <>
         <div className={classNames(styles.switchTabs)}>
@@ -120,12 +120,22 @@ export default class ToolBar extends Component {
                 <span>Preview</span>
               </div>
               <div className={styles.actionButt}>
-                <IconFont type="iconicon_previrew" />
-                <span>Share</span>
+                <IconFont
+                  type="iconICON_SAVEx"
+                  onClick={() => {
+                    saveDrawDisplay(true, 'saveAs');
+                  }}
+                />
+                <span>Save As</span>
               </div>
               {/* 进行模板保存 */}
-              <div className={styles.actionButt} onClick={saveReportTemplate}>
-                <IconFont type="iconicon_previrew" />
+              <div
+                className={styles.actionButt}
+                onClick={() => {
+                  saveDrawDisplay(true, 'save');
+                }}
+              >
+                <IconFont type="iconICON_SAVEx" />
                 <span>Save</span>
               </div>
             </div>
