@@ -260,8 +260,17 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
             <Spin spinning={loading['alertCenter/fetchComments']}>
               {comments.length > 0 ? (
                 <ul className={styles['comment-list']}>
-                  {comments.map(item => (
-                    <AlertComment comment={item} key={item.id} />
+                  {comments.map(({ id, commitTime, commentContent, userName, fileList }) => (
+                    <AlertComment
+                      comment={{
+                        id,
+                        time: commitTime,
+                        content: commentContent,
+                        user: userName,
+                        files: fileList,
+                      }}
+                      key={id}
+                    />
                   ))}
                 </ul>
               ) : (

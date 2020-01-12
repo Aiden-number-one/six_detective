@@ -9,8 +9,8 @@ export default class SpreadsheetComponent extends Component {
   render() {
     return (
       <Fragment>
-        <div id="x-spreadsheet"></div>
-        <div className="formulabar-text" id="J_choose_location"></div>
+        <div id="x-spreadsheet" style={{ position: 'relative' }} />
+        <div className="formulabar-text" id="J_choose_location" />
         <div style={{ display: 'none' }} className="sheet-img-collection">
           <img
             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAACK0lEQVQ4T63UPYgTQRQH8P/bzXpqo0HRQgiCFoeNYE4tREmfr5lALEQRtdAT5K7RRg5BPCuvEcHCSuQQCfJeEjFXCWIh2okfcILY2IgIcoiJLrtPJtyC5nIJ0dtu2Hm/eTPvzRDW+KPEy+fz6SAIjgPYMsoaRPRFVedF5JuL64KlUmm77/tNVV0AEI8IjgEwqVRqX61Wa3dBY8wJANtEZG4ULJlrrb0M4D0z1xJwkoh+MPPdarW6IQzDGwAOAAgBzInIw0ELGWPOEJHHzHdWgMYYl6UvItPLuERRdK7ZbH5cDR0IWmufM/Oh5CyNMa5Qm0XkVi9YqVT2x3E8TkQGwELfDK21tTiOb9br9WfL53udiF4wc92Nc7nc+nQ6PamqRwB8IKJFVd1DRO/6gqVSacL3/ccAHqnqd9cJInLBYeVyueh53nlVvSIiL5OMB27ZTSoUCjuCINgN4A0zf13O9CqAtIhM9bbWULD3rIwxDvslItf6FWZVUFWfAtjped5Su91+22q1flYqlbyqHmXmk6NW+RSAMYcS0TpVPUhEDwCc7nQ6E61Wa2lUcJyZpwGoC6xWq34YhvNE9JqZZ/+5sf8MtNbWoyi61Gg0FtcKfMXMe4fd7xVFKZfLx4hok4jcToKz2WyQyWSeMPPhYaC19qKqfhKR+927XCwWN6ZSKdfMs6rqHgSo6lbP86ZUdWYIuIuIzkZRVGw0Gp//+4EF4Br/3l8P7LAtjfL/N2JOPCTFuUnLAAAAAElFTkSuQmCC"

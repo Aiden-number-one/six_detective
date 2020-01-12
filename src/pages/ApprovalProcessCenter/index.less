@@ -123,6 +123,7 @@
       vertical-align: middle;
     }
     .icon {
+      color: rgba(188, 198, 204, 1);
       font-size: 20px;
       vertical-align: middle;
       cursor: pointer;
@@ -130,6 +131,9 @@
         margin: 0 8px;
         font-size: 19px;
       }
+    }
+    .icon:hover {
+      color: #0d87d4;
     }
   }
 }
@@ -266,8 +270,15 @@
         height: 100px;
       }
       .comment-commit {
-        height: 46px;
+        height: 30px;
         background-color: #fff;
+        .phrase-btn {
+          height: 25px;
+          margin-left: 5px;
+          color: #10416c;
+          background-color: #ebf0f4;
+          border-color: #ebf0f4;
+        }
       }
       .up-attachments {
         background-color: #eef1f4;
@@ -321,3 +332,19 @@
 // .antd-pro-pages-alert-center-index-btns button {
 //   margin-right: 10px;
 // }
+
+.processBox {
+  position: absolute;
+  top: 7px;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  width: 200px;
+  height: 30px;
+  margin: auto;
+  background-color: #fff;
+  p {
+    margin: 0;
+    text-align: center;
+  }
+}

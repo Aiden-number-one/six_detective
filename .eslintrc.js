@@ -2,8 +2,8 @@
  * @Description: eslint 配置
  * @Author: mus
  * @Date: 2019-08-30 16:09:36
- * @LastEditTime: 2019-09-19 10:27:54
- * @LastEditors: mus
+ * @LastEditTime : 2020-01-11 15:12:12
+ * @LastEditors  : liangchaoshun
  * @Email: mus@szkingdom.com
  */
 const { strictEslint } = require('@umijs/fabric');
@@ -19,7 +19,8 @@ const umiOptions = {
 
 // 自定义规则，写这里
 const customRules = {
-  '@typescript-eslint/no-unused-vars': 'off',
+  '@typescript-eslint/no-unused-vars': 'warn', // 定义了变量但未使用，警告
+  'no-plusplus': 'off', // 允许 i++ 运算
 }
 
 // 合并规则

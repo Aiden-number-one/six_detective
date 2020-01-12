@@ -3,8 +3,13 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
+<<<<<<< Updated upstream
  * @LastEditors  : mus
  * @LastEditTime : 2020-01-10 21:11:21
+=======
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-11 20:55:35
+>>>>>>> Stashed changes
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -86,6 +91,7 @@ export function dataSetTransform(dataSetItem) {
  * @Date: 2019-12-21 16:13:32
  */
 export function dataSetTree(dataSets) {
+  // TODO: 叶子节点不能如此判断
   return dataSets.map(dataSet => ({
     title: dataSet.dataset_name,
     key: dataSet.dataset_id,
@@ -376,3 +382,29 @@ export function setCellTypeAndValue({ type, value, cellPosition }) {
     });
   }
 }
+
+/**
+ *
+ * @param { ElementNode } el 动态添加的元素
+ * @param { Function } callback 回调
+ * @param { EventObject } ev 事件对象
+ * @description 动态添加的元素，点击外部区域，将其隐藏
+ */
+export const dynamicEleOutsideClickHandler = (element, callback) => {
+  const handler = (el, cb, ev) => {
+    ev.preventDefault();
+    el.style.display = 'none';
+    if (typeof cb === 'function') cb();
+  };
+
+  // 点击
+  document.body.addEventListener('click', e => handler(element, callback, e), false);
+  // 右键
+  document.body.addEventListener(
+    'mousedown',
+    e => {
+      if (`${e.button}` === '2') handler(element, callback, e);
+    },
+    false,
+  );
+};

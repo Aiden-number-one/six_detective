@@ -15,6 +15,7 @@ export default function({ info: { informationType, market, timestamp, informatio
         <Tabs defaultActiveKey="1" className={classNames(styles['detail-des'], styles['info-des'])}>
           <TabPane
             className={styles['tab-content']}
+            style={{ overflow: 'hidden' }}
             tab={<FormattedMessage id="alert-center.information-detail" />}
             key="1"
           >

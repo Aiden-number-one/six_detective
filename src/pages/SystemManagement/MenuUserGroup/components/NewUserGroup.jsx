@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 13:16:00
+ * @LastEditTime : 2020-01-11 16:50:22
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -11,6 +11,7 @@ import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
 import styles from '../MenuUserGroup.less';
+import { flatteningTree } from '@/utils/utils';
 
 import ClassifyTree from '@/components/ClassifyTree';
 
@@ -78,6 +79,8 @@ class NewUser extends Component {
     this.state = {
       selectedKeys: [],
       btnIds: [],
+      btnArray: [],
+      btnParentmenuids: [],
     };
   }
 
@@ -94,7 +97,7 @@ class NewUser extends Component {
 
   onSave = () => {
     const { selectedKeys } = this.state;
-    console.log('selectedKeys===', selectedKeys);
+    console.log('selectedKeys====================================', selectedKeys);
     const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
       if (err) {
@@ -162,7 +165,14 @@ class NewUser extends Component {
       payload: params,
       callback: () => {
         const selectedKeys = this.props.updateGroup.map(element => element.menuId);
+        const menuArray = flatteningTree(this.props.menuData);
+        const btnArray = menuArray.filter(element => element.menuid.includes('btn'));
+        // flatteningTree(this.props.menuData).then(res => {
+        //   menuArray = res
+        // })
+        console.log('btnArray=', btnArray);
         const btnIds = [];
+        const btnParentmenuids = btnArray.map(element => element.parentmenuid);
         for (let i = 0; i < selectedKeys.length; i += 1) {
           if (selectedKeys[i].includes('btn')) {
             btnIds.push(selectedKeys.splice(i, 1)[0]);
@@ -172,6 +182,8 @@ class NewUser extends Component {
         that.setState({
           selectedKeys,
           btnIds,
+          btnArray,
+          btnParentmenuids,
         });
       },
     });
@@ -195,8 +207,7 @@ class NewUser extends Component {
    * @return: undefined
    */
   onCheck = (selectedKeyss, event, btnIds) => {
-    console.log('selectedKeyss================================111===', selectedKeyss);
-    console.log('event======', event);
+    console.log('selectedKeyss, event, btnIds==', selectedKeyss, event, btnIds);
     let halfCheckedKeys = [];
     if (typeof event === 'boolean') {
       halfCheckedKeys = [];
@@ -217,7 +228,7 @@ class NewUser extends Component {
 
   render() {
     const { menuData, groupMenuInfo } = this.props;
-    const { selectedKeys, btnIds } = this.state;
+    const { selectedKeys, btnIds, btnArray, btnParentmenuids } = this.state;
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
@@ -232,6 +243,8 @@ class NewUser extends Component {
                 treeData={menuData}
                 checkedKeys={selectedKeys}
                 btnIds={btnIds}
+                btnParentmenuids={btnParentmenuids}
+                btnArray={btnArray}
                 treeKey={{
                   currentKey: 'menuid',
                   currentName: 'menuname',

@@ -484,7 +484,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
                 {getFieldDecorator('effectiveDate', {
                   rules: [{ required: !!isShowForm, message: 'Effective Date is missing' }],
                   initialValue: detailData.effectiveDate && moment(detailData.effectiveDate),
-                })(isShowForm ? <DatePicker format="DD-MMM-YYYY HH:mm:ss" /> : <Input disabled />)}
+                })(isShowForm ? <DatePicker format="DD-MMM-YYYY" /> : <Input disabled />)}
               </Form.Item>
             </div>
             <div className={styles.oldValueBox}>{oldValueList.effectiveDate}</div>
@@ -502,7 +502,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
                 {getFieldDecorator('expiryDate', {
                   rules: [{ required: !!isShowForm, message: 'Expiry Date is missing' }],
                   initialValue: detailData.expiryDate && moment(detailData.expiryDate),
-                })(isShowForm ? <DatePicker format="DD-MMM-YYYY HH:mm:ss" /> : <Input disabled />)}
+                })(isShowForm ? <DatePicker format="DD-MMM-YYYY" /> : <Input disabled />)}
               </Form.Item>
             </div>
             <div className={styles.oldValueBox}>{oldValueList.expiryDate}</div>

@@ -4,15 +4,16 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-10 13:58:46
+ * @LastEditTime : 2020-01-11 21:51:04
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
+import { defaultPage, defaultPageSize } from '@/pages/DataImportLog/constants';
 // just for unit test
 // `fetch` high order function return anonymous func
 export async function getAlerts({
-  page = 1,
-  pageSize = 10,
+  page = defaultPage,
+  pageSize = defaultPageSize,
   sort,
   currentColumn,
   conditions,
@@ -73,12 +74,17 @@ export async function getTaskHistory({ taskId }) {
     data: { taskId: taskId.toString() },
   });
 }
-export async function exportAlert({ fileType }) {
-  return request('set_data_file_export', {
+export async function exportAlerts({ alertId }) {
+  return request('set_alert_data_file_export', {
     data: {
-      apiName: 'bayconnect.superlop.get_alert_center_page_list',
-      apiVersion: 'v2.0',
-      fileType,
+      alertId: alertId.toString(),
+    },
+  });
+}
+export async function exportInfos({ infoId }) {
+  return request('set_information_data_file_export', {
+    data: {
+      infoId: infoId.toString(),
     },
   });
 }
@@ -92,8 +98,12 @@ export default {
   namespace: 'alertCenter',
   state: {
     infos: [],
+    infoPage: defaultPage,
+    infoPageSize: defaultPageSize,
     infoTotal: 0,
     alerts: [],
+    alertPage: defaultPage,
+    alertPageSize: defaultPageSize,
     alertTotal: 0,
     alertItems: [],
     comments: [],
@@ -104,18 +114,27 @@ export default {
   },
   reducers: {
     save(state, { payload }) {
-      const { alerts, alertTotal } = payload;
+      const {
+        alerts,
+        alertPage = defaultPage,
+        alertPageSize = defaultPageSize,
+        alertTotal,
+      } = payload;
       return {
         ...state,
         alerts,
+        alertPage,
+        alertPageSize,
         alertTotal,
       };
     },
     saveInfos(state, { payload }) {
-      const { infos, infoTotal } = payload;
+      const { infos, infoPage = defaultPage, infoPageSize = defaultPageSize, infoTotal } = payload;
       return {
         ...state,
         infos,
+        infoPage,
+        infoPageSize,
         infoTotal,
       };
     },
@@ -158,7 +177,8 @@ export default {
     },
   },
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *fetch({ payload = {} }, { call, put }) {
+      const { page, pageSize } = payload;
       const { items, totalCount, err } = yield call(getAlerts, {
         ...payload,
         dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
@@ -172,11 +192,20 @@ export default {
         type: 'save',
         payload: {
           alerts: items,
+          alertPage: page,
+          alertPageSize: pageSize,
           alertTotal: totalCount,
         },
       });
     },
-    *fetchInfos({ payload }, { call, put }) {
+    *exportAlerts({ payload }, { call }) {
+      const { err } = yield call(exportAlerts, payload);
+      if (err) {
+        throw new Error(err);
+      }
+    },
+    *fetchInfos({ payload = {} }, { call, put }) {
+      const { page, pageSize } = payload;
       const { items, totalCount, err } = yield call(getAlerts, {
         ...payload,
         dataTable: 'SLOP_BIZ.V_INFO',
@@ -190,9 +219,18 @@ export default {
         type: 'saveInfos',
         payload: {
           infos: items,
+          infoPage: page,
+          infoPageSize: pageSize,
           infoTotal: totalCount,
         },
       });
+    },
+    *exportInfos({ payload }, { call }) {
+      const { err, items } = yield call(exportInfos, payload);
+      if (err) {
+        throw new Error(err);
+      }
+      return items;
     },
     *fetchAlertItems({ payload }, { call, put }) {
       const { items, err } = yield call(getAlertItems, payload);
@@ -363,12 +401,6 @@ export default {
       yield put({
         type: 'fetch',
       });
-    },
-    *export({ payload }, { call }) {
-      const { err } = yield call(exportAlert, payload);
-      if (err) {
-        throw new Error(err);
-      }
     },
     *fetchAttachments({ payload }, { call, put }) {
       const { err, items } = yield call(getEmailByType, {

@@ -70,6 +70,8 @@ export default {
       if (res && res.bcjson.flag === '1') {
         message.success(res.bcjson.msg);
         router.goBack();
+      } else {
+        message.error(res.bcjson.msg);
       }
     },
     // 获取数据源数据

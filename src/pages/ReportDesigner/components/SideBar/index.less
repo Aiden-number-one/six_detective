@@ -201,7 +201,7 @@
       z-index: 100;
     }
     .ant-tree li .ant-tree-node-content-wrapper:hover {
-      background-color: transparent;
+      background-color: transparent !important;
     }
     .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected {
       background-color: transparent !important;
@@ -271,4 +271,9 @@
     margin-bottom: 10px;
     margin-left: 10%;
   }
+}
+
+// 当前选中的树节点（数据集）
+.selected-node {
+  background-color: #ccddec;
 }

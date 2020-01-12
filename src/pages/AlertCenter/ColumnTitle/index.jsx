@@ -12,48 +12,68 @@ function ColumnTitle({
   isNum,
   loading,
   curColumn,
-  filterItems,
   conditions,
   onSort,
   onCommit,
 }) {
   const defaultFilterType = isNum ? 1 : 7;
-
+  const [filterItems, setFilterItems] = useState([]);
   const [isFiltered, setFiltered] = useState(false);
   const [visible, setVisible] = useState(false);
   const [filterType, setFilterType] = useState(defaultFilterType);
-  const [checkedList, setCheckedList] = useState(filterItems);
+  const [checkedList, setCheckedList] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(''); // filterType == 1/3/4/5/6
 
-  function handleVisibleChange(v) {
+  async function handleVisibleChange(v) {
     setVisible(v);
     if (v) {
       setFilterType(defaultFilterType);
-      dispatch({
+      const filters = await dispatch({
         type: 'global/fetchTableFilterItems',
         payload: {
           tableName: 'slop_biz.v_alert_center',
           tableColumn: curColumn,
         },
       });
+      setFilterItems(filters);
+      if (!checkedList.length) {
+        setCheckedList(filters);
+      }
     }
   }
 
+  function handleCheckList(val) {
+    setCheckedList(val);
+    setSelectedItem('');
+  }
+
+  function handleSelect(val) {
+    setSelectedItem(val);
+    setCheckedList([val]);
+  }
+
   async function handleClear() {
-    await onCommit(curColumn);
+    const updatedConditions = conditions.filter(item => item.column !== curColumn);
+    console.log(updatedConditions);
+    await onCommit(curColumn, updatedConditions);
     setCheckedList(filterItems);
+    setSelectedItem('');
     setFiltered(false);
     setVisible(false);
   }
 
   async function handleSort(sort) {
-    await onSort(conditions, sort);
+    await onSort(curColumn, sort);
     setVisible(false);
   }
 
   async function handleOk() {
+    const isCheckbox = filterType === 2 || filterType === 7;
+    const value = isCheckbox ? checkedList : [selectedItem];
+
     const condition = {
       column: curColumn,
-      value: checkedList.toString(),
+      value: value.toString(),
       condition: filterType.toString(),
     };
     let updatedConditions = conditions;
@@ -73,8 +93,6 @@ function ColumnTitle({
     await onCommit(curColumn, updatedConditions);
     setVisible(false);
   }
-
-  function handleSelect() {}
 
   return (
     <Popover
@@ -99,7 +117,7 @@ function ColumnTitle({
                 filterList={filterItems}
                 curColumn={curColumn}
                 conditions={conditions}
-                onCheckedList={c => setCheckedList(c)}
+                onCheckedList={handleCheckList}
               />
             ) : (
               <FilterSelect
@@ -107,14 +125,14 @@ function ColumnTitle({
                 filterList={filterItems}
                 curColumn={curColumn}
                 conditions={conditions}
-                onSelect={handleSelect}
+                onChange={handleSelect}
               />
             )}
             <div className={styles['bottom-btns']}>
               <Button size="small" onClick={() => setVisible(false)}>
                 Cancel
               </Button>
-              <Button type="primary" disabled={!checkedList.length} onClick={handleOk}>
+              <Button type="primary" disabled={loading || !checkedList.length} onClick={handleOk}>
                 Commit
               </Button>
             </div>
@@ -135,8 +153,7 @@ function ColumnTitle({
   );
 }
 
-const mapStateToProps = ({ loading, global: { filterItems = [] } }) => ({
+const mapStateToProps = ({ loading }) => ({
   loading: loading.effects['global/fetchTableFilterItems'],
-  filterItems,
 });
 export default connect(mapStateToProps)(ColumnTitle);
