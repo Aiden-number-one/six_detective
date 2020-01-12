@@ -4,7 +4,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-11 12:10:37
+ * @LastEditTime : 2020-01-11 15:01:35
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -102,6 +102,12 @@ export default class ReportDesigner extends PureComponent {
         },
       });
     }
+
+    // 获取初始化数据
+    dispatch({
+      type: 'formArea/getDataSourceList',
+      payload: {},
+    });
   }
 
   // 单元格选择后
