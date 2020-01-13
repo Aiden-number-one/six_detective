@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 00:52:09
+ * @LastEditTime : 2020-01-13 15:00:11
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -24,6 +24,7 @@ export default {
     reportName: 'Untitled', // 当前报表设计器的名字
     reportTemplateContent: '', // 报表设计器的JSON
     reportId: '', // 报表设计器的id
+    folderId: '', // 报表模板存放的文件夹id
     teamplateAreaObj: [], // 报表设计器表格区域的相关Object对象
     originTemplateAreaObj: {}, // xspreadsheet的原始数据
     dataSetPublicList: [], // 公共数据集列表
@@ -134,6 +135,13 @@ export default {
         reportId: action.payload,
       };
     },
+    // 修改报表模板id
+    setFolderId(state, action) {
+      return {
+        ...state,
+        folderId: action.payload,
+      };
+    },
     // 存储otherProps的相关属性 例如扩展方向相关
     setSpreadsheetOtherProps(state, action) {
       return {
@@ -205,7 +213,7 @@ export default {
       const response = yield call(setReportTemplateContent, {
         param: {
           folderId: payload.folderId,
-          report_id: reportId,
+          reportId,
           reportTemplateContent: JSON.stringify(reportTemplateContentObj),
         },
       });
@@ -217,6 +225,11 @@ export default {
         yield put({
           type: 'changeReportName',
           payload: response.bcjson.items[0].reportTemplateContent.report_name,
+        });
+        // 处理报表id
+        yield put({
+          type: 'setFolderId',
+          payload: payload.folderI,
         });
         window.history.pushState(
           null,
@@ -260,7 +273,7 @@ export default {
       if (response.bcjson.flag === '1' && response.bcjson.items[0]) {
         // TODO: 需要优化
         if (response.bcjson.items[0].reportTemplateContent.templateArea.originTemplateAreaObj) {
-          const { reportTemplateContent } = response.bcjson.items[0];
+          const { reportTemplateContent, folderId } = response.bcjson.items[0];
           // 处理报表模板回显
           window.xsObj.instanceArray[0].loadData(
             reportTemplateContent.templateArea.originTemplateAreaObj,
@@ -280,9 +293,15 @@ export default {
             type: 'setDataSetPrivateList',
             payload: reportTemplateContent.datasets,
           });
+          // 处理报表名
           yield put({
             type: 'changeReportName',
             payload: reportTemplateContent.report_name,
+          });
+          // 处理报表id
+          yield put({
+            type: 'setFolderId',
+            payload: folderId,
           });
         }
       }

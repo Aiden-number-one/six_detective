@@ -185,13 +185,19 @@ export default props => {
                     })(
                       <Radio.Group>
                         <Radio.Button value="None">
-                          <IconFont type="icon-nodirection" />
+                          <div title="None">
+                            <IconFont type="icon-nodirection" />
+                          </div>
                         </Radio.Button>
                         <Radio.Button value="Down">
-                          <IconFont type="icon-zongxiang" />
+                          <div title="Down">
+                            <IconFont type="icon-zongxiang" />
+                          </div>
                         </Radio.Button>
                         <Radio.Button value="Right">
-                          <IconFont type="icon-hengxiang" />
+                          <div title="Right">
+                            <IconFont type="icon-hengxiang" />
+                          </div>
                         </Radio.Button>
                       </Radio.Group>,
                     )}

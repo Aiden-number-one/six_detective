@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 13:44:26
+ * @LastEditTime : 2020-01-13 15:49:55
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -247,7 +247,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
             aggregate = 'group';
           }
           if (otherProps.dataSetting === 'list') {
-            aggregate = 'list';
+            aggregate = 'select';
           }
           expand = otherProps.expendDirection || 'Down';
           if (otherProps.dataSetting === 'sum') {
@@ -273,7 +273,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       // 去除undefined
       cellxml = cellxml.replace(/undefined/g, '');
       // 生成value相关元素
-      if (cellType === 'TEXT') {
+      if (cellType === 'TEXT' || cellType === 'text') {
         cellxml += `<simple-value><![CDATA[${cellText || ''}]]></simple-value>`;
       } else if (cellType === 'DATASET') {
         const datasetName = cellText.split('.')[0];

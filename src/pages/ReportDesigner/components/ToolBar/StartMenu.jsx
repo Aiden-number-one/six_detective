@@ -433,7 +433,11 @@ class ToolBar extends Component {
                   <p>Preview</p>
                 </div>
               </Button>
-              <Upload onChange={info => this.importFileStatus(info)} action="/upload">
+              <Upload
+                accept=".xlsx, .xls"
+                onChange={info => this.importFileStatus(info)}
+                action="/upload"
+              >
                 <Button className={classNames('btn', 'btn2Report', 'mr6')}>
                   <div className={styles.topBottom}>
                     <IconFont type="icondaoru" />

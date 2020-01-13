@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-12 15:09:07
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-12 19:13:31
+ * @LastEditTime : 2020-01-13 14:04:51
  */
 
 import React from 'react';
@@ -14,6 +14,7 @@ import { connect } from 'dva';
 export default React.memo(
   connect(({ reportDesigner, reportTree }) => ({
     reportName: reportDesigner.reportName,
+    folderId: reportDesigner.folderId,
     classifyTree: reportTree.classifyTree,
   }))(
     Form.create()(
@@ -33,11 +34,10 @@ export default React.memo(
           const {
             form,
             saveDrawDisplay,
-            isSaveOther,
             classifyTree,
-            dataSet,
             saveType,
             reportName, // 报表名
+            folderId,
           } = this.props;
           const { getFieldDecorator } = form;
           const Layout = {
@@ -55,7 +55,7 @@ export default React.memo(
               <Form.Item {...Layout} label="Folder">
                 {getFieldDecorator('folderId', {
                   rules: [{ required: true, message: 'Please select' }],
-                  initialValue: saveType === 'saveAs' ? dataSet.folderId : undefined,
+                  initialValue: saveType === 'saveAs' || !folderId ? undefined : folderId,
                 })(<TreeSelect treeData={classifyTree} placeholder="Please select" />)}
               </Form.Item>
               <div
