@@ -18,6 +18,7 @@ const ButtonGroup = Button.Group;
 @connect(({ reportDesigner }) => ({
   showFmlModal: reportDesigner.showFmlModal,
   cellPosition: reportDesigner.cellPosition,
+  reportId: reportDesigner.reportId,
 }))
 class ToolBar extends Component {
   state = {
@@ -392,7 +393,13 @@ class ToolBar extends Component {
   };
 
   render() {
-    const { setCellStyle, setCellType, changeDisplaySearchArea, displayArea } = this.props;
+    const {
+      setCellStyle,
+      setCellType,
+      changeDisplaySearchArea,
+      displayArea,
+      reportId,
+    } = this.props;
     const { btnActiveStatus, backgroundColor, fontColor, cellType, paintformatActive } = this.state;
     const popoverProps = {
       placement: 'bottom',
@@ -411,7 +418,16 @@ class ToolBar extends Component {
         <div className={classNames(styles.tabs, 'card-container')}>
           <div style={tabPanelStyle}>
             <div className={styles.group}>
-              <Button className={classNames('btn', 'btn2Report', 'mr6')}>
+              <Button
+                className={classNames('btn', 'btn2Report', 'mr6')}
+                onClick={() => {
+                  if (!reportId) {
+                    message.warn('Please save the report template.');
+                    return;
+                  }
+                  window.open(`/report-designer-preview?reportId=${reportId}`);
+                }}
+              >
                 <div className={styles.topBottom}>
                   <IconFont type="iconicon_previrew" />
                   <p>Preview</p>

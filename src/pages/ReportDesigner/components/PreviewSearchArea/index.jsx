@@ -4,14 +4,14 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 22:27:04
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-11 14:25:01
+ * @LastEditTime : 2020-01-12 16:31:33
  */
 import React, { PureComponent } from 'react';
 import { Form, Input, Select, DatePicker, Radio, Checkbox, Tooltip, Icon, InputNumber } from 'antd';
 import _ from 'lodash';
 
 const { Option } = Select;
-const { MonthPicker, RangePicker } = DatePicker;
+const { MonthPicker } = DatePicker;
 
 class PreviewSearchArea extends PureComponent {
   render() {
@@ -22,7 +22,7 @@ class PreviewSearchArea extends PureComponent {
     } = this.props;
     return (
       <>
-        {customSearchData.map((value, index) => {
+        {customSearchData.map(value => {
           const {
             // 基本信息
             widgetType, // 控件类型

@@ -3,13 +3,8 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
-<<<<<<< Updated upstream
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-10 21:11:21
-=======
- * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-11 20:55:35
->>>>>>> Stashed changes
+ * @LastEditTime : 2020-01-13 00:44:10
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -152,17 +147,6 @@ export function getColColumnXml(contentDetail) {
     colColumnCel += `<column col-number="${(index + 1).toString()}" width="${value.toString()}"/>`;
   });
   return colColumnCel;
-}
-
-/**
- * @description: 生成查询区域的xml部分
- * @param {type} param
- * @return: return
- * @Author: mus
- * @Date: 2020-01-07 21:35:01
- */
-export function getCustomSearchDataXml(customSearchData) {
-  // let customeSearchXml = '';
 }
 
 /**

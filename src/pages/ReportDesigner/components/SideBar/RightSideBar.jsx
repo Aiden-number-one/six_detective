@@ -23,6 +23,9 @@ let resetControl = false;
   customSearchData: formArea.customSearchData,
   dataSetPublicList: reportDesigner.dataSetPublicList,
   defaultValueDatasetType: formArea.defaultValueDatasetType,
+  dataSourceList: formArea.dataSourceList,
+  tableList: formArea.tableList,
+  tableColumnList: formArea.tableColumnList,
 }))
 @Form.create({
   onFieldsChange(props, changedFields, allFields) {
@@ -190,9 +193,10 @@ export default class RightSideBar extends PureComponent {
       customSearchData,
     } = this.props;
     const { siderBarType } = this.state;
-    const customSearchDataIndex = customSearchData.find(value => value.active)
-      ? customSearchData.find(value => value.active).i
-      : undefined;
+    const customSearchItem = customSearchData.find(value => value.active)
+      ? customSearchData.find(value => value.active)
+      : {};
+    const customSearchDataIndex = customSearchItem.i;
     if (
       this.cellPosition !== this.props.cellPosition &&
       this.cellPosition &&
@@ -202,10 +206,53 @@ export default class RightSideBar extends PureComponent {
     }
     if (customSearchDataIndex !== this.customSearchDataIndex && siderBarType === 'query') {
       resetControl = true;
-      resetFields();
+      // 当去切换面板时，去加载所需要的select的option数据
+      this.initWidgetSelectOption(customSearchItem, resetFields);
     }
     this.cellPosition = this.props.cellPosition;
     this.customSearchDataIndex = customSearchDataIndex;
+  };
+
+  // 初始化控件的select的数据来源相关option
+  initWidgetSelectOption = async (customSearchItem, resetFields) => {
+    const { dispatch } = this.props;
+    if (customSearchItem.sourceType === 'table' && customSearchItem.datasource) {
+      await dispatch({
+        type: 'formArea/getDataSourceTable',
+        payload: {
+          pageNumber: '1',
+          pageSize: '9999',
+          connection_id: customSearchItem.datasource,
+        },
+      });
+      if (customSearchItem.table) {
+        await dispatch({
+          type: 'formArea/getTableColumnValue',
+          payload: {
+            table_id:
+              customSearchItem.table.split('.').length === 3
+                ? customSearchItem.table.split('.')[2]
+                : '',
+          },
+        });
+        if (customSearchItem.tablecolumn) {
+          await dispatch({
+            type: 'formArea/getDataSetColumnValue',
+            payload: {
+              datasourceId: customSearchItem.datasource,
+              fieldName: customSearchItem.tablecolumn,
+              tableName:
+                customSearchItem.table.split('.').length === 3
+                  ? `${customSearchItem.table.split('.')[0]}.${
+                      customSearchItem.table.split('.')[1]
+                    }`
+                  : '',
+            },
+          });
+        }
+      }
+    }
+    resetFields();
   };
 
   render() {
@@ -221,6 +268,9 @@ export default class RightSideBar extends PureComponent {
       customSearchData, // 查询条件相关数据
       dataSetPublicList, // 公共数据集列表
       defaultValueDatasetType, // 查询条件select类型->数据来源于数据集类->数据集某个字段的所有项
+      dataSourceList, // 数据源列表
+      tableList, // 当前选择的数据源列表下的所有table
+      tableColumnList, // 获取当前选择选择table下的所有字段
     } = this.props;
     this.resetFields();
     const { siderBarType } = this.state;
@@ -245,6 +295,9 @@ export default class RightSideBar extends PureComponent {
       dataSetPublicList,
       dispatch,
       defaultValueDatasetType,
+      dataSourceList,
+      tableList,
+      tableColumnList,
     };
     // 表单的props
     const formProps = {

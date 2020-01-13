@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'umi/link';
-import { Table, Row, Col, Icon } from 'antd';
-import { formatMessage, FormattedMessage } from 'umi/locale';
+import { Row, Col, Icon } from 'antd';
+import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
 import styles from '../../index.less';
 
@@ -18,7 +18,7 @@ export function AlertListBtns({
   return (
     <Row className={styles.btns} type="flex" justify="space-between" align="middle">
       <Col className={styles['page-name']}>
-        <IconFont type="icon-alertmanagement" className={styles.icon} />
+        <IconFont type="iconring" className={styles.icon} style={{ color: '#0D87D4' }} />
         <span>Alert Center</span>
       </Col>
       <Col>

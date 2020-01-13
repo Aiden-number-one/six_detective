@@ -4,8 +4,8 @@
  * @Author: liangchaoshun
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
- * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-11 21:24:01
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-12 19:12:42
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -22,6 +22,7 @@ import ToolBar from './components/ToolBar/index';
 import RightSideBar from './components/SideBar/RightSideBar';
 import LeftSideBar from './components/SideBar/LeftSideBar';
 import DatasetModify from './components/DatasetModify';
+import SaveModal from './components/SaveModal';
 import styles from './ReportDesigner.less';
 
 const { Sider, Content } = Layout;
@@ -33,9 +34,10 @@ const formularSet = [
   { name: 'AVERAGE', type: 'Statistical', desc: 'AVERAGE(number1, number2,...)' },
 ];
 
-@connect(({ loading, reportDesigner }) => ({
+@connect(({ loading, reportDesigner, reportTree }) => ({
   showFmlModal: reportDesigner.showFmlModal,
   cellPosition: reportDesigner.cellPosition,
+  classifyTree: reportTree.classifyTree,
   loading:
     loading.effects['privateDataSetEdit/getField'] ||
     loading.effects['reportDesigner/importExcel'] ||
@@ -52,7 +54,8 @@ export default class ReportDesigner extends PureComponent {
     display: false, // 查询区域是否显示
     leftSideCollapse: false, // 左边sideBar展开收起
     rightSideCollapse: false, // 右边sideBar展开收起
-    displayDraw: false, // 是否显示抽屉
+    displayDraw: false, // 是否显示数据集修改的抽屉
+    displaySaveAs: false, // 是否显示数据集保存的抽屉
     displayDropSelect: false, // 是否显示DropSelect
     displayDelete: false, // 是否显示私有删除框
     formularValue: '', // 输入公式以校验
@@ -103,6 +106,20 @@ export default class ReportDesigner extends PureComponent {
         },
       });
     }
+
+    // 获取数据源数据 - 用于查询条件Select类型的数据源头
+    dispatch({
+      type: 'formArea/getDataSourceList',
+      payload: {},
+    });
+    // 获取数据集分类树 - 用于保存与另存文
+    dispatch({
+      type: 'reportTree/getClassifyTree',
+      payload: {
+        dataStyle: 'Y',
+        fileType: 'R',
+      },
+    });
   }
 
   // 单元格选择后
@@ -403,13 +420,22 @@ export default class ReportDesigner extends PureComponent {
     });
   };
 
+  // 弹出保存模板的抽屉
+  saveDrawDisplay = (displaySaveAs, type) => {
+    this.setState({
+      displaySaveAs,
+    });
+    this.saveType = type;
+  };
+
   // 保存模板
-  saveReportTemplate = () => {
+  saveReportTemplate = fieldsValue => {
     window.xsObj.instanceArray[0].sheet.toolbar.change();
     setTimeout(() => {
       const { dispatch } = this.props;
       dispatch({
         type: 'reportDesigner/packageTemplate',
+        payload: fieldsValue,
       });
     });
   };
@@ -515,15 +541,16 @@ export default class ReportDesigner extends PureComponent {
       currFmlTypeIndex,
       currFmlIndex,
       formularDesc,
+      displaySaveAs, // 数据集保存抽屉
     } = this.state;
     const { setCellCallback, dispatch, setCellType, showFmlModal, loading = false } = this.props;
     // ToolBar的相关Props
     const toolBarProps = {
-      saveReportTemplate: this.saveReportTemplate, // 保存报表模板
       displayArea: display, // 是否显示查询区域
       changeDisplaySearchArea: this.changeDisplaySearchArea, // 改变属否显示查询条件区域
       setCellStyle: this.setCellStyle, // 设置单元格样式
       editRowColumn: this.editRowColumn, // 编辑行与列
+      saveDrawDisplay: this.saveDrawDisplay, // 保存抽屉是否显示
       setCellType, // 设置单元格的数据类型
       setCellCallback,
       dispatch,
@@ -536,6 +563,12 @@ export default class ReportDesigner extends PureComponent {
       displayDropSelect, // 是否显示drop select
       changedisplayDropSelect: this.changedisplayDropSelect, // 显示drop select
       displayDeletePrivate: this.displayDeletePrivate, // 删除私有数据集
+    };
+    // 保存模板相关的Props
+    const saveProps = {
+      saveDrawDisplay: this.saveDrawDisplay, // 是否显示保存Modal
+      saveReportTemplate: this.saveReportTemplate, // 保存报表模板
+      saveType: this.saveType, // 保存的模板类型 存为或另存为
     };
     // 数据集编辑的相关
     const datasetModifyProps = {
@@ -550,7 +583,29 @@ export default class ReportDesigner extends PureComponent {
               this.changedisplayDropSelect(false);
             }}
           >
-            {/* 抽屉区域 */}
+            {/* 保存另存为-抽屉区域 */}
+            <Drawer
+              destroyOnClose
+              closable={false}
+              title={this.saveType === 'save' ? 'Save' : 'Save As'}
+              width={600}
+              onClose={() => {
+                this.setState({
+                  displaySaveAs: false,
+                });
+              }}
+              visible={displaySaveAs}
+            >
+              <SaveModal
+                {...saveProps}
+                onClose={() => {
+                  this.setState({
+                    displaySaveAs: false,
+                  });
+                }}
+              />
+            </Drawer>
+            {/* 数据集修改-抽屉区域 */}
             <Drawer
               destroyOnClose
               closable={false}

@@ -16,7 +16,7 @@ export default {
     reportList: [], // 报表模板列表
   },
   effects: {
-    // 获取数据集
+    // 获取报表模板列表
     *getReportList({ payload }, { call, put }) {
       const response = yield call(getReportTemplateList, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -27,8 +27,17 @@ export default {
         });
       }
     },
-    // 删除数据集
+    // 删除报表模板列表
     *delete({ payload }, { call }) {
+      const response = yield call(setReportTemplateContent, { param: payload });
+      if (response.bcjson.flag === '1') {
+        message.success(response.bcjson.msg);
+      } else {
+        message.warning(response.bcjson.msg);
+      }
+    },
+    // 编辑报表模板
+    *modify({ payload }, { call }) {
       const response = yield call(setReportTemplateContent, { param: payload });
       if (response.bcjson.flag === '1') {
         message.success(response.bcjson.msg);
