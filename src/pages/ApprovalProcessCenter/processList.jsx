@@ -69,7 +69,7 @@ function TaskBtn({
           placeholder="search"
           defaultValue={urlTaskCode}
           onSearch={value => searchTask(selectedCurrentTask, value)}
-          style={{ width: 264, verticalAlign: 'middle', marginRight: '10px' }}
+          style={{ width: 264, verticalAlign: 'middle', marginRight: '10px', textAlign: 'left' }}
         />
         {selectedCurrentTask !== 'his' && (
           <>
@@ -278,6 +278,7 @@ function ProcessList({
           throw new Error('The task has not been claimed, please claim it and try again');
         } else {
           setVisible(true);
+          setRadioValue('');
         }
       },
     });
@@ -363,11 +364,11 @@ function ProcessList({
           value={radioValue}
         ></Radio.Group>
         <div className={btnStyles['bottom-btns']}>
-          <Button onClick={() => setTaskAssign(selectedKeys)} type="primary">
-            Confirm
-          </Button>
           <Button onClick={() => setVisible(false)} style={{ marginRight: 12 }}>
             Cancel
+          </Button>
+          <Button disabled={!radioValue} onClick={() => setTaskAssign(selectedKeys)} type="primary">
+            Confirm
           </Button>
         </div>
       </Drawer>

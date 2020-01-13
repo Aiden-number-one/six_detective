@@ -630,7 +630,7 @@ function NewAccound({
           </div>
         </List.Item>
         <List.Item>
-          <div className={styles.ListItem}>
+          <div className={styles.ListItem} style={{ marginTop: '10px' }}>
             <p>Received Answer</p>
             <p>{detailData.receivedAnswer}</p>
           </div>

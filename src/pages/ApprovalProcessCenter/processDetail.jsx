@@ -7,9 +7,10 @@ import AlertComment from '@/pages/AlertCenter/Alert/components/AlertComment';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
 import styles from './index.less';
-import Phase from '@/pages/AlertCenter/Alert/components/AlertPhrase';
+// import Phase from '@/pages/AlertCenter/Alert/components/AlertPhrase';
+import Phase from './component/TaskPhrase';
 import TaskAttachments from './component/TaskAttachments';
-import TaskCommentHistory from './component/TaskCommentHistory';
+// import TaskCommentHistory from './component/TaskCommentHistory';
 import TaskLog from './component/TaskLog';
 import DetailList from './component/DetailList';
 
@@ -110,6 +111,7 @@ function ProcessDetail({
   // 提交，通过，回退的校验
   function submitDrawer(type) {
     setSubmitType(type);
+    setRadioValue('');
     if (type === 'reject') {
       setConfirmVisible(true);
       return;
@@ -460,7 +462,11 @@ function ProcessDetail({
                   <Button onClick={() => setVisible(false)} style={{ marginRight: 12 }}>
                     Cancel
                   </Button>
-                  <Button onClick={() => submitOrApproveTask(submitType)} type="primary">
+                  <Button
+                    disabled={!radioValue}
+                    onClick={() => submitOrApproveTask(submitType)}
+                    type="primary"
+                  >
                     Confirm
                   </Button>
                 </div>
@@ -515,21 +521,21 @@ function ProcessDetail({
                         className={styles['btn-icon']}
                         style={{ marginRight: '8px' }}
                       />
-                      <Upload
-                        multiple
-                        action="/upload?fileClass=WORKFLOW"
-                        showUploadList={false}
-                        beforeUpload={file => isLt5M(file.size)}
-                        fileList={upAttachments}
-                        onChange={handleUpAttachments}
-                      >
-                        <IconFont
-                          type="iconbiezhen"
-                          style={{ cursor: 'pointer', marginRight: 4 }}
-                          title="please select a file"
-                        />
-                        {upAttachments.length > 0 && upAttachments.length}
-                      </Upload>
+                      <div className={styles['attachments-icon']}>
+                        <Upload
+                          multiple
+                          action="/upload?fileClass=WORKFLOW"
+                          showUploadList={false}
+                          beforeUpload={file => isLt5M(file.size)}
+                          fileList={upAttachments}
+                          onChange={handleUpAttachments}
+                        >
+                          <IconFont type="iconbiezhen" title="please select a file" />
+                        </Upload>
+                        <span className={styles['attachments-num']}>
+                          {upAttachments.length > 0 && upAttachments.length}
+                        </span>
+                      </div>
                       {/* {detailItems[0] && detailItems[0].isEditing ? (
                         <Button style={{ marginRight: '10px' }} type="primary" onClick={saveTask}>
                           Save
