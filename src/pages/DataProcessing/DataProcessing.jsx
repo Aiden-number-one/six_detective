@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 10:11:40
+ * @LastEditTime : 2020-01-13 13:13:09
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -503,20 +503,18 @@ export default class DataProcessing extends Component {
             );
           }
         }, 200);
-        setTimeout(() => {
-          dispatch({
-            type: 'dataProcessing/startProcessing',
-            payload: params,
-            callback: () => {
-              console.log('startProcessingData===', this.props.startProcessingData);
-              this.getChartData();
-              this.getStatusData();
-              this.setState({
-                dataProcessingFlag: false,
-              });
-            },
-          });
-        }, 1000);
+        dispatch({
+          type: 'dataProcessing/startProcessing',
+          payload: params,
+          callback: () => {
+            console.log('startProcessingData===', this.props.startProcessingData);
+            this.getChartData();
+            this.getStatusData();
+            this.setState({
+              dataProcessingFlag: false,
+            });
+          },
+        });
       }
     } catch (error) {
       console.log(error);
@@ -659,6 +657,9 @@ export default class DataProcessing extends Component {
         this.setState({
           processingBar: Number(barDataStr.split('%')[0]),
         });
+      },
+      errorFn: () => {
+        clearInterval(this.setInterval);
       },
     });
   };
