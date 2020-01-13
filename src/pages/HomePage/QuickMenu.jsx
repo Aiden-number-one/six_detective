@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Transfer, Tree, Icon, Button, Modal } from 'antd';
+import { Transfer, Tree, Icon, Button, Modal, Drawer } from 'antd';
 import classNames from 'classnames';
 import router from 'umi/router';
 import _ from 'lodash';
@@ -157,7 +157,7 @@ export default class QuickMenu extends PureComponent {
   // 保存操作
   saveQuickMenu = () => {
     const { targetKeys } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, toggleModal } = this.props;
     dispatch({
       type: 'quickMenu/saveQuickMenu',
       payload: {
@@ -173,10 +173,12 @@ export default class QuickMenu extends PureComponent {
         });
       },
     });
+    toggleModal('quickMenu');
   };
 
   // 确认弹框
   showConfirm = type => {
+    const { toggleModal } = this.props;
     Modal.confirm({
       content:
         type === 'clear'
@@ -189,7 +191,7 @@ export default class QuickMenu extends PureComponent {
             targetKeys: [],
           });
         } else {
-          router.goBack();
+          toggleModal('quickMenu');
         }
       },
       onCancel() {},
@@ -197,7 +199,7 @@ export default class QuickMenu extends PureComponent {
   };
 
   render() {
-    const { menuData, quickMenuData } = this.props;
+    const { menuData, quickMenuData, visible, toggleModal } = this.props;
 
     const { targetKeys, targetData } = this.state;
 
@@ -220,7 +222,19 @@ export default class QuickMenu extends PureComponent {
     flatten(menuSource);
 
     return (
-      <PageHeaderWrapper>
+      <Drawer
+        visible={visible}
+        title="Quick Menu Setting"
+        onClose={() => {
+          if (_.isEqual(quickMenuData, targetKeys)) {
+            toggleModal('quickMenu');
+          } else {
+            this.showConfirm();
+          }
+        }}
+        width={800}
+        destroyOnClose
+      >
         <Transfer
           className={styles.quickMenu}
           targetKeys={targetKeys}
@@ -262,25 +276,36 @@ export default class QuickMenu extends PureComponent {
             return null;
           }}
         </Transfer>
-        <div className={styles.buttonGroup}>
+        <div
+          style={{
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e9e9e9',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}
+        >
           <Button
             className="btn-usual"
             type="primary"
             onClick={() => {
               if (_.isEqual(quickMenuData, targetKeys)) {
-                router.goBack();
+                toggleModal('quickMenu');
               } else {
                 this.showConfirm();
               }
             }}
           >
-            Return
+            Cancel
           </Button>
           <Button type="primary" onClick={this.saveQuickMenu}>
             Save
           </Button>
         </div>
-      </PageHeaderWrapper>
+      </Drawer>
     );
   }
 }

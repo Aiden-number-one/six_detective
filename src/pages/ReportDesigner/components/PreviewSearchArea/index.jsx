@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 22:27:04
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-12 16:31:33
+ * @LastEditTime : 2020-01-13 12:11:29
  */
 import React, { PureComponent } from 'react';
 import { Form, Input, Select, DatePicker, Radio, Checkbox, Tooltip, Icon, InputNumber } from 'antd';
@@ -34,6 +34,7 @@ class PreviewSearchArea extends PureComponent {
             // 当类型为select类型、Radio类型、checkbox类型
             sourceType, // 选项的数据来源：数据集、数据表、自定义 table|dataset|datacolumn
             datacolumn, // 所取的数据集的字段
+            tablecolumn, // 所取的Table的字段
             customList = [], // select自定义选项
             // 校验相关
             widgetIsNull, // 校验是否为空
@@ -107,6 +108,10 @@ class PreviewSearchArea extends PureComponent {
                     {/* 若为数据集类型 */}
                     {sourceType === 'dataset' &&
                       (dataSetColumn[datacolumn] || []).map(optionData => (
+                        <Option key={optionData}>{optionData}</Option>
+                      ))}
+                    {sourceType === 'table' &&
+                      (dataSetColumn[tablecolumn] || []).map(optionData => (
                         <Option key={optionData}>{optionData}</Option>
                       ))}
                     {/* 若为自定义类型 */}
@@ -200,6 +205,11 @@ class PreviewSearchArea extends PureComponent {
                       (dataSetColumn[datacolumn] || []).map(optionData => (
                         <Radio value={optionData}>{optionData}</Radio>
                       ))}
+                    {/* 若为表类型 */}
+                    {sourceType === 'table' &&
+                      (dataSetColumn[tablecolumn] || []).map(optionData => (
+                        <Radio value={optionData}>{optionData}</Radio>
+                      ))}
                     {/* 若为自定义类型 */}
                     {sourceType === 'custom' &&
                       customList.map(optionData => (
@@ -227,6 +237,11 @@ class PreviewSearchArea extends PureComponent {
                       (dataSetColumn[datacolumn] || []).map(optionData => (
                         <Checkbox value={optionData}>{optionData}</Checkbox>
                       ))}
+                    {/* 若为表类型 */}
+                    {sourceType === 'table' &&
+                      (dataSetColumn[tablecolumn] || []).map(optionData => (
+                        <Checkbox value={optionData}>{optionData}</Checkbox>
+                      ))}
                     {/* 若为自定义类型 */}
                     {sourceType === 'custom' &&
                       customList.map(optionData => (
@@ -245,19 +260,3 @@ class PreviewSearchArea extends PureComponent {
 }
 
 export default Form.create()(PreviewSearchArea);
-
-function TooltipLabel({ tips, title }) {
-  return (
-    <span>
-      {title}
-      <Tooltip
-        overlayStyle={{
-          maxWidth: 900,
-        }}
-        title={tips}
-      >
-        <Icon type="question-circle-o" style={{ paddingLeft: 5, backgroundColor: 'transparent' }} />
-      </Tooltip>
-    </span>
-  );
-}

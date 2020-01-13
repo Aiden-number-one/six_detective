@@ -79,7 +79,8 @@ export function convertXml(xmlObject) {
     // 处理列相关属性
     xmlColumns.forEach(xmlColumnsValue => {
       const { width, columnNumber: columnNumberInside } = xmlColumnsValue;
-      const currentCols = resultObject.cols[columnNumberInside - 1] || {};
+      resultObject.cols[columnNumberInside - 1] = resultObject.cols[columnNumberInside - 1] || {};
+      resultObject.cols[columnNumberInside - 1].width = width;
     });
     // 给rows、cols 添加len
     resultObject.rows.len = xmlRows.length;
@@ -137,7 +138,7 @@ export function generateJson(spreadSheetData) {
     new Array(colLength).fill({}).map(() => ({
       F: '1',
       cellDesc: '',
-      cellType: 'text',
+      cellType: 'TEXT',
       style: {},
       sy: '0',
     })),
@@ -166,7 +167,7 @@ export function generateJson(spreadSheetData) {
       // spreadSheet单元格的数据及属性
       const cellContent = rows[rowIndex].cells[cellIndex];
       // 把spreadShett单元格的数据赋值给后台表格的单元格中
-      data[rowIndex][cellIndex] = cellContent.text;
+      data[rowIndex][cellIndex] = cellContent.text || '';
 
       // TODO：设置宽度、高度
 
@@ -187,6 +188,8 @@ export function generateJson(spreadSheetData) {
         currentCellProps.cellType = 'DATASET';
       } else if (cellContent.cellProps.cellType === 'text') {
         currentCellProps.cellType = 'TEXT';
+      } else if (cellContent.cellProps.cellType === 'formula') {
+        currentCellProps.cellType = 'FORMULA';
       }
 
       // 对样式进行处理
@@ -241,7 +244,7 @@ export function generateJson(spreadSheetData) {
             // 边框相关样式
             Object.entries(cellContent.style[singleStyle]).forEach(
               ([borderStyle, borderStyleValue]) => {
-                const [color = 'rgba(0,0,0)'] = borderStyleValue;
+                const [color = 'rgb(0,0,0)'] = borderStyleValue;
                 if (borderStyle === 'bottom') {
                   // 下边框
                   // eslint-disable-next-line prefer-destructuring

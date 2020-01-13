@@ -2,8 +2,8 @@
  * @Description: 新增修改数据集分类树
  * @Author: lan
  * @Date: 2019-12-11 15:51:22
- * @LastEditTime : 2020-01-11 16:39:37
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-13 15:58:55
+ * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -50,9 +50,13 @@ export default class OperateTreeForm extends PureComponent {
                   required: true,
                   message: 'Folder Name is missing',
                 },
+                {
+                  max: 64,
+                  message: 'Folder Name cannot be longer than 64 characters',
+                },
               ],
               initialValue: nodeTree && nodeTree.folderName,
-            })(<Input maxLength={64} />)}
+            })(<Input />)}
           </Form.Item>
         )}
         <div
