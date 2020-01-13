@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Icon } from 'antd';
+import { Table, Row, Icon, Alert } from 'antd';
 import IconFont from '@/components/IconFont';
 import { getAuthority } from '@/utils/authority';
 import {
@@ -28,6 +28,7 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
   const [selectedRows, setSelectedRows] = useState([]);
   const [isBatchAction, setBatchAction] = useState(false);
   const [isDiscontinue, setDiscontinue] = useState(false);
+  const [searchParams, setSearchParams] = useState('');
   // header filter
   const {
     conditions,
@@ -204,6 +205,20 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
   return (
     <div className={styles['list-container']}>
       <div className={styles.list}>
+        <ClaimModal
+          visible={claimVisible}
+          content={claimContent}
+          onCancel={handleCancelClaim}
+          onOk={handleReClaim}
+          loading={loading['alertCenter/reClaim']}
+        />
+        <CloseModal
+          visible={closeVisible}
+          onCancel={() => setCloseVisible(false)}
+          onOk={isDiscontinue ? discontinueAlert : closeAlert}
+          content={closeContent}
+          loading={loading[`alertCenter/${isDiscontinue ? 'discontinue' : 'close'}`]}
+        />
         <AlertListBtns
           isAuth={isAuth}
           isBatchAction={isBatchAction}
@@ -220,19 +235,13 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
           }}
           onExport={handleExport}
         />
-        <ClaimModal
-          visible={claimVisible}
-          content={claimContent}
-          onCancel={handleCancelClaim}
-          onOk={handleReClaim}
-          loading={loading['alertCenter/reClaim']}
-        />
-        <CloseModal
-          visible={closeVisible}
-          onCancel={() => setCloseVisible(false)}
-          onOk={isDiscontinue ? discontinueAlert : closeAlert}
-          content={closeContent}
-          loading={loading[`alertCenter/${isDiscontinue ? 'discontinue' : 'close'}`]}
+        <Alert
+          banner
+          showIcon
+          closable
+          type="info"
+          message={`Query Condition：${searchParams}`}
+          style={{ marginBottom: 10 }}
         />
         <Table
           dataSource={alerts}

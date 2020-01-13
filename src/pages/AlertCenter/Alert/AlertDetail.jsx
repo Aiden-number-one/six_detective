@@ -266,7 +266,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
         {+alert.emailType === 111 && attachments.length > 0 && (
           <AlertDownAttachments
             attachments={attachments}
-            onDownloadAll={() => handleDownloadAll(attachments)}
+            onDownloadAll={() => handleDownloadAll(attachments.map(({ url }) => url))}
           />
         )}
       </Col>
