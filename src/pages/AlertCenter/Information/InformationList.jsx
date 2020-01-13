@@ -15,6 +15,8 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
   const [info, setInfo] = useState(null);
   const [selectedKeys, setSelectedKeys] = useState([]);
 
+  const exportLoading = loading['alertCenter/exportInfos'];
+
   useEffect(() => {
     dispatch({
       type: 'alertCenter/fetchInfos',
@@ -65,8 +67,13 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             <Link to="/homepage/alert-center" className={styles.info}>
               Alert Center
             </Link>
-            <button type="button" disabled={!selectedKeys.length} onClick={handleExport}>
-              {loading['alertCenter/exportInfos'] ? (
+            <button
+              type="button"
+              className={exportLoading ? styles.loading : ''}
+              disabled={!selectedKeys.length}
+              onClick={handleExport}
+            >
+              {exportLoading ? (
                 <Icon type="loading" className={styles['btn-icon']} />
               ) : (
                 <IconFont type="iconexport" className={styles['btn-icon']} />

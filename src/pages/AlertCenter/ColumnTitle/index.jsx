@@ -6,6 +6,8 @@ import IconFont from '@/components/IconFont';
 import { FilterHeader, FilterType, FilterSelect, FilterCheckbox } from './FilterContent';
 import styles from './index.less';
 
+export { useColumnFilter } from './hooks';
+
 function ColumnTitle({
   dispatch,
   children,

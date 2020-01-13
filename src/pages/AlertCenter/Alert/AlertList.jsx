@@ -4,11 +4,16 @@ import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Icon } from 'antd';
 import IconFont from '@/components/IconFont';
-import { dateFormat, timestampFormat, pageSizeOptions } from '@/pages/DataImportLog/constants';
 import { getAuthority } from '@/utils/authority';
-import { ClaimModal, CloseModal, ExportModal } from './components/AlertListModal';
+import {
+  dateFormat,
+  timestampFormat,
+  pageSizeOptions,
+  downloadFile,
+} from '@/pages/DataImportLog/constants';
+import { ClaimModal, CloseModal } from './components/AlertListModal';
 import { AlertListBtns } from './components/AlertListBtns';
-import ColumnTitle from '../ColumnTitle';
+import ColumnTitle, { useColumnFilter } from '../ColumnTitle';
 import AlertDetail from './AlertDetail';
 import styles from '../index.less';
 
@@ -20,16 +25,23 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
   const [claimContent, setClaimContent] = useState('');
   const [closeVisible, setCloseVisible] = useState(false);
   const [closeContent, setCloseContent] = useState('');
-  const [exportVisible, setExportVisible] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isBatchAction, setBatchAction] = useState(false);
   const [isDiscontinue, setDiscontinue] = useState(false);
   // header filter
-  // { column: '', value: '', condition: '7' }
-  const [conditions, setConditions] = useState([]);
-  const [curTableColumn, setCurTableColumn] = useState('');
-  const [curSortColumn, setCurSortColumn] = useState('');
-  const [curSort, setCurSort] = useState('');
+  const {
+    conditions,
+    curTableColumn,
+    curSortColumn,
+    curSort,
+    handleCommit,
+    handleSort,
+  } = useColumnFilter({
+    dispatch,
+    action: 'alertCenter/fetch',
+    alertPage,
+    alertPageSize,
+  });
 
   const isAuth = useMemo(() => {
     const auth = getAuthority() || {};
@@ -164,7 +176,17 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
     setCloseVisible(false);
   }
 
-  function handleExport() {}
+  async function handleExport() {
+    const url = await dispatch({
+      type: 'alertCenter/exportAlerts',
+      payload: {
+        alertId: selectedRows.map(item => item.alertId),
+      },
+    });
+    if (url) {
+      downloadFile(url);
+    }
+  }
 
   function handlePageChange(page, pageSize) {
     dispatch({
@@ -179,45 +201,13 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
     });
   }
 
-  // filter methods
-  async function handleCommit(tableColumn, updatedConditions = []) {
-    setCurTableColumn(tableColumn);
-    setConditions(updatedConditions);
-    dispatch({
-      type: 'alertCenter/fetch',
-      payload: {
-        currentColumn: tableColumn,
-        conditions: updatedConditions,
-        page: alertPage,
-        pageSize: alertPageSize,
-        sort: curSortColumn === tableColumn ? curSort : '',
-      },
-    });
-  }
-
-  async function handleSort(tableColumn, sort) {
-    setCurTableColumn(tableColumn);
-    setCurSortColumn(tableColumn);
-    setCurSort(sort);
-    dispatch({
-      type: 'alertCenter/fetch',
-      payload: {
-        currentColumn: tableColumn,
-        conditions,
-        page: alertPage,
-        pageSize: alertPageSize,
-        sort,
-      },
-    });
-  }
-
   return (
     <div className={styles['list-container']}>
       <div className={styles.list}>
         <AlertListBtns
           isAuth={isAuth}
           isBatchAction={isBatchAction}
-          loading={loading['alertCenter/claim']}
+          loading={loading}
           disabled={!selectedRows.length}
           claimAlerts={() => claimAlerts()}
           closeAlerts={() => {
@@ -228,6 +218,7 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
             setDiscontinue(true);
             showCloseModal();
           }}
+          onExport={handleExport}
         />
         <ClaimModal
           visible={claimVisible}
@@ -242,11 +233,6 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
           onOk={isDiscontinue ? discontinueAlert : closeAlert}
           content={closeContent}
           loading={loading[`alertCenter/${isDiscontinue ? 'discontinue' : 'close'}`]}
-        />
-        <ExportModal
-          visible={exportVisible}
-          onCancel={() => setExportVisible(false)}
-          onOk={handleExport}
         />
         <Table
           dataSource={alerts}
@@ -304,7 +290,6 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
             dataIndex="alertName"
             title={
               <ColumnTitle
-                isNum={false}
                 curColumn="alertName"
                 conditions={conditions}
                 sort={curSortColumn === 'alertName' ? curSort : ''}
@@ -320,7 +305,6 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
             dataIndex="tradeDate"
             title={
               <ColumnTitle
-                isNum={false}
                 curColumn="tradeDate"
                 conditions={conditions}
                 sort={curTableColumn === 'tradeDate' ? curSort : ''}
