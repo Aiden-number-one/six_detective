@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-09 01:24:43
+ * @LastEditTime : 2020-01-13 11:27:05
  */
 import Service from '@/utils/Service';
 
@@ -32,12 +32,15 @@ export default {
     },
   },
   effects: {
-    // 获取数据集下的表的字段的值
-    *getDataSetColumnValue({ payload }, { call, put, all }) {
+    // 获取数据集下或表的字段的值
+    *getDataSetColumnValue({ payload }, { call, put, all, select }) {
       const selectOptionArray = yield all(
         payload.map(value => call(getMetadataTablePerform, { param: value })),
       );
-      const dataSetColumn = {};
+      const dataSetColumnState = yield select(
+        ({ reportDesignPreview }) => reportDesignPreview.dataSetColumn,
+      );
+      const dataSetColumn = { ...dataSetColumnState };
       selectOptionArray.forEach(value => {
         if (value.bcjson.flag === '1' && value.bcjson.items.length > 0) {
           const key = Object.keys(value.bcjson.items[0])[0];
@@ -63,16 +66,26 @@ export default {
         const [tableData, rowCountAndTemplateArea] = response.bcjson.items;
         const { templateArea = {} } = rowCountAndTemplateArea || {};
         const { customSearchData = [] } = templateArea;
-        // Option需要从接口获取
+        // Option需要从dataset中获取
         const datasetOption = customSearchData
           .filter(value => value.sourceType === 'dataset')
           .map(value => ({
             datasetId: value.datasetName,
             fieldName: value.datacolumn,
           }));
+        const tableOption = customSearchData
+          .filter(value => value.sourceType === 'table')
+          .map(value => ({
+            datasourceId: value.datasource,
+            fieldName: value.tablecolumn,
+            tableName:
+              value.table.split('.').length === 3
+                ? `${value.table.split('.')[0]}.${value.table.split('.')[1]}`
+                : '',
+          }));
         yield put({
           type: 'getDataSetColumnValue',
-          payload: datasetOption,
+          payload: [...datasetOption, ...tableOption],
         });
       } else {
         throw new Error(response.bcjson.msg);

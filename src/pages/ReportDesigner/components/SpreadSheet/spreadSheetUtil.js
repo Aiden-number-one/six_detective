@@ -79,7 +79,8 @@ export function convertXml(xmlObject) {
     // 处理列相关属性
     xmlColumns.forEach(xmlColumnsValue => {
       const { width, columnNumber: columnNumberInside } = xmlColumnsValue;
-      const currentCols = resultObject.cols[columnNumberInside - 1] || {};
+      resultObject.cols[columnNumberInside - 1] = resultObject.cols[columnNumberInside - 1] || {};
+      resultObject.cols[columnNumberInside - 1].width = width;
     });
     // 给rows、cols 添加len
     resultObject.rows.len = xmlRows.length;
