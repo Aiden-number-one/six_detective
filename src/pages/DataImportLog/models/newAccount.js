@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-11 11:19:03
+ * @LastEditTime : 2020-01-13 10:11:25
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -69,7 +69,7 @@ export default {
   },
   reducers: {
     save(state, { payload }) {
-      const { logs, page, pageSize, total } = payload;
+      const { logs, page = defaultPage, pageSize = defaultPageSize, total } = payload;
       return {
         ...state,
         logs,
