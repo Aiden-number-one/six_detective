@@ -8,7 +8,7 @@ import router from 'umi/router';
 
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
-import ring from '@/assets/images/ring.png';
+// import ring from '@/assets/images/ring.png';
 
 import styles from './HomePage.less';
 import QuickMenu from './QuickMenu';
@@ -67,6 +67,15 @@ export default class HomePage extends PureComponent {
     outstandingCasesLineChart: '',
     processingStageBarChart: '',
 
+    otherChart1: '',
+    otherChart2: '',
+    otherChart3: '',
+    otherChart4: '',
+    otherChart5: '',
+    otherChart6: '',
+    otherChart7: '',
+    otherChart8: '',
+
     visible: {
       quickMenu: false,
     },
@@ -103,7 +112,7 @@ export default class HomePage extends PureComponent {
       },
     });
     // 获取alert 统计数据
-    this.getAlertData(alertParams);
+    this.getAlertData1(alertParams);
     // 获取alert表格的数据
     dispatch({
       type: 'perAlert/getMyAlert',
@@ -207,6 +216,14 @@ export default class HomePage extends PureComponent {
           this.state.approvalAllChart.clear();
           this.renderApprovalAllChart();
         }
+        if (this.state.otherChart5) {
+          this.state.otherChart5.clear();
+          this.renderOtherChart5();
+        }
+        if (this.state.otherChart6) {
+          this.state.otherChart6.clear();
+          this.renderOtherChart6();
+        }
       },
     });
     // 获取approval process个人数据
@@ -224,18 +241,49 @@ export default class HomePage extends PureComponent {
           this.state.approvalPersonalPieChart.clear();
           this.renderApprovalPerPieChart();
         }
+        if (this.state.otherChart7) {
+          this.state.otherChart7.clear();
+          this.renderOtherChart7();
+        }
+        if (this.state.otherChart8) {
+          this.state.otherChart8.clear();
+          this.renderOtherChart8();
+        }
       },
     });
   };
 
   // 获取alert相关数据
-  getAlertData = (params = {}) => {
+  getAlertData1 = (params = {}) => {
     const { dispatch } = this.props;
     // 获取All alert total
     dispatch({
       type: 'allAlert/getAllAlertCount',
       payload: {
         ...params,
+      },
+      callback: () => {
+        // 获取All Claim alert total
+        dispatch({
+          type: 'allAlert/getAllClaimAlertCount',
+          payload: {
+            ...params,
+            isClaimed: 1,
+          },
+          callback: () => {
+            this.renderOtherChart1();
+          },
+        });
+        // 获取All processing alert total
+        dispatch({
+          type: 'allAlert/getAllProcessingAlertCount',
+          payload: {
+            ...params,
+          },
+          callback: () => {
+            this.renderOtherChart2();
+          },
+        });
       },
     });
     // 获取All outstanding alert total
@@ -244,21 +292,6 @@ export default class HomePage extends PureComponent {
       payload: {
         ...params,
         isClaimed: 0,
-      },
-    });
-    // 获取All Claim alert total
-    dispatch({
-      type: 'allAlert/getAllClaimAlertCount',
-      payload: {
-        ...params,
-        isClaimed: 1,
-      },
-    });
-    // 获取All processing alert total
-    dispatch({
-      type: 'allAlert/getAllProcessingAlertCount',
-      payload: {
-        ...params,
       },
     });
     // 获取个人 Alert Claim total
@@ -274,6 +307,82 @@ export default class HomePage extends PureComponent {
       type: 'perAlert/getPerProcessingAlertCount',
       payload: {
         ...params,
+      },
+    });
+  };
+
+  // 获取alert相关数据
+  getAlertData = (params = {}) => {
+    const { dispatch } = this.props;
+    // 获取All alert total
+    dispatch({
+      type: 'allAlert/getAllAlertCount',
+      payload: {
+        ...params,
+      },
+      callback: () => {
+        // 获取All Claim alert total
+        dispatch({
+          type: 'allAlert/getAllClaimAlertCount',
+          payload: {
+            ...params,
+            isClaimed: 1,
+          },
+          callback: () => {
+            if (this.state.otherChart1) {
+              this.state.otherChart1.clear();
+              this.renderOtherChart1();
+            }
+          },
+        });
+        // 获取All processing alert total
+        dispatch({
+          type: 'allAlert/getAllProcessingAlertCount',
+          payload: {
+            ...params,
+          },
+          callback: () => {
+            if (this.state.otherChart2) {
+              this.state.otherChart2.clear();
+              this.renderOtherChart2();
+            }
+          },
+        });
+        // 获取个人 Alert Claim total
+        dispatch({
+          type: 'perAlert/getPerClaimAlertCount',
+          payload: {
+            ...params,
+            isPersonal: '1',
+          },
+          callback: () => {
+            if (this.state.otherChart3) {
+              this.state.otherChart3.clear();
+              this.renderOtherChart3();
+            }
+          },
+        });
+        // 获取个人 Alert processing total
+        dispatch({
+          type: 'perAlert/getPerProcessingAlertCount',
+          payload: {
+            ...params,
+          },
+          callback: () => {
+            if (this.state.otherChart4) {
+              this.state.otherChart4.clear();
+              this.renderOtherChart4();
+            }
+          },
+        });
+      },
+    });
+    // 获取All outstanding alert total
+    dispatch({
+      type: 'allAlert/getAllOutstandingALertCount',
+      payload: {
+        ...params,
+        isClaimed: 0,
       },
     });
   };
@@ -316,6 +425,8 @@ export default class HomePage extends PureComponent {
       setTimeout(() => {
         if (document.getElementById('ApprovalAll') && renderProcess) {
           this.renderApprovalAllChart();
+          this.renderOtherChart5();
+          this.renderOtherChart6();
           this.setState({
             renderProcess: false,
           });
@@ -357,6 +468,501 @@ export default class HomePage extends PureComponent {
       dataList.push(param);
     });
     return dataList;
+  };
+
+  renderOtherChart1 = () => {
+    const { allAlertCount, allClaimAlertCount } = this.props;
+    let otherChart1;
+    if (this.state.otherChart1) {
+      // eslint-disable-next-line prefer-destructuring
+      otherChart1 = this.state.otherChart1;
+    } else {
+      otherChart1 = new G2.Chart({
+        container: 'otherChart1',
+        forceFit: true, // 是否自适应宽度
+        height: 70,
+        padding: 0,
+      });
+    }
+    const data = [
+      {
+        gender: 'a',
+        value:
+          allAlertCount === 0 ? 0 : Number((allClaimAlertCount / allAlertCount).toFixed(2)) * 100,
+      },
+    ];
+    otherChart1.source(data, {
+      value: {
+        min: 0,
+        max: 100,
+      },
+    });
+    otherChart1.legend(false);
+    otherChart1.axis(false);
+    otherChart1.tooltip(false);
+    otherChart1
+      .interval()
+      .position('gender*value')
+      .color('gender')
+      .shape('liquid-fill-gauge')
+      .style({
+        lineWidth: 1,
+        opacity: 0.75,
+      });
+    data.forEach(row => {
+      otherChart1.guide().text({
+        top: true,
+        position: {
+          gender: row.gender,
+          value: 50,
+        },
+        content: `${row.value}%`,
+        style: {
+          opacity: 0.75,
+          fontSize: 12,
+          fill: '#fff',
+          textAlign: 'center',
+        },
+      });
+    });
+    otherChart1.render();
+    this.setState({ otherChart1 });
+  };
+
+  renderOtherChart2 = () => {
+    const { allAlertCount, allProcessingAlertCount } = this.props;
+    let otherChart2;
+    if (this.state.otherChart2) {
+      // eslint-disable-next-line prefer-destructuring
+      otherChart2 = this.state.otherChart2;
+    } else {
+      otherChart2 = new G2.Chart({
+        container: 'otherChart2',
+        forceFit: true, // 是否自适应宽度
+        height: 70,
+        padding: 0,
+      });
+    }
+    const data = [
+      {
+        gender: '',
+        value:
+          allAlertCount === 0
+            ? 0
+            : Number((allProcessingAlertCount / allAlertCount).toFixed(2)) * 100,
+      },
+    ];
+    otherChart2.source(data, {
+      value: {
+        min: 0,
+        max: 100,
+      },
+    });
+    otherChart2.legend(false);
+    otherChart2.axis(false);
+    otherChart2.tooltip(false);
+    otherChart2
+      .interval()
+      .position('gender*value')
+      .color('gender')
+      .shape('liquid-fill-gauge')
+      .style({
+        lineWidth: 1,
+        opacity: 0.75,
+      });
+    data.forEach(row => {
+      otherChart2.guide().text({
+        top: true,
+        position: {
+          gender: row.gender,
+          value: 50,
+        },
+        content: `${row.value}%`,
+        style: {
+          opacity: 0.75,
+          fontSize: 12,
+          fill: '#fff',
+          textAlign: 'center',
+        },
+      });
+    });
+    otherChart2.render();
+    this.setState({ otherChart2 });
+  };
+
+  renderOtherChart3 = () => {
+    const { allAlertCount, perClaimAlertCount } = this.props;
+    let otherChart3;
+    if (this.state.otherChart3) {
+      // eslint-disable-next-line prefer-destructuring
+      otherChart3 = this.state.otherChart3;
+    } else {
+      otherChart3 = new G2.Chart({
+        container: 'otherChart3',
+        forceFit: true, // 是否自适应宽度
+        height: 70,
+        padding: 0,
+      });
+    }
+    const data = [
+      {
+        gender: '',
+        value:
+          allAlertCount === 0 ? 0 : Number((perClaimAlertCount / allAlertCount).toFixed(2)) * 100,
+      },
+    ];
+    otherChart3.source(data, {
+      value: {
+        min: 0,
+        max: 100,
+      },
+    });
+    otherChart3.legend(false);
+    otherChart3.axis(false);
+    otherChart3.tooltip(false);
+    otherChart3
+      .interval()
+      .position('gender*value')
+      .color('gender')
+      .shape('liquid-fill-gauge')
+      .style({
+        lineWidth: 1,
+        opacity: 0.75,
+      });
+    data.forEach(row => {
+      otherChart3.guide().text({
+        top: true,
+        position: {
+          gender: row.gender,
+          value: 50,
+        },
+        content: `${row.value}%`,
+        style: {
+          opacity: 0.75,
+          fontSize: 12,
+          fill: '#fff',
+          textAlign: 'center',
+        },
+      });
+    });
+    otherChart3.render();
+    this.setState({ otherChart3 });
+  };
+
+  renderOtherChart4 = () => {
+    const { allAlertCount, perProcessingAlertCount } = this.props;
+    let otherChart4;
+    if (this.state.otherChart4) {
+      // eslint-disable-next-line prefer-destructuring
+      otherChart4 = this.state.otherChart4;
+    } else {
+      otherChart4 = new G2.Chart({
+        container: 'otherChart4',
+        forceFit: true, // 是否自适应宽度
+        height: 70,
+        padding: 0,
+      });
+    }
+    const data = [
+      {
+        gender: '',
+        value:
+          allAlertCount === 0
+            ? 0
+            : Number((perProcessingAlertCount / allAlertCount).toFixed(2)) * 100,
+      },
+    ];
+    otherChart4.source(data, {
+      value: {
+        min: 0,
+        max: 100,
+      },
+    });
+    otherChart4.legend(false);
+    otherChart4.axis(false);
+    otherChart4.tooltip(false);
+    otherChart4
+      .interval()
+      .position('gender*value')
+      .color('gender')
+      .shape('liquid-fill-gauge')
+      .style({
+        lineWidth: 1,
+        opacity: 0.75,
+      });
+    data.forEach(row => {
+      otherChart4.guide().text({
+        top: true,
+        position: {
+          gender: row.gender,
+          value: 50,
+        },
+        content: `${row.value}%`,
+        style: {
+          opacity: 0.75,
+          fontSize: 12,
+          fill: '#fff',
+          textAlign: 'center',
+        },
+      });
+    });
+    otherChart4.render();
+    this.setState({ otherChart4 });
+  };
+
+  renderOtherChart5 = () => {
+    const { allApprovalData } = this.props;
+    let otherChart5;
+    if (this.state.otherChart5) {
+      // eslint-disable-next-line prefer-destructuring
+      otherChart5 = this.state.otherChart5;
+    } else {
+      otherChart5 = new G2.Chart({
+        container: 'otherChart5',
+        forceFit: true, // 是否自适应宽度
+        height: 70,
+        padding: 0,
+      });
+    }
+    let num = 0;
+    if (allApprovalData[0]) {
+      num =
+        Number((allApprovalData[0].allClaimedNum / allApprovalData[0].allTotalNum).toFixed(2)) *
+        100;
+    }
+    const data = [
+      {
+        gender: '',
+        value: num,
+      },
+    ];
+    otherChart5.source(data, {
+      value: {
+        min: 0,
+        max: 100,
+      },
+    });
+    otherChart5.legend(false);
+    otherChart5.axis(false);
+    otherChart5.tooltip(false);
+    otherChart5
+      .interval()
+      .position('gender*value')
+      .color('gender')
+      .shape('liquid-fill-gauge')
+      .style({
+        lineWidth: 1,
+        opacity: 0.75,
+      });
+    data.forEach(row => {
+      otherChart5.guide().text({
+        top: true,
+        position: {
+          gender: row.gender,
+          value: 50,
+        },
+        content: `${row.value}%`,
+        style: {
+          opacity: 0.75,
+          fontSize: 12,
+          fill: '#fff',
+          textAlign: 'center',
+        },
+      });
+    });
+    otherChart5.render();
+    this.setState({ otherChart5 });
+  };
+
+  renderOtherChart6 = () => {
+    const { allApprovalData } = this.props;
+    let otherChart6;
+    if (this.state.otherChart6) {
+      // eslint-disable-next-line prefer-destructuring
+      otherChart6 = this.state.otherChart6;
+    } else {
+      otherChart6 = new G2.Chart({
+        container: 'otherChart6',
+        forceFit: true, // 是否自适应宽度
+        height: 70,
+        padding: 0,
+      });
+    }
+    let num = 0;
+    if (allApprovalData[0]) {
+      num =
+        Number((allApprovalData[0].allProcessingNum / allApprovalData[0].allTotalNum).toFixed(2)) *
+        100;
+    }
+    const data = [
+      {
+        gender: '',
+        value: num,
+      },
+    ];
+    otherChart6.source(data, {
+      value: {
+        min: 0,
+        max: 100,
+      },
+    });
+    otherChart6.legend(false);
+    otherChart6.axis(false);
+    otherChart6.tooltip(false);
+    otherChart6
+      .interval()
+      .position('gender*value')
+      .color('gender')
+      .shape('liquid-fill-gauge')
+      .style({
+        lineWidth: 1,
+        opacity: 0.75,
+      });
+    data.forEach(row => {
+      otherChart6.guide().text({
+        top: true,
+        position: {
+          gender: row.gender,
+          value: 50,
+        },
+        content: `${row.value}%`,
+        style: {
+          opacity: 0.75,
+          fontSize: 12,
+          fill: '#fff',
+          textAlign: 'center',
+        },
+      });
+    });
+    otherChart6.render();
+    this.setState({ otherChart6 });
+  };
+
+  renderOtherChart7 = () => {
+    const { perApprovalData } = this.props;
+    let otherChart7;
+    if (this.state.otherChart7) {
+      // eslint-disable-next-line prefer-destructuring
+      otherChart7 = this.state.otherChart7;
+    } else {
+      otherChart7 = new G2.Chart({
+        container: 'otherChart7',
+        forceFit: true, // 是否自适应宽度
+        height: 70,
+        padding: 0,
+      });
+    }
+    let num = 0;
+    if (perApprovalData[0]) {
+      num =
+        Number((perApprovalData[0].myClaimedNum / perApprovalData[0].allTotalNum).toFixed(2)) * 100;
+    }
+    const data = [
+      {
+        gender: '',
+        value: num,
+      },
+    ];
+    otherChart7.source(data, {
+      value: {
+        min: 0,
+        max: 100,
+      },
+    });
+    otherChart7.legend(false);
+    otherChart7.axis(false);
+    otherChart7.tooltip(false);
+    otherChart7
+      .interval()
+      .position('gender*value')
+      .color('gender')
+      .shape('liquid-fill-gauge')
+      .style({
+        lineWidth: 1,
+        opacity: 0.75,
+      });
+    data.forEach(row => {
+      otherChart7.guide().text({
+        top: true,
+        position: {
+          gender: row.gender,
+          value: 50,
+        },
+        content: `${row.value}%`,
+        style: {
+          opacity: 0.75,
+          fontSize: 12,
+          fill: '#fff',
+          textAlign: 'center',
+        },
+      });
+    });
+    otherChart7.render();
+    this.setState({ otherChart7 });
+  };
+
+  renderOtherChart8 = () => {
+    const { perApprovalData } = this.props;
+    let otherChart8;
+    if (this.state.otherChart8) {
+      // eslint-disable-next-line prefer-destructuring
+      otherChart8 = this.state.otherChart8;
+    } else {
+      otherChart8 = new G2.Chart({
+        container: 'otherChart8',
+        forceFit: true, // 是否自适应宽度
+        height: 70,
+        padding: 0,
+      });
+    }
+    let num = 0;
+    if (perApprovalData[0]) {
+      num =
+        Number((perApprovalData[0].myProcessingNum / perApprovalData[0].allTotalNum).toFixed(2)) *
+        100;
+    }
+    const data = [
+      {
+        gender: '',
+        value: num,
+      },
+    ];
+    otherChart8.source(data, {
+      value: {
+        min: 0,
+        max: 100,
+      },
+    });
+    otherChart8.legend(false);
+    otherChart8.axis(false);
+    otherChart8.tooltip(false);
+    otherChart8
+      .interval()
+      .position('gender*value')
+      .color('gender')
+      .shape('liquid-fill-gauge')
+      .style({
+        lineWidth: 1,
+        opacity: 0.75,
+      });
+    data.forEach(row => {
+      otherChart8.guide().text({
+        top: true,
+        position: {
+          gender: row.gender,
+          value: 50,
+        },
+        content: `${row.value}%`,
+        style: {
+          opacity: 0.75,
+          fontSize: 12,
+          fill: '#fff',
+          textAlign: 'center',
+        },
+      });
+    });
+    otherChart8.render();
+    this.setState({ otherChart8 });
   };
 
   // 渲染Alter ALL条形图
@@ -1266,10 +1872,8 @@ export default class HomePage extends PureComponent {
           },
           callback: () => {
             if (this.state.submissionStatusBarChart) {
-              if (this.state.submissionStatusBarChart) {
-                this.state.submissionStatusBarChart.clear();
-                this.renderSubmissionStatusBarChart();
-              }
+              this.state.submissionStatusBarChart.clear();
+              this.renderSubmissionStatusBarChart();
             }
           },
         });
@@ -1478,7 +2082,6 @@ export default class HomePage extends PureComponent {
         .interval()
         .position('label*value')
         .color('type', ['#F4374C', '#0D87D4'])
-        .size(35)
         .adjust([
           {
             type: 'dodge',
@@ -2164,9 +2767,13 @@ export default class HomePage extends PureComponent {
                               {
                                 alertState: 'ALL',
                                 alterAllChart: '',
+                                otherChart1: '',
+                                otherChart2: '',
                               },
                               () => {
                                 this.renderAlterAllChart(allAlterData);
+                                this.renderOtherChart1();
+                                this.renderOtherChart2();
                               },
                             );
                           }}
@@ -2183,9 +2790,13 @@ export default class HomePage extends PureComponent {
                               {
                                 alertState: 'PER',
                                 alterPersonalChart: '',
+                                otherChart3: '',
+                                otherChart4: '',
                               },
                               () => {
                                 this.renderAlterPerChart();
+                                this.renderOtherChart3();
+                                this.renderOtherChart4();
                               },
                             );
                           }}
@@ -2332,7 +2943,8 @@ export default class HomePage extends PureComponent {
                               <span className={styles.value}>{allClaimAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <img src={ring} alt="" width={70} />
+                              <div id="otherChart1"></div>
+                              {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
                                   position: 'absolute',
@@ -2345,7 +2957,7 @@ export default class HomePage extends PureComponent {
                                   : (allClaimAlertCount / allAlertCount) * 100
                                 ).toFixed(2)}
                                 %
-                              </span>
+                              </span> */}
                               {/* <div id="allClaimed"></div> */}
                             </div>
                           </div>
@@ -2355,7 +2967,8 @@ export default class HomePage extends PureComponent {
                               <span className={styles.value}>{allProcessingAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <img src={ring} alt="" width={70} />
+                              <div id="otherChart2"></div>
+                              {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
                                   position: 'absolute',
@@ -2368,7 +2981,7 @@ export default class HomePage extends PureComponent {
                                   : (allProcessingAlertCount / allAlertCount) * 100
                                 ).toFixed(2)}
                                 %
-                              </span>
+                              </span> */}
                             </div>
                           </div>
                         </div>
@@ -2408,7 +3021,8 @@ export default class HomePage extends PureComponent {
                               <span className={styles.value}>{perClaimAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <img src={ring} alt="" width={70} />
+                              <div id="otherChart3"></div>
+                              {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
                                   position: 'absolute',
@@ -2421,7 +3035,7 @@ export default class HomePage extends PureComponent {
                                   : (perClaimAlertCount / allAlertCount) * 100
                                 ).toFixed(2)}
                                 %
-                              </span>
+                              </span> */}
                             </div>
                           </div>
                           <div className={styles.blackBox}>
@@ -2430,7 +3044,8 @@ export default class HomePage extends PureComponent {
                               <span className={styles.value}>{perProcessingAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <img src={ring} alt="" width={70} />
+                              <div id="otherChart4"></div>
+                              {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
                                   position: 'absolute',
@@ -2443,7 +3058,7 @@ export default class HomePage extends PureComponent {
                                   : (perProcessingAlertCount / allAlertCount) * 100
                                 ).toFixed(2)}
                                 %
-                              </span>
+                              </span> */}
                             </div>
                           </div>
                         </div>
@@ -2655,9 +3270,13 @@ export default class HomePage extends PureComponent {
                               {
                                 approvalState: 'ALL',
                                 approvalAllChart: '',
+                                otherChart5: '',
+                                otherChart6: '',
                               },
                               () => {
                                 this.renderApprovalAllChart();
+                                this.renderOtherChart5();
+                                this.renderOtherChart6();
                               },
                             );
                           }}
@@ -2675,10 +3294,14 @@ export default class HomePage extends PureComponent {
                                 approvalState: 'PER',
                                 approvalPersonalChart: '',
                                 approvalPersonalPieChart: '',
+                                otherChart7: '',
+                                otherChart8: '',
                               },
                               () => {
                                 this.renderApprovalPerChart();
                                 this.renderApprovalPerPieChart();
+                                this.renderOtherChart7();
+                                this.renderOtherChart8();
                               },
                             );
                           }}
@@ -2831,7 +3454,8 @@ export default class HomePage extends PureComponent {
                               </span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <img src={ring} alt="" width={70} />
+                              <div id="otherChart5"></div>
+                              {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
                                   position: 'absolute',
@@ -2846,7 +3470,7 @@ export default class HomePage extends PureComponent {
                                   : 0
                                 ).toFixed(2)}
                                 %
-                              </span>
+                              </span> */}
                             </div>
                           </div>
                           <div className={styles.blackBox}>
@@ -2857,7 +3481,8 @@ export default class HomePage extends PureComponent {
                               </span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <img src={ring} alt="" width={70} />
+                              <div id="otherChart6"></div>
+                              {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
                                   position: 'absolute',
@@ -2872,7 +3497,7 @@ export default class HomePage extends PureComponent {
                                   : 0
                                 ).toFixed(2)}
                                 %
-                              </span>
+                              </span> */}
                             </div>
                           </div>
                         </div>
@@ -2922,7 +3547,8 @@ export default class HomePage extends PureComponent {
                               </span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <img src={ring} alt="" width={70} />
+                              <div id="otherChart7"></div>
+                              {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
                                   position: 'absolute',
@@ -2937,7 +3563,7 @@ export default class HomePage extends PureComponent {
                                   : 0
                                 ).toFixed(2)}
                                 %
-                              </span>
+                              </span> */}
                             </div>
                           </div>
                           <div className={styles.blackBox}>
@@ -2948,7 +3574,8 @@ export default class HomePage extends PureComponent {
                               </span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <img src={ring} alt="" width={70} />
+                              <div id="otherChart8"></div>
+                              {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
                                   position: 'absolute',
@@ -2963,7 +3590,7 @@ export default class HomePage extends PureComponent {
                                   : 0
                                 ).toFixed(2)}
                                 %
-                              </span>
+                              </span> */}
                             </div>
                           </div>
                         </div>
@@ -3189,7 +3816,10 @@ export default class HomePage extends PureComponent {
                   {/* Submission status */}
                   <div className={styles.submitStatus}>
                     <div style={{ flex: '1 1', minHeight: 250 }}>
-                      <h3 className={styles.groupTitle}>Submission Status</h3>
+                      <h3 className={styles.groupTitle1}>
+                        <IconFont type="iconai70" style={{ color: '#0D87D4', marginRight: 3 }} />
+                        Submission Status
+                      </h3>
                       <div style={{ position: 'relative', height: 330 }}>
                         {(!currentTradeDate ||
                           !lastTradeDate ||
@@ -3254,9 +3884,10 @@ export default class HomePage extends PureComponent {
                   <div className={styles.reported}>
                     <div style={{ flex: 1 }}>
                       <h3
-                        className={styles.groupTitle}
+                        className={styles.groupTitle1}
                         title="Number of reported LOP holders in SEHK and HKFE"
                       >
+                        <IconFont type="iconai70" style={{ color: '#0D87D4', marginRight: 3 }} />
                         Number of reported LOP holders in SEHK and HKFE
                       </h3>
                       <div style={{ position: 'relative', height: 180 }}>
