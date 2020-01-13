@@ -1,0 +1,113 @@
+/*
+ * @Author: liangchaoshun
+ * @Email: liangchaoshun@szkingdom.com
+ * @Date: 2020-01-13 20:54:51
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-13 21:48:31
+ * @Description: 公式的模态框
+ */
+
+// 处理公式模态框
+.formula-modal {
+  :global {
+    .ant-modal-header {
+      padding: 0 10px;
+      border-bottom-color: #979aa8;
+      .ant-modal-title {
+        color: #464c51;
+        font-size: 14px;
+        font-family: AvenirHeavy, sans-serif;
+        line-height: 40px;
+      }
+    }
+
+    .ant-modal-body {
+      padding: 0;
+      :local {
+        .formula-input-tip {
+          padding: 0 10px;
+          color: #464c51;
+          font-size: 12px;
+          line-height: 30px;
+          background-color: #f3f6f9;
+        }
+        .formula-check-container {
+          text-align: right;
+          :global {
+            .ant-input {
+              margin: 10px 0;
+            }
+          }
+          .formula-format-error {
+            border-color: #df4949;
+          }
+        }
+
+        .formula-search-tip {
+          margin: 10px 0;
+          color: #464c51;
+          font-size: 14px;
+          font-family: AvenirHeavy, sans-serif;
+        }
+
+        .formula-type,
+        .formula-name {
+          display: inline-block;
+          width: 50%;
+          color: #464c51;
+          font-size: 12px;
+          font-family: AvenirHeavy, sans-serif;
+          line-height: 30px;
+        }
+
+        .formula-hub {
+          height: 200px;
+          border: 1px solid #979aa8;
+          .formula-hub-left,
+          .formula-hub-right {
+            float: left;
+            width: 50%;
+            height: 100%;
+            overflow: scroll;
+            font-size: 12px;
+            ul {
+              margin: 0;
+              padding: 0;
+              list-style: none;
+              li {
+                padding: 0 10px;
+                font-size: 12px;
+                font-family: AvenirHeavy, sans-serif;
+                line-height: 25px;
+                cursor: pointer;
+                &:hover {
+                  background-color: #f1f5f880;
+                }
+              }
+            }
+          }
+          .formula-hub-left {
+            border-right: 1px solid #d9d9d9;
+            .curr {
+              color: #0d87d4;
+            }
+          }
+          .formula-hub-right .curr {
+            color: #0d87d4;
+            background-color: #f3f6f9;
+          }
+        }
+
+        .formula-desc {
+          margin: 10px 0;
+          font-size: 12px;
+          font-family: AvenirHeavy, sans-serif;
+        }
+      }
+    }
+
+    .ant-modal-footer {
+      border-top: none;
+    }
+  }
+}
