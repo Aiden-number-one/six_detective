@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 13:13:09
+ * @LastEditTime : 2020-01-13 15:07:30
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -48,7 +48,7 @@ export default class DataProcessing extends Component {
       dataProcessingVisible: false,
       dataAlertVisible: false,
       dataProcessingFlag: false,
-      inspectDataVisible: false,
+      inspectDataVisible: true,
       checkedAll: false,
       alertIndeterminate: false,
       codeColumns: [
@@ -213,6 +213,7 @@ export default class DataProcessing extends Component {
 
   componentDidMount() {
     console.log('getAuthority===', getAuthority());
+    this.queryDataProcessing();
     this.getMarket();
     this.getChartData();
     this.getStatusData();
@@ -455,6 +456,7 @@ export default class DataProcessing extends Component {
   startProcessing = async () => {
     try {
       await this.getStatusData();
+      await this.queryDataProcessing();
       const { dataProcessingData } = this.props;
       const { dataStatus } = this.state;
       if (dataStatus === '1') {
@@ -513,6 +515,7 @@ export default class DataProcessing extends Component {
             this.setState({
               dataProcessingFlag: false,
             });
+            message.success('succeeded');
           },
         });
       }
