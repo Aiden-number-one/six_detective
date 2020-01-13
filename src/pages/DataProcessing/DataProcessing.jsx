@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 15:07:30
+ * @LastEditTime : 2020-01-13 15:35:33
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -105,8 +105,11 @@ export default class DataProcessing extends Component {
       columns: [
         {
           title: () =>
-            this.state.alertBypassStatus.length > 0 &&
-            this.state.isBypass && (
+            (this.state.alertBypassStatus.length > 0 ||
+              (this.props.dataProcessingItemData.items &&
+                this.props.dataProcessingItemData.items.some(
+                  element => element.bypassStatus === '1',
+                ))) && (
               <Fragment>
                 {this.state.alertBypassStatus.length > 0 && this.state.isBypass && (
                   <Checkbox
@@ -267,7 +270,7 @@ export default class DataProcessing extends Component {
         const alertBypassStatus = dataProcessingItemData.items.filter(
           element => element.bypassStatus === '0',
         );
-        if (alertBypassStatus.length <= 0 || !isBypass || !authBypass) {
+        if ((alertBypassStatus.length > 0 && !isBypass) || !authBypass) {
           const { tempColumns } = this.state;
           const newColumns = Object.assign([], columns);
           let newTempColumns = Object.assign([], tempColumns);
