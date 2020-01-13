@@ -3292,7 +3292,8 @@ export default class HomePage extends PureComponent {
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
-                                  {item.alertTime && moment(item.alertTime).format(timestampFormat)}
+                                  {item.alertTime &&
+                                    moment(item.alertTime, timestampFormat).format(timestampFormat)}
                                 </span>
                               </List.Item>
                             )}
@@ -3849,7 +3850,8 @@ export default class HomePage extends PureComponent {
                                 </span>
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
-                                  {item.alertTime && moment(item.alertTime).format(timestampFormat)}
+                                  {item.alertTime &&
+                                    moment(item.alertTime, timestampFormat).format(timestampFormat)}
                                 </span>
                               </List.Item>
                             )}
