@@ -2,7 +2,7 @@
  * @Description: quick menu
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-07 15:54:07
+ * @LastEditTime : 2020-01-13 13:33:52
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -65,13 +65,14 @@ export default {
       }
     },
     //
-    *getOutstandingReportFileCount({ payload }, { call, put }) {
+    *getOutstandingReportFileCount({ payload, callback }, { call, put }) {
       const response = yield call(getOutstandingReportFileCount, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'setOutstandingReportFileCount',
           payload: response.bcjson.items,
         });
+        if (callback) callback();
       }
     },
     //
