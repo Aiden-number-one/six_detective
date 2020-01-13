@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-12 15:09:07
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 14:04:51
+ * @LastEditTime : 2020-01-13 17:56:42
  */
 
 import React from 'react';
@@ -48,7 +48,13 @@ export default React.memo(
             <Form onSubmit={this.handleSubmit}>
               <Form.Item {...Layout} label="Template Name">
                 {getFieldDecorator('reportName', {
-                  rules: [{ required: true, message: 'Please Input' }],
+                  rules: [
+                    { required: true, message: 'Report Name is missing' },
+                    {
+                      max: 50,
+                      message: 'Report Name cannot be longer than 50 characters',
+                    },
+                  ],
                   initialValue: saveType === 'saveAs' ? `${reportName}_copy` : reportName,
                 })(<Input placeholder="Please Input" />)}
               </Form.Item>

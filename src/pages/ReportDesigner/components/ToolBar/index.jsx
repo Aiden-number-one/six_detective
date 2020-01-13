@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 09:36:59
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 15:53:20
+ * @LastEditTime : 2020-01-13 19:06:37
  */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
@@ -119,13 +119,13 @@ export default class ToolBar extends Component {
                 <IconFont type="iconicon_previrew" />
                 <span>Preview</span>
               </div>
-              <div className={styles.actionButt}>
-                <IconFont
-                  type="iconlingcunwei"
-                  onClick={() => {
-                    saveDrawDisplay(true, 'saveAs');
-                  }}
-                />
+              <div
+                className={styles.actionButt}
+                onClick={() => {
+                  saveDrawDisplay(true, 'saveAs');
+                }}
+              >
+                <IconFont type="iconlingcunwei" />
                 <span>Save As</span>
               </div>
               {/* 进行模板保存 */}
