@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 17:12:49
+ * @LastEditTime : 2020-01-13 20:18:31
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -32,6 +32,7 @@ const { Option } = Select;
   chartData: dataProcessing.chartData,
   statusData: dataProcessing.statusData,
   barData: dataProcessing.barData,
+  byPassSumData: dataProcessing.byPassSumData,
 }))
 export default class DataProcessing extends Component {
   constructor() {
@@ -473,6 +474,7 @@ export default class DataProcessing extends Component {
         dataProcessingData.items &&
         dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
       if (isClosedIntraday) {
+        this.byPassSumData();
         this.setState({
           intradays,
           dataAlertVisible: true,
@@ -540,9 +542,7 @@ export default class DataProcessing extends Component {
   };
 
   dataAlertConfirm = () => {
-    this.setState({
-      dataAlertVisible: false,
-    });
+    this.byPassAll();
   };
 
   dataAlertCancel = () => {
@@ -670,8 +670,39 @@ export default class DataProcessing extends Component {
     });
   };
 
+  byPassSumData = () => {
+    const { dispatch } = this.props;
+    const params = {
+      operType: 'byPassNumQuery',
+    };
+    dispatch({
+      type: 'dataProcessing/getByPassSum',
+      payload: params,
+      callback: () => {},
+      errorFn: () => {},
+    });
+  };
+
+  byPassAll = () => {
+    const { dispatch } = this.props;
+    const params = {
+      operType: 'onceByPass',
+    };
+    dispatch({
+      type: 'dataProcessing/getByPassAll',
+      payload: params,
+      callback: () => {
+        this.setState({
+          dataAlertVisible: false,
+        });
+        this.queryDataProcessing();
+      },
+      errorFn: () => {},
+    });
+  };
+
   render() {
-    const { loading, dataProcessingData, dataProcessingItemData } = this.props;
+    const { loading, dataProcessingData, dataProcessingItemData, byPassSumData } = this.props;
     const {
       inspectDataVisible,
       selectedRowKeys,
@@ -792,8 +823,8 @@ export default class DataProcessing extends Component {
                     okText={formatMessage({ id: 'app.common.confirm' })}
                   >
                     <span>
-                      There are still {intradays.length} outstanding alerts. Do you want to bypass
-                      all?
+                      There are still {byPassSumData && byPassSumData[0] && byPassSumData[0].num}{' '}
+                      outstanding alerts. Do you want to bypass all?
                     </span>
                   </Modal>
                 </div>
