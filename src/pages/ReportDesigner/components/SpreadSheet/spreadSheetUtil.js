@@ -138,7 +138,7 @@ export function generateJson(spreadSheetData) {
     new Array(colLength).fill({}).map(() => ({
       F: '1',
       cellDesc: '',
-      cellType: 'text',
+      cellType: 'TEXT',
       style: {},
       sy: '0',
     })),
@@ -188,6 +188,8 @@ export function generateJson(spreadSheetData) {
         currentCellProps.cellType = 'DATASET';
       } else if (cellContent.cellProps.cellType === 'text') {
         currentCellProps.cellType = 'TEXT';
+      } else if (cellContent.cellProps.cellType === 'formula') {
+        currentCellProps.cellType = 'FORMULA';
       }
 
       // 对样式进行处理
