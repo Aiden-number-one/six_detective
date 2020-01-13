@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime : 2020-01-13 17:18:55
+ * @LastEditTime : 2020-01-13 19:54:27
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -85,4 +85,5 @@ export default {
   progressChart: `${prefix}get_data_progress_chart`,
   progressStatus: `${prefix}get_data_progress_status`,
   progressBar: `${prefix}get_data_progress_bar`,
+  alertByPass: `${prefix}set_data_progress_once_by_pass`,
 };

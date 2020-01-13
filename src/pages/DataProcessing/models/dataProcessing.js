@@ -3,11 +3,18 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 16:15:45
+ * @LastEditTime : 2020-01-13 20:15:31
  */
 import Service from '@/utils/Service';
 
-const { getDataProcessing, startProcessing, progressChart, progressStatus, progressBar } = Service;
+const {
+  getDataProcessing,
+  startProcessing,
+  progressChart,
+  progressStatus,
+  progressBar,
+  alertByPass,
+} = Service;
 const codeMaintenance = {
   namespace: 'dataProcessing',
   state: {
@@ -20,6 +27,8 @@ const codeMaintenance = {
     chartData: [],
     statusData: {},
     barData: {},
+    byPassAllData: {},
+    byPassSumData: {},
   },
   effects: {
     *getDataProcessing({ payload, callback }, { call, put }) {
@@ -149,6 +158,36 @@ const codeMaintenance = {
         throw new Error(response.bcjson.msg);
       }
     },
+    *getByPassAll({ payload, callback, errorFn }, { call, put }) {
+      const response = yield call(alertByPass, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'byPassAll',
+            payload: response.bcjson.items,
+          });
+          callback();
+        }
+      } else {
+        errorFn();
+        throw new Error(response.bcjson.msg);
+      }
+    },
+    *getByPassSum({ payload, callback, errorFn }, { call, put }) {
+      const response = yield call(alertByPass, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'byPassSum',
+            payload: response.bcjson.items,
+          });
+          callback();
+        }
+      } else {
+        errorFn();
+        throw new Error(response.bcjson.msg);
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
@@ -203,6 +242,18 @@ const codeMaintenance = {
       return {
         ...state,
         barData: action.payload,
+      };
+    },
+    byPassAll(state, action) {
+      return {
+        ...state,
+        byPassAllData: action.payload,
+      };
+    },
+    byPassSum(state, action) {
+      return {
+        ...state,
+        byPassSumData: action.payload,
       };
     },
   },
