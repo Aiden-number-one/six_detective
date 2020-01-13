@@ -298,36 +298,7 @@ export default class HomePage extends PureComponent {
       outstandingReportFileCount,
       allApprovalData,
     } = this.props;
-    let currentTradeDate;
-    let lastTradeDate;
-    let currentDate;
-    let lastDate;
-    if (fileCountData[0]) {
-      // eslint-disable-next-line prefer-destructuring
-      currentTradeDate = fileCountData[0].currentTradeDate;
-      // eslint-disable-next-line prefer-destructuring
-      lastTradeDate = fileCountData[0].lastTradeDate;
-    }
-    if (currentTradeDate) {
-      // eslint-disable-next-line prefer-destructuring
-      currentDate = Object.keys(currentTradeDate)[0];
-    }
-    if (lastTradeDate) {
-      // eslint-disable-next-line prefer-destructuring
-      lastDate = Object.keys(lastTradeDate)[0];
-    }
-    let isRender = false;
     let isRender1 = false;
-    lateReportFileCount.forEach(item => {
-      if (item.count > 0) {
-        isRender = true;
-      }
-    });
-    outstandingReportFileCount.forEach(item => {
-      if (item.count > 0) {
-        isRender = true;
-      }
-    });
     if (processingStageData[0]) {
       Object.keys(processingStageData[0]).forEach(item => {
         if (processingStageData[0][item] > 0) {
@@ -348,24 +319,10 @@ export default class HomePage extends PureComponent {
     if (activeKey === '3') {
       setTimeout(() => {
         if (renderDashboard) {
-          if (
-            currentTradeDate &&
-            lastTradeDate &&
-            currentDate &&
-            lastDate &&
-            (currentTradeDate[currentDate] !== 0 || lastTradeDate[lastDate] !== 0)
-          ) {
-            this.renderSubmissionStatusPieChart();
-          }
-          if (isRender) {
-            this.renderSubmissionStatusBarChart();
-          }
-          if (marketData[0]) {
-            this.renderMarketPieChart();
-          }
-          if (marketDataByCategory[0]) {
-            this.renderMarketRoseChart();
-          }
+          this.renderSubmissionStatusPieChart();
+          this.renderSubmissionStatusBarChart();
+          this.renderMarketPieChart();
+          this.renderMarketRoseChart();
           if (isRender1) {
             this.renderProcessingStageBarChart();
           }
@@ -666,7 +623,7 @@ export default class HomePage extends PureComponent {
         .adjust([
           {
             type: 'dodge',
-            marginRatio: 1 / 32,
+            marginRatio: 0,
           },
         ]);
     } else {
@@ -708,7 +665,7 @@ export default class HomePage extends PureComponent {
         .adjust([
           {
             type: 'dodge',
-            marginRatio: 1 / 32,
+            marginRatio: 0,
           },
         ]);
     }
@@ -747,12 +704,16 @@ export default class HomePage extends PureComponent {
     if (allApprovalData[0] && allApprovalData[0].userInfo && allApprovalData[0].userInfo[0]) {
       const { userInfo } = allApprovalData[0];
       const ApprovalAll = [];
+      let count = 0;
       userInfo.forEach(item => {
         ApprovalAll.push({
           label: item.userId,
           type: 'CLAIMED',
           value: item.userClaimedNum,
         });
+        if (item.userClaimedNum > count) {
+          count = item.userClaimedNum;
+        }
       });
       userInfo.forEach(item => {
         ApprovalAll.push({
@@ -760,8 +721,16 @@ export default class HomePage extends PureComponent {
           type: 'PROCESSING',
           value: item.userProcessingNum,
         });
+        if (item.userProcessingNum > count) {
+          count = item.userProcessingNum;
+        }
       });
-      approvalAllChart.source(ApprovalAll);
+      approvalAllChart.source(ApprovalAll, {
+        value: {
+          // eslint-disable-next-line no-nested-ternary
+          max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+        },
+      });
       approvalAllChart.legend({
         position: 'top-center', // 设置图例的显示位置
         label: {
@@ -825,7 +794,11 @@ export default class HomePage extends PureComponent {
         { label: 'Alex.', type: 'Claimed', value: 3 },
         { label: 'Alex.', type: 'Processing', value: 4 },
       ];
-      approvalAllChart.source(ApprovalAll);
+      approvalAllChart.source(ApprovalAll, {
+        value: {
+          max: 5,
+        },
+      });
       approvalAllChart.legend(false);
       approvalAllChart.axis('value', {
         position: 'left',
@@ -893,13 +866,30 @@ export default class HomePage extends PureComponent {
         !!perApprovalData[0].myProcessingNum ||
         !!perApprovalData[0].myFinishedNum)
     ) {
+      const keys = {
+        allOutstandingNum: '',
+        myClaimedNum: '',
+        myProcessingNum: '',
+        myFinishedNum: '',
+      };
+      let count = 0;
+      Object.keys(keys).forEach(item => {
+        if (perApprovalData[0][item] > count) {
+          count = perApprovalData[0][item];
+        }
+      });
       const ApprovalPersonal = [
         { label: 'Outstanding', value: perApprovalData[0].allOutstandingNum },
         { label: 'Calimed', value: perApprovalData[0].myClaimedNum },
         { label: 'Processing', value: perApprovalData[0].myProcessingNum },
         { label: 'Finished', value: perApprovalData[0].myFinishedNum },
       ];
-      approvalPersonalChart.source(ApprovalPersonal);
+      approvalPersonalChart.source(ApprovalPersonal, {
+        value: {
+          // eslint-disable-next-line no-nested-ternary
+          max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+        },
+      });
       approvalPersonalChart.legend(false);
       approvalPersonalChart.axis('value', {
         position: 'left',
@@ -943,7 +933,7 @@ export default class HomePage extends PureComponent {
         .adjust([
           {
             type: 'dodge',
-            marginRatio: 1 / 32,
+            marginRatio: 0,
           },
         ]);
     } else {
@@ -953,7 +943,11 @@ export default class HomePage extends PureComponent {
         { label: 'Processing', value: 3 },
         { label: 'Finished', value: 4 },
       ];
-      approvalPersonalChart.source(ApprovalPersonal);
+      approvalPersonalChart.source(ApprovalPersonal, {
+        value: {
+          max: 5,
+        },
+      });
       approvalPersonalChart.legend(false);
       approvalPersonalChart.axis('value', {
         position: 'left',
@@ -977,7 +971,7 @@ export default class HomePage extends PureComponent {
         .adjust([
           {
             type: 'dodge',
-            marginRatio: 1 / 32,
+            marginRatio: 0,
           },
         ]);
     }
@@ -1123,12 +1117,45 @@ export default class HomePage extends PureComponent {
   // 渲染Submission Status饼图
   renderSubmissionStatusPieChart = () => {
     const { fileCountData } = this.props;
-    let submissionStatusCount = 0;
-    let submissionStatusPie = [];
+    let submissionStatusPieChart;
+    if (this.state.submissionStatusPieChart) {
+      // eslint-disable-next-line prefer-destructuring
+      submissionStatusPieChart = this.state.submissionStatusPieChart;
+    } else {
+      submissionStatusPieChart = new G2.Chart({
+        container: 'submissionStatusPie',
+        forceFit: true,
+        height: 330,
+        padding: [50, 20, 20, 0],
+      });
+    }
+    let currentTradeDate;
+    let lastTradeDate;
+    let currentDate;
+    let lastDate;
     if (fileCountData[0]) {
-      const { currentTradeDate, lastTradeDate } = fileCountData[0];
-      const currentDate = Object.keys(currentTradeDate)[0];
-      const lastDate = Object.keys(lastTradeDate)[0];
+      // eslint-disable-next-line prefer-destructuring
+      currentTradeDate = fileCountData[0].currentTradeDate;
+      // eslint-disable-next-line prefer-destructuring
+      lastTradeDate = fileCountData[0].lastTradeDate;
+    }
+    if (currentTradeDate) {
+      // eslint-disable-next-line prefer-destructuring
+      currentDate = Object.keys(currentTradeDate)[0];
+    }
+    if (lastTradeDate) {
+      // eslint-disable-next-line prefer-destructuring
+      lastDate = Object.keys(lastTradeDate)[0];
+    }
+    if (
+      currentTradeDate &&
+      lastTradeDate &&
+      currentDate &&
+      lastDate &&
+      (currentTradeDate[currentDate] !== 0 || lastTradeDate[lastDate] !== 0)
+    ) {
+      let submissionStatusCount = 0;
+      let submissionStatusPie = [];
       submissionStatusCount = currentTradeDate[currentDate] + lastTradeDate[lastDate];
       submissionStatusPie = [
         {
@@ -1138,62 +1165,87 @@ export default class HomePage extends PureComponent {
           date: currentDate,
         },
         {
-          label: 'Last trade date',
+          label: 'Last Trade Date',
           value: lastTradeDate[lastDate],
           percent: Number((lastTradeDate[lastDate] / submissionStatusCount).toFixed(4)),
           date: lastDate,
         },
       ];
-    }
-    const submissionStatusPieChart = new G2.Chart({
-      container: 'submissionStatusPie',
-      forceFit: true,
-      height: 300,
-      padding: [50, 20, 20, 0],
-    });
-    submissionStatusPieChart.source(submissionStatusPie, {
-      percent: {
-        formatter: val => {
-          const value = `${val * 100}%`;
-          return value;
+      submissionStatusPieChart.source(submissionStatusPie, {
+        percent: {
+          formatter: val => {
+            const value = `${(val * 100).toFixed(2)}%`;
+            return value;
+          },
         },
-      },
-    });
-    submissionStatusPieChart.coord('theta', {
-      radius: 0.5,
-    });
-    // .rotate(90);
-    submissionStatusPieChart.tooltip({
-      showTitle: false,
-    });
-    submissionStatusPieChart.legend({
-      position: 'top-center',
-      marker: 'square',
-      label: {
-        color: '#464C51',
-        fontSize: 12,
-      },
-    });
-    submissionStatusPieChart
-      .intervalStack()
-      .position('percent')
-      .label('percent', {
-        useHtml: true,
-        htmlTemplate: (val, item) =>
-          `<div style="font-size: 12px;">${item.point.value}(${val})</div><div style="font-size: 12px;white-space:nowrap;text-align: center;">${item.point.label}</div>`,
-      })
-      .tooltip('label*percent', (label, percent) => {
-        const value = `${percent * 100}%`;
-        return {
-          name: label,
-          value,
-        };
-      })
-      .color('label', ['#0D87D4', '#F4374C'])
-      .style({
-        lineWidth: 1,
-        stroke: '#fff',
       });
+      submissionStatusPieChart.coord('theta', {
+        radius: 0.5,
+      });
+      // .rotate(90);
+      submissionStatusPieChart.tooltip({
+        showTitle: false,
+      });
+      submissionStatusPieChart.legend({
+        position: 'top-center',
+        marker: 'square',
+        label: {
+          color: '#464C51',
+          fontSize: 12,
+        },
+      });
+      submissionStatusPieChart
+        .intervalStack()
+        .position('percent')
+        .label('percent', {
+          useHtml: true,
+          htmlTemplate: (val, item) =>
+            `<div style="font-size: 12px;">${item.point.value}(${val})</div><div style="font-size: 12px;white-space:nowrap;text-align: center;">${item.point.label}</div>`,
+        })
+        .tooltip('label*percent', (label, percent) => {
+          const value = `${(percent * 100).toFixed(2)}%`;
+          return {
+            name: label,
+            value,
+          };
+        })
+        .color('label', ['#0D87D4', '#F4374C'])
+        .style({
+          lineWidth: 1,
+          stroke: '#fff',
+        });
+    } else {
+      const submissionStatusPie = [
+        {
+          label: 'Current Trade Day',
+          value: 3,
+          percent: 0.3,
+          date: 20200113,
+        },
+        {
+          label: 'Last Trade Date',
+          value: 7,
+          percent: 0.7,
+          date: 20200110,
+        },
+      ];
+      submissionStatusPieChart.source(submissionStatusPie);
+      submissionStatusPieChart.coord('theta', {
+        radius: 0.5,
+      });
+      submissionStatusPieChart.tooltip({
+        showTitle: false,
+      });
+      submissionStatusPieChart.legend(false);
+      submissionStatusPieChart
+        .intervalStack()
+        .position('percent')
+        .color('label', ['#0D87D4', '#F4374C'])
+        .style({
+          lineWidth: 1,
+          stroke: '#fff',
+        });
+    }
     submissionStatusPieChart.render();
     submissionStatusPieChart.on('interval:click', ev => {
       const clickData = ev.data;
@@ -1206,6 +1258,16 @@ export default class HomePage extends PureComponent {
           payload: {
             tradeDate,
           },
+          callback: () => {
+            if (this.state.submissionStatusBarChart) {
+              setTimeout(() => {
+                if (this.state.submissionStatusBarChart) {
+                  this.state.submissionStatusBarChart.clear();
+                  this.renderSubmissionStatusBarChart();
+                }
+              }, 0);
+            }
+          },
         });
         dispatch({
           type: 'dashboard/getLateReportFileCount',
@@ -1213,25 +1275,12 @@ export default class HomePage extends PureComponent {
             tradeDate,
           },
           callback: () => {
-            const { lateReportFileCount, outstandingReportFileCount } = this.props;
-            const submissionStatusBar = [];
-            lateReportFileCount.forEach(item => {
-              submissionStatusBar.push({
-                label: 'Late report',
-                value: item.count,
-                type: item.market,
-              });
-            });
-            outstandingReportFileCount.forEach(item => {
-              submissionStatusBar.push({
-                label: 'Outstanding reports',
-                value: item.count,
-                type: item.market,
-              });
-            });
-            // eslint-disable-next-line no-unused-expressions
-            this.state.submissionStatusBarChart &&
-              this.state.submissionStatusBarChart.changeData(submissionStatusBar);
+            setTimeout(() => {
+              if (this.state.submissionStatusBarChart) {
+                this.state.submissionStatusBarChart.clear();
+                this.renderSubmissionStatusBarChart();
+              }
+            }, 0);
           },
         });
       }
@@ -1242,158 +1291,252 @@ export default class HomePage extends PureComponent {
   // 渲染Submission Status柱图
   renderSubmissionStatusBarChart = () => {
     const { lateReportFileCount, outstandingReportFileCount } = this.props;
-    const submissionStatusBar = [];
+    let submissionStatusBarChart;
+    if (this.state.submissionStatusBarChart) {
+      // eslint-disable-next-line prefer-destructuring
+      submissionStatusBarChart = this.state.submissionStatusBarChart;
+    } else {
+      submissionStatusBarChart = new G2.Chart({
+        container: 'submissionStatusBar',
+        forceFit: true,
+        height: 366,
+        padding: [100, 20, 30, 50],
+      });
+    }
+    let isRender = false;
     lateReportFileCount.forEach(item => {
-      submissionStatusBar.push({
-        label: 'Late report',
-        value: item.count,
-        type: item.market,
-      });
-    });
-    outstandingReportFileCount.forEach(item => {
-      submissionStatusBar.push({
-        label: 'Outstanding reports',
-        value: item.count,
-        type: item.market,
-      });
-    });
-    const submissionStatusBarChart = new G2.Chart({
-      container: 'submissionStatusBar',
-      forceFit: true,
-      height: 300,
-      padding: [50, 20, 20, 50],
-    });
-    submissionStatusBarChart.source(submissionStatusBar);
-    submissionStatusBarChart.legend({
-      position: 'top-right', // 设置图例的显示位置
-      itemGap: 20, // 图例项之间的间距
-      offsetY: -10,
-      label: {
-        color: '#464C51',
-        fontSize: 12,
-      },
-    });
-    submissionStatusBarChart.axis('value', {
-      position: 'left',
-      label: {
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-      grid: {
-        lineStyle: {
-          stroke: '#D4DDE3',
-          lineWidth: 0.5,
-          lineDash: [0],
-        },
-      },
-    });
-    submissionStatusBarChart.axis('label', {
-      label: {
-        offset: 12,
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-    });
-    submissionStatusBarChart
-      .interval()
-      .position('label*value')
-      .color('type', ['#F4374C', '#0D87D4'])
-      .label('value', {
-        textStyle: {
-          fill: '#7F91A4',
-          fontSize: 12,
-        },
-        offset: 10,
-      })
-      .size(35)
-      .adjust([
-        {
-          type: 'dodge',
-          marginRatio: 1 / 32,
-        },
-      ]);
-    submissionStatusBarChart.render();
-    submissionStatusBarChart.on('interval:click', ev => {
-      const clickData = ev.data;
-      if (clickData) {
-        // eslint-disable-next-line no-underscore-dangle
-        // const alertOwnerId = localStorage.getItem('loginName');
+      if (item.count > 0) {
+        isRender = true;
       }
     });
+    outstandingReportFileCount.forEach(item => {
+      if (item.count > 0) {
+        isRender = true;
+      }
+    });
+    if (isRender) {
+      const submissionStatusBar = [];
+      let count = 0;
+      lateReportFileCount.forEach(item => {
+        submissionStatusBar.push({
+          label: 'Late report',
+          value: item.count,
+          type: item.market,
+        });
+        if (item.count > count) {
+          // eslint-disable-next-line prefer-destructuring
+          count = item.count;
+        }
+      });
+      outstandingReportFileCount.forEach(item => {
+        submissionStatusBar.push({
+          label: 'Outstanding reports',
+          value: item.count,
+          type: item.market,
+        });
+        if (item.count > count) {
+          // eslint-disable-next-line prefer-destructuring
+          count = item.count;
+        }
+      });
+      submissionStatusBarChart.source(submissionStatusBar, {
+        value: {
+          // eslint-disable-next-line no-nested-ternary
+          max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+        },
+      });
+      submissionStatusBarChart.legend({
+        position: 'top-right', // 设置图例的显示位置
+        itemGap: 20, // 图例项之间的间距
+        offsetY: -10,
+        label: {
+          color: '#464C51',
+          fontSize: 12,
+        },
+      });
+      submissionStatusBarChart.axis('value', {
+        position: 'left',
+        label: {
+          color: '#464C51',
+          fontSize: 12,
+        },
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+        grid: {
+          lineStyle: {
+            stroke: '#D4DDE3',
+            lineWidth: 0.5,
+            lineDash: [0],
+          },
+        },
+      });
+      submissionStatusBarChart.axis('label', {
+        label: {
+          offset: 12,
+          color: '#464C51',
+          fontSize: 12,
+        },
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+      });
+      submissionStatusBarChart
+        .interval()
+        .position('label*value')
+        .color('type', ['#F4374C', '#0D87D4'])
+        .label('value', {
+          textStyle: {
+            fill: '#7F91A4',
+            fontSize: 12,
+          },
+          offset: 10,
+        })
+        .size(35)
+        .adjust([
+          {
+            type: 'dodge',
+            marginRatio: 0,
+          },
+        ]);
+    } else {
+      const submissionStatusBar = [
+        { label: 'Late reports', value: 8, type: 'HKFE' },
+        { label: 'Late reports', value: 6, type: 'SEHK' },
+        { label: 'Outstanding reports', value: 6, type: 'HKFE' },
+        { label: 'Outstanding reports', value: 8, type: 'SEHK' },
+      ];
+      submissionStatusBarChart.source(submissionStatusBar, {
+        value: {
+          max: 10,
+        },
+      });
+      submissionStatusBarChart.legend(false);
+      submissionStatusBarChart.axis('value', {
+        position: 'left',
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+        grid: false,
+      });
+      submissionStatusBarChart.axis('label', {
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+      });
+      submissionStatusBarChart
+        .interval()
+        .position('label*value')
+        .color('type', ['#F4374C', '#0D87D4'])
+        .size(35)
+        .adjust([
+          {
+            type: 'dodge',
+            marginRatio: 0,
+          },
+        ]);
+    }
+    submissionStatusBarChart.render();
     this.setState({ submissionStatusBarChart });
   };
 
   // 渲染market饼图
   renderMarketPieChart = () => {
     const { marketData } = this.props;
-    const marketPie = [];
-    let marketDataCount = 0;
-    marketData.forEach(item => {
-      marketDataCount += Number(item.count);
-    });
-    marketData.forEach(item => {
-      marketPie.push({
-        label: item.market,
-        value: Number(item.count),
-        percent:
-          marketDataCount === 0
-            ? marketDataCount
-            : Number((Number(item.count) / marketDataCount).toFixed(4)),
+    let marketPieChart;
+    if (this.state.marketPieChart) {
+      // eslint-disable-next-line prefer-destructuring
+      marketPieChart = this.state.marketPieChart;
+    } else {
+      marketPieChart = new G2.Chart({
+        container: 'marketPie',
+        forceFit: true,
+        height: 180,
+        padding: [10, 5, 10, 5],
       });
-    });
-    const marketPieChart = new G2.Chart({
-      container: 'marketPie',
-      forceFit: true,
-      height: 180,
-      padding: [10, 5, 10, 5],
-    });
-    marketPieChart.source(marketPie, {
-      percent: {
-        formatter: val => {
-          const value = `${(val * 100).toFixed(2)}%`;
-          return value;
+    }
+    if (marketData[0]) {
+      const marketPie = [];
+      let marketDataCount = 0;
+      marketData.forEach(item => {
+        marketDataCount += Number(item.count);
+      });
+      marketData.forEach(item => {
+        marketPie.push({
+          label: item.market,
+          value: Number(item.count),
+          percent:
+            marketDataCount === 0
+              ? marketDataCount
+              : Number((Number(item.count) / marketDataCount).toFixed(4)),
+        });
+      });
+      marketPieChart.source(marketPie, {
+        percent: {
+          formatter: val => {
+            const value = `${(val * 100).toFixed(2)}%`;
+            return value;
+          },
         },
-      },
-    });
-    marketPieChart.coord('theta', {
-      radius: 0.8,
-      innerRadius: 0.7,
-    });
-    marketPieChart.tooltip({
-      showTitle: false,
-    });
-    marketPieChart.legend({
-      position: 'left-top',
-      marker: 'square',
-      offsetX: 10,
-      offsetY: 20,
-    });
-    marketPieChart
-      .intervalStack()
-      .position('percent')
-      .label('percent', {
-        useHtml: true,
-        htmlTemplate: (val, item) =>
-          `<div style="white-space:nowrap;text-align: center;font-size:12px;">(${item.point.label})</div><div style="font-size:12px;">${item.point.value}(${val})</div>`,
-      })
-      .tooltip('label*percent', (label, percent) => {
-        const value = `${(percent * 100).toFixed(2)}%`;
-        return {
-          name: label,
-          value,
-        };
-      })
-      .color('label', ['#10416C', '#0D87D4'])
-      .style({
-        lineWidth: 1,
-        stroke: '#fff',
       });
+      marketPieChart.coord('theta', {
+        radius: 0.8,
+        innerRadius: 0.7,
+      });
+      marketPieChart.tooltip({
+        showTitle: false,
+      });
+      marketPieChart.legend({
+        position: 'left-top',
+        marker: 'square',
+        offsetX: 10,
+        offsetY: 20,
+      });
+      marketPieChart
+        .intervalStack()
+        .position('percent')
+        .label('percent', {
+          useHtml: true,
+          htmlTemplate: (val, item) =>
+            `<div style="white-space:nowrap;text-align: center;font-size:12px;">(${item.point.label})</div><div style="font-size:12px;">${item.point.value}(${val})</div>`,
+        })
+        .tooltip('label*percent', (label, percent) => {
+          const value = `${(percent * 100).toFixed(2)}%`;
+          return {
+            name: label,
+            value,
+          };
+        })
+        .color('label', ['#10416C', '#0D87D4'])
+        .style({
+          lineWidth: 1,
+          stroke: '#fff',
+        });
+    } else {
+      const marketPie = [
+        { label: 'HKFE', value: 1, percent: 0.5 },
+        { label: 'SEHK', value: 1, percent: 0.5 },
+      ];
+      marketPieChart.source(marketPie);
+      marketPieChart.coord('theta', {
+        radius: 0.8,
+        innerRadius: 0.7,
+      });
+      marketPieChart.tooltip({
+        showTitle: false,
+      });
+      marketPieChart.legend(false);
+      marketPieChart
+        .intervalStack()
+        .position('percent')
+        .color('label', ['#10416C', '#0D87D4'])
+        .style({
+          lineWidth: 1,
+          stroke: '#fff',
+        });
+    }
     marketPieChart.render();
     marketPieChart.on('interval:click', ev => {
       const clickData = ev.data;
@@ -1407,15 +1550,10 @@ export default class HomePage extends PureComponent {
             market,
           },
           callback: values => {
-            const marketRose = [];
-            values.forEach(item => {
-              marketRose.push({
-                label: item.biCategory,
-                value: Number(item.count),
-              });
-            });
-            // eslint-disable-next-line no-unused-expressions
-            this.state.marketRoseChart && this.state.marketRoseChart.changeData(marketRose);
+            if (this.state.marketPieChart) {
+              this.state.marketPieChart.clear();
+              this.renderMarketRoseChart();
+            }
           },
         });
       }
@@ -1426,36 +1564,77 @@ export default class HomePage extends PureComponent {
   // 渲染market南丁格尔玫瑰图
   renderMarketRoseChart = () => {
     const { marketDataByCategory } = this.props;
-    const marketRose = [];
-    marketDataByCategory.forEach(item => {
-      marketRose.push({
-        label: item.biCategory,
-        value: Number(item.count),
+    let marketRoseChart;
+    if (this.state.marketRoseChart) {
+      // eslint-disable-next-line prefer-destructuring
+      marketRoseChart = this.state.marketRoseChart;
+    } else {
+      marketRoseChart = new G2.Chart({
+        container: 'marketRose',
+        forceFit: true,
+        height: 210,
+        padding: [10, 75, 10, 75],
       });
-    });
-    const marketRoseChart = new G2.Chart({
-      container: 'marketRose',
-      forceFit: true,
-      height: 210,
-      padding: [10, 75, 10, 75],
-    });
-    marketRoseChart.source(marketRose);
-    marketRoseChart.coord('polar', {
-      innerRadius: 0.2,
-    });
-    marketRoseChart.tooltip({
-      showTitle: false,
-    });
-    marketRoseChart.legend({
-      position: 'left-top',
-      offsetX: -17,
-      offsetY: 20,
-    });
-    marketRoseChart.axis(false);
-    marketRoseChart
-      .interval()
-      .position('label*value')
-      .color('label', ['#10416C', '#0D87D4']);
+    }
+    if (marketDataByCategory[0]) {
+      const marketRose = [];
+      marketDataByCategory.forEach(item => {
+        marketRose.push({
+          label: item.biCategory,
+          value: Number(item.count),
+        });
+      });
+      marketRoseChart.source(marketRose);
+      marketRoseChart.coord('polar', {
+        innerRadius: 0.2,
+      });
+      marketRoseChart.tooltip({
+        showTitle: false,
+      });
+      marketRoseChart.legend({
+        position: 'left-top',
+        offsetX: -17,
+        offsetY: 20,
+      });
+      marketRoseChart.axis(false);
+      marketRoseChart
+        .interval()
+        .position('label*value')
+        .color('label', [
+          '#10416C',
+          '#0D87D4',
+          '#36BB3D',
+          '#ebca57',
+          '#ff9f7f',
+          '#F4374C',
+          '#705dc8',
+        ]);
+    } else {
+      const marketRose = [];
+      marketDataByCategory.forEach(item => {
+        marketRose.push({
+          label: item.biCategory,
+          value: Number(item.count),
+        });
+      });
+      marketRoseChart.source(marketRose);
+      marketRoseChart.coord('polar', {
+        innerRadius: 0.2,
+      });
+      marketRoseChart.tooltip({
+        showTitle: false,
+      });
+      marketRoseChart.legend({
+        position: 'left-top',
+        offsetX: -17,
+        offsetY: 20,
+      });
+      marketRoseChart.axis(false);
+      marketRoseChart
+        .interval()
+        .position('label*value')
+        .color('label', ['#10416C', '#0D87D4']);
+    }
     marketRoseChart.render();
     this.setState({ marketRoseChart });
   };
@@ -2684,43 +2863,43 @@ export default class HomePage extends PureComponent {
                   <div className={styles.submitStatus}>
                     <div style={{ flex: '1 1', minHeight: 250 }}>
                       <h3 className={styles.groupTitle}>Submission Status</h3>
-                      <div
-                        id="submissionStatusPie"
-                        style={{
-                          display:
-                            !currentTradeDate ||
-                            !lastTradeDate ||
-                            !currentDate ||
-                            !lastDate ||
-                            (currentTradeDate &&
-                              currentDate &&
-                              currentTradeDate[currentDate] === 0) ||
-                            (lastTradeDate && lastDate && lastTradeDate[lastDate] === 0)
-                              ? 'none'
-                              : 'block',
-                        }}
-                      ></div>
-                      {(!currentTradeDate ||
-                        !lastTradeDate ||
-                        !currentDate ||
-                        !lastDate ||
-                        (currentTradeDate && currentDate && currentTradeDate[currentDate] === 0) ||
-                        (lastTradeDate && lastDate && lastTradeDate[lastDate] === 0)) && (
-                        <div className={styles.empty} style={{ height: 300 }}>
-                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                        </div>
-                      )}
+                      <div style={{ position: 'relative', height: 330 }}>
+                        {(!currentTradeDate ||
+                          !lastTradeDate ||
+                          !currentDate ||
+                          !lastDate ||
+                          (currentTradeDate &&
+                            currentDate &&
+                            currentTradeDate[currentDate] === 0) ||
+                          (lastTradeDate && lastDate && lastTradeDate[lastDate] === 0)) && (
+                          <div
+                            style={{
+                              width: '100%',
+                              height: 330,
+                              position: 'absolute',
+                              zIndex: 1,
+                              background: 'hsla(0,0%,100%,.7)',
+                            }}
+                          ></div>
+                        )}
+                        <div id="submissionStatusPie"></div>
+                      </div>
                     </div>
                     <div style={{ flex: '1 1', minHeight: 250 }}>
-                      <div
-                        id="submissionStatusBar"
-                        style={{ display: !isRender ? 'none' : 'block' }}
-                      ></div>
-                      {!isRender && (
-                        <div className={styles.empty} style={{ height: 300 }}>
-                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                        </div>
-                      )}
+                      <div style={{ position: 'relative', height: 330 }}>
+                        {!isRender && (
+                          <div
+                            style={{
+                              width: '100%',
+                              height: 366,
+                              position: 'absolute',
+                              zIndex: 1,
+                              background: 'hsla(0,0%,100%,.7)',
+                            }}
+                          ></div>
+                        )}
+                        <div id="submissionStatusBar"></div>
+                      </div>
                     </div>
                   </div>
                   {/* Number of Outstanding Cases */}
