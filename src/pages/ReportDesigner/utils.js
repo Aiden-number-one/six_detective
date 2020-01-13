@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 00:44:10
+ * @LastEditTime : 2020-01-13 15:49:55
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -247,7 +247,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
             aggregate = 'group';
           }
           if (otherProps.dataSetting === 'list') {
-            aggregate = 'list';
+            aggregate = 'select';
           }
           expand = otherProps.expendDirection || 'Down';
           if (otherProps.dataSetting === 'sum') {
@@ -263,9 +263,9 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       cellxml += `<cell expand="${expand}" name="${createCellPos(colsIndex) +
         (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}">
         <cell-style font-size="${fontSize}" align="${align}" valign="${valign}" ${bgcolor &&
-        `bgcolor="${bgcolor}"`} ${forecolor && `bgcolor="${forecolor}"`} ${underline &&
+        `bgcolor="${bgcolor}"`} ${forecolor && `forecolor="${forecolor}"`} ${underline &&
         `underline="${underline}"`} ${fontFamily && `font-family="${fontFamily}"`} ${italic &&
-        `italic="${italic}"`} ${bold && `italic="${bold}"`} ${borderBottom &&
+        `italic="${italic}"`} ${bold && `bold="${bold}"`} ${borderBottom &&
         `<bottom-border width=${borderBottomWidth} style=${borderBottomType} color=${borderBottomColor}`} ${borderTop &&
         `<top-border width=${borderTopWidth} style=${borderTopType} color=${borderTopColor}`} ${borderLeft &&
         `<left-border width=${bordeLeftWidth} style=${borderLeftType} color=${borderLeftColor}`} ${borderRight &&
@@ -273,7 +273,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       // 去除undefined
       cellxml = cellxml.replace(/undefined/g, '');
       // 生成value相关元素
-      if (cellType === 'TEXT') {
+      if (cellType === 'TEXT' || cellType === 'text') {
         cellxml += `<simple-value><![CDATA[${cellText || ''}]]></simple-value>`;
       } else if (cellType === 'DATASET') {
         const datasetName = cellText.split('.')[0];

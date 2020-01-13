@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 13:13:09
+ * @LastEditTime : 2020-01-13 17:12:49
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -48,7 +48,7 @@ export default class DataProcessing extends Component {
       dataProcessingVisible: false,
       dataAlertVisible: false,
       dataProcessingFlag: false,
-      inspectDataVisible: false,
+      inspectDataVisible: true,
       checkedAll: false,
       alertIndeterminate: false,
       codeColumns: [
@@ -105,8 +105,11 @@ export default class DataProcessing extends Component {
       columns: [
         {
           title: () =>
-            this.state.alertBypassStatus.length > 0 &&
-            this.state.isBypass && (
+            (this.state.alertBypassStatus.length > 0 ||
+              (this.props.dataProcessingItemData.items &&
+                this.props.dataProcessingItemData.items.some(
+                  element => element.bypassStatus === '1',
+                ))) && (
               <Fragment>
                 {this.state.alertBypassStatus.length > 0 && this.state.isBypass && (
                   <Checkbox
@@ -130,22 +133,22 @@ export default class DataProcessing extends Component {
                   onChange={event => this.onSelectChange(event, recode)}
                 ></Checkbox>
               ) : (
-                <IconFont type="icon-bypass" className={styles['bypass-icon']} />
+                <IconFont type="icon-ignore" className={styles['bypass-icon']} />
               )}
             </Fragment>
           ),
         },
         {
-          title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
-          dataIndex: 'alertOwner',
-          key: 'alertOwner',
+          title: formatMessage({ id: 'systemManagement.dataProcessing.alertId' }),
+          dataIndex: 'alertId',
+          key: 'alertId',
+          width: '25%',
           ellipsis: true,
         },
         {
-          title: formatMessage({ id: 'systemManagement.dataProcessing.submitterCode' }),
-          dataIndex: 'submitterCode',
-          key: 'submitterCode',
-          width: '25%',
+          title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
+          dataIndex: 'alertOwner',
+          key: 'alertOwner',
           ellipsis: true,
         },
         {
@@ -213,6 +216,7 @@ export default class DataProcessing extends Component {
 
   componentDidMount() {
     console.log('getAuthority===', getAuthority());
+    this.queryDataProcessing();
     this.getMarket();
     this.getChartData();
     this.getStatusData();
@@ -266,7 +270,7 @@ export default class DataProcessing extends Component {
         const alertBypassStatus = dataProcessingItemData.items.filter(
           element => element.bypassStatus === '0',
         );
-        if (alertBypassStatus.length <= 0 || !isBypass || !authBypass) {
+        if ((alertBypassStatus.length > 0 && !isBypass) || !authBypass) {
           const { tempColumns } = this.state;
           const newColumns = Object.assign([], columns);
           let newTempColumns = Object.assign([], tempColumns);
@@ -455,6 +459,7 @@ export default class DataProcessing extends Component {
   startProcessing = async () => {
     try {
       await this.getStatusData();
+      await this.queryDataProcessing();
       const { dataProcessingData } = this.props;
       const { dataStatus } = this.state;
       if (dataStatus === '1') {
@@ -513,6 +518,7 @@ export default class DataProcessing extends Component {
             this.setState({
               dataProcessingFlag: false,
             });
+            message.success('succeeded');
           },
         });
       }
@@ -764,13 +770,13 @@ export default class DataProcessing extends Component {
                   >
                     {dataProcessingFlag ? (
                       <div>
-                        <Progress percent={50} status="active" />
+                        {/* <Progress percent={50} status="active" />
                         <p style={{ textAlign: 'left' }}>
                           Processed：<span>1234</span> records
                         </p>
                         <p style={{ textAlign: 'left' }}>
                           Pending to process：<span>1234</span> records
-                        </p>
+                        </p> */}
                       </div>
                     ) : (
                       <span>There are still 10 outstanding alerts. Do you want to bypass all?</span>
@@ -856,7 +862,6 @@ export default class DataProcessing extends Component {
                   <span style={{ marginRight: '5px' }}>Market</span>
                   <Select
                     placeholder="Please Select"
-                    allowClear
                     value={selectedMarket}
                     style={{ width: '120px' }}
                     onChange={this.onChangeMarkt}
@@ -883,8 +888,13 @@ export default class DataProcessing extends Component {
                     <div>
                       <Progress
                         percent={processingBar}
-                        successPercent={processingBar}
+                        // successPercent={processingBar}
                         // strokeWidth={150}
+                        strokeColor={{
+                          from: '#fff',
+                          to: '#0d87d4',
+                          direction: `${processingBar}%`,
+                        }}
                         style={{ width: '300px' }}
                       />
                       {/* <p style={{ textAlign: 'left' }}>

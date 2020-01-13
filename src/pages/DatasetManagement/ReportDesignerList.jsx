@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-13 00:26:13
+ * @LastEditTime : 2020-01-13 15:03:46
  * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
@@ -181,7 +181,7 @@ export default class DatasetManagement extends PureComponent {
     }
     setTimeout(() => {
       this.queryReportTemplate(value);
-    }, 0);
+    }, 300);
   };
 
   // 操作树节点
@@ -284,7 +284,7 @@ export default class DatasetManagement extends PureComponent {
   handleMove = async () => {
     const { dispatch, activeFolderId } = this.props;
     const param = {};
-    param.report_id = this.record.reportId;
+    param.reportId = this.record.reportId;
     param.folderId = activeFolderId;
     await dispatch({
       type: 'reportList/modify',
