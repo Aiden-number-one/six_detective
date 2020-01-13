@@ -132,9 +132,11 @@ const BasicLayout = props => {
           if (dispatch) {
             dispatch({
               type: 'login/logout',
+              callback: () => {
+                setStore({ name: 'employeeId', content: '' });
+              },
             });
           }
-          setStore({ name: 'employeeId', content: '' });
         }}
       >
         <IconFont type="icon-signout" style={{ marginRight: 5 }} />
