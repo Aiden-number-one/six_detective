@@ -18,6 +18,7 @@ const ButtonGroup = Button.Group;
 @connect(({ reportDesigner }) => ({
   showFmlModal: reportDesigner.showFmlModal,
   cellPosition: reportDesigner.cellPosition,
+  reportId: reportDesigner.reportId,
 }))
 class ToolBar extends Component {
   state = {
@@ -65,6 +66,11 @@ class ToolBar extends Component {
       key: 'dateyyyy-MM-dd',
       value: 'dateyyyy-MM-dd',
     },
+    {
+      label: 'currency￥',
+      key: 'currency￥',
+      value: 'currency￥',
+    },
     /* {
       label: '日期时间',
       key: 'datetimeyyyy-MM-dd hh:mm:ss',
@@ -79,11 +85,6 @@ class ToolBar extends Component {
       label: '货币($)',
       key: 'currency$',
       value: 'currency$',
-    },
-    {
-      label: '货币(￥)',
-      key: 'currency￥',
-      value: 'currency￥',
     },
     {
       label: '千分比',
@@ -102,21 +103,32 @@ class ToolBar extends Component {
       cellType: 'date',
       format: 'yyyy-MM-dd',
       type: 'date',
+      label: 'date',
     },
     text: {
       cellType: 'text',
+      label: 'text',
     },
     numeric: {
       cellType: 'numeric',
       format: '123',
+      label: 'numeric',
     },
     percentage: {
       cellType: 'numeric',
       format: '0.00%',
       scale: '2',
       type: 'percentage',
+      label: 'percentage',
     },
-    'datetimeyyyy-MM-dd hh:mm:ss': {
+    'currency￥': {
+      cellType: 'numeric',
+      format: '￥0,0.00',
+      scale: '2',
+      type: 'currency',
+      label: 'currency￥',
+    },
+    /* 'datetimeyyyy-MM-dd hh:mm:ss': {
       cellType: 'datetime',
       format: 'yyyy-MM-dd hh:mm:ss',
       type: 'datetime',
@@ -146,7 +158,7 @@ class ToolBar extends Component {
     },
     checkbox: {
       cellType: 'checkbox',
-    },
+    }, */
   };
 
   componentDidMount() {
@@ -381,7 +393,13 @@ class ToolBar extends Component {
   };
 
   render() {
-    const { setCellStyle, setCellType, changeDisplaySearchArea, displayArea } = this.props;
+    const {
+      setCellStyle,
+      setCellType,
+      changeDisplaySearchArea,
+      displayArea,
+      reportId,
+    } = this.props;
     const { btnActiveStatus, backgroundColor, fontColor, cellType, paintformatActive } = this.state;
     const popoverProps = {
       placement: 'bottom',
@@ -394,25 +412,37 @@ class ToolBar extends Component {
       overflow: 'hidden',
       whiteSpace: 'nowrap',
     };
+    // console.log('state -> cellType: ', cellType);
     return (
       <>
         <div className={classNames(styles.tabs, 'card-container')}>
           <div style={tabPanelStyle}>
             <div className={styles.group}>
-              <Button className={classNames('btn', 'btn2Report', 'mr6')}>
+              <Button
+                className={classNames('btn', 'btn2Report', 'mr6')}
+                onClick={() => {
+                  if (!reportId) {
+                    message.warn('Please save the report template.');
+                    return;
+                  }
+                  window.open(`/report-designer-preview?reportId=${reportId}`);
+                }}
+              >
                 <div className={styles.topBottom}>
                   <IconFont type="iconicon_previrew" />
                   <p>Preview</p>
                 </div>
               </Button>
-              <Button className={classNames('btn', 'btn2Report', 'mr6')}>
-                <Upload onChange={info => this.importFileStatus(info)} action="/upload">
+              <Upload onChange={info => this.importFileStatus(info)} action="/upload">
+                <Button className={classNames('btn', 'btn2Report', 'mr6')}>
                   <div className={styles.topBottom}>
                     <IconFont type="icondaoru" />
                     <p>Import</p>
                   </div>
-                </Upload>
-              </Button>
+                </Button>
+              </Upload>
+            </div>
+            <div className={styles.group}>
               {/* </Upload> */}
               <Button
                 className={classNames('btn', 'btn2Report', 'mr6', displayArea && 'active')}
@@ -880,13 +910,15 @@ class ToolBar extends Component {
                     style={{ width: '139px' }}
                     defaultValue="1"
                     suffixIcon={<Icon type="caret-down" />}
-                    value={cellType.format ? cellType.format : undefined}
+                    // value={cellType.format ? cellType.format : undefined}
+                    value={
+                      // eslint-disable-next-line no-nested-ternary
+                      cellType.type ? cellType.type : cellType.label ? cellType.label : undefined
+                    }
                     size="small"
                     onChange={value => {
                       this.setState({
-                        cellType: {
-                          format: value,
-                        },
+                        cellType: { label: value },
                       });
                       setCellType('cellType', this.cellTypeMap[value]);
                     }}

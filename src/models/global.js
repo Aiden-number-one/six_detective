@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2019-12-23 20:43:23
+ * @LastEditTime : 2020-01-11 19:40:39
  * @LastEditors  : iron
  */
 import fetch from '@/utils/request.default';
@@ -20,22 +20,23 @@ const global = {
       if (err) {
         throw new Error(err);
       }
-      yield put({
-        type: 'saveFilterItems',
-        payload: {
-          filterItems: items,
-        },
-      });
+      return items;
+      // yield put({
+      //   type: 'saveFilterItems',
+      //   payload: {
+      //     filterItems: items,
+      //   },
+      // });
     },
   },
   reducers: {
-    saveFilterItems(state, { payload }) {
-      const { filterItems } = payload;
-      return {
-        ...state,
-        filterItems,
-      };
-    },
+    // saveFilterItems(state, { payload }) {
+    //   const { filterItems } = payload;
+    //   return {
+    //     ...state,
+    //     filterItems,
+    //   };
+    // },
     changeLayoutCollapsed(state, { payload }) {
       return { ...state, collapsed: payload };
     },

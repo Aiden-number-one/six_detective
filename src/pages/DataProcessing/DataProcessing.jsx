@@ -3,12 +3,12 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 20:17:48
+ * @LastEditTime : 2020-01-13 13:13:09
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import classnames from 'classnames';
-import Antd, { Row, Col, Button, Table, Select, Modal, Progress, Checkbox } from 'antd';
+import Antd, { Row, Col, Button, Table, Select, Modal, Progress, Checkbox, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
 import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
@@ -17,7 +17,9 @@ import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
 import { getAuthority } from '@/utils/authority';
 import { getStore } from '@/utils/store';
-import { chartStatusFormat } from '@/utils/filter';
+// import { chartStatusFormat } from '@/utils/filter';
+import { formatTimeString } from '@/utils/utils';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -29,6 +31,7 @@ const { Option } = Select;
   marketData: dataProcessing.marketData,
   chartData: dataProcessing.chartData,
   statusData: dataProcessing.statusData,
+  barData: dataProcessing.barData,
 }))
 export default class DataProcessing extends Component {
   constructor() {
@@ -200,6 +203,11 @@ export default class DataProcessing extends Component {
         },
       },
       dataStatus: null,
+      processingBar: 0,
+      processedDate: {
+        t1: '',
+        t2: '',
+      },
     };
   }
 
@@ -444,42 +452,72 @@ export default class DataProcessing extends Component {
    * @param {type} null
    * @return: undefined
    */
-  startProcessing = () => {
-    const { dataProcessingData } = this.props;
-    const isClosedIntraday =
-      dataProcessingData.items &&
-      dataProcessingData.items.some(element => element.isClosedIntraday === '1');
-    const intradays =
-      dataProcessingData.items &&
-      dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
-    if (isClosedIntraday) {
-      this.setState({
-        intradays,
-        dataAlertVisible: true,
-      });
-    } else {
-      this.setState({
-        dataProcessingVisible: true,
-        dataProcessingFlag: true,
-      });
-      const { dispatch } = this.props;
-      const { market, selectedMarket } = this.state;
-      const params = {
-        // user_id: getStore('userInfo').employeeId,
-        // market,
-        operType: 'startProcess',
-        market,
-      };
-      dispatch({
-        type: 'dataProcessing/startProcessing',
-        payload: params,
-        callback: () => {
-          console.log('startProcessingData===', this.props.startProcessingData);
-          this.setState({
-            dataProcessingFlag: false,
-          });
-        },
-      });
+  startProcessing = async () => {
+    try {
+      await this.getStatusData();
+      const { dataProcessingData } = this.props;
+      const { dataStatus } = this.state;
+      if (dataStatus === '1') {
+        message.warning('There are other users processing');
+        return;
+      }
+      const isClosedIntraday =
+        dataProcessingData.items &&
+        dataProcessingData.items.some(element => element.isClosedIntraday === '1');
+      const intradays =
+        dataProcessingData.items &&
+        dataProcessingData.items.filter(item => item.isClosedIntraday === '1');
+      if (isClosedIntraday) {
+        this.setState({
+          intradays,
+          dataAlertVisible: true,
+        });
+      } else {
+        this.setState({
+          dataProcessingVisible: true,
+          dataProcessingFlag: true,
+        });
+        const { dispatch } = this.props;
+        const { market, selectedMarket } = this.state;
+        const params = {
+          // user_id: getStore('userInfo').employeeId,
+          // market,
+          operType: 'startProcess',
+          market,
+        };
+        this.setInterval = setInterval(() => {
+          const { processingBar } = this.state;
+          console.log('processingBar===', processingBar);
+          this.getProcessing();
+          if (processingBar === 100) {
+            clearInterval(this.setInterval);
+            this.setState(
+              {
+                dataProcessingFlag: false,
+              },
+              () => {
+                this.setState({
+                  processingBar: 0,
+                });
+              },
+            );
+          }
+        }, 200);
+        dispatch({
+          type: 'dataProcessing/startProcessing',
+          payload: params,
+          callback: () => {
+            console.log('startProcessingData===', this.props.startProcessingData);
+            this.getChartData();
+            this.getStatusData();
+            this.setState({
+              dataProcessingFlag: false,
+            });
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -586,16 +624,42 @@ export default class DataProcessing extends Component {
       type: 'dataProcessing/getProgressStatus',
       payload: params,
       callback: () => {
-        console.log('statusData===', this.props.statusData);
-        console.log('this.props.statusData[0].status==', this.props.statusData[0].status);
+        const processedTime = formatTimeString(this.props.statusData[0].time);
+        const objTime = {};
+        const t1 = processedTime.split(' ')[0];
+        const t2 = processedTime.split(' ')[1];
+        objTime.t1 = moment(t1).format('DD/MMM/YYYY');
+        objTime.t2 = t2;
+        console.log('objTime====', objTime);
         this.setState(
           {
             dataStatus: this.props.statusData[0].status,
+            processedDate: objTime,
           },
           () => {
             console.log('dataStatus=', this.state.dataStatus);
           },
         );
+      },
+    });
+  };
+
+  getProcessing = () => {
+    const { dispatch } = this.props;
+    const params = {};
+    dispatch({
+      type: 'dataProcessing/getProgressBar',
+      payload: params,
+      callback: () => {
+        const { barData } = this.props;
+        console.log('barData===', this.props.barData[0]);
+        const barDataStr = barData[0].returnMap;
+        this.setState({
+          processingBar: Number(barDataStr.split('%')[0]),
+        });
+      },
+      errorFn: () => {
+        clearInterval(this.setInterval);
       },
     });
   };
@@ -621,6 +685,8 @@ export default class DataProcessing extends Component {
       isBypass,
       selectedMarket,
       dataStatus,
+      processingBar,
+      processedDate,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -803,18 +869,26 @@ export default class DataProcessing extends Component {
                   </Select>
                 </Col>
                 <Col>
-                  <Button type="primary" className="btn-usual" onClick={this.startProcessing}>
+                  <Button
+                    type="primary"
+                    className="btn-usual"
+                    onClick={this.startProcessing}
+                    disabled={!inspectDataVisible}
+                  >
                     Start Processing
                   </Button>
                 </Col>
                 <Col>
                   {dataProcessingFlag ? (
                     <div>
-                      <Progress percent={50} status="active" />
-                      <p style={{ textAlign: 'left' }}>
-                        {/* Processed：<span>1234</span> records */}
-                        Processing...
-                      </p>
+                      <Progress
+                        percent={processingBar}
+                        successPercent={processingBar}
+                        // strokeWidth={150}
+                        style={{ width: '300px' }}
+                      />
+                      {/* <p style={{ textAlign: 'left' }}>
+                      </p> */}
                       {/* <p style={{ textAlign: 'left' }}>
                         Pending to process：<span>1234</span> records
                       </p> */}
@@ -823,7 +897,7 @@ export default class DataProcessing extends Component {
                     <span></span>
                   )}
                 </Col>
-                {!dataProcessingFlag && (
+                {/* {!dataProcessingFlag && (
                   <Col>
                     {dataStatus !== '1' ? (
                       <span>{dataStatus && chartStatusFormat(dataStatus)}</span>
@@ -831,10 +905,12 @@ export default class DataProcessing extends Component {
                       <div className={styles['data-processing']}></div>
                     )}
                   </Col>
-                )}
+                )} */}
               </Row>
               <Chart className={styles.chart} height={400} data={dataCharts} scale={cols} forceFit>
-                <span>The last time of data processing is at 10:55 on 12/12/2019</span>
+                <span>
+                  The last time of data processing is at {processedDate.t2} on {processedDate.t1}
+                </span>
                 <Axis name="year" />
                 <Axis name="sales" line={{ stroke: '#d9d9d9' }} position="left" />
                 <Tooltip

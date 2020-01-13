@@ -4,14 +4,14 @@ import { connect } from 'dva';
 import { FormattedMessage } from 'umi/locale';
 import { Table, Row, Col, Icon } from 'antd';
 import moment from 'moment';
-import { timestampFormat } from '@/pages/DataImportLog/constants';
+import { timestampFormat, downloadFile } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 import InformationDetail from './InformationDetail';
 import styles from '../index.less';
 
 const { Column } = Table;
 
-function InfomationList({ dispatch, infos, total, loading }) {
+function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loading }) {
   const [info, setInfo] = useState(null);
   const [selectedKeys, setSelectedKeys] = useState([]);
 
@@ -42,6 +42,17 @@ function InfomationList({ dispatch, infos, total, loading }) {
     });
   }
 
+  async function handleExport() {
+    const url = await dispatch({
+      type: 'alertCenter/exportInfos',
+      payload: {
+        infoId: selectedKeys,
+      },
+    });
+    if (url) {
+      downloadFile(url);
+    }
+  }
   return (
     <div className={styles['list-container']}>
       <div className={styles.list}>
@@ -54,14 +65,17 @@ function InfomationList({ dispatch, infos, total, loading }) {
             <Link to="/homepage/alert-center" className={styles.info}>
               Alert Center
             </Link>
-            <button type="button" disabled={!selectedKeys.length}>
-              <IconFont type="iconexport" className={styles['btn-icon']} />
+            <button type="button" disabled={!selectedKeys.length} onClick={handleExport}>
+              {loading['alertCenter/exportInfos'] ? (
+                <Icon type="loading" className={styles['btn-icon']} />
+              ) : (
+                <IconFont type="iconexport" className={styles['btn-icon']} />
+              )}
               <FormattedMessage id="alert-center.export" />
             </button>
           </Col>
         </Row>
         <Table
-          border
           dataSource={infos}
           rowKey="informationNo"
           loading={loading['alertCenter/fetchInfos']}
@@ -78,6 +92,8 @@ function InfomationList({ dispatch, infos, total, loading }) {
           }}
           pagination={{
             total,
+            current: infoPage,
+            pageSize: infoPageSize,
             showSizeChanger: true,
             showTotal(count) {
               return `Total ${count} items`;
@@ -92,12 +108,21 @@ function InfomationList({ dispatch, infos, total, loading }) {
           })}
         >
           <Column
+            width={50}
+            ellipsis
+            dataIndex="no"
+            title="No."
+            render={(text, record, index) => (infoPage - 1) * infoPageSize + index + 1}
+          />
+          <Column
             ellipsis
             width={150}
             dataIndex="informationNo"
             title={<FormattedMessage id="alert-center.information-no" />}
           />
           <Column
+            width="24%"
+            ellipsis
             dataIndex="informationType"
             title={<FormattedMessage id="alert-center.information-type" />}
           />
@@ -127,8 +152,13 @@ function InfomationList({ dispatch, infos, total, loading }) {
   );
 }
 
-const mapStateToProps = ({ loading, alertCenter: { infos, infoTotal } }) => ({
+const mapStateToProps = ({
+  loading,
+  alertCenter: { infos, infoPage, infoPageSize, infoTotal },
+}) => ({
   infos,
+  infoPage,
+  infoPageSize,
   total: infoTotal,
   loading: loading.effects,
 });

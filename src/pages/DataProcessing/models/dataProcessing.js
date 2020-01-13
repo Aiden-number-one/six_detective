@@ -3,11 +3,11 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 17:56:55
+ * @LastEditTime : 2020-01-11 20:22:33
  */
 import Service from '@/utils/Service';
 
-const { getDataProcessing, startProcessing, progressChart, progressStatus } = Service;
+const { getDataProcessing, startProcessing, progressChart, progressStatus, progressBar } = Service;
 const codeMaintenance = {
   namespace: 'dataProcessing',
   state: {
@@ -18,6 +18,7 @@ const codeMaintenance = {
     marketData: [],
     chartData: [],
     statusData: {},
+    barData: {},
   },
   effects: {
     *getDataProcessing({ payload, callback }, { call, put }) {
@@ -118,6 +119,20 @@ const codeMaintenance = {
         throw new Error(response.bcjson.msg);
       }
     },
+    *getProgressBar({ payload, callback }, { call, put }) {
+      const response = yield call(progressBar, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'getBar',
+            payload: response.bcjson.items,
+          });
+          callback();
+        }
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
@@ -160,6 +175,12 @@ const codeMaintenance = {
       return {
         ...state,
         statusData: action.payload,
+      };
+    },
+    getBar(state, action) {
+      return {
+        ...state,
+        barData: action.payload,
       };
     },
   },

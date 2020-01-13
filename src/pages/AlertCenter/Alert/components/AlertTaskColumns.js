@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-24 16:04:36
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-07 15:01:04
+ * @LastEditTime : 2020-01-11 22:21:54
  */
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -60,6 +60,8 @@ export const newAccountColumns = [
     title: formatMessage({ id: 'alert-center.submitter-code' }),
   },
   {
+    width: 140,
+    ellipsis: true,
     dataIndex: 'SUBMITTER_NAME',
     title: formatMessage({ id: 'alert-center.submitter-name' }),
   },

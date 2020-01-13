@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-10 21:11:21
+ * @LastEditTime : 2020-01-13 00:44:10
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -86,6 +86,7 @@ export function dataSetTransform(dataSetItem) {
  * @Date: 2019-12-21 16:13:32
  */
 export function dataSetTree(dataSets) {
+  // TODO: 叶子节点不能如此判断
   return dataSets.map(dataSet => ({
     title: dataSet.dataset_name,
     key: dataSet.dataset_id,
@@ -146,17 +147,6 @@ export function getColColumnXml(contentDetail) {
     colColumnCel += `<column col-number="${(index + 1).toString()}" width="${value.toString()}"/>`;
   });
   return colColumnCel;
-}
-
-/**
- * @description: 生成查询区域的xml部分
- * @param {type} param
- * @return: return
- * @Author: mus
- * @Date: 2020-01-07 21:35:01
- */
-export function getCustomSearchDataXml(customSearchData) {
-  // let customeSearchXml = '';
 }
 
 /**
@@ -376,3 +366,29 @@ export function setCellTypeAndValue({ type, value, cellPosition }) {
     });
   }
 }
+
+/**
+ *
+ * @param { ElementNode } el 动态添加的元素
+ * @param { Function } callback 回调
+ * @param { EventObject } ev 事件对象
+ * @description 动态添加的元素，点击外部区域，将其隐藏
+ */
+export const dynamicEleOutsideClickHandler = (element, callback) => {
+  const handler = (el, cb, ev) => {
+    ev.preventDefault();
+    el.style.display = 'none';
+    if (typeof cb === 'function') cb();
+  };
+
+  // 点击
+  document.body.addEventListener('click', e => handler(element, callback, e), false);
+  // 右键
+  document.body.addEventListener(
+    'mousedown',
+    e => {
+      if (`${e.button}` === '2') handler(element, callback, e);
+    },
+    false,
+  );
+};

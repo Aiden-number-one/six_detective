@@ -36,6 +36,9 @@ export default props => {
     dataSetPublicList,
     dispatch,
     defaultValueDatasetType,
+    dataSourceList = [], // 数据源列表
+    tableList = [], // 数据源列表下的所有表
+    tableColumnList = [], // 获取所有表下的字段
   } = props;
   const params = _.flattenDeep(dataSetPrivateList.map(value => value.query.parameters || []));
   const { customList = [] } = currentWidge;
@@ -123,46 +126,59 @@ export default props => {
               label={<FormattedMessage id="report-designer.defaultvalue" />}
               {...formLayout}
             >
-              {getFieldDecorator('widgetDefault', {
-                initialValue: currentWidge.widgetDefault,
-              })(
-                <>
-                  {/* 若类型为Input类型 */}
-                  {currentWidge.widgetType === 'input' && <Input />}
-                  {/* 若类型为Select/MutiSelect/Radio/CheckBox类型 */}
-                  {(currentWidge.widgetType === 'select' ||
-                    currentWidge.widgetType === 'selectmultiple' ||
-                    currentWidge.widgetType === 'radio' ||
-                    currentWidge.widgetType === 'checkbox') &&
-                    (() => {
-                      if (currentWidge.sourceType === 'custom') {
-                        return (
-                          <Select
-                            mode={
-                              (currentWidge.widgetType === 'selectmultiple' ||
-                                currentWidge.widgetType === 'checkbox') &&
-                              'multiple'
-                            }
-                          >
-                            {customList.map(optionData => (
-                              <Option key={optionData.key}>{optionData.value}</Option>
-                            ))}
-                          </Select>
-                        );
-                      }
-                      if (currentWidge.sourceType === 'dataset') {
-                        return (
-                          <Select>
-                            {(defaultValueDatasetType[currentWidge.datacolumn] || []).map(data => (
-                              <Option key={data}>{data}</Option>
-                            ))}
-                          </Select>
-                        );
-                      }
-                      return <Select />;
-                    })()}
-                </>,
-              )}
+              <>
+                {/* 若类型为Input类型 */}
+                {currentWidge.widgetType === 'input' &&
+                  getFieldDecorator('widgetDefault', {
+                    initialValue: currentWidge.widgetDefault,
+                  })(<Input />)}
+                {/* 若类型为Select/MutiSelect/Radio/CheckBox类型 */}
+                {(currentWidge.widgetType === 'select' ||
+                  currentWidge.widgetType === 'selectmultiple' ||
+                  currentWidge.widgetType === 'radio' ||
+                  currentWidge.widgetType === 'checkbox') &&
+                  (() => {
+                    if (currentWidge.sourceType === 'custom') {
+                      return getFieldDecorator('widgetDefault', {
+                        initialValue: currentWidge.widgetDefault,
+                      })(
+                        <Select
+                          mode={
+                            (currentWidge.widgetType === 'selectmultiple' ||
+                              currentWidge.widgetType === 'checkbox') &&
+                            'multiple'
+                          }
+                        >
+                          {customList.map(optionData => (
+                            <Option key={optionData.key}>{optionData.value}</Option>
+                          ))}
+                        </Select>,
+                      );
+                    }
+                    if (
+                      currentWidge.sourceType === 'dataset' ||
+                      currentWidge.sourceType === 'table'
+                    ) {
+                      return getFieldDecorator('widgetDefault', {
+                        initialValue: currentWidge.widgetDefault,
+                      })(
+                        <Select>
+                          {(
+                            defaultValueDatasetType[
+                              currentWidge.sourceType === 'dataset'
+                                ? currentWidge.datacolumn
+                                : currentWidge.tablecolumn
+                            ] || []
+                          ).map(data => (
+                            <Option key={data}>{data}</Option>
+                          ))}
+                        </Select>,
+                      );
+                    }
+                    return <Select />;
+                  })()}
+              </>
+              ,
             </Form.Item>
             {/* 表字段 */}
             <Form.Item label={<FormattedMessage id="report-designer.field" />} {...formLayout}>
@@ -201,7 +217,7 @@ export default props => {
                   <Select>
                     <Option value="dataset">Data Set</Option>
                     <Option value="custom">Custom</Option>
-                    {/* <Option value="table">Table</Option> */}
+                    <Option value="table">Table</Option>
                   </Select>,
                 )}
               </Form.Item>
@@ -212,21 +228,91 @@ export default props => {
                     label={<FormattedMessage id="report-designer.datasource" />}
                     {...formLayout}
                   >
-                    {getFieldDecorator('datasource', {})(<Select />)}
+                    {getFieldDecorator('datasource', {
+                      initialValue: currentWidge.datasource,
+                    })(
+                      <Select
+                        onChange={value => {
+                          currentWidge.table = undefined;
+                          currentWidge.currentWidge = undefined;
+                          currentWidge.widgetDefault = undefined;
+                          // 获取数据源下所有的表
+                          dispatch({
+                            type: 'formArea/getDataSourceTable',
+                            payload: {
+                              pageNumber: '1',
+                              pageSize: '9999',
+                              connection_id: value,
+                            },
+                          });
+                        }}
+                      >
+                        {dataSourceList.map(value => (
+                          <Option value={value.connectionId}>{value.connectionName}</Option>
+                        ))}
+                      </Select>,
+                    )}
                   </Form.Item>
                   {/* 数据集 */}
                   <Form.Item
                     label={<FormattedMessage id="report-designer.dataset" />}
                     {...formLayout}
                   >
-                    {getFieldDecorator('table', {})(<Select />)}
+                    {getFieldDecorator('table', {
+                      initialValue: currentWidge.table,
+                    })(
+                      <Select
+                        onChange={value => {
+                          currentWidge.tablecolumn = undefined;
+                          currentWidge.widgetDefault = undefined;
+                          dispatch({
+                            type: 'formArea/getTableColumnValue',
+                            payload: {
+                              table_id: value.split('.').length === 3 ? value.split('.')[2] : '',
+                            },
+                          });
+                        }}
+                      >
+                        {tableList.map(value => (
+                          <Option value={`${value.schemName}.${value.tableName}.${value.tableId}`}>
+                            {value.tableName}
+                          </Option>
+                        ))}
+                      </Select>,
+                    )}
                   </Form.Item>
                   {/* 数据字段 */}
                   <Form.Item
                     label={<FormattedMessage id="report-designer.datacolumn" />}
                     {...formLayout}
                   >
-                    {getFieldDecorator('tablecolumn', {})(<Select />)}
+                    {getFieldDecorator('tablecolumn', {
+                      initialValue: currentWidge.tablecolumn,
+                    })(
+                      <Select
+                        onChange={value => {
+                          currentWidge.widgetDefault = undefined;
+                          // 获取完毕字段后，得到相对应的字段相对应的值
+                          dispatch({
+                            type: 'formArea/getDataSetColumnValue',
+                            payload: {
+                              datasourceId: currentWidge.datasource,
+                              fieldName: value,
+                              tableName:
+                                currentWidge.table.split('.').length === 3
+                                  ? `${currentWidge.table.split('.')[0]}.${
+                                      currentWidge.table.split('.')[1]
+                                    }`
+                                  : '',
+                            },
+                          });
+                        }}
+                      >
+                        {tableColumnList.map(value => (
+                          <Option value={value.columnName}>{value.columnName}</Option>
+                        ))}
+                      </Select>,
+                    )}
                   </Form.Item>
                 </>
               )}
@@ -341,7 +427,7 @@ export default props => {
                 </Form.Item>
                 <Form.Item label="Min Length" {...formLayout}>
                   {getFieldDecorator('minLength', {
-                    initialValue: currentWidge.maxLength,
+                    initialValue: currentWidge.minLength,
                   })(<InputNumber />)}
                 </Form.Item>
               </>
