@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 20:27:44
+ * @LastEditTime : 2020-01-13 20:33:56
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -281,7 +281,10 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
         cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}" aggregate="${aggregate}" order="none" mapping-type="simple"></dataset-value>`;
       } else if (cellType === 'FORMULA') {
         // 去除公式中的等号
-        cellText = cellText.replace(/=/, '').toLocaleLowerCase();
+        cellText = cellText.replace(/=/, '');
+        // 得到函数后，进行替换，得到相对应的小写
+        const formulaName = cellText.match(/(.*)\(.*\)/)[1];
+        cellText = cellText.replace(formulaName, formulaName.toLocaleLowerCase());
         cellxml += `<expression-value><![CDATA[${cellText}]]></expression-value>`;
       } else {
         cellxml += '<simple-value><![CDATA[]]></simple-value>';
