@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-30 09:44:56
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-11 12:31:47
+ * @LastEditTime : 2020-01-13 10:09:56
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
@@ -54,12 +54,13 @@ export default {
   namespace: 'lop',
   state: {
     logs: [],
-    page: 1,
+    page: defaultPage,
+    pageSize: defaultPageSize,
     total: 0,
   },
   reducers: {
     save(state, { payload }) {
-      const { logs, page1, pageSize, total } = payload;
+      const { logs, page = defaultPage, pageSize = defaultPageSize, total } = payload;
       return {
         ...state,
         page,
@@ -70,7 +71,7 @@ export default {
     },
   },
   effects: {
-    *fetch({ payload }, { call, put, select }) {
+    *fetch({ payload = {} }, { call, put, select }) {
       const { page, pageSize: ps, ...rest } = payload;
 
       const pageSize = yield select(({ lop }) => ps || lop.pageSize);
