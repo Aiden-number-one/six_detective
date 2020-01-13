@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 16:50:22
+ * @LastEditTime : 2020-01-13 19:37:48
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -282,7 +282,7 @@ class NewUser extends Component {
 }
 
 const menuProps = ({ menu }) => ({
-  menuData: menu.menuData,
+  menuData: menu.adminMenuData,
 });
 
 export default connect(menuProps)(NewUser);

@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:15:57
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 11:08:07
+ * @LastEditTime : 2020-01-13 19:37:39
  */
 import React, { Component, Fragment } from 'react';
 import { Form, Table, Pagination, Button, Drawer, Modal } from 'antd';
@@ -83,7 +83,20 @@ class MenuUserGroup extends Component {
 
   componentDidMount() {
     this.queryUserList();
+    this.getAdminMenu();
   }
+
+  getAdminMenu = () => {
+    const { dispatch } = this.props;
+    const params = {};
+    dispatch({
+      type: 'menu/getAdminMenuData',
+      payload: params,
+      callback: () => {
+        console.log('adminMenuData===', this.props.adminMenuData);
+      },
+    });
+  };
 
   newUser = () => {
     this.setState({
@@ -345,4 +358,6 @@ class MenuUserGroup extends Component {
   }
 }
 
-export default MenuUserGroup;
+export default connect(({ menu }) => ({
+  adminMenuData: menu.adminMenuData,
+}))(MenuUserGroup);

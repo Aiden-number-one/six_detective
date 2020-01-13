@@ -16,7 +16,9 @@ import QuickMenu from './QuickMenu';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
-@connect(({ allAlert, perAlert, information, dashboard, approval }) => ({
+let interval;
+
+@connect(({ allAlert, perAlert, information, dashboard, approval, refresh }) => ({
   allAlterData: allAlert.allAlterData, // all alert的图表数据
   allAlertCount: allAlert.allAlertCount, // all alert总数
   allOutstandingALertCount: allAlert.allOutstandingALertCount, // 全部未认领的alert的总数
@@ -38,6 +40,7 @@ const { RangePicker } = DatePicker;
   allApprovalData: approval.allApprovalData, // 全部流程图表相关数据
   perApprovalData: approval.perApprovalData, // 个人流程相关数据
   allTaskData: approval.allTaskData, // my Task表格数据
+  refreshTime: refresh.refreshTime, // 刷新时间
 }))
 export default class HomePage extends PureComponent {
   state = {
@@ -189,7 +192,166 @@ export default class HomePage extends PureComponent {
       type: 'dashboard/getProcessingStageData',
       payload: {},
     });
+
+    // 刷新
+    dispatch({
+      type: 'refresh/getRefreshTime',
+      payload: {
+        parameterKey: 'home.page.refresh',
+        pageNumber: '1',
+        pageSize: '1',
+      },
+      callback: time => {
+        this.refreshPage(time);
+      },
+    });
   }
+
+  componentWillUnmount() {
+    clearInterval(interval);
+  }
+
+  refreshPage = value => {
+    const { dispatch } = this.props;
+    const { startDate, endDate, proStartDate, proEndDate } = this.state;
+    // 初始alert参数
+    const alertParams = {
+      startDate,
+      endDate,
+    };
+    // 初始approval参数
+    const proParams = {
+      startDate: proStartDate,
+      endDate: proEndDate,
+    };
+    interval = setInterval(() => {
+      // 获取All alert 条形图数据
+      dispatch({
+        type: 'allAlert/getAllAlterData',
+        payload: {
+          ...alertParams,
+        },
+        callback: data => {
+          if (this.state.alterAllChart) {
+            this.state.alterAllChart.clear();
+            this.renderAlterAllChart(data);
+          }
+        },
+      });
+      // 获取个人 alert柱状图数据
+      dispatch({
+        type: 'perAlert/getPerAlertData',
+        payload: {
+          ...alertParams,
+        },
+        callback: () => {
+          if (this.state.alterPersonalChart) {
+            this.state.alterPersonalChart.clear();
+            this.renderAlterPerChart();
+          }
+        },
+      });
+      // 获取alert 统计数据
+      this.getAlertData(alertParams);
+      // 获取alert表格的数据
+      dispatch({
+        type: 'perAlert/getMyAlert',
+        payload: {
+          pageNumber: 1,
+          pageSize: 4,
+          dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
+        },
+      });
+      // 获取ALL Task表格数据
+      dispatch({
+        type: 'approval/getAllTask',
+        payload: {
+          pageNumber: '1',
+          pageSize: '4',
+          type: 'all',
+          taskCode: '',
+        },
+      });
+      // 获取快捷菜单
+      dispatch({
+        type: 'quickMenu/getQuickMenu',
+        payload: {},
+        callback: values => {
+          const targetData = this.TreeFolderTrans(values);
+          this.setState({
+            targetData,
+          });
+        },
+      });
+      // 获取information 列表数据
+      dispatch({
+        type: 'information/getInformation',
+        payload: {
+          pageNumber: 1,
+          pageSize: 4,
+          dataTable: 'SLOP_BIZ.V_INFO',
+        },
+      });
+      this.getApprovalData(proParams);
+      // 获取dashboard相关数据
+      dispatch({
+        type: 'dashboard/getFileCountByDate',
+        payload: {},
+        callback: () => {
+          if (this.state.submissionStatusPieChart) {
+            this.state.submissionStatusPieChart.clear();
+            this.renderSubmissionStatusPieChart();
+          }
+          if (this.state.submissionStatusBarChart) {
+            this.state.submissionStatusBarChart.clear();
+            this.renderSubmissionStatusBarChart();
+          }
+        },
+      });
+      dispatch({
+        type: 'dashboard/getOutstandingCasesData',
+        payload: {},
+        callback: () => {
+          if (this.state.outstandingCasesLineChart) {
+            this.state.outstandingCasesLineChart.clear();
+            this.renderOutstandingCasesLineChart();
+          }
+        },
+      });
+      dispatch({
+        type: 'dashboard/getMarketData',
+        payload: {},
+        callback: () => {
+          if (this.state.marketPieChart) {
+            this.state.marketPieChart.clear();
+            this.renderMarketPieChart();
+          }
+        },
+      });
+      dispatch({
+        type: 'dashboard/getMarketDataByCategory',
+        payload: {
+          market: 'HKFE',
+        },
+        callback: () => {
+          if (this.state.marketRoseChart) {
+            this.state.marketRoseChart.clear();
+            this.renderMarketRoseChart();
+          }
+        },
+      });
+      dispatch({
+        type: 'dashboard/getProcessingStageData',
+        payload: {},
+        callback: () => {
+          if (this.state.processingStageBarChart) {
+            this.state.processingStageBarChart.clear();
+            this.renderProcessingStageBarChart();
+          }
+        },
+      });
+    }, value * 1000);
+  };
 
   // 显示关闭抽屉
   toggleModal = key => {
@@ -516,7 +678,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value}%`,
+        content: `${row.value.toFixed()}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -564,7 +726,7 @@ export default class HomePage extends PureComponent {
     otherChart2
       .interval()
       .position('gender*value')
-      .color('gender')
+      .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
         lineWidth: 1,
@@ -577,7 +739,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value}%`,
+        content: `${row.value.toFixed()}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -636,7 +798,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value}%`,
+        content: `${row.value.toFixed()}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -684,7 +846,7 @@ export default class HomePage extends PureComponent {
     otherChart4
       .interval()
       .position('gender*value')
-      .color('gender')
+      .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
         lineWidth: 1,
@@ -697,7 +859,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value}%`,
+        content: `${row.value.toFixed()}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -761,7 +923,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value}%`,
+        content: `${row.value.toFixed()}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -812,7 +974,7 @@ export default class HomePage extends PureComponent {
     otherChart6
       .interval()
       .position('gender*value')
-      .color('gender')
+      .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
         lineWidth: 1,
@@ -825,7 +987,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value}%`,
+        content: `${row.value.toFixed()}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -888,7 +1050,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value}%`,
+        content: `${row.value.toFixed()}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -939,7 +1101,7 @@ export default class HomePage extends PureComponent {
     otherChart8
       .interval()
       .position('gender*value')
-      .color('gender')
+      .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
         lineWidth: 1,
@@ -952,7 +1114,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value}%`,
+        content: `${row.value.toFixed()}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -2250,7 +2412,7 @@ export default class HomePage extends PureComponent {
       });
       marketRoseChart.legend({
         position: 'left-top',
-        offsetX: -17,
+        offsetX: -10,
         offsetY: 20,
       });
       marketRoseChart.axis(false);

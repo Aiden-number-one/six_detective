@@ -2,7 +2,7 @@
  * @Description: quick menu
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-13 14:49:48
+ * @LastEditTime : 2020-01-13 19:48:05
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -34,7 +34,7 @@ export default {
 
   effects: {
     //
-    *getFileCountByDate({ payload }, { call, put }) {
+    *getFileCountByDate({ payload, callback }, { call, put }) {
       const response = yield call(getFileCountByDate, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
@@ -48,6 +48,7 @@ export default {
           payload: {
             tradeDate,
           },
+          callback,
         });
         // yield put({
         //   type: 'getLateReportFileCount',
@@ -96,13 +97,14 @@ export default {
     //   }
     // },
     //
-    *getMarketData({ payload }, { call, put }) {
+    *getMarketData({ payload, callback }, { call, put }) {
       const response = yield call(getMarketData, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'setMarketData',
           payload: response.bcjson.items,
         });
+        if (callback) callback();
       }
     },
     *getMarketDataByCategory({ payload, callback }, { call, put }) {
@@ -115,22 +117,24 @@ export default {
         if (callback) callback(response.bcjson.items);
       }
     },
-    *getProcessingStageData({ payload }, { call, put }) {
+    *getProcessingStageData({ payload, callback }, { call, put }) {
       const response = yield call(getProcessingStageData, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'setProcessingStageData',
           payload: response.bcjson.items,
         });
+        if (callback) callback();
       }
     },
-    *getOutstandingCasesData({ payload }, { call, put }) {
+    *getOutstandingCasesData({ payload, callback }, { call, put }) {
       const response = yield call(getOutstandingCasesData, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'setOutstandingCasesData',
           payload: response.bcjson.items,
         });
+        if (callback) callback();
       }
     },
   },
