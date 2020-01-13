@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 21:58:13
+ * @LastEditTime : 2020-01-13 10:11:40
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -510,6 +510,7 @@ export default class DataProcessing extends Component {
             callback: () => {
               console.log('startProcessingData===', this.props.startProcessingData);
               this.getChartData();
+              this.getStatusData();
               this.setState({
                 dataProcessingFlag: false,
               });
