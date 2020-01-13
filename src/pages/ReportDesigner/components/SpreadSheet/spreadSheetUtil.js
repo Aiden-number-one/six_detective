@@ -167,7 +167,7 @@ export function generateJson(spreadSheetData) {
       // spreadSheet单元格的数据及属性
       const cellContent = rows[rowIndex].cells[cellIndex];
       // 把spreadShett单元格的数据赋值给后台表格的单元格中
-      data[rowIndex][cellIndex] = cellContent.text;
+      data[rowIndex][cellIndex] = cellContent.text || '';
 
       // TODO：设置宽度、高度
 
@@ -242,7 +242,7 @@ export function generateJson(spreadSheetData) {
             // 边框相关样式
             Object.entries(cellContent.style[singleStyle]).forEach(
               ([borderStyle, borderStyleValue]) => {
-                const [color = 'rgba(0,0,0)'] = borderStyleValue;
+                const [color = 'rgb(0,0,0)'] = borderStyleValue;
                 if (borderStyle === 'bottom') {
                   // 下边框
                   // eslint-disable-next-line prefer-destructuring
