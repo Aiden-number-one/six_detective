@@ -168,7 +168,7 @@ export default props => {
                       <Select>
                         <Option value="sum">Sum</Option>
                         <Option value="count">Count</Option>
-                        <Option value="average">Average</Option>
+                        <Option value="avg">Average</Option>
                         <Option value="max">Max</Option>
                         <Option value="min">Min</Option>
                       </Select>,
