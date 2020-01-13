@@ -255,7 +255,7 @@ export default props => {
                   </Form.Item>
                   {/* 数据集 */}
                   <Form.Item
-                    label={<FormattedMessage id="report-designer.dataset" />}
+                    label={<FormattedMessage id="report-designer.table" />}
                     {...formLayout}
                   >
                     {getFieldDecorator('table', {

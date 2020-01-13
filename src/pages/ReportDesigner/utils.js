@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 15:49:55
+ * @LastEditTime : 2020-01-13 17:31:44
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -208,7 +208,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
   const spreadSheetProps = contentDetail[0].cellAttrs;
   spreadSheetData.forEach((rowsValue, rowsIndex) => {
     rowsValue.forEach((colsValue, colsIndex) => {
-      const cellText = colsValue;
+      let cellText = colsValue;
       const { cellType, style } = spreadSheetProps[rowsIndex][colsIndex];
       const {
         bgcolor,
@@ -279,6 +279,10 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
         const datasetName = cellText.split('.')[0];
         const property = cellText.split('.')[1];
         cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}" aggregate="${aggregate}" order="none" mapping-type="simple"></dataset-value>`;
+      } else if (cellType === 'FORMULA') {
+        // 去除公式中的等号
+        cellText = cellText.replace(/=/, '');
+        cellxml += `<expression-value><![CDATA[${cellText}]]></expression-value>`;
       } else {
         cellxml += '<simple-value><![CDATA[]]></simple-value>';
       }
