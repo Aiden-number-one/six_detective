@@ -6,11 +6,12 @@ import classNames from 'classnames';
 import { connect } from 'dva';
 import router from 'umi/router';
 
-import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
+import { timestampFormat } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 import ring from '@/assets/images/ring.png';
 
 import styles from './HomePage.less';
+import QuickMenu from './QuickMenu';
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
@@ -30,8 +31,10 @@ const { RangePicker } = DatePicker;
   marketData: dashboard.marketData, // 全部 marketData 图表数据
   marketDataByCategory: dashboard.marketDataByCategory, // 单个marketData图表数据
   processingStageData: dashboard.processingStageData, //
-  lateReportFileCount: dashboard.lateReportFileCount, //
-  outstandingReportFileCount: dashboard.outstandingReportFileCount, //
+  // lateReportFileCount: dashboard.lateReportFileCount, //
+  // outstandingReportFileCount: dashboard.outstandingReportFileCount, //
+  reportFilesData: dashboard.reportFilesData,
+  outstandingCasesData: dashboard.outstandingCasesData,
   allApprovalData: approval.allApprovalData, // 全部流程图表相关数据
   perApprovalData: approval.perApprovalData, // 个人流程相关数据
   allTaskData: approval.allTaskData, // my Task表格数据
@@ -61,7 +64,12 @@ export default class HomePage extends PureComponent {
     submissionStatusBarChart: '',
     marketPieChart: '',
     marketRoseChart: '',
+    outstandingCasesLineChart: '',
     processingStageBarChart: '',
+
+    visible: {
+      quickMenu: false,
+    },
   };
 
   componentDidMount() {
@@ -155,6 +163,10 @@ export default class HomePage extends PureComponent {
       payload: {},
     });
     dispatch({
+      type: 'dashboard/getOutstandingCasesData',
+      payload: {},
+    });
+    dispatch({
       type: 'dashboard/getMarketData',
       payload: {},
     });
@@ -170,6 +182,17 @@ export default class HomePage extends PureComponent {
     });
   }
 
+  // 显示关闭抽屉
+  toggleModal = key => {
+    const { visible } = this.state;
+    this.setState({
+      visible: {
+        ...visible,
+        [key]: !visible[key],
+      },
+    });
+  };
+
   // 根据日期选择更新approval的数据
   getApprovalData = (params = {}) => {
     const { dispatch } = this.props;
@@ -179,7 +202,7 @@ export default class HomePage extends PureComponent {
       payload: {
         ...params,
       },
-      callback: datas => {
+      callback: () => {
         if (this.state.approvalAllChart) {
           this.state.approvalAllChart.clear();
           this.renderApprovalAllChart();
@@ -192,7 +215,7 @@ export default class HomePage extends PureComponent {
       payload: {
         ...params,
       },
-      callback: datas => {
+      callback: () => {
         if (this.state.approvalPersonalChart) {
           this.state.approvalPersonalChart.clear();
           this.renderApprovalPerChart();
@@ -289,23 +312,6 @@ export default class HomePage extends PureComponent {
   // tabs 切换
   onTabsChange = activeKey => {
     const { renderProcess, renderDashboard } = this.state;
-    const {
-      fileCountData,
-      marketData,
-      marketDataByCategory,
-      processingStageData,
-      lateReportFileCount,
-      outstandingReportFileCount,
-      allApprovalData,
-    } = this.props;
-    let isRender1 = false;
-    if (processingStageData[0]) {
-      Object.keys(processingStageData[0]).forEach(item => {
-        if (processingStageData[0][item] > 0) {
-          isRender1 = true;
-        }
-      });
-    }
     if (activeKey === '2') {
       setTimeout(() => {
         if (document.getElementById('ApprovalAll') && renderProcess) {
@@ -323,9 +329,8 @@ export default class HomePage extends PureComponent {
           this.renderSubmissionStatusBarChart();
           this.renderMarketPieChart();
           this.renderMarketRoseChart();
-          if (isRender1) {
-            this.renderProcessingStageBarChart();
-          }
+          this.renderProcessingStageBarChart();
+          this.renderOutstandingCasesLineChart();
           this.setState({
             renderDashboard: false,
           });
@@ -339,6 +344,7 @@ export default class HomePage extends PureComponent {
     const dataList = [];
     value.forEach(item => {
       if (item.children) {
+        // eslint-disable-next-line no-param-reassign
         item.children = this.TreeFolderTrans(item.children);
       }
       const param = {
@@ -698,7 +704,7 @@ export default class HomePage extends PureComponent {
         container: 'ApprovalAll',
         forceFit: true,
         height: 250,
-        padding: [30, 100, 20, 50],
+        padding: [30, 100, 30, 50],
       });
     }
     if (allApprovalData[0] && allApprovalData[0].userInfo && allApprovalData[0].userInfo[0]) {
@@ -708,7 +714,7 @@ export default class HomePage extends PureComponent {
       userInfo.forEach(item => {
         ApprovalAll.push({
           label: item.userId,
-          type: 'CLAIMED',
+          type: 'Claimed',
           value: item.userClaimedNum,
         });
         if (item.userClaimedNum > count) {
@@ -718,7 +724,7 @@ export default class HomePage extends PureComponent {
       userInfo.forEach(item => {
         ApprovalAll.push({
           label: item.userId,
-          type: 'PROCESSING',
+          type: 'Processing',
           value: item.userProcessingNum,
         });
         if (item.userProcessingNum > count) {
@@ -1254,35 +1260,49 @@ export default class HomePage extends PureComponent {
         const tradeDate = clickData._origin.date;
         const { dispatch } = this.props;
         dispatch({
-          type: 'dashboard/getOutstandingReportFileCount',
+          type: 'dashboard/getReportFiles',
           payload: {
             tradeDate,
           },
           callback: () => {
             if (this.state.submissionStatusBarChart) {
-              setTimeout(() => {
-                if (this.state.submissionStatusBarChart) {
-                  this.state.submissionStatusBarChart.clear();
-                  this.renderSubmissionStatusBarChart();
-                }
-              }, 0);
-            }
-          },
-        });
-        dispatch({
-          type: 'dashboard/getLateReportFileCount',
-          payload: {
-            tradeDate,
-          },
-          callback: () => {
-            setTimeout(() => {
               if (this.state.submissionStatusBarChart) {
                 this.state.submissionStatusBarChart.clear();
                 this.renderSubmissionStatusBarChart();
               }
-            }, 0);
+            }
           },
         });
+        // dispatch({
+        //   type: 'dashboard/getOutstandingReportFileCount',
+        //   payload: {
+        //     tradeDate,
+        //   },
+        //   callback: () => {
+        //     if (this.state.submissionStatusBarChart) {
+        //       setTimeout(() => {
+        //         if (this.state.submissionStatusBarChart) {
+        //           this.state.submissionStatusBarChart.clear();
+        //           this.renderSubmissionStatusBarChart();
+        //         }
+        //       }, 0);
+        //     }
+        //   },
+        // });
+        // dispatch({
+        //   type: 'dashboard/getLateReportFileCount',
+        //   payload: {
+        //     tradeDate,
+        //   },
+        //   callback: () => {
+        //     setTimeout(() => {
+        //       if (this.state.submissionStatusBarChart) {
+        //         this.state.submissionStatusBarChart.clear();
+        //         this.renderSubmissionStatusBarChart();
+        //       }
+        //     }, 0);
+        //   },
+        // });
       }
     });
     this.setState({ submissionStatusPieChart });
@@ -1290,7 +1310,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Submission Status柱图
   renderSubmissionStatusBarChart = () => {
-    const { lateReportFileCount, outstandingReportFileCount } = this.props;
+    const { reportFilesData } = this.props;
     let submissionStatusBarChart;
     if (this.state.submissionStatusBarChart) {
       // eslint-disable-next-line prefer-destructuring
@@ -1300,21 +1320,25 @@ export default class HomePage extends PureComponent {
         container: 'submissionStatusBar',
         forceFit: true,
         height: 366,
-        padding: [100, 20, 30, 50],
+        padding: [100, 20, 45, 70],
       });
     }
     let isRender = false;
-    lateReportFileCount.forEach(item => {
-      if (item.count > 0) {
-        isRender = true;
-      }
-    });
-    outstandingReportFileCount.forEach(item => {
-      if (item.count > 0) {
-        isRender = true;
-      }
-    });
+    if (reportFilesData[0]) {
+      const { lateReportFileCount, outstandingReportFileCount } = reportFilesData[0];
+      lateReportFileCount.forEach(item => {
+        if (item.count > 0) {
+          isRender = true;
+        }
+      });
+      outstandingReportFileCount.forEach(item => {
+        if (item.count > 0) {
+          isRender = true;
+        }
+      });
+    }
     if (isRender) {
+      const { lateReportFileCount, outstandingReportFileCount } = reportFilesData[0];
       const submissionStatusBar = [];
       let count = 0;
       lateReportFileCount.forEach(item => {
@@ -1370,6 +1394,14 @@ export default class HomePage extends PureComponent {
             lineDash: [0],
           },
         },
+        title: {
+          textStyle: {
+            fontSize: 12, // 文本大小
+            textAlign: 'center', // 文本对齐方式
+            fill: '#e3e3e3', // 文本颜色
+          },
+          offset: 50,
+        },
       });
       submissionStatusBarChart.axis('label', {
         label: {
@@ -1380,6 +1412,22 @@ export default class HomePage extends PureComponent {
         line: {
           lineWidth: 0.5, // 设置线的宽度
         },
+        title: {
+          textStyle: {
+            fontSize: 12, // 文本大小
+            textAlign: 'center', // 文本对齐方式
+            fill: '#e3e3e3', // 文本颜色
+          },
+          offset: 30,
+        },
+      });
+      submissionStatusBarChart.scale('value', {
+        alias: 'Number Of Reports',
+        // eslint-disable-next-line no-nested-ternary
+        max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+      });
+      submissionStatusBarChart.scale('label', {
+        alias: 'Submission Type',
       });
       submissionStatusBarChart
         .interval()
@@ -1549,7 +1597,7 @@ export default class HomePage extends PureComponent {
           payload: {
             market,
           },
-          callback: values => {
+          callback: () => {
             if (this.state.marketPieChart) {
               this.state.marketPieChart.clear();
               this.renderMarketRoseChart();
@@ -1578,10 +1626,16 @@ export default class HomePage extends PureComponent {
     }
     if (marketDataByCategory[0]) {
       const marketRose = [];
+      let count = 0;
+      marketDataByCategory.forEach(item => {
+        // eslint-disable-next-line no-const-assign
+        count += item.count;
+      });
       marketDataByCategory.forEach(item => {
         marketRose.push({
           label: item.biCategory,
           value: Number(item.count),
+          percent: (item.count / count).toFixed(4),
         });
       });
       marketRoseChart.source(marketRose);
@@ -1596,6 +1650,43 @@ export default class HomePage extends PureComponent {
         offsetX: -17,
         offsetY: 20,
       });
+      marketRoseChart.axis(false);
+      marketRoseChart
+        .interval()
+        .position('label*value')
+        .tooltip('label*percent*value', (label, percent, value) => {
+          const a = `${(percent * 100).toFixed(2)}%`;
+          return {
+            name: label,
+            value: `${value}(${a})`,
+          };
+        })
+        .color('label', [
+          '#10416C',
+          '#0D87D4',
+          '#36BB3D',
+          '#ebca57',
+          '#ff9f7f',
+          '#F4374C',
+          '#705dc8',
+        ]);
+    } else {
+      const marketRose = [
+        { label: 'Individual', value: 7 },
+        { label: 'Institution', value: 3 },
+        { label: 'Investment Bank', value: 1 },
+        { label: 'Group Proprietary', value: 3 },
+        { label: 'Hedge Fund', value: 5 },
+        { label: 'Omnibus A/C', value: 4 },
+      ];
+      marketRoseChart.source(marketRose);
+      marketRoseChart.coord('polar', {
+        innerRadius: 0.2,
+      });
+      marketRoseChart.tooltip({
+        showTitle: false,
+      });
+      marketRoseChart.legend(false);
       marketRoseChart.axis(false);
       marketRoseChart
         .interval()
@@ -1609,131 +1700,359 @@ export default class HomePage extends PureComponent {
           '#F4374C',
           '#705dc8',
         ]);
-    } else {
-      const marketRose = [];
-      marketDataByCategory.forEach(item => {
-        marketRose.push({
-          label: item.biCategory,
-          value: Number(item.count),
-        });
-      });
-      marketRoseChart.source(marketRose);
-      marketRoseChart.coord('polar', {
-        innerRadius: 0.2,
-      });
-      marketRoseChart.tooltip({
-        showTitle: false,
-      });
-      marketRoseChart.legend({
-        position: 'left-top',
-        offsetX: -17,
-        offsetY: 20,
-      });
-      marketRoseChart.axis(false);
-      marketRoseChart
-        .interval()
-        .position('label*value')
-        .color('label', ['#10416C', '#0D87D4']);
     }
     marketRoseChart.render();
     this.setState({ marketRoseChart });
   };
 
+  renderOutstandingCasesLineChart = () => {
+    const { outstandingCasesData } = this.props;
+    let outstandingCasesLineChart;
+    if (this.state.outstandingCasesLineChart) {
+      // eslint-disable-next-line prefer-destructuring
+      outstandingCasesLineChart = this.state.outstandingCasesLineChart;
+    } else {
+      outstandingCasesLineChart = new G2.Chart({
+        container: 'outstandingCasesLine', // div ID
+        forceFit: true, // 是否自适应宽度
+        height: 226, // 画布高度
+        padding: [20, 20, 45, 70], // 上下左右的padding
+      });
+    }
+    if (outstandingCasesData[0]) {
+      const outstandingCasesLine = [];
+      let count = 0;
+      outstandingCasesData.forEach(item => {
+        outstandingCasesLine.push({
+          label: item.tradeDate,
+          value: item.count,
+          type: item.isProcess,
+        });
+        if (item.count > count) {
+          // eslint-disable-next-line prefer-destructuring
+          count = item.count;
+        }
+      });
+      outstandingCasesLineChart.source(outstandingCasesLine, {
+        value: {
+          // eslint-disable-next-line no-nested-ternary
+          max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+        },
+      });
+      outstandingCasesLineChart.legend({
+        position: 'top-center', // 设置图例的显示位置
+        label: {
+          color: '#464C51', // 图例的字体颜色
+          fontSize: 12,
+        },
+      });
+      // 柱图value坐标
+      outstandingCasesLineChart.axis('value', {
+        position: 'left',
+        label: {
+          color: '#464C51',
+          fontSize: 12,
+        },
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+        grid: {
+          lineStyle: {
+            lineWidth: 0,
+          },
+        },
+        title: {
+          textStyle: {
+            fontSize: 12, // 文本大小
+            textAlign: 'center', // 文本对齐方式
+            fill: '#e3e3e3', // 文本颜色
+          },
+          offset: 50,
+        },
+      });
+      outstandingCasesLineChart.axis('label', {
+        label: {
+          color: '#464C51',
+          fontSize: 12,
+        },
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+        title: {
+          textStyle: {
+            fontSize: 12, // 文本大小
+            textAlign: 'center', // 文本对齐方式
+            fill: '#e3e3e3', // 文本颜色
+          },
+          offset: 30,
+        },
+      });
+      outstandingCasesLineChart.scale('value', {
+        alias: 'Number Of Alerts',
+        // eslint-disable-next-line no-nested-ternary
+        max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+      });
+      outstandingCasesLineChart.scale('label', {
+        alias: 'Trade Date',
+      });
+      outstandingCasesLineChart
+        .line()
+        .position('label*value')
+        .color('type')
+        .shape('smooth');
+      outstandingCasesLineChart
+        .point()
+        .position('label*value')
+        .color('type')
+        .size(4)
+        .shape('circle')
+        .style({
+          stroke: '#fff',
+          lineWidth: 1,
+        });
+    } else {
+      const outstandingCasesLine = [
+        { label: '20200101', value: 2, type: 'Alert_only' },
+        { label: '20200102', value: 4, type: 'Alert_only' },
+        { label: '20200103', value: 6, type: 'Alert_only' },
+        { label: '20200104', value: 8, type: 'Alert_only' },
+        { label: '20200105', value: 6, type: 'Alert_only' },
+        { label: '20200106', value: 4, type: 'Alert_only' },
+        { label: '20200101', value: 4, type: 'With_Approval_Process' },
+        { label: '20200102', value: 6, type: 'With_Approval_Process' },
+        { label: '20200103', value: 8, type: 'With_Approval_Process' },
+        { label: '20200104', value: 10, type: 'With_Approval_Process' },
+        { label: '20200105', value: 8, type: 'With_Approval_Process' },
+        { label: '20200106', value: 6, type: 'With_Approval_Process' },
+      ];
+      outstandingCasesLineChart.source(outstandingCasesLine, {
+        value: {
+          max: 12,
+        },
+      });
+      outstandingCasesLineChart.legend(false);
+      // 柱图value坐标
+      outstandingCasesLineChart.axis('value', {
+        position: 'left',
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+        grid: false,
+      });
+      outstandingCasesLineChart.axis('label', {
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+      });
+      outstandingCasesLineChart
+        .line()
+        .position('label*value')
+        .color('type')
+        .shape('smooth');
+      outstandingCasesLineChart
+        .point()
+        .position('label*value')
+        .color('type')
+        .size(4)
+        .shape('circle')
+        .style({
+          stroke: '#fff',
+          lineWidth: 1,
+        });
+    }
+    outstandingCasesLineChart.render();
+    this.setState({ outstandingCasesLineChart });
+  };
+
   // 渲染 processing stage 条形图
   renderProcessingStageBarChart = () => {
     const { processingStageData } = this.props;
-    const processingStageBar = [
-      {
-        label: 'Fail submission',
-        type: 'Number of Files',
-        value: processingStageData[0]['Fail submission'],
-      },
-      {
-        label: 'Failed validation',
-        type: 'Number of Files',
-        value: processingStageData[0]['Failed validation'],
-      },
-      {
-        label: 'In validation',
-        type: 'Number of Files',
-        value: processingStageData[0]['In validation'],
-      },
-      { label: 'Processed', type: 'Number of Files', value: processingStageData[0].Processed },
-      {
-        label: 'Ready for Processing',
-        type: 'Number of Files',
-        value: processingStageData[0]['Ready for Processing'],
-      },
-    ];
-    const processingStageBarChart = new G2.Chart({
-      container: 'processingStageBar', // div ID
-      forceFit: true, // 是否自适应宽度
-      height: 170, // 画布高度
-      padding: [20, 20, 40, 140], // 上下左右的padding
-    });
-    processingStageBarChart.source(processingStageBar);
-    processingStageBarChart.legend({
-      position: 'top-center', // 设置图例的显示位置
-      label: {
-        color: '#464C51', // 图例的字体颜色
-        fontSize: 12,
-      },
-    });
-    processingStageBarChart.scale('value', {
-      alias: 'Number of Files',
-    });
-    processingStageBarChart.scale('label', {
-      alias: 'Processing_Stage',
-    });
-    // 柱图value坐标
-    processingStageBarChart.axis('value', {
-      position: 'right',
-      label: {
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-      grid: {
-        lineStyle: {
-          lineWidth: 0,
-        },
-      },
-      title: {
-        offset: 30,
-      },
-    });
-    processingStageBarChart.axis('label', {
-      label: {
-        offset: 2,
-        color: '#464C51',
-        fontSize: 12,
-      },
-      line: {
-        lineWidth: 0.5, // 设置线的宽度
-      },
-      title: {
-        offset: 130,
-      },
-    });
-    // 将柱图转为条形图
-    processingStageBarChart
-      .coord()
-      .transpose()
-      .scale(1, -1);
-    processingStageBarChart
-      .interval()
-      .position('label*value')
-      .color('type', ['#10416c'])
-      .size(12)
-      .label('value', {
-        textStyle: {
-          fill: '#464C51',
-          fontSize: 11,
-        },
-        offset: 2,
+    let processingStageBarChart;
+    if (this.state.processingStageBarChart) {
+      // eslint-disable-next-line prefer-destructuring
+      processingStageBarChart = this.state.processingStageBarChart;
+    } else {
+      processingStageBarChart = new G2.Chart({
+        container: 'processingStageBar', // div ID
+        forceFit: true, // 是否自适应宽度
+        height: 170, // 画布高度
+        padding: [20, 20, 40, 140], // 上下左右的padding
       });
+    }
+    let isRender1 = false;
+    let count = 0;
+    if (processingStageData[0]) {
+      Object.keys(processingStageData[0]).forEach(item => {
+        if (processingStageData[0][item] > 0) {
+          isRender1 = true;
+        }
+        if (processingStageData[0][item] > count) {
+          count = processingStageData[0][item];
+        }
+      });
+    }
+    if (isRender1) {
+      const processingStageBar = [
+        {
+          label: 'Fail submission',
+          type: 'Number Of Files',
+          value: processingStageData[0]['Fail submission'],
+        },
+        {
+          label: 'Failed validation',
+          type: 'Number Of Files',
+          value: processingStageData[0]['Failed validation'],
+        },
+        {
+          label: 'In validation',
+          type: 'Number Of Files',
+          value: processingStageData[0]['In validation'],
+        },
+        { label: 'Processed', type: 'Number Of Files', value: processingStageData[0].Processed },
+        {
+          label: 'Ready for Processing',
+          type: 'Number Of Files',
+          value: processingStageData[0]['Ready for Processing'],
+        },
+      ];
+      processingStageBarChart.source(processingStageBar, {
+        value: {
+          // eslint-disable-next-line no-nested-ternary
+          max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+        },
+      });
+      processingStageBarChart.legend({
+        position: 'top-center', // 设置图例的显示位置
+        label: {
+          color: '#464C51', // 图例的字体颜色
+          fontSize: 12,
+        },
+      });
+      // 柱图value坐标
+      processingStageBarChart.axis('value', {
+        position: 'right',
+        label: {
+          color: '#464C51',
+          fontSize: 12,
+        },
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+        grid: {
+          lineStyle: {
+            lineWidth: 0,
+          },
+        },
+        title: {
+          textStyle: {
+            fontSize: 12, // 文本大小
+            textAlign: 'center', // 文本对齐方式
+            fill: '#e3e3e3', // 文本颜色
+          },
+          offset: 25,
+        },
+      });
+      processingStageBarChart.axis('label', {
+        label: {
+          color: '#464C51',
+          fontSize: 12,
+          offset: 2,
+        },
+        line: {
+          lineWidth: 0.5, // 设置线的宽度
+        },
+        title: {
+          textStyle: {
+            fontSize: 12, // 文本大小
+            textAlign: 'center', // 文本对齐方式
+            fill: '#e3e3e3', // 文本颜色
+          },
+          offset: 130,
+        },
+      });
+      processingStageBarChart.scale('value', {
+        alias: 'Number Of Files',
+        // eslint-disable-next-line no-nested-ternary
+        max: count < 5 ? 5 : count < 10 ? 10 : count + 5,
+      });
+      processingStageBarChart.scale('label', {
+        alias: 'Processing_Stage',
+      });
+      // 将柱图转为条形图
+      processingStageBarChart
+        .coord()
+        .transpose()
+        .scale(1, -1);
+      processingStageBarChart
+        .interval()
+        .position('label*value')
+        .color('type', ['#10416c'])
+        .size(12)
+        .label('value', {
+          textStyle: {
+            fill: '#464C51',
+            fontSize: 11,
+          },
+          offset: 2,
+        });
+    } else {
+      const processingStageBar = [
+        {
+          label: 'Fail submission',
+          type: 'Number Of Files',
+          value: 4,
+        },
+        {
+          label: 'Failed validation',
+          type: 'Number Of Files',
+          value: 3,
+        },
+        {
+          label: 'In validation',
+          type: 'Number Of Files',
+          value: 2,
+        },
+        { label: 'Processed', type: 'Number Of Files', value: 3 },
+        {
+          label: 'Ready for Processing',
+          type: 'Number Of Files',
+          value: 4,
+        },
+      ];
+      processingStageBarChart.source(processingStageBar, {
+        value: {
+          max: 5,
+        },
+      });
+      processingStageBarChart.legend(false);
+      // 柱图value坐标
+      processingStageBarChart.axis('value', {
+        position: 'right',
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+        grid: false,
+      });
+      processingStageBarChart.axis('label', {
+        label: false,
+        line: {
+          lineWidth: 1, // 设置线的宽度
+        },
+      });
+      // 将柱图转为条形图
+      processingStageBarChart
+        .coord()
+        .transpose()
+        .scale(1, -1);
+      processingStageBarChart
+        .interval()
+        .position('label*value')
+        .color('type', ['#10416c'])
+        .size(12);
+    }
     processingStageBarChart.render();
     this.setState({ processingStageBarChart });
   };
@@ -1756,16 +2075,16 @@ export default class HomePage extends PureComponent {
       allTaskData,
 
       fileCountData,
-      lateReportFileCount,
-      outstandingReportFileCount,
+      // lateReportFileCount,
+      // outstandingReportFileCount,
+      reportFilesData,
       marketData,
       marketDataByCategory,
+      outstandingCasesData,
       processingStageData,
 
       allApprovalData,
       perApprovalData,
-
-      dispatch,
     } = this.props;
 
     let currentTradeDate;
@@ -1784,16 +2103,19 @@ export default class HomePage extends PureComponent {
     }
 
     let isRender = false;
-    lateReportFileCount.forEach(item => {
-      if (item.count > 0) {
-        isRender = true;
-      }
-    });
-    outstandingReportFileCount.forEach(item => {
-      if (item.count > 0) {
-        isRender = true;
-      }
-    });
+    if (reportFilesData[0]) {
+      const { lateReportFileCount, outstandingReportFileCount } = reportFilesData[0];
+      lateReportFileCount.forEach(item => {
+        if (item.count > 0) {
+          isRender = true;
+        }
+      });
+      outstandingReportFileCount.forEach(item => {
+        if (item.count > 0) {
+          isRender = true;
+        }
+      });
+    }
 
     let isRender1 = false;
     if (processingStageData[0]) {
@@ -1816,6 +2138,7 @@ export default class HomePage extends PureComponent {
       endDate,
       submissionStatusPieChart,
       marketPieChart,
+      outstandingCasesLineChart,
       processingStageBarChart,
     } = this.state;
     return (
@@ -2185,7 +2508,7 @@ export default class HomePage extends PureComponent {
                                   title={item.alertDesc}
                                   className={styles.description}
                                   onClick={() => {
-                                    router.push(`/homepage/alert-center?alertId=${item.alertId}`);
+                                    router.push(`/homepage/alert-center?alertIds=${item.alertId}`);
                                   }}
                                 >
                                   {item.alertDesc}
@@ -2242,10 +2565,11 @@ export default class HomePage extends PureComponent {
                     <h3 className={styles.groupTitle}>
                       Quick Menu
                       <IconFont
-                        type="iconliangduanduiqi"
+                        type="iconshezhi"
                         className={styles.quickMenuIcon}
                         onClick={() => {
-                          router.push('/homepage/quick-menu-management');
+                          this.toggleModal('quickMenu');
+                          // router.push('/homepage/quick-menu-management');
                         }}
                       />
                     </h3>
@@ -2287,19 +2611,20 @@ export default class HomePage extends PureComponent {
                       dataSource={informationData}
                       renderItem={item => (
                         <List.Item>
-                          <span className={styles.icon}>
-                            <IconFont type="icon-sound" />
-                          </span>
                           <span
                             title={item.informationDetail}
-                            className="description"
+                            className={styles.description}
                             onClick={() => {
                               router.push(
                                 `/homepage/information?informationNo=${item.informationNo}`,
                               );
                             }}
                           >
-                            {item.informationDetail}
+                            <span className={styles.icon}>
+                              <IconFont type="icon-sound" />
+                            </span>
+                            {item.informationDetail &&
+                              `${item.informationDetail.substring(0, 70)}...`}
                           </span>
                           <span className={styles.date}>
                             {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}
@@ -2728,7 +3053,7 @@ export default class HomePage extends PureComponent {
                                   title={item.alertDesc}
                                   className={styles.description}
                                   onClick={() => {
-                                    router.push(`/homepage/alert-center?alertId=${item.alertId}`);
+                                    router.push(`/homepage/alert-center?alertIds=${item.alertId}`);
                                   }}
                                 >
                                   {item.alertDesc}
@@ -2785,10 +3110,11 @@ export default class HomePage extends PureComponent {
                     <h3 className={styles.groupTitle}>
                       Quick Menu
                       <IconFont
-                        type="iconliangduanduiqi"
+                        type="iconshezhi"
                         className={styles.quickMenuIcon}
                         onClick={() => {
-                          router.push('/homepage/quick-menu-management');
+                          this.toggleModal('quickMenu');
+                          // router.push('/homepage/quick-menu-management');
                         }}
                       />
                     </h3>
@@ -2830,19 +3156,20 @@ export default class HomePage extends PureComponent {
                       dataSource={informationData}
                       renderItem={item => (
                         <List.Item>
-                          <span className={styles.icon}>
-                            <IconFont type="icon-sound" />
-                          </span>
                           <span
                             title={item.informationDetail}
-                            className="description"
+                            className={styles.description}
                             onClick={() => {
                               router.push(
                                 `/homepage/information?informationNo=${item.informationNo}`,
                               );
                             }}
                           >
-                            {item.informationDetail}
+                            <span className={styles.icon}>
+                              <IconFont type="icon-sound" />
+                            </span>
+                            {item.informationDetail &&
+                              `${item.informationDetail.substring(0, 70)}...`}
                           </span>
                           <span className={styles.date}>
                             {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}
@@ -2905,9 +3232,19 @@ export default class HomePage extends PureComponent {
                   {/* Number of Outstanding Cases */}
                   <div className={styles.outstandingCases}>
                     <h3 className={styles.groupTitle}>NO. of Outstanding Cases(Investigating)</h3>
-
-                    <div className={styles.empty}>
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    <div style={{ position: 'relative', height: 226 }}>
+                      {!outstandingCasesData[0] && (
+                        <div
+                          style={{
+                            width: '100%',
+                            height: 226,
+                            position: 'absolute',
+                            zIndex: 1,
+                            background: 'hsla(0,0%,100%,.7)',
+                          }}
+                        ></div>
+                      )}
+                      <div id="outstandingCasesLine"></div>
                     </div>
                   </div>
                 </div>
@@ -2922,51 +3259,63 @@ export default class HomePage extends PureComponent {
                       >
                         Number of reported LOP holders in SEHK and HKFE
                       </h3>
-                      <div
-                        id="marketPie"
-                        style={{
-                          display: !marketData[0] ? 'none' : 'block',
-                        }}
-                      ></div>
-                      {!marketData[0] && (
-                        <div className={styles.empty} style={{ height: 180 }}>
-                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                        </div>
-                      )}
+                      <div style={{ position: 'relative', height: 180 }}>
+                        {!marketData[0] && (
+                          <div
+                            style={{
+                              width: '100%',
+                              height: 180,
+                              position: 'absolute',
+                              zIndex: 1,
+                              background: 'hsla(0,0%,100%,.7)',
+                            }}
+                          ></div>
+                        )}
+                        <div id="marketPie"></div>
+                      </div>
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div
-                        id="marketRose"
-                        style={{
-                          display: !marketDataByCategory[0] ? 'none' : 'block',
-                        }}
-                      ></div>
-                      {!marketDataByCategory[0] && (
-                        <div className={styles.empty} style={{ height: 200 }}>
-                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                        </div>
-                      )}
+                      <div style={{ position: 'relative', height: 210 }}>
+                        {!marketDataByCategory[0] && (
+                          <div
+                            style={{
+                              width: '100%',
+                              height: 210,
+                              position: 'absolute',
+                              zIndex: 1,
+                              background: 'hsla(0,0%,100%,.7)',
+                            }}
+                          ></div>
+                        )}
+                        <div id="marketRose"></div>
+                      </div>
                     </div>
                   </div>
                   {/* Processing Stage */}
                   <div className={styles.processingStage}>
                     <h3 className={styles.groupTitle}>Processing Stage</h3>
-                    <div
-                      id="processingStageBar"
-                      style={{
-                        display: !isRender1 ? 'none' : 'block',
-                      }}
-                    ></div>
-                    {!isRender1 && (
-                      <div className={styles.empty} style={{ height: 170 }}>
-                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                      </div>
-                    )}
+                    <div style={{ position: 'relative', height: 170 }}>
+                      {!isRender1 && (
+                        <div
+                          style={{
+                            width: '100%',
+                            height: 170,
+                            position: 'absolute',
+                            zIndex: 1,
+                            background: 'hsla(0,0%,100%,.7)',
+                          }}
+                        ></div>
+                      )}
+                      <div id="processingStageBar"></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </TabPane>
           </Tabs>
+          {this.state.visible.quickMenu && (
+            <QuickMenu toggleModal={this.toggleModal} visible={this.state.visible.quickMenu} />
+          )}
         </div>
       </div>
     );

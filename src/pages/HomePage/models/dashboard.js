@@ -2,7 +2,7 @@
  * @Description: quick menu
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-13 13:33:52
+ * @LastEditTime : 2020-01-13 14:49:48
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -12,8 +12,10 @@ const {
   getMarketData, // 获取MarketData
   getMarketDataByCategory, // 点击环图获取数据
   getProcessingStageData, //
-  getLateReportFileCount,
-  getOutstandingReportFileCount,
+  getReportFiles,
+  // getLateReportFileCount,
+  // getOutstandingReportFileCount,
+  getOutstandingCasesData,
 } = Service;
 
 export default {
@@ -24,8 +26,10 @@ export default {
     marketData: [], // MarketData
     marketDataByCategory: [],
     processingStageData: [],
-    lateReportFileCount: [],
-    outstandingReportFileCount: [],
+    reportFilesData: [],
+    // lateReportFileCount: [],
+    // outstandingReportFileCount: [],
+    outstandingCasesData: [],
   },
 
   effects: {
@@ -40,41 +44,57 @@ export default {
         const { currentTradeDate } = response.bcjson.items[0];
         const tradeDate = Object.keys(currentTradeDate)[0];
         yield put({
-          type: 'getLateReportFileCount',
+          type: 'getReportFiles',
           payload: {
             tradeDate,
           },
         });
-        yield put({
-          type: 'getOutstandingReportFileCount',
-          payload: {
-            tradeDate,
-          },
-        });
+        // yield put({
+        //   type: 'getLateReportFileCount',
+        //   payload: {
+        //     tradeDate,
+        //   },
+        // });
+        // yield put({
+        //   type: 'getOutstandingReportFileCount',
+        //   payload: {
+        //     tradeDate,
+        //   },
+        // });
       }
     },
-    //
-    *getLateReportFileCount({ payload, callback }, { call, put }) {
-      const response = yield call(getLateReportFileCount, { param: payload });
+    *getReportFiles({ payload, callback }, { call, put }) {
+      const response = yield call(getReportFiles, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
-          type: 'setLateReportFileCount',
+          type: 'setReportFiles',
           payload: response.bcjson.items,
         });
         if (callback) callback();
       }
     },
     //
-    *getOutstandingReportFileCount({ payload, callback }, { call, put }) {
-      const response = yield call(getOutstandingReportFileCount, { param: payload });
-      if (response.bcjson.flag === '1') {
-        yield put({
-          type: 'setOutstandingReportFileCount',
-          payload: response.bcjson.items,
-        });
-        if (callback) callback();
-      }
-    },
+    // *getLateReportFileCount({ payload, callback }, { call, put }) {
+    //   const response = yield call(getLateReportFileCount, { param: payload });
+    //   if (response.bcjson.flag === '1') {
+    //     yield put({
+    //       type: 'setLateReportFileCount',
+    //       payload: response.bcjson.items,
+    //     });
+    //     if (callback) callback();
+    //   }
+    // },
+    // //
+    // *getOutstandingReportFileCount({ payload, callback }, { call, put }) {
+    //   const response = yield call(getOutstandingReportFileCount, { param: payload });
+    //   if (response.bcjson.flag === '1') {
+    //     yield put({
+    //       type: 'setOutstandingReportFileCount',
+    //       payload: response.bcjson.items,
+    //     });
+    //     if (callback) callback();
+    //   }
+    // },
     //
     *getMarketData({ payload }, { call, put }) {
       const response = yield call(getMarketData, { param: payload });
@@ -104,6 +124,15 @@ export default {
         });
       }
     },
+    *getOutstandingCasesData({ payload }, { call, put }) {
+      const response = yield call(getOutstandingCasesData, { param: payload });
+      if (response.bcjson.flag === '1') {
+        yield put({
+          type: 'setOutstandingCasesData',
+          payload: response.bcjson.items,
+        });
+      }
+    },
   },
 
   reducers: {
@@ -113,18 +142,24 @@ export default {
         fileCountData: action.payload,
       };
     },
-    setLateReportFileCount(state, action) {
+    setReportFiles(state, action) {
       return {
         ...state,
-        lateReportFileCount: action.payload,
+        reportFilesData: action.payload,
       };
     },
-    setOutstandingReportFileCount(state, action) {
-      return {
-        ...state,
-        outstandingReportFileCount: action.payload,
-      };
-    },
+    // setLateReportFileCount(state, action) {
+    //   return {
+    //     ...state,
+    //     lateReportFileCount: action.payload,
+    //   };
+    // },
+    // setOutstandingReportFileCount(state, action) {
+    //   return {
+    //     ...state,
+    //     outstandingReportFileCount: action.payload,
+    //   };
+    // },
     // 保存MarketData
     setMarketData(state, action) {
       return {
@@ -144,6 +179,12 @@ export default {
       return {
         ...state,
         processingStageData: action.payload,
+      };
+    },
+    setOutstandingCasesData(state, action) {
+      return {
+        ...state,
+        outstandingCasesData: action.payload,
       };
     },
   },

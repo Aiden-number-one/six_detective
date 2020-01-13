@@ -2,19 +2,21 @@
  * @Description: 首页相关接口
  * @Author: lan
  * @Date: 2019-11-28 14:18:22
- * @LastEditTime : 2020-01-10 13:40:23
+ * @LastEditTime : 2020-01-13 14:44:39
  * @LastEditors  : lan
  */
 export default {
   getAllTask: 'get_approval_task_list_page', // all Task
   getAllApproval: 'get_all_approval_process_summary', // all approval
   getPerApproval: 'get_personal_approval_process_summary', // all approval
-  getLateReportFileCount: 'get_late_report_file_count_by_trade_date', //
-  getOutstandingReportFileCount: 'get_outstanding_report_file_count_by_trade_date', //
+  getReportFiles: 'get_late_and_outstanding_report_file_count_by_trade_date',
+  // getLateReportFileCount: 'get_late_report_file_count_by_trade_date', //
+  // getOutstandingReportFileCount: 'get_outstanding_report_file_count_by_trade_date', //
   getProcessingStageData: 'get_file_count_group_by_proc_status', //
   getMarketData: 'get_bi_count_group_by_market', // 获取
   getMarketDataByCategory: 'get_bi_count_of_market_group_by_category', // 获取
   getFileCountByDate: 'get_file_count_group_by_trade_date', //
+  getOutstandingCasesData: 'get_alert_count_group_by_alert_category_for_six_trade_date',
   getMyAlert: 'get_my_alert', // 获取My alert
   getQuickMenu: 'get_quickly_query_menu', // 获取快捷菜单
   saveQuickMenu: 'set_quickly_add_menu', // 设置快捷菜单
