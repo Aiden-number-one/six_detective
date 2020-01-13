@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 17:31:44
+ * @LastEditTime : 2020-01-13 20:27:44
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -281,7 +281,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
         cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}" aggregate="${aggregate}" order="none" mapping-type="simple"></dataset-value>`;
       } else if (cellType === 'FORMULA') {
         // 去除公式中的等号
-        cellText = cellText.replace(/=/, '');
+        cellText = cellText.replace(/=/, '').toLocaleLowerCase();
         cellxml += `<expression-value><![CDATA[${cellText}]]></expression-value>`;
       } else {
         cellxml += '<simple-value><![CDATA[]]></simple-value>';
