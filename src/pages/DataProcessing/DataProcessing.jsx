@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 15:42:44
+ * @LastEditTime : 2020-01-13 15:55:48
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -133,7 +133,7 @@ export default class DataProcessing extends Component {
                   onChange={event => this.onSelectChange(event, recode)}
                 ></Checkbox>
               ) : (
-                <IconFont type="icon-bypass" className={styles['bypass-icon']} />
+                <IconFont type="icon-ignore" className={styles['bypass-icon']} />
               )}
             </Fragment>
           ),
@@ -862,7 +862,6 @@ export default class DataProcessing extends Component {
                   <span style={{ marginRight: '5px' }}>Market</span>
                   <Select
                     placeholder="Please Select"
-                    allowClear
                     value={selectedMarket}
                     style={{ width: '120px' }}
                     onChange={this.onChangeMarkt}
