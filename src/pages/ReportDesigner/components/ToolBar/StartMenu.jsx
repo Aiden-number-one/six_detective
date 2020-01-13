@@ -433,14 +433,16 @@ class ToolBar extends Component {
                   <p>Preview</p>
                 </div>
               </Button>
-              <Button className={classNames('btn', 'btn2Report', 'mr6')}>
-                <Upload onChange={info => this.importFileStatus(info)} action="/upload">
+              <Upload onChange={info => this.importFileStatus(info)} action="/upload">
+                <Button className={classNames('btn', 'btn2Report', 'mr6')}>
                   <div className={styles.topBottom}>
                     <IconFont type="icondaoru" />
                     <p>Import</p>
                   </div>
-                </Upload>
-              </Button>
+                </Button>
+              </Upload>
+            </div>
+            <div className={styles.group}>
               {/* </Upload> */}
               <Button
                 className={classNames('btn', 'btn2Report', 'mr6', displayArea && 'active')}
