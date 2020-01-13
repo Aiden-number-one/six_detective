@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
+import router from 'umi/router';
+import withRouter from 'umi/withRouter';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Table, Row, Icon, Alert } from 'antd';
 import IconFont from '@/components/IconFont';
@@ -19,7 +21,7 @@ import styles from '../index.less';
 
 const { Column } = Table;
 
-function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total }) {
+function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSize, total }) {
   const [alert, setAlert] = useState(null);
   const [claimVisible, setClaimVisible] = useState(false);
   const [claimContent, setClaimContent] = useState('');
@@ -28,7 +30,6 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
   const [selectedRows, setSelectedRows] = useState([]);
   const [isBatchAction, setBatchAction] = useState(false);
   const [isDiscontinue, setDiscontinue] = useState(false);
-  const [searchParams, setSearchParams] = useState('');
   // header filter
   const {
     conditions,
@@ -42,6 +43,7 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
     action: 'alertCenter/fetch',
     alertPage,
     alertPageSize,
+    reset: Object.keys(location.query).length > 0 ? handleCloseMsg : null,
   });
 
   const isAuth = useMemo(() => {
@@ -50,10 +52,20 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
   }, []);
 
   useEffect(() => {
+    const { alertIds } = location.query;
+    let params = [];
+    if (alertIds) {
+      params = [{ column: 'alertNo', value: alertIds, condition: '7' }];
+    }
     dispatch({
       type: 'alertCenter/fetch',
+      payload: {
+        page: alertPage,
+        pageSize: alertPageSize,
+        conditions: params,
+      },
     });
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     if (alerts && alerts.length > 0) {
@@ -202,6 +214,9 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
     });
   }
 
+  function handleCloseMsg() {
+    router.replace('/homepage/alert-center');
+  }
   return (
     <div className={styles['list-container']}>
       <div className={styles.list}>
@@ -235,20 +250,24 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
           }}
           onExport={handleExport}
         />
-        <Alert
-          banner
-          showIcon
-          closable
-          type="info"
-          message={`Query Condition：${searchParams}`}
-          style={{ marginBottom: 10 }}
-        />
+        {Object.keys(location.query).length > 0 && (
+          <Alert
+            banner
+            showIcon
+            closable
+            type="info"
+            message={`Query Condition：${Object.keys(location.query)}`}
+            style={{ marginBottom: 10 }}
+            onClose={handleCloseMsg}
+          />
+        )}
         <Table
           dataSource={alerts}
           rowKey="alertId"
           loading={loading['alertCenter/fetch']}
           rowClassName={record => (alert && record.alertId === alert.alertId ? 'table-active' : '')}
           rowSelection={{
+            columnWidth: 50,
             onChange(selectedRowKeys, sRows) {
               setSelectedRows(sRows);
             },
@@ -272,7 +291,7 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
           })}
         >
           <Column
-            width={50}
+            width={45}
             ellipsis
             dataIndex="no"
             title="No."
@@ -283,7 +302,6 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
             className="word-break"
             title={
               <ColumnTitle
-                isNum={false}
                 curColumn="alertNo"
                 conditions={conditions}
                 sort={curSortColumn === 'alertNo' ? curSort : ''}
@@ -312,6 +330,7 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
           <Column
             align="center"
             dataIndex="tradeDate"
+            render={text => moment(text).format(dateFormat)}
             title={
               <ColumnTitle
                 curColumn="tradeDate"
@@ -323,25 +342,43 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
                 <FormattedMessage id="alert-center.trade-date" />
               </ColumnTitle>
             }
-            render={text => moment(text).format(dateFormat)}
           />
           <Column
             align="center"
             dataIndex="alertTime"
-            title={<FormattedMessage id="alert-center.alert-timestamp" />}
             render={text => moment(text, timestampFormat).format(timestampFormat)}
+            title={
+              <ColumnTitle
+                curColumn="alertTime"
+                conditions={conditions}
+                sort={curSortColumn === 'alertName' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.alert-timestamp" />
+              </ColumnTitle>
+            }
           />
           <Column
-            width={100}
+            width={120}
             align="right"
             dataIndex="itemsTotal"
-            title={<FormattedMessage id="alert-center.items-total" />}
-            render={text => +text}
+            title={
+              <ColumnTitle
+                isNum
+                curColumn="itemsTotal"
+                conditions={conditions}
+                sort={curSortColumn === 'itemsTotal' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.items-total" />
+              </ColumnTitle>
+            }
           />
           <Column
             width={120}
             dataIndex="userName"
-            title={<FormattedMessage id="alert-center.owner" />}
             render={text => {
               if (text) {
                 const users = text.split(',');
@@ -349,11 +386,21 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
               }
               return text;
             }}
+            title={
+              <ColumnTitle
+                curColumn="userName"
+                conditions={conditions}
+                sort={curSortColumn === 'userName' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.owner" />
+              </ColumnTitle>
+            }
           />
           <Column
-            width={120}
+            width={110}
             dataIndex="alertStatusDesc"
-            title={<FormattedMessage id="alert-center.status" />}
             render={text => {
               if (text) {
                 const users = text.split(',');
@@ -361,6 +408,17 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
               }
               return text;
             }}
+            title={
+              <ColumnTitle
+                curColumn="alertStatusDesc"
+                conditions={conditions}
+                sort={curSortColumn === 'alertStatusDesc' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.status" />
+              </ColumnTitle>
+            }
           />
           <Column
             width={90}
@@ -415,4 +473,4 @@ const mapStateToProps = ({
   total: alertTotal,
   loading: loading.effects,
 });
-export default connect(mapStateToProps)(AlertList);
+export default withRouter(connect(mapStateToProps)(AlertList));

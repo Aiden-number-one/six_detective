@@ -6,6 +6,7 @@ import { Table, Row, Col, Icon } from 'antd';
 import moment from 'moment';
 import { timestampFormat, downloadFile } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
+import ColumnTitle, { useColumnFilter } from '../ColumnTitle';
 import InformationDetail from './InformationDetail';
 import styles from '../index.less';
 
@@ -14,6 +15,21 @@ const { Column } = Table;
 function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loading }) {
   const [info, setInfo] = useState(null);
   const [selectedKeys, setSelectedKeys] = useState([]);
+
+  // header filter
+  const {
+    conditions,
+    curTableColumn,
+    curSortColumn,
+    curSort,
+    handleCommit,
+    handleSort,
+  } = useColumnFilter({
+    dispatch,
+    action: 'alertCenter/fetchInfos',
+    infoPage,
+    infoPageSize,
+  });
 
   const exportLoading = loading['alertCenter/exportInfos'];
 
@@ -93,6 +109,7 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             return '';
           }}
           rowSelection={{
+            columnWidth: 50,
             onChange: selectedRowKeys => {
               setSelectedKeys(selectedRowKeys);
             },
@@ -122,35 +139,96 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             render={(text, record, index) => (infoPage - 1) * infoPageSize + index + 1}
           />
           <Column
-            ellipsis
             width={150}
             dataIndex="informationNo"
-            title={<FormattedMessage id="alert-center.information-no" />}
+            title={
+              <ColumnTitle
+                curColumn="informationNo"
+                tableName="slop_biz.v_info"
+                conditions={conditions}
+                sort={curSortColumn === 'informationNo' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.information-no" />
+              </ColumnTitle>
+            }
           />
           <Column
-            width="24%"
+            width="20%"
             ellipsis
             dataIndex="informationType"
-            title={<FormattedMessage id="alert-center.information-type" />}
+            title={
+              <ColumnTitle
+                curColumn="informationType"
+                conditions={conditions}
+                sort={curSortColumn === 'informationType' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.information-type" />
+              </ColumnTitle>
+            }
           />
           <Column
             align="center"
             dataIndex="timestamp"
-            title={<FormattedMessage id="alert-center.information-timestamp" />}
             render={text => moment(text).format(timestampFormat)}
+            title={
+              <ColumnTitle
+                curColumn="timestamp"
+                conditions={conditions}
+                sort={curSortColumn === 'timestamp' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.information-timestamp" />
+              </ColumnTitle>
+            }
           />
           <Column
             align="center"
             dataIndex="market"
-            title={<FormattedMessage id="alert-center.market" />}
+            title={
+              <ColumnTitle
+                curColumn="market"
+                tableName="slop_biz.v_info"
+                conditions={conditions}
+                sort={curSortColumn === 'market' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.market" />
+              </ColumnTitle>
+            }
           />
           <Column
             dataIndex="submitterCode"
-            title={<FormattedMessage id="alert-center.submitter-code" />}
+            title={
+              <ColumnTitle
+                curColumn="submitterCode"
+                conditions={conditions}
+                sort={curSortColumn === 'submitterCode' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.submitter-code" />
+              </ColumnTitle>
+            }
           />
           <Column
             dataIndex="submitterName"
-            title={<FormattedMessage id="alert-center.submitter-name" />}
+            title={
+              <ColumnTitle
+                curColumn="submitterName"
+                conditions={conditions}
+                sort={curSortColumn === 'submitterName' ? curSort : ''}
+                onSort={handleSort}
+                onCommit={handleCommit}
+              >
+                <FormattedMessage id="alert-center.submitter-name" />
+              </ColumnTitle>
+            }
           />
         </Table>
       </div>

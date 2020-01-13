@@ -4,11 +4,11 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-13 17:13:19
+ * @LastEditTime : 2020-01-13 22:17:22
  */
 import { useState } from 'react';
 
-export function useColumnFilter({ dispatch, action: type, alertPage, alertPageSize }) {
+export function useColumnFilter({ dispatch, action: type, alertPage, alertPageSize, reset }) {
   // { column: '', value: '', condition: '7' }
   const [conditions, setConditions] = useState([]);
   const [curTableColumn, setCurTableColumn] = useState('');
@@ -19,6 +19,9 @@ export function useColumnFilter({ dispatch, action: type, alertPage, alertPageSi
   async function handleCommit(tableColumn, updatedConditions = []) {
     setCurTableColumn(tableColumn);
     setConditions(updatedConditions);
+    if (reset) {
+      reset();
+    }
     dispatch({
       type,
       payload: {
@@ -35,6 +38,9 @@ export function useColumnFilter({ dispatch, action: type, alertPage, alertPageSi
     setCurTableColumn(tableColumn);
     setCurSortColumn(tableColumn);
     setCurSort(sort);
+    if (reset) {
+      reset();
+    }
     dispatch({
       type: 'alertCenter/fetch',
       payload: {

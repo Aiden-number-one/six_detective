@@ -14,6 +14,7 @@ function ColumnTitle({
   isNum,
   loading,
   curColumn,
+  tableName = 'slop_biz.v_alert_center',
   conditions,
   sort,
   onSort,
@@ -34,7 +35,7 @@ function ColumnTitle({
       const filters = await dispatch({
         type: 'global/fetchTableFilterItems',
         payload: {
-          tableName: 'slop_biz.v_alert_center',
+          tableName,
           tableColumn: curColumn,
         },
       });

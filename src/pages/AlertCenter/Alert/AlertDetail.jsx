@@ -173,6 +173,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
   }
 
   async function handleDownloadAll(fileList) {
+    console.log(fileList);
     const url = await dispatch({
       type: 'global/fetchZipAttachments',
       payload: {
