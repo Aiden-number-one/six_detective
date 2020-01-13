@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Link from 'umi/link';
 import { connect } from 'dva';
 import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Col, Icon } from 'antd';
+import { Table, Row, Icon } from 'antd';
 import IconFont from '@/components/IconFont';
 import { dateFormat, timestampFormat, pageSizeOptions } from '@/pages/DataImportLog/constants';
 import { getAuthority } from '@/utils/authority';
@@ -26,8 +25,10 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
   const [isBatchAction, setBatchAction] = useState(false);
   const [isDiscontinue, setDiscontinue] = useState(false);
   // header filter
+  // { column: '', value: '', condition: '7' }
   const [conditions, setConditions] = useState([]);
   const [curTableColumn, setCurTableColumn] = useState('');
+  const [curSortColumn, setCurSortColumn] = useState('');
   const [curSort, setCurSort] = useState('');
 
   const isAuth = useMemo(() => {
@@ -173,7 +174,7 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
         pageSize,
         conditions,
         currentColumn: curTableColumn,
-        sort: curSort,
+        sort: curSortColumn === curTableColumn ? curSort : '',
       },
     });
   }
@@ -189,12 +190,14 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
         conditions: updatedConditions,
         page: alertPage,
         pageSize: alertPageSize,
+        sort: curSortColumn === tableColumn ? curSort : '',
       },
     });
   }
 
   async function handleSort(tableColumn, sort) {
     setCurTableColumn(tableColumn);
+    setCurSortColumn(tableColumn);
     setCurSort(sort);
     dispatch({
       type: 'alertCenter/fetch',
@@ -288,6 +291,7 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
                 isNum={false}
                 curColumn="alertNo"
                 conditions={conditions}
+                sort={curSortColumn === 'alertNo' ? curSort : ''}
                 onSort={handleSort}
                 onCommit={handleCommit}
               >
@@ -303,6 +307,7 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
                 isNum={false}
                 curColumn="alertName"
                 conditions={conditions}
+                sort={curSortColumn === 'alertName' ? curSort : ''}
                 onSort={handleSort}
                 onCommit={handleCommit}
               >
@@ -318,6 +323,7 @@ function AlertList({ dispatch, loading, alerts, alertPage, alertPageSize, total 
                 isNum={false}
                 curColumn="tradeDate"
                 conditions={conditions}
+                sort={curTableColumn === 'tradeDate' ? curSort : ''}
                 onSort={handleSort}
                 onCommit={handleCommit}
               >

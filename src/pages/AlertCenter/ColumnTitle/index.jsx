@@ -13,6 +13,7 @@ function ColumnTitle({
   loading,
   curColumn,
   conditions,
+  sort,
   onSort,
   onCommit,
 }) {
@@ -35,9 +36,9 @@ function ColumnTitle({
           tableColumn: curColumn,
         },
       });
-      setFilterItems(filters);
+      setFilterItems(filters || []);
       if (!checkedList.length) {
-        setCheckedList(filters);
+        setCheckedList(filters || []);
       }
     }
   }
@@ -54,7 +55,6 @@ function ColumnTitle({
 
   async function handleClear() {
     const updatedConditions = conditions.filter(item => item.column !== curColumn);
-    console.log(updatedConditions);
     await onCommit(curColumn, updatedConditions);
     setCheckedList(filterItems);
     setSelectedItem('');
@@ -62,8 +62,10 @@ function ColumnTitle({
     setVisible(false);
   }
 
-  async function handleSort(sort) {
-    await onSort(curColumn, sort);
+  async function handleSort(s) {
+    if (s !== sort) {
+      await onSort(curColumn, s);
+    }
     setVisible(false);
   }
 
@@ -107,6 +109,7 @@ function ColumnTitle({
           <FilterHeader
             disabled={checkedList.length === filterItems.length}
             onClear={handleClear}
+            sort={sort}
             onSort={handleSort}
           />
           <div className={styles.content}>

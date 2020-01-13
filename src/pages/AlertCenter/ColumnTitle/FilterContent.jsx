@@ -21,12 +21,20 @@ const types = [
 const textTypes = types.filter(({ id }) => id === 7 || id === 1 || id === 2);
 const numTypes = types.filter(({ id }) => id !== 7);
 
-export function FilterHeader({ disabled, onSort, onClear }) {
+export function FilterHeader({ disabled, onSort, sort, onClear }) {
   return (
     <Row className={styles.title} type="flex" justify="space-between" align="middle">
       <Col>
-        <IconFont type="iconsort-asc" className={styles.icon} onClick={() => onSort('1')} />
-        <IconFont type="iconsort-desc" className={styles.icon} onClick={() => onSort('0')} />
+        <IconFont
+          type="iconsort-asc"
+          onClick={() => onSort('1')}
+          className={classNames(styles.icon, { [styles.active]: sort === '1' })}
+        />
+        <IconFont
+          type="iconsort-desc"
+          onClick={() => onSort('0')}
+          className={classNames(styles.icon, { [styles.active]: sort === '0' })}
+        />
       </Col>
       <Col>
         <span
