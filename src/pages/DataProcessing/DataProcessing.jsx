@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 15:55:48
+ * @LastEditTime : 2020-01-13 17:12:49
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -770,13 +770,13 @@ export default class DataProcessing extends Component {
                   >
                     {dataProcessingFlag ? (
                       <div>
-                        <Progress percent={50} status="active" />
+                        {/* <Progress percent={50} status="active" />
                         <p style={{ textAlign: 'left' }}>
                           Processed：<span>1234</span> records
                         </p>
                         <p style={{ textAlign: 'left' }}>
                           Pending to process：<span>1234</span> records
-                        </p>
+                        </p> */}
                       </div>
                     ) : (
                       <span>There are still 10 outstanding alerts. Do you want to bypass all?</span>
@@ -888,8 +888,13 @@ export default class DataProcessing extends Component {
                     <div>
                       <Progress
                         percent={processingBar}
-                        successPercent={processingBar}
+                        // successPercent={processingBar}
                         // strokeWidth={150}
+                        strokeColor={{
+                          from: '#fff',
+                          to: '#0d87d4',
+                          direction: `${processingBar}%`,
+                        }}
                         style={{ width: '300px' }}
                       />
                       {/* <p style={{ textAlign: 'left' }}>
