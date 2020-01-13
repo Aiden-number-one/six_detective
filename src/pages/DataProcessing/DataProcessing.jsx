@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 15:35:33
+ * @LastEditTime : 2020-01-13 15:42:44
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -139,16 +139,16 @@ export default class DataProcessing extends Component {
           ),
         },
         {
-          title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
-          dataIndex: 'alertOwner',
-          key: 'alertOwner',
+          title: formatMessage({ id: 'systemManagement.dataProcessing.alertId' }),
+          dataIndex: 'alertId',
+          key: 'alertId',
+          width: '25%',
           ellipsis: true,
         },
         {
-          title: formatMessage({ id: 'systemManagement.dataProcessing.submitterCode' }),
-          dataIndex: 'submitterCode',
-          key: 'submitterCode',
-          width: '25%',
+          title: formatMessage({ id: 'systemManagement.dataProcessing.alertOwner' }),
+          dataIndex: 'alertOwner',
+          key: 'alertOwner',
           ellipsis: true,
         },
         {
