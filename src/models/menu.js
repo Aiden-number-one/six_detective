@@ -2,7 +2,7 @@
  * @Description: menu modal
  * @Author: mus
  * @Date: 2019-09-19 17:03:33
- * @LastEditTime : 2020-01-06 20:06:14
+ * @LastEditTime : 2020-01-13 09:55:28
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -24,7 +24,9 @@ export default {
     *getMenuData({ payload, callback }, { call, put }) {
       const response = yield call(getMenu, { param: payload, version: 'v2.0' });
       const items = response.bcjson.items || [];
-      const menuData = geneMenuData(items);
+      let menuData = geneMenuData(items);
+      menuData = menuData.filter(element => !element.menuid.includes('btn'));
+      console.log('menuData=====', menuData);
       yield put({
         type: 'save',
         payload: menuData,
@@ -45,6 +47,7 @@ export default {
       console.log('authBtn====', authBtn);
       setAuthority(authBtn);
       newItems[0].menu = newMenu;
+      console.log('geneMenuData(newItems)===', geneMenuData(newItems));
       callback(geneMenuData(newItems));
     },
     *getTaskCount({ payload }, { call, put }) {
