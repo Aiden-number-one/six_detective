@@ -2,7 +2,7 @@
  * @Description: all alert data
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-11 15:07:07
+ * @LastEditTime : 2020-01-13 18:49:46
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -27,13 +27,14 @@ export default {
 
   effects: {
     // 获取全部alert总数
-    *getAllAlertCount({ payload }, { call, put }) {
+    *getAllAlertCount({ payload, callback }, { call, put }) {
       const response = yield call(getAlertCount, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'saveAllAlertCount',
           payload: response.bcjson.items[0].count,
         });
+        if (callback) callback();
       }
     },
     // 获取全部未认领总数
@@ -47,23 +48,25 @@ export default {
       }
     },
     // 获取全部已认领总数
-    *getAllClaimAlertCount({ payload }, { call, put }) {
+    *getAllClaimAlertCount({ payload, callback }, { call, put }) {
       const response = yield call(getClaimAlertCount, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'saveAllClaimAlertCount',
           payload: response.bcjson.items[0].count,
         });
+        if (callback) callback();
       }
     },
     // 获取全部处理中总数
-    *getAllProcessingAlertCount({ payload }, { call, put }) {
+    *getAllProcessingAlertCount({ payload, callback }, { call, put }) {
       const response = yield call(getAllProcessingAlertCount, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'saveAllProcessingAlertCount',
           payload: response.bcjson.items[0].count,
         });
+        if (callback) callback();
       }
     },
     // 获取全部的alert的数据

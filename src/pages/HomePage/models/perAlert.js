@@ -2,7 +2,7 @@
  * @Description: all alert data
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-11 18:29:58
+ * @LastEditTime : 2020-01-13 18:18:09
  * @LastEditors  : lan
  */
 import Service from '@/utils/Service';
@@ -38,23 +38,25 @@ export default {
       }
     },
     // 获取个人已认领总数
-    *getPerClaimAlertCount({ payload }, { call, put }) {
+    *getPerClaimAlertCount({ payload, callback }, { call, put }) {
       const response = yield call(getAlertCount, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'savePerClaimAlertCount',
           payload: response.bcjson.items[0].count,
         });
+        if (callback) callback();
       }
     },
     // 获取个人处理中总数
-    *getPerProcessingAlertCount({ payload }, { call, put }) {
+    *getPerProcessingAlertCount({ payload, callback }, { call, put }) {
       const response = yield call(getPerProcessingAlertCount, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'savePerProcessingAlertCount',
           payload: response.bcjson.items[0].count,
         });
+        if (callback) callback();
       }
     },
     // 获取个人的已关闭的alert的数据
