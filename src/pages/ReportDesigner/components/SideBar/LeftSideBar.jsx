@@ -193,7 +193,12 @@ export default class LeftSideBar extends PureComponent {
               <DropSelect
                 {...dropSelectProps}
                 addon={() => (
-                  <div className={styles.addon}>
+                  <div
+                    className={styles.addon}
+                    onClick={() => {
+                      window.open('/report/report-designer/dataset-management');
+                    }}
+                  >
                     <Icon type="form" />
                   </div>
                 )}

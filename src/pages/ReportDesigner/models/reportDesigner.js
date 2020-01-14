@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-14 11:12:38
+ * @LastEditTime : 2020-01-14 14:47:21
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -33,8 +33,16 @@ export default {
     cellPosition: 'A1', // 当前的单元格
     showFmlModal: false, // 是否显示处理公式的模态框
     paging: true, // 是否分页
+    description: '', // 报表描述
   },
   reducers: {
+    // 修改报表描述
+    changeDescription(state, action) {
+      return {
+        ...state,
+        description: action.payload,
+      };
+    },
     // 修改分页属性
     changePaging(state, action) {
       return {
@@ -219,6 +227,7 @@ export default {
           spreadsheetOtherProps, // 单元格的一些问题相关 例如：数据集相关、公式相关
           customSearchData,
           paging,
+          description: payload.description || '',
         },
       };
       const response = yield call(setReportTemplateContent, {
@@ -241,6 +250,11 @@ export default {
         yield put({
           type: 'setFolderId',
           payload: payload.folderId,
+        });
+        // 处理des
+        yield put({
+          type: 'changeDescription',
+          payload: payload.description,
         });
         window.history.pushState(
           null,
@@ -303,6 +317,11 @@ export default {
           yield put({
             type: 'changePaging',
             payload: !!reportTemplateContent.templateArea.paging,
+          });
+          // 处理des
+          yield put({
+            type: 'changeDescription',
+            payload: reportTemplateContent.templateArea.description || '',
           });
           // 处理私有数据集
           yield put({
