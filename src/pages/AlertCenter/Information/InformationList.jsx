@@ -56,6 +56,9 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
       payload: {
         page,
         pageSize,
+        conditions,
+        currentColumn: curTableColumn,
+        sort: curSortColumn === curTableColumn ? curSort : '',
       },
     });
   }
@@ -144,7 +147,6 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             title={
               <ColumnTitle
                 curColumn="informationNo"
-                tableName="slop_biz.v_info"
                 conditions={conditions}
                 sort={curSortColumn === 'informationNo' ? curSort : ''}
                 onSort={handleSort}
