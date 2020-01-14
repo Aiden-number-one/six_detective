@@ -901,7 +901,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (allApprovalData[0]) {
+    if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
         Number((allApprovalData[0].allClaimedNum / allApprovalData[0].allTotalNum).toFixed(2)) *
         100;
@@ -965,7 +965,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (allApprovalData[0]) {
+    if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
         Number((allApprovalData[0].allProcessingNum / allApprovalData[0].allTotalNum).toFixed(2)) *
         100;
@@ -1029,7 +1029,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (perApprovalData[0]) {
+    if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
         Number((perApprovalData[0].myClaimedNum / perApprovalData[0].allTotalNum).toFixed(2)) * 100;
     }
@@ -1092,7 +1092,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (perApprovalData[0]) {
+    if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
         Number((perApprovalData[0].myProcessingNum / perApprovalData[0].allTotalNum).toFixed(2)) *
         100;
