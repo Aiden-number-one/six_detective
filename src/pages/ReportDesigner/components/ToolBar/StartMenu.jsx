@@ -1007,7 +1007,7 @@ class ToolBar extends Component {
                   'btn',
                   'btn2Report',
                   'mr6',
-                  this.props.formatPainter && 'active',
+                  // this.props.formatPainter && 'active',
                 )}
                 onClick={() => this.displayHandlerModal('showHylModal', 'triggerHylModal')}
               >
@@ -1047,7 +1047,7 @@ class ToolBar extends Component {
                   'btn',
                   'btn2Report',
                   'mr6',
-                  this.props.formatPainter && 'active',
+                  // this.props.formatPainter && 'active',
                 )}
                 onClick={() => this.displayHandlerModal('showFmlModal', 'triggerFmlModal')}
               >
