@@ -57,6 +57,9 @@ export default class ParamSetting extends PureComponent {
                   >
                     <Option value="STRING">STRING</Option>
                     <Option value="NUMBER">NUMBER</Option>
+                    <Option value="DATE(YYYYMMDD)">DATE(YYYYMMDD)</Option>
+                    <Option value="DATE(YYYYMM)">DATE(YYYYMM)</Option>
+                    <Option value="DATE(YYYY)">DATE(YYYY)</Option>
                   </Select>
                 </Col>
               </Row>
