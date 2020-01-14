@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-14 15:03:17
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-14 15:39:20
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -300,6 +300,8 @@ export default class DatasetManagement extends PureComponent {
         title: 'Name',
         dataIndex: 'reportName',
         key: 'reportName',
+        width: '25%',
+        ellipsis: true,
       },
       {
         title: 'Created By',
@@ -316,12 +318,14 @@ export default class DatasetManagement extends PureComponent {
         dataIndex: 'updateDatetime',
         key: 'updateDatetime',
         align: 'center',
+        width: '25%',
         render: (res, obj) => <span>{obj.updateDatetime && timeFormat(obj.updateDatetime)}</span>,
       },
       {
         title: 'Operation',
         key: 'Operation',
         align: 'center',
+        width: 130,
         render: (text, record) => (
           <span className={styles.operation}>
             <a
@@ -330,7 +334,7 @@ export default class DatasetManagement extends PureComponent {
                 window.open(`/report-designer?reportId=${record.reportId}`);
               }}
             >
-              <IconFont type="icon-edit" className={styles['btn-icon']} />
+              <IconFont type="icon-edit" className="operation-icon" />
             </a>
             <a
               href="#"
@@ -343,7 +347,7 @@ export default class DatasetManagement extends PureComponent {
                 );
               }}
             >
-              <IconFont type="icon-prew" className={styles['btn-icon']} />
+              <IconFont type="icon-prew" className="operation-icon" />
             </a>
             <a
               href="#"
@@ -352,7 +356,7 @@ export default class DatasetManagement extends PureComponent {
                 this.record = record;
               }}
             >
-              <IconFont type="icon-move" className={styles['btn-icon']} />
+              <IconFont type="icon-move" className="operation-icon" />
             </a>
             <a
               href="#"
@@ -361,7 +365,7 @@ export default class DatasetManagement extends PureComponent {
                 this.record = record;
               }}
             >
-              <IconFont type="icon-delete" className={styles['btn-icon']} />
+              <IconFont type="icon-delete" className="operation-icon" />
             </a>
           </span>
         ),

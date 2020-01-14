@@ -1166,7 +1166,7 @@ define(function (require, exports, module) {
                 });
             } else {
                 if (choose.length === 0) {
-                    $("#J_variable_modal .variable-r .list-group").append("<li class=\"list-group-item\" data-variablename=\"" + variableName + "\"> \n                        <span>" + variableName + "</span> \n                        <a class=\"v-close\" title=\"\u5220\u9664\"> <i class=\"fa fa-close\"></i> </a> \n                    </li>");
+                    $("#J_variable_modal .variable-r .list-group").append("<li class=\"list-group-item\" data-variablename=\"" + variableName + "\"> \n                        <span>" + variableName + "</span> \n                        <a class=\"v-close\" title=\"DELETE\"> <i class=\"fa fa-close\"></i> </a> \n                    </li>");
                 } else {
                     // 判断是否存在
                     var includes = false;
@@ -1177,7 +1177,7 @@ define(function (require, exports, module) {
                         }
                     });
                     if (!includes) {
-                        $("#J_variable_modal .variable-r .list-group").append("<li class=\"list-group-item\" data-variablename=\"" + variableName + "\"> \n                            <span>" + variableName + "</span> \n                            <a class=\"v-close\" title=\"\u5220\u9664\"> <i class=\"fa fa-close\"></i> </a> \n                        </li>");
+                        $("#J_variable_modal .variable-r .list-group").append("<li class=\"list-group-item\" data-variablename=\"" + variableName + "\"> \n                            <span>" + variableName + "</span> \n                            <a class=\"v-close\" title=\"DELETE\"> <i class=\"fa fa-close\"></i> </a> \n                        </li>");
                     }
                 }
             }
@@ -1247,6 +1247,7 @@ define(function (require, exports, module) {
                 });
                 jQuery.uniform.update();
             });
+            $("#J_variable_table .checked").removeClass('checked');
         };
     });
 });

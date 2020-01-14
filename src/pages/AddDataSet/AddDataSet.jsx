@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-14 13:49:45
+ * @LastEditTime : 2020-01-14 18:07:45
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -152,6 +152,12 @@ class AddDataSet extends PureComponent {
     dispatch({
       type: 'sqlDataSource/clearAll',
     });
+    // 保存后跳转页面初始化
+    this.pageNumber = 1;
+    this.isSaveOther = false;
+    this.connection_id = '';
+    this.connection_name = '';
+    this.datasetId = '';
   }
 
   // 获取参数设置
@@ -406,12 +412,6 @@ class AddDataSet extends PureComponent {
         });
       });
     }
-    // 保存后跳转页面初始化
-    this.pageNumber = 1;
-    this.isSaveOther = false;
-    this.connection_id = '';
-    this.connection_name = '';
-    this.datasetId = '';
   };
 
   // 表格分页

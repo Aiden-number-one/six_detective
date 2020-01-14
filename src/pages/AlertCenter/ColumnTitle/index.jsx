@@ -6,7 +6,7 @@ import IconFont from '@/components/IconFont';
 import { FilterHeader, FilterType, FilterSelect, FilterCheckbox } from './FilterContent';
 import styles from './index.less';
 
-export { useColumnFilter } from './hooks';
+export { useColumnFilter, actionType } from './hooks';
 
 function ColumnTitle({
   dispatch,
@@ -14,7 +14,7 @@ function ColumnTitle({
   isNum,
   loading,
   curColumn,
-  tableName = 'slop_biz.v_alert_center',
+  tableName = 'SLOP_BIZ.V_ALERT_CENTER',
   conditions,
   sort,
   onSort,
