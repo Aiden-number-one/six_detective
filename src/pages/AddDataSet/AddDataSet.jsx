@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-14 13:21:08
+ * @LastEditTime : 2020-01-14 13:49:45
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -345,12 +345,14 @@ class AddDataSet extends PureComponent {
     params.commandText = this.state.sql;
     params.previewNum = 20;
     dispatch({
-      type: 'sqlDataSource/getMetadataTablePerform',
-      payload: params,
-    });
-    dispatch({
       type: 'sqlDataSource/getColumn',
       payload: params,
+      callback: () => {
+        dispatch({
+          type: 'sqlDataSource/getMetadataTablePerform',
+          payload: params,
+        });
+      },
     });
   };
 
