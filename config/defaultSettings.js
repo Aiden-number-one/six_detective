@@ -2,8 +2,8 @@
  * @Description: Theme
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2019-12-30 13:59:28
- * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-14 15:08:15
+ * @LastEditors  : lan
  */
 export default {
   navTheme: 'dark',
@@ -19,7 +19,7 @@ export default {
   successColor: '#24803D',
   warningColor: '#FFB81C',
   errorColor: '#F4374C',
-  boxShadowBase: 'none',
+  // boxShadowBase: 'none',
   layout: 'sidemenu',
   contentWidth: 'Fluid',
   fixedHeader: false,

@@ -17,6 +17,7 @@ const ButtonGroup = Button.Group;
 
 @connect(({ reportDesigner }) => ({
   showFmlModal: reportDesigner.showFmlModal,
+  showHylModal: reportDesigner.showHylModal,
   cellPosition: reportDesigner.cellPosition,
   reportId: reportDesigner.reportId,
   paging: reportDesigner.paging,
@@ -333,15 +334,6 @@ class ToolBar extends Component {
     );
   };
 
-  // 显示处理公式的模态框
-  showFormularModal = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'reportDesigner/triggerFmlModal',
-      payload: { showModalBool: true },
-    });
-  };
-
   // 小数位递增/递减
   inOrDecreaseDecimal = action => {
     const { cellPosition, setCellType } = this.props;
@@ -391,6 +383,15 @@ class ToolBar extends Component {
     } else if (info.file.status === 'error') {
       message.infp(`${info.file.name} file upload failed.`);
     }
+  };
+
+  // 显示超链接|公式处理面板
+  displayHandlerModal = (type, snappet) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: `reportDesigner/${snappet}`,
+      payload: { [type]: true },
+    });
   };
 
   render() {
@@ -1008,6 +1009,7 @@ class ToolBar extends Component {
                   'mr6',
                   this.props.formatPainter && 'active',
                 )}
+                onClick={() => this.displayHandlerModal('showHylModal', 'triggerHylModal')}
               >
                 <div className={styles.topBottom}>
                   <IconFont type="iconlianjie" />
@@ -1047,7 +1049,7 @@ class ToolBar extends Component {
                   'mr6',
                   this.props.formatPainter && 'active',
                 )}
-                onClick={this.showFormularModal}
+                onClick={() => this.displayHandlerModal('showFmlModal', 'triggerFmlModal')}
               >
                 <div className={styles.topBottom}>
                   <IconFont type="icon_function" />

@@ -3,8 +3,8 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
- * @LastEditors  : mus
- * @LastEditTime : 2020-01-14 14:47:21
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-14 15:16:45
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -32,6 +32,8 @@ export default {
     spreadsheetOtherProps: [], // spreadSheet的其他属性
     cellPosition: 'A1', // 当前的单元格
     showFmlModal: false, // 是否显示处理公式的模态框
+    showHylModal: false, // 是否显示处理超链接的模态框
+    rightSideCollapse: false, // 右边sideBar展开收起
     paging: true, // 是否分页
     description: '', // 报表描述
   },
@@ -175,12 +177,30 @@ export default {
       };
     },
 
-    // 显示或隐藏处理公式的模态框
-    triggerFmlModal(state, action) {
-      const { showModalBool } = action.payload;
+    // 展开或收起右侧菜单面板
+    triggerRightSidebar(state, action) {
+      const { showRightSidebar } = action.payload;
       return {
         ...state,
-        showFmlModal: showModalBool,
+        rightSideCollapse: showRightSidebar,
+      };
+    },
+
+    // 显示或隐藏处理公式的模态框
+    triggerFmlModal(state, action) {
+      const { showFmlModal } = action.payload;
+      return {
+        ...state,
+        showFmlModal,
+      };
+    },
+
+    // 显示或隐藏处理超链接的模态框
+    triggerHylModal(state, action) {
+      const { showHylModal } = action.payload;
+      return {
+        ...state,
+        showHylModal,
       };
     },
   },

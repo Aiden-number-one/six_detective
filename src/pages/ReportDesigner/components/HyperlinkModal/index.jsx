@@ -3,7 +3,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-13 20:28:07
  * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-13 22:43:52
+ * @LastEditTime : 2020-01-14 15:05:50
  * @Description: 超链接的模态框
  */
 
@@ -11,10 +11,12 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 
 import { Modal, Input } from 'antd';
+import { setCellTypeAndValue } from '../../utils';
 import less from './index.less';
 
 @connect(({ reportDesigner }) => ({
   showHylModal: reportDesigner.showHylModal,
+  cellPosition: reportDesigner.cellPosition,
 }))
 class HyperlinkModal extends PureComponent {
   constructor(props) {
@@ -49,11 +51,20 @@ class HyperlinkModal extends PureComponent {
   // 超链接模态框：确认
   hylConfirm = () => {
     console.log('hylConfirm');
-    const { hylContentValue } = this.state;
+    const { cellPosition, setCellStyle } = this.props;
+    const { hylContentValue, hylLinkValue } = this.state;
     if (hylContentValue.trim() === '') {
       this.setState({ hylEmptyVal: true });
       return;
     }
+    this.setState({ hylEmptyVal: false });
+    setCellTypeAndValue({
+      type: 'hyperlink',
+      value: `${hylContentValue},${hylLinkValue}`,
+      cellPosition,
+    });
+    setCellStyle('underline', true); // 添加样式
+    setCellStyle('color', 'rgb(26,26,255)');
     this.showOrHideHylModal(false);
   };
 
