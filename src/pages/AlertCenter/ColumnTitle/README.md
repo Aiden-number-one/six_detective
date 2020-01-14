@@ -8,12 +8,12 @@
 
 1. import component and hooks
 
-`import ColumnTitle, { useColumnFilter } from './ColumnTitle';`
+`import ColumnTitle, { actionType,useColumnFilter } from './ColumnTitle';`
 
 2. use component
 
 ```js
-const { handlePageChange, getTitleProps } = useColumnFilter({
+const { fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
   dispatch,
   action: string,
   page: number|string,
@@ -35,6 +35,33 @@ const { handlePageChange, getTitleProps } = useColumnFilter({
 
 ### API
 
+- fetchTableList
+
+```typescript
+type Params = {
+  page: string | number;
+  pageSize: string | number;
+  conditions: Array<{ column: string; value: string; condition: Condition }>;
+  currentColumn: string;
+  sort: '' | '0' | '1';
+  isReset: boolean;
+};
+
+type fetchTableList = {
+  (params?: Params, tableName?: string): void;
+};
+```
+
+- handlePageChange
+
+```typescript
+type handlePageChange = {
+  (page: string, pageSize: string): void;
+};
+```
+
+- getTitleProps
+
 ```typescript
 enum Condition = {
   'EQUAL'=1,
@@ -54,8 +81,7 @@ type Props = {
   onCommit: Function,
   onSort: Function,
 }
-type Fn = {
- column:string: Props;
+type getTitleProps = {
+ column?:string: Props;
 }
-let getTitleProps:Fn
 ```
