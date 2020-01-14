@@ -102,7 +102,7 @@ export function FilterSelect({ filterList, curColumn, conditions, onChange }) {
         }
       >
         {filterList.map(item => (
-          <Option value={item} key={item}>
+          <Option value={decodeURIComponent(item)} key={item}>
             {item}
           </Option>
         ))}
@@ -174,7 +174,7 @@ export function FilterCheckbox({ loading, filterList, onCheckedList, curColumn, 
             </Row>
             <Checkbox.Group
               className={styles['scroll-container']}
-              value={checkedList}
+              value={checkedList.map(item => decodeURIComponent(item))}
               onChange={handleChange}
             >
               {searchList.map(item => (

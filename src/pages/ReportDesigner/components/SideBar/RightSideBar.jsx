@@ -30,6 +30,7 @@ const formLayout = {
   dataSourceList: formArea.dataSourceList,
   tableList: formArea.tableList,
   tableColumnList: formArea.tableColumnList,
+  rightSideCollapse: reportDesigner.rightSideCollapse,
   paging: reportDesigner.paging,
 }))
 @Form.create({
@@ -265,7 +266,6 @@ export default class RightSideBar extends PureComponent {
     const {
       cellPosition, // 单元格位置
       rightSideCollapse, // 右边的面板
-      changeRightSideBar, // 隐藏或显示右边的面板
       dataSetPrivateList, // 私有数据集列表
       dispatch,
       spreadsheetOtherProps, // spreadSheet的otherProps的集合（包含：数据集的一些属性等等）
@@ -277,6 +277,7 @@ export default class RightSideBar extends PureComponent {
       tableList, // 当前选择的数据源列表下的所有table
       tableColumnList, // 获取当前选择选择table下的所有字段
       paging, // 是否分页
+      changeRightSideBar,
     } = this.props;
     this.resetFields();
     const { siderBarType } = this.state;
@@ -321,9 +322,7 @@ export default class RightSideBar extends PureComponent {
           )}
           <IconFont
             type={rightSideCollapse ? 'iconright' : 'iconleft'}
-            onClick={() => {
-              changeRightSideBar(!rightSideCollapse);
-            }}
+            onClick={() => changeRightSideBar(!rightSideCollapse)}
           />
         </div>
         {rightSideCollapse && (

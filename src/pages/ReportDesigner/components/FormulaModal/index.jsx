@@ -3,7 +3,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-13 20:54:47
  * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-13 22:44:16
+ * @LastEditTime : 2020-01-14 10:40:31
  * @Description: 公式输入的模态框
  */
 
@@ -44,8 +44,8 @@ class HyperlinkModal extends PureComponent {
 
   // 把公式的初始值放到到 Input
   componentDidUpdate(prevProps) {
-    const { initVal: prevVal } = prevProps;
-    const { initVal: currVal } = this.props;
+    const { initFmlVal: prevVal } = prevProps;
+    const { initFmlVal: currVal } = this.props;
     // eslint-disable-next-line react/no-did-update-set-state
     if (prevVal !== currVal) this.setState({ formularValue: currVal });
   }

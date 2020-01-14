@@ -87,10 +87,9 @@ export default props => {
             {/* 公式 */}
             {otherProps.elementType === 'formula' && (
               <Form.Item label=" " {...formLayout}>
-                {getFieldDecorator('formula', {})(<Input />)}
+                {/* {getFieldDecorator('formula', {})(<Input />)} */}
               </Form.Item>
             )}
-
             {/* 插入数据列 */}
             {/* 数据集 */}
             {otherProps.elementType === 'column' && (

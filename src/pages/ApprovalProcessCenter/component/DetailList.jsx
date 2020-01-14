@@ -515,7 +515,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
                 {getFieldDecorator('remark', {
                   rules: [{ required: !!isShowForm, message: 'Please input Remark!' }],
                   initialValue: detailData.remark,
-                })(isShowForm ? <TextArea /> : <Input disabled />)}
+                })(isShowForm ? <TextArea autoSize={{ minRows: 2 }} /> : <Input disabled />)}
               </Form.Item>
             </div>
             <div className={styles.oldValueBox}>{oldValueList.remark}</div>
@@ -851,7 +851,7 @@ function NewAccound({
                 {getFieldDecorator('remark', {
                   rules: [{ required: !!isShowForm, message: 'remark is missing' }],
                   initialValue: detailData.remark,
-                })(<TextArea disabled={!isShowForm} autoSize={{ minRows: 1 }} />)}
+                })(<TextArea disabled={!isShowForm} autoSize={{ minRows: 2 }} />)}
               </Form.Item>
             </div>
           </div>
@@ -936,7 +936,7 @@ function DetailForm({ form, task, detailItem, saveConfirmToCategory, saveConfirm
   const oldValueList = task ? (detailItem && detailItem[0] && detailItem[0].oldValue) || {} : {};
   const alertType = detailData && detailData.alertType;
 
-  const isShowForm = detailData && detailData.isStarter;
+  // const isShowForm = detailData && detailData.isStarter;
   const isEditing = detailData && detailData.isEditing;
   // const isEditing = true;
   // console.log('alertType---->', alertType, detailList, isShowForm);

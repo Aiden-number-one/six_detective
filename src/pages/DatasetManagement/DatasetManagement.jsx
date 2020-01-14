@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-13 19:57:26
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-14 16:34:26
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -344,6 +344,8 @@ export default class DatasetManagement extends PureComponent {
         title: 'DataSet Name',
         dataIndex: 'datasetName',
         key: 'datasetName',
+        width: '15%',
+        ellipsis: true,
       },
       {
         title: 'Type',
@@ -354,6 +356,8 @@ export default class DatasetManagement extends PureComponent {
         title: 'Data Source',
         dataIndex: 'datasourceName',
         key: 'datasourceName',
+        width: '15%',
+        ellipsis: true,
       },
       {
         title: 'Creat by',
@@ -369,6 +373,7 @@ export default class DatasetManagement extends PureComponent {
         title: 'Modified at',
         dataIndex: 'updateDatetime',
         key: 'updateDatetime',
+        width: 130,
         render: text => (
           <span>{text && moment(formatTimeString(text)).format(timestampFormat)}</span>
         ),
@@ -376,8 +381,9 @@ export default class DatasetManagement extends PureComponent {
       {
         title: 'Operation',
         key: 'Operation',
+        width: 130,
         render: (text, record) => (
-          <span className={styles.operation}>
+          <span>
             <a
               onClick={() => {
                 router.push({
@@ -392,7 +398,7 @@ export default class DatasetManagement extends PureComponent {
               }}
               title="EDIT"
             >
-              <IconFont type="icon-edit" className={styles['btn-icon']} />
+              <IconFont type="icon-edit" className="operation-icon" />
             </a>
             <a
               onClick={() => {
@@ -405,7 +411,7 @@ export default class DatasetManagement extends PureComponent {
               }}
               title="PREVIEW"
             >
-              <IconFont type="icon-prew" className={styles['btn-icon']} />
+              <IconFont type="icon-prew" className="operation-icon" />
             </a>
             <a
               onClick={() => {
@@ -414,7 +420,7 @@ export default class DatasetManagement extends PureComponent {
               }}
               title="MOVE TO"
             >
-              <IconFont type="icon-move" className={styles['btn-icon']} />
+              <IconFont type="icon-move" className="operation-icon" />
             </a>
             <a
               onClick={() => {
@@ -423,7 +429,7 @@ export default class DatasetManagement extends PureComponent {
               }}
               title="DELETE"
             >
-              <IconFont type="icon-delete" className={styles['btn-icon']} />
+              <IconFont type="icon-delete" className="operation-icon" />
             </a>
           </span>
         ),
@@ -493,7 +499,7 @@ export default class DatasetManagement extends PureComponent {
               <div className={styles.content}>
                 <div className={styles.tableTop}>
                   <Dropdown overlay={menu}>
-                    <Button className="btn-usual" type="primary">
+                    <Button className="btn-usual" type="primary" style={{ width: 160 }}>
                       + New DataSet
                     </Button>
                   </Dropdown>

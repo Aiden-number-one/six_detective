@@ -34,8 +34,8 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   const { handlePageChange, getTitleProps } = useColumnFilter({
     dispatch,
     action: 'alertCenter/fetch',
-    alertPage,
-    alertPageSize,
+    page: alertPage,
+    pageSize: alertPageSize,
     reset: Object.keys(location.query).length > 0 ? handleCloseMsg : null,
   });
 
@@ -45,10 +45,24 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   }, []);
 
   useEffect(() => {
-    const { alertIds } = location.query;
+    const { alertId, owner, status, tradeDate } = location.query;
     let params = [];
-    if (alertIds) {
-      params = [{ column: 'alertNo', value: alertIds, condition: '7' }];
+    if (alertId) {
+      params = [{ column: 'alertNo', value: alertId, condition: '7' }];
+    }
+    if (owner) {
+      params = [...params, { column: 'userName', value: owner, condition: '7' }];
+    }
+    if (status) {
+      params = [...params, { column: 'alertStatusDesc', value: status, condition: '7' }];
+    }
+    if (tradeDate) {
+      const [start, end] = tradeDate.split(',');
+      params = [
+        ...params,
+        { column: 'tradeDate', value: start, condition: '4' },
+        { column: 'tradeDate', value: end, condition: '6' },
+      ];
     }
     dispatch({
       type: 'alertCenter/fetch',

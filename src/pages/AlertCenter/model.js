@@ -4,29 +4,29 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-13 17:36:40
+ * @LastEditTime : 2020-01-14 17:34:52
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
 import { defaultPage, defaultPageSize } from '@/pages/DataImportLog/constants';
 // just for unit test
 // `fetch` high order function return anonymous func
-export async function getAlerts({
+export async function getTableList({
+  sort,
+  dataTable,
+  conditions,
+  currentColumn,
   page = defaultPage,
   pageSize = defaultPageSize,
-  sort,
-  currentColumn,
-  conditions,
-  dataTable,
 } = {}) {
   return request('get_table_page_list', {
     data: {
       sort,
+      dataTable,
       currentColumn,
       conditions: conditions && JSON.stringify(conditions),
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
-      dataTable,
     },
   });
 }
@@ -104,6 +104,7 @@ export default {
     alerts: [],
     alertPage: defaultPage,
     alertPageSize: defaultPageSize,
+    alertParams: {}, // fetch alerts params
     alertTotal: 0,
     alertItems: [],
     comments: [],
@@ -119,13 +120,16 @@ export default {
         alertPage = defaultPage,
         alertPageSize = defaultPageSize,
         alertTotal,
+        alertParams,
       } = payload;
+
       return {
         ...state,
         alerts,
         alertPage,
         alertPageSize,
         alertTotal,
+        alertParams,
       };
     },
     saveInfos(state, { payload }) {
@@ -178,9 +182,11 @@ export default {
   },
   effects: {
     *fetch({ payload = {} }, { call, put }) {
-      const { page, pageSize } = payload;
-      const { items, totalCount, err } = yield call(getAlerts, {
-        ...payload,
+      const { page, pageSize, ...rest } = payload;
+      const { items, totalCount, err } = yield call(getTableList, {
+        ...rest,
+        page,
+        pageSize,
         dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
       });
 
@@ -195,6 +201,7 @@ export default {
           alertPage: page,
           alertPageSize: pageSize,
           alertTotal: totalCount,
+          alertParams: rest,
         },
       });
     },
@@ -207,7 +214,7 @@ export default {
     },
     *fetchInfos({ payload = {} }, { call, put }) {
       const { page, pageSize } = payload;
-      const { items, totalCount, err } = yield call(getAlerts, {
+      const { items, totalCount, err } = yield call(getTableList, {
         ...payload,
         dataTable: 'SLOP_BIZ.V_INFO',
       });
@@ -355,17 +362,18 @@ export default {
         throw new Error(err);
       }
 
+      // has been claimed
       if (items && items.length > 0) {
         return items;
       }
       yield put({
-        type: 'fetch',
+        type: 'reloadAlerts',
       });
       message.success(msg);
       return '';
     },
     // claim many or check alert status
-    *claimMany({ payload }, { call, put }) {
+    *claimMany({ payload }, { put }) {
       return yield put({
         type: 'claim',
         payload,
@@ -373,7 +381,7 @@ export default {
     },
     // claim alert(s) which has been claimed
     *reClaim({ payload }, { call, put }) {
-      const { err, msg, items } = yield call(claimAlert, {
+      const { err, msg } = yield call(claimAlert, {
         alertIds: payload.alertIds,
         isCoverClaim: 1,
       });
@@ -381,7 +389,7 @@ export default {
         throw new Error(err);
       }
       yield put({
-        type: 'fetch',
+        type: 'reloadAlerts',
       });
       message.success(msg);
     },
@@ -391,7 +399,7 @@ export default {
         throw new Error(err);
       }
       yield put({
-        type: 'fetch',
+        type: 'reloadAlerts',
       });
     },
     *discontinue({ payload }, { call, put }) {
@@ -400,7 +408,7 @@ export default {
         throw new Error(err);
       }
       yield put({
-        type: 'fetch',
+        type: 'reloadAlerts',
       });
     },
     *fetchAttachments({ payload }, { call, put }) {
@@ -445,12 +453,25 @@ export default {
       }
       message.success(msg);
     },
-    *fetchTaskHistory({ payload }, { call, put }) {
+    *fetchTaskHistory({ payload }, { call }) {
       const { err, items = {} } = yield call(getTaskHistory, payload);
       if (err) {
         throw new Error(err);
       }
       return items;
+    },
+    *reloadAlerts(_, { put, select }) {
+      const page = yield select(({ alertCenter }) => alertCenter.alertPage);
+      const pageSize = yield select(({ alertCenter }) => alertCenter.alertPageSize);
+      const alertParams = yield select(({ alertCenter }) => alertCenter.alertParams);
+      yield put({
+        type: 'fetch',
+        payload: {
+          page,
+          pageSize,
+          ...alertParams,
+        },
+      });
     },
   },
 };

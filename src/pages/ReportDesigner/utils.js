@@ -3,8 +3,8 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
- * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 20:33:56
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-14 14:43:37
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -356,9 +356,20 @@ export function getCellStringByIndex(rowIndex, colIndex) {
  */
 export function setCellTypeAndValue({ type, value, cellPosition }) {
   const [rowIndex, colIndex] = getColIndexRowIndex(cellPosition);
+
+  // 设置超链接
+  let extra;
+  let text = value;
+  if (type === 'hyperlink') {
+    const [linkText, linkAddr] = value.split(',');
+    text = linkText;
+    extra = linkAddr;
+  }
+
   if (type !== undefined) {
     // eslint-disable-next-line no-underscore-dangle
     window.xsObj._setCellType({
+      extra,
       sheetName: 'sheet1',
       rc: cellPosition,
       cellType: type,
@@ -367,9 +378,9 @@ export function setCellTypeAndValue({ type, value, cellPosition }) {
   if (value !== undefined) {
     // eslint-disable-next-line no-underscore-dangle
     window.xsObj._setCellText({
+      text,
       ri: Number(rowIndex),
       ci: Number(colIndex),
-      text: value,
     });
   }
 }

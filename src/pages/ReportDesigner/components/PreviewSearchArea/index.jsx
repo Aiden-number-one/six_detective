@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 22:27:04
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 12:11:29
+ * @LastEditTime : 2020-01-14 15:45:19
  */
 import React, { PureComponent } from 'react';
 import { Form, Input, Select, DatePicker, Radio, Checkbox, Tooltip, Icon, InputNumber } from 'antd';
@@ -213,7 +213,7 @@ class PreviewSearchArea extends PureComponent {
                     {/* 若为自定义类型 */}
                     {sourceType === 'custom' &&
                       customList.map(optionData => (
-                        <Radio value={optionData.key}>{optionData.value}</Radio>
+                        <Radio value={optionData.value}>{optionData.value}</Radio>
                       ))}
                   </Radio.Group>,
                 )}
