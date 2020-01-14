@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 20:12:18
+ * @LastEditTime : 2020-01-14 20:27:38
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -533,9 +533,10 @@ export default class DataProcessing extends Component {
     const { marketData } = this.props;
     let markets = [];
     if (value === '0') {
-      marketData.forEach(element => markets.push(element.dictdataValue));
-      markets = markets.join(',');
+      // marketData.forEach(element => markets.push(element.dictdataValue));
+      // markets = markets.join(',');
       console.log('markets===', markets);
+      markets = 'ALL';
     } else {
       markets = value;
     }
