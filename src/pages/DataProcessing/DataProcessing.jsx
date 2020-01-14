@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 18:49:48
+ * @LastEditTime : 2020-01-14 19:40:07
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -1055,12 +1055,20 @@ export default class DataProcessing extends Component {
                   </Col>
                 )} */}
               </Row>
-              <Chart className={styles.chart} height={400} data={this.state.dv} forceFit>
+              <Chart
+                className={styles.chart}
+                padding={['auto', 'auto', 'auto', 20]}
+                height={400}
+                data={this.state.dv}
+                forceFit
+              >
                 <div>
-                  The last time of data processing is at {processedDate.t2} on {processedDate.t1}
+                  The last time of data processing is for HKEF at {processedDate.t2} on{' '}
+                  {processedDate.t1}
                 </div>
                 <div>
-                  The last time of data processing is at {processedDate.t2} on {processedDate.t1}
+                  The last time of data processing is for SEHK at {processedDate.t2} on{' '}
+                  {processedDate.t1}
                 </div>
                 <Axis name="月份" />
                 <Axis name="月均降雨量" line={{ stroke: '#d9d9d9' }} position="left" />
