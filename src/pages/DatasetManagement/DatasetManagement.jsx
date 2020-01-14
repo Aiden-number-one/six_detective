@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-11 16:39:20
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-13 19:57:26
+ * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -245,7 +245,7 @@ export default class DatasetManagement extends PureComponent {
     params.commandText = this.record.commandText;
     // 如果存在参数设置 做数据处理
     if (values) {
-      const datasetParams = JSON.parse(this.record.datasetParams);
+      const { datasetParams } = this.record;
       datasetParams.forEach(item => {
         Object.keys(values).forEach(i => {
           if (i === item.parameter_name) {
