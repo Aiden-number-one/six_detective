@@ -1,9 +1,8 @@
 import React, { PureComponent, useState } from 'react';
 import { connect } from 'dva';
-import { Layout, Form, Tree, Icon } from 'antd';
+import { Layout, Form, Tree, Checkbox } from 'antd';
 import classNames from 'classnames';
 import { FormattedMessage } from 'umi/locale';
-import _ from 'lodash';
 import uuidv1 from 'uuid/v1';
 import { getColIndexRowIndex, setCellTypeAndValue } from '../../utils';
 import IconFont from '@/components/IconFont';
@@ -14,6 +13,11 @@ import styles from './index.less';
 const { Sider } = Layout;
 const { TreeNode } = Tree;
 let resetControl = false;
+
+const formLayout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
 
 @connect(({ reportDesigner, formArea }) => ({
   cellPosition: reportDesigner.cellPosition,
@@ -26,6 +30,7 @@ let resetControl = false;
   dataSourceList: formArea.dataSourceList,
   tableList: formArea.tableList,
   tableColumnList: formArea.tableColumnList,
+  paging: reportDesigner.paging,
 }))
 @Form.create({
   onFieldsChange(props, changedFields, allFields) {
@@ -271,12 +276,14 @@ export default class RightSideBar extends PureComponent {
       dataSourceList, // 数据源列表
       tableList, // 当前选择的数据源列表下的所有table
       tableColumnList, // 获取当前选择选择table下的所有字段
+      paging, // 是否分页
     } = this.props;
     this.resetFields();
     const { siderBarType } = this.state;
     const formattedMessageMap = {
       cell: 'cellproperty',
       query: 'widgetcontrol',
+      global: 'global',
     };
     const [rowIndex, colIndex] = getColIndexRowIndex(cellPosition);
     // 单元格的props
@@ -321,13 +328,32 @@ export default class RightSideBar extends PureComponent {
         </div>
         {rightSideCollapse && (
           <>
-            <div className={styles.tree} style={{ marginBottom: 20 }}>
-              <Tree>{this.generateTree()}</Tree>
-            </div>
+            {siderBarType === 'query' && (
+              <div className={styles.tree} style={{ marginBottom: 20 }}>
+                <Tree>{this.generateTree()}</Tree>
+              </div>
+            )}
             <Layout>
               {siderBarType === 'cell' && <CellProperty {...formProps} {...cellProps} />}
               {siderBarType === 'query' && <WidgetControl {...formProps} {...widgetProps} />}
-              {siderBarType === 'global' && <CellProperty {...formProps} />}
+              {siderBarType === 'global' && (
+                <div className={classNames(styles.content, styles.global)}>
+                  <Form.Item
+                    label={<FormattedMessage id="report-designer.paging" />}
+                    {...formLayout}
+                  >
+                    <Checkbox
+                      checked={paging}
+                      onChange={e => {
+                        dispatch({
+                          type: 'reportDesigner/changePaging',
+                          payload: e.target.checked,
+                        });
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+              )}
               <Sider width={30} className={styles.sider}>
                 <IconFont
                   type="iconbiaoge2"
