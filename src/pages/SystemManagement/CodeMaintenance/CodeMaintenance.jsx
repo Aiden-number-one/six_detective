@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:15:22
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 11:19:23
+ * @LastEditTime : 2020-01-14 10:59:12
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -379,6 +379,7 @@ class CodeMaintenance extends Component {
             <div className={styles.content}>
               <Table
                 loading={loading['codeList/getCodeList']}
+                rowKey={row => row.codeId.toString()}
                 rowClassName={record => (codeId && record.codeId === codeId ? 'table-active' : '')}
                 dataSource={codeListData}
                 columns={this.state.codeColumns}
@@ -442,6 +443,7 @@ class CodeMaintenance extends Component {
               </div>
               <Table
                 loading={loading['codeList/getCodeItemList']}
+                rowKey={row => row.subitemId.toString()}
                 dataSource={codeItemListData}
                 pagination={false}
                 columns={this.state.columns}

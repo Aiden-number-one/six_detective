@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:19:25
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 12:18:56
+ * @LastEditTime : 2020-01-14 10:59:45
  */
 import React, { Component, Fragment } from 'react';
 import { Table, Form, Pagination, Drawer } from 'antd';
@@ -269,6 +269,7 @@ class SystemParams extends Component {
             <div className="conten-wraper">
               <Table
                 loading={loading['systemParams/getSystemParamsList']}
+                rowKey={row => row.paramId.toString()}
                 dataSource={getSystemParamsListData.items}
                 columns={this.state.columns}
                 pagination={false}
