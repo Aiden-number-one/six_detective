@@ -1235,7 +1235,7 @@ export default class HomePage extends PureComponent {
         .label('value', {
           textStyle: {
             fill: '#7F91A4',
-            fontSize: 12,
+            fontSize: 11,
           },
           offset: 2,
         })
