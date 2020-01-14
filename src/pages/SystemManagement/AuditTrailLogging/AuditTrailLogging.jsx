@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 12:07:59
+ * @LastEditTime : 2020-01-14 21:09:06
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -62,10 +62,10 @@ class AuditTrailLogging extends Component {
         label: formatMessage({ id: 'systemManagement.auditLog.effectiveDate' }),
         value: 'effectiveTime',
       },
-      // {
-      //   label: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
-      //   value: 'filedUpdated',
-      // },
+      {
+        label: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
+        value: 'filedUpdated',
+      },
       { label: formatMessage({ id: 'systemManagement.auditLog.updateType' }), value: 'updateType' },
       { label: formatMessage({ id: 'systemManagement.auditLog.logDate' }), value: 'logTime' },
       { label: formatMessage({ id: 'systemManagement.auditLog.updatedBy' }), value: 'updatedBy' },
@@ -100,10 +100,10 @@ class AuditTrailLogging extends Component {
         visible: true,
         className: 'columnsnone',
       },
-      // {
-      //   key: 'filedUpdated',
-      //   visible: false,
-      // },
+      {
+        key: 'filedUpdated',
+        visible: false,
+      },
       {
         key: 'updateType',
         visible: false,
@@ -177,13 +177,13 @@ class AuditTrailLogging extends Component {
         date: true,
         render: (res, obj) => <span>{obj.effectiveTime && timeFormat(obj.effectiveTime)}</span>,
       },
-      // {
-      //   index: 6,
-      //   title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
-      //   dataIndex: 'filedUpdated',
-      //   key: 'filedUpdated',
-      //   align: 'left',
-      // },
+      {
+        index: 6,
+        title: formatMessage({ id: 'systemManagement.auditLog.fieldUpdated' }),
+        dataIndex: 'filedUpdated',
+        key: 'filedUpdated',
+        align: 'left',
+      },
       {
         index: 6,
         title: formatMessage({ id: 'systemManagement.auditLog.updateType' }),
