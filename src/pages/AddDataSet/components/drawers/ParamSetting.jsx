@@ -88,7 +88,7 @@ export default class ParamSetting extends PureComponent {
               }}
               type="primary"
             >
-              Submit
+              Save
             </Button>
           </div>
         </ul>

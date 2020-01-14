@@ -6,26 +6,58 @@ import styles from './index.less';
 
 const InsertMenu = () => (
   <div className={classNames(styles.insertContent)}>
-    <WrapperDragTarget iconType="iconTextboxx" type="input" /> {/* 文字 */}
-    <WrapperDragTarget iconType="iconiconicon_numbersx" type="inputnumber" /> {/* 数字 */}
+    <WrapperDragTarget iconType="iconTextboxx" type="input" title="Input" /> {/* 文字 */}
+    <WrapperDragTarget
+      iconType="iconiconicon_numbersx"
+      type="inputnumber"
+      title="Input Number"
+    />{' '}
+    {/* 数字 */}
     <div className={styles.divider}></div>
-    <WrapperDragTarget iconType="iconicon_yyx" type="datepickeryyyy" /> {/* 年 */}
-    <WrapperDragTarget iconType="iconicon_yymmx" type="datepickeryyyymm" /> {/* 年月 */}
-    <WrapperDragTarget iconType="iconicon_calenderx" type="datepickeryyyymmdd" /> {/* 年月日 */}
+    <WrapperDragTarget
+      iconType="iconicon_yyx"
+      type="datepickeryyyy"
+      title="Date Picker(Year)"
+    />{' '}
+    {/* 年 */}
+    <WrapperDragTarget
+      iconType="iconicon_yymmx"
+      type="datepickeryyyymm"
+      title="Date Picker(Month)"
+    />{' '}
+    {/* 年月 */}
+    <WrapperDragTarget
+      iconType="iconicon_calenderx"
+      type="datepickeryyyymmdd"
+      title="Date Picker(Day)"
+    />{' '}
+    {/* 年月日 */}
     <div className={styles.divider}></div>
-    <WrapperDragTarget iconType="iconicon_xialadanxuanx" type="select" /> {/* 下拉单选 */}
-    <WrapperDragTarget iconType="iconicon_xialaduoxuanx" type="selectmultiple" /> {/* 下拉多选 */}
+    <WrapperDragTarget iconType="iconicon_xialadanxuanx" type="select" title="Select" />{' '}
+    {/* 下拉单选 */}
+    <WrapperDragTarget
+      iconType="iconicon_xialaduoxuanx"
+      type="selectmultiple"
+      title="Multiple Select"
+    />{' '}
+    {/* 下拉多选 */}
     <div className={styles.divider}></div>
-    <WrapperDragTarget iconType="iconicon_multiselectedx" type="radio" /> {/* Radio */}
-    <WrapperDragTarget iconType="iconicon_multiselectedkaobeix" type="checkbox" /> {/* CheckBox */}
+    <WrapperDragTarget iconType="iconicon_multiselectedx" type="radio" title="Radio" />{' '}
+    {/* Radio */}
+    <WrapperDragTarget
+      iconType="iconicon_multiselectedkaobeix"
+      type="checkbox"
+      title="Checkbox"
+    />{' '}
+    {/* CheckBox */}
   </div>
 );
 
 const Widget = props => {
-  const { iconType, connectDragSource } = props;
+  const { iconType, connectDragSource, title } = props;
   return connectDragSource(
     <div>
-      <IconFont type={iconType} />
+      <IconFont type={iconType} title={title} />
     </div>,
   );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { formatMessage } from 'umi/locale';
 import { Typography } from 'antd';
-import { downloadFile } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
 import styles from '@/pages/AlertCenter/index.less';
 
@@ -32,7 +31,7 @@ const getFileName = url => {
 export function AttachmentList({ attachments }) {
   return (
     <ul className={styles['down-attachment-list']}>
-      {attachments.map(({ url }) => (
+      {attachments.map(url => (
         <li key={url}>
           <Text ellipsis style={{ width: '85%' }} title={getFileName(url)}>
             <IconFont
@@ -50,21 +49,16 @@ export function AttachmentList({ attachments }) {
   );
 }
 
-export default function({ attachments }) {
-  function downloadAll(files) {
-    files.forEach(({ url }) => {
-      downloadFile(url);
-    });
-  }
+export default function({ attachments, onDownloadAll }) {
   return (
     <div className={styles['alert-attachments']}>
       <div className={styles.title}>
         <span>Attachment ({attachments.length})</span>
-        <span className={styles['download-all']} onClick={() => downloadAll(attachments)}>
+        <span className={styles['download-all']} onClick={onDownloadAll}>
           {formatMessage({ id: 'alert-center.download-all' })}
         </span>
       </div>
-      <AttachmentList attachments={attachments} />
+      <AttachmentList attachments={attachments.map(({ url }) => url)} />
     </div>
   );
 }

@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2020-01-11 19:40:39
+ * @LastEditTime : 2020-01-13 19:29:49
  * @LastEditors  : iron
  */
 import fetch from '@/utils/request.default';
@@ -15,28 +15,22 @@ const global = {
     filterItems: [],
   },
   effects: {
-    *fetchTableFilterItems({ payload }, { call, put }) {
-      const { err, items } = yield call(fetch('get_table_column_filter_list'), { ...payload });
+    *fetchTableFilterItems({ payload }, { call }) {
+      const { err, items } = yield call(fetch('get_table_column_filter_list'), payload);
       if (err) {
         throw new Error(err);
       }
       return items;
-      // yield put({
-      //   type: 'saveFilterItems',
-      //   payload: {
-      //     filterItems: items,
-      //   },
-      // });
+    },
+    *fetchZipAttachments({ payload }, { call }) {
+      const { err, items } = yield call(fetch('set_attachment_download_batch'), payload);
+      if (err) {
+        throw new Error(err);
+      }
+      return items;
     },
   },
   reducers: {
-    // saveFilterItems(state, { payload }) {
-    //   const { filterItems } = payload;
-    //   return {
-    //     ...state,
-    //     filterItems,
-    //   };
-    // },
     changeLayoutCollapsed(state, { payload }) {
       return { ...state, collapsed: payload };
     },

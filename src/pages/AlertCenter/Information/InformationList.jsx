@@ -6,6 +6,7 @@ import { Table, Row, Col, Icon } from 'antd';
 import moment from 'moment';
 import { timestampFormat, downloadFile } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
+import ColumnTitle, { useColumnFilter } from '../ColumnTitle';
 import InformationDetail from './InformationDetail';
 import styles from '../index.less';
 
@@ -14,6 +15,17 @@ const { Column } = Table;
 function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loading }) {
   const [info, setInfo] = useState(null);
   const [selectedKeys, setSelectedKeys] = useState([]);
+
+  // header filter
+  const { handlePageChange, getTitleProps } = useColumnFilter({
+    dispatch,
+    tableName: 'slop_biz.v_info',
+    action: 'alertCenter/fetchInfos',
+    infoPage,
+    infoPageSize,
+  });
+
+  const exportLoading = loading['alertCenter/exportInfos'];
 
   useEffect(() => {
     dispatch({
@@ -31,16 +43,6 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
       setInfo(null);
     }
   }, [infos]);
-
-  function handlePageChange(page, pageSize) {
-    dispatch({
-      type: 'alertCenter/fetchInfos',
-      payload: {
-        page,
-        pageSize,
-      },
-    });
-  }
 
   async function handleExport() {
     const url = await dispatch({
@@ -65,8 +67,13 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             <Link to="/homepage/alert-center" className={styles.info}>
               Alert Center
             </Link>
-            <button type="button" disabled={!selectedKeys.length} onClick={handleExport}>
-              {loading['alertCenter/exportInfos'] ? (
+            <button
+              type="button"
+              className={exportLoading ? styles.loading : ''}
+              disabled={!selectedKeys.length}
+              onClick={handleExport}
+            >
+              {exportLoading ? (
                 <Icon type="loading" className={styles['btn-icon']} />
               ) : (
                 <IconFont type="iconexport" className={styles['btn-icon']} />
@@ -86,6 +93,7 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             return '';
           }}
           rowSelection={{
+            columnWidth: 50,
             onChange: selectedRowKeys => {
               setSelectedKeys(selectedRowKeys);
             },
@@ -115,35 +123,58 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             render={(text, record, index) => (infoPage - 1) * infoPageSize + index + 1}
           />
           <Column
-            ellipsis
             width={150}
             dataIndex="informationNo"
-            title={<FormattedMessage id="alert-center.information-no" />}
+            title={
+              <ColumnTitle {...getTitleProps('informationNo')}>
+                <FormattedMessage id="alert-center.information-no" />
+              </ColumnTitle>
+            }
           />
           <Column
-            width="24%"
+            width="20%"
             ellipsis
             dataIndex="informationType"
-            title={<FormattedMessage id="alert-center.information-type" />}
+            title={
+              <ColumnTitle {...getTitleProps('informationType')}>
+                <FormattedMessage id="alert-center.information-type" />
+              </ColumnTitle>
+            }
           />
           <Column
             align="center"
             dataIndex="timestamp"
-            title={<FormattedMessage id="alert-center.information-timestamp" />}
             render={text => moment(text).format(timestampFormat)}
+            title={
+              <ColumnTitle {...getTitleProps('timestamp')}>
+                <FormattedMessage id="alert-center.information-timestamp" />
+              </ColumnTitle>
+            }
           />
           <Column
             align="center"
             dataIndex="market"
-            title={<FormattedMessage id="alert-center.market" />}
+            title={
+              <ColumnTitle {...getTitleProps('market')}>
+                <FormattedMessage id="alert-center.market" />
+              </ColumnTitle>
+            }
           />
           <Column
             dataIndex="submitterCode"
-            title={<FormattedMessage id="alert-center.submitter-code" />}
+            title={
+              <ColumnTitle {...getTitleProps('submitterCode')}>
+                <FormattedMessage id="alert-center.submitter-code" />
+              </ColumnTitle>
+            }
           />
           <Column
             dataIndex="submitterName"
-            title={<FormattedMessage id="alert-center.submitter-name" />}
+            title={
+              <ColumnTitle {...getTitleProps('submitterName')}>
+                <FormattedMessage id="alert-center.submitter-name" />
+              </ColumnTitle>
+            }
           />
         </Table>
       </div>
