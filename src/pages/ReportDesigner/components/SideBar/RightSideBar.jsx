@@ -26,6 +26,7 @@ let resetControl = false;
   dataSourceList: formArea.dataSourceList,
   tableList: formArea.tableList,
   tableColumnList: formArea.tableColumnList,
+  rightSideCollapse: reportDesigner.rightSideCollapse,
 }))
 @Form.create({
   onFieldsChange(props, changedFields, allFields) {
@@ -255,12 +256,20 @@ export default class RightSideBar extends PureComponent {
     resetFields();
   };
 
+  // 展开或收起右侧菜单栏
+  triggerRightSideBar = () => {
+    const { dispatch, rightSideCollapse } = this.props;
+    dispatch({
+      type: 'reportDesigner/triggerRightSidebar',
+      payload: { showRightSidebar: !rightSideCollapse },
+    });
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
       cellPosition, // 单元格位置
       rightSideCollapse, // 右边的面板
-      changeRightSideBar, // 隐藏或显示右边的面板
       dataSetPrivateList, // 私有数据集列表
       dispatch,
       spreadsheetOtherProps, // spreadSheet的otherProps的集合（包含：数据集的一些属性等等）
@@ -314,9 +323,7 @@ export default class RightSideBar extends PureComponent {
           )}
           <IconFont
             type={rightSideCollapse ? 'iconright' : 'iconleft'}
-            onClick={() => {
-              changeRightSideBar(!rightSideCollapse);
-            }}
+            onClick={() => this.triggerRightSideBar(!rightSideCollapse)}
           />
         </div>
         {rightSideCollapse && (
