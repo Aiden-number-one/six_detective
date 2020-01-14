@@ -40,6 +40,7 @@ function ReportPager(props) {
     showPageSize, // 是否显示每页条数选项
     pageChageCallback, // 页码|每页条数 改变后的回调
     pageSizeArr = [10, 20, 30], // 每页条数选项
+    paging, // 是否分页
   } = props;
 
   const totalPage = parseInt(tpage, 10) || VALUE_DEFAULT; // 总页数，【数字】
@@ -72,6 +73,11 @@ function ReportPager(props) {
       setIsDiableNAE(true); // 禁用后两个按钮
     } else {
       setIsDiablePAH(false);
+    }
+
+    if (!paging) {
+      setIsDiablePAH(true);
+      setIsDiableNAE(true);
     }
 
     // 处理回调：比如，父组件重新请求数据 TODO: FIXME: 为什么首次进来就会执行？？？
@@ -148,7 +154,7 @@ function ReportPager(props) {
         </div>
       ) : null}
       {showPageSize ? (
-        <Select defaultValue={pageSizeArr[0]} onChange={onPageSizeChange}>
+        <Select defaultValue={pageSizeArr[0]} onChange={onPageSizeChange} disabled={!paging}>
           {pageSizeArr.map(value => (
             <Select.Option key={value} value={value}>
               {value}/Page
@@ -175,7 +181,7 @@ function ReportPager(props) {
         <Icon type="left" />
       </span>
       <div className={less['page-num']}>
-        <Input value={currPage} onChange={currPageInputChage} />
+        <Input value={currPage} onChange={currPageInputChage} disabled={!paging} />
         <span> / </span>
         <span>{totalPage}</span>
       </div>

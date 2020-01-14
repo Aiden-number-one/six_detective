@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 15:00:11
+ * @LastEditTime : 2020-01-14 11:12:38
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -32,8 +32,16 @@ export default {
     spreadsheetOtherProps: [], // spreadSheet的其他属性
     cellPosition: 'A1', // 当前的单元格
     showFmlModal: false, // 是否显示处理公式的模态框
+    paging: true, // 是否分页
   },
   reducers: {
+    // 修改分页属性
+    changePaging(state, action) {
+      return {
+        ...state,
+        paging: action.payload,
+      };
+    },
     // 删除私有数据集相关
     deleteDataSetPrivate(state, action) {
       return {
@@ -179,6 +187,7 @@ export default {
         originTemplateAreaObj,
         spreadsheetOtherProps,
         customSearchData,
+        paging,
       ] = yield select(({ reportDesigner, formArea }) => [
         reportDesigner.reportId, // 报表模板id
         reportDesigner.dataSetPrivateList, // 私有数据集
@@ -186,6 +195,7 @@ export default {
         reportDesigner.originTemplateAreaObj, // 报表模板区域原始数据
         reportDesigner.spreadsheetOtherProps, // 单元格otherProps
         formArea.customSearchData, // 查询条件区域
+        reportDesigner.paging, // 查询区域是否分页
       ]);
       // 得到单元格的相关xml
       const templateAreaXml = getTemplateAreaCellPartXml(teamplateAreaObj, spreadsheetOtherProps);
@@ -208,6 +218,7 @@ export default {
           originTemplateAreaObj,
           spreadsheetOtherProps, // 单元格的一些问题相关 例如：数据集相关、公式相关
           customSearchData,
+          paging,
         },
       };
       const response = yield call(setReportTemplateContent, {
@@ -229,7 +240,7 @@ export default {
         // 处理报表id
         yield put({
           type: 'setFolderId',
-          payload: payload.folderI,
+          payload: payload.folderId,
         });
         window.history.pushState(
           null,
@@ -287,6 +298,11 @@ export default {
           yield put({
             type: 'formArea/setCustomSearchData',
             payload: reportTemplateContent.templateArea.customSearchData || [],
+          });
+          // 处理分页区域部分
+          yield put({
+            type: 'changePaging',
+            payload: !!reportTemplateContent.templateArea.paging,
           });
           // 处理私有数据集
           yield put({

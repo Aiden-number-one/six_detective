@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:17
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 12:13:27
+ * @LastEditTime : 2020-01-14 10:57:48
  */
 import React, { Component } from 'react';
 import { Form, Table, Pagination, Drawer, Modal } from 'antd';
@@ -311,6 +311,7 @@ export default class MessageContentTemplate extends Component {
         <div className={styles.content}>
           <Table
             loading={loading['messageContentTemplate/getTemplateList']}
+            rowKey={row => row.templateId.toString()}
             dataSource={messageTemplate.items}
             columns={columns}
             pagination={false}

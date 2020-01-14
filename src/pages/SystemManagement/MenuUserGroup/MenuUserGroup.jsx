@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:15:57
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 19:37:39
+ * @LastEditTime : 2020-01-14 10:56:38
  */
 import React, { Component, Fragment } from 'react';
 import { Form, Table, Pagination, Button, Drawer, Modal } from 'antd';
@@ -337,6 +337,7 @@ class MenuUserGroup extends Component {
             // pagination={{ total: menuUserGroup.totalCount, pageSize: page.pageSize }}
             // rowSelection={rowSelection}
             // onChange={this.pageChange}
+            rowKey={row => row.groupId.toString()}
             dataSource={menuUserGroup.items}
             columns={columns}
             pagination={false}

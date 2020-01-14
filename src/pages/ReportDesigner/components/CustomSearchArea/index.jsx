@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-09 11:30:21
+ * @LastEditTime : 2020-01-13 22:16:09
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -29,6 +29,18 @@ const iconMap = {
   checkbox: 'checkbox',
 };
 
+const titleMap = {
+  input: 'Input',
+  inputnumber: 'Input Number',
+  datepickeryyyy: 'Date Picker(Year)',
+  datepickeryyyymm: 'Date Picker(Month)',
+  datepickeryyyymmdd: 'Date Picker(Day)',
+  select: 'Select',
+  selectmultiple: 'Multiple Select',
+  radio: 'Radio',
+  checkbox: 'Checkbox',
+};
+
 class CustomSearchArea extends PureComponent {
   static defaultProps = {
     rowHeight: 35,
@@ -36,11 +48,13 @@ class CustomSearchArea extends PureComponent {
 
   // 改变查询查询条件的active的状态
   changeActive = i => {
-    const { dispatch } = this.props;
+    const { dispatch, queryWakeUp, changeRightSideBar } = this.props;
     dispatch({
       type: 'formArea/changeCustomSearchData',
       payload: { index: i },
     });
+    queryWakeUp('query');
+    changeRightSideBar(true);
   };
 
   generateDOM = () => {
@@ -52,15 +66,15 @@ class CustomSearchArea extends PureComponent {
           this.changeActive(el.i);
         }}
       >
-        <div className={classNames(styles.bulk, el.active && styles.active)}>
+        <div
+          className={classNames(styles.bulk, el.active && styles.active)}
+          title={titleMap[el.widgetType]}
+        >
           <div className={styles.left}>
             <div>{el.widgetName}</div>
           </div>
           <div className={styles.rigth}>
             <IconFont type={iconMap[el.widgetType]} />
-            {el.type === 'year' && <span>dd</span>}
-            {el.type === 'yearmonth' && <span>dd-mm</span>}
-            {el.type === 'yearmonthday' && <span>dd-mm-yy</span>}
           </div>
         </div>
       </div>

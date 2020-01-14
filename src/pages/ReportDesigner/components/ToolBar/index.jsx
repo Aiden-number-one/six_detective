@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 09:36:59
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 19:06:37
+ * @LastEditTime : 2020-01-14 10:57:40
  */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
@@ -19,6 +19,7 @@ import InsertMenu from './InsertMenu';
 @connect(({ reportDesigner }) => ({
   reportName: reportDesigner.reportName,
   reportId: reportDesigner.reportId,
+  paging: reportDesigner.paging,
 }))
 export default class ToolBar extends Component {
   state = {
@@ -46,7 +47,7 @@ export default class ToolBar extends Component {
 
   render() {
     const { tabActive, reportNameType } = this.state;
-    const { reportName, reportId, saveDrawDisplay } = this.props;
+    const { reportName, reportId, saveDrawDisplay, paging } = this.props;
     return (
       <>
         <div className={classNames(styles.switchTabs)}>
@@ -113,7 +114,9 @@ export default class ToolBar extends Component {
                     message.warn('Please save the report template.');
                     return;
                   }
-                  window.open(`/report-designer-preview?reportId=${reportId}`);
+                  window.open(
+                    `/report-designer-preview?reportId=${reportId}&paging=${paging ? '1' : '0'}`,
+                  );
                 }}
               >
                 <IconFont type="iconicon_previrew" />

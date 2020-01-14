@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 20:18:31
+ * @LastEditTime : 2020-01-14 11:17:19
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -770,7 +770,7 @@ export default class DataProcessing extends Component {
                         [styles['alert-table-row']]: record.isClosedIntraday === '1',
                       })
                     }
-                    rowKey={row => row.index}
+                    rowKey={row => row.alertType.toString()}
                     dataSource={dataProcessingData.items}
                     columns={this.state.codeColumns}
                     pagination={false}

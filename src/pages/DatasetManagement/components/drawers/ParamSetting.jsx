@@ -2,7 +2,7 @@
  * @Description: 修改数据集名称
  * @Author: lan
  * @Date: 2019-12-11 20:54:21
- * @LastEditTime : 2020-01-02 20:02:52
+ * @LastEditTime : 2020-01-14 12:42:01
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -44,7 +44,7 @@ export default class ParamSetting extends PureComponent {
     return (
       <Drawer
         title="Params"
-        width={500}
+        width={700}
         visible={visible}
         onClose={() => {
           clearRecord();
@@ -57,8 +57,8 @@ export default class ParamSetting extends PureComponent {
             record.datasetParams.map(item => (
               <Form.Item
                 label={item.parameter_name}
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
+                labelCol={{ span: 10 }}
+                wrapperCol={{ span: 14 }}
               >
                 {getFieldDecorator(item.parameter_name, {
                   rules: [
@@ -91,7 +91,7 @@ export default class ParamSetting extends PureComponent {
               Cancel
             </Button>
             <Button htmlType="submit" type="primary">
-              Save
+              Submit
             </Button>
           </div>
         </Form>
