@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:19:25
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 10:59:45
+ * @LastEditTime : 2020-01-14 22:05:45
  */
 import React, { Component, Fragment } from 'react';
 import { Table, Form, Pagination, Drawer } from 'antd';
@@ -223,6 +223,10 @@ class SystemParams extends Component {
   };
 
   queryLog = () => {
+    const page = {
+      pageNumber: 1,
+      pageSize: 10,
+    };
     this.searchForm.current.validateFields((err, values) => {
       if (err) {
         return;
@@ -230,6 +234,7 @@ class SystemParams extends Component {
       this.setState(
         {
           searchParameterType: values.parameterType,
+          page,
         },
         () => {
           this.querySystemParams();
