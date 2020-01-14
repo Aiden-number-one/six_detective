@@ -33,18 +33,3 @@ export function CloseModal({ visible, onCancel, loading, onOk, content }) {
     </Modal>
   );
 }
-
-export function ExportModal({ visible, onCancel, loading, onOk }) {
-  return (
-    <Modal
-      title="EXPORT"
-      visible={visible}
-      closable={false}
-      onCancel={onCancel}
-      onOk={onOk}
-      confirmLoading={loading}
-    >
-      <div style={{ textAlign: 'center' }}>111</div>
-    </Modal>
-  );
-}

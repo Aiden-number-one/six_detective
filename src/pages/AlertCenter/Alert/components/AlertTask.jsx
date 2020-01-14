@@ -42,7 +42,7 @@ function AlertTask({ dispatch, loading, alertItems, users, taskColumns, onTaskRo
 
   // default selected that just one task
   useEffect(() => {
-    if (alertItems.length === 1) {
+    if (alertItems && alertItems.length === 1) {
       setSelectedTaskIds(alertItems.map(item => item.TASK_ID));
     }
   }, [alertItems]);
