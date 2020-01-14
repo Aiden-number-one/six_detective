@@ -257,6 +257,7 @@ define(function (require, exports, module) {
                 } else if (modalId === "J_modal_TFP") {
                     formParams.dbTable = $("#J_select2_multi_tab_13_1").select2('data')[0].text.replace(/\(.+\)/g, "");
                 }
+                formParams.taskDesc = formParams.taskDesc && formParams.taskDesc.substring(0, 1024);
                 // 执行Web任务
                 if (modalId === "J_modal_AS") {
                     if (oparatetype === 'add') {
@@ -706,11 +707,11 @@ define(function (require, exports, module) {
             if (v === "0") {
                 $("#J_import_task_separator").css("display", "none");
             } else if (v === "1") {
-                var val = $("#J_import_path").val().replace($("[data-importtype=1] [name=fileName]").val(), "");
-                $("#J_import_path").val(val);
-                var fileName = $("[data-importtype=1] [name=fileName]").val().match(/.+\./)[0];
-                var val1 = fileName.substring(0, fileName.length - 1);
-                $("[data-importtype=1] [name=fileName]").val(val1);
+                //     let val = $("#J_import_path").val().replace($(`[data-importtype=1] [name=fileName]`).val(),"")
+                //     $("#J_import_path").val(val);
+                //     let fileName = $(`[data-importtype=1] [name=fileName]`).val().match(/.+\./)[0];
+                //    let val1 = fileName.substring(0,fileName.length-1);
+                //    $(`[data-importtype=1] [name=fileName]`).val(val1);
             } else if (v === "2") {
                 $("[data-importtype=2] [name=sftpSecretword]").attr("type", "password");
             }
@@ -1311,6 +1312,19 @@ define(function (require, exports, module) {
                 $("#J_header_content").hide().find("[name=headerContent]").attr("type", "hidden");
             } else {
                 $("#J_header_content").show().find("[name=headerContent]").attr("type", "text");
+            }
+        });
+
+        // Web Task -> isAuth Change
+        $("body").on("change", "[name=isAuth]", function () {
+            debugger;
+            var v = $(this).val();
+            if (v == "0") {
+                $("#userParams").hide().find("[name=requestUserName]").attr("type", "hidden");
+                $("#userParams").find("[name=requestSecretWord]").attr("type", "hidden");
+            } else {
+                $("#userParams").show().find("[name=requestUserName]").attr("type", "text");
+                $("#userParams").find("[name=requestSecretWord]").attr("type", "password");
             }
         });
 
