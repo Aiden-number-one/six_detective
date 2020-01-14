@@ -187,26 +187,41 @@ export default {
       }
     },
     // 获取表列
-    *getColumn({ payload }, { call, put }) {
+    *getColumn({ payload, callback }, { call, put }) {
       const res = yield call(getColumn, { param: payload });
       if (res && res.bcjson.flag === '1') {
         yield put({
           type: 'changeColumnData',
           payload: res.bcjson.items,
         });
+        if (callback) callback();
+      } else {
+        message.error(res.bcjson.msg);
       }
     },
     // 获取表数据
-    *getMetadataTablePerform({ payload }, { call, put }) {
+    *getMetadataTablePerform({ payload }, { call, put, select }) {
       const res = yield call(getMetadataTablePerform, { param: payload });
       if (res && res.bcjson.flag === '1') {
-        const tableHead = res.bcjson.items[0] ? res.bcjson.items[0] : {};
-        const column = Object.keys(tableHead).map(value => ({
-          value,
-          // eslint-disable-next-line no-restricted-globals
-          type: isNaN(tableHead[value]) ? 'dimension' : 'measure',
-          width: 150,
-        }));
+        let column = [];
+        if (res.bcjson.items[0]) {
+          const tableHead = res.bcjson.items[0];
+          column = Object.keys(tableHead).map(value => ({
+            value,
+            // eslint-disable-next-line no-restricted-globals
+            type: isNaN(tableHead[value]) ? 'dimension' : 'measure',
+            width: 150,
+          }));
+        } else {
+          const columnData = yield select(({ sqlDataSource }) => sqlDataSource.columnData);
+          columnData.forEach(item => {
+            column.push({
+              value: item.field_data_name,
+              width: 150,
+              type: 'dimension',
+            });
+          });
+        }
         // 保存表头
         yield put({
           type: 'changeColumn',
@@ -222,6 +237,7 @@ export default {
           type: 'addMetadataTablePerform',
           payload: [],
         });
+        message.error(res.bcjson.msg);
       }
     },
   },
