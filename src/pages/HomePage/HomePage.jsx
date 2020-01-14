@@ -901,7 +901,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (allApprovalData[0]) {
+    if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
         Number((allApprovalData[0].allClaimedNum / allApprovalData[0].allTotalNum).toFixed(2)) *
         100;
@@ -965,7 +965,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (allApprovalData[0]) {
+    if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
         Number((allApprovalData[0].allProcessingNum / allApprovalData[0].allTotalNum).toFixed(2)) *
         100;
@@ -1029,7 +1029,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (perApprovalData[0]) {
+    if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
         Number((perApprovalData[0].myClaimedNum / perApprovalData[0].allTotalNum).toFixed(2)) * 100;
     }
@@ -1092,7 +1092,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (perApprovalData[0]) {
+    if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
         Number((perApprovalData[0].myProcessingNum / perApprovalData[0].allTotalNum).toFixed(2)) *
         100;
@@ -1312,9 +1312,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = clickData._origin.label;
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.type;
+          // const alertStatusDesc = clickData._origin.type;
           router.push(
-            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${startDate},${endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&tradeDate=${this.state.startDate},${this.state.endDate}`,
           );
         }
       });
@@ -1471,9 +1471,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = localStorage.getItem('loginName');
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.label;
+          // const alertStatusDesc = clickData._origin.label;
           router.push(
-            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${startDate},${endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&tradeDate=${this.state.startDate},${this.state.endDate}`,
           );
         }
       });
@@ -2914,6 +2914,11 @@ export default class HomePage extends PureComponent {
       perApprovalData,
     } = this.props;
 
+    const colorMap = {};
+    allTaskData.forEach((item, index) => {
+      colorMap[item.owner] = `color${index}`;
+    });
+
     let currentTradeDate;
     let lastTradeDate;
     let currentDate;
@@ -2970,10 +2975,10 @@ export default class HomePage extends PureComponent {
       proEndDate,
       startDate,
       endDate,
-      submissionStatusPieChart,
-      marketPieChart,
-      outstandingCasesLineChart,
-      processingStageBarChart,
+      // submissionStatusPieChart,
+      // marketPieChart,
+      // outstandingCasesLineChart,
+      // processingStageBarChart,
     } = this.state;
     return (
       <div>
@@ -3377,7 +3382,7 @@ export default class HomePage extends PureComponent {
                           <List
                             itemLayout="horizontal"
                             dataSource={allTaskData}
-                            renderItem={(item, index) => (
+                            renderItem={item => (
                               <List.Item>
                                 <span
                                   title={`${item.classification} ${item.details}`}
@@ -3390,7 +3395,9 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span className={classNames(styles.user, styles[`color${index}`])}>
+                                <span
+                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
+                                >
                                   {item.owner &&
                                     item.owner.match(/[A-Z]/g) &&
                                     item.owner.match(/[A-Z]/g).join('')}
@@ -3941,7 +3948,7 @@ export default class HomePage extends PureComponent {
                           <List
                             itemLayout="horizontal"
                             dataSource={allTaskData}
-                            renderItem={(item, index) => (
+                            renderItem={item => (
                               <List.Item>
                                 <span
                                   title={`${item.classification} ${item.details}`}
@@ -3954,7 +3961,9 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span className={classNames(styles.user, styles[`color${index}`])}>
+                                <span
+                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
+                                >
                                   {item.owner &&
                                     item.owner.match(/[A-Z]/g) &&
                                     item.owner.match(/[A-Z]/g).join('')}

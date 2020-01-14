@@ -2,8 +2,8 @@
  * @Description: 获取数据集列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime : 2020-01-06 10:34:53
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-14 15:57:19
+ * @LastEditors  : lan
  */
 import { message } from 'antd';
 import Service from '@/utils/Service';
@@ -59,6 +59,8 @@ export default {
             fileType: payload.fileType,
           },
         });
+      } else {
+        message.error(response.bcjson.msg);
       }
     },
     // 删除数据集分类树
@@ -73,6 +75,8 @@ export default {
             fileType: payload.fileType,
           },
         });
+      } else {
+        message.error(response.bcjson.msg);
       }
     },
     // 获取数据集
