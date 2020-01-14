@@ -5,7 +5,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 22:15:36
+ * @LastEditTime : 2020-01-14 13:55:12
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -166,6 +166,7 @@ export default class ReportDesigner extends PureComponent {
     // 拖放如果只有一个的话，就传字符串，否则传字符串数组
     // 保存在组件上，保证 orientHandler 能每次获取到最新的 dragInfo
     this.passInfoArr = [...dragInfo].map(item => `${item.datasetName}.${item.fieldDataName}`);
+    this.dragDataSetInfo = [...dragInfo].map(item => item);
 
     /**
      *
@@ -185,8 +186,8 @@ export default class ReportDesigner extends PureComponent {
       dispatch({
         type: 'reportDesigner/modifyTemplateArea',
         payload: {
-          dataSet: dataSetInfo, // ???
-          elementType: 'column', // ???
+          dataSet: dataSetInfo, // {datasetName, fieldDataName} 用于侧边栏回显
+          elementType: 'column', // 单元格类型
         },
         cellPostion: createCellPos(col) + (Number(row) + 1),
       });
@@ -198,7 +199,7 @@ export default class ReportDesigner extends PureComponent {
     if (this.passInfoArr.length === 1) {
       // 单选数据集拖放
       const { ri, ci } = this.dropPosition; // 放置位置
-      dropBiz(this.passInfoArr[0], ri, ci, this.passInfoArr[0]);
+      dropBiz(this.passInfoArr[0], ri, ci, this.dragDataSetInfo[0]);
     } else {
       // 多选数据集拖放
       /**
@@ -233,7 +234,7 @@ export default class ReportDesigner extends PureComponent {
             // 循环放入数据集
             for (let i = 0; i < this.passInfoArr.length; i++) {
               const dataSetContent = this.passInfoArr[i];
-              dropBiz(dataSetContent, +ri, Number(ci) + i, this.passInfoArr);
+              dropBiz(dataSetContent, +ri, Number(ci) + i, this.dragDataSetInfo[i]);
             }
             break;
           }
@@ -242,7 +243,7 @@ export default class ReportDesigner extends PureComponent {
               const dataSetContent = this.passInfoArr[i];
               const colIndex = Number(ci) - i; // 数字类型
               if (colIndex < 0) break;
-              dropBiz(dataSetContent, +ri, colIndex, this.passInfoArr);
+              dropBiz(dataSetContent, +ri, colIndex, this.dragDataSetInfo[i]);
             }
             break;
           case 't2b': {
@@ -259,7 +260,7 @@ export default class ReportDesigner extends PureComponent {
             // 循环放入数据集
             for (let i = 0; i < this.passInfoArr.length; i++) {
               const dataSetContent = this.passInfoArr[i];
-              dropBiz(dataSetContent, Number(ri) + i, +ci, this.passInfoArr);
+              dropBiz(dataSetContent, Number(ri) + i, +ci, this.dragDataSetInfo[i]);
             }
             break;
           }
@@ -269,7 +270,7 @@ export default class ReportDesigner extends PureComponent {
               const rowIndex = Number(ri) - i; // 数字类型
               // console.log('rowIndex: ', rowIndex, ri, ci);
               if (rowIndex < 0) break;
-              dropBiz(dataSetContent, rowIndex, +ci, this.passInfoArr);
+              dropBiz(dataSetContent, rowIndex, +ci, this.dragDataSetInfo[i]);
             }
             break;
 
@@ -278,6 +279,7 @@ export default class ReportDesigner extends PureComponent {
       };
 
       // 新建一个面板
+
       const newPanel = () => {
         // 设置方向
         const panel = document.createElement('div');
@@ -577,7 +579,6 @@ export default class ReportDesigner extends PureComponent {
       currentSelectDataSetOtherInfo: this.currentSelectDataSetOtherInfo, // 编辑数据集所需要的参数
     };
     const formularTypeArr = [...new Set(formularSet.map(v => v.type))]; // 公式类型的数组
-    console.log(this.rightSideBarRef);
     return (
       <DndProvider backend={HTML5Backend}>
         <Spin spinning={loading}>
