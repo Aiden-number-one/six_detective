@@ -1314,7 +1314,7 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertStatusDesc = clickData._origin.type;
           router.push(
-            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${startDate},${endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${this.state.startDate},${this.state.endDate}`,
           );
         }
       });
@@ -1473,7 +1473,7 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertStatusDesc = clickData._origin.label;
           router.push(
-            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${startDate},${endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${this.state.startDate},${this.state.endDate}`,
           );
         }
       });
