@@ -2914,6 +2914,11 @@ export default class HomePage extends PureComponent {
       perApprovalData,
     } = this.props;
 
+    const colorMap = {};
+    allTaskData.forEach((item, index) => {
+      colorMap[item.owner] = `color${index}`;
+    });
+
     let currentTradeDate;
     let lastTradeDate;
     let currentDate;
@@ -2970,10 +2975,10 @@ export default class HomePage extends PureComponent {
       proEndDate,
       startDate,
       endDate,
-      submissionStatusPieChart,
-      marketPieChart,
-      outstandingCasesLineChart,
-      processingStageBarChart,
+      // submissionStatusPieChart,
+      // marketPieChart,
+      // outstandingCasesLineChart,
+      // processingStageBarChart,
     } = this.state;
     return (
       <div>
@@ -3377,7 +3382,7 @@ export default class HomePage extends PureComponent {
                           <List
                             itemLayout="horizontal"
                             dataSource={allTaskData}
-                            renderItem={(item, index) => (
+                            renderItem={item => (
                               <List.Item>
                                 <span
                                   title={`${item.classification} ${item.details}`}
@@ -3390,7 +3395,9 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span className={classNames(styles.user, styles[`color${index}`])}>
+                                <span
+                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
+                                >
                                   {item.owner &&
                                     item.owner.match(/[A-Z]/g) &&
                                     item.owner.match(/[A-Z]/g).join('')}
@@ -3941,7 +3948,7 @@ export default class HomePage extends PureComponent {
                           <List
                             itemLayout="horizontal"
                             dataSource={allTaskData}
-                            renderItem={(item, index) => (
+                            renderItem={item => (
                               <List.Item>
                                 <span
                                   title={`${item.classification} ${item.details}`}
@@ -3954,7 +3961,9 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span className={classNames(styles.user, styles[`color${index}`])}>
+                                <span
+                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
+                                >
                                   {item.owner &&
                                     item.owner.match(/[A-Z]/g) &&
                                     item.owner.match(/[A-Z]/g).join('')}
