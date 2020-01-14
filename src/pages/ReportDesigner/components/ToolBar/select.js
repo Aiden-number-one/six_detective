@@ -1,28 +1,24 @@
+/*
+ * @Des: Des
+ * @Author: mus
+ * @Email: mus@szkingdom.com
+ * @Date: 2020-01-09 17:17:50
+ * @LastEditors: mus
+ * @LastEditTime: 2020-01-14 21:23:26
+ */
 const fontSizeSelect = [6, 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
 
 const fontFamilySelect = [
   {
-    key: '仿宋',
-    value: 'FangSong',
-  },
-  {
-    key: '楷体',
-    value: 'KaiTi',
-  },
-  {
-    key: '宋体',
+    key: 'SimSun',
     value: 'SimSun',
-  },
-  {
-    key: '宋体_方正超大字符集',
-    value: '宋体_方正超大字符集',
   },
   {
     key: 'Microsoft YaHei',
     value: 'Microsoft YaHei',
   },
   {
-    key: '新宋体',
+    key: 'NSimSun',
     value: 'NSimSun',
   },
   {

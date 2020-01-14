@@ -550,365 +550,398 @@ class ToolBar extends Component {
                     <Option value={item}>{item}</Option>
                   ))}
                 </Select>
-
-                <Button
-                  className="btn mr6"
-                  onClick={() => {
-                    let index = fontSizeSelect.findIndex(item => item === btnActiveStatus.fontSize);
-                    if (index === 16) {
-                      index = 0;
-                    } else {
-                      index += 1;
-                    }
-                    this.setState({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        fontSize: fontSizeSelect[index],
-                      },
-                    });
-                    setCellStyle('font-size', fontSizeSelect[index]);
-                  }}
-                >
-                  <span>A+</span>
-                </Button>
-
-                <Button
-                  className="btn mr6"
-                  onClick={() => {
-                    let index = fontSizeSelect.findIndex(item => item === btnActiveStatus.fontSize);
-                    if (index === 0) {
-                      index = 16;
-                    } else {
-                      index -= 1;
-                    }
-                    this.setState({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        fontSize: fontSizeSelect[index],
-                      },
-                    });
-                    setCellStyle('font-size', fontSizeSelect[index]);
-                  }}
-                >
-                  <span>A-</span>
-                </Button>
+                <Popover content="Increase Font Size" {...popoverProps}>
+                  <Button
+                    className="btn mr6"
+                    onClick={() => {
+                      let index = fontSizeSelect.findIndex(
+                        item => item === btnActiveStatus.fontSize,
+                      );
+                      if (index === 16) {
+                        index = 0;
+                      } else {
+                        index += 1;
+                      }
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          fontSize: fontSizeSelect[index],
+                        },
+                      });
+                      setCellStyle('font-size', fontSizeSelect[index]);
+                    }}
+                  >
+                    <span>A+</span>
+                  </Button>
+                </Popover>
+                <Popover content="Decrease Font Size" {...popoverProps}>
+                  <Button
+                    className="btn mr6"
+                    onClick={() => {
+                      let index = fontSizeSelect.findIndex(
+                        item => item === btnActiveStatus.fontSize,
+                      );
+                      if (index === 0) {
+                        index = 16;
+                      } else {
+                        index -= 1;
+                      }
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          fontSize: fontSizeSelect[index],
+                        },
+                      });
+                      setCellStyle('font-size', fontSizeSelect[index]);
+                    }}
+                  >
+                    <span>A-</span>
+                  </Button>
+                </Popover>
               </div>
               <div>
-                <Button
-                  onClick={() => {
-                    this.setState(() => ({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        fontWeight: btnActiveStatus.fontWeight === 'normal' ? 'bold' : 'normal',
-                      },
-                    }));
-                    setCellStyle('font-bold', true);
-                  }}
-                  className={classNames(
-                    'btn',
-                    'mr6',
-                    btnActiveStatus.fontWeight === 'bold' && 'active',
-                  )}
-                >
-                  <IconFont type="iconB" />
-                </Button>
-                <Button
-                  className={classNames(
-                    'btn',
-                    'mr6',
-                    btnActiveStatus.fontStyle === 'italic' && 'active',
-                  )}
-                  onClick={() => {
-                    this.setState(() => ({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        fontStyle: btnActiveStatus.fontStyle === 'normal' ? 'italic' : 'normal',
-                      },
-                    }));
-                    setCellStyle('font-italic', true);
-                  }}
-                >
-                  <IconFont type="iconI" />
-                </Button>
-
-                <Button
-                  onClick={() => {
-                    this.setState(() => ({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        textDecoration:
-                          btnActiveStatus.textDecoration === 'none' ? 'underline' : 'none',
-                      },
-                    }));
-                    setCellStyle('underline', true);
-                  }}
-                  className={classNames(
-                    'btn',
-                    'mr6',
-                    btnActiveStatus.textDecoration === 'underline' && 'active',
-                  )}
-                >
-                  <IconFont type="iconxiahuaxian1" />
-                </Button>
-                <ButtonGroup className="btn-group mr6">
-                  <Button className="btn" onClick={() => {}}>
-                    <IconFont type="iconborder-none-solid" />
-                  </Button>
-                  <Dropdown
-                    overlay={this.creatMenu(borderMenu, 'border')}
-                    trigger={['click']}
-                    placement="bottomLeft"
-                  >
-                    <Button className="btn with-icon">
-                      <Icon type="caret-down" />
-                    </Button>
-                  </Dropdown>
-                </ButtonGroup>
-                <ButtonGroup className="btn-group mr6">
+                <Popover content="Bold" {...popoverProps}>
                   <Button
-                    className="btn"
                     onClick={() => {
-                      setCellStyle('bgcolor', backgroundColor);
+                      this.setState(() => ({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          fontWeight: btnActiveStatus.fontWeight === 'normal' ? 'bold' : 'normal',
+                        },
+                      }));
+                      setCellStyle('font-bold', true);
+                    }}
+                    className={classNames(
+                      'btn',
+                      'mr6',
+                      btnActiveStatus.fontWeight === 'bold' && 'active',
+                    )}
+                  >
+                    <IconFont type="iconB" />
+                  </Button>
+                </Popover>
+                <Popover content="Italic" {...popoverProps}>
+                  <Button
+                    className={classNames(
+                      'btn',
+                      'mr6',
+                      btnActiveStatus.fontStyle === 'italic' && 'active',
+                    )}
+                    onClick={() => {
+                      this.setState(() => ({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          fontStyle: btnActiveStatus.fontStyle === 'normal' ? 'italic' : 'normal',
+                        },
+                      }));
+                      setCellStyle('font-italic', true);
                     }}
                   >
-                    <IconFont type="iconic_format_color_fill" />
+                    <IconFont type="iconI" />
                   </Button>
-                  <Dropdown
-                    overlay={
-                      <SketchPicker
-                        color={backgroundColor}
-                        onChange={value => {
-                          this.setState({
-                            backgroundColor: value.hex,
-                          });
-                          setCellStyle(
-                            'bgcolor',
-                            `rgb(${value.rgb.r},${value.rgb.g},${value.rgb.b})`,
-                          );
-                        }}
-                      />
-                    }
-                    trigger={['click']}
-                    placement="bottomLeft"
-                  >
-                    <Button className="btn with-icon">
-                      <Icon type="caret-down" />
-                    </Button>
-                  </Dropdown>
-                </ButtonGroup>
-                <ButtonGroup className="btn-group mr6">
+                </Popover>
+                <Popover content="Underline" {...popoverProps}>
                   <Button
-                    className="btn"
                     onClick={() => {
-                      setCellStyle('color', fontColor);
+                      this.setState(() => ({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          textDecoration:
+                            btnActiveStatus.textDecoration === 'none' ? 'underline' : 'none',
+                        },
+                      }));
+                      setCellStyle('underline', true);
                     }}
+                    className={classNames(
+                      'btn',
+                      'mr6',
+                      btnActiveStatus.textDecoration === 'underline' && 'active',
+                    )}
                   >
-                    <IconFont type="iconic_format_color_text_px" />
+                    <IconFont type="iconxiahuaxian1" />
                   </Button>
-                  <Dropdown
-                    overlay={
-                      <SketchPicker
-                        color={fontColor}
-                        onChange={value => {
-                          this.setState({
-                            fontColor: value.hex,
-                          });
-                          setCellStyle(
-                            'color',
-                            `rgb(${value.rgb.r},${value.rgb.g},${value.rgb.b})`,
-                          );
-                        }}
-                      />
-                    }
-                    trigger={['click']}
-                    placement="bottomLeft"
-                  >
-                    <Button className="btn with-icon">
-                      <Icon type="caret-down" />
+                </Popover>
+                <Popover content="All Borders" {...popoverProps}>
+                  <ButtonGroup className="btn-group mr6">
+                    <Button className="btn" onClick={() => {}}>
+                      <IconFont type="iconborder-none-solid" />
                     </Button>
-                  </Dropdown>
-                </ButtonGroup>
-                <ButtonGroup className="btn-group mr6">
-                  <Button className="btn">
-                    <IconFont type="iconeraser-ps" />
-                  </Button>
-                  <Dropdown
-                    overlay={this.creatMenu(borderMenu, 'eraser')}
-                    trigger={['click']}
-                    placement="bottomLeft"
-                  >
-                    <Button className="btn with-icon">
-                      <Icon type="caret-down" />
+                    <Dropdown
+                      overlay={this.creatMenu(borderMenu, 'border')}
+                      trigger={['click']}
+                      placement="bottomLeft"
+                    >
+                      <Button className="btn with-icon">
+                        <Icon type="caret-down" />
+                      </Button>
+                    </Dropdown>
+                  </ButtonGroup>
+                </Popover>
+                <Popover content="Fill Color" {...popoverProps}>
+                  <ButtonGroup className="btn-group mr6">
+                    <Button
+                      className="btn"
+                      onClick={() => {
+                        setCellStyle('bgcolor', backgroundColor);
+                      }}
+                    >
+                      <IconFont type="iconic_format_color_fill" />
                     </Button>
-                  </Dropdown>
-                </ButtonGroup>
+                    <Dropdown
+                      overlay={
+                        <SketchPicker
+                          color={backgroundColor}
+                          onChange={value => {
+                            this.setState({
+                              backgroundColor: value.hex,
+                            });
+                            setCellStyle(
+                              'bgcolor',
+                              `rgb(${value.rgb.r},${value.rgb.g},${value.rgb.b})`,
+                            );
+                          }}
+                        />
+                      }
+                      trigger={['click']}
+                      placement="bottomLeft"
+                    >
+                      <Button className="btn with-icon">
+                        <Icon type="caret-down" />
+                      </Button>
+                    </Dropdown>
+                  </ButtonGroup>
+                </Popover>
+                <Popover content="Fill Color" {...popoverProps}>
+                  <ButtonGroup className="btn-group mr6">
+                    <Button
+                      className="btn"
+                      onClick={() => {
+                        setCellStyle('color', fontColor);
+                      }}
+                    >
+                      <IconFont type="iconic_format_color_text_px" />
+                    </Button>
+                    <Dropdown
+                      overlay={
+                        <SketchPicker
+                          color={fontColor}
+                          onChange={value => {
+                            this.setState({
+                              fontColor: value.hex,
+                            });
+                            setCellStyle(
+                              'color',
+                              `rgb(${value.rgb.r},${value.rgb.g},${value.rgb.b})`,
+                            );
+                          }}
+                        />
+                      }
+                      trigger={['click']}
+                      placement="bottomLeft"
+                    >
+                      <Button className="btn with-icon">
+                        <Icon type="caret-down" />
+                      </Button>
+                    </Dropdown>
+                  </ButtonGroup>
+                </Popover>
+                <Popover content="Clear" {...popoverProps}>
+                  <ButtonGroup className="btn-group mr6">
+                    <Button className="btn">
+                      <IconFont type="iconeraser-ps" />
+                    </Button>
+                    <Dropdown
+                      overlay={this.creatMenu(borderMenu, 'eraser')}
+                      trigger={['click']}
+                      placement="bottomLeft"
+                    >
+                      <Button className="btn with-icon">
+                        <Icon type="caret-down" />
+                      </Button>
+                    </Dropdown>
+                  </ButtonGroup>
+                </Popover>
               </div>
             </div>
             <div className={styles.divider} />
             <div className={classNames(styles.group, styles.iconGroup)}>
               <div className="mb4">
-                <Button
-                  onClick={() => {
-                    this.setState({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        verticalAlign: btnActiveStatus.verticalAlign === 'top' ? 'middle' : 'top',
-                      },
-                    });
-                    setCellStyle('valign', 'top');
-                  }}
-                  className={classNames(
-                    'btn',
-                    'mr6',
-                    btnActiveStatus.verticalAlign === 'top' && 'active',
-                  )}
-                >
-                  <IconFont type="icondingduiqi" />
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.setState({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        verticalAlign: 'middle',
-                      },
-                    });
-                    setCellStyle('valign', 'middle');
-                  }}
-                  className={classNames(
-                    'btn',
-                    'mr6',
-                    btnActiveStatus.verticalAlign === 'middle' && 'active',
-                  )}
-                >
-                  <IconFont type="iconshuipingduiqi1" />
-                </Button>
-
-                <Button
-                  onClick={() => {
-                    this.setState({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        verticalAlign:
-                          btnActiveStatus.verticalAlign === 'bottom' ? 'middle' : 'bottom',
-                      },
-                    });
-                    setCellStyle('valign', 'bottom');
-                  }}
-                  className={classNames(
-                    'btn',
-                    'mr6',
-                    btnActiveStatus.verticalAlign === 'bottom' && 'active',
-                  )}
-                >
-                  <IconFont type="icondiduiqi" />
-                </Button>
+                <Popover content="Top Align" {...popoverProps}>
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          verticalAlign: btnActiveStatus.verticalAlign === 'top' ? 'middle' : 'top',
+                        },
+                      });
+                      setCellStyle('valign', 'top');
+                    }}
+                    className={classNames(
+                      'btn',
+                      'mr6',
+                      btnActiveStatus.verticalAlign === 'top' && 'active',
+                    )}
+                  >
+                    <IconFont type="icondingduiqi" />
+                  </Button>
+                </Popover>
+                <Popover content="Middle Align" {...popoverProps}>
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          verticalAlign: 'middle',
+                        },
+                      });
+                      setCellStyle('valign', 'middle');
+                    }}
+                    className={classNames(
+                      'btn',
+                      'mr6',
+                      btnActiveStatus.verticalAlign === 'middle' && 'active',
+                    )}
+                  >
+                    <IconFont type="iconshuipingduiqi1" />
+                  </Button>
+                </Popover>
+                <Popover content="Bottom Align" {...popoverProps}>
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          verticalAlign:
+                            btnActiveStatus.verticalAlign === 'bottom' ? 'middle' : 'bottom',
+                        },
+                      });
+                      setCellStyle('valign', 'bottom');
+                    }}
+                    className={classNames(
+                      'btn',
+                      'mr6',
+                      btnActiveStatus.verticalAlign === 'bottom' && 'active',
+                    )}
+                  >
+                    <IconFont type="icondiduiqi" />
+                  </Button>
+                </Popover>
               </div>
               <div>
-                <Button
-                  onClick={() => {
-                    this.setState({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        textAlign: 'left',
-                      },
-                    });
-                    setCellStyle('align', 'left');
-                  }}
-                  className={classNames(
-                    'btn',
-                    'mr6',
-                    btnActiveStatus.textAlign === 'left' && 'active',
-                  )}
-                >
-                  <IconFont type="iconalign-left-solid" />
-                </Button>
-
-                <Button
-                  onClick={() => {
-                    this.setState({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        textAlign: btnActiveStatus.textAlign === 'center' ? 'left' : 'center',
-                      },
-                    });
-                    setCellStyle('align', 'center');
-                  }}
-                  className={classNames(
-                    'btn',
-                    'mr6',
-                    btnActiveStatus.textAlign === 'center' && 'active',
-                  )}
-                >
-                  <IconFont type="iconalign-center-solid" />
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.setState({
-                      btnActiveStatus: {
-                        ...btnActiveStatus,
-                        textAlign: btnActiveStatus.textAlign === 'right' ? 'left' : 'right',
-                      },
-                    });
-                    setCellStyle('align', 'right');
-                  }}
-                  className={classNames(
-                    'btn',
-                    'mr6',
-                    btnActiveStatus.textAlign === 'right' && 'active',
-                  )}
-                >
-                  <IconFont type="iconalign-right-solid" />
-                </Button>
+                <Popover content="Align Text Left" {...popoverProps}>
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          textAlign: 'left',
+                        },
+                      });
+                      setCellStyle('align', 'left');
+                    }}
+                    className={classNames(
+                      'btn',
+                      'mr6',
+                      btnActiveStatus.textAlign === 'left' && 'active',
+                    )}
+                  >
+                    <IconFont type="iconalign-left-solid" />
+                  </Button>
+                </Popover>
+                <Popover content="Center" {...popoverProps}>
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          textAlign: btnActiveStatus.textAlign === 'center' ? 'left' : 'center',
+                        },
+                      });
+                      setCellStyle('align', 'center');
+                    }}
+                    className={classNames(
+                      'btn',
+                      'mr6',
+                      btnActiveStatus.textAlign === 'center' && 'active',
+                    )}
+                  >
+                    <IconFont type="iconalign-center-solid" />
+                  </Button>
+                </Popover>
+                <Popover content="Align Text Right" {...popoverProps}>
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        btnActiveStatus: {
+                          ...btnActiveStatus,
+                          textAlign: btnActiveStatus.textAlign === 'right' ? 'left' : 'right',
+                        },
+                      });
+                      setCellStyle('align', 'right');
+                    }}
+                    className={classNames(
+                      'btn',
+                      'mr6',
+                      btnActiveStatus.textAlign === 'right' && 'active',
+                    )}
+                  >
+                    <IconFont type="iconalign-right-solid" />
+                  </Button>
+                </Popover>
               </div>
             </div>
             <div className={styles.divider} />
             <div className={styles.group}>
-              <Button
-                className={classNames(
-                  'btn',
-                  'btn2Report',
-                  'mr6',
-                  btnActiveStatus.isMerge && 'active',
-                )}
-              >
-                <div
-                  className={classNames(styles.topBottom)}
-                  onClick={() => {
-                    setCellStyle('merge', true);
-                    setCellStyle('align', 'center');
-                  }}
+              <Popover content="Merge and Center" {...popoverProps}>
+                <Button
+                  className={classNames(
+                    'btn',
+                    'btn2Report',
+                    'mr6',
+                    btnActiveStatus.isMerge && 'active',
+                  )}
                 >
-                  <IconFont type="iconhuanhang" />
-                  <p className={styles.brP}>
-                    <span>Merge and</span>
-                    <br />
-                    <span>center</span>
-                  </p>
-                </div>
-              </Button>
-              <Button
-                className={classNames(
-                  'btn',
-                  'btn2Report',
-                  'mr6',
-                  btnActiveStatus.autoLineBreak && 'active',
-                )}
-              >
-                <div
-                  className={classNames(styles.topBottom)}
-                  onClick={() => {
-                    setCellStyle('textwrap', !btnActiveStatus.autoLineBreak);
-                  }}
+                  <div
+                    className={classNames(styles.topBottom)}
+                    onClick={() => {
+                      setCellStyle('merge', true);
+                      setCellStyle('align', 'center');
+                    }}
+                  >
+                    <IconFont type="iconhuanhang" />
+                    <p className={styles.brP}>
+                      <span>Merge and</span>
+                      <br />
+                      <span>center</span>
+                    </p>
+                  </div>
+                </Button>
+              </Popover>
+              <Popover content="Wrap Text" {...popoverProps}>
+                <Button
+                  className={classNames(
+                    'btn',
+                    'btn2Report',
+                    'mr6',
+                    btnActiveStatus.autoLineBreak && 'active',
+                  )}
                 >
-                  <IconFont type="iconhebingdanyuange_danyuangecaozuo_jurassic" />
-                  <p className={styles.brP}>
-                    <span>Wrap</span>
-                    <br />
-                    <span>Text</span>
-                  </p>
-                </div>
-              </Button>
+                  <div
+                    className={classNames(styles.topBottom)}
+                    onClick={() => {
+                      setCellStyle('textwrap', !btnActiveStatus.autoLineBreak);
+                    }}
+                  >
+                    <IconFont type="iconhebingdanyuange_danyuangecaozuo_jurassic" />
+                    <p className={styles.brP}>
+                      <span>Wrap</span>
+                      <br />
+                      <span>Text</span>
+                    </p>
+                  </div>
+                </Button>
+              </Popover>
             </div>
             <div className={styles.divider} />
             <div className={styles.group}>
@@ -941,37 +974,47 @@ class ToolBar extends Component {
                 </Popover>
               </div>
               <div>
-                <Button
-                  className="btn mr6"
-                  onClick={() => setCellType('cellType', this.cellTypeMap['currency￥'])}
-                >
-                  <IconFont type="iconrenminbi" />
-                </Button>
-                <Button
-                  className="btn mr6"
-                  onClick={() => setCellType('cellType', this.cellTypeMap.percentage)}
-                >
-                  <IconFont type="iconpercent-solid" />
-                </Button>
+                <Popover content="Currency" {...popoverProps}>
+                  <Button
+                    className="btn mr6"
+                    onClick={() => setCellType('cellType', this.cellTypeMap['currency￥'])}
+                  >
+                    <IconFont type="iconrenminbi" />
+                  </Button>
+                </Popover>
+                <Popover content="Percent Style" {...popoverProps}>
+                  <Button
+                    className="btn mr6"
+                    onClick={() => setCellType('cellType', this.cellTypeMap.percentage)}
+                  >
+                    <IconFont type="iconpercent-solid" />
+                  </Button>
+                </Popover>
                 {/* 格式化为三位一逗号 */}
-                <Button
-                  className="btn mr6"
-                  onClick={() =>
-                    setCellType('cellType', {
-                      cellType: 'numeric',
-                      format: '1,000.00',
-                      scale: '2',
-                    })
-                  }
-                >
-                  <IconFont type="icon_commastylex" />
-                </Button>
-                <Button className="btn mr6" onClick={() => this.inOrDecreaseDecimal('increase')}>
-                  <IconFont type="icon_increasedecimalx" />
-                </Button>
-                <Button className="btn mr6" onClick={() => this.inOrDecreaseDecimal('decrease')}>
-                  <IconFont type="icon_decreasedecimalx" />
-                </Button>
+                <Popover content="Comma Style" {...popoverProps}>
+                  <Button
+                    className="btn mr6"
+                    onClick={() =>
+                      setCellType('cellType', {
+                        cellType: 'numeric',
+                        format: '1,000.00',
+                        scale: '2',
+                      })
+                    }
+                  >
+                    <IconFont type="icon_commastylex" />
+                  </Button>
+                </Popover>
+                <Popover content="Increase Decimal" {...popoverProps}>
+                  <Button className="btn mr6" onClick={() => this.inOrDecreaseDecimal('increase')}>
+                    <IconFont type="icon_increasedecimalx" />
+                  </Button>
+                </Popover>
+                <Popover content="Decrease Decimal" {...popoverProps}>
+                  <Button className="btn mr6" onClick={() => this.inOrDecreaseDecimal('decrease')}>
+                    <IconFont type="icon_decreasedecimalx" />
+                  </Button>
+                </Popover>
               </div>
             </div>
             <div className={styles.divider} style={{ marginLeft: 12 }} />
