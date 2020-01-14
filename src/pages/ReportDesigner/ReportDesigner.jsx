@@ -5,7 +5,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-12 19:12:42
+ * @LastEditTime : 2020-01-13 22:15:36
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -45,6 +45,8 @@ const formularSet = [
 }))
 @SpreadSheet.createSpreadSheet
 export default class ReportDesigner extends PureComponent {
+  rightSideBarRef = React.createRef();
+
   constructor(props) {
     super(props);
     this.formulaInputRef = React.createRef();
@@ -575,6 +577,7 @@ export default class ReportDesigner extends PureComponent {
       currentSelectDataSetOtherInfo: this.currentSelectDataSetOtherInfo, // 编辑数据集所需要的参数
     };
     const formularTypeArr = [...new Set(formularSet.map(v => v.type))]; // 公式类型的数组
+    console.log(this.rightSideBarRef);
     return (
       <DndProvider backend={HTML5Backend}>
         <Spin spinning={loading}>
@@ -658,11 +661,17 @@ export default class ReportDesigner extends PureComponent {
                       style={{ width: rightSideCollapse ? '300px' : '30px' }}
                     >
                       <RightSideBar
+                        wrappedComponentRef={this.rightSideBarRef}
                         rightSideCollapse={rightSideCollapse}
                         changeRightSideBar={this.changeRightSideBar}
                       />
                     </div>
-                    {display && <CustomSearchArea />}
+                    {display && (
+                      <CustomSearchArea
+                        changeRightSideBar={this.changeRightSideBar}
+                        queryWakeUp={this.rightSideBarRef.current.changeSiderBarType}
+                      />
+                    )}
                     <div>
                       <WrapperDropContent afterDrop={this.afterDrop} />
                     </div>

@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-06 13:40:22
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-02 10:00:09
+ * @LastEditTime : 2020-01-14 09:58:37
  */
 
 export default {
@@ -44,4 +44,7 @@ export default {
   'report-designer.group': 'Group', // 分组
   'report-designer.list': 'List', // 列表
   'report-designer.sum': 'Sum', // 汇总
+  // 全局设置
+  'report-designer.paging': 'Paging',
+  'report-designer.global': 'Global',
 };

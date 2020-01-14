@@ -19,6 +19,7 @@ const ButtonGroup = Button.Group;
   showFmlModal: reportDesigner.showFmlModal,
   cellPosition: reportDesigner.cellPosition,
   reportId: reportDesigner.reportId,
+  paging: reportDesigner.paging,
 }))
 class ToolBar extends Component {
   state = {
@@ -399,6 +400,7 @@ class ToolBar extends Component {
       changeDisplaySearchArea,
       displayArea,
       reportId,
+      paging,
     } = this.props;
     const { btnActiveStatus, backgroundColor, fontColor, cellType, paintformatActive } = this.state;
     const popoverProps = {
@@ -425,7 +427,9 @@ class ToolBar extends Component {
                     message.warn('Please save the report template.');
                     return;
                   }
-                  window.open(`/report-designer-preview?reportId=${reportId}`);
+                  window.open(
+                    `/report-designer-preview?reportId=${reportId}&paging=${paging ? '1' : '0'}`,
+                  );
                 }}
               >
                 <div className={styles.topBottom}>
