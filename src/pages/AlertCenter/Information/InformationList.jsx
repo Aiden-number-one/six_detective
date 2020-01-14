@@ -21,8 +21,8 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
     dispatch,
     tableName: 'slop_biz.v_info',
     action: 'alertCenter/fetchInfos',
-    infoPage,
-    infoPageSize,
+    page: infoPage,
+    pageSize: infoPageSize,
   });
 
   const exportLoading = loading['alertCenter/exportInfos'];

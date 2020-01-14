@@ -101,6 +101,7 @@ function AlertTask({ dispatch, loading, alertItems, users, taskColumns, onTaskRo
           },
         }}
         rowSelection={{
+          columnWidth: 50,
           selectedRowKeys: selectedTaskIds,
           onChange: selectedRowKeys => {
             setSelectedTaskIds(selectedRowKeys);

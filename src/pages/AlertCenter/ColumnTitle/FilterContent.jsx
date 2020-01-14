@@ -120,7 +120,7 @@ export function FilterCheckbox({ loading, filterList, onCheckedList, curColumn, 
 
   useEffect(() => {
     const curFilters = conditions.find(item => item.column === curColumn);
-    if (curFilters) {
+    if (curFilters && curFilters.value) {
       setCheckedList(curFilters.value.split(','));
     } else {
       // reset

@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Drawer, Form, Input, Upload, Icon, Button, Table, Select, Alert, message } from 'antd';
+import { Drawer, Form, Upload, Icon, Button, Alert, message } from 'antd';
 import { ErrorList } from './ErrorList';
 import { EditableFileTable } from './EditableFileTable';
 import styles from '../index.less';
-
-const { Column } = Table;
-const { Option } = Select;
 
 const tipMsg = 'Please press "Parse Files" button to display the files';
 const warningMsg = 'Please validate before upload. If information is incorrect,please edit.';
@@ -226,4 +223,4 @@ function NewAccountLogManualModal({
   );
 }
 
-export default Form.create()(NewAccountLogManualModal);
+export default Form.create({ name: 'newAccount' })(NewAccountLogManualModal);

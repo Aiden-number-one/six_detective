@@ -34,8 +34,8 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   const { handlePageChange, getTitleProps } = useColumnFilter({
     dispatch,
     action: 'alertCenter/fetch',
-    alertPage,
-    alertPageSize,
+    page: alertPage,
+    pageSize: alertPageSize,
     reset: Object.keys(location.query).length > 0 ? handleCloseMsg : null,
   });
 

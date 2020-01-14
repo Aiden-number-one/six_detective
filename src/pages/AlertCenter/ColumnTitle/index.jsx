@@ -74,11 +74,11 @@ function ColumnTitle({
 
   async function handleOk() {
     const isCheckbox = filterType === 2 || filterType === 7;
-    const value = isCheckbox ? checkedList : [selectedItem];
+    const values = isCheckbox ? checkedList : [selectedItem];
 
     const condition = {
       column: curColumn,
-      value: value.toString(),
+      value: values.map(item => encodeURIComponent(item)).toString(),
       condition: filterType.toString(),
     };
     let updatedConditions = conditions;

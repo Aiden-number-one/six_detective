@@ -4,29 +4,29 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-13 17:36:40
+ * @LastEditTime : 2020-01-14 14:13:38
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
 import { defaultPage, defaultPageSize } from '@/pages/DataImportLog/constants';
 // just for unit test
 // `fetch` high order function return anonymous func
-export async function getAlerts({
+export async function getTableList({
+  sort,
+  dataTable,
+  conditions,
+  currentColumn,
   page = defaultPage,
   pageSize = defaultPageSize,
-  sort,
-  currentColumn,
-  conditions,
-  dataTable,
 } = {}) {
   return request('get_table_page_list', {
     data: {
       sort,
+      dataTable,
       currentColumn,
       conditions: conditions && JSON.stringify(conditions),
       pageNumber: page.toString(),
       pageSize: pageSize.toString(),
-      dataTable,
     },
   });
 }
@@ -179,7 +179,7 @@ export default {
   effects: {
     *fetch({ payload = {} }, { call, put }) {
       const { page, pageSize } = payload;
-      const { items, totalCount, err } = yield call(getAlerts, {
+      const { items, totalCount, err } = yield call(getTableList, {
         ...payload,
         dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
       });
@@ -207,7 +207,7 @@ export default {
     },
     *fetchInfos({ payload = {} }, { call, put }) {
       const { page, pageSize } = payload;
-      const { items, totalCount, err } = yield call(getAlerts, {
+      const { items, totalCount, err } = yield call(getTableList, {
         ...payload,
         dataTable: 'SLOP_BIZ.V_INFO',
       });
@@ -373,7 +373,7 @@ export default {
     },
     // claim alert(s) which has been claimed
     *reClaim({ payload }, { call, put }) {
-      const { err, msg, items } = yield call(claimAlert, {
+      const { err, msg } = yield call(claimAlert, {
         alertIds: payload.alertIds,
         isCoverClaim: 1,
       });
