@@ -515,12 +515,22 @@ function ProcessDetail({
                       <Phase postComment={c => setComment(`${comment}${c} `)} />
                     </Col>
                     <Col span={20} align="right">
-                      <IconFont
-                        type="iconicon_withdraw1"
-                        onClick={() => setWithdrawConfirmVisible(true)}
-                        className={styles['btn-icon']}
-                        style={{ marginRight: '8px' }}
-                      />
+                      <div className={styles['attachments-icon']}>
+                        <IconFont
+                          type="icon-withdrawx"
+                          onClick={() => setWithdrawConfirmVisible(true)}
+                          className={styles['btn-icon']}
+                        />
+                      </div>
+                      {detailItems[0] && detailItems[0].isStarter && detailItems[0].isEditing ? (
+                        <div className={styles['attachments-icon']}>
+                          <IconFont
+                            type="icon-savex"
+                            onClick={saveTask}
+                            className={styles['btn-icon']}
+                          />
+                        </div>
+                      ) : null}
                       <div className={styles['attachments-icon']}>
                         <Upload
                           multiple
@@ -530,7 +540,11 @@ function ProcessDetail({
                           fileList={upAttachments}
                           onChange={handleUpAttachments}
                         >
-                          <IconFont type="iconbiezhen" title="please select a file" />
+                          <IconFont
+                            className={styles['btn-icon']}
+                            type="icon-attachmentkaobeix"
+                            title="please select a file"
+                          />
                         </Upload>
                         <span className={styles['attachments-num']}>
                           {upAttachments.length > 0 && upAttachments.length}
@@ -543,17 +557,11 @@ function ProcessDetail({
                       ) : null} */}
                       {detailItems[0] && detailItems[0].isStarter ? (
                         <>
-                          {detailItems[0].isEditing ? (
-                            <Button
-                              style={{ marginRight: '10px', marginLeft: '4px' }}
-                              type="primary"
-                              onClick={saveTask}
-                            >
-                              Save
-                            </Button>
-                          ) : null}
-
-                          <Button type="primary" onClick={() => submitDrawer('submit')}>
+                          <Button
+                            type="primary"
+                            style={{ marginLeft: '4px' }}
+                            onClick={() => submitDrawer('submit')}
+                          >
                             Submit
                           </Button>
                         </>

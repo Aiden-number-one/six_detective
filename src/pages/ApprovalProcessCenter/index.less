@@ -125,7 +125,7 @@
     }
     .icon {
       color: rgba(188, 198, 204, 1);
-      font-size: 20px;
+      font-size: 16px;
       vertical-align: middle;
       cursor: pointer;
       &:nth-child(2) {
@@ -145,7 +145,7 @@
     padding: 0 18px;
   }
   .tab-scroll-content {
-    height: 380px;
+    height: 360px;
     padding: 0 18px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -252,7 +252,7 @@
   .detail-comment {
     background-color: #fff;
     .comment-list {
-      min-height: 200px;
+      min-height: 213px;
       max-height: 300px;
       margin: 0 0 18px;
       padding: 0 18px;
@@ -274,34 +274,46 @@
         height: 30px;
         background-color: #fff;
         .phrase-btn {
-          width: 60px;
-          height: 25px;
-          margin-left: 5px;
+          width: 56px;
+          height: 30px;
           padding: 0;
-          color: #10416c;
+          color: #464c51;
+          font-weight: 500;
+          font-size: 12px;
+          font-family: Avenir, sans-serif;
           background-color: #ebf0f4;
-          border-color: #ebf0f4;
+          border: none;
         }
+
         .attachments-icon {
           position: relative;
           display: inline-block;
           width: 24px;
           height: 24px;
-          margin-right: 9px;
+          margin-right: 8px;
           text-align: center;
           background: rgba(225, 234, 239, 1);
           border-radius: 50%;
           cursor: pointer;
+          .btn-icon {
+            font-size: 12.5px;
+          }
+
+          .attachments-num {
+            position: absolute;
+            right: -13px;
+            bottom: 1px;
+            width: 15px;
+            height: 15px;
+            color: rgba(70, 76, 81, 1);
+            font-size: 12px;
+          }
         }
-        .attachments-num {
-          position: absolute;
-          right: -13px;
-          bottom: 1px;
-          width: 15px;
-          height: 15px;
-          color: rgba(70, 76, 81, 1);
-          font-size: 12px;
-          opacity: 0.4;
+        .attachments-icon:hover {
+          background-color: #0d87d4;
+          .btn-icon {
+            color: #fff;
+          }
         }
       }
       .up-attachments {
