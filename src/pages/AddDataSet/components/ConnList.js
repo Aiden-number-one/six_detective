@@ -24,9 +24,8 @@ class ConnList extends PureComponent {
 
   render() {
     const { data, loadMore, activeKey, filterName } = this.props;
-    const filterData = data.filter(item =>
-      item.name.toLowerCase().includes(filterName.toLowerCase()),
-    );
+    const filterData =
+      data && data.filter(item => item.name.toLowerCase().includes(filterName.toLowerCase()));
     return (
       <ul
         id="sqlDataSetList"

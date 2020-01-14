@@ -95,6 +95,9 @@ class CodeMirrorComponent extends Component {
         <Menu.Item key="1">Call</Menu.Item>
       </Menu>
     );
+    const placeHolder = `Please Input ${datasetType}, Support dynamic parameters, Parameter format is $[XXX]`
+      .replace('[', '{')
+      .replace(']', '}');
     return connectDropTarget(
       <div
         style={{ position: 'relative' }}
@@ -118,7 +121,7 @@ class CodeMirrorComponent extends Component {
               fontSize: 14,
             }}
           >
-            Please Input {datasetType}
+            {placeHolder}
           </span>
         )}
         <Dropdown
