@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 09:57:29
+ * @LastEditTime : 2020-01-14 12:07:59
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -14,6 +14,7 @@ import { formatMessage } from 'umi/locale';
 import moment from 'moment';
 import styles from './AuditTrailLogging.less';
 import { timeFormat } from '@/utils/filter';
+import { showLogFormat } from '@/utils/utils';
 import SearchForm from './components/SearchForm';
 import IconFont from '@/components/IconFont';
 import { downloadFile } from '@/pages/DataImportLog/constants';
@@ -212,6 +213,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'before',
         key: 'before',
         align: 'left',
+        render: (res, obj) => <span>{showLogFormat(obj.before)}</span>,
       },
       {
         index: 10,
@@ -219,6 +221,7 @@ class AuditTrailLogging extends Component {
         dataIndex: 'after',
         key: 'after',
         align: 'left',
+        render: (res, obj) => <span>{showLogFormat(obj.after)}</span>,
       },
     ],
     getAuditLogList: [],

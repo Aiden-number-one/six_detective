@@ -31,18 +31,11 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   const [isBatchAction, setBatchAction] = useState(false);
   const [isDiscontinue, setDiscontinue] = useState(false);
   // header filter
-  const {
-    conditions,
-    curTableColumn,
-    curSortColumn,
-    curSort,
-    handleCommit,
-    handleSort,
-  } = useColumnFilter({
+  const { handlePageChange, getTitleProps } = useColumnFilter({
     dispatch,
     action: 'alertCenter/fetch',
-    alertPage,
-    alertPageSize,
+    page: alertPage,
+    pageSize: alertPageSize,
     reset: Object.keys(location.query).length > 0 ? handleCloseMsg : null,
   });
 
@@ -201,22 +194,10 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
     }
   }
 
-  function handlePageChange(page, pageSize) {
-    dispatch({
-      type: 'alertCenter/fetch',
-      payload: {
-        page,
-        pageSize,
-        conditions,
-        currentColumn: curTableColumn,
-        sort: curSortColumn === curTableColumn ? curSort : '',
-      },
-    });
-  }
-
   function handleCloseMsg() {
     router.replace('/homepage/alert-center');
   }
+
   return (
     <div className={styles['list-container']}>
       <div className={styles.list}>
@@ -301,13 +282,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
             dataIndex="alertNo"
             className="word-break"
             title={
-              <ColumnTitle
-                curColumn="alertNo"
-                conditions={conditions}
-                sort={curSortColumn === 'alertNo' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('alertNo')}>
                 <FormattedMessage id="alert-center.alert-id" />
               </ColumnTitle>
             }
@@ -316,13 +291,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
             ellipsis
             dataIndex="alertName"
             title={
-              <ColumnTitle
-                curColumn="alertName"
-                conditions={conditions}
-                sort={curSortColumn === 'alertName' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('alertName')}>
                 <FormattedMessage id="alert-center.alert-name" />
               </ColumnTitle>
             }
@@ -332,13 +301,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
             dataIndex="tradeDate"
             render={text => moment(text).format(dateFormat)}
             title={
-              <ColumnTitle
-                curColumn="tradeDate"
-                conditions={conditions}
-                sort={curTableColumn === 'tradeDate' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('tradeDate')}>
                 <FormattedMessage id="alert-center.trade-date" />
               </ColumnTitle>
             }
@@ -348,13 +311,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
             dataIndex="alertTime"
             render={text => moment(text, timestampFormat).format(timestampFormat)}
             title={
-              <ColumnTitle
-                curColumn="alertTime"
-                conditions={conditions}
-                sort={curSortColumn === 'alertName' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('alertTime')}>
                 <FormattedMessage id="alert-center.alert-timestamp" />
               </ColumnTitle>
             }
@@ -364,14 +321,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
             align="right"
             dataIndex="itemsTotal"
             title={
-              <ColumnTitle
-                isNum
-                curColumn="itemsTotal"
-                conditions={conditions}
-                sort={curSortColumn === 'itemsTotal' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle isNum {...getTitleProps('itemsTotal')}>
                 <FormattedMessage id="alert-center.items-total" />
               </ColumnTitle>
             }
@@ -387,13 +337,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
               return text;
             }}
             title={
-              <ColumnTitle
-                curColumn="userName"
-                conditions={conditions}
-                sort={curSortColumn === 'userName' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('userName')}>
                 <FormattedMessage id="alert-center.owner" />
               </ColumnTitle>
             }
@@ -409,13 +353,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
               return text;
             }}
             title={
-              <ColumnTitle
-                curColumn="alertStatusDesc"
-                conditions={conditions}
-                sort={curSortColumn === 'alertStatusDesc' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('alertStatusDesc')}>
                 <FormattedMessage id="alert-center.status" />
               </ColumnTitle>
             }

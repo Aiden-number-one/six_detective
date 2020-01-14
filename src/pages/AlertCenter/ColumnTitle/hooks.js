@@ -4,11 +4,11 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-14 10:03:35
+ * @LastEditTime : 2020-01-14 14:41:13
  */
 import { useState } from 'react';
 
-export function useColumnFilter({ dispatch, action: type, alertPage, alertPageSize, reset }) {
+export function useColumnFilter({ dispatch, tableName, action: type, page, pageSize, reset }) {
   // { column: '', value: '', condition: '7' }
   const [conditions, setConditions] = useState([]);
   const [curTableColumn, setCurTableColumn] = useState('');
@@ -25,10 +25,10 @@ export function useColumnFilter({ dispatch, action: type, alertPage, alertPageSi
     dispatch({
       type,
       payload: {
+        page,
+        pageSize,
         currentColumn: tableColumn,
         conditions: updatedConditions,
-        page: alertPage,
-        pageSize: alertPageSize,
         sort: curSortColumn === tableColumn ? curSort : '',
       },
     });
@@ -46,19 +46,35 @@ export function useColumnFilter({ dispatch, action: type, alertPage, alertPageSi
       payload: {
         currentColumn: tableColumn,
         conditions,
-        page: alertPage,
-        pageSize: alertPageSize,
+        page,
+        pageSize,
         sort,
       },
     });
   }
 
+  async function handlePageChange(p, ps) {
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        page: p,
+        pageSize: ps,
+        conditions,
+        currentColumn: curTableColumn,
+        sort: curSortColumn === curTableColumn ? curSort : '',
+      },
+    });
+  }
+
   return {
-    conditions,
-    curTableColumn,
-    curSortColumn,
-    curSort,
-    handleCommit,
-    handleSort,
+    handlePageChange,
+    getTitleProps: column => ({
+      curColumn: column,
+      conditions,
+      tableName,
+      sort: curSortColumn === column ? curSort : '',
+      onCommit: handleCommit,
+      onSort: handleSort,
+    }),
   };
 }
