@@ -1367,6 +1367,9 @@ export default class HomePage extends PureComponent {
         },
       });
       alterPersonalChart.legend(false);
+      alterPersonalChart.tooltip({
+        showTitle: false,
+      });
       alterPersonalChart.axis('value', {
         position: 'right',
         label: {
@@ -1692,6 +1695,9 @@ export default class HomePage extends PureComponent {
         },
       });
       approvalPersonalChart.legend(false);
+      approvalPersonalChart.tooltip({
+        showTitle: false,
+      });
       approvalPersonalChart.axis('value', {
         position: 'left',
         label: {
@@ -3374,7 +3380,7 @@ export default class HomePage extends PureComponent {
                             renderItem={(item, index) => (
                               <List.Item>
                                 <span
-                                  title={item.details}
+                                  title={`${item.classification} ${item.details}`}
                                   className={styles.description}
                                   onClick={() => {
                                     router.push(
@@ -3382,7 +3388,7 @@ export default class HomePage extends PureComponent {
                                     );
                                   }}
                                 >
-                                  {item.details}
+                                  {item.classification} {item.details}
                                 </span>
                                 <span className={classNames(styles.user, styles[`color${index}`])}>
                                   {item.owner &&
@@ -3938,7 +3944,7 @@ export default class HomePage extends PureComponent {
                             renderItem={(item, index) => (
                               <List.Item>
                                 <span
-                                  title={item.details}
+                                  title={`${item.classification} ${item.details}`}
                                   className={styles.description}
                                   onClick={() => {
                                     router.push(
@@ -3946,7 +3952,7 @@ export default class HomePage extends PureComponent {
                                     );
                                   }}
                                 >
-                                  {item.details}
+                                  {item.classification} {item.details}
                                 </span>
                                 <span className={classNames(styles.user, styles[`color${index}`])}>
                                   {item.owner &&
