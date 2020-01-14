@@ -2,8 +2,8 @@
  * @Author: liangchaoshun
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-13 20:54:47
- * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-14 10:40:31
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-14 19:26:44
  * @Description: 公式输入的模态框
  */
 
@@ -61,7 +61,7 @@ class HyperlinkModal extends PureComponent {
 
   // 公式模态框：确认
   fmlConfirm = () => {
-    const { cellPosition } = this.props;
+    const { cellPosition, dispatch } = this.props;
     const { formularValue } = this.state;
     this.checkFormularFormat(() => {
       // 验证格式
@@ -73,6 +73,12 @@ class HyperlinkModal extends PureComponent {
         this.showOrHideFormulaModal(false);
         setCellTypeAndValue({ type: 'formula', value: refineFmlValue, cellPosition });
         this.setState({ formularValue: '', formularSearchValue: '' });
+        dispatch({
+          type: 'reportDesigner/modifyTemplateArea',
+          payload: {
+            elementType: 'formula', // 单元格类型
+          },
+        });
       }
     });
   };

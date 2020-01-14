@@ -75,6 +75,12 @@ const formLayout = {
           cellPosition,
         });
       }
+      if (otherProps.elementType === 'text') {
+        setCellTypeAndValue({
+          type: 'text',
+          cellPosition,
+        });
+      }
       dispatch({
         type: 'reportDesigner/modifyTemplateArea',
         payload: otherProps,
@@ -289,6 +295,7 @@ export default class RightSideBar extends PureComponent {
     const [rowIndex, colIndex] = getColIndexRowIndex(cellPosition);
     // 单元格的props
     const cellProps = {
+      dispatch,
       cellPosition, // 单元格位置
       dataSetPrivateList, // 私有数据集
       otherProps: spreadsheetOtherProps.length > 0 ? spreadsheetOtherProps[rowIndex][colIndex] : {},
