@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:15:22
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 11:15:26
+ * @LastEditTime : 2020-01-14 22:19:19
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -253,12 +253,17 @@ class CodeMaintenance extends Component {
    * @return: undefined
    */
   queryCode = () => {
+    const page = {
+      pageNumber: 1,
+      pageSize: 10,
+    };
     this.searchForm.current.validateFields((err, values) => {
       if (err) {
         return;
       }
       this.setState(
         {
+          page,
           codeName: values.codeName,
         },
         () => {
