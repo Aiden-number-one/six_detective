@@ -79,6 +79,13 @@ export default class HomePage extends PureComponent {
     otherChart7: '',
     otherChart8: '',
 
+    isRenderAlterAllChart: true,
+    isRenderAlterPersonalChart: true,
+    isRenderApprovalAllChart: true,
+    isRenderApprovalPersonalChart: true,
+    isRenderSubmissionStatusPieChart: true,
+    isRenderMarketPieChart: true,
+
     visible: {
       quickMenu: false,
     },
@@ -212,19 +219,19 @@ export default class HomePage extends PureComponent {
   }
 
   refreshPage = value => {
-    const { dispatch } = this.props;
-    const { startDate, endDate, proStartDate, proEndDate } = this.state;
-    // 初始alert参数
-    const alertParams = {
-      startDate,
-      endDate,
-    };
-    // 初始approval参数
-    const proParams = {
-      startDate: proStartDate,
-      endDate: proEndDate,
-    };
     interval = setInterval(() => {
+      const { dispatch } = this.props;
+      const { startDate, endDate, proStartDate, proEndDate } = this.state;
+      // 初始alert参数
+      const alertParams = {
+        startDate,
+        endDate,
+      };
+      // 初始approval参数
+      const proParams = {
+        startDate: proStartDate,
+        endDate: proEndDate,
+      };
       // 获取All alert 条形图数据
       dispatch({
         type: 'allAlert/getAllAlterData',
@@ -1290,21 +1297,24 @@ export default class HomePage extends PureComponent {
         ]);
     }
     alterAllChart.render();
-    alterAllChart.on('interval:click', ev => {
-      // alertOwnerId
-      const clickData = ev.data;
-      if (clickData) {
-        // eslint-disable-next-line no-underscore-dangle
-        const alertOwnerId = clickData._origin.label;
-        // eslint-disable-next-line no-underscore-dangle
-        const alertStatusDesc = clickData._origin.type;
-        router.push(
-          `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&startDate=${startDate}&endDate=${endDate}`,
-        );
-      }
-    });
+    if (this.state.isRenderAlterAllChart) {
+      alterAllChart.on('interval:click', ev => {
+        // alertOwnerId
+        const clickData = ev.data;
+        if (clickData) {
+          // eslint-disable-next-line no-underscore-dangle
+          const alertOwnerId = clickData._origin.label;
+          // eslint-disable-next-line no-underscore-dangle
+          const alertStatusDesc = clickData._origin.type;
+          router.push(
+            `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&startDate=${startDate}&endDate=${endDate}`,
+          );
+        }
+      });
+    }
     this.setState({
       alterAllChart,
+      isRenderAlterAllChart: false,
     });
   };
 
@@ -1444,19 +1454,24 @@ export default class HomePage extends PureComponent {
         ]);
     }
     alterPersonalChart.render();
-    alterPersonalChart.on('interval:click', ev => {
-      const clickData = ev.data;
-      if (clickData) {
-        // eslint-disable-next-line no-underscore-dangle
-        const alertOwnerId = localStorage.getItem('loginName');
-        // eslint-disable-next-line no-underscore-dangle
-        const alertStatusDesc = clickData._origin.label;
-        router.push(
-          `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&startDate=${startDate}&endDate=${endDate}`,
-        );
-      }
+    if (this.state.isRenderAlterPersonalChart) {
+      alterPersonalChart.on('interval:click', ev => {
+        const clickData = ev.data;
+        if (clickData) {
+          // eslint-disable-next-line no-underscore-dangle
+          const alertOwnerId = localStorage.getItem('loginName');
+          // eslint-disable-next-line no-underscore-dangle
+          const alertStatusDesc = clickData._origin.label;
+          router.push(
+            `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&startDate=${startDate}&endDate=${endDate}`,
+          );
+        }
+      });
+    }
+    this.setState({
+      alterPersonalChart,
+      isRenderAlterPersonalChart: false,
     });
-    this.setState({ alterPersonalChart });
   };
 
   // 渲染Approval All柱状图
@@ -1601,20 +1616,25 @@ export default class HomePage extends PureComponent {
         ]);
     }
     approvalAllChart.render();
-    approvalAllChart.on('interval:click', ev => {
-      // alertOwnerId
-      const clickData = ev.data;
-      if (clickData) {
-        // eslint-disable-next-line no-underscore-dangle
-        const alertOwnerId = clickData._origin.label;
-        // eslint-disable-next-line no-underscore-dangle
-        const alertStatusDesc = clickData._origin.type;
-        router.push(
-          `/homepage/Approval-Process-Center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
-        );
-      }
+    if (this.state.isRenderApprovalAllChart) {
+      approvalAllChart.on('interval:click', ev => {
+        // alertOwnerId
+        const clickData = ev.data;
+        if (clickData) {
+          // eslint-disable-next-line no-underscore-dangle
+          const alertOwnerId = clickData._origin.label;
+          // eslint-disable-next-line no-underscore-dangle
+          const alertStatusDesc = clickData._origin.type;
+          router.push(
+            `/homepage/Approval-Process-Center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
+          );
+        }
+      });
+    }
+    this.setState({
+      approvalAllChart,
+      isRenderApprovalAllChart: false,
     });
-    this.setState({ approvalAllChart });
   };
 
   // 渲染Approval Personal柱状图
@@ -1750,19 +1770,24 @@ export default class HomePage extends PureComponent {
         ]);
     }
     approvalPersonalChart.render();
-    approvalPersonalChart.on('interval:click', ev => {
-      const clickData = ev.data;
-      if (clickData) {
-        // eslint-disable-next-line no-underscore-dangle
-        const alertOwnerId = localStorage.getItem('loginName');
-        // eslint-disable-next-line no-underscore-dangle
-        const alertStatusDesc = clickData._origin.label;
-        router.push(
-          `/homepage/Approval-Process-Center?taskType=myTask&alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
-        );
-      }
+    if (this.state.isRenderApprovalPersonalChart) {
+      approvalPersonalChart.on('interval:click', ev => {
+        const clickData = ev.data;
+        if (clickData) {
+          // eslint-disable-next-line no-underscore-dangle
+          const alertOwnerId = localStorage.getItem('loginName');
+          // eslint-disable-next-line no-underscore-dangle
+          const alertStatusDesc = clickData._origin.label;
+          router.push(
+            `/homepage/Approval-Process-Center?taskType=myTask&alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
+          );
+        }
+      });
+    }
+    this.setState({
+      approvalPersonalChart,
+      isRenderApprovalPersonalChart: false,
     });
-    this.setState({ approvalPersonalChart });
   };
 
   // 渲染Approval Personal饼图
@@ -2021,57 +2046,62 @@ export default class HomePage extends PureComponent {
         });
     }
     submissionStatusPieChart.render();
-    submissionStatusPieChart.on('interval:click', ev => {
-      const clickData = ev.data;
-      if (clickData) {
-        // eslint-disable-next-line no-underscore-dangle
-        const tradeDate = clickData._origin.date;
-        const { dispatch } = this.props;
-        dispatch({
-          type: 'dashboard/getReportFiles',
-          payload: {
-            tradeDate,
-          },
-          callback: () => {
-            if (this.state.submissionStatusBarChart) {
-              this.state.submissionStatusBarChart.clear();
-              this.renderSubmissionStatusBarChart();
-            }
-          },
-        });
-        // dispatch({
-        //   type: 'dashboard/getOutstandingReportFileCount',
-        //   payload: {
-        //     tradeDate,
-        //   },
-        //   callback: () => {
-        //     if (this.state.submissionStatusBarChart) {
-        //       setTimeout(() => {
-        //         if (this.state.submissionStatusBarChart) {
-        //           this.state.submissionStatusBarChart.clear();
-        //           this.renderSubmissionStatusBarChart();
-        //         }
-        //       }, 0);
-        //     }
-        //   },
-        // });
-        // dispatch({
-        //   type: 'dashboard/getLateReportFileCount',
-        //   payload: {
-        //     tradeDate,
-        //   },
-        //   callback: () => {
-        //     setTimeout(() => {
-        //       if (this.state.submissionStatusBarChart) {
-        //         this.state.submissionStatusBarChart.clear();
-        //         this.renderSubmissionStatusBarChart();
-        //       }
-        //     }, 0);
-        //   },
-        // });
-      }
+    if (this.state.isRenderSubmissionStatusPieChart) {
+      submissionStatusPieChart.on('interval:click', ev => {
+        const clickData = ev.data;
+        if (clickData) {
+          // eslint-disable-next-line no-underscore-dangle
+          const tradeDate = clickData._origin.date;
+          const { dispatch } = this.props;
+          dispatch({
+            type: 'dashboard/getReportFiles',
+            payload: {
+              tradeDate,
+            },
+            callback: () => {
+              if (this.state.submissionStatusBarChart) {
+                this.state.submissionStatusBarChart.clear();
+                this.renderSubmissionStatusBarChart();
+              }
+            },
+          });
+          // dispatch({
+          //   type: 'dashboard/getOutstandingReportFileCount',
+          //   payload: {
+          //     tradeDate,
+          //   },
+          //   callback: () => {
+          //     if (this.state.submissionStatusBarChart) {
+          //       setTimeout(() => {
+          //         if (this.state.submissionStatusBarChart) {
+          //           this.state.submissionStatusBarChart.clear();
+          //           this.renderSubmissionStatusBarChart();
+          //         }
+          //       }, 0);
+          //     }
+          //   },
+          // });
+          // dispatch({
+          //   type: 'dashboard/getLateReportFileCount',
+          //   payload: {
+          //     tradeDate,
+          //   },
+          //   callback: () => {
+          //     setTimeout(() => {
+          //       if (this.state.submissionStatusBarChart) {
+          //         this.state.submissionStatusBarChart.clear();
+          //         this.renderSubmissionStatusBarChart();
+          //       }
+          //     }, 0);
+          //   },
+          // });
+        }
+      });
+    }
+    this.setState({
+      submissionStatusPieChart,
+      isRenderSubmissionStatusPieChart: false,
     });
-    this.setState({ submissionStatusPieChart });
   };
 
   // 渲染Submission Status柱图
@@ -2206,7 +2236,7 @@ export default class HomePage extends PureComponent {
           },
           offset: 10,
         })
-        .size(35)
+        .size(30)
         .adjust([
           {
             type: 'dodge',
@@ -2351,27 +2381,32 @@ export default class HomePage extends PureComponent {
         });
     }
     marketPieChart.render();
-    marketPieChart.on('interval:click', ev => {
-      const clickData = ev.data;
-      if (clickData) {
-        // eslint-disable-next-line no-underscore-dangle
-        const market = clickData._origin.label;
-        const { dispatch } = this.props;
-        dispatch({
-          type: 'dashboard/getMarketDataByCategory',
-          payload: {
-            market,
-          },
-          callback: () => {
-            if (this.state.marketPieChart) {
-              this.state.marketPieChart.clear();
-              this.renderMarketRoseChart();
-            }
-          },
-        });
-      }
+    if (this.state.isRenderMarketPieChart) {
+      marketPieChart.on('interval:click', ev => {
+        const clickData = ev.data;
+        if (clickData) {
+          // eslint-disable-next-line no-underscore-dangle
+          const market = clickData._origin.label;
+          const { dispatch } = this.props;
+          dispatch({
+            type: 'dashboard/getMarketDataByCategory',
+            payload: {
+              market,
+            },
+            callback: () => {
+              if (this.state.marketRoseChart) {
+                this.state.marketRoseChart.clear();
+                this.renderMarketRoseChart();
+              }
+            },
+          });
+        }
+      });
+    }
+    this.setState({
+      marketPieChart,
+      isRenderMarketPieChart: false,
     });
-    this.setState({ marketPieChart });
   };
 
   // 渲染market南丁格尔玫瑰图
@@ -2484,14 +2519,20 @@ export default class HomePage extends PureComponent {
         padding: [20, 20, 45, 70], // 上下左右的padding
       });
     }
-    if (outstandingCasesData[0]) {
+    let isRender = false;
+    outstandingCasesData.forEach(item => {
+      if (item.count > 0) {
+        isRender = true;
+      }
+    });
+    if (isRender) {
       const outstandingCasesLine = [];
       let count = 0;
       outstandingCasesData.forEach(item => {
         outstandingCasesLine.push({
           label: item.tradeDate,
           value: item.count,
-          type: item.isProcess,
+          type: item.isProces,
         });
         if (item.count > count) {
           // eslint-disable-next-line prefer-destructuring
@@ -2659,29 +2700,37 @@ export default class HomePage extends PureComponent {
       });
     }
     if (isRender1) {
-      const processingStageBar = [
-        {
-          label: 'Fail submission',
+      const processingStageBar = [];
+      Object.keys(processingStageData[0]).forEach(item => {
+        processingStageBar.push({
+          label: item,
           type: 'Number Of Files',
-          value: processingStageData[0]['Fail submission'],
-        },
-        {
-          label: 'Failed validation',
-          type: 'Number Of Files',
-          value: processingStageData[0]['Failed validation'],
-        },
-        {
-          label: 'In validation',
-          type: 'Number Of Files',
-          value: processingStageData[0]['In validation'],
-        },
-        { label: 'Processed', type: 'Number Of Files', value: processingStageData[0].Processed },
-        {
-          label: 'Ready for Processing',
-          type: 'Number Of Files',
-          value: processingStageData[0]['Ready for Processing'],
-        },
-      ];
+          value: processingStageData[0][item],
+        });
+      });
+      // const processingStageBar = [
+      //   {
+      //     label: 'Fail Submission',
+      //     type: 'Number Of Files',
+      //     value: processingStageData[0]['Fail Submission'],
+      //   },
+      //   {
+      //     label: 'Failed Validation',
+      //     type: 'Number Of Files',
+      //     value: processingStageData[0]['Failed Validation'],
+      //   },
+      //   {
+      //     label: 'In Validation',
+      //     type: 'Number Of Files',
+      //     value: processingStageData[0]['In Validation'],
+      //   },
+      //   { label: 'Processed', type: 'Number Of Files', value: processingStageData[0].Processed },
+      //   {
+      //     label: 'Ready for Process',
+      //     type: 'Number Of Files',
+      //     value: processingStageData[0]['Ready for Process'],
+      //   },
+      // ];
       processingStageBarChart.source(processingStageBar, {
         value: {
           // eslint-disable-next-line no-nested-ternary
@@ -2891,6 +2940,13 @@ export default class HomePage extends PureComponent {
       });
     }
 
+    let isRender2 = false;
+    outstandingCasesData.forEach(item => {
+      if (item.count > 0) {
+        isRender2 = true;
+      }
+    });
+
     const {
       alertState,
       textActive,
@@ -2929,6 +2985,7 @@ export default class HomePage extends PureComponent {
                               {
                                 alertState: 'ALL',
                                 alterAllChart: '',
+                                isRenderAlterAllChart: true,
                                 otherChart1: '',
                                 otherChart2: '',
                               },
@@ -2952,6 +3009,7 @@ export default class HomePage extends PureComponent {
                               {
                                 alertState: 'PER',
                                 alterPersonalChart: '',
+                                isRenderAlterPersonalChart: true,
                                 otherChart3: '',
                                 otherChart4: '',
                               },
@@ -3433,6 +3491,7 @@ export default class HomePage extends PureComponent {
                               {
                                 approvalState: 'ALL',
                                 approvalAllChart: '',
+                                isRenderApprovalAllChart: true,
                                 otherChart5: '',
                                 otherChart6: '',
                               },
@@ -3456,6 +3515,7 @@ export default class HomePage extends PureComponent {
                               {
                                 approvalState: 'PER',
                                 approvalPersonalChart: '',
+                                isRenderApprovalPersonalChart: true,
                                 approvalPersonalPieChart: '',
                                 otherChart7: '',
                                 otherChart8: '',
@@ -3989,10 +4049,8 @@ export default class HomePage extends PureComponent {
                           !lastTradeDate ||
                           !currentDate ||
                           !lastDate ||
-                          (currentTradeDate &&
-                            currentDate &&
-                            currentTradeDate[currentDate] === 0) ||
-                          (lastTradeDate && lastDate && lastTradeDate[lastDate] === 0)) && (
+                          (currentTradeDate[currentDate] === 0 &&
+                            lastTradeDate[lastDate] === 0)) && (
                           <div
                             style={{
                               width: '100%',
@@ -4027,7 +4085,7 @@ export default class HomePage extends PureComponent {
                   <div className={styles.outstandingCases}>
                     <h3 className={styles.groupTitle}>NO. of Outstanding Cases(Investigating)</h3>
                     <div style={{ position: 'relative', height: 226 }}>
-                      {!outstandingCasesData[0] && (
+                      {!isRender2 && (
                         <div
                           style={{
                             width: '100%',
