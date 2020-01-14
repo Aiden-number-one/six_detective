@@ -2,11 +2,23 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-11 16:56:09
+ * @LastEditTime : 2020-01-14 12:37:21
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
-import { Icon, Input, Select, Button, Layout, Table, Row, Col, Checkbox, InputNumber } from 'antd';
+import {
+  Icon,
+  message,
+  Input,
+  Select,
+  Button,
+  Layout,
+  Table,
+  Row,
+  Col,
+  Checkbox,
+  InputNumber,
+} from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import _ from 'lodash';
@@ -349,23 +361,45 @@ class AddDataSet extends PureComponent {
       variableList,
       dataSourceList,
     } = this.props;
-    dispatch({
-      type: 'sqlDataSource/addDataSet',
-      payload: {
-        datasourceId:
-          this.connection_id ||
-          (dataSourceList && dataSourceList[0] && dataSourceList[0].connectionId),
-        datasourceName: this.connection_name,
-        commandText: this.state.sql,
-        datasetParams: JSON.stringify(variableList),
-        datasetFields: JSON.stringify([]),
-        datasetType: dataSet.datasetType || datasetType,
-        datasetIsDict: 'N',
-        datasetName: fieldsValue.sqlDataSetName,
-        folderId: fieldsValue.folder,
-        datasetId: this.isSaveOther ? '' : this.datasetId,
-      },
-    });
+    if (variableList[0]) {
+      dispatch({
+        type: 'sqlDataSource/addDataSet',
+        payload: {
+          datasourceId:
+            this.connection_id ||
+            (dataSourceList && dataSourceList[0] && dataSourceList[0].connectionId),
+          datasourceName: this.connection_name,
+          commandText: this.state.sql,
+          datasetParams: JSON.stringify(variableList),
+          datasetFields: JSON.stringify([]),
+          datasetType: dataSet.datasetType || datasetType,
+          datasetIsDict: 'N',
+          datasetName: fieldsValue.sqlDataSetName,
+          folderId: fieldsValue.folder,
+          datasetId: this.isSaveOther ? '' : this.datasetId,
+        },
+      });
+    } else {
+      this.getVariableList(values => {
+        dispatch({
+          type: 'sqlDataSource/addDataSet',
+          payload: {
+            datasourceId:
+              this.connection_id ||
+              (dataSourceList && dataSourceList[0] && dataSourceList[0].connectionId),
+            datasourceName: this.connection_name,
+            commandText: this.state.sql,
+            datasetParams: JSON.stringify(values),
+            datasetFields: JSON.stringify([]),
+            datasetType: dataSet.datasetType || datasetType,
+            datasetIsDict: 'N',
+            datasetName: fieldsValue.sqlDataSetName,
+            folderId: fieldsValue.folder,
+            datasetId: this.isSaveOther ? '' : this.datasetId,
+          },
+        });
+      });
+    }
     // 保存后跳转页面初始化
     this.pageNumber = 1;
     this.isSaveOther = false;
@@ -500,9 +534,13 @@ class AddDataSet extends PureComponent {
                   style={{ float: 'right' }}
                   type="primary"
                   onClick={() => {
-                    // 打开保存弹框
-                    this.isSaveOther = false;
-                    this.toggleModal('save');
+                    if (this.state.sql) {
+                      // 打开保存弹框
+                      this.isSaveOther = false;
+                      this.toggleModal('save');
+                    } else {
+                      message.warning(`Please input ${datasetType}`);
+                    }
                   }}
                 >
                   Save
@@ -512,9 +550,13 @@ class AddDataSet extends PureComponent {
                   className="btn-usual"
                   type="primary"
                   onClick={() => {
-                    // 打开另存为弹框
-                    this.isSaveOther = true;
-                    this.toggleModal('save');
+                    if (this.state.sql) {
+                      // 打开另存为弹框
+                      this.isSaveOther = true;
+                      this.toggleModal('save');
+                    } else {
+                      message.warning(`Please input ${datasetType}`);
+                    }
                   }}
                 >
                   Save As
@@ -636,17 +678,19 @@ class AddDataSet extends PureComponent {
                         onClick={() => {
                           if (this.state.sql) {
                             // 存在参数设置则弹出参数设置弹框,否则直接预览数据
-                            if (variableList.length > 0) {
-                              this.toggleModal('valueSetting');
-                            } else {
-                              this.getVariableList(values => {
-                                if (values.length > 0) {
-                                  this.toggleModal('valueSetting');
-                                } else {
-                                  this.handlePreview();
-                                }
-                              });
-                            }
+                            // if (variableList.length > 0) {
+                            //   this.toggleModal('valueSetting');
+                            // } else {
+                            this.getVariableList(values => {
+                              if (values.length > 0) {
+                                this.toggleModal('valueSetting');
+                              } else {
+                                this.handlePreview();
+                              }
+                            });
+                            // }
+                          } else {
+                            message.warning(`Please Input ${datasetType}`);
                           }
                         }}
                       >

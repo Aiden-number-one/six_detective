@@ -2,7 +2,7 @@
  * @Description: quick menu
  * @Author: lan
  * @Date: 2020-01-02 15:08:11
- * @LastEditTime : 2020-01-03 18:43:28
+ * @LastEditTime : 2020-01-14 11:13:26
  * @LastEditors  : lan
  */
 import { message } from 'antd';
@@ -22,7 +22,7 @@ export default {
 
   effects: {
     // 获取快捷菜单
-    *getQuickMenu({ payload, callback }, { call, put }) {
+    *getQuickMenu({ payload, callback, callbackForHomepage }, { call, put }) {
       const response = yield call(getQuickMenu, { param: payload });
       if (response.bcjson.flag === '1') {
         yield put({
@@ -30,16 +30,18 @@ export default {
           payload: response.bcjson.items,
         });
         if (callback) callback(response.bcjson.items);
+        if (callbackForHomepage) callbackForHomepage(response.bcjson.items);
       }
     },
     // 设置快捷菜单
-    *saveQuickMenu({ payload, callback }, { call, put }) {
+    *saveQuickMenu({ payload, callback, callbackForHomepage }, { call, put }) {
       const response = yield call(saveQuickMenu, { param: payload });
       if (response.bcjson.flag === '1') {
         message.success(response.bcjson.msg);
         yield put({
           type: 'getQuickMenu',
           callback,
+          callbackForHomepage,
         });
       }
     },

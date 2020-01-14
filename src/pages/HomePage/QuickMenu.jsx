@@ -157,7 +157,7 @@ export default class QuickMenu extends PureComponent {
   // 保存操作
   saveQuickMenu = () => {
     const { targetKeys } = this.state;
-    const { dispatch, toggleModal } = this.props;
+    const { dispatch, toggleModal, callback } = this.props;
     dispatch({
       type: 'quickMenu/saveQuickMenu',
       payload: {
@@ -172,6 +172,7 @@ export default class QuickMenu extends PureComponent {
           targetKeys: keys,
         });
       },
+      callbackForHomepage: callback,
     });
     toggleModal('quickMenu');
   };
