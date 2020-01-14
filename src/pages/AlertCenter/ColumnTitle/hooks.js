@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-14 14:41:13
+ * @LastEditTime : 2020-01-14 15:17:29
  */
 import { useState } from 'react';
 
@@ -42,7 +42,7 @@ export function useColumnFilter({ dispatch, tableName, action: type, page, pageS
       reset();
     }
     dispatch({
-      type: 'alertCenter/fetch',
+      type,
       payload: {
         currentColumn: tableColumn,
         conditions,
@@ -55,7 +55,7 @@ export function useColumnFilter({ dispatch, tableName, action: type, page, pageS
 
   async function handlePageChange(p, ps) {
     dispatch({
-      type: 'alertCenter/fetch',
+      type,
       payload: {
         page: p,
         pageSize: ps,
