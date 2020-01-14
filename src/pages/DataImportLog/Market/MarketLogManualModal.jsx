@@ -151,4 +151,4 @@ function MarketLogManualModal({ form, visible, loading, onCancel, onUpload }) {
   );
 }
 
-export default Form.create()(MarketLogManualModal);
+export default Form.create({ name: 'market' })(MarketLogManualModal);

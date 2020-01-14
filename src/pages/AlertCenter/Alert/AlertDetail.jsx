@@ -240,7 +240,6 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
             panes.map(pane => (
               <TabPane
                 className={styles['tab-content']}
-                style={{ height: isFullscreen ? 'auto' : 360 }}
                 key={pane.TASK_ID.toString()}
                 tab={
                   <Row type="flex" justify="space-between" align="middle">
@@ -255,6 +254,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
               >
                 <TaskItem
                   task={pane}
+                  style={{ height: isFullscreen ? 'auto' : 500 }}
                   taskItemHistorys={taskItemHistorys}
                   loading={loading['alertCenter/fetchTaskHistory']}
                 />
