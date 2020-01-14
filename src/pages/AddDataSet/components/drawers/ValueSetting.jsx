@@ -2,7 +2,7 @@
  * @Description: 设置参数值
  * @Author: lan
  * @Date: 2019-12-11 20:54:21
- * @LastEditTime : 2019-12-24 13:25:13
+ * @LastEditTime : 2020-01-14 12:43:55
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -40,7 +40,7 @@ export default class ValueSetting extends PureComponent {
     return (
       <Drawer
         title="Params"
-        width={500}
+        width={700}
         visible={visible}
         onClose={() => {
           toggleModal('valueSetting');
@@ -49,7 +49,11 @@ export default class ValueSetting extends PureComponent {
       >
         <Form onSubmit={this.handleSubmit}>
           {variableList.map(item => (
-            <Form.Item label={item.parameter_name} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+            <Form.Item
+              label={item.parameter_name}
+              labelCol={{ span: 10 }}
+              wrapperCol={{ span: 14 }}
+            >
               {getFieldDecorator(item.parameter_name, {
                 rules: [
                   {
@@ -80,7 +84,7 @@ export default class ValueSetting extends PureComponent {
               Cancel
             </Button>
             <Button htmlType="submit" type="primary">
-              Save
+              Submit
             </Button>
           </div>
         </Form>

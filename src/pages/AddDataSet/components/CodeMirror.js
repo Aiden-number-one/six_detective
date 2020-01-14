@@ -136,10 +136,10 @@ class CodeMirrorComponent extends Component {
           options={options}
           onChange={(editor, data, value) => {
             alterInputSql(value);
-            // dispatch({
-            //   type: 'sqlKeydown/changeSql',
-            //   payload: value,
-            // });
+            dispatch({
+              type: 'sqlDataSource/setVariableList',
+              payload: [],
+            });
           }}
         />
       </div>,
