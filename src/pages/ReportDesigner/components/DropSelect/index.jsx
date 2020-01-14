@@ -28,12 +28,11 @@ export default class DropSelect extends Component {
       changedisplayDropSelect,
     } = this.props;
     const { keyWord } = this.state;
-    // TODO
-    const text = '';
     // 关键词搜索数据集
     if (keyWord) {
       data = data.filter(item => item.datasetName.includes(keyWord)); // 关键字搜索
     }
+    const dataText = privateData.map(item => item.dataset_name).split(',');
     return (
       <div className={styles.edit}>
         <div
@@ -49,15 +48,20 @@ export default class DropSelect extends Component {
               e.stopPropagation();
               changedisplayDropSelect(!displayDropSelect);
             }}
-            title={text}
+            title={dataText}
           >
-            {text} {displayDropSelect ? <Icon type="caret-up" /> : <Icon type="caret-down" />}
+            {dataText} {displayDropSelect ? <Icon type="caret-up" /> : <Icon type="caret-down" />}
           </div>
           <div
             className={styles.dropSelectMenu}
             style={{ display: displayDropSelect ? 'block' : 'none' }}
           >
-            <div className={styles.search}>
+            <div
+              className={styles.search}
+              onClick={e => {
+                e.stopPropagation();
+              }}
+            >
               <Icon type="search" />
               <input
                 placeholder="Please input keywords"
@@ -69,12 +73,24 @@ export default class DropSelect extends Component {
               />
             </div>
             <div className={styles.dropSelectBtns}>
-              <span onClick={() => {}}>
+              <span
+                onClick={e => {
+                  e.stopPropagation();
+                  window.open('/report/report-designer/dataset-management');
+                }}
+              >
                 <Icon type="plus" style={{ fontSize: 12 }} />
                 &nbsp;
                 <FormattedMessage id="report-designer.adddataset" />
               </span>
-              <Icon className={styles.hover} type="reload" onClick={getPublicDataSet} />
+              <Icon
+                className={styles.hover}
+                type="reload"
+                onClick={e => {
+                  e.stopPropagation();
+                  getPublicDataSet();
+                }}
+              />
             </div>
             <Spin size="small" spinning={loading}>
               <div className={styles.items}>

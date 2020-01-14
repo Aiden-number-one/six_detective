@@ -8,13 +8,15 @@ import styles from '../../index.less';
 export function AlertListBtns({
   disabled,
   loading,
-  isBatchAction,
   isAuth,
+  isBatchAction,
   claimAlerts,
   closeAlerts,
-  exportAlerts,
+  onExport,
   onDiscontinue,
 }) {
+  const claimLoading = loading['alertCenter/claim'];
+  const exportLoading = loading['alertCenter/exportAlerts'];
   return (
     <Row className={styles.btns} type="flex" justify="space-between" align="middle">
       <Col className={styles['page-name']}>
@@ -29,22 +31,30 @@ export function AlertListBtns({
           type="button"
           disabled={disabled}
           onClick={claimAlerts}
-          className={loading ? styles.loading : ''}
+          className={claimLoading ? styles.loading : ''}
         >
-          {isBatchAction && !disabled && loading ? (
+          {isBatchAction && !disabled && claimLoading ? (
             <Icon type="loading" className={styles['btn-icon']} />
           ) : (
             <IconFont type="iconqizhi" className={styles['btn-icon']} />
           )}
-
           <FormattedMessage id="alert-center.claim" />
         </button>
         <button type="button" disabled={disabled} onClick={closeAlerts}>
           <IconFont type="iconclose-circle" className={styles['btn-icon']} />
           <FormattedMessage id="alert-center.close" />
         </button>
-        <button type="button" disabled={disabled} onClick={exportAlerts}>
-          <IconFont type="iconexport" className={styles['btn-icon']} />
+        <button
+          type="button"
+          className={exportLoading ? styles.loading : ''}
+          disabled={disabled}
+          onClick={onExport}
+        >
+          {!disabled && exportLoading ? (
+            <Icon type="loading" className={styles['btn-icon']} />
+          ) : (
+            <IconFont type="iconexport" className={styles['btn-icon']} />
+          )}
           <FormattedMessage id="alert-center.export" />
         </button>
         {isAuth && (

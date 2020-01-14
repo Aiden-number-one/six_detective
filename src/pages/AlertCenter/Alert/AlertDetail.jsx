@@ -3,6 +3,7 @@ import { Tabs, Row, Col, Empty, Spin, Icon, Button } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
+import { downloadFile } from '@/pages/DataImportLog/constants';
 import styles from '@/pages/AlertCenter/index.less';
 import {
   AlertDes,
@@ -171,6 +172,19 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
     setEmailVisible(false);
   }
 
+  async function handleDownloadAll(fileList) {
+    console.log(fileList);
+    const url = await dispatch({
+      type: 'global/fetchZipAttachments',
+      payload: {
+        attachmentUrl: fileList,
+      },
+    });
+    if (url) {
+      downloadFile(url);
+    }
+  }
+
   return (
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
@@ -226,7 +240,6 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
             panes.map(pane => (
               <TabPane
                 className={styles['tab-content']}
-                style={{ height: isFullscreen ? 'auto' : 360 }}
                 key={pane.TASK_ID.toString()}
                 tab={
                   <Row type="flex" justify="space-between" align="middle">
@@ -241,6 +254,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
               >
                 <TaskItem
                   task={pane}
+                  style={{ height: isFullscreen ? 'auto' : 500 }}
                   taskItemHistorys={taskItemHistorys}
                   loading={loading['alertCenter/fetchTaskHistory']}
                 />
@@ -251,7 +265,10 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
             ))}
         </Tabs>
         {+alert.emailType === 111 && attachments.length > 0 && (
-          <AlertDownAttachments attachments={attachments} />
+          <AlertDownAttachments
+            attachments={attachments}
+            onDownloadAll={() => handleDownloadAll(attachments.map(({ url }) => url))}
+          />
         )}
       </Col>
       <Col span={8}>
@@ -262,6 +279,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
                 <ul className={styles['comment-list']}>
                   {comments.map(({ id, commitTime, commentContent, userName, fileList }) => (
                     <AlertComment
+                      key={id}
                       comment={{
                         id,
                         time: commitTime,
@@ -269,7 +287,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
                         user: userName,
                         files: fileList,
                       }}
-                      key={id}
+                      onDownloadAll={() => handleDownloadAll(fileList)}
                     />
                   ))}
                 </ul>

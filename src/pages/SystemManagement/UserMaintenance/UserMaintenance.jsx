@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-12 19:03:58
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 13:44:10
+ * @LastEditTime : 2020-01-14 10:55:56
  */
 
 import React, { Component } from 'react';
@@ -359,6 +359,7 @@ class UserMaintenance extends Component {
             </div>
             <Table
               loading={loading['userMaintenance/userManagemetDatas']}
+              rowKey={row => row.userId.toString()}
               dataSource={userMaintenanceData.items}
               columns={this.state.columns}
               pagination={false}

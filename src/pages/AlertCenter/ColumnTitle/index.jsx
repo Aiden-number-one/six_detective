@@ -6,13 +6,17 @@ import IconFont from '@/components/IconFont';
 import { FilterHeader, FilterType, FilterSelect, FilterCheckbox } from './FilterContent';
 import styles from './index.less';
 
+export { useColumnFilter } from './hooks';
+
 function ColumnTitle({
   dispatch,
   children,
   isNum,
   loading,
   curColumn,
+  tableName = 'slop_biz.v_alert_center',
   conditions,
+  sort,
   onSort,
   onCommit,
 }) {
@@ -31,13 +35,13 @@ function ColumnTitle({
       const filters = await dispatch({
         type: 'global/fetchTableFilterItems',
         payload: {
-          tableName: 'slop_biz.v_alert_center',
+          tableName,
           tableColumn: curColumn,
         },
       });
-      setFilterItems(filters);
+      setFilterItems(filters || []);
       if (!checkedList.length) {
-        setCheckedList(filters);
+        setCheckedList(filters || []);
       }
     }
   }
@@ -54,7 +58,6 @@ function ColumnTitle({
 
   async function handleClear() {
     const updatedConditions = conditions.filter(item => item.column !== curColumn);
-    console.log(updatedConditions);
     await onCommit(curColumn, updatedConditions);
     setCheckedList(filterItems);
     setSelectedItem('');
@@ -62,18 +65,20 @@ function ColumnTitle({
     setVisible(false);
   }
 
-  async function handleSort(sort) {
-    await onSort(curColumn, sort);
+  async function handleSort(s) {
+    if (s !== sort) {
+      await onSort(curColumn, s);
+    }
     setVisible(false);
   }
 
   async function handleOk() {
     const isCheckbox = filterType === 2 || filterType === 7;
-    const value = isCheckbox ? checkedList : [selectedItem];
+    const values = isCheckbox ? checkedList : [selectedItem];
 
     const condition = {
       column: curColumn,
-      value: value.toString(),
+      value: values.map(item => encodeURIComponent(item)).toString(),
       condition: filterType.toString(),
     };
     let updatedConditions = conditions;
@@ -107,6 +112,7 @@ function ColumnTitle({
           <FilterHeader
             disabled={checkedList.length === filterItems.length}
             onClear={handleClear}
+            sort={sort}
             onSort={handleSort}
           />
           <div className={styles.content}>

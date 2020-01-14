@@ -95,6 +95,9 @@ class CodeMirrorComponent extends Component {
         <Menu.Item key="1">Call</Menu.Item>
       </Menu>
     );
+    const placeHolder = `Please Input ${datasetType}, Support dynamic parameters, Parameter format is $[XXX]`
+      .replace('[', '{')
+      .replace(']', '}');
     return connectDropTarget(
       <div
         style={{ position: 'relative' }}
@@ -118,7 +121,7 @@ class CodeMirrorComponent extends Component {
               fontSize: 14,
             }}
           >
-            Please Input {datasetType}
+            {placeHolder}
           </span>
         )}
         <Dropdown
@@ -133,10 +136,10 @@ class CodeMirrorComponent extends Component {
           options={options}
           onChange={(editor, data, value) => {
             alterInputSql(value);
-            // dispatch({
-            //   type: 'sqlKeydown/changeSql',
-            //   payload: value,
-            // });
+            dispatch({
+              type: 'sqlDataSource/setVariableList',
+              payload: [],
+            });
           }}
         />
       </div>,

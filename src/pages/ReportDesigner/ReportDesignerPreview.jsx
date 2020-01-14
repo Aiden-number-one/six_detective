@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Icon, Row, Select, Radio, DatePicker, Button } from 'antd';
+import { Icon, Row, Button } from 'antd';
 
 import less from './ReportPreview.less';
 import ReportPager from './ReportPager';
@@ -21,11 +21,6 @@ class ReportDesignerPreview extends Component {
     };
   }
 
-  componentDidMount() {
-    // 获取预览数据
-    this.fetchData();
-  }
-
   // 获取数据
   fetchData = (
     { pageNumber = '1', pageSize = '10', parameters = '' } = {
@@ -38,7 +33,7 @@ class ReportDesignerPreview extends Component {
     const {
       dispatch,
       location: {
-        query: { reportId },
+        query: { reportId, paging = '1' },
       },
     } = this.props;
     // 查看预览数据
@@ -46,7 +41,8 @@ class ReportDesignerPreview extends Component {
       type: 'reportDesignPreview/getReportTemplateDataQuery',
       payload: {
         reportId,
-        pageNumber,
+        // 若为不分页，则pageNumber始终为0
+        pageNumber: paging === '1' ? pageNumber : '0',
         pageSize,
         parameters,
       },
@@ -132,9 +128,11 @@ class ReportDesignerPreview extends Component {
     } = this.props;
     const [tableData, rowCountAndTemplateArea] = items; // 考虑 undefined
     // 总的记录数及templateArea
-    const { totalRowCount: totalRecord, templateArea = {} } = rowCountAndTemplateArea || {};
-    const { customSearchData = [] } = templateArea;
-    const { totalPage, content = '<div></div>', style: styleRules } = tableData || {};
+    const { templateArea = {} } = rowCountAndTemplateArea || {};
+    // 查询条件相关及分页参数
+    const { customSearchData = [], paging } = templateArea;
+    const { totalPage, content = '<div></div>', style: styleRules, totalPage: totalRecord } =
+      tableData || {};
     // console.log('preview: ', items);
     if (styleRules) {
       // 动态添加表格的样式到 document 中
@@ -158,6 +156,7 @@ class ReportDesignerPreview extends Component {
             totalPage={totalPage}
             totalRecord={totalRecord}
             pageChageCallback={this.pageChageCallback}
+            paging={paging}
           />
           <div className="ant-divider ant-divider-vertical" role="separator" />
           <Icon type="export" title="Export" onClick={this.exportExcel} />

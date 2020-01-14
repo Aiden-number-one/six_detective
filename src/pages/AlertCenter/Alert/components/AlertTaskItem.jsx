@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Table } from 'antd';
 import moment from 'moment';
 import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';

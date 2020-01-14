@@ -17,7 +17,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/images/logo.png';
 import logoSamll from '../assets/images/logo-small.png';
 import styles from './BasicLayout.less';
-import { setStore, getStore } from '@/utils/store';
+import { setStore } from '@/utils/store';
 // import globalStyles from '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
 
@@ -56,10 +56,10 @@ const BasicLayout = props => {
 
   useEffect(() => {
     // console.log('employeeId=======', getStore('employeeId'))
-    if (!getStore('employeeId')) {
-      router.push('/login');
-      return;
-    }
+    // if (!getStore('employeeId')) {
+    //   router.push('/login');
+    //   return;
+    // }
     dispatch({
       type: 'menu/getMenuData',
       callback: m => {
@@ -77,12 +77,11 @@ const BasicLayout = props => {
   }, []);
 
   useEffect(() => {
-    if (!getStore('employeeId')) {
-      router.push('/login');
-      return;
-    }
+    // if (!getStore('employeeId')) {
+    //   router.push('/login');
+    //   return;
+    // }
     setLocale('en-US');
-    console.log('basic');
     // window.addEventListener('beforeunload', listenClose, false);
     if (dispatch) {
       dispatch({

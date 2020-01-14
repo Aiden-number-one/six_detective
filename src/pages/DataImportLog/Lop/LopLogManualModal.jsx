@@ -214,4 +214,4 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
   );
 }
 
-export default Form.create()(LopLogManualModal);
+export default Form.create({ name: 'lop' })(LopLogManualModal);
