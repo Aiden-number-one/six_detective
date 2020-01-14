@@ -49,27 +49,27 @@ class ToolBar extends Component {
 
   cellType = [
     {
-      label: 'general',
+      label: 'General',
       key: 'text',
       value: 'text',
     },
     {
-      label: 'number',
+      label: 'Number',
       key: 'numeric',
       value: 'numeric',
     },
     {
-      label: 'percentage',
+      label: 'Percentage',
       key: 'percentage',
       value: 'percentage',
     },
     {
-      label: 'date',
+      label: 'Date',
       key: 'dateyyyy-MM-dd',
       value: 'dateyyyy-MM-dd',
     },
     {
-      label: 'currency￥',
+      label: 'Currency￥',
       key: 'currency￥',
       value: 'currency￥',
     },
@@ -100,12 +100,13 @@ class ToolBar extends Component {
     }, */
   ];
 
+  // *** 每项中的 label 对应 this.cellType 中的 value ***
   cellTypeMap = {
     'dateyyyy-MM-dd': {
       cellType: 'date',
       format: 'yyyy-MM-dd',
       type: 'date',
-      label: 'date',
+      label: 'dateyyyy-MM-dd',
     },
     text: {
       cellType: 'text',
@@ -415,7 +416,7 @@ class ToolBar extends Component {
       overflow: 'hidden',
       whiteSpace: 'nowrap',
     };
-    // console.log('state -> cellType: ', cellType);
+
     return (
       <>
         <div className={classNames(styles.tabs, 'card-container')}>
@@ -917,13 +918,8 @@ class ToolBar extends Component {
                   <Select
                     className="select"
                     style={{ width: '139px' }}
-                    defaultValue="1"
                     suffixIcon={<Icon type="caret-down" />}
-                    // value={cellType.format ? cellType.format : undefined}
-                    value={
-                      // eslint-disable-next-line no-nested-ternary
-                      cellType.type ? cellType.type : cellType.label ? cellType.label : undefined
-                    }
+                    value={cellType.label ? cellType.label : 'text'}
                     size="small"
                     onChange={value => {
                       this.setState({
