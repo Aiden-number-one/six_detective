@@ -4,11 +4,18 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-14 10:03:35
+ * @LastEditTime : 2020-01-14 13:22:13
  */
 import { useState } from 'react';
 
-export function useColumnFilter({ dispatch, action: type, alertPage, alertPageSize, reset }) {
+export function useColumnFilter({
+  dispatch,
+  tableName,
+  action: type,
+  alertPage,
+  alertPageSize,
+  reset,
+}) {
   // { column: '', value: '', condition: '7' }
   const [conditions, setConditions] = useState([]);
   const [curTableColumn, setCurTableColumn] = useState('');
@@ -53,12 +60,28 @@ export function useColumnFilter({ dispatch, action: type, alertPage, alertPageSi
     });
   }
 
+  async function handlePageChange(page, pageSize) {
+    dispatch({
+      type: 'alertCenter/fetch',
+      payload: {
+        page,
+        pageSize,
+        conditions,
+        currentColumn: curTableColumn,
+        sort: curSortColumn === curTableColumn ? curSort : '',
+      },
+    });
+  }
+
   return {
-    conditions,
-    curTableColumn,
-    curSortColumn,
-    curSort,
-    handleCommit,
-    handleSort,
+    handlePageChange,
+    getTitleProps: column => ({
+      curColumn: column,
+      conditions,
+      tableName,
+      sort: curSortColumn === column ? curSort : '',
+      onCommit: handleCommit,
+      onSort: handleSort,
+    }),
   };
 }

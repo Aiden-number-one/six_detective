@@ -17,15 +17,9 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   // header filter
-  const {
-    conditions,
-    curTableColumn,
-    curSortColumn,
-    curSort,
-    handleCommit,
-    handleSort,
-  } = useColumnFilter({
+  const { handlePageChange, getTitleProps } = useColumnFilter({
     dispatch,
+    tableName: 'slop_biz.v_info',
     action: 'alertCenter/fetchInfos',
     infoPage,
     infoPageSize,
@@ -49,19 +43,6 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
       setInfo(null);
     }
   }, [infos]);
-
-  function handlePageChange(page, pageSize) {
-    dispatch({
-      type: 'alertCenter/fetchInfos',
-      payload: {
-        page,
-        pageSize,
-        conditions,
-        currentColumn: curTableColumn,
-        sort: curSortColumn === curTableColumn ? curSort : '',
-      },
-    });
-  }
 
   async function handleExport() {
     const url = await dispatch({
@@ -145,13 +126,7 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             width={150}
             dataIndex="informationNo"
             title={
-              <ColumnTitle
-                curColumn="informationNo"
-                conditions={conditions}
-                sort={curSortColumn === 'informationNo' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('informationNo')}>
                 <FormattedMessage id="alert-center.information-no" />
               </ColumnTitle>
             }
@@ -161,13 +136,7 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             ellipsis
             dataIndex="informationType"
             title={
-              <ColumnTitle
-                curColumn="informationType"
-                conditions={conditions}
-                sort={curSortColumn === 'informationType' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('informationType')}>
                 <FormattedMessage id="alert-center.information-type" />
               </ColumnTitle>
             }
@@ -177,13 +146,7 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             dataIndex="timestamp"
             render={text => moment(text).format(timestampFormat)}
             title={
-              <ColumnTitle
-                curColumn="timestamp"
-                conditions={conditions}
-                sort={curSortColumn === 'timestamp' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('timestamp')}>
                 <FormattedMessage id="alert-center.information-timestamp" />
               </ColumnTitle>
             }
@@ -192,14 +155,7 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             align="center"
             dataIndex="market"
             title={
-              <ColumnTitle
-                curColumn="market"
-                tableName="slop_biz.v_info"
-                conditions={conditions}
-                sort={curSortColumn === 'market' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('market')}>
                 <FormattedMessage id="alert-center.market" />
               </ColumnTitle>
             }
@@ -207,13 +163,7 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
           <Column
             dataIndex="submitterCode"
             title={
-              <ColumnTitle
-                curColumn="submitterCode"
-                conditions={conditions}
-                sort={curSortColumn === 'submitterCode' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('submitterCode')}>
                 <FormattedMessage id="alert-center.submitter-code" />
               </ColumnTitle>
             }
@@ -221,13 +171,7 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
           <Column
             dataIndex="submitterName"
             title={
-              <ColumnTitle
-                curColumn="submitterName"
-                conditions={conditions}
-                sort={curSortColumn === 'submitterName' ? curSort : ''}
-                onSort={handleSort}
-                onCommit={handleCommit}
-              >
+              <ColumnTitle {...getTitleProps('submitterName')}>
                 <FormattedMessage id="alert-center.submitter-name" />
               </ColumnTitle>
             }
