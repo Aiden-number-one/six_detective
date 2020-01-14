@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:15:22
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 10:59:12
+ * @LastEditTime : 2020-01-14 11:15:26
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -117,8 +117,8 @@ class CodeMaintenance extends Component {
     modifyFlag: false,
     codeId: '',
     itemPage: {
-      pageNumber: '1',
-      pageSize: '10',
+      pageNumber: 1,
+      pageSize: 10,
     },
     updateCodeItemParams: {
       codeId: '',
