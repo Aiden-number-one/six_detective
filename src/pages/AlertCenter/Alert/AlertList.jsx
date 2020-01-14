@@ -45,10 +45,24 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   }, []);
 
   useEffect(() => {
-    const { alertIds } = location.query;
+    const { alertIds, owner, status, tradeDate } = location.query;
     let params = [];
     if (alertIds) {
       params = [{ column: 'alertNo', value: alertIds, condition: '7' }];
+    }
+    if (owner) {
+      params = [...params, { column: 'userName', value: owner, condition: '7' }];
+    }
+    if (status) {
+      params = [...params, { column: 'alertStatusDesc', value: status, condition: '7' }];
+    }
+    if (tradeDate) {
+      const [start, end] = tradeDate.split(',');
+      params = [
+        ...params,
+        { column: 'tradeDate', value: start, condition: '4' },
+        { column: 'tradeDate', value: end, condition: '6' },
+      ];
     }
     dispatch({
       type: 'alertCenter/fetch',
