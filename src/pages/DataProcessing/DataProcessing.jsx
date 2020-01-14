@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 20:27:38
+ * @LastEditTime : 2020-01-14 21:03:40
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -156,9 +156,9 @@ export default class DataProcessing extends Component {
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertId' }),
-          dataIndex: 'alertId',
-          key: 'alertId',
-          width: '25%',
+          dataIndex: 'alertNo',
+          key: 'alertNo',
+          width: '30%',
           ellipsis: true,
         },
         {
@@ -171,7 +171,7 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterName' }),
           dataIndex: 'submitterName',
           key: 'submitterName',
-          width: '35%',
+          width: '30%',
           ellipsis: true,
         },
       ],
@@ -675,8 +675,8 @@ export default class DataProcessing extends Component {
    */
   goAlertCenter = () => {
     const { dataProcessingItemData } = this.props;
-    const alertIds = dataProcessingItemData.items.map(element => element.alertId);
-    router.push({ pathname: '/homepage/alert-center', query: { alertIds: alertIds.join(',') } });
+    const alertIds = dataProcessingItemData.items.map(element => element.alertNo);
+    router.push({ pathname: '/homepage/alert-center', query: { alertId: alertIds.join(',') } });
   };
 
   /**
