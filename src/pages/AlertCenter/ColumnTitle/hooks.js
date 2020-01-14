@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-14 20:09:48
+ * @LastEditTime : 2020-01-14 22:00:36
  */
 import { useState, useEffect } from 'react';
 
@@ -31,12 +31,12 @@ export function useColumnFilter({
     setCurSort('');
   }, [tableName]);
 
-  function fetchTableList(params) {
+  function fetchTableList(params = {}, dataTable = tableName) {
     dispatch({
       type: actionType,
       payload: {
         ...params,
-        dataTable: tableName,
+        dataTable,
       },
     });
   }
