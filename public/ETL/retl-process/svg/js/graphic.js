@@ -3592,7 +3592,7 @@ function Tree_Menu(existence, thisGraph, existId) {
                 animate: true,
                 data: [{
                     "id": 0,
-                    "text": "节点对象",
+                    "text": "Node Object",
                     "children": existence
 
                 }],
