@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Icon, Row, Button } from 'antd';
+import { Icon, Row, Button, Spin } from 'antd';
 
 import less from './ReportPreview.less';
 import ReportPager from './ReportPager';
 import PreviewSearchArea from './components/PreviewSearchArea';
 
-@connect(({ reportDesignPreview }) => {
+@connect(({ reportDesignPreview, loading }) => {
   const { previewData = {}, dataSetColumn = {} } = reportDesignPreview;
   return {
     previewData,
     dataSetColumn,
+    loading: loading.effects['reportDesignPreview/getReportTemplateDataQuery'],
   };
 })
 class ReportDesignerPreview extends Component {
@@ -125,6 +126,7 @@ class ReportDesignerPreview extends Component {
     const {
       previewData: { items = [] },
       dataSetColumn, // 当选项来源于数据集时，select中option的数据来源
+      loading = false,
     } = this.props;
     const [tableData, rowCountAndTemplateArea] = items; // 考虑 undefined
     // 总的记录数及templateArea
@@ -178,7 +180,9 @@ class ReportDesignerPreview extends Component {
           </Row>
         </div>
 
-        <div className={less['table-area']} dangerouslySetInnerHTML={{ __html: content }} />
+        <Spin spinning={loading}>
+          <div className={less['table-area']} dangerouslySetInnerHTML={{ __html: content }} />
+        </Spin>
       </div>
     );
   }
