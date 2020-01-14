@@ -170,16 +170,32 @@ function ProcessDetail({
                 weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
               };
             } else {
+              const effectiveDate = values.effectiveDate
+                ? moment(values.effectiveDate).format('YYYYMMDD')
+                : '';
+              const expiryDate = values.expiryDate
+                ? moment(values.expiryDate).format('YYYYMMDD')
+                : '';
               valueData = {
                 isCaCode: values.isCaCode,
                 remark: values.remark,
+                effectiveDate,
+                expiryDate,
               };
             }
           } else if (alertTypeValue === '303') {
             if (values.isCaCode === 'Yes') {
+              const effectiveDate = values.effectiveDate
+                ? moment(values.effectiveDate).format('YYYYMMDD')
+                : '';
+              const expiryDate = values.expiryDate
+                ? moment(values.expiryDate).format('YYYYMMDD')
+                : '';
               valueData = {
                 isCaCode: values.isCaCode,
                 remark: values.remark,
+                effectiveDate,
+                expiryDate,
               };
             } else {
               valueData = {
