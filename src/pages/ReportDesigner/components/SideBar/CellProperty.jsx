@@ -168,7 +168,7 @@ export default props => {
                       <Select>
                         <Option value="sum">Sum</Option>
                         <Option value="count">Count</Option>
-                        <Option value="average">Average</Option>
+                        <Option value="avg">Average</Option>
                         <Option value="max">Max</Option>
                         <Option value="min">Min</Option>
                       </Select>,
@@ -185,13 +185,19 @@ export default props => {
                     })(
                       <Radio.Group>
                         <Radio.Button value="None">
-                          <IconFont type="icon-nodirection" />
+                          <div title="None">
+                            <IconFont type="icon-nodirection" />
+                          </div>
                         </Radio.Button>
                         <Radio.Button value="Down">
-                          <IconFont type="icon-zongxiang" />
+                          <div title="Down">
+                            <IconFont type="icon-zongxiang" />
+                          </div>
                         </Radio.Button>
                         <Radio.Button value="Right">
-                          <IconFont type="icon-hengxiang" />
+                          <div title="Right">
+                            <IconFont type="icon-hengxiang" />
+                          </div>
                         </Radio.Button>
                       </Radio.Group>,
                     )}

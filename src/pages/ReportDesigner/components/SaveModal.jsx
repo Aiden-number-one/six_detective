@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-12 15:09:07
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-12 19:13:31
+ * @LastEditTime : 2020-01-13 17:56:42
  */
 
 import React from 'react';
@@ -14,6 +14,7 @@ import { connect } from 'dva';
 export default React.memo(
   connect(({ reportDesigner, reportTree }) => ({
     reportName: reportDesigner.reportName,
+    folderId: reportDesigner.folderId,
     classifyTree: reportTree.classifyTree,
   }))(
     Form.create()(
@@ -33,11 +34,10 @@ export default React.memo(
           const {
             form,
             saveDrawDisplay,
-            isSaveOther,
             classifyTree,
-            dataSet,
             saveType,
             reportName, // 报表名
+            folderId,
           } = this.props;
           const { getFieldDecorator } = form;
           const Layout = {
@@ -48,14 +48,20 @@ export default React.memo(
             <Form onSubmit={this.handleSubmit}>
               <Form.Item {...Layout} label="Template Name">
                 {getFieldDecorator('reportName', {
-                  rules: [{ required: true, message: 'Please Input' }],
+                  rules: [
+                    { required: true, message: 'Report Name is missing' },
+                    {
+                      max: 50,
+                      message: 'Report Name cannot be longer than 50 characters',
+                    },
+                  ],
                   initialValue: saveType === 'saveAs' ? `${reportName}_copy` : reportName,
                 })(<Input placeholder="Please Input" />)}
               </Form.Item>
               <Form.Item {...Layout} label="Folder">
                 {getFieldDecorator('folderId', {
                   rules: [{ required: true, message: 'Please select' }],
-                  initialValue: saveType === 'saveAs' ? dataSet.folderId : undefined,
+                  initialValue: saveType === 'saveAs' || !folderId ? undefined : folderId,
                 })(<TreeSelect treeData={classifyTree} placeholder="Please select" />)}
               </Form.Item>
               <div

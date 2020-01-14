@@ -1,3 +1,10 @@
+/*
+ * @Description: This is for login
+ * @Author: dailinbo
+ * @Date: 2019-12-19 14:06:28
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-13 21:49:16
+ */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
@@ -41,19 +48,22 @@ const Model = {
       // }
       if (callback) callback(response);
     },
-    *logout(_, { call, put }) {
+    *logout({ callback }, { call, put }) {
       // const { redirect } = getPageQuery();
-      yield call(logout, { param: {} });
-      if (window.location.pathname !== '/login') {
-        yield put(
-          routerRedux.replace({
-            pathname: '/login',
-            search: stringify({
-              redirect: window.location.href,
+      const response = yield call(logout, { param: {} });
+      if (response.bcjson.flag === '1') {
+        if (window.location.pathname !== '/login') {
+          yield put(
+            routerRedux.replace({
+              pathname: '/login',
+              search: stringify({
+                redirect: window.location.href,
+              }),
             }),
-          }),
-        );
-        window.localStorage.clear();
+          );
+          window.localStorage.clear();
+        }
+        callback();
       }
     },
   },

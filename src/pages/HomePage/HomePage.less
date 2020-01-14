@@ -34,37 +34,6 @@
     .ant-list-item:hover {
       color: #0d87d4;
       background: #f2f6f8;
-      .description::before {
-        background: #f2f6f8;
-      }
-    }
-    .description {
-      position: relative;
-      width: 65%;
-      max-height: 28px;
-      margin-right: -1em;
-      padding-right: 1em;
-      overflow: hidden;
-      line-height: 13.5px;
-      text-align: justify;
-      cursor: pointer;
-      &::before {
-        position: absolute;
-        right: 12px;
-        bottom: 0;
-        padding: 0 1px;
-        background: #fff;
-        content: '...';
-      }
-      &::after {
-        position: absolute;
-        right: 14px;
-        width: 1em;
-        height: 1em;
-        margin-top: 0.2em;
-        background: white;
-        content: '';
-      }
     }
   }
   .empty {
@@ -73,6 +42,16 @@
     justify-content: center;
     width: 100%;
     height: 100%;
+  }
+  .groupTitle1 {
+    position: relative;
+    margin: 0;
+    padding: 8px 5px 0;
+    overflow: hidden;
+    color: #464c51;
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .groupTitle {
     position: relative;
@@ -240,13 +219,13 @@
             background-color: #10416c;
             .leftBlock {
               display: flex;
-              flex: 3;
+              flex: 1;
               flex-direction: column;
               align-items: center;
               justify-content: center;
             }
             .rightBlock {
-              flex: 2;
+              flex: 1;
             }
           }
           .blackBox:last-child {
@@ -258,6 +237,7 @@
       .pendingTasks {
         flex: 1;
         min-width: 644px;
+        height: calc(100vh - 550px);
         min-height: 205px;
         margin: 5px 0;
         background-color: #fff;
@@ -306,6 +286,16 @@
             line-height: 20px;
             cursor: pointer;
           }
+          .description::before {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            margin-right: 3px;
+            margin-bottom: 2px;
+            background: #c5ccd6;
+            border-radius: 50%;
+            content: '';
+          }
           .date {
             width: 20%;
           }
@@ -344,6 +334,7 @@
       .outstandingCases {
         flex: 1;
         min-width: 644px;
+        height: calc(100vh - 498px);
         min-height: 257px;
         margin: 5px 0;
         background-color: #fff;
@@ -385,6 +376,7 @@
       .information {
         flex: 1;
         min-width: 275px;
+        height: calc(100vh - 498px);
         min-height: 257px;
         margin-top: 5px;
         margin-bottom: 5px;
@@ -394,20 +386,29 @@
         background-color: #fff;
         :global {
           .ant-list-item {
+            position: relative;
             justify-content: space-between;
             padding: 10px 0;
             color: #464c51;
             font-size: 12px;
           }
         }
-        .icon {
-          width: 20px;
-          padding-left: 5px;
-          font-size: 14px;
+        .description {
+          position: relative;
+          width: 100%;
+          height: 34px;
+          line-height: 17px;
+          cursor: pointer;
+          .icon {
+            width: 20px;
+            padding: 0 5px;
+            font-size: 14px;
+          }
         }
         .date {
-          width: 27%;
-          margin-left: 5px;
+          position: absolute;
+          top: 27px;
+          right: 5px;
           color: #7f91a4;
         }
       }
@@ -421,8 +422,10 @@
       .processingStage {
         flex: 1;
         min-width: 275px;
+        height: calc(100vh - 550px);
         min-height: 205px;
         margin-top: 5px;
+        margin-bottom: 5px;
         background-color: #fff;
       }
     }

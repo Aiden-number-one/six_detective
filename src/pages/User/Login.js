@@ -2,8 +2,8 @@
  * @Description: 登录
  * @Author: mus
  * @Date: 2019-09-19 20:01:46
- * @LastEditTime : 2020-01-11 16:00:47
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-13 21:17:21
+ * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -62,6 +62,7 @@ class Login extends Component {
           const item = response.bcjson.items[0];
           localStorage.setItem('loginName', item.name);
           setStore({ name: 'userInfo', content: item });
+          setStore({ name: 'employeeId', content: item.employeeId });
           router.push('/');
         },
       });

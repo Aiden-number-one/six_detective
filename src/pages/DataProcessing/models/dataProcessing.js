@@ -3,22 +3,32 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 20:22:33
+ * @LastEditTime : 2020-01-13 20:15:31
  */
 import Service from '@/utils/Service';
 
-const { getDataProcessing, startProcessing, progressChart, progressStatus, progressBar } = Service;
+const {
+  getDataProcessing,
+  startProcessing,
+  progressChart,
+  progressStatus,
+  progressBar,
+  alertByPass,
+} = Service;
 const codeMaintenance = {
   namespace: 'dataProcessing',
   state: {
     data: [],
     itemData: [],
+    alertItemData: [],
     itemsByPassData: {},
     startProcessingData: {},
     marketData: [],
     chartData: [],
     statusData: {},
     barData: {},
+    byPassAllData: {},
+    byPassSumData: {},
   },
   effects: {
     *getDataProcessing({ payload, callback }, { call, put }) {
@@ -41,6 +51,20 @@ const codeMaintenance = {
         if (response.bcjson.items) {
           yield put({
             type: 'getItemDatas',
+            payload: response.bcjson,
+          });
+          callback();
+        }
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
+    },
+    *getAlertItemData({ payload, callback }, { call, put }) {
+      const response = yield call(getDataProcessing, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'getAlertItem',
             payload: response.bcjson,
           });
           callback();
@@ -119,7 +143,7 @@ const codeMaintenance = {
         throw new Error(response.bcjson.msg);
       }
     },
-    *getProgressBar({ payload, callback }, { call, put }) {
+    *getProgressBar({ payload, callback, errorFn }, { call, put }) {
       const response = yield call(progressBar, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -130,6 +154,37 @@ const codeMaintenance = {
           callback();
         }
       } else {
+        errorFn();
+        throw new Error(response.bcjson.msg);
+      }
+    },
+    *getByPassAll({ payload, callback, errorFn }, { call, put }) {
+      const response = yield call(alertByPass, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'byPassAll',
+            payload: response.bcjson.items,
+          });
+          callback();
+        }
+      } else {
+        errorFn();
+        throw new Error(response.bcjson.msg);
+      }
+    },
+    *getByPassSum({ payload, callback, errorFn }, { call, put }) {
+      const response = yield call(alertByPass, { param: payload });
+      if (response.bcjson.flag === '1') {
+        if (response.bcjson.items) {
+          yield put({
+            type: 'byPassSum',
+            payload: response.bcjson.items,
+          });
+          callback();
+        }
+      } else {
+        errorFn();
         throw new Error(response.bcjson.msg);
       }
     },
@@ -145,6 +200,12 @@ const codeMaintenance = {
       return {
         ...state,
         itemData: action.payload,
+      };
+    },
+    getAlertItem(state, action) {
+      return {
+        ...state,
+        alertItemData: action.payload,
       };
     },
     itemsByPass(state, action) {
@@ -181,6 +242,18 @@ const codeMaintenance = {
       return {
         ...state,
         barData: action.payload,
+      };
+    },
+    byPassAll(state, action) {
+      return {
+        ...state,
+        byPassAllData: action.payload,
+      };
+    },
+    byPassSum(state, action) {
+      return {
+        ...state,
+        byPassSumData: action.payload,
       };
     },
   },

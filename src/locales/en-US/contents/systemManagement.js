@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-21 16:17:40
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 13:43:42
+ * @LastEditTime : 2020-01-13 15:41:42
  */
 export default {
   'systemManagement.userMaintenance.userId': 'User ID',
@@ -68,4 +68,5 @@ export default {
   'systemManagement.dataProcessing.alertOwner': 'Alert Owner',
   'systemManagement.dataProcessing.submitterCode': 'Submitter Code',
   'systemManagement.dataProcessing.submitterName': 'Submitter Name',
+  'systemManagement.dataProcessing.alertId': 'Alert Id',
 };

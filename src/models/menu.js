@@ -2,7 +2,7 @@
  * @Description: menu modal
  * @Author: mus
  * @Date: 2019-09-19 17:03:33
- * @LastEditTime : 2020-01-13 09:55:28
+ * @LastEditTime : 2020-01-13 19:43:25
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -11,12 +11,13 @@ import { geneMenuData } from '@/utils/utils';
 import { setAuthority } from '@/utils/authority';
 // import authData from './auth.json';
 
-const { getMenu, getTaskCount, getAlertCount } = Service;
+const { getMenu, getAdminMenu, getTaskCount, getAlertCount } = Service;
 
 export default {
   namespace: 'menu',
   state: {
     menuData: [],
+    adminMenuData: [],
     taskCount: 0,
     alertCount: 0,
   },
@@ -50,6 +51,17 @@ export default {
       console.log('geneMenuData(newItems)===', geneMenuData(newItems));
       callback(geneMenuData(newItems));
     },
+    *getAdminMenuData({ payload, callback }, { call, put }) {
+      const response = yield call(getAdminMenu, { param: payload, version: 'v2.0' });
+      const items = [{ menu: null }];
+      items[0].menu = Object.assign([], response.bcjson.items);
+      const menuData = geneMenuData(items);
+      yield put({
+        type: 'adminMenu',
+        payload: menuData,
+      });
+      callback();
+    },
     *getTaskCount({ payload }, { call, put }) {
       const response = yield call(getTaskCount, { param: payload });
       if (response.bcjson.flag === '1') {
@@ -75,6 +87,12 @@ export default {
       return {
         ...state,
         menuData: action.payload || [],
+      };
+    },
+    adminMenu(state, action) {
+      return {
+        ...state,
+        adminMenuData: action.payload || [],
       };
     },
     saveTaskCount(state, action) {

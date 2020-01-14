@@ -11,6 +11,7 @@ export default {
   // 公共
   'report-designer.start': 'Start',
   'report-designer.dataset': 'Data Set',
+  'report-designer.table': 'Table',
   'report-designer.datacolumn': 'Data Column',
   'report-designer.inputkeywords': 'Please input keywords',
   'report-designer.nodata': 'No Data',

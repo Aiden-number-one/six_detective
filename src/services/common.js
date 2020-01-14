@@ -2,7 +2,7 @@
  * @Description: 公共接口
  * @Author: mus
  * @Date: 2019-09-19 19:41:36
- * @LastEditTime : 2020-01-11 20:21:17
+ * @LastEditTime : 2020-01-13 19:54:27
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -11,6 +11,7 @@ const prefix = '';
 export default {
   getSP: 'get_qry_statement_result', // 获取存储过程
   getMenu: 'get_acl_menu', // 获取数据门户主题列表
+  getAdminMenu: 'get_admin_menu_list', // 获取最高权限
   // getMenu: 'mock/run/7765f3a2-a030-4578-a016-cc13c4156136', // Mock
   getDatas: 'kingdom.retl.getDatas',
   delDatas: 'kingdom.retl.delDatas',
@@ -84,4 +85,5 @@ export default {
   progressChart: `${prefix}get_data_progress_chart`,
   progressStatus: `${prefix}get_data_progress_status`,
   progressBar: `${prefix}get_data_progress_bar`,
+  alertByPass: `${prefix}set_data_progress_once_by_pass`,
 };

@@ -1,0 +1,36 @@
+/*
+ * @Author: liangchaoshun
+ * @Email: liangchaoshun@szkingdom.com
+ * @Date: 2020-01-13 20:28:15
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-13 20:43:30
+ * @Description: 超链接的模态框
+ */
+
+// 处理超链接的模态框
+.hyperlink-modal {
+  :global {
+    .ant-modal-header {
+      padding: 0 10px;
+      border-bottom-color: #979aa8;
+      .ant-modal-title {
+        color: #464c51;
+        font-size: 14px;
+        font-family: AvenirHeavy, sans-serif;
+        line-height: 40px;
+      }
+    }
+
+    .ant-modal-body {
+      padding: 15px;
+      :local {
+        .link-addr {
+          margin: 10px 0 5px;
+        }
+        .hyl-empty-error {
+          border-color: #df4949;
+        }
+      }
+    }
+  }
+}

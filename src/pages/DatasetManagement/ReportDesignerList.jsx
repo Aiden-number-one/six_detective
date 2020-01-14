@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-13 00:26:13
+ * @LastEditTime : 2020-01-13 16:47:28
  * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
@@ -171,17 +171,15 @@ export default class DatasetManagement extends PureComponent {
   };
 
   // 选中树
-  onSelect = value => {
+  onSelect = async value => {
     const { dispatch } = this.props;
     if (value) {
-      dispatch({
+      await dispatch({
         type: 'dataSet/setActiveTree',
         payload: value,
       });
     }
-    setTimeout(() => {
-      this.queryReportTemplate(value);
-    }, 0);
+    this.queryReportTemplate();
   };
 
   // 操作树节点
@@ -284,7 +282,7 @@ export default class DatasetManagement extends PureComponent {
   handleMove = async () => {
     const { dispatch, activeFolderId } = this.props;
     const param = {};
-    param.report_id = this.record.reportId;
+    param.reportId = this.record.reportId;
     param.folderId = activeFolderId;
     await dispatch({
       type: 'reportList/modify',
