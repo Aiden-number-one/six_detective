@@ -3356,7 +3356,7 @@ export default class HomePage extends PureComponent {
                                   title={item.alertDesc}
                                   className={styles.description}
                                   onClick={() => {
-                                    router.push(`/homepage/alert-center?alertId=${item.alertId}`);
+                                    router.push(`/homepage/alert-center?alertId=${item.alertNo}`);
                                   }}
                                 >
                                   {item.alertDesc}
@@ -3920,7 +3920,7 @@ export default class HomePage extends PureComponent {
                                   title={item.alertDesc}
                                   className={styles.description}
                                   onClick={() => {
-                                    router.push(`/homepage/alert-center?alertId=${item.alertId}`);
+                                    router.push(`/homepage/alert-center?alertId=${item.alertNo}`);
                                   }}
                                 >
                                   {item.alertDesc}
