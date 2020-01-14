@@ -352,13 +352,13 @@ $('#saveInfo').click(function () {
 		//		graphic.update()
 		$('#importTasks').window('close');
 	} else {
-		$.messager.alert('提示', "请选择待导入任务信息！", 'waring');
+		$.messager.alert('Tips', "Please select import task info", 'waring');
 	}
 });
 
 //取消操作
 $('#cancelInfo').click(function () {
-	$.messager.confirm('确认提示', '您确定要关闭窗口吗？', function (r) {
+	$.messager.confirm('Tips', 'Please confirm to close the window', function (r) {
 		if (r) {
 			$('#importTasks').window('close');
 			$('#tt>ul').tree('loadData', { total: 0, rows: [] });

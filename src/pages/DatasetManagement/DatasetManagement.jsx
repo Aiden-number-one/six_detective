@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-14 16:34:26
+ * @LastEditTime : 2020-01-14 21:10:16
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -351,6 +351,7 @@ export default class DatasetManagement extends PureComponent {
         title: 'Type',
         dataIndex: 'datasetType',
         key: 'datasetType',
+        width: 130,
       },
       {
         title: 'Data Source',

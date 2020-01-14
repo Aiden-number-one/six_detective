@@ -245,7 +245,7 @@ i{
     background: #fff;
   }
  .datagrid-header td, .datagrid-body td, .datagrid-footer td{
-   background: #fff;
+   /* background: #fff; */
    border-style: solid;
    border:none
  }
@@ -333,10 +333,10 @@ i{
       <!-- <i class="fa fa-search"></i> -->
       <!-- <input type="button" value="搜索" id="sea_but" style="width: 50px; height: 25px; font-size: 14px;" />
       <i><img src="css/icons/reload.png" title="刷新" style="cursor: pointer;" id="Refresh" /></i> -->
-      <button type="button" class="btn-query" id="sea_but">
+      <button type="button" class="btn-query" id="sea_but">SEARCH
         <i class="fa fa-search"></i>
       </button>
-      <button type="button" class="btn-reset" id="Refresh"><i class="fa fa-times"></i></button>
+      <button type="button" class="btn-reset" id="Refresh">RESET<i class="fa fa-times"></i></button>
     </div>
     <div class='toolbox'></div>
     <ul class="tab_Label" id="tab_Label">
@@ -344,13 +344,13 @@ i{
       <li>Node Object</li>
     </ul>
     <div id="ssou" style="display: none" class="ssou">
-      <input type="search" class="form-control input-small input-inline" style="width:120px!important" placeholder="Please input" id="sousuo_text">
+      <input type="search" class="form-control input-small input-inline" style="width:173px !important;" placeholder="Please input nodename" id="sousuo_text">
       <!-- <input type="text" style="width: 130px; margin-left: 10px;height: 30px" id="sousuo_text" /> -->
       <!-- <input type="button" value="搜索" id="sousuo" /> -->
-      <button type="button" class="btn-query" id="sousuo"> SEARCH
+      <button type="button" class="btn-query" id="sousuo" title="SEARCH">
         <i class="fa fa-search"></i>
       </button>
-      <button type="button" class="btn-reset" id="sxin">RESET<i class="fa fa-times"></i></button>
+      <button type="button" class="btn-reset" id="sxin" title="RESET"><i class="fa fa-refresh"></i></button>
       <!-- <a id="sxin" class="btn-query">
         <i class="widget-thumb-icon bg-green fa fa-refresh"></i> 刷新</a> -->
       <!-- <i><img src="css/icons/reload.png" title="刷新" style="cursor: pointer;" id="sxin" /></i> -->
@@ -682,7 +682,7 @@ i{
       </div>
     </div>
 
-    <div id='nodeformbox9' class="easyui-window" title="发送邮件任务" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformbox9' class="easyui-window" title="Email Sending" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -716,7 +716,7 @@ i{
       </div>
     </div>
 
-    <div id='nodeformbox10' class="easyui-window" title="执行Kettle任务" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformbox10' class="easyui-window" title="Excute Kettle" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -750,7 +750,7 @@ i{
       </div>
     </div>
     <!-- 执行JS任务 -->
-    <div id='nodeformbox11' class="easyui-window" title="执行JS语句" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformbox11' class="easyui-window" title="Excute JS" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -785,7 +785,7 @@ i{
     </div>
 
     <!-- 执行Webservice -->
-    <div id='nodeformbox12' class="easyui-window" title="执行Webservice" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformbox12' class="easyui-window" title="Excute Webservice" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -861,7 +861,7 @@ i{
   </div>
   
  <!-- FTP文件上传下载 -->
-    <div id='nodeformbox14' class="easyui-window" title="FTP文件任务" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
+    <div id='nodeformbox14' class="easyui-window" title="FTP Files" data-options="modal:true,closed:true,iconCls:'',inline:true" style="width:570px">
       <div class="c-container">
         <div class="c-container-p15">
           <div class="c-bg-b-w">
@@ -1249,14 +1249,14 @@ i{
     </div>
 
    
-    <div id="importTasks" class="easyui-window" title="Batch Task Importing" data-options="modal:true,closed:true,iconCls:''" style="width: 800px; height: 500px;">
+    <div id="importTasks" class="easyui-window" title="Batch Task Importing" data-options="modal:true,closed:true,iconCls:''" style="width: 930px; height: 500px;">
       <div class="c-container">
         <div style='position: absolute; top: 0px; left: 0px; width: 100%; padding: 0 10px;'>
           <div style='display: inline-block; vertical-align: middle; padding-top: 5px;' class='pull-right'>
             Node Status:
-            <input type="text" class="easyui-combobox" id="nodeType" name="nodeType"/>
+            <input type="text" class="easyui-combobox" id="nodeType" name="nodeType" style="width: 280px;"/>
             &nbsp; &nbsp; &nbsp;        
-            <a class="btn-operate" id="saveInfo" style="float:none"><i class="widget-thumb-icon bg-red fa fa-arrow-down" style="position: relative;left: 279px; top: 4px;"></i> Batch Import </a>
+            <a class="btn-operate" id="saveInfo" style="float:none"><i class="widget-thumb-icon bg-red fa fa-arrow-down" style="float:none;"></i> Batch Import </a>
             <!-- <button type="button" class="btn btn-default btn-small" id='saveInfo'>批量导入</button> -->
             <button type="button" class="btn btn-default btn-small" id='cancelInfo'>CANCEL</button>
           </div>
@@ -1271,10 +1271,10 @@ i{
             <div class="c-float-7p">
               <div style='position: relative; height: 100%;'>
                 <div class="c-absolute-middle-wrap">
-                  <button class="btn btn-default btn-sm c-btn40" onclick="moveRight();">
+                  <button class="btn btn-default btn-sm c-btn40" style="min-width: 40px;padding: 4px 10px;" onclick="moveRight();">
                     <i class="glyphicon glyphicon-arrow-right"></i>
                   </button>
-                  <button class="btn btn-default btn-sm c-btn40" onclick="moveLeft();">
+                  <button class="btn btn-default btn-sm c-btn40" style="min-width: 40px;padding: 4px 10px;" onclick="moveLeft();">
                     <i class="glyphicon glyphicon-trash"></i>
                   </button>
                 </div>
@@ -1302,16 +1302,16 @@ i{
       </div>
       <div id="nodeM" class="easyui-menu tubiao" style="width: 120px;">
         <div id='nodeM_copy'>
-          <i class="icon iconfont icon-fuzhi"></i>复制节点
+          <i class="icon iconfont icon-fuzhi"></i>Copy Node
         </div>
         <div class="Shear">
-          <i class="icon iconfont icon-jianqie"></i>剪切节点
+          <i class="icon iconfont icon-jianqie"></i>Cut Node
         </div>
         <div class="Paste">
-          <i class="icon iconfont icon-iconfontniantie"></i>粘贴节点
+          <i class="icon iconfont icon-iconfontniantie"></i>Paste Node
         </div>
         <div class="Delete">
-          <i class="icon iconfont icon-shanchu"></i>删除节点
+          <i class="icon iconfont icon-shanchu"></i>Delete Node
         </div>
         <div id='nodeM_edit' data-options="iconCls:''">Edit</div>
         <div class="menu-sep"></div>
@@ -1332,37 +1332,37 @@ i{
       </div>
       <div id="sort" class="easyui-menu tubiao" style="min-width: 100px;">
         <div class="s_alignment">
-          <i class="icon iconfont icon-shangduiqi"></i>上对齐
+          <i class="icon iconfont icon-shangduiqi"></i>Top Align
         </div>
         <div class="x_alignment">
-          <i class="icon iconfont icon-duixiangkaoxiaduiqi"></i>下对齐
+          <i class="icon iconfont icon-duixiangkaoxiaduiqi"></i>Bottom Align
         </div>
         <div class="z_alignment">
-          <i class="icon iconfont icon-duiqi"></i>左对齐
+          <i class="icon iconfont icon-duiqi"></i>Left Align
         </div>
         <div class="y_alignment">
-          <i class="icon iconfont icon-alignright"></i>右对齐
+          <i class="icon iconfont icon-alignright"></i>Right Align
         </div>
         <div class="x_Dispersed">
-          <i class="icon iconfont icon-shuipingjianjuxiangtong"></i>水平分散
+          <i class="icon iconfont icon-shuipingjianjuxiangtong"></i>Horizontal Distributed
         </div>
         <div class="y_Dispersed">
-          <i class="icon iconfont icon-chuizhijianjuxiangtong"></i>垂直分散
+          <i class="icon iconfont icon-chuizhijianjuxiangtong"></i>Vertical Distributed
         </div>
         <div class="Shear">
-          <i class="icon iconfont icon-jianqie"></i>剪切节点
+          <i class="icon iconfont icon-jianqie"></i>Cut Node
         </div>
         <div class="Copy">
-          <i class="icon iconfont icon-fuzhi"></i>复制节点
+          <i class="icon iconfont icon-fuzhi"></i>Copy Node
         </div>
         <div class="Paste">
-          <i class="icon iconfont icon-iconfontniantie"></i>粘贴节点
+          <i class="icon iconfont icon-iconfontniantie"></i>Patse Node
         </div>
         <div class="Delete">
-          <i class="icon iconfont icon-shanchu"></i>删除节点
+          <i class="icon iconfont icon-shanchu"></i>Delete Node
         </div>
       </div>
-      <div id="pathM" class="easyui-menu" style="width: 165px;">
+      <div id="pathM" class="easyui-menu" style="width: 280px;">
         <div id='pathM_true' data-options="iconCls:'',">execute the next step when the result is true</div>
         <div id='pathM_false' data-options="">execute the next step when the result is false</div>
         <div id='pathM_unconditional' data-options="">execute the next step unconditionally</div>

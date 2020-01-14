@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 11:17:19
+ * @LastEditTime : 2020-01-14 21:03:40
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -11,15 +11,30 @@ import classnames from 'classnames';
 import Antd, { Row, Col, Button, Table, Select, Modal, Progress, Checkbox, message } from 'antd';
 import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
-import { Chart, Geom, Axis, Tooltip, Guide } from 'bizcharts';
+import {
+  G2,
+  Chart,
+  Geom,
+  Axis,
+  Tooltip,
+  Coord,
+  Label,
+  Legend,
+  View,
+  Guide,
+  Shape,
+  Facet,
+  Util,
+} from 'bizcharts';
+import DataSet from '@antv/data-set';
 import router from 'umi/router';
+import moment from 'moment';
 import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
 import { getAuthority } from '@/utils/authority';
 import { getStore } from '@/utils/store';
-// import { chartStatusFormat } from '@/utils/filter';
+import { dataChartFormat } from '@/utils/filter';
 import { formatTimeString } from '@/utils/utils';
-import moment from 'moment';
 
 const { Option } = Select;
 
@@ -41,7 +56,7 @@ export default class DataProcessing extends Component {
       alertType: '',
       activeIndex: 0,
       alertIds: '',
-      market: '',
+      market: 'ALL',
       selectedMarket: '0',
       authBypass: false,
       alertBypassStatus: [],
@@ -141,9 +156,9 @@ export default class DataProcessing extends Component {
         },
         {
           title: formatMessage({ id: 'systemManagement.dataProcessing.alertId' }),
-          dataIndex: 'alertId',
-          key: 'alertId',
-          width: '25%',
+          dataIndex: 'alertNo',
+          key: 'alertNo',
+          width: '30%',
           ellipsis: true,
         },
         {
@@ -156,7 +171,7 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'systemManagement.dataProcessing.submitterName' }),
           dataIndex: 'submitterName',
           key: 'submitterName',
-          width: '35%',
+          width: '30%',
           ellipsis: true,
         },
       ],
@@ -170,34 +185,22 @@ export default class DataProcessing extends Component {
       },
       dataCharts: [
         {
-          title: 'ecpRecords',
-          year: 'Records Received from ECP',
-          sales: '',
+          name: 'Hk',
+          'Records Received from ECP': 0,
+          'Records Imported by user': 0,
+          'TO Records Eliminated': 0,
+          'Duplicated Records Eliminated': 0,
+          'Late Submission': 0,
+          'Adjustment for Format Conversion': 0,
         },
         {
-          title: 'importRecords',
-          year: 'Records Imported by user',
-          sales: '',
-        },
-        {
-          title: 'eliminatedRecords',
-          year: 'TO Records Eliminated',
-          sales: '',
-        },
-        {
-          title: 'eliminatedTotal',
-          year: 'Duplicated Records Eliminated',
-          sales: '',
-        },
-        {
-          title: 'lateRecords',
-          year: 'Late Submission',
-          sales: '',
-        },
-        {
-          title: 'adjustmentRecords',
-          year: 'Adjustment of Stock Options Records for Format Conversion',
-          sales: '',
+          name: 'HS',
+          'Records Received from ECP': 0,
+          'Records Imported by user': 0,
+          'TO Records Eliminated': 0,
+          'Duplicated Records Eliminated': 0,
+          'Late Submission': 0,
+          'Adjustment for Format Conversion': 0,
         },
       ],
       cols: {
@@ -206,9 +209,14 @@ export default class DataProcessing extends Component {
           alias: 'processing',
         },
       },
+      dv: null,
       dataStatus: null,
       processingBar: 0,
-      processedDate: {
+      HKEFTime: {
+        t1: '',
+        t2: '',
+      },
+      SEHKTime: {
         t1: '',
         t2: '',
       },
@@ -219,12 +227,97 @@ export default class DataProcessing extends Component {
     console.log('getAuthority===', getAuthority());
     this.queryDataProcessing();
     this.getMarket();
+    this.getInitChart();
     this.getChartData();
+    // this.setDataChart();
     this.getStatusData();
     this.setState({
       authBypass: getAuthority().authBypass,
     });
   }
+
+  getInitChart = () => {
+    const { dataCharts } = this.state;
+    const ds = new DataSet();
+    const dv = ds.createView().source(dataCharts);
+    dv.transform({
+      type: 'fold',
+      fields: [
+        'Records Received from ECP',
+        'Records Imported by user',
+        'TO Records Eliminated',
+        'Duplicated Records Eliminated',
+        'Late Submission',
+        'Adjustment for Format Conversion',
+      ],
+      // 展开字段集
+      key: '月份',
+      // key字段
+      value: '月均降雨量', // value字段
+    });
+    this.setState({
+      dv,
+    });
+  };
+
+  setDataChart = () => {
+    const { dataCharts } = this.state;
+    const newDataCharts = Object.assign([], dataCharts);
+    const setMap = [
+      {
+        ecpRecords: 12,
+        importRecords: 2,
+        eliminatedRecords: 3,
+        eliminatedTotal: 4,
+        lateRecords: 5,
+        adjustmentRecords: 8,
+      },
+      {
+        ecpRecords: 6,
+        importRecords: 5,
+        eliminatedRecords: 7,
+        eliminatedTotal: 2,
+        lateRecords: 3,
+        adjustmentRecords: 6,
+      },
+    ];
+    // dataChartFormat
+    // for(let i = 0; i < setMap.length; i += 1){
+    //   dataChartFormat()
+    // }
+    // setMap.forEach(element => {
+    //   Object.keys(element).forEach(key => {
+    //     newDataCharts.forEach(item => {
+    //       Object.keys(item).forEach(k => {
+    //         // console.log('k===', k)
+    //         console.log('dataChartFormat(key)===', dataChartFormat(key))
+    //         console.log('k===', k)
+    //         console.log(dataChartFormat(key) === k)
+    //         if (dataChartFormat(key) === k) {
+    //           // eslint-disable-next-line no-param-reassign
+    //           item[k] = element[key];
+    //         }
+    //       });
+    //     });
+    //   });
+    // });
+    // newDataCharts.map(element => {
+    //   const obj = setMap.find(item => )
+    // })
+    console.log('newDataCharts==============', newDataCharts);
+    console.log(
+      'JSON.parse(JSON.stringify(data).replace(/title/g===',
+      JSON.parse(JSON.stringify(setMap).replace(/ecpRecords/g, dataChartFormat('ecpRecords'))),
+    );
+    this.setState(
+      {
+        dataCharts: newDataCharts,
+      },
+      () => {
+        this.getInitChart();
+      },
+    );
+  };
 
   /**
    * @description: This is a function for Inspect Data.
@@ -343,8 +436,9 @@ export default class DataProcessing extends Component {
         });
         let markets = [];
         if (this.state.selectedMarket === '0') {
-          this.props.marketData.forEach(element => markets.push(element.dictdataValue));
-          markets = markets.join(',');
+          // this.props.marketData.forEach(element => markets.push(element.dictdataValue));
+          // markets = markets.join(',');
+          markets = 'ALL';
         } else {
           markets = this.state.selectedMarket;
         }
@@ -439,9 +533,10 @@ export default class DataProcessing extends Component {
     const { marketData } = this.props;
     let markets = [];
     if (value === '0') {
-      marketData.forEach(element => markets.push(element.dictdataValue));
-      markets = markets.join(',');
+      // marketData.forEach(element => markets.push(element.dictdataValue));
+      // markets = markets.join(',');
       console.log('markets===', markets);
+      markets = 'ALL';
     } else {
       markets = value;
     }
@@ -514,7 +609,6 @@ export default class DataProcessing extends Component {
           type: 'dataProcessing/startProcessing',
           payload: params,
           callback: () => {
-            console.log('startProcessingData===', this.props.startProcessingData);
             this.getChartData();
             this.getStatusData();
             this.setState({
@@ -522,10 +616,14 @@ export default class DataProcessing extends Component {
             });
             message.success('succeeded');
           },
+          errorFn: () => {
+            clearInterval(this.setInterval);
+          },
         });
       }
     } catch (error) {
       console.log(error);
+      clearInterval(this.setInterval);
     }
   };
 
@@ -577,8 +675,8 @@ export default class DataProcessing extends Component {
    */
   goAlertCenter = () => {
     const { dataProcessingItemData } = this.props;
-    const alertIds = dataProcessingItemData.items.map(element => element.alertId);
-    router.push({ pathname: '/homepage/alert-center', query: { alertIds: alertIds.join(',') } });
+    const alertIds = dataProcessingItemData.items.map(element => element.alertNo);
+    router.push({ pathname: '/homepage/alert-center', query: { alertId: alertIds.join(',') } });
   };
 
   /**
@@ -588,37 +686,51 @@ export default class DataProcessing extends Component {
    */
   getChartData = () => {
     const { dispatch } = this.props;
-    // dataCharts
-    const params = {};
+    const { market } = this.state;
+    const params = {
+      market,
+    };
     dispatch({
       type: 'dataProcessing/getProgressChart',
       payload: params,
       callback: () => {
         const { chartData } = this.props;
-        const { dataCharts } = this.state;
-        const newChartData = chartData[0];
-        const newDataCharts = Object.assign([], dataCharts);
-        console.log('newChartData===', newChartData);
-        Object.keys(newChartData).forEach(element => {
-          newDataCharts.forEach((item, index) => {
-            if (item.title === `${element}`) {
-              newDataCharts[index].sales = newChartData[`${element}`];
-            }
-          });
-        });
-        // eslint-disable-next-line no-restricted-syntax
-        // for (const key in newChartData) {
-        //   newDataCharts.forEach((element, index) => {
-        //     if (element.title === key) {
-        //       newDataCharts[index].sales = newChartData[key];
-        //     }
-        //   });
-        // }
-        console.log('newDataCharts===================', newDataCharts);
-        this.setState({
-          dataCharts: newDataCharts,
-        });
-        console.log('chartData===', this.props.chartData);
+        let newDataCharts = Object.assign([], chartData);
+        newDataCharts = JSON.parse(
+          JSON.stringify(newDataCharts).replace(/ecpRecords/g, dataChartFormat('ecpRecords')),
+        );
+        newDataCharts = JSON.parse(
+          JSON.stringify(newDataCharts).replace(/importRecords/g, dataChartFormat('importRecords')),
+        );
+        newDataCharts = JSON.parse(
+          JSON.stringify(newDataCharts).replace(
+            /eliminatedRecords/g,
+            dataChartFormat('eliminatedRecords'),
+          ),
+        );
+        newDataCharts = JSON.parse(
+          JSON.stringify(newDataCharts).replace(
+            /eliminatedTotal/g,
+            dataChartFormat('eliminatedTotal'),
+          ),
+        );
+        newDataCharts = JSON.parse(
+          JSON.stringify(newDataCharts).replace(/lateRecords/g, dataChartFormat('lateRecords')),
+        );
+        newDataCharts = JSON.parse(
+          JSON.stringify(newDataCharts).replace(
+            /adjustmentRecords/g,
+            dataChartFormat('adjustmentRecords'),
+          ),
+        );
+        this.setState(
+          {
+            dataCharts: newDataCharts,
+          },
+          () => {
+            this.getInitChart();
+          },
+        );
       },
     });
   };
@@ -630,17 +742,17 @@ export default class DataProcessing extends Component {
       type: 'dataProcessing/getProgressStatus',
       payload: params,
       callback: () => {
-        const processedTime = formatTimeString(this.props.statusData[0].time);
-        const objTime = {};
-        const t1 = processedTime.split(' ')[0];
-        const t2 = processedTime.split(' ')[1];
-        objTime.t1 = moment(t1).format('DD/MMM/YYYY');
-        objTime.t2 = t2;
-        console.log('objTime====', objTime);
+        const processedTime1 = this.formatMarketTime(
+          formatTimeString(this.props.statusData[0].hekfTime),
+        );
+        const processedTime2 = this.formatMarketTime(
+          formatTimeString(this.props.statusData[0].sehkTime),
+        );
         this.setState(
           {
             dataStatus: this.props.statusData[0].status,
-            processedDate: objTime,
+            HKEFTime: processedTime1,
+            SEHKTime: processedTime2,
           },
           () => {
             console.log('dataStatus=', this.state.dataStatus);
@@ -648,6 +760,15 @@ export default class DataProcessing extends Component {
         );
       },
     });
+  };
+
+  formatMarketTime = processedTime => {
+    const objTime = {};
+    const t1 = processedTime.split(' ')[0];
+    const t2 = processedTime.split(' ')[1];
+    objTime.t1 = moment(t1).format('DD/MMM/YYYY');
+    objTime.t2 = t2;
+    return objTime;
   };
 
   getProcessing = () => {
@@ -723,7 +844,8 @@ export default class DataProcessing extends Component {
       selectedMarket,
       dataStatus,
       processingBar,
-      processedDate,
+      HKEFTime,
+      SEHKTime,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -948,12 +1070,22 @@ export default class DataProcessing extends Component {
                   </Col>
                 )} */}
               </Row>
-              <Chart className={styles.chart} height={400} data={dataCharts} scale={cols} forceFit>
-                <span>
-                  The last time of data processing is at {processedDate.t2} on {processedDate.t1}
-                </span>
-                <Axis name="year" />
-                <Axis name="sales" line={{ stroke: '#d9d9d9' }} position="left" />
+              <Chart
+                className={styles.chart}
+                padding={['auto', 'auto', 'auto', 20]}
+                height={400}
+                data={this.state.dv}
+                forceFit
+              >
+                <div>
+                  The last time of data processing is for HKEF at {HKEFTime.t2} on {HKEFTime.t1}
+                </div>
+                <div>
+                  The last time of data processing is for SEHK at {SEHKTime.t2} on {SEHKTime.t1}
+                </div>
+                <Axis name="月份" />
+                <Axis name="月均降雨量" line={{ stroke: '#d9d9d9' }} position="left" />
+                <Legend />
                 <Tooltip
                   crosshairs={{
                     type: 'y',
@@ -964,12 +1096,19 @@ export default class DataProcessing extends Component {
                 </Guide>
                 <Geom
                   type="interval"
-                  position="year*sales"
+                  position="月份*月均降雨量"
+                  color="name"
                   size={20}
                   style={{
                     stroke: '#d9d9d9',
                     lineWidth: 1,
                   }}
+                  adjust={[
+                    {
+                      type: 'dodge',
+                      marginRatio: 1 / 32,
+                    },
+                  ]}
                 />
               </Chart>
             </div>
