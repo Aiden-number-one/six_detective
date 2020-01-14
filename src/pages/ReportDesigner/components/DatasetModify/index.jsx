@@ -174,6 +174,14 @@ export default class DatasetModify extends PureComponent {
     });
   };
 
+  checkName = (rule, value, callback) => {
+    if (value.includes('.')) {
+      callback('DataSet Name Cannot Contain "."');
+    } else {
+      callback();
+    }
+  };
+
   render() {
     const {
       sql,
@@ -197,6 +205,9 @@ export default class DatasetModify extends PureComponent {
                   {
                     required: true,
                     message: 'Name of Data Set should not be empty',
+                  },
+                  {
+                    validator: this.checkName,
                   },
                 ],
                 initialValue: currentSelectDataSetOtherInfo.datasetName,

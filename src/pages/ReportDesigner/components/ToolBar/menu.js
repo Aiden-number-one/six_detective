@@ -11,17 +11,17 @@ const previewMenu = [
 
 const borderMenu = [
   {
-    name: '无框线(N)',
+    name: 'No Border',
     icon: 'noBorder',
     params: 'none',
   },
   {
-    name: '所有框线(A)',
+    name: 'All Border',
     icon: 'allBorder',
     params: 'all',
   },
   {
-    name: '外侧框线(S)',
+    name: 'Outside Border',
     icon: 'outsideBorder',
     params: 'outside',
   },
@@ -31,27 +31,27 @@ const borderMenu = [
   //   params: '{"border":"3px solid black"}',
   // },
   {
-    name: '下框线(O)',
+    name: 'Bottom Border',
     icon: 'bottomBorder',
     params: 'bottom',
   },
   {
-    name: '上框线(P)',
+    name: 'Top Border',
     icon: 'topBorder',
     params: 'top',
   },
   {
-    name: '左框线(L)',
+    name: 'Left Border',
     icon: 'leftBorder',
     params: 'left',
   },
   {
-    name: '右框线(R)',
+    name: 'Right Border',
     icon: 'rightBorder',
     params: 'right',
   },
   {
-    name: '双底框线(B)',
+    name: 'Bottom Double Border',
     icon: 'doubleBottomBorder',
     params: 'dBottom',
   },
