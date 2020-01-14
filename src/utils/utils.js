@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2020-01-11 15:50:44
+ * @LastEditTime : 2020-01-14 13:31:12
  * @LastEditors  : dailinbo
  */
 
@@ -277,5 +277,30 @@ export function stringToNum(a) {
 }
 export function isFormData(v) {
   return Object.prototype.toString.call(v) === '[object FormData]';
+}
+
+export function showLogFormat(value) {
+  if (!value) {
+    return '';
+  }
+  const str = value.replace(/\{|}/g, '');
+  const strArray = str.split(',');
+  let resultStr = '';
+  function formatArray(item) {
+    const element = item.replace(/\[|]/g, '');
+    let result = '';
+    if (element.includes('=')) {
+      // eslint-disable-next-line prefer-destructuring
+      result = element.split('=')[1];
+    } else {
+      result = element;
+    }
+    return result;
+  }
+  for (let i = 0; i < strArray.length; i += 1) {
+    resultStr += `${formatArray(strArray[i])},`;
+  }
+  resultStr = resultStr.substring(0, resultStr.length - 1);
+  return resultStr;
 }
 export { isProOrDev, isUrl, geneMenuData, getRandowNVPS, passWordStrength };
