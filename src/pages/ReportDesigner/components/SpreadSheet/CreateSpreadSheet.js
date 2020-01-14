@@ -2,11 +2,12 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2020-01-10 16:03:56
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-14 11:29:40
+ * @LastEditors  : liangchaoshun
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
+import { connect } from 'dva';
 import { generateJson } from './spreadSheetUtil';
 import { INITHEIGHT, INITWIDTH } from '../../utils';
 
@@ -15,8 +16,8 @@ const styleKeyMap = {
   'font-italic': 'italic',
 };
 
-export default WrapperComponent =>
-  class extends Component {
+export default WrapperComponent => {
+  class Hoc extends Component {
     constructor(props) {
       super(props);
       this.state = {};
@@ -102,13 +103,13 @@ export default WrapperComponent =>
           // ----- 普通右键菜单-start -----
           usual: [
             { key: 'divider' },
-            {
+            /* {
               key: 'filter',
               title: 'contextmenu.filter',
               callback: (type, obj) => {
                 console.log(type, obj);
               },
-            },
+            }, */
             { key: 'insert-comment', title: 'contextmenu.insertComment' },
             { key: 'divider' },
             { key: 'clear', title: 'contextmenu.clear' },
@@ -116,16 +117,20 @@ export default WrapperComponent =>
               key: 'data-design',
               title: 'contextmenu.dataDesign',
               callback: (type, obj) => {
-                console.log(type, obj);
+                const { dispatch } = this.props;
+                dispatch({
+                  type: 'reportDesigner/triggerRightSidebar',
+                  payload: { showRightSidebar: true },
+                });
               },
             },
           ],
           // ----- 普通右键菜单-end -----
         },
         hooks: {
-          calloutFormularPanel(params) {
-            // 双击类型为公式的单元格，调出面板
-            callbackProps.calloutFormularPanel(params);
+          calloutSpecialActionPanel(params) {
+            // 双击特殊类型的单元格，调出面板（公式|超链接）
+            callbackProps.calloutSpecialActionPanel(params);
           },
           afterDrop(params) {
             // 拖拽放置后的回调
@@ -370,4 +375,9 @@ export default WrapperComponent =>
       };
       return <WrapperComponent {...props} ref={this.WrapperComponentRef} />;
     }
-  };
+  }
+
+  return connect(({ reportDesigner }) => ({
+    rightSideCollapse: reportDesigner.rightSideCollapse,
+  }))(Hoc);
+};

@@ -1314,7 +1314,7 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertStatusDesc = clickData._origin.type;
           router.push(
-            `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&startDate=${startDate}&endDate=${endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${startDate},${endDate}`,
           );
         }
       });
@@ -1473,7 +1473,7 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertStatusDesc = clickData._origin.label;
           router.push(
-            `/homepage/alert-center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&startDate=${startDate}&endDate=${endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${startDate},${endDate}`,
           );
         }
       });
@@ -3356,7 +3356,7 @@ export default class HomePage extends PureComponent {
                                   title={item.alertDesc}
                                   className={styles.description}
                                   onClick={() => {
-                                    router.push(`/homepage/alert-center?alertIds=${item.alertId}`);
+                                    router.push(`/homepage/alert-center?alertId=${item.alertId}`);
                                   }}
                                 >
                                   {item.alertDesc}
@@ -3920,7 +3920,7 @@ export default class HomePage extends PureComponent {
                                   title={item.alertDesc}
                                   className={styles.description}
                                   onClick={() => {
-                                    router.push(`/homepage/alert-center?alertIds=${item.alertId}`);
+                                    router.push(`/homepage/alert-center?alertId=${item.alertId}`);
                                   }}
                                 >
                                   {item.alertDesc}
