@@ -2,11 +2,23 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-11 16:56:09
+ * @LastEditTime : 2020-01-14 12:10:58
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
-import { Icon, Input, Select, Button, Layout, Table, Row, Col, Checkbox, InputNumber } from 'antd';
+import {
+  Icon,
+  message,
+  Input,
+  Select,
+  Button,
+  Layout,
+  Table,
+  Row,
+  Col,
+  Checkbox,
+  InputNumber,
+} from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import _ from 'lodash';
@@ -500,9 +512,13 @@ class AddDataSet extends PureComponent {
                   style={{ float: 'right' }}
                   type="primary"
                   onClick={() => {
-                    // 打开保存弹框
-                    this.isSaveOther = false;
-                    this.toggleModal('save');
+                    if (this.state.sql) {
+                      // 打开保存弹框
+                      this.isSaveOther = false;
+                      this.toggleModal('save');
+                    } else {
+                      message.warning(`Please input ${datasetType}`);
+                    }
                   }}
                 >
                   Save
@@ -512,9 +528,13 @@ class AddDataSet extends PureComponent {
                   className="btn-usual"
                   type="primary"
                   onClick={() => {
-                    // 打开另存为弹框
-                    this.isSaveOther = true;
-                    this.toggleModal('save');
+                    if (this.state.sql) {
+                      // 打开另存为弹框
+                      this.isSaveOther = true;
+                      this.toggleModal('save');
+                    } else {
+                      message.warning(`Please input ${datasetType}`);
+                    }
                   }}
                 >
                   Save As
