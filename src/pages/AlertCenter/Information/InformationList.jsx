@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { FormattedMessage } from 'umi/locale';
-import { Table, Row, Col, Icon } from 'antd';
+import router from 'umi/router';
+import withRouter from 'umi/withRouter';
+import { Table, Row, Col, Icon, Alert } from 'antd';
 import moment from 'moment';
 import { timestampFormat, downloadFile } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
@@ -12,7 +14,7 @@ import styles from '../index.less';
 
 const { Column } = Table;
 
-function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loading }) {
+function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, total, loading }) {
   const [info, setInfo] = useState(null);
   const [selectedKeys, setSelectedKeys] = useState([]);
 
@@ -28,10 +30,21 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
   const exportLoading = loading['alertCenter/exportInfos'];
 
   useEffect(() => {
+    const { informationNo } = location.query;
+    let params = [];
+    if (informationNo) {
+      params = [{ column: 'informationNo', value: informationNo, condition: '7' }];
+    }
+
     dispatch({
       type: 'alertCenter/fetchInfos',
+      payload: {
+        page: infoPage,
+        pageSize: infoPageSize,
+        conditions: params,
+      },
     });
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     if (infos && infos.length > 0) {
@@ -54,6 +67,10 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
     if (url) {
       downloadFile(url);
     }
+  }
+
+  function handleCloseMsg() {
+    router.replace('/homepage/information');
   }
   return (
     <div className={styles['list-container']}>
@@ -82,6 +99,17 @@ function InfomationList({ dispatch, infos, infoPage, infoPageSize, total, loadin
             </button>
           </Col>
         </Row>
+        {Object.keys(location.query).length > 0 && (
+          <Alert
+            banner
+            showIcon
+            closable
+            type="info"
+            message={`Query Condition：${Object.keys(location.query)}`}
+            style={{ marginBottom: 10 }}
+            onClose={handleCloseMsg}
+          />
+        )}
         <Table
           dataSource={infos}
           rowKey="informationNo"
@@ -193,4 +221,4 @@ const mapStateToProps = ({
   total: infoTotal,
   loading: loading.effects,
 });
-export default connect(mapStateToProps)(InfomationList);
+export default withRouter(connect(mapStateToProps)(InfomationList));

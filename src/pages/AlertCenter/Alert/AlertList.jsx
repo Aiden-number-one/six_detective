@@ -45,10 +45,10 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   }, []);
 
   useEffect(() => {
-    const { alertIds, owner, status, tradeDate } = location.query;
+    const { alertId, owner, status, tradeDate } = location.query;
     let params = [];
-    if (alertIds) {
-      params = [{ column: 'alertNo', value: alertIds, condition: '7' }];
+    if (alertId) {
+      params = [{ column: 'alertNo', value: alertId, condition: '7' }];
     }
     if (owner) {
       params = [...params, { column: 'userName', value: owner, condition: '7' }];
