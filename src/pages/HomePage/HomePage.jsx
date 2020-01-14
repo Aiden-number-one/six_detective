@@ -218,6 +218,13 @@ export default class HomePage extends PureComponent {
     clearInterval(interval);
   }
 
+  quickMenuCallback = values => {
+    const targetData = this.TreeFolderTrans(values);
+    this.setState({
+      targetData,
+    });
+  };
+
   refreshPage = value => {
     interval = setInterval(() => {
       const { dispatch } = this.props;
@@ -3412,7 +3419,11 @@ export default class HomePage extends PureComponent {
                     <Row>
                       {targetData.map(item => (
                         <Col span={11} className={styles.menuItem}>
-                          {/* <IconFont type={item.icon} className={styles.icon} /> */}
+                          <IconFont
+                            // type={item.icon}
+                            type="iconkuaijiecaidan"
+                            className={styles.icon}
+                          />
                           <span
                             onClick={() => {
                               router.push(item.menuurl);
@@ -4167,7 +4178,11 @@ export default class HomePage extends PureComponent {
             </TabPane>
           </Tabs>
           {this.state.visible.quickMenu && (
-            <QuickMenu toggleModal={this.toggleModal} visible={this.state.visible.quickMenu} />
+            <QuickMenu
+              toggleModal={this.toggleModal}
+              visible={this.state.visible.quickMenu}
+              callback={this.quickMenuCallback}
+            />
           )}
         </div>
       </div>
