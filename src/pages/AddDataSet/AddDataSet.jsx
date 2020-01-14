@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-14 12:37:21
+ * @LastEditTime : 2020-01-14 13:21:08
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -278,15 +278,19 @@ class AddDataSet extends PureComponent {
           render: text => {
             // eslint-disable-next-line no-restricted-globals
             if (!isNaN(Number(text))) {
-              return <span>{text && text.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')}</span>;
+              return (
+                <span title={text}>
+                  {text && text.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')}
+                </span>
+              );
             }
-            return <span>{text}</span>;
+            return <span title={text}>{text}</span>;
           },
           width,
-          onHeaderCell: columns => ({
-            width: columns.width,
-            onResize: this.handleResize(index),
-          }),
+          // onHeaderCell: columns => ({
+          //   width: columns.width,
+          //   onResize: this.handleResize(index),
+          // }),
         };
       })
     );
