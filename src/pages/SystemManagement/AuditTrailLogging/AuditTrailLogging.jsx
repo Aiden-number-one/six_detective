@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 21:09:06
+ * @LastEditTime : 2020-01-14 22:54:01
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -277,6 +277,21 @@ class AuditTrailLogging extends Component {
     });
   };
 
+  onShowSizeChange = (current, pageSize) => {
+    const page = {
+      pageNumber: current,
+      pageSize,
+    };
+    this.setState(
+      {
+        page,
+      },
+      () => {
+        this.getAuditLog();
+      },
+    );
+  };
+
   /**
    * @description: This is function for get log list.
    * @param {type} null
@@ -320,6 +335,10 @@ class AuditTrailLogging extends Component {
   changeEndDate = () => {};
 
   queryLog = () => {
+    const page = {
+      pageNumber: 1,
+      pageSize: 10,
+    };
     this.auditLogForm.current.validateFields((err, values) => {
       if (err) {
         return;
@@ -333,6 +352,7 @@ class AuditTrailLogging extends Component {
       }
       this.setState(
         {
+          page,
           logStartDate,
           logEndDate,
           functionName: values.functionName,
