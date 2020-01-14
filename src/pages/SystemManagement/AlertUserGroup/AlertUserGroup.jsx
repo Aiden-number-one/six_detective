@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-06 14:48:56
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 11:07:39
+ * @LastEditTime : 2020-01-14 11:01:48
  */
 import React, { Component } from 'react';
 import { Form, Table, Pagination, Button, Drawer, Modal } from 'antd';
@@ -306,6 +306,7 @@ class AlertUserGroup extends Component {
           </div>
           <Table
             loading={loading['menuUserGroup/getAlertUserGroup']}
+            rowKey={row => row.groupId.toString()}
             dataSource={menuUserGroup.items}
             columns={columns}
             pagination={false}
