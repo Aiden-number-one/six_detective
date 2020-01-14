@@ -74,7 +74,7 @@
             var url = $(e.target).data("url");
             var filetype = files[0].name.substring(files[0].name.lastIndexOf(".") + 1).toUpperCase();           
             if (acceptFileTpye.indexOf(filetype) === -1) {
-                toastr.info('Please upload' + acceptFileTpye + 'file.');
+                toastr.info('Please upload ' + acceptFileTpye + ' file.');
                 return;
             }
             var _this = this;

@@ -894,6 +894,7 @@ define(function (require, exports, module) {
                         });
                     }
                 });
+                $("#J_data_field_table .checked").removeClass('checked');
             }
         });
     };
@@ -1041,6 +1042,7 @@ define(function (require, exports, module) {
                 $(this).closest("tr").remove();
             });
             showContent.haddleDataField.reorder();
+            $("#J_data_field_table .checked").removeClass('checked');
         },
         // 重新排序
         reorder: function reorder() {
@@ -1165,6 +1167,7 @@ define(function (require, exports, module) {
                     App.initCheckableTable($("#J_data_field_table_2"));
                 });
             }
+            $("#J_data_field_table_2 .checked").removeClass('checked');
         });
     };
 
@@ -1263,6 +1266,7 @@ define(function (require, exports, module) {
             $.each($("#J_data_field_tbody_2 input[type=checkbox]:checked"), function (i) {
                 $(this).closest("tr").remove();
             });
+            $("#J_data_field_table_2 .checked").removeClass('checked');
             showContent.haddleDataField_2.reorder();
         },
         // 重新排序
@@ -1517,8 +1521,10 @@ define(function (require, exports, module) {
                 },
                 headerContent: {
                     required: true
+                },
+                codeType: {
+                    required: true
                 }
-
             },
             invalidHandler: function invalidHandler(event, validator) {//display error alert on form submit
                 // $('.alert-danger', $('.login-form')).show();
