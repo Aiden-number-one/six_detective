@@ -177,7 +177,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
     const url = await dispatch({
       type: 'global/fetchZipAttachments',
       payload: {
-        attachmentUrl: fileList,
+        attachmentUrl: fileList.toString(),
       },
     });
     if (url) {

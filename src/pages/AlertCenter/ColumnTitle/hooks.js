@@ -4,9 +4,9 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-14 15:17:29
+ * @LastEditTime : 2020-01-14 18:40:51
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function useColumnFilter({ dispatch, tableName, action: type, page, pageSize, reset }) {
   // { column: '', value: '', condition: '7' }
@@ -14,6 +14,14 @@ export function useColumnFilter({ dispatch, tableName, action: type, page, pageS
   const [curTableColumn, setCurTableColumn] = useState('');
   const [curSortColumn, setCurSortColumn] = useState('');
   const [curSort, setCurSort] = useState('');
+
+  // reset state
+  useEffect(() => {
+    setConditions([]);
+    setCurTableColumn('');
+    setCurSortColumn('');
+    setCurSort('');
+  }, [tableName]);
 
   // filter methods
   async function handleCommit(tableColumn, updatedConditions = []) {
@@ -68,7 +76,7 @@ export function useColumnFilter({ dispatch, tableName, action: type, page, pageS
 
   return {
     handlePageChange,
-    getTitleProps: column => ({
+    getTitleProps: (column = curTableColumn) => ({
       curColumn: column,
       conditions,
       tableName,
