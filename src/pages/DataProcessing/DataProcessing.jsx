@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 19:40:07
+ * @LastEditTime : 2020-01-14 20:12:18
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -191,7 +191,7 @@ export default class DataProcessing extends Component {
           'TO Records Eliminated': 0,
           'Duplicated Records Eliminated': 0,
           'Late Submission': 0,
-          'Adjustment of Stock Options Records for Format Conversion': 0,
+          'Adjustment for Format Conversion': 0,
         },
         {
           name: 'HS',
@@ -200,7 +200,7 @@ export default class DataProcessing extends Component {
           'TO Records Eliminated': 0,
           'Duplicated Records Eliminated': 0,
           'Late Submission': 0,
-          'Adjustment of Stock Options Records for Format Conversion': 0,
+          'Adjustment for Format Conversion': 0,
         },
       ],
       cols: {
@@ -212,7 +212,11 @@ export default class DataProcessing extends Component {
       dv: null,
       dataStatus: null,
       processingBar: 0,
-      processedDate: {
+      HKEFTime: {
+        t1: '',
+        t2: '',
+      },
+      SEHKTime: {
         t1: '',
         t2: '',
       },
@@ -244,7 +248,7 @@ export default class DataProcessing extends Component {
         'TO Records Eliminated',
         'Duplicated Records Eliminated',
         'Late Submission',
-        'Adjustment of Stock Options Records for Format Conversion',
+        'Adjustment for Format Conversion',
       ],
       // 展开字段集
       key: '月份',
@@ -737,17 +741,17 @@ export default class DataProcessing extends Component {
       type: 'dataProcessing/getProgressStatus',
       payload: params,
       callback: () => {
-        const processedTime = formatTimeString(this.props.statusData[0].time);
-        const objTime = {};
-        const t1 = processedTime.split(' ')[0];
-        const t2 = processedTime.split(' ')[1];
-        objTime.t1 = moment(t1).format('DD/MMM/YYYY');
-        objTime.t2 = t2;
-        console.log('objTime====', objTime);
+        const processedTime1 = this.formatMarketTime(
+          formatTimeString(this.props.statusData[0].hekfTime),
+        );
+        const processedTime2 = this.formatMarketTime(
+          formatTimeString(this.props.statusData[0].sehkTime),
+        );
         this.setState(
           {
             dataStatus: this.props.statusData[0].status,
-            processedDate: objTime,
+            HKEFTime: processedTime1,
+            SEHKTime: processedTime2,
           },
           () => {
             console.log('dataStatus=', this.state.dataStatus);
@@ -755,6 +759,15 @@ export default class DataProcessing extends Component {
         );
       },
     });
+  };
+
+  formatMarketTime = processedTime => {
+    const objTime = {};
+    const t1 = processedTime.split(' ')[0];
+    const t2 = processedTime.split(' ')[1];
+    objTime.t1 = moment(t1).format('DD/MMM/YYYY');
+    objTime.t2 = t2;
+    return objTime;
   };
 
   getProcessing = () => {
@@ -830,7 +843,8 @@ export default class DataProcessing extends Component {
       selectedMarket,
       dataStatus,
       processingBar,
-      processedDate,
+      HKEFTime,
+      SEHKTime,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -1063,12 +1077,10 @@ export default class DataProcessing extends Component {
                 forceFit
               >
                 <div>
-                  The last time of data processing is for HKEF at {processedDate.t2} on{' '}
-                  {processedDate.t1}
+                  The last time of data processing is for HKEF at {HKEFTime.t2} on {HKEFTime.t1}
                 </div>
                 <div>
-                  The last time of data processing is for SEHK at {processedDate.t2} on{' '}
-                  {processedDate.t1}
+                  The last time of data processing is for SEHK at {SEHKTime.t2} on {SEHKTime.t1}
                 </div>
                 <Axis name="月份" />
                 <Axis name="月均降雨量" line={{ stroke: '#d9d9d9' }} position="left" />

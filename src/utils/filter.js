@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-13 16:47:20
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 17:30:29
+ * @LastEditTime : 2020-01-14 20:09:47
  */
 import moment from 'moment';
 import { formatTimeString } from '@/utils/utils';
@@ -50,7 +50,7 @@ const dataChartFormat = value => {
     eliminatedRecords: 'TO Records Eliminated',
     eliminatedTotal: 'Duplicated Records Eliminated',
     lateRecords: 'Late Submission',
-    adjustmentRecords: 'Adjustment of Stock Options Records for Format Conversion',
+    adjustmentRecords: 'Adjustment for Format Conversion',
     // 'Records Received from ECP': 'ecpRecords',
     // 'Records Imported by user': 'importRecords',
     // 'TO Records Eliminated': 'eliminatedRecords',
