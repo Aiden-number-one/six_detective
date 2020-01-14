@@ -5,6 +5,7 @@ import router from 'umi/router';
 import { Table, Row, Col, Button, Input, Radio, Drawer, message } from 'antd';
 import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
+import ColumnTitle, { actionType, useColumnFilter } from '@/pages/AlertCenter/ColumnTitle';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
 import { GetQueryString } from '@/utils/utils';
@@ -33,9 +34,9 @@ function TabBtn({ changeTab, selectedCurrentTask }) {
           buttonStyle="solid"
           onChange={e => changeTab(e.target.value)}
         >
-          <Radio.Button value="all">All Tasks</Radio.Button>
-          <Radio.Button value="my">My Tasks</Radio.Button>
-          <Radio.Button value="his">History</Radio.Button>
+          <Radio.Button value="SLOP_BIZ.V_ALL_TASK">All Tasks</Radio.Button>
+          <Radio.Button value="SLOP_BIZ.V_MY_TASK">My Tasks</Radio.Button>
+          <Radio.Button value="SLOP_BIZ.V_TASK_HISTORY">History</Radio.Button>
         </Radio.Group>
       </Col>
     </Row>
@@ -124,8 +125,9 @@ function ProcessList({
   setCurrentTaskType,
 }) {
   const [selectedKeys, setSelectedKeys] = useState([]); // 列表复选框选中的值
-  const [selectedCurrentTask, setSelectedTasks] = useState('all'); // 选中的tab选项
+  const [selectedCurrentTask, setSelectedTasks] = useState('SLOP_BIZ.V_ALL_TASK'); // 选中的tab选项
   const [currentPage, setcurrentPage] = useState('1'); // 当前处在第几页
+  const [currentPageSize, setcurrentPageSize] = useState('10'); // 当前处在第几页
   const [currentRow, setcurrentRow] = useState('1'); // 列表选择的行
   const [visible, setVisible] = useState(false); // 弹窗显示隐藏控制
   const [radioValue, setRadioValue] = useState(''); // 分配任务选择的人员
@@ -136,38 +138,63 @@ function ProcessList({
   const [isBatch, setIsBatch] = useState(false); // 是否是批量操作
   const urlTaskCode = GetQueryString('taskCode'); // 获取alert center 带过来的参数,定位到当前条
   const urlIsEnd = GetQueryString('isEnd'); // 获取 alert center 带过来的参数,流程是否结束，结束则跳转到历史
+
+  const { fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
+    dispatch,
+    tableName: selectedCurrentTask,
+    page: currentPage,
+    pageSize: currentPageSize,
+  });
   useEffect(() => {
     setUrlCode(urlTaskCode);
     if (urlIsEnd) {
       if (urlIsEnd === '1') {
-        setSelectedTasks('his');
-        router.push({
-          pathname: '/homepage/Approval-Process-Center',
-        });
+        setSelectedTasks('SLOP_BIZ.V_TASK_HISTORY');
+        // router.push({
+        //   pathname: '/homepage/Approval-Process-Center',
+        // });
       } else {
-        setSelectedTasks('my');
-        router.push({
-          pathname: '/homepage/Approval-Process-Center',
-          query: {
-            isEnd: urlIsEnd,
-          },
-        });
+        setSelectedTasks('SLOP_BIZ.V_MY_TASK');
+        // router.push({
+        //   pathname: '/homepage/Approval-Process-Center',
+        //   query: {
+        //     isEnd: urlIsEnd,
+        //   },
+        // });
       }
-      dispatch({
-        type: 'approvalCenter/fetch',
-        payload: {
-          type: urlIsEnd === '1' ? 'his' : 'my',
-          taskCode: urlTaskCode,
+      const currentTask = urlIsEnd === '1' ? 'SLOP_BIZ.V_TASK_HISTORY' : 'SLOP_BIZ.V_MY_TASK';
+      fetchTableList(
+        {
+          conditions: [
+            {
+              value: urlTaskCode,
+              condition: '7',
+              column: 'taskCode',
+            },
+          ],
         },
-      });
+        currentTask,
+      );
+      // dispatch({
+      //   type: 'approvalCenter/fetch',
+      //   payload: {
+      //     type: urlIsEnd === '1' ? 'his' : 'my',
+      //     taskCode: urlTaskCode,
+      //   },
+      // });
     } else {
-      dispatch({
-        type: 'approvalCenter/fetch',
-        payload: {
-          type: selectedCurrentTask,
-          taskCode: urlTaskCode,
+      fetchTableList(
+        {
+          conditions: [
+            {
+              value: urlTaskCode,
+              condition: '7',
+              column: 'taskCode',
+            },
+          ],
         },
-      });
+        'SLOP_BIZ.V_MY_TASK',
+      );
     }
   }, []);
 
@@ -251,12 +278,17 @@ function ProcessList({
       callback: () => {
         setConfirmVisible(false);
         setcurrentPage(DEFAULT_PAGE);
-        dispatch({
-          type: 'approvalCenter/fetch',
-          payload: {
-            type: selectedCurrentTask,
+        const { curColumn, sort, conditions } = getTitleProps();
+        fetchTableList(
+          {
+            page: currentPage,
+            pageSize: currentPageSize,
+            currentColumn: curColumn,
+            sort,
+            conditions,
           },
-        });
+          selectedCurrentTask,
+        );
       },
     });
   }
@@ -295,12 +327,23 @@ function ProcessList({
       },
       callback: () => {
         setRadioValue('');
-        dispatch({
-          type: 'approvalCenter/fetch',
-          payload: {
-            type: selectedCurrentTask,
+        const { curColumn, sort, conditions } = getTitleProps();
+        fetchTableList(
+          {
+            page: currentPage,
+            pageSize: currentPageSize,
+            currentColumn: curColumn,
+            sort,
+            conditions,
           },
-        });
+          selectedCurrentTask,
+        );
+        // dispatch({
+        //   type: 'approvalCenter/fetch',
+        //   payload: {
+        //     type: selectedCurrentTask,
+        //   },
+        // });
       },
     });
   }
@@ -332,13 +375,25 @@ function ProcessList({
 
   // search 搜索
   function searchTask(taskType, value) {
-    dispatch({
-      type: 'approvalCenter/fetch',
-      payload: {
-        taskCode: value,
-        type: taskType,
+    fetchTableList(
+      {
+        conditions: [
+          {
+            value,
+            condition: '7',
+            column: 'taskCode',
+          },
+        ],
       },
-    });
+      selectedCurrentTask,
+    );
+    // dispatch({
+    //   type: 'approvalCenter/fetch',
+    //   payload: {
+    //     taskCode: value,
+    //     type: taskType,
+    //   },
+    // });
     setcurrentPage(DEFAULT_PAGE);
   }
 
@@ -381,12 +436,7 @@ function ProcessList({
                 setSelectedKeys([]);
                 setSelectedTasks(selectedTasks);
                 setCurrentTaskType(selectedTasks);
-                dispatch({
-                  type: 'approvalCenter/fetch',
-                  payload: {
-                    type: selectedTasks,
-                  },
-                });
+                fetchTableList({ isReset: true }, selectedTasks);
               }}
               selectedCurrentTask={selectedCurrentTask}
             />
@@ -412,7 +462,7 @@ function ProcessList({
         border
         dataSource={tasks}
         rowKey="taskCode"
-        loading={loading['approvalCenter/fetch']}
+        loading={loading[actionType]}
         rowClassName={record => (record.taskCode === currentRow.taskCode ? 'active' : '')}
         rowSelection={{
           selectedRowKeys: selectedKeys,
@@ -429,25 +479,13 @@ function ProcessList({
           },
           onChange(page, pageSize) {
             setcurrentPage(page);
-            dispatch({
-              type: 'approvalCenter/fetch',
-              payload: {
-                page,
-                pageSize,
-                type: selectedCurrentTask,
-              },
-            });
+            setcurrentPageSize(pageSize);
+            handlePageChange(page, pageSize);
           },
           onShowSizeChange(page, pageSize) {
             setcurrentPage(page);
-            dispatch({
-              type: 'approvalCenter/fetch',
-              payload: {
-                page,
-                pageSize,
-                type: selectedCurrentTask,
-              },
-            });
+            setcurrentPageSize(pageSize);
+            handlePageChange(page, pageSize);
           },
         }}
         onRow={record => ({
@@ -457,16 +495,27 @@ function ProcessList({
           },
         })}
       >
-        <Column align="center" dataIndex="taskCode" title="Task Code" width="9%" />
+        <Column
+          align="center"
+          dataIndex="taskCode"
+          title={<ColumnTitle {...getTitleProps('taskCode')}>Task Code</ColumnTitle>}
+          width="11%"
+        />
         <Column
           ellipsis
           align="left"
           dataIndex="classification"
-          title="Classification"
-          width="20%"
+          title={<ColumnTitle {...getTitleProps('classification')}>Classification</ColumnTitle>}
+          width="19%"
         />
-        <Column align="left" dataIndex="submitterName" title="Submitter Name" width="15%" />
-        <Column ellipsis align="left" dataIndex="details" title="Details" width="15%" />
+        <Column
+          ellipsis
+          align="left"
+          dataIndex="submitterName"
+          width="15%"
+          title={<ColumnTitle {...getTitleProps('submitterName')}>Submitter Name</ColumnTitle>}
+        />
+        <Column ellipsis align="left" dataIndex="details" title="Details" width="14%" />
         <Column
           align="center"
           dataIndex="updateDate"
@@ -476,8 +525,18 @@ function ProcessList({
           }
           width="15%"
         />
-        <Column dataIndex="owner" title="Owner" align="center" width="9%" />
-        <Column align="center" dataIndex="statusDesc" title="Status" width="9%" />
+        <Column
+          dataIndex="owner"
+          align="center"
+          width="9%"
+          title={<ColumnTitle {...getTitleProps('owner')}>Owner</ColumnTitle>}
+        />
+        <Column
+          align="center"
+          dataIndex="statusDesc"
+          width="9%"
+          title={<ColumnTitle {...getTitleProps('statusDesc')}>Status</ColumnTitle>}
+        />
         {selectedCurrentTask !== 'his' ? (
           <Column
             align="center"
@@ -504,10 +563,13 @@ function ProcessList({
 }
 
 export default connect(
-  ({ loading, approvalCenter: { tasks, currentUsers, currentGroup, page, total } }) => ({
-    tasks,
-    page,
-    total,
+  ({
+    loading,
+    global: { filterTables, filterTableTotal },
+    approvalCenter: { currentUsers, currentGroup },
+  }) => ({
+    tasks: filterTables,
+    total: filterTableTotal,
     currentUsers,
     currentGroup,
     loading: loading.effects,

@@ -4,9 +4,9 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-14 22:00:36
+ * @LastEditTime : 2020-01-14 22:30:51
  */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export const actionType = 'global/fetchTableList';
 
@@ -23,22 +23,22 @@ export function useColumnFilter({
   const [curSortColumn, setCurSortColumn] = useState('');
   const [curSort, setCurSort] = useState('');
 
-  // reset state
-  useEffect(() => {
-    setConditions([]);
-    setCurTableColumn('');
-    setCurSortColumn('');
-    setCurSort('');
-  }, [tableName]);
-
   function fetchTableList(params = {}, dataTable = tableName) {
+    const { isReset, ...rest } = params;
     dispatch({
       type: actionType,
       payload: {
-        ...params,
+        ...rest,
         dataTable,
       },
     });
+
+    if (isReset) {
+      setConditions([]);
+      setCurTableColumn('');
+      setCurSortColumn('');
+      setCurSort('');
+    }
   }
 
   // filter methods
