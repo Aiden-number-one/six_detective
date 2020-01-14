@@ -245,7 +245,7 @@ i{
     background: #fff;
   }
  .datagrid-header td, .datagrid-body td, .datagrid-footer td{
-   background: #fff;
+   /* background: #fff; */
    border-style: solid;
    border:none
  }
@@ -333,10 +333,10 @@ i{
       <!-- <i class="fa fa-search"></i> -->
       <!-- <input type="button" value="搜索" id="sea_but" style="width: 50px; height: 25px; font-size: 14px;" />
       <i><img src="css/icons/reload.png" title="刷新" style="cursor: pointer;" id="Refresh" /></i> -->
-      <button type="button" class="btn-query" id="sea_but">
+      <button type="button" class="btn-query" id="sea_but">SEARCH
         <i class="fa fa-search"></i>
       </button>
-      <button type="button" class="btn-reset" id="Refresh"><i class="fa fa-times"></i></button>
+      <button type="button" class="btn-reset" id="Refresh">RESET<i class="fa fa-times"></i></button>
     </div>
     <div class='toolbox'></div>
     <ul class="tab_Label" id="tab_Label">
@@ -344,13 +344,13 @@ i{
       <li>Node Object</li>
     </ul>
     <div id="ssou" style="display: none" class="ssou">
-      <input type="search" class="form-control input-small input-inline" style="width:120px!important" placeholder="Please input" id="sousuo_text">
+      <input type="search" class="form-control input-small input-inline" style="width:173px !important;" placeholder="Please input nodename" id="sousuo_text">
       <!-- <input type="text" style="width: 130px; margin-left: 10px;height: 30px" id="sousuo_text" /> -->
       <!-- <input type="button" value="搜索" id="sousuo" /> -->
-      <button type="button" class="btn-query" id="sousuo"> SEARCH
+      <button type="button" class="btn-query" id="sousuo" title="SEARCH">
         <i class="fa fa-search"></i>
       </button>
-      <button type="button" class="btn-reset" id="sxin">RESET<i class="fa fa-times"></i></button>
+      <button type="button" class="btn-reset" id="sxin" title="RESET"><i class="fa fa-refresh"></i></button>
       <!-- <a id="sxin" class="btn-query">
         <i class="widget-thumb-icon bg-green fa fa-refresh"></i> 刷新</a> -->
       <!-- <i><img src="css/icons/reload.png" title="刷新" style="cursor: pointer;" id="sxin" /></i> -->
@@ -1249,14 +1249,14 @@ i{
     </div>
 
    
-    <div id="importTasks" class="easyui-window" title="Batch Task Importing" data-options="modal:true,closed:true,iconCls:''" style="width: 800px; height: 500px;">
+    <div id="importTasks" class="easyui-window" title="Batch Task Importing" data-options="modal:true,closed:true,iconCls:''" style="width: 930px; height: 500px;">
       <div class="c-container">
         <div style='position: absolute; top: 0px; left: 0px; width: 100%; padding: 0 10px;'>
           <div style='display: inline-block; vertical-align: middle; padding-top: 5px;' class='pull-right'>
             Node Status:
-            <input type="text" class="easyui-combobox" id="nodeType" name="nodeType"/>
+            <input type="text" class="easyui-combobox" id="nodeType" name="nodeType" style="width: 280px;"/>
             &nbsp; &nbsp; &nbsp;        
-            <a class="btn-operate" id="saveInfo" style="float:none"><i class="widget-thumb-icon bg-red fa fa-arrow-down" style="position: relative;left: 279px; top: 4px;"></i> Batch Import </a>
+            <a class="btn-operate" id="saveInfo" style="float:none"><i class="widget-thumb-icon bg-red fa fa-arrow-down" style="float:none;"></i> Batch Import </a>
             <!-- <button type="button" class="btn btn-default btn-small" id='saveInfo'>批量导入</button> -->
             <button type="button" class="btn btn-default btn-small" id='cancelInfo'>CANCEL</button>
           </div>
@@ -1271,10 +1271,10 @@ i{
             <div class="c-float-7p">
               <div style='position: relative; height: 100%;'>
                 <div class="c-absolute-middle-wrap">
-                  <button class="btn btn-default btn-sm c-btn40" onclick="moveRight();">
+                  <button class="btn btn-default btn-sm c-btn40" style="min-width: 40px;padding: 4px 10px;" onclick="moveRight();">
                     <i class="glyphicon glyphicon-arrow-right"></i>
                   </button>
-                  <button class="btn btn-default btn-sm c-btn40" onclick="moveLeft();">
+                  <button class="btn btn-default btn-sm c-btn40" style="min-width: 40px;padding: 4px 10px;" onclick="moveLeft();">
                     <i class="glyphicon glyphicon-trash"></i>
                   </button>
                 </div>
