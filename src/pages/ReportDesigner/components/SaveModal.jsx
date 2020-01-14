@@ -4,17 +4,20 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-12 15:09:07
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 17:56:42
+ * @LastEditTime : 2020-01-14 14:50:01
  */
 
 import React from 'react';
 import { Form, Input, TreeSelect, Button } from 'antd';
 import { connect } from 'dva';
 
+const { TextArea } = Input;
+
 export default React.memo(
   connect(({ reportDesigner, reportTree }) => ({
     reportName: reportDesigner.reportName,
     folderId: reportDesigner.folderId,
+    description: reportDesigner.description,
     classifyTree: reportTree.classifyTree,
   }))(
     Form.create()(
@@ -37,7 +40,8 @@ export default React.memo(
             classifyTree,
             saveType,
             reportName, // 报表名
-            folderId,
+            folderId, // 存放文件夹id
+            description, // 报表描述
           } = this.props;
           const { getFieldDecorator } = form;
           const Layout = {
@@ -63,6 +67,17 @@ export default React.memo(
                   rules: [{ required: true, message: 'Please select' }],
                   initialValue: saveType === 'saveAs' || !folderId ? undefined : folderId,
                 })(<TreeSelect treeData={classifyTree} placeholder="Please select" />)}
+              </Form.Item>
+              <Form.Item {...Layout} label="Description">
+                {getFieldDecorator('description', {
+                  rules: [
+                    {
+                      max: 1000,
+                      message: 'Description cannot be longer than 1000 characters',
+                    },
+                  ],
+                  initialValue: description,
+                })(<TextArea autoSize={{ minRows: 6, maxRows: 12 }} />)}
               </Form.Item>
               <div
                 style={{

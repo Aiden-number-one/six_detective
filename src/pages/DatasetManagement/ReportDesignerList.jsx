@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-14 11:09:34
+ * @LastEditTime : 2020-01-14 15:03:17
  * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
@@ -81,7 +81,7 @@ export default class DatasetManagement extends PureComponent {
         dispatch({
           type: 'reportList/getReportList',
           payload: {
-            datasetName: values.datasetName,
+            reportName: values.datasetName,
             folderId: activeTree,
             ...page,
           },
