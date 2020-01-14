@@ -8,7 +8,7 @@ import { Table, Row, Col, Icon, Alert } from 'antd';
 import moment from 'moment';
 import { timestampFormat, downloadFile } from '@/pages/DataImportLog/constants';
 import IconFont from '@/components/IconFont';
-import ColumnTitle, { useColumnFilter } from '../ColumnTitle';
+import ColumnTitle, { actionType, useColumnFilter } from '../ColumnTitle';
 import InformationDetail from './InformationDetail';
 import styles from '../index.less';
 
@@ -19,10 +19,9 @@ function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, tot
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   // header filter
-  const { handlePageChange, getTitleProps } = useColumnFilter({
+  const { fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
     dispatch,
-    tableName: 'slop_biz.v_info',
-    action: 'alertCenter/fetchInfos',
+    tableName: 'SLOP_BIZ.V_INFO',
     page: infoPage,
     pageSize: infoPageSize,
   });
@@ -35,14 +34,10 @@ function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, tot
     if (informationNo) {
       params = [{ column: 'informationNo', value: informationNo, condition: '7' }];
     }
-
-    dispatch({
-      type: 'alertCenter/fetchInfos',
-      payload: {
-        page: infoPage,
-        pageSize: infoPageSize,
-        conditions: params,
-      },
+    fetchTableList({
+      page: infoPage,
+      pageSize: infoPageSize,
+      conditions: params,
     });
   }, [location]);
 
@@ -113,7 +108,7 @@ function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, tot
         <Table
           dataSource={infos}
           rowKey="informationNo"
-          loading={loading['alertCenter/fetchInfos']}
+          loading={loading[actionType]}
           rowClassName={record => {
             if (info && record.informationNo === info.informationNo) {
               return 'table-active';
@@ -213,12 +208,12 @@ function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, tot
 
 const mapStateToProps = ({
   loading,
-  alertCenter: { infos, infoPage, infoPageSize, infoTotal },
+  global: { filterTables, filterTalbePage, filterTalbePageSize, filterTableTotal },
 }) => ({
-  infos,
-  infoPage,
-  infoPageSize,
-  total: infoTotal,
+  infos: filterTables,
+  infoPage: filterTalbePage,
+  infoPageSize: filterTalbePageSize,
+  total: filterTableTotal,
   loading: loading.effects,
 });
 export default withRouter(connect(mapStateToProps)(InfomationList));

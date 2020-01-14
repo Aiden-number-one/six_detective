@@ -15,7 +15,7 @@ import {
 } from '@/pages/DataImportLog/constants';
 import { ClaimModal, CloseModal } from './components/AlertListModal';
 import { AlertListBtns } from './components/AlertListBtns';
-import ColumnTitle, { useColumnFilter } from '../ColumnTitle';
+import ColumnTitle, { actionType, useColumnFilter } from '../ColumnTitle';
 import AlertDetail from './AlertDetail';
 import styles from '../index.less';
 
@@ -31,9 +31,8 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   const [isBatchAction, setBatchAction] = useState(false);
   const [isDiscontinue, setDiscontinue] = useState(false);
   // header filter
-  const { handlePageChange, getTitleProps } = useColumnFilter({
+  const { fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
     dispatch,
-    action: 'alertCenter/fetch',
     page: alertPage,
     pageSize: alertPageSize,
     reset: Object.keys(location.query).length > 0 ? handleCloseMsg : null,
@@ -64,18 +63,16 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
         { column: 'tradeDate', value: end, condition: '6' },
       ];
     }
-    dispatch({
-      type: 'alertCenter/fetch',
-      payload: {
-        page: alertPage,
-        pageSize: alertPageSize,
-        conditions: params,
-      },
+    fetchTableList({
+      page: alertPage,
+      pageSize: alertPageSize,
+      conditions: params,
     });
   }, [location]);
 
   useEffect(() => {
     if (alerts && alerts.length > 0) {
+      console.log(alerts);
       const [firstAlert] = alerts;
       const curAlert = alert && alerts.find(item => item.alertId === alert.alertId);
       // should be latest alert,owner and status has been changed
@@ -259,7 +256,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
         <Table
           dataSource={alerts}
           rowKey="alertId"
-          loading={loading['alertCenter/fetch']}
+          loading={loading[actionType]}
           rowClassName={record => (alert && record.alertId === alert.alertId ? 'table-active' : '')}
           rowSelection={{
             columnWidth: 50,
@@ -416,13 +413,14 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
 
 const mapStateToProps = ({
   loading,
-  alertCenter: { alerts, alertItems = [], alertPage, alertPageSize, alertTotal },
+  alertCenter: { alertItems = [] },
+  global: { filterTables, filterTalbePage, filterTalbePageSize, filterTableTotal },
 }) => ({
-  alerts,
   alertItems,
-  alertPage,
-  alertPageSize,
-  total: alertTotal,
+  alerts: filterTables,
+  alertPage: filterTalbePage,
+  alertPageSize: filterTalbePageSize,
+  total: filterTableTotal,
   loading: loading.effects,
 });
 export default withRouter(connect(mapStateToProps)(AlertList));
