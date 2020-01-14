@@ -129,6 +129,7 @@ define(function (require, exports, module) {
             template: "data-source-configuration/template/data-source-configuration-datasourcedetail.handlebars",
             cb: showContent.qry_connect_data
         });
+        $("#connect-data-result .checked").removeClass('checked');
     };
 
     //  测试数据连接提交
@@ -203,10 +204,13 @@ define(function (require, exports, module) {
 
             //取消交互
             App.unblockUI();
-
-            var items = data.bcjson.items;
-            showContent.getCurrentTreeData = items;
-            showContent.generateTree(items);
+            if (data.bcjson.flag === '1') {
+                var items = data.bcjson.items;
+                showContent.getCurrentTreeData = items;
+                showContent.generateTree(items);
+            } else {
+                toastr.error(data.bcjson.msg);
+            }
         });
     };
     // 获取文件地址
