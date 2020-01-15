@@ -415,12 +415,14 @@ function Title({ title, isLeaf, copyData, deleteData }) {
           {isLeaf && (
             <>
               <IconFont
+                title="Copy"
                 type="iconcopy"
                 onClick={() => {
                   copyData();
                 }}
               />
               <IconFont
+                title="Delete"
                 type="icon-delete"
                 onClick={() => {
                   deleteData();
