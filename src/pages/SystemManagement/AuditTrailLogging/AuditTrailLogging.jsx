@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 17:11:54
+ * @LastEditTime : 2020-01-15 17:16:12
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -396,7 +396,7 @@ class AuditTrailLogging extends Component {
     const { dispatch } = this.props;
     const { attrSort } = this.state;
     const param = {
-      fileType: exportType,
+      fileType: exportType.toString(),
       apiVersion: 'v2.0',
       isPage: 'true',
       attrSort: attrSort.join(','),
