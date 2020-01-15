@@ -9,5 +9,6 @@ export { default as AlertRichText } from './AlertRichText';
 export { default as AlertEmailModal } from './AlertEmailModal';
 export { GrDescriptions } from './GrDescriptions';
 export { TaskBtn } from './AlertTask';
+export { default as AlertDetailLogTabs } from './AlertDetailLogTabs';
 export { epColumns, proudctColumns, caCodeColumns, newAccountColumns } from './AlertTaskColumns';
 export { EpTaskItem, ProductTaskItem, CaCodeTaskItem, NewAccountTaskItem } from './AlertTaskItem';

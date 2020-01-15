@@ -10,9 +10,11 @@ import {
   Radio,
   Button,
   InputNumber,
+  DatePicker,
 } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import _ from 'lodash';
+import moment from 'moment';
 import IconFont from '@/components/IconFont';
 import styles from './index.less';
 
@@ -20,6 +22,7 @@ const { Content } = Layout;
 const { Panel } = Collapse;
 const { TextArea } = Input;
 const { Option } = Select;
+const { MonthPicker } = DatePicker;
 
 const formLayout = {
   labelCol: { span: 8 },
@@ -177,6 +180,33 @@ export default props => {
                     }
                     return <Select />;
                   })()}
+                {/* 若类型为年类型 */}
+                {currentWidge.widgetType === 'datepickeryyyy' &&
+                  getFieldDecorator('widgetDefault', {
+                    initialValue: currentWidge.widgetDefault
+                      ? currentWidge.widgetDefault
+                      : undefined,
+                  })(
+                    <Select>
+                      {_.range(1990, 2099).map(year => (
+                        <Option key={year}>{year}</Option>
+                      ))}
+                    </Select>,
+                  )}
+                {/* 若类型为月类型 */}
+                {currentWidge.widgetType === 'datepickeryyyymm' &&
+                  getFieldDecorator('widgetDefault', {
+                    initialValue: currentWidge.widgetDefault
+                      ? moment(currentWidge.widgetDefault, 'YYYY-MM')
+                      : undefined,
+                  })(<MonthPicker />)}
+                {/* 若类型为日类型 */}
+                {currentWidge.widgetType === 'datepickeryyyymmdd' &&
+                  getFieldDecorator('widgetDefault', {
+                    initialValue: currentWidge.widgetDefault
+                      ? moment(currentWidge.widgetDefault, 'YYYY-MM-DD')
+                      : undefined,
+                  })(<MonthPicker />)}
               </>
               ,
             </Form.Item>

@@ -13,7 +13,7 @@
 2. use component
 
 ```js
-const { fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
+const { clearFilter, fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
   dispatch,
   action: string,
   page: number|string,

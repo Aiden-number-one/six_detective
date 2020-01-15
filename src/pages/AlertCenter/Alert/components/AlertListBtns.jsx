@@ -20,7 +20,7 @@ export function AlertListBtns({
   return (
     <Row className={styles.btns} type="flex" justify="space-between" align="middle">
       <Col className={styles['page-name']}>
-        <IconFont type="iconring" className={styles.icon} style={{ color: '#0D87D4' }} />
+        <IconFont type="iconring" className={styles.icon} style={{ color: '#0d87d4' }} />
         <span>Alert Center</span>
       </Col>
       <Col>
@@ -36,7 +36,7 @@ export function AlertListBtns({
           {isBatchAction && !disabled && claimLoading ? (
             <Icon type="loading" className={styles['btn-icon']} />
           ) : (
-            <IconFont type="iconqizhi" className={styles['btn-icon']} />
+            <IconFont type="icon-claim-small" className={styles['btn-icon']} />
           )}
           <FormattedMessage id="alert-center.claim" />
         </button>
