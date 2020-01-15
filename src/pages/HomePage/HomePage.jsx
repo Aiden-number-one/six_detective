@@ -4060,6 +4060,11 @@ export default class HomePage extends PureComponent {
                       {targetData.map(item => (
                         <Col span={11} className={styles.menuItem}>
                           {/* <IconFont type={item.icon} className={styles.icon} /> */}
+                          <IconFont
+                            // type={item.icon}
+                            type="iconkuaijiecaidan"
+                            className={styles.icon}
+                          />
                           <span
                             onClick={() => {
                               router.push(item.menuurl);
