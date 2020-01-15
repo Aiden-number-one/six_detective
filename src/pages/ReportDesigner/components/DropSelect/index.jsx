@@ -32,7 +32,7 @@ export default class DropSelect extends Component {
     if (keyWord) {
       data = data.filter(item => item.datasetName.includes(keyWord)); // 关键字搜索
     }
-    const dataText = privateData.map(item => item.dataset_name).split(',');
+    const dataText = privateData.map(item => item.dataset_name).join(',');
     return (
       <div className={styles.edit}>
         <div

@@ -4,6 +4,7 @@ import { Tabs, Row, Col, Input, Button, Drawer, Radio, Upload, Empty, Spin } fro
 import { connect } from 'dva';
 import moment from 'moment';
 import AlertComment from '@/pages/AlertCenter/Alert/components/AlertComment';
+import { useColumnFilter } from '@/pages/AlertCenter/ColumnTitle';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
 import styles from './index.less';
@@ -50,6 +51,7 @@ function ProcessDetail({
   taskHistoryList,
   logList,
   currentTaskType,
+  pageSizeData,
 }) {
   const [isFullscreen, setFullscreen] = useState(false); // 全屏控制
   const [visible, setVisible] = useState(false); // 弹窗显示控制
@@ -64,7 +66,12 @@ function ProcessDetail({
   const [confirmBiCategoryValue, setConfirmBiCategory] = useState(''); // 保存confirmBiCategory
   const newDetailForm = React.createRef();
   const isLt5M = size => size / 1024 / 1024 < 5;
-
+  const { fetchTableList } = useColumnFilter({
+    dispatch,
+    tableName: currentTaskType,
+    page: pageSizeData.page,
+    pageSize: pageSizeData.pageSize,
+  });
   // 初始化 加载对应数据
   useEffect(() => {
     if (task) {
@@ -88,7 +95,7 @@ function ProcessDetail({
   }, [detailItems]);
 
   useEffect(() => {
-    if (task && currentTaskType !== 'his') {
+    if (task && currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY') {
       dispatch({
         type: 'approvalCenter/featchTaskGroup',
         payload: {
@@ -170,16 +177,32 @@ function ProcessDetail({
                 weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
               };
             } else {
+              const effectiveDate = values.effectiveDate
+                ? moment(values.effectiveDate).format('YYYYMMDD')
+                : '';
+              const expiryDate = values.expiryDate
+                ? moment(values.expiryDate).format('YYYYMMDD')
+                : '';
               valueData = {
                 isCaCode: values.isCaCode,
                 remark: values.remark,
+                effectiveDate,
+                expiryDate,
               };
             }
           } else if (alertTypeValue === '303') {
             if (values.isCaCode === 'Yes') {
+              const effectiveDate = values.effectiveDate
+                ? moment(values.effectiveDate).format('YYYYMMDD')
+                : '';
+              const expiryDate = values.expiryDate
+                ? moment(values.expiryDate).format('YYYYMMDD')
+                : '';
               valueData = {
                 isCaCode: values.isCaCode,
                 remark: values.remark,
+                effectiveDate,
+                expiryDate,
               };
             } else {
               valueData = {
@@ -228,12 +251,13 @@ function ProcessDetail({
         type: 'approvalCenter/approveAndReject',
         payload: taskValue,
         callback: () => {
-          dispatch({
-            type: 'approvalCenter/fetch',
-            payload: {
-              type: currentTaskType,
-            },
-          });
+          fetchTableList({}, currentTaskType);
+          // dispatch({
+          //   type: 'approvalCenter/fetch',
+          //   payload: {
+          //     type: currentTaskType,
+          //   },
+          // });
           setUpAttachements([]);
           setComment('');
         },
@@ -252,13 +276,14 @@ function ProcessDetail({
         comment,
       },
       callback: () => {
-        dispatch({
-          type: 'approvalCenter/fetch',
-          payload: {
-            type: currentTaskType,
-            taskCode: task.taskCode,
-          },
-        });
+        fetchTableList({}, currentTaskType);
+        // dispatch({
+        //   type: 'approvalCenter/fetch',
+        //   payload: {
+        //     type: currentTaskType,
+        //     taskCode: task.taskCode,
+        //   },
+        // });
         setComment('');
       },
     });
@@ -436,6 +461,7 @@ function ProcessDetail({
               className={isFullscreen ? styles['tab-content'] : styles['tab-scroll-content']}
               closable={false}
               tab="Task Detail"
+              type="card"
               key=""
             >
               <DetailList
@@ -474,7 +500,7 @@ function ProcessDetail({
             </TabPane>
           </Tabs>
         </Col>
-        <Col span={8}>
+        <Col span={8} className={styles['detail-comment-box']}>
           <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
             <TabPane tab="Approval History" key="1">
               <Spin spinning={loading['approvalCenter/getApprovalTaskHistory']}>
@@ -497,7 +523,10 @@ function ProcessDetail({
                   <CustomEmpty className={styles['comment-list']} />
                 )}
               </Spin>
-              {currentTaskType !== 'his' && currentOwner ? (
+              {currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY' &&
+              currentOwner &&
+              detailItems[0] &&
+              detailItems[0].receivedAnswer !== '0' ? (
                 <div className={styles['comment-box']}>
                   <TextArea
                     placeholder="Plase Input Comment"
@@ -518,6 +547,7 @@ function ProcessDetail({
                       <div className={styles['attachments-icon']}>
                         <IconFont
                           type="icon-withdrawx"
+                          title="withdraw"
                           onClick={() => setWithdrawConfirmVisible(true)}
                           className={styles['btn-icon']}
                         />
@@ -526,6 +556,7 @@ function ProcessDetail({
                         <div className={styles['attachments-icon']}>
                           <IconFont
                             type="icon-savex"
+                            title="save"
                             onClick={saveTask}
                             className={styles['btn-icon']}
                           />
@@ -593,7 +624,7 @@ function ProcessDetail({
             </TabPane>
             <TabPane tab="Task Lifecycle" key="2">
               <Spin spinning={loading['approvalCenter/getApprovalTaskHistory']}>
-                <div style={{ height: 370, overflowY: 'auto', padding: '0 18px' }}>
+                <div className={styles.LifecycleBox}>
                   {logList.length > 0 ? (
                     logList.map(log => <TaskLog log={log} key={log.id} />)
                   ) : (

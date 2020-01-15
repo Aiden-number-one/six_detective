@@ -2,8 +2,8 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2020-01-14 11:29:40
- * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-15 11:06:17
+ * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -62,12 +62,12 @@ export default WrapperComponent => {
         name: 'sheet1',
         fxObj: document.querySelector('#fxFn'),
         row: {
-          len: 5,
+          len: 20,
           height: INITHEIGHT,
           minHeight: 2, // 设置高度可调最小高度
         },
         col: {
-          len: 5,
+          len: 20,
           width: INITWIDTH,
           indexWidth: 20,
           minWidth: 2, // 设置列最小宽度
@@ -140,7 +140,7 @@ export default WrapperComponent => {
             console.log(`row:${row} col:${col} index:${index}`);
           },
           afterTriggerHistoryAction(historyType, params) {
-            console.table(historyType, params);
+            // console.table(historyType, params);
           },
           /**
            * @description: 右键菜单显示前回调 可用于显示和隐藏菜单

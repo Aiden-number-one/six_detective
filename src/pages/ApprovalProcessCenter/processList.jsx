@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+// import Redirect from 'umi/redirect';
 import router from 'umi/router';
-import { Table, Row, Col, Button, Input, Radio, Drawer, message } from 'antd';
+import withRouter from 'umi/withRouter';
+import Link from 'umi/link';
+import { Table, Row, Col, Button, Input, Radio, Drawer, message, Alert } from 'antd';
 import moment from 'moment';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
+import ColumnTitle, { actionType, useColumnFilter } from '@/pages/AlertCenter/ColumnTitle';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
-import { GetQueryString } from '@/utils/utils';
+// import { GetQueryString } from '@/utils/utils';
 import styles from './index.less';
 import alertStyle from '@/pages/AlertCenter/index.less';
 import btnStyles from '@/pages/DataImportLog/index.less';
@@ -19,7 +23,7 @@ export const DEFAULT_PAGE = 1; // 默认页
 export const DEFAULT_PAGE_SIZE = 10; // 一页默认显示条数
 
 // tab切换组件
-function TabBtn({ changeTab, selectedCurrentTask }) {
+function TabBtn({ selectedCurrentTask }) {
   return (
     <Row className={styles.tabBtnBox}>
       <Col span={24}>
@@ -27,15 +31,16 @@ function TabBtn({ changeTab, selectedCurrentTask }) {
           <IconFont type="icon-approval-process-title" className={styles.icon} />
           <span>Approval process</span>
         </div>
-        <Radio.Group
-          key={selectedCurrentTask}
-          defaultValue={selectedCurrentTask}
-          buttonStyle="solid"
-          onChange={e => changeTab(e.target.value)}
-        >
-          <Radio.Button value="all">All Tasks</Radio.Button>
-          <Radio.Button value="my">My Tasks</Radio.Button>
-          <Radio.Button value="his">History</Radio.Button>
+        <Radio.Group key={selectedCurrentTask} value={selectedCurrentTask} buttonStyle="solid">
+          <Radio.Button value="SLOP_BIZ.V_ALL_TASK">
+            <Link to="/homepage/Approval-Process-Center">All Tasks</Link>
+          </Radio.Button>
+          <Radio.Button value="SLOP_BIZ.V_MY_TASK">
+            <Link to="/homepage/Approval-Process-Center/my">My Tasks</Link>
+          </Radio.Button>
+          <Radio.Button value="SLOP_BIZ.V_TASK_HISTORY">
+            <Link to="/homepage/Approval-Process-Center/history">History</Link>
+          </Radio.Button>
         </Radio.Group>
       </Col>
     </Row>
@@ -58,27 +63,26 @@ function TaskBtn({
   searchTask,
   checkOwner,
   checkAssign,
-  urlTaskCode,
   dataFileExport,
 }) {
   return (
     <Row>
-      <Col span={24} align="right">
+      <Col span={24} align="right" className={styles.taskBtnBox}>
         <Search
-          key={urlTaskCode}
+          key="search"
           placeholder="search"
-          defaultValue={urlTaskCode}
+          defaultValue=""
           onSearch={value => searchTask(selectedCurrentTask, value)}
           style={{ width: 264, verticalAlign: 'middle', marginRight: '10px', textAlign: 'left' }}
         />
-        {selectedCurrentTask !== 'his' && (
+        {selectedCurrentTask !== 'SLOP_BIZ.V_TASK_HISTORY' && (
           <>
             <button
               type="button"
               disabled={!selectedKeys.length}
               onClick={() => checkOwner(selectedKeys)}
             >
-              <IconFont type="iconqizhi" className={alertStyle['btn-icon']} />
+              <IconFont type="icon-claim-small" className={alertStyle['btn-icon']} />
               <FormattedMessage id="alert-center.claim" />
             </button>
             <button
@@ -115,6 +119,8 @@ function TaskBtn({
  */
 function ProcessList({
   dispatch,
+  location,
+  match,
   loading,
   tasks,
   currentUsers,
@@ -122,54 +128,69 @@ function ProcessList({
   total,
   getTask,
   setCurrentTaskType,
+  setPageSizeData,
 }) {
   const [selectedKeys, setSelectedKeys] = useState([]); // 列表复选框选中的值
-  const [selectedCurrentTask, setSelectedTasks] = useState('all'); // 选中的tab选项
+  const [selectedCurrentTask, setSelectedTasks] = useState('SLOP_BIZ.V_ALL_TASK'); // 选中的tab选项
   const [currentPage, setcurrentPage] = useState('1'); // 当前处在第几页
+  const [currentPageSize, setcurrentPageSize] = useState('10'); // 当前处在第几页
   const [currentRow, setcurrentRow] = useState('1'); // 列表选择的行
   const [visible, setVisible] = useState(false); // 弹窗显示隐藏控制
   const [radioValue, setRadioValue] = useState(''); // 分配任务选择的人员
   const [confirmVisible, setConfirmVisible] = useState(false); // 确认框弹窗显示
   const [clickCurrentTaskCode, setClickTaskCode] = useState(''); // 选中的任务taskCode
   const [claimContent, setClaimContent] = useState(''); // 设置弹窗的内容
-  const [urlCode, setUrlCode] = useState(''); // 设置从alert center 带过来的参数
+  // const [urlCode, setUrlCode] = useState(''); // 设置从alert center 带过来的参数
   const [isBatch, setIsBatch] = useState(false); // 是否是批量操作
-  const urlTaskCode = GetQueryString('taskCode'); // 获取alert center 带过来的参数,定位到当前条
-  const urlIsEnd = GetQueryString('isEnd'); // 获取 alert center 带过来的参数,流程是否结束，结束则跳转到历史
+  // const urlTaskCode = GetQueryString('taskCode'); // 获取alert center 带过来的参数,定位到当前条
+  // const urlIsEnd = GetQueryString('isEnd'); // 获取 alert center 带过来的参数,流程是否结束，结束则跳转到历史
+
+  const { clearFilter, fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
+    dispatch,
+    tableName: selectedCurrentTask,
+    page: currentPage,
+    pageSize: currentPageSize,
+    reset: Object.keys(location.query).length > 0 ? handleCloseMsg : null,
+  });
   useEffect(() => {
-    setUrlCode(urlTaskCode);
-    if (urlIsEnd) {
-      if (urlIsEnd === '1') {
-        setSelectedTasks('his');
-        router.push({
-          pathname: '/homepage/Approval-Process-Center',
-        });
-      } else {
-        setSelectedTasks('my');
-        router.push({
-          pathname: '/homepage/Approval-Process-Center',
-          query: {
-            isEnd: urlIsEnd,
-          },
-        });
-      }
-      dispatch({
-        type: 'approvalCenter/fetch',
-        payload: {
-          type: urlIsEnd === '1' ? 'his' : 'my',
-          taskCode: urlTaskCode,
-        },
-      });
-    } else {
-      dispatch({
-        type: 'approvalCenter/fetch',
-        payload: {
-          type: selectedCurrentTask,
-          taskCode: urlTaskCode,
-        },
-      });
+    const { taskCode, owner, tradeDate } = location.query;
+    const { type } = match.params;
+    // if (type !== 'my' || type !== 'history') {
+    //   router.replace('/homepage/Approval-Process-Center/all');
+    // }
+    clearFilter();
+    const currentTab =
+      // eslint-disable-next-line no-nested-ternary
+      type === 'my'
+        ? 'SLOP_BIZ.V_MY_TASK'
+        : type === 'history'
+        ? 'SLOP_BIZ.V_TASK_HISTORY'
+        : 'SLOP_BIZ.V_ALL_TASK';
+    let params = [];
+    if (taskCode) {
+      params = [{ column: 'taskCode', value: taskCode, condition: '7' }];
     }
-  }, []);
+    if (owner) {
+      params = [...params, { column: 'owner', value: owner, condition: '7' }];
+    }
+    if (tradeDate) {
+      const [start, end] = tradeDate.split(',');
+      params = [
+        ...params,
+        { column: 'updateDate', value: start, condition: '4' },
+        { column: 'updateDate', value: end, condition: '6' },
+      ];
+    }
+    fetchTableList(
+      {
+        page: currentPage,
+        pageSize: currentPageSize,
+        conditions: params,
+      },
+      currentTab,
+    );
+    setSelectedTasks(currentTab);
+  }, [location]);
 
   // default task 初始化
   useEffect(() => {
@@ -178,6 +199,10 @@ function ProcessList({
       getTask(firstTasks);
       setcurrentRow(firstTasks);
       setCurrentTaskType(selectedCurrentTask);
+      setPageSizeData({
+        page: currentPage,
+        pageSize: currentPageSize,
+      });
     } else {
       getTask(false);
     }
@@ -242,7 +267,6 @@ function ProcessList({
 
   // 批量认领
   function claimOk(taskCode) {
-    setUrlCode('');
     dispatch({
       type: 'approvalCenter/claim',
       payload: {
@@ -251,12 +275,17 @@ function ProcessList({
       callback: () => {
         setConfirmVisible(false);
         setcurrentPage(DEFAULT_PAGE);
-        dispatch({
-          type: 'approvalCenter/fetch',
-          payload: {
-            type: selectedCurrentTask,
+        const { curColumn, sort, conditions } = getTitleProps();
+        fetchTableList(
+          {
+            page: currentPage,
+            pageSize: currentPageSize,
+            currentColumn: curColumn,
+            sort,
+            conditions,
           },
-        });
+          selectedCurrentTask,
+        );
       },
     });
   }
@@ -295,12 +324,23 @@ function ProcessList({
       },
       callback: () => {
         setRadioValue('');
-        dispatch({
-          type: 'approvalCenter/fetch',
-          payload: {
-            type: selectedCurrentTask,
+        const { curColumn, sort, conditions } = getTitleProps();
+        fetchTableList(
+          {
+            page: currentPage,
+            pageSize: currentPageSize,
+            currentColumn: curColumn,
+            sort,
+            conditions,
           },
-        });
+          selectedCurrentTask,
+        );
+        // dispatch({
+        //   type: 'approvalCenter/fetch',
+        //   payload: {
+        //     type: selectedCurrentTask,
+        //   },
+        // });
       },
     });
   }
@@ -332,14 +372,24 @@ function ProcessList({
 
   // search 搜索
   function searchTask(taskType, value) {
-    dispatch({
-      type: 'approvalCenter/fetch',
-      payload: {
-        taskCode: value,
-        type: taskType,
-      },
-    });
+    let params = {};
+    if (value) {
+      params = {
+        conditions: [
+          {
+            value,
+            condition: '7',
+            column: 'taskCode',
+          },
+        ],
+      };
+    }
+    fetchTableList(params, selectedCurrentTask);
     setcurrentPage(DEFAULT_PAGE);
+  }
+
+  function handleCloseMsg() {
+    router.replace('/homepage/Approval-Process-Center/all');
   }
 
   return (
@@ -375,21 +425,7 @@ function ProcessList({
       <div>
         <Row className={alertStyle.btns}>
           <Col span={10}>
-            <TabBtn
-              changeTab={selectedTasks => {
-                setUrlCode('');
-                setSelectedKeys([]);
-                setSelectedTasks(selectedTasks);
-                setCurrentTaskType(selectedTasks);
-                dispatch({
-                  type: 'approvalCenter/fetch',
-                  payload: {
-                    type: selectedTasks,
-                  },
-                });
-              }}
-              selectedCurrentTask={selectedCurrentTask}
-            />
+            <TabBtn selectedCurrentTask={selectedCurrentTask} />
           </Col>
           <Col span={14} align="right">
             <TaskBtn
@@ -402,17 +438,26 @@ function ProcessList({
               dataFileExport={dataFileExport}
               checkAssign={checkAssign}
               setVisible={setVisible}
-              urlTaskCode={urlCode}
             />
           </Col>
         </Row>
       </div>
-
+      {Object.keys(location.query).length > 0 && (
+        <Alert
+          banner
+          showIcon
+          closable
+          type="info"
+          message={`Query Condition：${Object.keys(location.query)}`}
+          style={{ marginBottom: 10 }}
+          onClose={handleCloseMsg}
+        />
+      )}
       <Table
         border
         dataSource={tasks}
         rowKey="taskCode"
-        loading={loading['approvalCenter/fetch']}
+        loading={loading[actionType]}
         rowClassName={record => (record.taskCode === currentRow.taskCode ? 'active' : '')}
         rowSelection={{
           selectedRowKeys: selectedKeys,
@@ -429,25 +474,13 @@ function ProcessList({
           },
           onChange(page, pageSize) {
             setcurrentPage(page);
-            dispatch({
-              type: 'approvalCenter/fetch',
-              payload: {
-                page,
-                pageSize,
-                type: selectedCurrentTask,
-              },
-            });
+            setcurrentPageSize(pageSize);
+            handlePageChange(page, pageSize);
           },
           onShowSizeChange(page, pageSize) {
             setcurrentPage(page);
-            dispatch({
-              type: 'approvalCenter/fetch',
-              payload: {
-                page,
-                pageSize,
-                type: selectedCurrentTask,
-              },
-            });
+            setcurrentPageSize(pageSize);
+            handlePageChange(page, pageSize);
           },
         }}
         onRow={record => ({
@@ -457,16 +490,27 @@ function ProcessList({
           },
         })}
       >
-        <Column align="center" dataIndex="taskCode" title="Task Code" width="9%" />
+        <Column
+          align="center"
+          dataIndex="taskCode"
+          title={<ColumnTitle {...getTitleProps('taskCode')}>Task Code</ColumnTitle>}
+          width="11%"
+        />
         <Column
           ellipsis
           align="left"
           dataIndex="classification"
-          title="Classification"
-          width="20%"
+          title={<ColumnTitle {...getTitleProps('classification')}>Classification</ColumnTitle>}
+          width="19%"
         />
-        <Column align="left" dataIndex="submitterName" title="Submitter Name" width="15%" />
-        <Column ellipsis align="left" dataIndex="details" title="Details" width="15%" />
+        <Column
+          ellipsis
+          align="left"
+          dataIndex="submitterName"
+          width="15%"
+          title={<ColumnTitle {...getTitleProps('submitterName')}>Submitter Name</ColumnTitle>}
+        />
+        <Column ellipsis align="left" dataIndex="details" title="Details" width="14%" />
         <Column
           align="center"
           dataIndex="updateDate"
@@ -476,9 +520,19 @@ function ProcessList({
           }
           width="15%"
         />
-        <Column dataIndex="owner" title="Owner" align="center" width="9%" />
-        <Column align="center" dataIndex="statusDesc" title="Status" width="9%" />
-        {selectedCurrentTask !== 'his' ? (
+        <Column
+          dataIndex="owner"
+          align="center"
+          width="9%"
+          title={<ColumnTitle {...getTitleProps('owner')}>Owner</ColumnTitle>}
+        />
+        <Column
+          align="center"
+          dataIndex="statusDesc"
+          width="9%"
+          title={<ColumnTitle {...getTitleProps('statusDesc')}>Status</ColumnTitle>}
+        />
+        {match.params.type !== 'history' ? (
           <Column
             align="center"
             dataIndex="action"
@@ -503,13 +557,18 @@ function ProcessList({
   );
 }
 
-export default connect(
-  ({ loading, approvalCenter: { tasks, currentUsers, currentGroup, page, total } }) => ({
-    tasks,
-    page,
-    total,
-    currentUsers,
-    currentGroup,
-    loading: loading.effects,
-  }),
-)(ProcessList);
+export default withRouter(
+  connect(
+    ({
+      loading,
+      global: { filterTables, filterTableTotal },
+      approvalCenter: { currentUsers, currentGroup },
+    }) => ({
+      tasks: filterTables,
+      total: filterTableTotal,
+      currentUsers,
+      currentGroup,
+      loading: loading.effects,
+    }),
+  )(ProcessList),
+);

@@ -28,6 +28,7 @@ export function FilterHeader({ disabled, onSort, sort, onClear }) {
         <IconFont
           type="iconsort-asc"
           onClick={() => onSort('1')}
+          style={{ marginRight: 8 }}
           className={classNames(styles.icon, { [styles.active]: sort === '1' })}
         />
         <IconFont
@@ -38,11 +39,11 @@ export function FilterHeader({ disabled, onSort, sort, onClear }) {
       </Col>
       <Col>
         <span
-          className={classNames(styles.clear, { [styles.disabled]: disabled })}
-          title="Clear"
           onClick={onClear}
+          className={classNames(styles.clear, { [styles.disabled]: disabled })}
         >
           <IconFont type="icondelete" className={styles.icon} />
+          <span className={styles.text}>Clear</span>
         </span>
       </Col>
     </Row>

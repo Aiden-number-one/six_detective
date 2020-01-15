@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { Popover, Button } from 'antd';
 import classNames from 'classnames';
@@ -6,19 +6,19 @@ import IconFont from '@/components/IconFont';
 import { FilterHeader, FilterType, FilterSelect, FilterCheckbox } from './FilterContent';
 import styles from './index.less';
 
-export { useColumnFilter } from './hooks';
+export { useColumnFilter, actionType } from './hooks';
 
 function ColumnTitle({
   dispatch,
+  loading,
   children,
   isNum,
-  loading,
-  curColumn,
-  tableName = 'slop_biz.v_alert_center',
-  conditions,
   sort,
   onSort,
   onCommit,
+  curColumn,
+  conditions,
+  tableName = 'SLOP_BIZ.V_ALERT_CENTER',
 }) {
   const defaultFilterType = isNum ? 1 : 7;
   const [filterItems, setFilterItems] = useState([]);
@@ -27,6 +27,13 @@ function ColumnTitle({
   const [filterType, setFilterType] = useState(defaultFilterType);
   const [checkedList, setCheckedList] = useState([]);
   const [selectedItem, setSelectedItem] = useState(''); // filterType == 1/3/4/5/6
+
+  // reset all state
+  useEffect(() => {
+    if (conditions.length === 0) {
+      resetState();
+    }
+  }, [conditions]);
 
   async function handleVisibleChange(v) {
     setVisible(v);
@@ -56,13 +63,17 @@ function ColumnTitle({
     setCheckedList([val]);
   }
 
-  async function handleClear() {
-    const updatedConditions = conditions.filter(item => item.column !== curColumn);
-    await onCommit(curColumn, updatedConditions);
+  function resetState() {
     setCheckedList(filterItems);
     setSelectedItem('');
     setFiltered(false);
     setVisible(false);
+  }
+
+  async function handleClear() {
+    const updatedConditions = conditions.filter(item => item.column !== curColumn);
+    await onCommit(curColumn, updatedConditions);
+    resetState();
   }
 
   async function handleSort(s) {

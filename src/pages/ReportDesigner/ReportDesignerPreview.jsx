@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Icon, Row, Button } from 'antd';
-
+import { Icon, Row, Button, Spin } from 'antd';
 import less from './ReportPreview.less';
 import ReportPager from './ReportPager';
 import PreviewSearchArea from './components/PreviewSearchArea';
 
-@connect(({ reportDesignPreview }) => {
-  const { previewData = {}, dataSetColumn = {} } = reportDesignPreview;
+@connect(({ reportDesignPreview, loading }) => {
+  const { previewData = {}, dataSetColumn = {}, customSearchData = [] } = reportDesignPreview;
   return {
     previewData,
     dataSetColumn,
+    customSearchData,
+    loading: loading.effects['reportDesignPreview/getReportTemplateDataQuery'],
   };
 })
 class ReportDesignerPreview extends Component {
@@ -111,11 +112,54 @@ class ReportDesignerPreview extends Component {
     console.log('打印报表 - 待办');
   };
 
+  // 根据Key得到customSearchData相对应的数据
+  getCurrentData = key => {
+    const { customSearchData } = this.props;
+    return customSearchData.find(value => value.widgetKey === key) || {};
+  };
+
   // 条件搜索 TODO:
   search = () => {
     this.formRef.props.form.validateFields((err, values) => {
+      const transformValue = {};
+      Object.keys(values).forEach(key => {
+        const value = values[key];
+        const {
+          widgetType, // 控件类型
+          widgetKey, // 控件Key
+          parameterType, // 所绑定字段的Type
+          customList = [], // 自定义字段所需要的值
+          sourceType, // select类类型的数据来源
+        } = this.getCurrentData(key);
+        if (widgetType === 'datepickeryyyymm' && value) {
+          transformValue[widgetKey] = value.format('YYYYMM');
+        } else if (widgetType === 'datepickeryyyymmdd' && value) {
+          transformValue[widgetKey] = value.format('YYYYMMDD');
+        } else if ((widgetType === 'checkbox' || widgetType === 'selectmultiple') && value) {
+          // 如果是自定义的话
+          transformValue[widgetKey] = value
+            .map(singleValue => {
+              const selectValue =
+                sourceType === 'custom'
+                  ? customList.find(singleCustom => singleCustom.key === singleValue).value
+                  : singleValue;
+              if (parameterType === 'STRING') {
+                return `'${selectValue}'`; // 若为字符串的时候要带''
+              }
+              return selectValue;
+            })
+            .join(',');
+        } else if ((widgetType === 'radio' || widgetType === 'select') && value) {
+          transformValue[widgetKey] =
+            sourceType === 'custom'
+              ? customList.find(singleCustom => singleCustom.key === value).value
+              : value;
+        } else {
+          transformValue[widgetKey] = value;
+        }
+      });
       if (!err) {
-        this.fetchData({ parameters: JSON.stringify(values) });
+        this.fetchData({ parameters: JSON.stringify(transformValue) });
       }
     });
   };
@@ -125,6 +169,7 @@ class ReportDesignerPreview extends Component {
     const {
       previewData: { items = [] },
       dataSetColumn, // 当选项来源于数据集时，select中option的数据来源
+      loading = false,
     } = this.props;
     const [tableData, rowCountAndTemplateArea] = items; // 考虑 undefined
     // 总的记录数及templateArea
@@ -178,7 +223,9 @@ class ReportDesignerPreview extends Component {
           </Row>
         </div>
 
-        <div className={less['table-area']} dangerouslySetInnerHTML={{ __html: content }} />
+        <Spin spinning={loading}>
+          <div className={less['table-area']} dangerouslySetInnerHTML={{ __html: content }} />
+        </Spin>
       </div>
     );
   }

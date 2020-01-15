@@ -15,7 +15,7 @@ import {
 } from '@/pages/DataImportLog/constants';
 import { ClaimModal, CloseModal } from './components/AlertListModal';
 import { AlertListBtns } from './components/AlertListBtns';
-import ColumnTitle, { useColumnFilter } from '../ColumnTitle';
+import ColumnTitle, { actionType, useColumnFilter } from '../ColumnTitle';
 import AlertDetail from './AlertDetail';
 import styles from '../index.less';
 
@@ -31,9 +31,8 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   const [isBatchAction, setBatchAction] = useState(false);
   const [isDiscontinue, setDiscontinue] = useState(false);
   // header filter
-  const { handlePageChange, getTitleProps } = useColumnFilter({
+  const { fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
     dispatch,
-    action: 'alertCenter/fetch',
     page: alertPage,
     pageSize: alertPageSize,
     reset: Object.keys(location.query).length > 0 ? handleCloseMsg : null,
@@ -45,18 +44,29 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   }, []);
 
   useEffect(() => {
-    const { alertIds } = location.query;
+    const { alertId, owner, status, tradeDate } = location.query;
     let params = [];
-    if (alertIds) {
-      params = [{ column: 'alertNo', value: alertIds, condition: '7' }];
+    if (alertId) {
+      params = [{ column: 'alertNo', value: alertId, condition: '7' }];
     }
-    dispatch({
-      type: 'alertCenter/fetch',
-      payload: {
-        page: alertPage,
-        pageSize: alertPageSize,
-        conditions: params,
-      },
+    if (owner) {
+      params = [...params, { column: 'userName', value: owner, condition: '7' }];
+    }
+    if (status) {
+      params = [...params, { column: 'alertStatusDesc', value: status, condition: '7' }];
+    }
+    if (tradeDate) {
+      const [start, end] = tradeDate.split(',');
+      params = [
+        ...params,
+        { column: 'tradeDate', value: start, condition: '4' },
+        { column: 'tradeDate', value: end, condition: '6' },
+      ];
+    }
+    fetchTableList({
+      page: alertPage,
+      pageSize: alertPageSize,
+      conditions: params,
     });
   }, [location]);
 
@@ -233,19 +243,28 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
         />
         {Object.keys(location.query).length > 0 && (
           <Alert
-            banner
-            showIcon
             closable
             type="info"
-            message={`Query Condition：${Object.keys(location.query)}`}
-            style={{ marginBottom: 10 }}
+            closeText="Clear"
             onClose={handleCloseMsg}
+            message={
+              <>
+                <Icon type="exclamation-circle" theme="filled" />
+                Query Condition：
+                {Object.keys(location.query).map((w, index) => (
+                  <>
+                    {index > 0 && ', '}
+                    <em key={w}>{w}</em>
+                  </>
+                ))}
+              </>
+            }
           />
         )}
         <Table
           dataSource={alerts}
           rowKey="alertId"
-          loading={loading['alertCenter/fetch']}
+          loading={loading[actionType]}
           rowClassName={record => (alert && record.alertId === alert.alertId ? 'table-active' : '')}
           rowSelection={{
             columnWidth: 50,
@@ -359,7 +378,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
             }
           />
           <Column
-            width={90}
+            width={80}
             dataIndex="action"
             title={<FormattedMessage id="alert-center.actions" />}
             render={(text, record) => (
@@ -402,13 +421,14 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
 
 const mapStateToProps = ({
   loading,
-  alertCenter: { alerts, alertItems = [], alertPage, alertPageSize, alertTotal },
+  alertCenter: { alertItems = [] },
+  global: { filterTables, filterTalbePage, filterTalbePageSize, filterTableTotal },
 }) => ({
-  alerts,
   alertItems,
-  alertPage,
-  alertPageSize,
-  total: alertTotal,
+  alerts: filterTables,
+  alertPage: filterTalbePage,
+  alertPageSize: filterTalbePageSize,
+  total: filterTableTotal,
   loading: loading.effects,
 });
 export default withRouter(connect(mapStateToProps)(AlertList));

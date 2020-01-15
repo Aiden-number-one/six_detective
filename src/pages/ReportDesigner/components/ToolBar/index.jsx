@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 09:36:59
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-14 10:57:40
+ * @LastEditTime : 2020-01-15 11:22:20
  */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
@@ -39,6 +39,10 @@ export default class ToolBar extends Component {
   // 修改report Input Name
   reportOnChange = e => {
     const { dispatch } = this.props;
+    if (e.target.value.length > 50) {
+      message.warn('Report Name cannot be longer than 50 characters');
+      return;
+    }
     dispatch({
       type: 'reportDesigner/changeReportName',
       payload: e.target.value,

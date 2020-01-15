@@ -8,6 +8,7 @@
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
+import { getTableList } from '@/pages/AlertCenter/model';
 
 // import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from './AlertList';
 
@@ -163,13 +164,41 @@ export default {
     },
   },
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const { page, pageSize, taskCode, type } = payload || {};
-      const { items, totalCount, err } = yield call(getApprovalTaskList, {
-        page,
-        pageSize,
-        taskCode,
-        type,
+    // *fetch({ payload }, { call, put }) {
+    //   const { page, pageSize, taskCode, type } = payload || {};
+    //   const { items, totalCount, err } = yield call(getApprovalTaskList, {
+    //     page,
+    //     pageSize,
+    //     taskCode,
+    //     type,
+    //   });
+
+    //   if (err) {
+    //     throw new Error(err);
+    //   }
+
+    //   yield put({
+    //     type: 'save',
+    //     payload: {
+    //       tasks: items,
+    //       page,
+    //       total: totalCount,
+    //     },
+    //   });
+    // },
+    *fetch({ payload = {} }, { call, put }) {
+      const { page, pageSize, type } = payload;
+      const chooseTable =
+        // eslint-disable-next-line no-nested-ternary
+        type === 'my'
+          ? 'SLOP_BIZ.V_MY_TASK'
+          : type === 'his'
+          ? 'SLOP_BIZ.V_TASK_HISTORY'
+          : 'SLOP_BIZ.V_ALL_TASK';
+      console.log('chooseTable------>', chooseTable);
+      const { items, totalCount, err } = yield call(getTableList, {
+        ...payload,
+        dataTable: chooseTable,
       });
 
       if (err) {

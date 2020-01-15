@@ -25,7 +25,7 @@ export default [
       {
         path: '/',
         component: '../layouts/BasicLayout',
-        Routes: ['src/pages/Authorized'],
+        // Routes: ['src/pages/Authorized'],
         authority: ['admin', 'user'],
         routes: [
           {
@@ -62,6 +62,11 @@ export default [
               },
               {
                 path: '/homepage/Approval-Process-Center',
+                name: 'ApprovalProcessCenter',
+                component: './ApprovalProcessCenter/index',
+              },
+              {
+                path: '/homepage/Approval-Process-Center/:type',
                 name: 'ApprovalProcessCenter',
                 component: './ApprovalProcessCenter/index',
               },
@@ -397,6 +402,11 @@ export default [
     ]
   },
   {
+    path: '/404',
     component: './Page404',
+  },
+  {
+    path: '/no-access',
+    component: './NoAccess',
   },
 ];

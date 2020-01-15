@@ -2,7 +2,7 @@
  * @Description: menu modal
  * @Author: mus
  * @Date: 2019-09-19 17:03:33
- * @LastEditTime : 2020-01-13 19:43:25
+ * @LastEditTime : 2020-01-15 21:40:14
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -49,7 +49,7 @@ export default {
       setAuthority(authBtn);
       newItems[0].menu = newMenu;
       console.log('geneMenuData(newItems)===', geneMenuData(newItems));
-      callback(geneMenuData(newItems));
+      callback(geneMenuData(newItems), newItems[0].menu);
     },
     *getAdminMenuData({ payload, callback }, { call, put }) {
       const response = yield call(getAdminMenu, { param: payload, version: 'v2.0' });
@@ -60,7 +60,7 @@ export default {
         type: 'adminMenu',
         payload: menuData,
       });
-      callback();
+      callback(response.bcjson.items);
     },
     *getTaskCount({ payload }, { call, put }) {
       const response = yield call(getTaskCount, { param: payload });

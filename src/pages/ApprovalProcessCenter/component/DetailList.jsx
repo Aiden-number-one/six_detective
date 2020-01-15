@@ -157,10 +157,14 @@ function NewProduct({
                   initialValue: detailData.productCategory,
                 })(
                   isShowForm ? (
-                    <Select>
-                      {detailData.productCategoryInit.split(',').map(item => (
-                        <Option value={item} key={item}>
-                          {item}
+                    <Select optionLabelProp="label">
+                      {detailData.productCategoryInit.map(item => (
+                        <Option
+                          value={item.productCategory}
+                          label={item.productCategoryName}
+                          key={item.productCategory}
+                        >
+                          {item.productCategoryName}
                         </Option>
                       ))}
                     </Select>
@@ -208,9 +212,13 @@ function NewProduct({
                 })(
                   isShowForm ? (
                     <Select>
-                      {detailData.productGroupInit.split(',').map(item => (
-                        <Option value={item} key={item}>
-                          {item}
+                      {detailData.productGroupInit.map(item => (
+                        <Option
+                          value={item.productGroup}
+                          label={item.productGroupName}
+                          key={item.productGroup}
+                        >
+                          {item.productGroupName}
                         </Option>
                       ))}
                     </Select>
@@ -242,9 +250,13 @@ function NewProduct({
                 })(
                   isShowForm ? (
                     <Select>
-                      {detailData.ltdTmplCodeInit.split(',').map(item => (
-                        <Option value={item} key={item}>
-                          {item}
+                      {detailData.ltdTmplCodeInit.map(item => (
+                        <Option
+                          value={item.ltdTmplCode}
+                          label={item.ltdTmplName}
+                          key={item.ltdTmplCode}
+                        >
+                          {item.ltdTmplName}
                         </Option>
                       ))}
                     </Select>
@@ -276,9 +288,13 @@ function NewProduct({
                 })(
                   isShowForm ? (
                     <Select>
-                      {detailData.plTmplCodeInit.split(',').map(item => (
-                        <Option value={item} key={item}>
-                          {item}
+                      {detailData.plTmplCodeInit.map(item => (
+                        <Option
+                          value={item.plTmplCode}
+                          label={item.plTmplName}
+                          key={item.plTmplCode}
+                        >
+                          {item.plTmplName}
                         </Option>
                       ))}
                     </Select>
@@ -310,9 +326,13 @@ function NewProduct({
                 })(
                   isShowForm ? (
                     <Select>
-                      {detailData.rlTmplCodeInit.split(',').map(item => (
-                        <Option value={item} key={item}>
-                          {item}
+                      {detailData.rlTmplCodeInit.map(item => (
+                        <Option
+                          value={item.rlTmplCode}
+                          label={item.rlTmplName}
+                          key={item.rlTmplCode}
+                        >
+                          {item.rlTmplName}
                         </Option>
                       ))}
                     </Select>
@@ -483,7 +503,10 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
               <Form.Item label="Effective Date">
                 {getFieldDecorator('effectiveDate', {
                   rules: [{ required: !!isShowForm, message: 'Effective Date is missing' }],
-                  initialValue: detailData.effectiveDate && moment(detailData.effectiveDate),
+                  initialValue: isShowForm
+                    ? detailData.effectiveDate && moment(detailData.effectiveDate)
+                    : detailData.effectiveDate &&
+                      moment(detailData.effectiveDate).format('DD-MMM-YYYY'),
                 })(isShowForm ? <DatePicker format="DD-MMM-YYYY" /> : <Input disabled />)}
               </Form.Item>
             </div>
@@ -501,7 +524,9 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
               <Form.Item label="Expiry Date">
                 {getFieldDecorator('expiryDate', {
                   rules: [{ required: !!isShowForm, message: 'Expiry Date is missing' }],
-                  initialValue: detailData.expiryDate && moment(detailData.expiryDate),
+                  initialValue: isShowForm
+                    ? detailData.expiryDate && moment(detailData.expiryDate)
+                    : detailData.expiryDate && moment(detailData.expiryDate).format('DD-MMM-YYYY'),
                 })(isShowForm ? <DatePicker format="DD-MMM-YYYY" /> : <Input disabled />)}
               </Form.Item>
             </div>

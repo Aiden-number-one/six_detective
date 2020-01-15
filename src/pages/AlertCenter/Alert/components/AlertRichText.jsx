@@ -2,20 +2,17 @@ import React, { useState } from 'react';
 import { Row, Col, Input, Button, Upload } from 'antd';
 import IconFont from '@/components/IconFont';
 import styles from '@/pages/AlertCenter/index.less';
-import AlertAttachments from './AlertUpAttachments';
 import AlertPhrase from './AlertPhrase';
 
 const { TextArea } = Input;
 const isLt5M = size => size / 1024 / 1024 < 5;
 
-export default function({ loading, onCommit }) {
+export default function({ loading, upAttachments, onUpload, onCommit }) {
   const [comment, setComment] = useState('');
-  const [upAttachments, setUpAttachements] = useState([]);
 
   async function handleCommitComment() {
     await onCommit(comment, upAttachments);
     setComment('');
-    setUpAttachements([]);
   }
 
   function handleUpAttachments(info) {
@@ -31,11 +28,7 @@ export default function({ loading, onCommit }) {
       }
       return file;
     });
-    setUpAttachements(fileList);
-  }
-
-  function handleRemove(file) {
-    setUpAttachements(upAttachments.filter(item => item.uid !== file.uid));
+    onUpload(fileList);
   }
 
   return (
@@ -74,13 +67,6 @@ export default function({ loading, onCommit }) {
           </Button>
         </Col>
       </Row>
-      {!!upAttachments.length && (
-        <AlertAttachments
-          attachments={upAttachments}
-          onRemove={handleRemove}
-          onRemoveAll={() => setUpAttachements([])}
-        />
-      )}
     </div>
   );
 }

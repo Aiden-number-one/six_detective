@@ -15,13 +15,14 @@ const formLayout = {
 };
 
 export default props => {
-  const { getFieldDecorator, cellPosition, dataSetPrivateList, otherProps, text } = props;
+  const { getFieldDecorator, cellPosition, dataSetPrivateList, otherProps, text, dispatch } = props;
   // 当前被选择的数据集
   const [dataset, changeDataset] = useState(undefined);
   // 根据被选择的数据集得到想对应的列
   // TODO: 如果，树那边的数据集被删掉，则右边已经设置的单元格怎么办？
   const currentDatasetObj = dataSetPrivateList.find(value => value.dataset_id === dataset);
   const currentColumn = currentDatasetObj ? currentDatasetObj.fields : [];
+
   /**
    * 表单值汇总
    * cell: 单元格 elementType: 元素类型
@@ -29,6 +30,16 @@ export default props => {
    * formula: 公式内容
    * dataset:数据集 datacolumn: 数据集所对应的列 dataSetting: 数据设置选择框 dataseting2: 数据设置选择框的副选择框 extension: 扩展方向
    */
+  // 用于处理超链接与公式的弹出框
+  function displayFXOrLink(value) {
+    if (value === 'link' || value === 'formula') {
+      dispatch({
+        type: `reportDesigner/${value === 'link' ? 'triggerHylModal' : 'triggerFmlModal'}`,
+        payload: { [value === 'link' ? 'showHylModal' : 'showFmlModal']: true },
+      });
+    }
+  }
+
   return (
     <Content className={styles.content}>
       {/* 控件设置基本信息 */}
@@ -54,10 +65,15 @@ export default props => {
               {getFieldDecorator('elementType', {
                 initialValue: otherProps.elementType || 'text',
               })(
-                <Select>
+                <Select
+                  onChange={value => {
+                    displayFXOrLink(value);
+                  }}
+                >
                   <Option value="text">Text</Option>
                   <Option value="formula">Formula</Option>
                   <Option value="column">Data Column</Option>
+                  <Option value="link">Link</Option>
                 </Select>,
               )}
             </Form.Item>
@@ -87,10 +103,9 @@ export default props => {
             {/* 公式 */}
             {otherProps.elementType === 'formula' && (
               <Form.Item label=" " {...formLayout}>
-                {getFieldDecorator('formula', {})(<Input />)}
+                {/* {getFieldDecorator('formula', {})(<Input />)} */}
               </Form.Item>
             )}
-
             {/* 插入数据列 */}
             {/* 数据集 */}
             {otherProps.elementType === 'column' && (
@@ -149,13 +164,14 @@ export default props => {
                   )}
                 </Form.Item>
                 {/* 数据设置2 */}
-                {otherProps.dataSetting === 'group' && (
+                {(otherProps.dataSetting === 'group' || !otherProps.dataSetting) && (
                   <Form.Item label=" " {...formLayout}>
                     {getFieldDecorator('groupSetting', {
                       initialValue: otherProps.groupSetting || 'normal',
                     })(
                       <Select>
                         <Option value="normal">Normal</Option>
+                        <Option value="asc">Group by & Sort</Option>
                       </Select>,
                     )}
                   </Form.Item>

@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-14 15:39:20
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-15 21:06:26
+ * @LastEditors  : mus
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -26,7 +26,10 @@ const NewSearchForm = Form.create({})(SearchForm);
   reportList: reportList.reportList, // 报表设计器列表的List
   activeTree: dataSet.activeTree, // 选中的树节点
   activeFolderId: dataSet.activeFolderId, // 选中文件夹的FolderId
-  loading: loading.effects['reportList/getReportList'] || loading.effects['reportList/delete'],
+  loading:
+    loading.effects['reportList/getReportList'] ||
+    loading.effects['reportList/delete'] ||
+    loading.effects['dataSet/getClassifyTree'],
 }))
 export default class DatasetManagement extends PureComponent {
   operateType = 'ADD'; // 操作类型
@@ -334,7 +337,7 @@ export default class DatasetManagement extends PureComponent {
                 window.open(`/report-designer?reportId=${record.reportId}`);
               }}
             >
-              <IconFont type="icon-edit" className="operation-icon" />
+              <IconFont type="icon-edit1" className="operation-icon" />
             </a>
             <a
               href="#"
@@ -347,7 +350,7 @@ export default class DatasetManagement extends PureComponent {
                 );
               }}
             >
-              <IconFont type="icon-prew" className="operation-icon" />
+              <IconFont type="icon-prew1" className="operation-icon" />
             </a>
             <a
               href="#"
@@ -365,7 +368,7 @@ export default class DatasetManagement extends PureComponent {
                 this.record = record;
               }}
             >
-              <IconFont type="icon-delete" className="operation-icon" />
+              <IconFont type="icon-delete2" className="operation-icon" />
             </a>
           </span>
         ),

@@ -4,16 +4,41 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-14 15:17:29
+ * @LastEditTime : 2020-01-15 20:03:28
  */
 import { useState } from 'react';
 
-export function useColumnFilter({ dispatch, tableName, action: type, page, pageSize, reset }) {
+export const actionType = 'global/fetchTableList';
+
+export function useColumnFilter({
+  dispatch,
+  page,
+  pageSize,
+  reset,
+  tableName = 'SLOP_BIZ.V_ALERT_CENTER',
+}) {
   // { column: '', value: '', condition: '7' }
   const [conditions, setConditions] = useState([]);
   const [curTableColumn, setCurTableColumn] = useState('');
   const [curSortColumn, setCurSortColumn] = useState('');
   const [curSort, setCurSort] = useState('');
+
+  function clearFilter() {
+    setConditions([]);
+    setCurTableColumn('');
+    setCurSortColumn('');
+    setCurSort('');
+  }
+
+  function fetchTableList(params = {}, dataTable = tableName) {
+    dispatch({
+      type: actionType,
+      payload: {
+        ...params,
+        dataTable,
+      },
+    });
+  }
 
   // filter methods
   async function handleCommit(tableColumn, updatedConditions = []) {
@@ -22,15 +47,12 @@ export function useColumnFilter({ dispatch, tableName, action: type, page, pageS
     if (reset) {
       reset();
     }
-    dispatch({
-      type,
-      payload: {
-        page,
-        pageSize,
-        currentColumn: tableColumn,
-        conditions: updatedConditions,
-        sort: curSortColumn === tableColumn ? curSort : '',
-      },
+    fetchTableList({
+      page,
+      pageSize,
+      currentColumn: tableColumn,
+      conditions: updatedConditions,
+      sort: curSortColumn === tableColumn ? curSort : '',
     });
   }
 
@@ -41,34 +63,30 @@ export function useColumnFilter({ dispatch, tableName, action: type, page, pageS
     if (reset) {
       reset();
     }
-    dispatch({
-      type,
-      payload: {
-        currentColumn: tableColumn,
-        conditions,
-        page,
-        pageSize,
-        sort,
-      },
+    fetchTableList({
+      sort,
+      page,
+      pageSize,
+      conditions,
+      currentColumn: tableColumn,
     });
   }
 
   async function handlePageChange(p, ps) {
-    dispatch({
-      type,
-      payload: {
-        page: p,
-        pageSize: ps,
-        conditions,
-        currentColumn: curTableColumn,
-        sort: curSortColumn === curTableColumn ? curSort : '',
-      },
+    fetchTableList({
+      page: p,
+      pageSize: ps,
+      conditions,
+      currentColumn: curTableColumn,
+      sort: curSortColumn === curTableColumn ? curSort : '',
     });
   }
 
   return {
+    clearFilter,
+    fetchTableList,
     handlePageChange,
-    getTitleProps: column => ({
+    getTitleProps: (column = curTableColumn) => ({
       curColumn: column,
       conditions,
       tableName,

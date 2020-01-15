@@ -2,14 +2,15 @@
  * @Description: This is for login
  * @Author: dailinbo
  * @Date: 2019-12-19 14:06:28
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 21:49:16
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-15 21:05:55
  */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import uuidv1 from 'uuid/v1';
 import Service from '@/utils/Service';
+import { setStore } from '@/utils/store';
 
 const { getLogin, getLoginStatus, logout } = Service;
 
@@ -40,18 +41,26 @@ const Model = {
           message.warning(item.info);
           yield put({
             type: 'logout',
+            callback: () => {},
           });
+          setStore({ name: 'employeeId', content: '' });
         }
       }
       // if (response.bcjson.flag === '001') {
       //   message.error('您的登录信息已失效,请重新登录')
       // }
+      if (response.bcjson.flag === '001') {
+        yield put({
+          type: 'logout',
+        });
+        setStore({ name: 'employeeId', content: '' });
+      }
       if (callback) callback(response);
     },
     *logout({ callback }, { call, put }) {
       // const { redirect } = getPageQuery();
       const response = yield call(logout, { param: {} });
-      if (response.bcjson.flag === '1') {
+      if (response.bcjson.flag === '1' || response.bcjson.flag === '001') {
         if (window.location.pathname !== '/login') {
           yield put(
             routerRedux.replace({
@@ -63,7 +72,7 @@ const Model = {
           );
           window.localStorage.clear();
         }
-        callback();
+        if (callback) callback();
       }
     },
   },

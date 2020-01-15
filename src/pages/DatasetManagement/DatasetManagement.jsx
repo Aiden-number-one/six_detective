@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-14 14:47:45
+ * @LastEditTime : 2020-01-15 16:56:08
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -27,9 +27,9 @@ import SearchForm from './components/SearchForm';
 const NewSearchForm = Form.create({})(SearchForm);
 
 @connect(({ dataSet }) => ({
-  classifyTreeData: dataSet.classifyTreeData, // 分类树
-  dataSetData: dataSet.dataSetData, // 数据集表格
-  activeTree: dataSet.activeTree, // 选中的树节点
+  classifyTreeData: dataSet.classifyTreeData, // 文件夹数据
+  dataSetData: dataSet.dataSetData, // 数据集表格数据
+  activeTree: dataSet.activeTree, // 选中的文件夹ID
   column: dataSet.column, // 数据预览表头
   tableData: dataSet.tableData, // 数据预览数据
   activeFolderId: dataSet.activeFolderId, // 移动文件夹的FolderId
@@ -81,7 +81,16 @@ export default class DatasetManagement extends PureComponent {
     });
   }
 
-  // 获取数据集列表
+  /**
+   * @description: 获取数据集列表
+   * @param {
+   *   newPage: 分页器
+   *   folderId: 文件夹ID
+   *   datasetName: 数据集名称,用于搜索框
+   * }
+   * @Author: lan
+   * @Date: 2020-01-15 16:49:33
+   */
   queryDataSet = () => {
     const { dispatch, activeTree } = this.props;
     const { page } = this.state;
@@ -104,7 +113,14 @@ export default class DatasetManagement extends PureComponent {
     });
   };
 
-  // 显示隐藏抽屉
+  /**
+   * @description: 显示隐藏抽屉
+   * @param {
+   *   key: 控制抽屉显示隐藏的参数名
+   * }
+   * @Author: lan
+   * @Date: 2020-01-15 16:52:13
+   */
   toggleDrawer = key => {
     const { visible } = this.state;
     this.setState({
@@ -351,6 +367,7 @@ export default class DatasetManagement extends PureComponent {
         title: 'Type',
         dataIndex: 'datasetType',
         key: 'datasetType',
+        width: 130,
       },
       {
         title: 'Data Source',
@@ -398,7 +415,7 @@ export default class DatasetManagement extends PureComponent {
               }}
               title="EDIT"
             >
-              <IconFont type="icon-edit" className="operation-icon" />
+              <IconFont type="icon-edit1" className="operation-icon" />
             </a>
             <a
               onClick={() => {
@@ -411,7 +428,7 @@ export default class DatasetManagement extends PureComponent {
               }}
               title="PREVIEW"
             >
-              <IconFont type="icon-prew" className="operation-icon" />
+              <IconFont type="icon-prew1" className="operation-icon" />
             </a>
             <a
               onClick={() => {
@@ -429,7 +446,7 @@ export default class DatasetManagement extends PureComponent {
               }}
               title="DELETE"
             >
-              <IconFont type="icon-delete" className="operation-icon" />
+              <IconFont type="icon-delete2" className="operation-icon" />
             </a>
           </span>
         ),
@@ -499,7 +516,7 @@ export default class DatasetManagement extends PureComponent {
               <div className={styles.content}>
                 <div className={styles.tableTop}>
                   <Dropdown overlay={menu}>
-                    <Button className="btn-usual" type="primary">
+                    <Button className="btn-usual" type="primary" style={{ width: 160 }}>
                       + New DataSet
                     </Button>
                   </Dropdown>

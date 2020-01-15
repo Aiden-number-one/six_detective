@@ -3,18 +3,20 @@ import { FormattedMessage, formatMessage } from 'umi/locale';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { Icon, Table } from 'antd';
-import styles from '@/pages/AlertCenter/index.less';
 import IconFont from '@/components/IconFont';
+import { pageSizeOptions } from '@/pages/DataImportLog/constants';
+import styles from '@/pages/AlertCenter/index.less';
 import AlertTaskModal from './AlertTaskModal';
 
 export const TaskBtn = ({ task }) => {
   const localUserName = localStorage.getItem('loginName');
   const isDisabled = !task.USER_NAME || localUserName !== task.USER_NAME;
-  const isEnd = task.TASK_STATUS === 'A' ? 1 : 0;
+  const route = task.TASK_STATUS === 'A' ? 'history' : 'my';
+
   return (
     <Link
       disabled={isDisabled}
-      to={`/homepage/Approval-Process-Center?taskCode=${task.TASK_ID}&isEnd=${isEnd}`}
+      to={`/homepage/Approval-Process-Center/${route}?taskCode=${task.TASK_ID}`}
       title={formatMessage({ id: 'alert-center.enter-approval' })}
     >
       <FormattedMessage id="alert-center.enter-approval" />
@@ -96,6 +98,7 @@ function AlertTask({ dispatch, loading, alertItems, users, taskColumns, onTaskRo
         loading={loading['alertCenter/fetchAlertItems']}
         pagination={{
           showSizeChanger: true,
+          pageSizeOptions,
           showTotal(count) {
             return `Total ${count} items`;
           },
@@ -129,7 +132,7 @@ function AlertTask({ dispatch, loading, alertItems, users, taskColumns, onTaskRo
             title: formatMessage({ id: 'alert-center.status' }),
           },
           {
-            width: 120,
+            width: 108,
             align: 'center',
             dataIndex: 'action',
             title: <FormattedMessage id="alert-center.actions" />,

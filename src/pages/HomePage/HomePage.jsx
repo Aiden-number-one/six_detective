@@ -646,6 +646,12 @@ export default class HomePage extends PureComponent {
     return dataList;
   };
 
+  compare = key => (value1, value2) => {
+    const val1 = value1[key];
+    const val2 = value2[key];
+    return val2 - val1;
+  };
+
   renderOtherChart1 = () => {
     const { allAlertCount, allClaimAlertCount } = this.props;
     let otherChart1;
@@ -682,7 +688,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -743,7 +749,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -802,7 +808,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -863,7 +869,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -901,7 +907,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (allApprovalData[0]) {
+    if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
         Number((allApprovalData[0].allClaimedNum / allApprovalData[0].allTotalNum).toFixed(2)) *
         100;
@@ -927,7 +933,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -965,7 +971,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (allApprovalData[0]) {
+    if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
         Number((allApprovalData[0].allProcessingNum / allApprovalData[0].allTotalNum).toFixed(2)) *
         100;
@@ -991,7 +997,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -1029,7 +1035,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (perApprovalData[0]) {
+    if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
         Number((perApprovalData[0].myClaimedNum / perApprovalData[0].allTotalNum).toFixed(2)) * 100;
     }
@@ -1054,7 +1060,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -1092,7 +1098,7 @@ export default class HomePage extends PureComponent {
       });
     }
     let num = 0;
-    if (perApprovalData[0]) {
+    if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
         Number((perApprovalData[0].myProcessingNum / perApprovalData[0].allTotalNum).toFixed(2)) *
         100;
@@ -1118,7 +1124,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -1143,7 +1149,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Alter ALL条形图
   renderAlterAllChart = data => {
-    const { startDate, endDate } = this.state;
+    // const { startDate, endDate } = this.state;
     // Alter ALL 的条形图
     let alterAllChart;
     if (this.state.alterAllChart) {
@@ -1239,6 +1245,9 @@ export default class HomePage extends PureComponent {
           },
           offset: 2,
         })
+        .style({
+          lineWidth: 1,
+        })
         // eslint-disable-next-line consistent-return
         // .size('', () => {
         //   if (AlterAll.length / 2 < 5) {
@@ -1290,6 +1299,9 @@ export default class HomePage extends PureComponent {
         .interval()
         .position('label*value')
         .color('type', ['#F4374C', '#0D87D4'])
+        .style({
+          lineWidth: 1,
+        })
         // eslint-disable-next-line consistent-return
         // .size('', () => {
         //   if (AlterAll.length / 2 < 5) {
@@ -1312,9 +1324,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = clickData._origin.label;
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.type;
+          // const alertStatusDesc = clickData._origin.type;
           router.push(
-            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${startDate},${endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&tradeDate=${this.state.startDate},${this.state.endDate}`,
           );
         }
       });
@@ -1327,7 +1339,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Alter Personal条形图
   renderAlterPerChart = () => {
-    const { startDate, endDate } = this.state;
+    // const { startDate, endDate } = this.state;
     const { perAlertData } = this.props;
     let alterPersonalChart;
     if (this.state.alterPersonalChart) {
@@ -1414,6 +1426,9 @@ export default class HomePage extends PureComponent {
         })
         .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
         .size(20)
+        .style({
+          lineWidth: 1,
+        })
         .adjust([
           {
             type: 'dodge',
@@ -1456,6 +1471,9 @@ export default class HomePage extends PureComponent {
         .position('label*value')
         .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
         .size(20)
+        .style({
+          lineWidth: 1,
+        })
         .adjust([
           {
             type: 'dodge',
@@ -1471,9 +1489,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = localStorage.getItem('loginName');
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.label;
+          // const alertStatusDesc = clickData._origin.label;
           router.push(
-            `/homepage/alert-center?owner=${alertOwnerId}&status=${alertStatusDesc}&tradeDate=${startDate},${endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&tradeDate=${this.state.startDate},${this.state.endDate}`,
           );
         }
       });
@@ -1486,7 +1504,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval All柱状图
   renderApprovalAllChart = () => {
-    const { proStartDate, proEndDate } = this.state;
+    // const { proStartDate, proEndDate } = this.state;
     const { allApprovalData } = this.props;
     let approvalAllChart;
     if (this.state.approvalAllChart) {
@@ -1578,6 +1596,9 @@ export default class HomePage extends PureComponent {
           offset: 10,
         })
         .size(25)
+        .style({
+          lineWidth: 1,
+        })
         .adjust([
           {
             type: 'dodge',
@@ -1618,6 +1639,9 @@ export default class HomePage extends PureComponent {
         .position('label*value')
         .color('type', ['#F4374C', '#0D87D4'])
         .size(25)
+        .style({
+          lineWidth: 1,
+        })
         .adjust([
           {
             type: 'dodge',
@@ -1634,9 +1658,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = clickData._origin.label;
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.type;
+          // const alertStatusDesc = clickData._origin.type;
           router.push(
-            `/homepage/Approval-Process-Center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
+            `/homepage/Approval-Process-Center?owner=${alertOwnerId}&tradeDate=${this.state.proStartDate},${this.state.proEndDate}`,
           );
         }
       });
@@ -1649,7 +1673,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval Personal柱状图
   renderApprovalPerChart = () => {
-    const { proStartDate, proEndDate } = this.state;
+    // const { proStartDate, proEndDate } = this.state;
     const { perApprovalData } = this.props;
     let approvalPersonalChart;
     if (this.state.approvalPersonalChart) {
@@ -1737,6 +1761,9 @@ export default class HomePage extends PureComponent {
         })
         .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
         .size(20)
+        .style({
+          lineWidth: 1,
+        })
         .adjust([
           {
             type: 'dodge',
@@ -1775,6 +1802,9 @@ export default class HomePage extends PureComponent {
         .position('label*value')
         .color('label', ['#10416C', '#F4374C', '#0D87D4', '#36BB3D'])
         .size(20)
+        .style({
+          lineWidth: 1,
+        })
         .adjust([
           {
             type: 'dodge',
@@ -1790,9 +1820,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = localStorage.getItem('loginName');
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.label;
+          // const alertStatusDesc = clickData._origin.label;
           router.push(
-            `/homepage/Approval-Process-Center?taskType=myTask&alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
+            `/homepage/Approval-Process-Center/my?owner=${alertOwnerId}&tradeDate=${this.state.proStartDate},${this.state.proEndDate}`,
           );
         }
       });
@@ -1843,6 +1873,7 @@ export default class HomePage extends PureComponent {
           percent: Number((myTerminatedNum / count).toFixed(4)),
         },
       ];
+      ApprovalPersonalPie.sort(this.compare('value'));
       approvalPersonalPieChart.source(ApprovalPersonalPie, {
         percent: {
           formatter: val => {
@@ -1866,7 +1897,9 @@ export default class HomePage extends PureComponent {
         .intervalStack()
         .position('percent')
         .label('percent', {
-          offset: -40,
+          offset: 10,
+          useHtml: true,
+          htmlTemplate: val => `<div style="font-size: 12px;">${val}</div>`,
           color: '#464C51',
           fontSize: 12,
         })
@@ -1887,17 +1920,17 @@ export default class HomePage extends PureComponent {
         {
           label: 'Approved',
           value: 3,
-          percent: 0.3,
+          percent: 0.33,
         },
         {
           label: 'Rejected',
-          value: 4,
-          percent: 0.4,
+          value: 3,
+          percent: 0.33,
         },
         {
           label: 'Terminated',
           value: 3,
-          percent: 0.3,
+          percent: 0.33,
         },
       ];
       approvalPersonalPieChart.source(ApprovalPersonalPie, {
@@ -1983,6 +2016,7 @@ export default class HomePage extends PureComponent {
           date: lastDate,
         },
       ];
+      submissionStatusPie.sort(this.compare('value'));
       submissionStatusPieChart.source(submissionStatusPie, {
         percent: {
           formatter: val => {
@@ -2250,6 +2284,9 @@ export default class HomePage extends PureComponent {
           offset: 10,
         })
         .size(30)
+        .style({
+          lineWidth: 1,
+        })
         .adjust([
           {
             type: 'dodge',
@@ -2287,6 +2324,9 @@ export default class HomePage extends PureComponent {
         .interval()
         .position('label*value')
         .color('type', ['#F4374C', '#0D87D4'])
+        .style({
+          lineWidth: 1,
+        })
         .adjust([
           {
             type: 'dodge',
@@ -2329,6 +2369,7 @@ export default class HomePage extends PureComponent {
               : Number((Number(item.count) / marketDataCount).toFixed(4)),
         });
       });
+      marketPie.sort(this.compare('value'));
       marketPieChart.source(marketPie, {
         percent: {
           formatter: val => {
@@ -2474,6 +2515,9 @@ export default class HomePage extends PureComponent {
             value: `${value}(${a})`,
           };
         })
+        .style({
+          lineWidth: 1,
+        })
         .color('label', [
           '#10416C',
           '#0D87D4',
@@ -2504,6 +2548,9 @@ export default class HomePage extends PureComponent {
       marketRoseChart
         .interval()
         .position('label*value')
+        .style({
+          lineWidth: 1,
+        })
         .color('label', [
           '#10416C',
           '#0D87D4',
@@ -2817,6 +2864,9 @@ export default class HomePage extends PureComponent {
         .position('label*value')
         .color('type', ['#10416c'])
         .size(12)
+        .style({
+          lineWidth: 1,
+        })
         .label('value', {
           textStyle: {
             fill: '#464C51',
@@ -2878,6 +2928,9 @@ export default class HomePage extends PureComponent {
         .interval()
         .position('label*value')
         .color('type', ['#10416c'])
+        .style({
+          lineWidth: 1,
+        })
         .size(12);
     }
     processingStageBarChart.render();
@@ -2913,6 +2966,11 @@ export default class HomePage extends PureComponent {
       allApprovalData,
       perApprovalData,
     } = this.props;
+
+    const colorMap = {};
+    allTaskData.forEach((item, index) => {
+      colorMap[item.owner] = `color${index}`;
+    });
 
     let currentTradeDate;
     let lastTradeDate;
@@ -2970,10 +3028,10 @@ export default class HomePage extends PureComponent {
       proEndDate,
       startDate,
       endDate,
-      submissionStatusPieChart,
-      marketPieChart,
-      outstandingCasesLineChart,
-      processingStageBarChart,
+      // submissionStatusPieChart,
+      // marketPieChart,
+      // outstandingCasesLineChart,
+      // processingStageBarChart,
     } = this.state;
     return (
       <div>
@@ -2994,20 +3052,22 @@ export default class HomePage extends PureComponent {
                             alertState === 'ALL' ? styles.buttonActive : '',
                           )}
                           onClick={() => {
-                            this.setState(
-                              {
-                                alertState: 'ALL',
-                                alterAllChart: '',
-                                isRenderAlterAllChart: true,
-                                otherChart1: '',
-                                otherChart2: '',
-                              },
-                              () => {
-                                this.renderAlterAllChart(allAlterData);
-                                this.renderOtherChart1();
-                                this.renderOtherChart2();
-                              },
-                            );
+                            if (this.state.alertState !== 'ALL') {
+                              this.setState(
+                                {
+                                  alertState: 'ALL',
+                                  alterAllChart: '',
+                                  isRenderAlterAllChart: true,
+                                  otherChart1: '',
+                                  otherChart2: '',
+                                },
+                                () => {
+                                  this.renderAlterAllChart(allAlterData);
+                                  this.renderOtherChart1();
+                                  this.renderOtherChart2();
+                                },
+                              );
+                            }
                           }}
                         >
                           All
@@ -3018,20 +3078,22 @@ export default class HomePage extends PureComponent {
                             alertState === 'PER' ? styles.buttonActive : '',
                           )}
                           onClick={() => {
-                            this.setState(
-                              {
-                                alertState: 'PER',
-                                alterPersonalChart: '',
-                                isRenderAlterPersonalChart: true,
-                                otherChart3: '',
-                                otherChart4: '',
-                              },
-                              () => {
-                                this.renderAlterPerChart();
-                                this.renderOtherChart3();
-                                this.renderOtherChart4();
-                              },
-                            );
+                            if (this.state.alertState !== 'PER') {
+                              this.setState(
+                                {
+                                  alertState: 'PER',
+                                  alterPersonalChart: '',
+                                  isRenderAlterPersonalChart: true,
+                                  otherChart3: '',
+                                  otherChart4: '',
+                                },
+                                () => {
+                                  this.renderAlterPerChart();
+                                  this.renderOtherChart3();
+                                  this.renderOtherChart4();
+                                },
+                              );
+                            }
                           }}
                         >
                           Personal
@@ -3176,7 +3238,7 @@ export default class HomePage extends PureComponent {
                               <span className={styles.value}>{allClaimAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <div id="otherChart1"></div>
+                              <div id="otherChart1" style={{ width: 107 }}></div>
                               {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
@@ -3200,7 +3262,7 @@ export default class HomePage extends PureComponent {
                               <span className={styles.value}>{allProcessingAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <div id="otherChart2"></div>
+                              <div id="otherChart2" style={{ width: 107 }}></div>
                               {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
@@ -3254,7 +3316,7 @@ export default class HomePage extends PureComponent {
                               <span className={styles.value}>{perClaimAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <div id="otherChart3"></div>
+                              <div id="otherChart3" style={{ width: 107 }}></div>
                               {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
@@ -3277,7 +3339,7 @@ export default class HomePage extends PureComponent {
                               <span className={styles.value}>{perProcessingAlertCount}</span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <div id="otherChart4"></div>
+                              <div id="otherChart4" style={{ width: 107 }}></div>
                               {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
@@ -3377,7 +3439,7 @@ export default class HomePage extends PureComponent {
                           <List
                             itemLayout="horizontal"
                             dataSource={allTaskData}
-                            renderItem={(item, index) => (
+                            renderItem={item => (
                               <List.Item>
                                 <span
                                   title={`${item.classification} ${item.details}`}
@@ -3390,7 +3452,9 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span className={classNames(styles.user, styles[`color${index}`])}>
+                                <span
+                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
+                                >
                                   {item.owner &&
                                     item.owner.match(/[A-Z]/g) &&
                                     item.owner.match(/[A-Z]/g).join('')}
@@ -3504,20 +3568,22 @@ export default class HomePage extends PureComponent {
                             approvalState === 'ALL' ? styles.buttonActive : '',
                           )}
                           onClick={() => {
-                            this.setState(
-                              {
-                                approvalState: 'ALL',
-                                approvalAllChart: '',
-                                isRenderApprovalAllChart: true,
-                                otherChart5: '',
-                                otherChart6: '',
-                              },
-                              () => {
-                                this.renderApprovalAllChart();
-                                this.renderOtherChart5();
-                                this.renderOtherChart6();
-                              },
-                            );
+                            if (this.state.approvalState !== 'ALL') {
+                              this.setState(
+                                {
+                                  approvalState: 'ALL',
+                                  approvalAllChart: '',
+                                  isRenderApprovalAllChart: true,
+                                  otherChart5: '',
+                                  otherChart6: '',
+                                },
+                                () => {
+                                  this.renderApprovalAllChart();
+                                  this.renderOtherChart5();
+                                  this.renderOtherChart6();
+                                },
+                              );
+                            }
                           }}
                         >
                           All
@@ -3528,22 +3594,24 @@ export default class HomePage extends PureComponent {
                             approvalState === 'PER' ? styles.buttonActive : '',
                           )}
                           onClick={() => {
-                            this.setState(
-                              {
-                                approvalState: 'PER',
-                                approvalPersonalChart: '',
-                                isRenderApprovalPersonalChart: true,
-                                approvalPersonalPieChart: '',
-                                otherChart7: '',
-                                otherChart8: '',
-                              },
-                              () => {
-                                this.renderApprovalPerChart();
-                                this.renderApprovalPerPieChart();
-                                this.renderOtherChart7();
-                                this.renderOtherChart8();
-                              },
-                            );
+                            if (this.state.approvalState !== 'PER') {
+                              this.setState(
+                                {
+                                  approvalState: 'PER',
+                                  approvalPersonalChart: '',
+                                  isRenderApprovalPersonalChart: true,
+                                  approvalPersonalPieChart: '',
+                                  otherChart7: '',
+                                  otherChart8: '',
+                                },
+                                () => {
+                                  this.renderApprovalPerChart();
+                                  this.renderApprovalPerPieChart();
+                                  this.renderOtherChart7();
+                                  this.renderOtherChart8();
+                                },
+                              );
+                            }
                           }}
                         >
                           Personal
@@ -3694,7 +3762,7 @@ export default class HomePage extends PureComponent {
                               </span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <div id="otherChart5"></div>
+                              <div id="otherChart5" style={{ width: 107 }}></div>
                               {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
@@ -3721,7 +3789,7 @@ export default class HomePage extends PureComponent {
                               </span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <div id="otherChart6"></div>
+                              <div id="otherChart6" style={{ width: 107 }}></div>
                               {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
@@ -3787,7 +3855,7 @@ export default class HomePage extends PureComponent {
                               </span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <div id="otherChart7"></div>
+                              <div id="otherChart7" style={{ width: 107 }}></div>
                               {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
@@ -3814,7 +3882,7 @@ export default class HomePage extends PureComponent {
                               </span>
                             </div>
                             <div className={styles.rightBlock}>
-                              <div id="otherChart8"></div>
+                              <div id="otherChart8" style={{ width: 107 }}></div>
                               {/* <img src={ring} alt="" width={70} />
                               <span
                                 style={{
@@ -3941,7 +4009,7 @@ export default class HomePage extends PureComponent {
                           <List
                             itemLayout="horizontal"
                             dataSource={allTaskData}
-                            renderItem={(item, index) => (
+                            renderItem={item => (
                               <List.Item>
                                 <span
                                   title={`${item.classification} ${item.details}`}
@@ -3954,7 +4022,9 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span className={classNames(styles.user, styles[`color${index}`])}>
+                                <span
+                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
+                                >
                                   {item.owner &&
                                     item.owner.match(/[A-Z]/g) &&
                                     item.owner.match(/[A-Z]/g).join('')}
@@ -3990,6 +4060,11 @@ export default class HomePage extends PureComponent {
                       {targetData.map(item => (
                         <Col span={11} className={styles.menuItem}>
                           {/* <IconFont type={item.icon} className={styles.icon} /> */}
+                          <IconFont
+                            // type={item.icon}
+                            type="iconkuaijiecaidan"
+                            className={styles.icon}
+                          />
                           <span
                             onClick={() => {
                               router.push(item.menuurl);

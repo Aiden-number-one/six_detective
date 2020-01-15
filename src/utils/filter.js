@@ -2,8 +2,8 @@
  * @Description: This is filter.
  * @Author: dailinbo
  * @Date: 2019-11-13 16:47:20
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 19:01:28
+ * @LastEditors  : lan
+ * @LastEditTime : 2020-01-15 13:48:11
  */
 import moment from 'moment';
 import { formatTimeString } from '@/utils/utils';
@@ -42,7 +42,26 @@ const chartStatusFormat = value => {
   return payWayMap[value] || 'stateless';
 };
 
-const lockedFormat = value => (value === 'L' ? 'Y' : 'N');
+const dataChartFormat = value => {
+  const setMap = {
+    name: 'HKEF',
+    ecpRecords: 'Records Received from ECP',
+    importRecords: 'Records Imported by user',
+    eliminatedRecords: 'TO Records Eliminated',
+    eliminatedTotal: 'Duplicated Records Eliminated',
+    lateRecords: 'Late Submission',
+    adjustmentRecords: 'Adjustment for Format Conversion',
+    // 'Records Received from ECP': 'ecpRecords',
+    // 'Records Imported by user': 'importRecords',
+    // 'TO Records Eliminated': 'eliminatedRecords',
+    // 'Duplicated Records Eliminated': 'eliminatedTotal',
+    // 'Late Submission': 'lateRecords',
+    // 'Adjustment of Stock Options Records for Format Conversion': 'adjustmentRecords',
+  };
+  return setMap[value];
+};
+
+const lockedFormat = value => (value === 'Y' ? 'Y' : 'N');
 
 const timeFormat = time => {
   const str = formatTimeString(time);
@@ -50,4 +69,11 @@ const timeFormat = time => {
   return `${moment(strArr[0]).format('DD-MMM-YYYY')} ${strArr[1]}`;
 };
 
-export { userStatus, templateTypeFormat, timeFormat, lockedFormat, chartStatusFormat };
+export {
+  userStatus,
+  templateTypeFormat,
+  timeFormat,
+  lockedFormat,
+  chartStatusFormat,
+  dataChartFormat,
+};

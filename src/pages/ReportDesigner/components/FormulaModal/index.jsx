@@ -3,13 +3,13 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-13 20:54:47
  * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-14 10:40:31
+ * @LastEditTime : 2020-01-15 15:50:44
  * @Description: 公式输入的模态框
  */
 
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Modal, Button, Input } from 'antd';
+import { Form, Modal, Input } from 'antd';
 import { setCellTypeAndValue } from '../../utils';
 
 import less from './index.less';
@@ -25,21 +25,17 @@ const formularSet = [
   showFmlModal: reportDesigner.showFmlModal,
   cellPosition: reportDesigner.cellPosition,
 }))
-class HyperlinkModal extends PureComponent {
+@Form.create({ name: 'formula_modal' })
+class FormulaModal extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      formularValue: '', // 输入公式以校验
-      formularCheckLoading: false, // 校验公式格式时 loading
       formularSearchValue: '', // 输入公式以搜索
-      fmlFormatErr: false, // 公式格式错误
       currFormulaArr: [], // 当前展示的公式集
       currFmlTypeIndex: -1, // 当前选中的公式类
       formularDesc: '', // 当前选中公式的描述
     };
-
-    this.formulaInputRef = React.createRef();
   }
 
   // 把公式的初始值放到到 Input
@@ -47,7 +43,12 @@ class HyperlinkModal extends PureComponent {
     const { initFmlVal: prevVal } = prevProps;
     const { initFmlVal: currVal } = this.props;
     // eslint-disable-next-line react/no-did-update-set-state
-    if (prevVal !== currVal) this.setState({ formularValue: currVal });
+    if (prevVal !== currVal) {
+      const {
+        form: { setFieldsValue },
+      } = this.props;
+      setFieldsValue({ formulaValue: currVal }); // 赋值
+    }
   }
 
   // 显示或隐藏处理公式的模态框
@@ -61,18 +62,27 @@ class HyperlinkModal extends PureComponent {
 
   // 公式模态框：确认
   fmlConfirm = () => {
-    const { cellPosition } = this.props;
-    const { formularValue } = this.state;
-    this.checkFormularFormat(() => {
-      // 验证格式
-      const fmlInputInst = this.formulaInputRef.current;
-      const fmlFormatErr = fmlInputInst.props.className.includes(less['formula-format-error']);
-      const refineFmlValue = /^=/.test(formularValue) ? formularValue : `=${formularValue}`;
-      // console.log('fmlConfirm -> ', refineFmlValue, cellPosition, fmlFormatErr);
-      if (!fmlFormatErr) {
+    const {
+      cellPosition,
+      dispatch,
+      form: { validateFields, setFieldsValue },
+    } = this.props;
+    validateFields((err, values) => {
+      if (!err) {
+        // console.log('Received values of form: ', values);
+        const { formulaValue } = values;
+        let refineFmlValue = formulaValue;
+        if (!formulaValue.startsWith('=')) refineFmlValue = `=${formulaValue}`;
         this.showOrHideFormulaModal(false);
         setCellTypeAndValue({ type: 'formula', value: refineFmlValue, cellPosition });
-        this.setState({ formularValue: '', formularSearchValue: '' });
+        setFieldsValue({ formulaValue: '' }); // 清空
+        this.setState({ formularSearchValue: '' }); // 清空
+        dispatch({
+          type: 'reportDesigner/modifyTemplateArea',
+          payload: {
+            elementType: 'formula', // 单元格类型
+          },
+        });
       }
     });
   };
@@ -80,32 +90,12 @@ class HyperlinkModal extends PureComponent {
   // 公式模态框：取消
   fmlCancel = () => {
     // console.log('fmlCancel');
+    const {
+      form: { setFieldsValue },
+    } = this.props;
+    setFieldsValue({ formulaValue: '' }); // 清空
+
     this.showOrHideFormulaModal(false);
-  };
-
-  // 公式输入框
-  formulaInputChange = ev => {
-    const { value: formularValue } = ev.target;
-    this.setState({ formularValue });
-  };
-
-  // 校验公式格式
-  checkFormularFormat = callback => {
-    const { formularValue } = this.state;
-    const formulaRegExp = /^=?[A-Z]+\(.*\)$/; // 公式的整体校验正则
-    this.setState({ formularCheckLoading: true }, () => {
-      const bool = formulaRegExp.test(formularValue); // 格式校验结果
-      // console.log('checkFormularFormat -> ', formularValue, bool);
-      this.setState(
-        {
-          fmlFormatErr: !bool,
-          formularCheckLoading: false,
-        },
-        () => {
-          if (typeof callback === 'function') callback();
-        },
-      );
-    });
   };
 
   // 输入搜索公式
@@ -129,20 +119,23 @@ class HyperlinkModal extends PureComponent {
   // 选择公式
   pickupFormular = (formularObj, index) => {
     const { name, desc } = formularObj;
+    const {
+      form: { setFieldsValue },
+    } = this.props;
+    setFieldsValue({ formulaValue: `=${name}()` }); // 清空
     this.setState({
       currFmlIndex: index,
       formularDesc: desc,
-      formularValue: `${name}()`,
     });
   };
 
   render() {
-    const { showFmlModal } = this.props;
     const {
-      formularValue,
-      formularCheckLoading,
+      showFmlModal,
+      form: { getFieldDecorator },
+    } = this.props;
+    const {
       formularSearchValue,
-      fmlFormatErr,
       currFormulaArr,
       currFmlTypeIndex,
       currFmlIndex,
@@ -162,67 +155,76 @@ class HyperlinkModal extends PureComponent {
           onCancel={this.fmlCancel}
           wrapClassName={less['formula-modal']}
         >
-          <div className={less['formula-input-tip']}>
-            Please Enter Formula into assigned column:
-          </div>
-          <div style={{ padding: '0 10px' }}>
-            <div className={less['formula-check-container']}>
+          <Form>
+            <div className={less['formula-input-tip']}>
+              Please Enter Formula into assigned column:
+            </div>
+            <div style={{ padding: '0 10px' }}>
+              <div className={less['formula-check-container']}>
+                <Form.Item>
+                  {getFieldDecorator('formulaValue', {
+                    validateFirst: true,
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please input a formula',
+                      },
+                      {
+                        // 一般性整体校验
+                        pattern: /^=?[A-Z]+\(.*\)$/,
+                        message: 'Please input the correct format, eg: =SUM()',
+                      },
+                    ],
+                  })(<Input placeholder="Please input a formula" />)}
+                </Form.Item>
+              </div>
+              <div className={less['formula-search-tip']}>Search Function (S):</div>
               <Input
-                value={formularValue}
-                ref={this.formulaInputRef}
-                onChange={this.formulaInputChange}
-                className={`${fmlFormatErr ? less['formula-format-error'] : ''}`}
+                value={formularSearchValue}
+                onChange={this.formularSearchInputChange}
+                placeholder="Input or pick up a formula"
               />
-              <Button
-                type="primary"
-                loading={formularCheckLoading}
-                onClick={this.checkFormularFormat}
-              >
-                Check Validity
-              </Button>
-            </div>
-            <div className={less['formula-search-tip']}>Search Function (S):</div>
-            <Input value={formularSearchValue} onChange={this.formularSearchInputChange} />
-            <div style={{ marginTop: '5px' }}>
-              <span className={less['formula-type']}>Function Type:</span>
-              <span className={less['formula-name']}>Function Name:</span>
-            </div>
-
-            <div className={`${less['formula-hub']} clearfix`}>
-              <div className={less['formula-hub-left']}>
-                <ul>
-                  {formularTypeArr.map((formularType, i) => (
-                    <li
-                      key={formularType}
-                      className={currFmlTypeIndex === i ? less.curr : ''}
-                      onClick={() => this.pickupFormularType(formularType, i)}
-                    >
-                      {formularType}
-                    </li>
-                  ))}
-                </ul>
+              <div style={{ marginTop: '5px' }}>
+                <span className={less['formula-type']}>Function Type:</span>
+                <span className={less['formula-name']}>Function Name:</span>
               </div>
-              <div className={less['formula-hub-right']}>
-                <ul>
-                  {currFormulaArr.map((item, i) => (
-                    <li
-                      key={item.name}
-                      className={currFmlIndex === i ? less.curr : ''}
-                      onClick={() => this.pickupFormular(item, i)}
-                    >
-                      {item.name}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
 
-            <div className={less['formula-desc']}>{formularDesc}</div>
-          </div>
+              <div className={less['formula-hub']}>
+                <div className={less['formula-hub-left']}>
+                  <ul>
+                    {formularTypeArr.map((formularType, i) => (
+                      <li
+                        key={formularType}
+                        className={currFmlTypeIndex === i ? less.curr : ''}
+                        onClick={() => this.pickupFormularType(formularType, i)}
+                      >
+                        {formularType}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className={less['formula-hub-right']}>
+                  <ul>
+                    {currFormulaArr.map((item, i) => (
+                      <li
+                        key={item.name}
+                        className={currFmlIndex === i ? less.curr : ''}
+                        onClick={() => this.pickupFormular(item, i)}
+                      >
+                        {item.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className={less['formula-desc']}>{formularDesc}</div>
+            </div>
+          </Form>
         </Modal>
       </>
     );
   }
 }
 
-export default HyperlinkModal;
+export default FormulaModal;
