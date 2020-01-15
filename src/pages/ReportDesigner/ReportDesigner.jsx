@@ -4,8 +4,8 @@
  * @Author: liangchaoshun
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
- * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-14 15:25:46
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-15 11:02:05
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -449,7 +449,7 @@ export default class ReportDesigner extends PureComponent {
         type: 'reportDesigner/packageTemplate',
         payload: fieldsValue,
       });
-    });
+    }, 200);
   };
 
   // 展示或收起右边SideBar
@@ -505,6 +505,7 @@ export default class ReportDesigner extends PureComponent {
       saveDrawDisplay: this.saveDrawDisplay, // 是否显示保存Modal
       saveReportTemplate: this.saveReportTemplate, // 保存报表模板
       saveType: this.saveType, // 保存的模板类型 存为或另存为
+      dispatch,
     };
     // 数据集编辑的相关
     const datasetModifyProps = {
