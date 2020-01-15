@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 14:26:49
+ * @LastEditTime : 2020-01-15 14:43:25
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -768,6 +768,9 @@ export default class DataProcessing extends Component {
             }
           },
         );
+      },
+      errorFn: () => {
+        clearInterval(this.setIntervalStatus);
       },
     });
   };
