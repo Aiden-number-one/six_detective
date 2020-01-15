@@ -3,8 +3,9 @@ import { FormattedMessage, formatMessage } from 'umi/locale';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { Icon, Table } from 'antd';
-import styles from '@/pages/AlertCenter/index.less';
 import IconFont from '@/components/IconFont';
+import { pageSizeOptions } from '@/pages/DataImportLog/constants';
+import styles from '@/pages/AlertCenter/index.less';
 import AlertTaskModal from './AlertTaskModal';
 
 export const TaskBtn = ({ task }) => {
@@ -96,6 +97,7 @@ function AlertTask({ dispatch, loading, alertItems, users, taskColumns, onTaskRo
         loading={loading['alertCenter/fetchAlertItems']}
         pagination={{
           showSizeChanger: true,
+          pageSizeOptions,
           showTotal(count) {
             return `Total ${count} items`;
           },
@@ -129,7 +131,7 @@ function AlertTask({ dispatch, loading, alertItems, users, taskColumns, onTaskRo
             title: formatMessage({ id: 'alert-center.status' }),
           },
           {
-            width: 120,
+            width: 108,
             align: 'center',
             dataIndex: 'action',
             title: <FormattedMessage id="alert-center.actions" />,

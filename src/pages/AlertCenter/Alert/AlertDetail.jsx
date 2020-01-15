@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Row, Col, Empty, Spin, Icon, Button } from 'antd';
+import { Tabs, Row, Col, Button } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import IconFont from '@/components/IconFont';
@@ -8,9 +8,6 @@ import styles from '@/pages/AlertCenter/index.less';
 import {
   AlertDes,
   AlertTask,
-  AlertComment,
-  AlertLog,
-  AlertRichText,
   AlertEmailModal,
   AlertDownAttachments,
   TaskBtn,
@@ -22,6 +19,7 @@ import {
   caCodeColumns,
   newAccountColumns,
   NewAccountTaskItem,
+  AlertDetailLogTabs,
 } from './components';
 
 const { TabPane } = Tabs;
@@ -44,15 +42,7 @@ const TaskItemMap = {
   323: NewAccountTaskItem,
 };
 
-function CustomEmpty({ className = '', style = {} }) {
-  return (
-    <Row className={className} style={style} type="flex" align="middle" justify="center">
-      <Empty />
-    </Row>
-  );
-}
-
-function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachments }) {
+function AlertDetail({ dispatch, loading, alert, email, attachments }) {
   const [isFullscreen, setFullscreen] = useState(false);
   const [panes, setPanes] = useState([]);
   const [taskItemHistorys, setTaskItemHistorys] = useState([]);
@@ -64,25 +54,12 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
   const isNewAccountType = [321, 322, 323].includes(+alert.alertTypeId);
 
   useEffect(() => {
-    const { alertId } = alert;
+    const { alertId, emailType } = alert;
     // clear task item
     setPanes([]);
     setActiveKey('1');
-
-    dispatch({
-      type: 'alertCenter/fetchLogs',
-      payload: {
-        alertId,
-      },
-    });
-    dispatch({
-      type: 'alertCenter/fetchComments',
-      payload: {
-        alertId,
-      },
-    });
-    // show attachments
-    if (+alert.emailType === 111) {
+    // show attachments,just emailType = 111 show attachment
+    if (emailType && emailType.split(',').includes('111')) {
       dispatch({
         type: 'alertCenter/fetchAttachments',
         payload: {
@@ -91,17 +68,6 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
       });
     }
   }, [alert]);
-
-  async function handleCommit(comment, fileList) {
-    await dispatch({
-      type: 'alertCenter/postComment',
-      payload: {
-        alertId: alert.alertId,
-        content: comment,
-        fileList: fileList.map(file => file.url),
-      },
-    });
-  }
 
   async function handleAddItem(pane) {
     const isEqual = item => item.TASK_ID === pane.TASK_ID;
@@ -262,54 +228,14 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
         )}
       </Col>
       <Col span={8}>
-        <Tabs defaultActiveKey="1" type="card" className={styles['detail-comment']}>
-          <TabPane key="1" tab={<FormattedMessage id="alert-center.comment-history" />}>
-            <Spin spinning={loading['alertCenter/fetchComments']}>
-              {comments.length > 0 ? (
-                <ul className={styles['comment-list']}>
-                  {comments.map(({ id, commitTime, commentContent, userName, fileList }) => (
-                    <AlertComment
-                      key={id}
-                      comment={{
-                        id,
-                        time: commitTime,
-                        content: commentContent,
-                        user: userName,
-                        files: fileList,
-                      }}
-                      onDownloadAll={() => handleDownloadAll(fileList)}
-                    />
-                  ))}
-                </ul>
-              ) : (
-                <CustomEmpty className={styles['comment-list']} />
-              )}
-            </Spin>
-            <AlertRichText loading={loading['alertCenter/postComment']} onCommit={handleCommit} />
-          </TabPane>
-          <TabPane key="2" tab={<FormattedMessage id="alert-center.alert-lifecycle" />}>
-            <Spin spinning={loading['alertCenter/fetchLogs']}>
-              <div style={{ height: 370, overflowY: 'auto' }}>
-                {logs.length > 0 ? (
-                  logs.map(log => <AlertLog log={log} key={log.id} />)
-                ) : (
-                  <CustomEmpty className={styles['comment-list']} style={{ height: 370 }} />
-                )}
-              </div>
-            </Spin>
-          </TabPane>
-        </Tabs>
+        <AlertDetailLogTabs alert={alert} onDownloadAll={handleDownloadAll} />
       </Col>
     </Row>
   );
 }
 
-export default connect(
-  ({ loading, alertCenter: { comments = [], logs = [], email, attachments } }) => ({
-    loading: loading.effects,
-    comments,
-    logs,
-    email,
-    attachments,
-  }),
-)(AlertDetail);
+export default connect(({ loading, alertCenter: { email, attachments } }) => ({
+  loading: loading.effects,
+  email,
+  attachments,
+}))(AlertDetail);

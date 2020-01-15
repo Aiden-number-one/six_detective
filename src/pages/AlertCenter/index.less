@@ -1,4 +1,8 @@
 // utils
+@tab_height: 500px;
+@textarea_height: 90px;
+@comment_btns_height: 30px;
+
 .txt-sub {
   em {
     font-size: 13px;
@@ -171,7 +175,7 @@
 }
 
 .detail-container {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   .fullscreen {
     position: fixed;
     top: 0;
@@ -194,7 +198,7 @@
   :global {
     .ant-tabs-card {
       > .ant-tabs-content {
-        height: 500px;
+        height: @tab_height;
         padding: 10px;
         overflow-y: auto;
         background-color: #fff;
@@ -216,12 +220,16 @@
       }
     }
   }
+
   .detail-comment {
-    background-color: #fff;
+    :global {
+      .ant-tabs-content {
+        padding: 0;
+      }
+    }
     .comment-list {
-      min-height: 200px;
-      max-height: 300px;
-      margin: 0 0 18px;
+      height: @tab_height - @textarea_height - @comment_btns_height;
+      margin: 0;
       padding: 10px;
       overflow-y: auto;
       > li {
@@ -231,26 +239,16 @@
         .txt-sub();
       }
     }
-    .loading-more {
-      text-align: center;
-      > button {
-        height: 30px;
-      }
-    }
     .comment-box {
-      padding-top: 8px;
-      background-color: #f6f9fa;
       > .txt {
-        height: 100px;
+        height: @textarea_height;
+        resize: none;
       }
       .comment-commit {
-        background-color: #fff;
         .phrase-btn {
-          height: 25px;
-          margin-left: 5px;
-          color: #10416c;
-          background-color: #ebf0f4;
-          border-color: #ebf0f4;
+          color: #464c51;
+          background-color: #d5ebf8;
+          border-color: #d5ebf8;
         }
         .up-icon {
           margin-right: 4px;
@@ -261,37 +259,18 @@
           }
         }
       }
-      .up-attachments {
-        background-color: #eef1f4;
-        .file-desc {
-          display: flex;
-          justify-content: space-between;
-          padding: 4px 10px;
-          color: #3d4a59;
-          span:last-child {
-            cursor: pointer;
-            &:hover {
-              color: #1e416c;
-            }
-          }
-        }
-        > ul {
-          margin: 0;
-          padding: 6px 10px;
-          color: #464c51;
-          .icon-btns > a {
-            color: #464c51;
-          }
-          .icon {
-            margin-right: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            &:hover {
-              color: #1e416c;
-            }
-          }
-        }
-      }
+    }
+    .logs {
+      padding: 10px;
+    }
+  }
+}
+
+// information
+.info-detail {
+  :global {
+    .ant-tabs-card > .ant-tabs-content {
+      height: 300px;
     }
   }
 }
@@ -341,6 +320,38 @@
   :global {
     .ant-popover-inner {
       min-width: 150px;
+    }
+  }
+}
+
+.up-attachments {
+  background-color: #eef1f4;
+  .file-desc {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 10px;
+    color: #3d4a59;
+    span:last-child {
+      cursor: pointer;
+      &:hover {
+        color: #1e416c;
+      }
+    }
+  }
+  > ul {
+    margin: 0;
+    padding: 6px 10px;
+    color: #464c51;
+    .icon-btns > a {
+      color: #464c51;
+    }
+    .icon {
+      margin-right: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      &:hover {
+        color: #1e416c;
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import moment from 'moment';
 import router from 'umi/router';
 import withRouter from 'umi/withRouter';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Icon, Alert, Button } from 'antd';
+import { Table, Row, Icon, Alert } from 'antd';
 import IconFont from '@/components/IconFont';
 import { getAuthority } from '@/utils/authority';
 import {
