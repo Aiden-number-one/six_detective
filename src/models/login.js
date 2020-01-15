@@ -3,13 +3,14 @@
  * @Author: dailinbo
  * @Date: 2019-12-19 14:06:28
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-13 21:49:16
+ * @LastEditTime : 2020-01-15 09:48:58
  */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import uuidv1 from 'uuid/v1';
 import Service from '@/utils/Service';
+import { setStore } from '@/utils/store';
 
 const { getLogin, getLoginStatus, logout } = Service;
 
@@ -41,6 +42,7 @@ const Model = {
           yield put({
             type: 'logout',
           });
+          setStore({ name: 'employeeId', content: '' });
         }
       }
       // if (response.bcjson.flag === '001') {

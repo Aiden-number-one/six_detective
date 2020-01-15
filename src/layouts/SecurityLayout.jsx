@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'umi';
+import { connect } from 'dva';
 import { stringify } from 'querystring';
 import PageLoading from '@/components/PageLoading';
 import { getStore } from '@/utils/store';
@@ -10,8 +11,16 @@ class SecurityLayout extends React.Component {
   };
 
   componentDidMount() {
+    const { dispatch } = this.props;
     this.setState({
       isReady: true,
+    });
+    dispatch({
+      type: 'login/getLoginStatus',
+      payload: {
+        // loginName: window.localStorage.currentUser,
+        // userAgent: window.navigator.userAgent,
+      },
     });
   }
 
@@ -33,4 +42,4 @@ class SecurityLayout extends React.Component {
   }
 }
 
-export default SecurityLayout;
+export default connect(() => ({}))(SecurityLayout);
