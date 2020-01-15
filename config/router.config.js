@@ -397,16 +397,18 @@ export default [
               },
             ],
           },
+          {
+            path: '/404',
+            name: '404',
+            component: './Page404.jsx',
+          },
+          {
+            path: '/no-access',
+            name: 'no-access',
+            component: './NoAccess/NoAccess',
+          },
         ],
       },
     ]
-  },
-  {
-    path: '/404',
-    component: './Page404',
-  },
-  {
-    path: '/no-access',
-    component: './NoAccess',
   },
 ];
