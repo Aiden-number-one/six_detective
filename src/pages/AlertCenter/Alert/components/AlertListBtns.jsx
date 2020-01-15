@@ -36,7 +36,7 @@ export function AlertListBtns({
           {isBatchAction && !disabled && claimLoading ? (
             <Icon type="loading" className={styles['btn-icon']} />
           ) : (
-            <IconFont type="iconqizhi" className={styles['btn-icon']} />
+            <IconFont type="icon-claim-small" className={styles['btn-icon']} />
           )}
           <FormattedMessage id="alert-center.claim" />
         </button>
