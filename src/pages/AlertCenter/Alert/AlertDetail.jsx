@@ -24,6 +24,8 @@ import {
   NewAccountTaskItem,
 } from './components';
 
+const { TabPane } = Tabs;
+
 const taskColumnsMap = {
   301: epColumns,
   302: proudctColumns,
@@ -41,8 +43,6 @@ const TaskItemMap = {
   322: NewAccountTaskItem,
   323: NewAccountTaskItem,
 };
-
-const { TabPane } = Tabs;
 
 function CustomEmpty({ className = '', style = {} }) {
   return (
@@ -129,20 +129,18 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
     }
   }
 
-  function handleRemoveItem(e, pane) {
-    e.stopPropagation();
+  function handleRemoveItem(targetKey) {
     let lastIndex;
     let curActiveKey = activeKey;
-    const targetKey = pane.TASK_ID;
     panes.forEach((item, i) => {
-      if (item.TASK_ID === targetKey) {
+      if (item.TASK_ID.toString() === targetKey) {
         lastIndex = i - 1;
       }
     });
 
-    setPanes(panes.filter(item => item.TASK_ID !== targetKey));
+    setPanes(panes.filter(item => item.TASK_ID.toString() !== targetKey));
 
-    if (panes.length && activeKey === targetKey.toString()) {
+    if (panes.length && activeKey === targetKey) {
       if (lastIndex >= 0) {
         curActiveKey = panes[lastIndex].TASK_ID.toString();
       } else {
@@ -173,7 +171,6 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
   }
 
   async function handleDownloadAll(fileList) {
-    console.log(fileList);
     const url = await dispatch({
       type: 'global/fetchZipAttachments',
       payload: {
@@ -189,9 +186,15 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
     <Row className={styles['detail-container']} gutter={10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
         <Tabs
-          className={styles['detail-des']}
+          hideAdd
+          type="editable-card"
           activeKey={activeKey}
           onChange={key => setActiveKey(key)}
+          onEdit={(targetKey, action) => {
+            if (action === 'remove') {
+              handleRemoveItem(targetKey);
+            }
+          }}
           tabBarExtraContent={
             <IconFont
               type={isFullscreen ? 'iconfullscreen-exit' : 'iconfull-screen'}
@@ -202,7 +205,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
         >
           <TabPane
             key="1"
-            className={styles['tab-content']}
+            closable={false}
             tab={<FormattedMessage id="alert-center.alert-detail" />}
           >
             <AlertDes alert={alert} />
@@ -230,7 +233,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
           {+alert.itemsTotal !== 0 && taskColumns && (
             <TabPane
               key="2"
-              className={styles['tab-content']}
+              closable={false}
               tab={<FormattedMessage id="alert-center.alert-item-list" />}
             >
               <AlertTask alert={alert} onTaskRow={handleAddItem} taskColumns={taskColumns} />
@@ -238,20 +241,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
           )}
           {+alert.itemsTotal !== 0 &&
             panes.map(pane => (
-              <TabPane
-                className={styles['tab-content']}
-                key={pane.TASK_ID.toString()}
-                tab={
-                  <Row type="flex" justify="space-between" align="middle">
-                    <span>Alert Item</span>
-                    <Icon
-                      type="close"
-                      style={{ marginLeft: 12, fontSize: 12 }}
-                      onClick={e => handleRemoveItem(e, pane)}
-                    />
-                  </Row>
-                }
-              >
+              <TabPane key={pane.TASK_ID.toString()} tab="Alert Item">
                 <TaskItem
                   task={pane}
                   style={{ height: isFullscreen ? 'auto' : 500 }}
@@ -272,7 +262,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
         )}
       </Col>
       <Col span={8}>
-        <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
+        <Tabs defaultActiveKey="1" type="card" className={styles['detail-comment']}>
           <TabPane key="1" tab={<FormattedMessage id="alert-center.comment-history" />}>
             <Spin spinning={loading['alertCenter/fetchComments']}>
               {comments.length > 0 ? (
@@ -297,11 +287,7 @@ function AlertDetail({ dispatch, loading, alert, comments, logs, email, attachme
             </Spin>
             <AlertRichText loading={loading['alertCenter/postComment']} onCommit={handleCommit} />
           </TabPane>
-          <TabPane
-            key="2"
-            tab={<FormattedMessage id="alert-center.alert-lifecycle" />}
-            className={styles['tab-content']}
-          >
+          <TabPane key="2" tab={<FormattedMessage id="alert-center.alert-lifecycle" />}>
             <Spin spinning={loading['alertCenter/fetchLogs']}>
               <div style={{ height: 370, overflowY: 'auto' }}>
                 {logs.length > 0 ? (

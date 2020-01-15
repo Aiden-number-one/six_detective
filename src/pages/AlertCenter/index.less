@@ -34,7 +34,7 @@
   font-weight: 500;
   > li {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     em {
       font-style: normal;
     }
@@ -143,6 +143,7 @@
 
 .icon-btns {
   button {
+    padding: 0;
     background-color: transparent;
     border: 0;
     outline: none;
@@ -156,6 +157,9 @@
         }
       }
     }
+    &:first-child {
+      margin-right: 8px;
+    }
     .icon {
       color: #bcc6cc;
       font-size: 13px;
@@ -168,11 +172,6 @@
 
 .detail-container {
   margin-bottom: 20px;
-  .tab-content {
-    height: 500px;
-    padding: 10px;
-    overflow-y: auto;
-  }
   .fullscreen {
     position: fixed;
     top: 0;
@@ -187,34 +186,34 @@
     overflow: auto;
     background-color: #fff;
   }
-  :global {
-    .ant-tabs-nav .ant-tabs-tab-active {
-      color: #464c51;
-    }
-    .ant-tabs-nav .ant-tabs-tab:hover {
-      color: #464c51;
-    }
-    .ant-tabs-ink-bar {
-      background-color: #f8374c;
-    }
+  .fullscreen-icon {
+    margin: 9px 10px 9px 0;
+    font-size: 22px;
+    cursor: pointer;
   }
-  .detail-des {
-    background-color: #fff;
-    &.info-des {
-      box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
-    }
-    :global {
-      .ant-tabs-extra-content {
-        line-height: 1;
+  :global {
+    .ant-tabs-card {
+      > .ant-tabs-content {
+        height: 500px;
+        padding: 10px;
+        overflow-y: auto;
+        background-color: #fff;
+        box-shadow: 0 0 1px 0 rgba(166, 171, 173, 0.6);
       }
-    }
-    .fullscreen-icon {
-      margin: 10px 10px 0 0;
-      font-size: 22px;
-      cursor: pointer;
-    }
-    .info-content {
-      min-height: 300px;
+      > .ant-tabs-bar {
+        background-color: #f0f2f4;
+        .ant-tabs-extra-content {
+          line-height: 1;
+        }
+        .ant-tabs-tab {
+          background-color: transparent;
+          border: none;
+        }
+        .ant-tabs-tab-active {
+          color: #464c51;
+          background-color: #d9e7f1;
+        }
+      }
     }
   }
   .detail-comment {

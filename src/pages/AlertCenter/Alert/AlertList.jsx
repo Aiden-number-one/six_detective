@@ -4,7 +4,7 @@ import moment from 'moment';
 import router from 'umi/router';
 import withRouter from 'umi/withRouter';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Table, Row, Icon, Alert } from 'antd';
+import { Table, Row, Icon, Alert, Button } from 'antd';
 import IconFont from '@/components/IconFont';
 import { getAuthority } from '@/utils/authority';
 import {
@@ -72,7 +72,6 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
 
   useEffect(() => {
     if (alerts && alerts.length > 0) {
-      console.log(alerts);
       const [firstAlert] = alerts;
       const curAlert = alert && alerts.find(item => item.alertId === alert.alertId);
       // should be latest alert,owner and status has been changed
@@ -370,7 +369,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
             }
           />
           <Column
-            width={90}
+            width={80}
             dataIndex="action"
             title={<FormattedMessage id="alert-center.actions" />}
             render={(text, record) => (

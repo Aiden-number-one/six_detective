@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 10:13:34
+ * @LastEditors  : iron
+ * @LastEditTime : 2020-01-15 10:26:47
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -50,7 +50,7 @@ export function errorHandler(error) {
     const errorText = statusText;
     message.error(errorText);
   }
-  return response;
+  return Promise.reject();
 }
 
 export const request = extend({
