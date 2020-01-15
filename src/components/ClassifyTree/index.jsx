@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 22:24:37
+ * @LastEditTime : 2020-01-15 16:56:38
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -182,7 +182,7 @@ class ClassifyTree extends Component {
           checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
         });
       }
-    }, 1000);
+    }, 500);
   }
 
   formatCheckedKeys = (menuList, checkedKeys) => {
