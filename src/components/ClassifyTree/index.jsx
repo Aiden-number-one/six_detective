@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 16:56:38
+ * @LastEditTime : 2020-01-15 17:50:54
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -167,22 +167,22 @@ class ClassifyTree extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      const { checkedKeys, all, btnIds } = this.props;
-      const { menuList } = this.state;
+    // setTimeout(() => {
+    const { checkedKeys, all, btnIds } = this.props;
+    const { menuList } = this.state;
+    this.setState({
+      checkedKeys,
+      customeBtnIds: btnIds,
+      tempCheckedKeys: checkedKeys,
+    });
+    this.props.onSelect(menuList[0] && menuList[0][this.props.treeKey.currentKey]);
+    if (all) {
+      this.compareAllChecked();
       this.setState({
-        checkedKeys,
-        customeBtnIds: btnIds,
-        tempCheckedKeys: checkedKeys,
+        checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
       });
-      this.props.onSelect(menuList[0] && menuList[0][this.props.treeKey.currentKey]);
-      if (all) {
-        this.compareAllChecked();
-        this.setState({
-          checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
-        });
-      }
-    }, 500);
+    }
+    // }, 500);
   }
 
   formatCheckedKeys = (menuList, checkedKeys) => {
