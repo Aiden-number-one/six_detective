@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-12 15:09:07
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-14 20:54:08
+ * @LastEditTime : 2020-01-15 10:55:44
  */
 
 import React from 'react';
@@ -24,10 +24,14 @@ export default React.memo(
       class extends React.Component {
         handleSubmit = e => {
           e.preventDefault();
-          const { form, saveDrawDisplay, saveReportTemplate } = this.props;
-          form.validateFields((err, fieldsValue) => {
+          const { form, saveDrawDisplay, saveReportTemplate, dispatch } = this.props;
+          form.validateFields(async (err, fieldsValue) => {
             if (err) return;
             form.resetFields();
+            await dispatch({
+              type: 'reportDesigner/modifyTemplateArea',
+              payload: {},
+            });
             saveReportTemplate(fieldsValue);
             saveDrawDisplay(false);
           });
@@ -49,7 +53,7 @@ export default React.memo(
             wrapperCol: { span: 18 },
           };
           return (
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
               <Form.Item {...Layout} label="Template Name">
                 {getFieldDecorator('reportName', {
                   rules: [
@@ -64,7 +68,7 @@ export default React.memo(
               </Form.Item>
               <Form.Item {...Layout} label="Folder">
                 {getFieldDecorator('folderId', {
-                  rules: [{ required: true, message: 'Please select' }],
+                  rules: [{ required: false, message: 'Please select' }],
                   initialValue: saveType === 'saveAs' || !folderId ? undefined : folderId,
                 })(<TreeSelect treeData={classifyTree} placeholder="Please select" />)}
               </Form.Item>
@@ -99,13 +103,7 @@ export default React.memo(
                 >
                   Cancel
                 </Button>
-                <Button
-                  htmlType="submit"
-                  type="primary"
-                  onSubmit={() => {
-                    this.handleSubmit();
-                  }}
-                >
+                <Button htmlType="submit" type="primary" onClick={this.handleSubmit}>
                   Submit
                 </Button>
               </div>
