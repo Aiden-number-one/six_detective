@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 22:54:01
+ * @LastEditTime : 2020-01-15 17:11:54
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -225,6 +225,7 @@ class AuditTrailLogging extends Component {
       },
     ],
     getAuditLogList: [],
+    attrSort: [],
   };
 
   auditLogForm = React.createRef();
@@ -372,16 +373,33 @@ class AuditTrailLogging extends Component {
   };
 
   exportDataConfirm = () => {
-    const { exportType } = this.state;
-    this.goExport(exportType);
+    const { columns, exportType } = this.state;
+    let attrSort = [];
+    columns.forEach(element => attrSort.push(element.key));
+    attrSort = new Set(attrSort);
+    attrSort = [...attrSort];
+    const index = attrSort.indexOf('index');
+    if (index > -1) {
+      attrSort.splice(index, 1);
+    }
+    this.setState(
+      {
+        attrSort,
+      },
+      () => {
+        this.goExport(exportType);
+      },
+    );
   };
 
   goExport = exportType => {
     const { dispatch } = this.props;
+    const { attrSort } = this.state;
     const param = {
       fileType: exportType,
       apiVersion: 'v2.0',
       isPage: 'true',
+      attrSort: attrSort.join(','),
       apiName: 'bayconnect.superlop.get_system_log_list',
     };
     dispatch({
