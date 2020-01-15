@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 14:43:25
+ * @LastEditTime : 2020-01-15 15:20:35
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -59,6 +59,7 @@ export default class DataProcessing extends Component {
       market: 'ALL',
       selectedMarket: '0',
       authBypass: false,
+      authDataProcess: false,
       alertBypassStatus: [],
       isBypass: false,
       dataProcessingVisible: false,
@@ -233,6 +234,7 @@ export default class DataProcessing extends Component {
     this.getStatusData();
     this.setState({
       authBypass: getAuthority().authBypass,
+      authDataProcess: getAuthority()['authData Process'],
     });
   }
 
@@ -845,6 +847,7 @@ export default class DataProcessing extends Component {
       dataAlertVisible,
       intradays,
       authBypass,
+      authDataProcess,
       dataProcessingFlag,
       dataCharts,
       cols,
@@ -1039,16 +1042,18 @@ export default class DataProcessing extends Component {
                     ))}
                   </Select>
                 </Col>
-                <Col>
-                  <Button
-                    type="primary"
-                    className="btn-usual"
-                    onClick={this.startProcessing}
-                    disabled={!inspectDataVisible}
-                  >
-                    Start Processing
-                  </Button>
-                </Col>
+                {authDataProcess && (
+                  <Col>
+                    <Button
+                      type="primary"
+                      className="btn-usual"
+                      onClick={this.startProcessing}
+                      disabled={!inspectDataVisible}
+                    >
+                      Start Processing
+                    </Button>
+                  </Col>
+                )}
                 <Col>
                   {dataProcessingFlag ? (
                     <div>
