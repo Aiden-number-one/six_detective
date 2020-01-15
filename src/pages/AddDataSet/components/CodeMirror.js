@@ -77,7 +77,12 @@ class CodeMirrorComponent extends Component {
               procType: '2',
             },
             callback: value => {
-              const params = value.map(item => `\${${item.ARGUMENT_NAME}}`);
+              const params = value.map(item => {
+                if (item.IN_OUT === 'IN') {
+                  return `\${${item.ARGUMENT_NAME}}`;
+                }
+                return '?';
+              });
               const insertProceduce = `CALL ${procedureName}(${params.join(',\n')})`;
               dispatch({
                 type: 'sqlKeydown/changeSql',
