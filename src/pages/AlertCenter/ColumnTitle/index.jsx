@@ -28,6 +28,7 @@ function ColumnTitle({
   const [checkedList, setCheckedList] = useState([]);
   const [selectedItem, setSelectedItem] = useState(''); // filterType == 1/3/4/5/6
 
+  // reset all state
   useEffect(() => {
     if (conditions.length === 0) {
       resetState();
