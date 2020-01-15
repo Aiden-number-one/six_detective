@@ -25,7 +25,7 @@ export default [
       {
         path: '/',
         component: '../layouts/BasicLayout',
-        Routes: ['src/pages/Authorized'],
+        // Routes: ['src/pages/Authorized'],
         authority: ['admin', 'user'],
         routes: [
           {
@@ -397,6 +397,11 @@ export default [
     ]
   },
   {
+    path: '/404',
     component: './Page404',
+  },
+  {
+    path: '/no-access',
+    component: './NoAccess',
   },
 ];
