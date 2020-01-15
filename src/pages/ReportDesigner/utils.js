@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-14 20:27:06
+ * @LastEditTime : 2020-01-15 10:47:42
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -305,7 +305,11 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
  * @Author: mus
  * @Date: 2019-12-23 16:41:39
  */
-export function modifyTemplateAreaInside({ value, position, spreadsheetOtherProps }) {
+export function modifyTemplateAreaInside({
+  value = {},
+  position = 'A1',
+  spreadsheetOtherProps = [],
+}) {
   let newSpreadsheetOtherProps = [...spreadsheetOtherProps];
   const [rowIndex, colIndex] = getColIndexRowIndex(position);
   if (newSpreadsheetOtherProps.length === 0) {

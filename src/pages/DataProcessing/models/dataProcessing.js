@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-04 12:56:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 18:01:58
+ * @LastEditTime : 2020-01-15 14:42:41
  */
 import Service from '@/utils/Service';
 
@@ -130,7 +130,7 @@ const codeMaintenance = {
         throw new Error(response.bcjson.msg);
       }
     },
-    *getProgressStatus({ payload, callback }, { call, put }) {
+    *getProgressStatus({ payload, callback, errorFn }, { call, put }) {
       const response = yield call(progressStatus, { param: payload });
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
@@ -141,11 +141,15 @@ const codeMaintenance = {
           callback();
         }
       } else {
+        errorFn();
         throw new Error(response.bcjson.msg);
       }
     },
     *getProgressBar({ payload, callback, errorFn }, { call, put }) {
       const response = yield call(progressBar, { param: payload });
+      if (!response.bcjson) {
+        errorFn();
+      }
       if (response.bcjson.flag === '1') {
         if (response.bcjson.items) {
           yield put({

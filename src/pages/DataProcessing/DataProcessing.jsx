@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 21:03:40
+ * @LastEditTime : 2020-01-15 16:26:17
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -33,7 +33,7 @@ import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
 import { getAuthority } from '@/utils/authority';
 import { getStore } from '@/utils/store';
-import { dataChartFormat } from '@/utils/filter';
+import { dataChartFormat, chartStatusFormat } from '@/utils/filter';
 import { formatTimeString } from '@/utils/utils';
 
 const { Option } = Select;
@@ -59,6 +59,7 @@ export default class DataProcessing extends Component {
       market: 'ALL',
       selectedMarket: '0',
       authBypass: false,
+      authDataProcess: false,
       alertBypassStatus: [],
       isBypass: false,
       dataProcessingVisible: false,
@@ -233,6 +234,7 @@ export default class DataProcessing extends Component {
     this.getStatusData();
     this.setState({
       authBypass: getAuthority().authBypass,
+      authDataProcess: getAuthority()['authData Process'],
     });
   }
 
@@ -723,6 +725,9 @@ export default class DataProcessing extends Component {
             dataChartFormat('adjustmentRecords'),
           ),
         );
+        if (newDataCharts[1].name === 'HKEF') {
+          newDataCharts.reverse();
+        }
         this.setState(
           {
             dataCharts: newDataCharts,
@@ -756,8 +761,18 @@ export default class DataProcessing extends Component {
           },
           () => {
             console.log('dataStatus=', this.state.dataStatus);
+            if (this.state.dataStatus === '1') {
+              this.setIntervalStatus = setInterval(() => {
+                this.getStatusData();
+              }, 500);
+            } else {
+              clearInterval(this.setIntervalStatus);
+            }
           },
         );
+      },
+      errorFn: () => {
+        clearInterval(this.setIntervalStatus);
       },
     });
   };
@@ -832,6 +847,7 @@ export default class DataProcessing extends Component {
       dataAlertVisible,
       intradays,
       authBypass,
+      authDataProcess,
       dataProcessingFlag,
       dataCharts,
       cols,
@@ -1029,9 +1045,11 @@ export default class DataProcessing extends Component {
                 <Col>
                   <Button
                     type="primary"
-                    className="btn-usual"
+                    // className={[authDataProcess ? 'btn-usual' : 'noauth-btn']}
+                    className={authDataProcess ? ['btn-usual'] : ['disabled-btn']}
                     onClick={this.startProcessing}
-                    disabled={!inspectDataVisible}
+                    // disabled={!inspectDataVisible}
+                    disabled={!authDataProcess}
                   >
                     Start Processing
                   </Button>
@@ -1060,15 +1078,16 @@ export default class DataProcessing extends Component {
                     <span></span>
                   )}
                 </Col>
-                {/* {!dataProcessingFlag && (
+                {dataStatus === '1' && (
                   <Col>
-                    {dataStatus !== '1' ? (
-                      <span>{dataStatus && chartStatusFormat(dataStatus)}</span>
-                    ) : (
-                      <div className={styles['data-processing']}></div>
-                    )}
+                    <Progress
+                      style={{ width: '300px' }}
+                      percent={80}
+                      status="active"
+                      format={() => chartStatusFormat(dataStatus)}
+                    />
                   </Col>
-                )} */}
+                )}
               </Row>
               <Chart
                 className={styles.chart}
