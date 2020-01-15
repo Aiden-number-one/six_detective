@@ -2,8 +2,8 @@
  * @Author: liangchaoshun
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-13 20:28:07
- * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-14 15:05:50
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-14 19:54:18
  * @Description: 超链接的模态框
  */
 
@@ -50,8 +50,7 @@ class HyperlinkModal extends PureComponent {
 
   // 超链接模态框：确认
   hylConfirm = () => {
-    console.log('hylConfirm');
-    const { cellPosition, setCellStyle } = this.props;
+    const { cellPosition, setCellStyle, dispatch } = this.props;
     const { hylContentValue, hylLinkValue } = this.state;
     if (hylContentValue.trim() === '') {
       this.setState({ hylEmptyVal: true });
@@ -66,6 +65,14 @@ class HyperlinkModal extends PureComponent {
     setCellStyle('underline', true); // 添加样式
     setCellStyle('color', 'rgb(26,26,255)');
     this.showOrHideHylModal(false);
+    this.setState({ hylContentValue: '', hylLinkValue: '' });
+    dispatch({
+      type: 'reportDesigner/modifyTemplateArea',
+      payload: {
+        elementType: 'link', // 单元格类型
+        link: hylLinkValue,
+      },
+    });
   };
 
   // 超链接模态框：取消

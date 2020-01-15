@@ -4,32 +4,12 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 19:36:07
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-14 17:34:52
+ * @LastEditTime : 2020-01-14 20:14:41
  */
 import { message } from 'antd';
 import { request } from '@/utils/request.default';
-import { defaultPage, defaultPageSize } from '@/pages/DataImportLog/constants';
 // just for unit test
 // `fetch` high order function return anonymous func
-export async function getTableList({
-  sort,
-  dataTable,
-  conditions,
-  currentColumn,
-  page = defaultPage,
-  pageSize = defaultPageSize,
-} = {}) {
-  return request('get_table_page_list', {
-    data: {
-      sort,
-      dataTable,
-      currentColumn,
-      conditions: conditions && JSON.stringify(conditions),
-      pageNumber: page.toString(),
-      pageSize: pageSize.toString(),
-    },
-  });
-}
 
 export async function getAlertItems({ alertId, alertTypeId }) {
   return request('get_alert_item_list', { data: { alertTypeId, alertId } });
@@ -97,15 +77,6 @@ export async function getEmailByType(params) {
 export default {
   namespace: 'alertCenter',
   state: {
-    infos: [],
-    infoPage: defaultPage,
-    infoPageSize: defaultPageSize,
-    infoTotal: 0,
-    alerts: [],
-    alertPage: defaultPage,
-    alertPageSize: defaultPageSize,
-    alertParams: {}, // fetch alerts params
-    alertTotal: 0,
     alertItems: [],
     comments: [],
     logs: [],
@@ -114,34 +85,6 @@ export default {
     attachments: [],
   },
   reducers: {
-    save(state, { payload }) {
-      const {
-        alerts,
-        alertPage = defaultPage,
-        alertPageSize = defaultPageSize,
-        alertTotal,
-        alertParams,
-      } = payload;
-
-      return {
-        ...state,
-        alerts,
-        alertPage,
-        alertPageSize,
-        alertTotal,
-        alertParams,
-      };
-    },
-    saveInfos(state, { payload }) {
-      const { infos, infoPage = defaultPage, infoPageSize = defaultPageSize, infoTotal } = payload;
-      return {
-        ...state,
-        infos,
-        infoPage,
-        infoPageSize,
-        infoTotal,
-      };
-    },
     saveAlertItems(state, { payload }) {
       return {
         ...state,
@@ -181,57 +124,12 @@ export default {
     },
   },
   effects: {
-    *fetch({ payload = {} }, { call, put }) {
-      const { page, pageSize, ...rest } = payload;
-      const { items, totalCount, err } = yield call(getTableList, {
-        ...rest,
-        page,
-        pageSize,
-        dataTable: 'SLOP_BIZ.V_ALERT_CENTER',
-      });
-
-      if (err) {
-        throw new Error(err);
-      }
-
-      yield put({
-        type: 'save',
-        payload: {
-          alerts: items,
-          alertPage: page,
-          alertPageSize: pageSize,
-          alertTotal: totalCount,
-          alertParams: rest,
-        },
-      });
-    },
     *exportAlerts({ payload }, { call }) {
       const { err, items } = yield call(exportAlerts, payload);
       if (err) {
         throw new Error(err);
       }
       return items;
-    },
-    *fetchInfos({ payload = {} }, { call, put }) {
-      const { page, pageSize } = payload;
-      const { items, totalCount, err } = yield call(getTableList, {
-        ...payload,
-        dataTable: 'SLOP_BIZ.V_INFO',
-      });
-
-      if (err) {
-        throw new Error(err);
-      }
-
-      yield put({
-        type: 'saveInfos',
-        payload: {
-          infos: items,
-          infoPage: page,
-          infoPageSize: pageSize,
-          infoTotal: totalCount,
-        },
-      });
     },
     *exportInfos({ payload }, { call }) {
       const { err, items } = yield call(exportInfos, payload);
@@ -367,7 +265,7 @@ export default {
         return items;
       }
       yield put({
-        type: 'reloadAlerts',
+        type: 'global/reloadTableList',
       });
       message.success(msg);
       return '';
@@ -389,7 +287,7 @@ export default {
         throw new Error(err);
       }
       yield put({
-        type: 'reloadAlerts',
+        type: 'global/reloadTableList',
       });
       message.success(msg);
     },
@@ -399,7 +297,7 @@ export default {
         throw new Error(err);
       }
       yield put({
-        type: 'reloadAlerts',
+        type: 'global/reloadTableList',
       });
     },
     *discontinue({ payload }, { call, put }) {
@@ -408,7 +306,7 @@ export default {
         throw new Error(err);
       }
       yield put({
-        type: 'reloadAlerts',
+        type: 'global/reloadTableList',
       });
     },
     *fetchAttachments({ payload }, { call, put }) {
@@ -459,19 +357,6 @@ export default {
         throw new Error(err);
       }
       return items;
-    },
-    *reloadAlerts(_, { put, select }) {
-      const page = yield select(({ alertCenter }) => alertCenter.alertPage);
-      const pageSize = yield select(({ alertCenter }) => alertCenter.alertPageSize);
-      const alertParams = yield select(({ alertCenter }) => alertCenter.alertParams);
-      yield put({
-        type: 'fetch',
-        payload: {
-          page,
-          pageSize,
-          ...alertParams,
-        },
-      });
     },
   },
 };

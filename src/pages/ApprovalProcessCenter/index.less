@@ -150,6 +150,28 @@
     overflow-x: hidden;
     overflow-y: auto;
   }
+  :global {
+    .ant-tabs .ant-tabs-bar {
+      background-color: #f0f2f4;
+    }
+    .ant-tabs .ant-tabs-bar .ant-tabs-nav .ant-tabs-tab-active {
+      width: 108px;
+      height: 40px;
+      margin: 0;
+      padding: 0;
+      color: rgba(70, 76, 81, 1);
+      font-weight: 500;
+      font-size: 14px;
+      font-family: Avenir, sans-serif;
+      line-height: 40px;
+      text-align: center;
+      background: rgba(217, 231, 241, 1);
+    }
+    .ant-tabs-ink-bar {
+      height: 0;
+    }
+  }
+
   .fullscreen {
     position: fixed;
     top: 0;
@@ -163,6 +185,7 @@
     padding: 0 20px;
     overflow: hidden;
     overflow-y: auto;
+    color: #464c51;
     background-color: #fff;
   }
   .ListBox {
@@ -242,15 +265,24 @@
 
   .detail-des {
     background-color: #fff;
-    box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
+    // box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
+
     .fullscreen-icon {
       margin: 14px 14px 0 0;
       font-size: 22px;
       cursor: pointer;
     }
   }
-  .detail-comment {
-    background-color: #fff;
+  .detail-comment-box {
+    .detail-comment {
+      background-color: #fff;
+    }
+    :global {
+      .ant-tabs .ant-tabs-bar .ant-tabs-nav .ant-tabs-tab-active {
+        width: 137px !important;
+      }
+    }
+
     .comment-list {
       min-height: 213px;
       max-height: 300px;
@@ -281,7 +313,7 @@
           font-weight: 500;
           font-size: 12px;
           font-family: Avenir, sans-serif;
-          background-color: #ebf0f4;
+          background-color: #d5ebf8;
           border: none;
         }
 

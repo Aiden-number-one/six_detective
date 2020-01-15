@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2020-01-14 11:29:40
+ * @LastEditTime : 2020-01-14 16:02:28
  * @LastEditors  : liangchaoshun
  * @Email: mus@szkingdom.com
  */
@@ -140,7 +140,7 @@ export default WrapperComponent => {
             console.log(`row:${row} col:${col} index:${index}`);
           },
           afterTriggerHistoryAction(historyType, params) {
-            console.table(historyType, params);
+            // console.table(historyType, params);
           },
           /**
            * @description: 右键菜单显示前回调 可用于显示和隐藏菜单

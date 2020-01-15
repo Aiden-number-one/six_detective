@@ -170,16 +170,32 @@ function ProcessDetail({
                 weightFactor: values.isCalculatePd === 'Yes' ? values.weightFactor.toString() : '',
               };
             } else {
+              const effectiveDate = values.effectiveDate
+                ? moment(values.effectiveDate).format('YYYYMMDD')
+                : '';
+              const expiryDate = values.expiryDate
+                ? moment(values.expiryDate).format('YYYYMMDD')
+                : '';
               valueData = {
                 isCaCode: values.isCaCode,
                 remark: values.remark,
+                effectiveDate,
+                expiryDate,
               };
             }
           } else if (alertTypeValue === '303') {
             if (values.isCaCode === 'Yes') {
+              const effectiveDate = values.effectiveDate
+                ? moment(values.effectiveDate).format('YYYYMMDD')
+                : '';
+              const expiryDate = values.expiryDate
+                ? moment(values.expiryDate).format('YYYYMMDD')
+                : '';
               valueData = {
                 isCaCode: values.isCaCode,
                 remark: values.remark,
+                effectiveDate,
+                expiryDate,
               };
             } else {
               valueData = {
@@ -436,6 +452,7 @@ function ProcessDetail({
               className={isFullscreen ? styles['tab-content'] : styles['tab-scroll-content']}
               closable={false}
               tab="Task Detail"
+              type="card"
               key=""
             >
               <DetailList
@@ -474,7 +491,7 @@ function ProcessDetail({
             </TabPane>
           </Tabs>
         </Col>
-        <Col span={8}>
+        <Col span={8} className={styles['detail-comment-box']}>
           <Tabs defaultActiveKey="1" className={styles['detail-comment']}>
             <TabPane tab="Approval History" key="1">
               <Spin spinning={loading['approvalCenter/getApprovalTaskHistory']}>
@@ -497,7 +514,10 @@ function ProcessDetail({
                   <CustomEmpty className={styles['comment-list']} />
                 )}
               </Spin>
-              {currentTaskType !== 'his' && currentOwner ? (
+              {currentTaskType !== 'his' &&
+              currentOwner &&
+              detailItems[0] &&
+              detailItems[0].receivedAnswer !== '0' ? (
                 <div className={styles['comment-box']}>
                   <TextArea
                     placeholder="Plase Input Comment"
@@ -518,6 +538,7 @@ function ProcessDetail({
                       <div className={styles['attachments-icon']}>
                         <IconFont
                           type="icon-withdrawx"
+                          title="withdraw"
                           onClick={() => setWithdrawConfirmVisible(true)}
                           className={styles['btn-icon']}
                         />
@@ -526,6 +547,7 @@ function ProcessDetail({
                         <div className={styles['attachments-icon']}>
                           <IconFont
                             type="icon-savex"
+                            title="save"
                             onClick={saveTask}
                             className={styles['btn-icon']}
                           />

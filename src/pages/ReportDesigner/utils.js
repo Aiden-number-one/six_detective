@@ -3,8 +3,8 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
- * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-14 14:43:37
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-14 20:27:06
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -239,10 +239,10 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       } = style;
       let expand = 'None';
       let aggregate = 'group';
+      const otherProps = spreadsheetOtherProps[rowsIndex][colsIndex];
       if (cellType === 'DATASET') {
         // TODO：spreadsheetOtherProps 怎么保持与表格单元格的一致
         try {
-          const otherProps = spreadsheetOtherProps[rowsIndex][colsIndex];
           if (otherProps.dataSetting === 'group') {
             aggregate = 'group';
           }
@@ -261,7 +261,9 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       }
       // 生成
       cellxml += `<cell expand="${expand}" name="${createCellPos(colsIndex) +
-        (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}">
+        (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}" ${
+        cellType === 'LINK' ? `link-url="${otherProps.link}" link-target-window="_blank"` : ''
+      }>
         <cell-style font-size="${fontSize}" align="${align}" valign="${valign}" ${bgcolor &&
         `bgcolor="${bgcolor}"`} ${forecolor && `forecolor="${forecolor}"`} ${underline &&
         `underline="${underline}"`} ${fontFamily && `font-family="${fontFamily}"`} ${italic &&
@@ -273,7 +275,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       // 去除undefined
       cellxml = cellxml.replace(/undefined/g, '');
       // 生成value相关元素
-      if (cellType === 'TEXT' || cellType === 'text') {
+      if (cellType === 'TEXT' || cellType === 'text' || cellType === 'LINK') {
         cellxml += `<simple-value><![CDATA[${cellText || ''}]]></simple-value>`;
       } else if (cellType === 'DATASET') {
         const datasetName = cellText.split('.')[0];
@@ -312,10 +314,15 @@ export function modifyTemplateAreaInside({ value, position, spreadsheetOtherProp
     const rowLength = rows.len;
     const colLength = cols.len;
     newSpreadsheetOtherProps = new Array(rowLength).fill([]).map(() =>
-      new Array(colLength).fill({}).map(() => ({
-        dataSet: {},
-        expendDirection: 'Down',
-      })),
+      new Array(colLength).fill({}).map(() => {
+        if (value.elementType === 'column') {
+          return {
+            dataSet: {},
+            expendDirection: 'Down',
+          };
+        }
+        return {};
+      }),
     );
   }
   const content = newSpreadsheetOtherProps[rowIndex][colIndex];

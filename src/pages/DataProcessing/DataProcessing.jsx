@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 21:03:40
+ * @LastEditTime : 2020-01-15 09:29:07
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -723,6 +723,9 @@ export default class DataProcessing extends Component {
             dataChartFormat('adjustmentRecords'),
           ),
         );
+        if (newDataCharts[1].name === 'HKEF') {
+          newDataCharts.reverse();
+        }
         this.setState(
           {
             dataCharts: newDataCharts,

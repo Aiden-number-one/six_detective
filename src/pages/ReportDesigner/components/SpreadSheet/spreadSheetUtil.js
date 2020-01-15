@@ -190,6 +190,8 @@ export function generateJson(spreadSheetData) {
         currentCellProps.cellType = 'TEXT';
       } else if (cellContent.cellProps.cellType === 'formula') {
         currentCellProps.cellType = 'FORMULA';
+      } else if (cellContent.cellProps.cellType === 'hyperlink') {
+        currentCellProps.cellType = 'LINK';
       }
 
       // 对样式进行处理
