@@ -520,7 +520,7 @@ define(function (require, exports, module) {
         },
         defaultDate: new Date().Format("yyyy-mm-dd"),
         editable: true,
-        monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+        monthNames: ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "June.", "July.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."],
         eventLimit: false, // allow "more" link when too many events
         eventStartEditable: true,
         dayClick: function dayClick(date, jsEvent, view) {
