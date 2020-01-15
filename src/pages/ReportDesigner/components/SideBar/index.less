@@ -195,6 +195,7 @@
 }
 
 .tree {
+  margin-top: 5px;
   :global {
     .ant-tree li {
       padding: 0;
@@ -239,6 +240,16 @@
   position: relative;
   .title {
     position: relative;
+  }
+  .titleText {
+    display: inline-block;
+    width: 75%;
+    margin-left: 3.5px;
+    overflow-x: hidden;
+    line-height: 17px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: text-top;
   }
   .hoverArea {
     position: absolute;
