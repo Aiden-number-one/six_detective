@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 15:20:35
+ * @LastEditTime : 2020-01-15 16:26:17
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -1042,18 +1042,18 @@ export default class DataProcessing extends Component {
                     ))}
                   </Select>
                 </Col>
-                {authDataProcess && (
-                  <Col>
-                    <Button
-                      type="primary"
-                      className="btn-usual"
-                      onClick={this.startProcessing}
-                      disabled={!inspectDataVisible}
-                    >
-                      Start Processing
-                    </Button>
-                  </Col>
-                )}
+                <Col>
+                  <Button
+                    type="primary"
+                    // className={[authDataProcess ? 'btn-usual' : 'noauth-btn']}
+                    className={authDataProcess ? ['btn-usual'] : ['disabled-btn']}
+                    onClick={this.startProcessing}
+                    // disabled={!inspectDataVisible}
+                    disabled={!authDataProcess}
+                  >
+                    Start Processing
+                  </Button>
+                </Col>
                 <Col>
                   {dataProcessingFlag ? (
                     <div>
