@@ -2,8 +2,8 @@
  * @Description: This is for login
  * @Author: dailinbo
  * @Date: 2019-12-19 14:06:28
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 10:00:35
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-15 20:27:28
  */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
@@ -71,7 +71,9 @@ const Model = {
           );
           window.localStorage.clear();
         }
-        callback();
+        if (callback) {
+          callback();
+        }
       }
     },
   },

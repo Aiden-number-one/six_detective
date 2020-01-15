@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-13 11:27:05
+ * @LastEditTime : 2020-01-15 20:03:15
  */
 import Service from '@/utils/Service';
 
@@ -15,6 +15,7 @@ export default {
   state: {
     previewData: {},
     dataSetColumn: {},
+    customSearchData: [],
   },
   reducers: {
     // 保存报表预览数据
@@ -28,6 +29,12 @@ export default {
       return {
         ...state,
         dataSetColumn: action.payload,
+      };
+    },
+    setCustomSearchData(state, action) {
+      return {
+        ...state,
+        customSearchData: action.payload,
       };
     },
   },
@@ -86,6 +93,10 @@ export default {
         yield put({
           type: 'getDataSetColumnValue',
           payload: [...datasetOption, ...tableOption],
+        });
+        yield put({
+          type: 'setCustomSearchData',
+          payload: customSearchData,
         });
       } else {
         throw new Error(response.bcjson.msg);
