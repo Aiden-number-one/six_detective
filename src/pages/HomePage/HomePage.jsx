@@ -1504,7 +1504,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval All柱状图
   renderApprovalAllChart = () => {
-    const { proStartDate, proEndDate } = this.state;
+    // const { proStartDate, proEndDate } = this.state;
     const { allApprovalData } = this.props;
     let approvalAllChart;
     if (this.state.approvalAllChart) {
@@ -1658,9 +1658,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = clickData._origin.label;
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.type;
+          // const alertStatusDesc = clickData._origin.type;
           router.push(
-            `/homepage/Approval-Process-Center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
+            `/homepage/Approval-Process-Center?owner=${alertOwnerId}&tradeDate=${this.state.proStartDate},${this.state.proEndDate}`,
           );
         }
       });
@@ -1673,7 +1673,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval Personal柱状图
   renderApprovalPerChart = () => {
-    const { proStartDate, proEndDate } = this.state;
+    // const { proStartDate, proEndDate } = this.state;
     const { perApprovalData } = this.props;
     let approvalPersonalChart;
     if (this.state.approvalPersonalChart) {
@@ -1820,9 +1820,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = localStorage.getItem('loginName');
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.label;
+          // const alertStatusDesc = clickData._origin.label;
           router.push(
-            `/homepage/Approval-Process-Center?taskType=myTask&alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
+            `/homepage/Approval-Process-Center/My?owner=${alertOwnerId}&tradeDate=${this.state.proStartDate},${this.state.proEndDate}`,
           );
         }
       });
