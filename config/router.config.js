@@ -65,6 +65,11 @@ export default [
                 name: 'ApprovalProcessCenter',
                 component: './ApprovalProcessCenter/index',
               },
+              {
+                path: '/homepage/Approval-Process-Center/:type',
+                name: 'ApprovalProcessCenter',
+                component: './ApprovalProcessCenter/index',
+              },
             ],
           },
           // Report

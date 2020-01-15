@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 22:54:01
+ * @LastEditTime : 2020-01-15 17:31:17
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -225,6 +225,8 @@ class AuditTrailLogging extends Component {
       },
     ],
     getAuditLogList: [],
+    attrSort: [],
+    attrDisplay: [],
   };
 
   auditLogForm = React.createRef();
@@ -372,16 +374,42 @@ class AuditTrailLogging extends Component {
   };
 
   exportDataConfirm = () => {
-    const { exportType } = this.state;
-    this.goExport(exportType);
+    const { columns, exportType } = this.state;
+    let attrSort = [];
+    let attrDisplay = [];
+    columns.forEach(element => {
+      attrSort.push(element.key);
+      attrDisplay.push(element.title);
+    });
+    attrSort = new Set(attrSort);
+    attrDisplay = new Set(attrDisplay);
+    attrSort = [...attrSort];
+    attrDisplay = [...attrDisplay];
+    const index = attrSort.indexOf('index');
+    if (index > -1) {
+      attrSort.splice(index, 1);
+      attrDisplay.splice(index, 1);
+    }
+    this.setState(
+      {
+        attrSort,
+        attrDisplay,
+      },
+      () => {
+        this.goExport(exportType);
+      },
+    );
   };
 
   goExport = exportType => {
     const { dispatch } = this.props;
+    const { attrSort, attrDisplay } = this.state;
     const param = {
-      fileType: exportType,
+      fileType: exportType.toString(),
       apiVersion: 'v2.0',
       isPage: 'true',
+      attrSort: attrSort.join(','),
+      attrDisplay: attrDisplay.join(','),
       apiName: 'bayconnect.superlop.get_system_log_list',
     };
     dispatch({

@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-19 14:06:28
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 20:27:28
+ * @LastEditTime : 2020-01-15 21:05:55
  */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
@@ -41,6 +41,7 @@ const Model = {
           message.warning(item.info);
           yield put({
             type: 'logout',
+            callback: () => {},
           });
           setStore({ name: 'employeeId', content: '' });
         }
@@ -71,9 +72,7 @@ const Model = {
           );
           window.localStorage.clear();
         }
-        if (callback) {
-          callback();
-        }
+        if (callback) callback();
       }
     },
   },

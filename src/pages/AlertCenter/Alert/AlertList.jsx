@@ -72,7 +72,6 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
 
   useEffect(() => {
     if (alerts && alerts.length > 0) {
-      console.log(alerts);
       const [firstAlert] = alerts;
       const curAlert = alert && alerts.find(item => item.alertId === alert.alertId);
       // should be latest alert,owner and status has been changed
@@ -370,7 +369,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
             }
           />
           <Column
-            width={90}
+            width={80}
             dataIndex="action"
             title={<FormattedMessage id="alert-center.actions" />}
             render={(text, record) => (

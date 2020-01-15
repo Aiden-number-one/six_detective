@@ -2,8 +2,8 @@
  * @Description: This is filter.
  * @Author: dailinbo
  * @Date: 2019-11-13 16:47:20
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 20:09:47
+ * @LastEditors  : lan
+ * @LastEditTime : 2020-01-15 13:48:11
  */
 import moment from 'moment';
 import { formatTimeString } from '@/utils/utils';
@@ -61,7 +61,7 @@ const dataChartFormat = value => {
   return setMap[value];
 };
 
-const lockedFormat = value => (value === 'L' ? 'Y' : 'N');
+const lockedFormat = value => (value === 'Y' ? 'Y' : 'N');
 
 const timeFormat = time => {
   const str = formatTimeString(time);

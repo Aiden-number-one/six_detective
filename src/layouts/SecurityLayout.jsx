@@ -21,6 +21,7 @@ class SecurityLayout extends React.Component {
         // loginName: window.localStorage.currentUser,
         // userAgent: window.navigator.userAgent,
       },
+      callback: () => {},
     });
   }
 

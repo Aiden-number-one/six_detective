@@ -688,7 +688,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -749,7 +749,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -808,7 +808,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -869,7 +869,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -933,7 +933,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -997,7 +997,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -1060,7 +1060,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -1124,7 +1124,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -1149,7 +1149,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Alter ALL条形图
   renderAlterAllChart = data => {
-    const { startDate, endDate } = this.state;
+    // const { startDate, endDate } = this.state;
     // Alter ALL 的条形图
     let alterAllChart;
     if (this.state.alterAllChart) {
@@ -1339,7 +1339,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Alter Personal条形图
   renderAlterPerChart = () => {
-    const { startDate, endDate } = this.state;
+    // const { startDate, endDate } = this.state;
     const { perAlertData } = this.props;
     let alterPersonalChart;
     if (this.state.alterPersonalChart) {
@@ -1504,7 +1504,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval All柱状图
   renderApprovalAllChart = () => {
-    const { proStartDate, proEndDate } = this.state;
+    // const { proStartDate, proEndDate } = this.state;
     const { allApprovalData } = this.props;
     let approvalAllChart;
     if (this.state.approvalAllChart) {
@@ -1658,9 +1658,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = clickData._origin.label;
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.type;
+          // const alertStatusDesc = clickData._origin.type;
           router.push(
-            `/homepage/Approval-Process-Center?alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
+            `/homepage/Approval-Process-Center?owner=${alertOwnerId}&tradeDate=${this.state.proStartDate},${this.state.proEndDate}`,
           );
         }
       });
@@ -1673,7 +1673,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Approval Personal柱状图
   renderApprovalPerChart = () => {
-    const { proStartDate, proEndDate } = this.state;
+    // const { proStartDate, proEndDate } = this.state;
     const { perApprovalData } = this.props;
     let approvalPersonalChart;
     if (this.state.approvalPersonalChart) {
@@ -1820,9 +1820,9 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           const alertOwnerId = localStorage.getItem('loginName');
           // eslint-disable-next-line no-underscore-dangle
-          const alertStatusDesc = clickData._origin.label;
+          // const alertStatusDesc = clickData._origin.label;
           router.push(
-            `/homepage/Approval-Process-Center?taskType=myTask&alertOwnerId=${alertOwnerId}&alertStatusDesc=${alertStatusDesc}&proStartDate=${proStartDate}&proEndDate=${proEndDate}`,
+            `/homepage/Approval-Process-Center/my?owner=${alertOwnerId}&tradeDate=${this.state.proStartDate},${this.state.proEndDate}`,
           );
         }
       });
@@ -4060,6 +4060,11 @@ export default class HomePage extends PureComponent {
                       {targetData.map(item => (
                         <Col span={11} className={styles.menuItem}>
                           {/* <IconFont type={item.icon} className={styles.icon} /> */}
+                          <IconFont
+                            // type={item.icon}
+                            type="iconkuaijiecaidan"
+                            className={styles.icon}
+                          />
                           <span
                             onClick={() => {
                               router.push(item.menuurl);
