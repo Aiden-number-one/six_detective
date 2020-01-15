@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-14 15:39:20
+ * @LastEditTime : 2020-01-15 14:14:01
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -334,7 +334,7 @@ export default class DatasetManagement extends PureComponent {
                 window.open(`/report-designer?reportId=${record.reportId}`);
               }}
             >
-              <IconFont type="icon-edit" className="operation-icon" />
+              <IconFont type="icon-edit1" className="operation-icon" />
             </a>
             <a
               href="#"
@@ -347,7 +347,7 @@ export default class DatasetManagement extends PureComponent {
                 );
               }}
             >
-              <IconFont type="icon-prew" className="operation-icon" />
+              <IconFont type="icon-prew1" className="operation-icon" />
             </a>
             <a
               href="#"
@@ -365,7 +365,7 @@ export default class DatasetManagement extends PureComponent {
                 this.record = record;
               }}
             >
-              <IconFont type="icon-delete" className="operation-icon" />
+              <IconFont type="icon-delete2" className="operation-icon" />
             </a>
           </span>
         ),
