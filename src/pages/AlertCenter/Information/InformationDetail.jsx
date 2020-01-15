@@ -10,25 +10,18 @@ const { TabPane } = Tabs;
 
 export default function({ info: { informationType, market, timestamp, informationDetail } }) {
   return (
-    <Row className={styles['detail-container']} gutter={16}>
-      <Col span={24}>
-        <Tabs defaultActiveKey="1" className={classNames(styles['detail-des'], styles['info-des'])}>
-          <TabPane
-            className={styles['tab-content']}
-            style={{ overflow: 'hidden' }}
-            tab={<FormattedMessage id="alert-center.information-detail" />}
-            key="1"
-          >
-            <Row>{informationType}</Row>
-            <Row type="flex" justify="space-between">
-              <Col>{market}</Col>
-              <Col>{moment(timestamp).format(timestampFormat)}</Col>
-            </Row>
-            <Divider style={{ margin: '6px 0' }} />
-            <Row className={styles['info-content']}>{informationDetail}</Row>
-          </TabPane>
-        </Tabs>
-      </Col>
+    <Row className={styles['detail-container']}>
+      <Tabs type="card" defaultActiveKey="1">
+        <TabPane key="1" tab={<FormattedMessage id="alert-center.information-detail" />}>
+          <Row>{informationType}</Row>
+          <Row type="flex" justify="space-between">
+            <Col>{market}</Col>
+            <Col>{moment(timestamp).format(timestampFormat)}</Col>
+          </Row>
+          <Divider style={{ margin: '6px 0' }} />
+          <Row className={styles['info-content']}>{informationDetail}</Row>
+        </TabPane>
+      </Tabs>
     </Row>
   );
 }
