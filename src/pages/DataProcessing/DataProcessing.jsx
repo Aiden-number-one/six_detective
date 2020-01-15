@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 09:29:07
+ * @LastEditTime : 2020-01-15 14:26:49
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -33,7 +33,7 @@ import IconFont from '@/components/IconFont';
 import styles from './DataProcessing.less';
 import { getAuthority } from '@/utils/authority';
 import { getStore } from '@/utils/store';
-import { dataChartFormat } from '@/utils/filter';
+import { dataChartFormat, chartStatusFormat } from '@/utils/filter';
 import { formatTimeString } from '@/utils/utils';
 
 const { Option } = Select;
@@ -759,6 +759,13 @@ export default class DataProcessing extends Component {
           },
           () => {
             console.log('dataStatus=', this.state.dataStatus);
+            if (this.state.dataStatus === '1') {
+              this.setIntervalStatus = setInterval(() => {
+                this.getStatusData();
+              }, 500);
+            } else {
+              clearInterval(this.setIntervalStatus);
+            }
           },
         );
       },
@@ -1063,15 +1070,16 @@ export default class DataProcessing extends Component {
                     <span></span>
                   )}
                 </Col>
-                {/* {!dataProcessingFlag && (
+                {dataStatus === '1' && (
                   <Col>
-                    {dataStatus !== '1' ? (
-                      <span>{dataStatus && chartStatusFormat(dataStatus)}</span>
-                    ) : (
-                      <div className={styles['data-processing']}></div>
-                    )}
+                    <Progress
+                      style={{ width: '300px' }}
+                      percent={80}
+                      status="active"
+                      format={() => chartStatusFormat(dataStatus)}
+                    />
                   </Col>
-                )} */}
+                )}
               </Row>
               <Chart
                 className={styles.chart}
