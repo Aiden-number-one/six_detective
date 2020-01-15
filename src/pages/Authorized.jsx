@@ -3,6 +3,7 @@ import Redirect from 'umi/redirect';
 import { connect } from 'dva';
 import pathToRegexp from 'path-to-regexp';
 import Authorized from '@/utils/Authorized';
+import { getStore } from '@/utils/store';
 
 const getRouteAuthority = (path, routeData) => {
   let authorities;
@@ -32,17 +33,18 @@ const AuthComponent = ({
   location = {
     pathname: '',
   },
-  user = {},
+  // user = {},
 }) => {
-  const { currentUser } = user;
+  // const { currentUser } = user;
   const { routes = [] } = route;
   // console.log(children);
 
-  const isLogin = currentUser && currentUser.name;
+  // const isLogin = currentUser && currentUser.name;
+  const isLogin = getStore('employeeId');
   return (
     <Authorized
       authority={getRouteAuthority(location.pathname, routes) || ''}
-      noMatch={isLogin ? <Redirect to="/exception/403" /> : <Redirect to="/aaa" />}
+      noMatch={isLogin ? <Redirect to="/exception/403" /> : <Redirect to="/login" />}
     >
       {children}
     </Authorized>

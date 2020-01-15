@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:40:45
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-11 17:37:46
+ * @LastEditTime : 2020-01-15 14:35:26
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, Checkbox, message } from 'antd';
@@ -141,7 +141,7 @@ export default class ModifyUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accountLock: '0',
+      accountLock: 'N',
       locedChecked: false,
       groupIds: [],
       alertIds: [],
@@ -151,7 +151,7 @@ export default class ModifyUser extends Component {
   componentDidMount() {
     const { userInfo } = this.props;
     let locedChecked = false;
-    if (userInfo.accountLock && userInfo.accountLock === 'L') {
+    if (userInfo.accountLock && userInfo.accountLock === 'Y') {
       locedChecked = true;
     }
     this.queryLog();
@@ -233,12 +233,12 @@ export default class ModifyUser extends Component {
   onChangeLocked = e => {
     if (e.target.checked) {
       this.setState({
-        accountLock: 'L',
+        accountLock: 'Y',
         locedChecked: true,
       });
     } else {
       this.setState({
-        accountLock: '0',
+        accountLock: 'N',
         locedChecked: false,
       });
     }
