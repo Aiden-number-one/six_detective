@@ -624,7 +624,7 @@ function ProcessDetail({
             </TabPane>
             <TabPane tab="Task Lifecycle" key="2">
               <Spin spinning={loading['approvalCenter/getApprovalTaskHistory']}>
-                <div style={{ height: 370, overflowY: 'auto', padding: '0 18px' }}>
+                <div className={styles.LifecycleBox}>
                   {logList.length > 0 ? (
                     logList.map(log => <TaskLog log={log} key={log.id} />)
                   ) : (
