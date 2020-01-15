@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-19 14:06:28
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 09:48:58
+ * @LastEditTime : 2020-01-15 10:00:35
  */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
@@ -48,12 +48,18 @@ const Model = {
       // if (response.bcjson.flag === '001') {
       //   message.error('您的登录信息已失效,请重新登录')
       // }
+      if (response.bcjson.flag === '001') {
+        yield put({
+          type: 'logout',
+        });
+        setStore({ name: 'employeeId', content: '' });
+      }
       if (callback) callback(response);
     },
     *logout({ callback }, { call, put }) {
       // const { redirect } = getPageQuery();
       const response = yield call(logout, { param: {} });
-      if (response.bcjson.flag === '1') {
+      if (response.bcjson.flag === '1' || response.bcjson.flag === '001') {
         if (window.location.pathname !== '/login') {
           yield put(
             routerRedux.replace({
