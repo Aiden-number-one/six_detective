@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Layout, Form, Tree, Checkbox } from 'antd';
 import classNames from 'classnames';
 import { FormattedMessage } from 'umi/locale';
+import _ from 'lodash';
 import uuidv1 from 'uuid/v1';
 import { getColIndexRowIndex, setCellTypeAndValue } from '../../utils';
 import IconFont from '@/components/IconFont';
@@ -86,9 +87,29 @@ const formLayout = {
         payload: otherProps,
       });
     }
-    const { customSearchData } = props;
+    const { customSearchData, dataSetPrivateList } = props;
     if (allFields.widgetType && customSearchData.length > 0) {
       const currentCustomSearchData = customSearchData.find(value => value.active);
+      // 对result中的日期进行moment处理
+      if (
+        result.widgetDefault &&
+        typeof result.widgetDefault === 'object' &&
+        // eslint-disable-next-line no-underscore-dangle
+        result.widgetDefault._isAMomentObject
+      ) {
+        if (result.widgetType === 'datepickeryyyymm') {
+          result.widgetDefault = result.widgetDefault.format('YYYYMM');
+        } else {
+          result.widgetDefault = result.widgetDefault.format('YYYYMMDD');
+        }
+      }
+      // 需要添加一个字段判断是字符串还是数据类型
+      const findFieldArray = _.flattenDeep(
+        dataSetPrivateList.map(value => value.query.parameters || []),
+      );
+      result.parameterType = result.widgetKey
+        ? findFieldArray.find(value => value.parameter_name === result.widgetKey).parameter_type
+        : 'STRING';
       // 若为控件设置的操作，则进行以下操作
       dispatch({
         type: 'formArea/changeCustomSearchData',

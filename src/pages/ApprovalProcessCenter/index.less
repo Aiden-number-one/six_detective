@@ -43,14 +43,21 @@
     .ant-radio-button-wrapper {
       width: 85px;
       height: 30px;
+      padding: 0;
       color: #464c51;
       font-weight: 500;
-      font-size: 9px;
+      font-size: 12px;
       font-family: Avenir, sans-serif;
       text-align: center;
       background-color: #fff;
       border: none;
       border-radius: unset;
+      outline: none;
+      a {
+        display: block;
+        width: 100%;
+        height: 30px;
+      }
     }
     .ant-radio-button-wrapper:first-child {
       border: none;
@@ -61,6 +68,7 @@
       background: #fff;
       border-bottom: 2px solid #0d87d4;
       border-radius: unset;
+      outline: none;
       box-shadow: 0 0 0 0 #0d87d4 !important;
     }
 
@@ -100,7 +108,7 @@
   }
 
   .list {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 10px;
     background-color: #fff;
     box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
@@ -152,7 +160,19 @@
   }
   :global {
     .ant-tabs .ant-tabs-bar {
+      position: relative;
       background-color: #f0f2f4;
+    }
+    .ant-tabs .ant-tabs-bar .ant-tabs-nav .ant-tabs-tab {
+      width: 108px;
+      height: 40px;
+      margin: 0;
+      padding: 0;
+      color: #464c51;
+      font-size: 14px;
+      font-family: Avenir, sans-serif;
+      line-height: 40px;
+      text-align: center;
     }
     .ant-tabs .ant-tabs-bar .ant-tabs-nav .ant-tabs-tab-active {
       width: 108px;
@@ -268,7 +288,10 @@
     // box-shadow: 0 0 4px 0 rgba(166, 171, 173, 0.6);
 
     .fullscreen-icon {
-      margin: 14px 14px 0 0;
+      position: absolute;
+      top: 47px;
+      right: 10px;
+      z-index: 1000;
       font-size: 22px;
       cursor: pointer;
     }
@@ -278,6 +301,9 @@
       background-color: #fff;
     }
     :global {
+      .ant-tabs .ant-tabs-bar .ant-tabs-nav .ant-tabs-tab {
+        width: 137px;
+      }
       .ant-tabs .ant-tabs-bar .ant-tabs-nav .ant-tabs-tab-active {
         width: 137px !important;
       }
