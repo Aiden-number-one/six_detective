@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import { Row, Col, Button, Form, Input, Select, message, Table, Spin } from 'antd';
 import { connect } from 'dva';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
+import classNames from 'classnames';
 import styles from './index.less';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';
@@ -272,7 +273,7 @@ export default class DatasetModify extends PureComponent {
           {/* 编辑数据集相关 */}
           {variableList.length > 0 && (
             <Form.Item label=" " labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
-              <div className={styles.inputCollection}>
+              <div className={classNames(styles.inputCollection, styles.title)}>
                 <span className={styles.valueName}>Variable Name</span>
                 <span className={styles.valueType}>Variable Type</span>
                 <span className={styles.value}>Value</span>

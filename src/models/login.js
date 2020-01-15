@@ -2,8 +2,8 @@
  * @Description: This is for login
  * @Author: dailinbo
  * @Date: 2019-12-19 14:06:28
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 16:02:11
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-15 21:05:55
  */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';

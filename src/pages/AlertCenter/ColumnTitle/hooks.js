@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-15 19:38:32
+ * @LastEditTime : 2020-01-15 20:03:28
  */
 import { useState } from 'react';
 
@@ -31,18 +31,13 @@ export function useColumnFilter({
   }
 
   function fetchTableList(params = {}, dataTable = tableName) {
-    const { isReset, ...rest } = params;
     dispatch({
       type: actionType,
       payload: {
-        ...rest,
+        ...params,
         dataTable,
       },
     });
-
-    if (isReset) {
-      clearFilter();
-    }
   }
 
   // filter methods

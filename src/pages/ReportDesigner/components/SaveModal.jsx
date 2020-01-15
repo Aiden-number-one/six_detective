@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-12 15:09:07
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 10:55:44
+ * @LastEditTime : 2020-01-15 20:33:36
  */
 
 import React from 'react';
@@ -27,13 +27,13 @@ export default React.memo(
           const { form, saveDrawDisplay, saveReportTemplate, dispatch } = this.props;
           form.validateFields(async (err, fieldsValue) => {
             if (err) return;
+            saveDrawDisplay(false);
             form.resetFields();
             await dispatch({
               type: 'reportDesigner/modifyTemplateArea',
               payload: {},
             });
             saveReportTemplate(fieldsValue);
-            saveDrawDisplay(false);
           });
         };
 

@@ -96,13 +96,22 @@ function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, tot
         </Row>
         {Object.keys(location.query).length > 0 && (
           <Alert
-            banner
-            showIcon
             closable
             type="info"
-            message={`Query Condition：${Object.keys(location.query)}`}
-            style={{ marginBottom: 10 }}
+            closeText="Clear"
             onClose={handleCloseMsg}
+            message={
+              <>
+                <Icon type="exclamation-circle" theme="filled" />
+                Query Condition：
+                {Object.keys(location.query).map((w, index) => (
+                  <>
+                    {index > 0 && ', '}
+                    <em key={w}>{w}</em>
+                  </>
+                ))}
+              </>
+            }
           />
         )}
         <Table
