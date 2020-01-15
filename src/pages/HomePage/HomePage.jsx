@@ -688,7 +688,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -749,7 +749,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -808,7 +808,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -869,7 +869,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -933,7 +933,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -997,7 +997,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -1060,7 +1060,7 @@ export default class HomePage extends PureComponent {
       .color('gender')
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -1124,7 +1124,7 @@ export default class HomePage extends PureComponent {
       .color('gender', ['#F4394E'])
       .shape('liquid-fill-gauge')
       .style({
-        lineWidth: 1,
+        lineWidth: 1.5,
         opacity: 0.75,
       });
     data.forEach(row => {
@@ -1149,7 +1149,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Alter ALL条形图
   renderAlterAllChart = data => {
-    const { startDate, endDate } = this.state;
+    // const { startDate, endDate } = this.state;
     // Alter ALL 的条形图
     let alterAllChart;
     if (this.state.alterAllChart) {
@@ -1339,7 +1339,7 @@ export default class HomePage extends PureComponent {
 
   // 渲染Alter Personal条形图
   renderAlterPerChart = () => {
-    const { startDate, endDate } = this.state;
+    // const { startDate, endDate } = this.state;
     const { perAlertData } = this.props;
     let alterPersonalChart;
     if (this.state.alterPersonalChart) {
