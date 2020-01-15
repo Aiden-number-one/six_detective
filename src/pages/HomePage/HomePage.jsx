@@ -1822,7 +1822,7 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           // const alertStatusDesc = clickData._origin.label;
           router.push(
-            `/homepage/Approval-Process-Center/My?owner=${alertOwnerId}&tradeDate=${this.state.proStartDate},${this.state.proEndDate}`,
+            `/homepage/Approval-Process-Center/my?owner=${alertOwnerId}&tradeDate=${this.state.proStartDate},${this.state.proEndDate}`,
           );
         }
       });
