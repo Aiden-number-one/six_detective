@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:24
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 19:28:16
+ * @LastEditTime : 2020-01-16 20:04:02
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message, Select } from 'antd';
@@ -23,7 +23,7 @@ class FormUser extends Component {
     const { groupMenuInfo, typeOptions } = this.props;
     return (
       <Fragment>
-        <Form>
+        <Form className="text-area">
           <Form.Item
             label={formatMessage({ id: 'systemManagement.template.templateName' })}
             labelCol={{ span: 4 }}

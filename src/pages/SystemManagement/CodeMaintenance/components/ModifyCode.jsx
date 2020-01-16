@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:15:30
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 19:30:35
+ * @LastEditTime : 2020-01-16 19:53:04
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -21,7 +21,7 @@ class FormUser extends Component {
     const { codeId, updateCodeItemParams } = this.props;
     return (
       <Fragment>
-        <Form>
+        <Form className="text-area">
           <Form.Item
             label={formatMessage({ id: 'systemManagement.codeMaintenance.codeID' })}
             labelCol={{ span: 4 }}
