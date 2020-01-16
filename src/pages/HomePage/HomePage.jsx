@@ -3426,7 +3426,9 @@ export default class HomePage extends PureComponent {
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
                                   {item.alertTime &&
-                                    moment(item.alertTime, timestampFormat).format(timestampFormat)}
+                                    moment(item.alertTime, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -3452,13 +3454,18 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span
-                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
-                                >
-                                  {item.owner &&
-                                    item.owner.match(/[A-Z]/g) &&
-                                    item.owner.match(/[A-Z]/g).join('')}
-                                </span>
+                                {item.owner && (
+                                  <span
+                                    className={classNames(
+                                      styles.user,
+                                      styles[colorMap[item.owner]],
+                                    )}
+                                  >
+                                    {item.owner &&
+                                      item.owner.match(/[A-Z]/g) &&
+                                      item.owner.match(/[A-Z]/g).join('')}
+                                  </span>
+                                )}
                                 <span className={styles.date}>
                                   {item.updateDate &&
                                     moment(item.updateDate).format(timestampFormat)}
@@ -3996,7 +4003,9 @@ export default class HomePage extends PureComponent {
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
                                   {item.alertTime &&
-                                    moment(item.alertTime, timestampFormat).format(timestampFormat)}
+                                    moment(item.alertTime, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -4022,13 +4031,18 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span
-                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
-                                >
-                                  {item.owner &&
-                                    item.owner.match(/[A-Z]/g) &&
-                                    item.owner.match(/[A-Z]/g).join('')}
-                                </span>
+                                {item.owner && (
+                                  <span
+                                    className={classNames(
+                                      styles.user,
+                                      styles[colorMap[item.owner]],
+                                    )}
+                                  >
+                                    {item.owner &&
+                                      item.owner.match(/[A-Z]/g) &&
+                                      item.owner.match(/[A-Z]/g).join('')}
+                                  </span>
+                                )}
                                 <span className={styles.date}>
                                   {item.updateDate &&
                                     moment(item.updateDate).format(timestampFormat)}

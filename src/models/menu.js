@@ -2,7 +2,7 @@
  * @Description: menu modal
  * @Author: mus
  * @Date: 2019-09-19 17:03:33
- * @LastEditTime : 2020-01-16 09:46:52
+ * @LastEditTime : 2020-01-16 15:21:12
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -22,8 +22,12 @@ export default {
     alertCount: 0,
   },
   effects: {
-    *getMenuData({ payload, callback }, { call, put }) {
+    *getMenuData({ payload, callback, errorFn }, { call, put }) {
       const response = yield call(getMenu, { param: payload, version: 'v2.0' });
+      if (response.bcjson.flag !== '1') {
+        if (errorFn) errorFn();
+        return;
+      }
       const items = response.bcjson.items || [];
       let menuData = geneMenuData(items);
       menuData = menuData.filter(element => !element.menuid.includes('btn'));
@@ -51,8 +55,12 @@ export default {
       console.log('geneMenuData(newItems)===', geneMenuData(newItems));
       callback(geneMenuData(newItems), newItems[0].menu);
     },
-    *getAdminMenuData({ payload, callback }, { call, put }) {
+    *getAdminMenuData({ payload, callback, errorFn }, { call, put }) {
       const response = yield call(getAdminMenu, { param: payload, version: 'v2.0' });
+      if (response.bcjson.flag !== '1') {
+        if (errorFn) errorFn();
+        return;
+      }
       const items = [{ menu: null }];
       items[0].menu = Object.assign([], response.bcjson.items);
       const menuData = geneMenuData(items);
