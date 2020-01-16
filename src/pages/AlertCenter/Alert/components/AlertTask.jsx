@@ -11,7 +11,7 @@ import AlertTaskModal from './AlertTaskModal';
 export const TaskBtn = ({ task }) => {
   const localUserName = localStorage.getItem('loginName');
   const isDisabled = !task.USER_NAME || localUserName !== task.USER_NAME;
-  const route = task.TASK_STATUS === 'A' ? 'history' : 'my';
+  const route = ['A', 'T'].includes(task.TASK_STATUS) ? 'history' : 'my';
 
   return (
     <Link
