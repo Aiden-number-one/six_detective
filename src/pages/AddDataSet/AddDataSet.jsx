@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-14 18:07:45
+ * @LastEditTime : 2020-01-16 18:48:52
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -545,7 +545,7 @@ class AddDataSet extends PureComponent {
                       this.isSaveOther = false;
                       this.toggleModal('save');
                     } else {
-                      message.warning(`Please input ${datasetType}`);
+                      message.warning(`${datasetType} is missing`);
                     }
                   }}
                 >
@@ -561,7 +561,7 @@ class AddDataSet extends PureComponent {
                       this.isSaveOther = true;
                       this.toggleModal('save');
                     } else {
-                      message.warning(`Please input ${datasetType}`);
+                      message.warning(`${datasetType} is missing`);
                     }
                   }}
                 >
@@ -696,7 +696,7 @@ class AddDataSet extends PureComponent {
                             });
                             // }
                           } else {
-                            message.warning(`Please Input ${datasetType}`);
+                            message.warning(`${datasetType} is missing`);
                           }
                         }}
                       >

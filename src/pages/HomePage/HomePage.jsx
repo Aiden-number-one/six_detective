@@ -670,7 +670,7 @@ export default class HomePage extends PureComponent {
       {
         gender: 'a',
         value:
-          allAlertCount === 0 ? 0 : Number((allClaimAlertCount / allAlertCount).toFixed(2)) * 100,
+          allAlertCount === 0 ? 0 : Number((allClaimAlertCount / allAlertCount).toFixed(4)) * 100,
       },
     ];
     otherChart1.source(data, {
@@ -698,7 +698,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -731,7 +731,7 @@ export default class HomePage extends PureComponent {
         value:
           allAlertCount === 0
             ? 0
-            : Number((allProcessingAlertCount / allAlertCount).toFixed(2)) * 100,
+            : Number((allProcessingAlertCount / allAlertCount).toFixed(4)) * 100,
       },
     ];
     otherChart2.source(data, {
@@ -759,7 +759,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -790,7 +790,7 @@ export default class HomePage extends PureComponent {
       {
         gender: '',
         value:
-          allAlertCount === 0 ? 0 : Number((perClaimAlertCount / allAlertCount).toFixed(2)) * 100,
+          allAlertCount === 0 ? 0 : Number((perClaimAlertCount / allAlertCount).toFixed(4)) * 100,
       },
     ];
     otherChart3.source(data, {
@@ -818,7 +818,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -851,7 +851,7 @@ export default class HomePage extends PureComponent {
         value:
           allAlertCount === 0
             ? 0
-            : Number((perProcessingAlertCount / allAlertCount).toFixed(2)) * 100,
+            : Number((perProcessingAlertCount / allAlertCount).toFixed(4)) * 100,
       },
     ];
     otherChart4.source(data, {
@@ -879,7 +879,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -909,7 +909,7 @@ export default class HomePage extends PureComponent {
     let num = 0;
     if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
-        Number((allApprovalData[0].allClaimedNum / allApprovalData[0].allTotalNum).toFixed(2)) *
+        Number((allApprovalData[0].allClaimedNum / allApprovalData[0].allTotalNum).toFixed(4)) *
         100;
     }
     const data = [
@@ -943,7 +943,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -973,7 +973,7 @@ export default class HomePage extends PureComponent {
     let num = 0;
     if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
-        Number((allApprovalData[0].allProcessingNum / allApprovalData[0].allTotalNum).toFixed(2)) *
+        Number((allApprovalData[0].allProcessingNum / allApprovalData[0].allTotalNum).toFixed(4)) *
         100;
     }
     const data = [
@@ -1007,7 +1007,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -1037,7 +1037,7 @@ export default class HomePage extends PureComponent {
     let num = 0;
     if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
-        Number((perApprovalData[0].myClaimedNum / perApprovalData[0].allTotalNum).toFixed(2)) * 100;
+        Number((perApprovalData[0].myClaimedNum / perApprovalData[0].allTotalNum).toFixed(4)) * 100;
     }
     const data = [
       {
@@ -1070,7 +1070,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -1100,7 +1100,7 @@ export default class HomePage extends PureComponent {
     let num = 0;
     if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
-        Number((perApprovalData[0].myProcessingNum / perApprovalData[0].allTotalNum).toFixed(2)) *
+        Number((perApprovalData[0].myProcessingNum / perApprovalData[0].allTotalNum).toFixed(4)) *
         100;
     }
     const data = [
@@ -1134,7 +1134,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
