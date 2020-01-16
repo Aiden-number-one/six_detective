@@ -92,10 +92,10 @@ export function CaCodeTaskItem({
       <GrDescriptions.Item label="Is CA Code? *">{isCACodeMap[+IS_CA_CODE]}</GrDescriptions.Item>
       <GrDescriptions.Item label="Original Product Code *">{CA_PRODUCT_CODE}</GrDescriptions.Item>
       <GrDescriptions.Item label="Effective Date *">
-        {moment(EFFECTIVE_DATE).format(dateFormat)}
+        {EFFECTIVE_DATE ? moment(EFFECTIVE_DATE).format(dateFormat) : ''}
       </GrDescriptions.Item>
       <GrDescriptions.Item label="Expiry Date *">
-        {moment(EXPIRY_DATE).format(dateFormat)}
+        {EXPIRY_DATE ? moment(EXPIRY_DATE).format(dateFormat) : ''}
       </GrDescriptions.Item>
       <GrDescriptions.Item label="Remark *">{REMARK}</GrDescriptions.Item>
     </GrDescriptions>

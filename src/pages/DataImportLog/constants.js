@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 18:53:34
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-13 19:15:58
+ * @LastEditTime : 2020-01-16 15:58:47
  */
 import moment from 'moment';
 
@@ -34,6 +34,9 @@ export const channelMap = {
 export const defaultPage = 1;
 export const defaultPageSize = 10;
 export const pageSizeOptions = ['10', '20', '50', '100'];
+
+export const rawDateFormat = 'YYYYMMDD';
+export const rawTimestampFormat = 'YYYYMMDDHHmmss';
 
 export const reqFormat = 'YYYYMMDD';
 export const dateFormat = 'DD-MMM-YYYY';

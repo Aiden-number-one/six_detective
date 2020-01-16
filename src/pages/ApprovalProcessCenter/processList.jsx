@@ -67,7 +67,7 @@ function TaskBtn({
 }) {
   return (
     <Row>
-      <Col span={24} align="right" className={styles.taskBtnBox}>
+      <Col span={24} align="right">
         <Search
           key="search"
           placeholder="search"
@@ -175,10 +175,12 @@ function ProcessList({
     }
     if (tradeDate) {
       const [start, end] = tradeDate.split(',');
+      const startResult = `${start}000000`;
+      const endResult = `${end}235959`;
       params = [
         ...params,
-        { column: 'updateDate', value: start, condition: '4' },
-        { column: 'updateDate', value: end, condition: '6' },
+        { column: 'updateDate', value: startResult, condition: '4' },
+        { column: 'updateDate', value: endResult, condition: '6' },
       ];
     }
     fetchTableList(
@@ -389,7 +391,7 @@ function ProcessList({
   }
 
   function handleCloseMsg() {
-    router.replace('/homepage/Approval-Process-Center/all');
+    router.replace('/homepage/Approval-Process-Center');
   }
 
   return (
@@ -427,7 +429,7 @@ function ProcessList({
           <Col span={10}>
             <TabBtn selectedCurrentTask={selectedCurrentTask} />
           </Col>
-          <Col span={14} align="right">
+          <Col span={14} align="right" className={styles.taskBtnBox}>
             <TaskBtn
               selectedKeys={selectedKeys}
               selectedCurrentTask={selectedCurrentTask}
@@ -455,6 +457,7 @@ function ProcessList({
       )}
       <Table
         border
+        className={styles.tableBox}
         dataSource={tasks}
         rowKey="taskCode"
         loading={loading[actionType]}
@@ -468,7 +471,7 @@ function ProcessList({
         pagination={{
           total,
           showSizeChanger: true,
-          current: currentPage,
+          current: +currentPage,
           showTotal() {
             return `Total ${total} items`;
           },
@@ -501,7 +504,7 @@ function ProcessList({
           align="left"
           dataIndex="classification"
           title={<ColumnTitle {...getTitleProps('classification')}>Classification</ColumnTitle>}
-          width="19%"
+          width="17%"
         />
         <Column
           ellipsis
@@ -510,26 +513,32 @@ function ProcessList({
           width="15%"
           title={<ColumnTitle {...getTitleProps('submitterName')}>Submitter Name</ColumnTitle>}
         />
-        <Column ellipsis align="left" dataIndex="details" title="Details" width="14%" />
+        <Column
+          ellipsis
+          align="left"
+          dataIndex="details"
+          title={<ColumnTitle {...getTitleProps('details')}>Details</ColumnTitle>}
+          width="14%"
+        />
         <Column
           align="center"
           dataIndex="updateDate"
-          title="Generation Date"
+          title={<ColumnTitle {...getTitleProps('updateDate')}>Generation Date</ColumnTitle>}
           render={(text, record) =>
-            record.updateDate && moment(record.updateDate).format(timestampFormat)
+            record.updateDate && moment(record.updateDate, 'YYYYMMDDHHmmss').format(timestampFormat)
           }
           width="15%"
         />
         <Column
           dataIndex="owner"
           align="center"
-          width="9%"
+          width="10%"
           title={<ColumnTitle {...getTitleProps('owner')}>Owner</ColumnTitle>}
         />
         <Column
           align="center"
           dataIndex="statusDesc"
-          width="9%"
+          width="10%"
           title={<ColumnTitle {...getTitleProps('statusDesc')}>Status</ColumnTitle>}
         />
         {match.params.type !== 'history' ? (

@@ -102,10 +102,6 @@
     .ant-typography {
       margin-bottom: 0;
     }
-    .antd-pro-pages-alert-center-index-btns button:disabled {
-      font-size: 12px;
-      font-family: Avenir, sans-serif;
-    }
     // .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
     //   box-shadow: unset;
     // }
@@ -130,15 +126,65 @@
       }
     }
   }
-  .btns {
-    .btn-icon {
-      color: #464c51 !important;
-      font-size: 14px !important;
+  .taskBtnBox {
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      margin-right: 10px;
+      padding: 0 14px;
+      font-size: 12px;
+      font-family: Avenir, sans-serif;
       vertical-align: middle;
+      background-color: #fff;
+      border: 1px solid rgba(151, 154, 168, 1);
+      border-radius: 0;
+      &.loading {
+        pointer-events: none;
+      }
+      &:focus {
+        outline: none;
+      }
+      &:last-child {
+        margin-right: 0;
+      }
+      &:disabled {
+        color: unset;
+        background-color: unset;
+        border: 1px solid rgba(151, 154, 168, 1);
+        &:hover {
+          color: unset;
+          background-color: unset;
+          border-color: unset;
+          cursor: not-allowed;
+        }
+      }
+      &:hover {
+        color: #fff;
+        background-color: #0d87d4;
+        border-color: #0d87d4;
+        cursor: pointer;
+      }
+    }
+    .info {
+      margin-right: 10px;
+      color: #464c51;
+      font-weight: 500;
+      text-decoration: underline;
+      &:hover {
+        color: #009cff;
+      }
+    }
+  }
+  .tableBox {
+    .btn-icon {
+      margin-right: 4px;
+      font-size: 12px;
     }
     .icon {
       color: rgba(188, 198, 204, 1);
-      font-size: 13px;
+      font-size: 14px;
       vertical-align: middle;
       cursor: pointer;
       &:nth-child(2) {
@@ -307,9 +353,14 @@
       background-color: #fff;
     }
     .LifecycleBox {
-      height: 370px;
-      padding: 10px 18px;
+      height: 368px;
+      padding: 10px 10px;
       overflow-y: auto;
+      :global {
+        .ant-row {
+          margin-bottom: 4px;
+        }
+      }
     }
     :global {
       .ant-tabs .ant-tabs-bar .ant-tabs-nav .ant-tabs-tab {
@@ -321,11 +372,42 @@
     }
 
     .comment-list {
-      min-height: 213px;
-      max-height: 300px;
+      height: 213px;
       margin: 0 0 18px;
-      padding: 0 18px;
+      padding: 10px 10px;
       overflow-y: auto;
+      li {
+        padding: 4px 0;
+        .attachmentsBox {
+          position: absolute;
+          right: 12px;
+          color: #464c51;
+          .num {
+            font-size: 11px;
+          }
+        }
+        .attachmentsTimeBox {
+          position: relative;
+          .time {
+            position: absolute;
+            top: -18px;
+            right: 22px;
+            color: #7f91a4;
+          }
+        }
+      }
+
+      :global {
+        .ant-typography {
+          position: relative;
+          width: 100%;
+          height: 34px;
+          padding-right: 38px;
+          line-height: 17px;
+          word-break: break-all;
+          cursor: pointer;
+        }
+      }
     }
     .loading-more {
       text-align: center;

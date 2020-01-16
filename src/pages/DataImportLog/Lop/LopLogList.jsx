@@ -3,11 +3,22 @@ import { Table, Icon, Descriptions } from 'antd';
 import moment from 'moment';
 import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
-import { statusMap } from '../Market/MarketLogList';
 import { dateFormat, timestampFormat, pageSizeOptions } from '../constants';
 import styles from '../index.less';
 
 const { Column } = Table;
+
+const IconStatus = ({ type, color, des }) => (
+  <Icon type={type} style={{ color, fontSize: 16 }} title={des} />
+);
+
+export const statusMap = {
+  0: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
+  1: ({ des }) => <IconStatus type="loading" color="#009cff" des={des} />,
+  2: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
+  8: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
+  9: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
+};
 
 const submissionChannelMap = {
   A: 'ECP',
@@ -50,7 +61,7 @@ export default function({
         },
       }}
       expandedRowRender={record => (
-        <Descriptions column={2}>
+        <Descriptions column={2} size="small">
           <Descriptions.Item label={<FormattedMessage id="data-import.submission-channel" />}>
             {submissionChannelMap[record.submissionChannel]}
           </Descriptions.Item>
@@ -67,7 +78,7 @@ export default function({
       )}
     >
       <Column
-        width="10%"
+        width={120}
         align="center"
         dataIndex="tradeDate"
         title={<FormattedMessage id="data-import.trade-date" />}
@@ -90,10 +101,10 @@ export default function({
       <Column
         width="10%"
         align="center"
-        dataIndex="submissionStatus"
+        dataIndex="processingStage"
         title={<FormattedMessage id="data-import.submission-status" />}
         render={(text, record) => {
-          const des = record.submissionStatusDesc;
+          const des = record.processingStageDesc;
           if ([0, 1, 2, 8, 9].includes(+text)) {
             const Status = statusMap[+text];
             return <Status des={des} />;
@@ -103,7 +114,7 @@ export default function({
       />
       <Column
         align="center"
-        dataIndex="processingStatusDesc"
+        dataIndex="processingStageDesc"
         title={<FormattedMessage id="data-import.lop.processing-stage" />}
       />
       <Column

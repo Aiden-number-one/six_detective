@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from 'antd';
 import moment from 'moment';
-import { dateFormat, timestampFormat } from '@/pages/DataImportLog/constants';
+import { dateFormat, timestampFormat, rawTimestampFormat } from '@/pages/DataImportLog/constants';
 import { GrDescriptions } from './index';
 
 const { Paragraph } = Typography;
@@ -30,7 +30,7 @@ export default function({
         </GrDescriptions.Item>
       )}
       <GrDescriptions.Item label="Alert Timestamp">
-        {moment(alertTime, timestampFormat).format(timestampFormat)}
+        {moment(alertTime, rawTimestampFormat).format(timestampFormat)}
       </GrDescriptions.Item>
       {submissionTime && (
         <GrDescriptions.Item label="Submission Time">
