@@ -3549,8 +3549,9 @@ export default class HomePage extends PureComponent {
                             <span className={styles.icon}>
                               <IconFont type="icon-sound" />
                             </span>
-                            {item.informationDetail &&
-                              `${item.informationDetail.substring(0, 70)}...`}
+                            {item.informationDetail && item.informationDetail.length > 70
+                              ? `${item.informationDetail.substring(0, 70)}...`
+                              : item.informationDetail}
                           </span>
                           <span className={styles.date}>
                             {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}
@@ -4129,8 +4130,9 @@ export default class HomePage extends PureComponent {
                             <span className={styles.icon}>
                               <IconFont type="icon-sound" />
                             </span>
-                            {item.informationDetail &&
-                              `${item.informationDetail.substring(0, 70)}...`}
+                            {item.informationDetail && item.informationDetail.length > 70
+                              ? `${item.informationDetail.substring(0, 70)}...`
+                              : item.informationDetail}
                           </span>
                           <span className={styles.date}>
                             {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}
