@@ -30,7 +30,7 @@ function AlertAttachmentPop({ attachments, onDownloadAll }) {
     >
       <span style={{ cursor: 'pointer' }}>
         <IconFont type="iconbiezhen" />
-        <em>{attachments.length}</em>
+        <em className={styles.num}>{attachments.length}</em>
       </span>
     </Popover>
   );
@@ -42,7 +42,7 @@ export default function({
 }) {
   const attachments = files ? files.split(',') : [];
   return (
-    <li key={id}>
+    <li key={id} className={styles['comment-item-container']}>
       <Row type="flex">
         <Paragraph title={`(${user})${content}`} ellipsis={{ rows: 2, expandable: false }}>
           ({user}){content.substring(0, 66)}
