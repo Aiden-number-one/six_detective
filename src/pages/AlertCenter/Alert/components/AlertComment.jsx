@@ -6,7 +6,6 @@ import IconFont from '@/components/IconFont';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import { AttachmentList } from './AlertDownAttachments';
 import styles from '@/pages/AlertCenter/index.less';
-import approvalStyles from '@/pages/ApprovalProcessCenter/index.less';
 
 const { Paragraph } = Typography;
 
@@ -50,13 +49,13 @@ export default function({
           {content.length > 66 ? '...' : ''}
         </Paragraph>
         {attachments.length > 0 && (
-          <Col className={approvalStyles.attachmentsBox}>
+          <Col className={styles.attachmentsBox}>
             <AlertAttachmentPop attachments={attachments} onDownloadAll={onDownloadAll} />
           </Col>
         )}
       </Row>
-      <Row className={approvalStyles.attachmentsTimeBox}>
-        <Col className={approvalStyles.time}>{moment(time).format(timestampFormat)}</Col>
+      <Row className={styles.attachmentsTimeBox}>
+        <Col className={styles.time}>{moment(time).format(timestampFormat)}</Col>
       </Row>
     </li>
   );
