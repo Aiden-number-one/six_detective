@@ -236,7 +236,7 @@ const BasicLayout = props => {
             trigger="click"
             overlayClassName="userinfo"
           >
-            <Icon type="caret-down" />
+            <IconFont type="iconicon_usercenterarrowx" />
           </Popover>
         </div>
       </div>

@@ -280,7 +280,7 @@ function ProcessList({
         const { curColumn, sort, conditions } = getTitleProps();
         fetchTableList(
           {
-            page: currentPage,
+            page: '1',
             pageSize: currentPageSize,
             currentColumn: curColumn,
             sort,
@@ -329,7 +329,7 @@ function ProcessList({
         const { curColumn, sort, conditions } = getTitleProps();
         fetchTableList(
           {
-            page: currentPage,
+            page: '1',
             pageSize: currentPageSize,
             currentColumn: curColumn,
             sort,
