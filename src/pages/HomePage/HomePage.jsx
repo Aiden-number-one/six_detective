@@ -138,8 +138,8 @@ export default class HomePage extends PureComponent {
       payload: {
         pageNumber: '1',
         pageSize: '4',
-        type: 'all',
-        taskCode: '',
+        dataTable: 'SLOP_BIZ.V_ALL_TASK',
+        conditions: [],
       },
     });
     // 获取快捷菜单
@@ -282,8 +282,8 @@ export default class HomePage extends PureComponent {
         payload: {
           pageNumber: '1',
           pageSize: '4',
-          type: 'all',
-          taskCode: '',
+          dataTable: 'SLOP_BIZ.V_ALL_TASK',
+          conditions: [],
         },
       });
       // 获取快捷菜单
@@ -3468,7 +3468,9 @@ export default class HomePage extends PureComponent {
                                 )}
                                 <span className={styles.date}>
                                   {item.updateDate &&
-                                    moment(item.updateDate).format(timestampFormat)}
+                                    moment(item.updateDate, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -4045,7 +4047,9 @@ export default class HomePage extends PureComponent {
                                 )}
                                 <span className={styles.date}>
                                   {item.updateDate &&
-                                    moment(item.updateDate).format(timestampFormat)}
+                                    moment(item.updateDate, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}

@@ -2,12 +2,12 @@
  * @Description: 首页相关接口
  * @Author: lan
  * @Date: 2019-11-28 14:18:22
- * @LastEditTime : 2020-01-13 19:17:08
+ * @LastEditTime : 2020-01-16 16:06:07
  * @LastEditors  : lan
  */
 export default {
   getRefreshTime: 'get_system_config_list',
-  getAllTask: 'get_approval_task_list_page', // all Task
+  getAllTask: 'get_table_page_list', // all Task
   getAllApproval: 'get_all_approval_process_summary', // all approval
   getPerApproval: 'get_personal_approval_process_summary', // all approval
   getReportFiles: 'get_late_and_outstanding_report_file_count_by_trade_date',
