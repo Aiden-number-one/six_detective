@@ -54,7 +54,7 @@ class SecurityLayout extends React.Component {
                   loading: false,
                 });
               } else {
-                router.push('/404');
+                // router.push('/404');
                 this.setState({
                   loading: false,
                 });
