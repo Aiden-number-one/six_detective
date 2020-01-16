@@ -696,7 +696,7 @@ class ToolBar extends Component {
                         borderBottom: `3px solid ${backgroundColor}`,
                       }}
                     >
-                      <IconFont type="iconic_format_color_fill1" />
+                      <IconFont style={{ fontSize: 16 }} type="iconiconic_format_color_fill1" />
                     </Button>
                     <Dropdown
                       overlay={
@@ -733,7 +733,7 @@ class ToolBar extends Component {
                         borderBottom: `3px solid ${fontColor}`,
                       }}
                     >
-                      <IconFont type="iconic_format_color_text_px" />
+                      <IconFont style={{ fontSize: 12 }} type="iconiconic_format_color_text_px1" />
                     </Button>
                     <Dropdown
                       overlay={

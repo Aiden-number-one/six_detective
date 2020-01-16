@@ -1524,7 +1524,7 @@ export default class HomePage extends PureComponent {
       let count = 0;
       userInfo.forEach(item => {
         ApprovalAll.push({
-          label: item.userId,
+          label: item.userName,
           type: 'Claimed',
           value: item.userClaimedNum,
         });
@@ -1534,7 +1534,7 @@ export default class HomePage extends PureComponent {
       });
       userInfo.forEach(item => {
         ApprovalAll.push({
-          label: item.userId,
+          label: item.userName,
           type: 'Processing',
           value: item.userProcessingNum,
         });
