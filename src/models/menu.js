@@ -2,7 +2,7 @@
  * @Description: menu modal
  * @Author: mus
  * @Date: 2019-09-19 17:03:33
- * @LastEditTime : 2020-01-15 21:40:14
+ * @LastEditTime : 2020-01-16 09:46:52
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -30,7 +30,7 @@ export default {
       console.log('menuData=====', menuData);
       yield put({
         type: 'save',
-        payload: menuData,
+        payload: geneMenuData(menuData),
       });
       const newItems = Object.assign([], items);
       const newMenu = Object.assign([], newItems[0].menu);

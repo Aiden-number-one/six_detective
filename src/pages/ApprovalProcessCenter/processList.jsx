@@ -67,7 +67,7 @@ function TaskBtn({
 }) {
   return (
     <Row>
-      <Col span={24} align="right" className={styles.taskBtnBox}>
+      <Col span={24} align="right">
         <Search
           key="search"
           placeholder="search"
@@ -427,7 +427,7 @@ function ProcessList({
           <Col span={10}>
             <TabBtn selectedCurrentTask={selectedCurrentTask} />
           </Col>
-          <Col span={14} align="right">
+          <Col span={14} align="right" className={styles.taskBtnBox}>
             <TaskBtn
               selectedKeys={selectedKeys}
               selectedCurrentTask={selectedCurrentTask}

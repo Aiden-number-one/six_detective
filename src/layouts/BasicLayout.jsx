@@ -20,7 +20,6 @@ import styles from './BasicLayout.less';
 import { setStore } from '@/utils/store';
 // import globalStyles from '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
-import { flatteningTree } from '@/utils/utils';
 
 /**
  * use Authorized check all menu item
@@ -77,26 +76,6 @@ const BasicLayout = props => {
         setNewMenuData(m);
         console.log('location.pathname, menuList=========', props.location.pathname, menuList);
         console.log('menuData111====', m, menuData);
-        if (m.length <= 0) {
-          message.warning('The menu is empty');
-          dispatch({
-            type: 'login/logout',
-          });
-        }
-        if (!menuList.some(element => element.page.includes(props.location.pathname))) {
-          dispatch({
-            type: 'menu/getAdminMenuData',
-            payload: {},
-            callback: adminList => {
-              console.log('adminList=======', adminList);
-              if (adminList.some(item => item.page.includes(props.location.pathname))) {
-                router.push('/no-access');
-              } else {
-                router.push('/404');
-              }
-            },
-          });
-        }
       },
     });
   }, []);
