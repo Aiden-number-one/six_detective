@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-15 20:03:28
+ * @LastEditTime : 2020-01-16 20:57:09
  */
 import { useState } from 'react';
 
@@ -12,7 +12,6 @@ export const actionType = 'global/fetchTableList';
 
 export function useColumnFilter({
   dispatch,
-  page,
   pageSize,
   reset,
   tableName = 'SLOP_BIZ.V_ALERT_CENTER',
@@ -48,7 +47,7 @@ export function useColumnFilter({
       reset();
     }
     fetchTableList({
-      page,
+      page: 1, // go back first page
       pageSize,
       currentColumn: tableColumn,
       conditions: updatedConditions,
@@ -65,7 +64,7 @@ export function useColumnFilter({
     }
     fetchTableList({
       sort,
-      page,
+      page: 1,
       pageSize,
       conditions,
       currentColumn: tableColumn,

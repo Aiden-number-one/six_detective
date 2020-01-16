@@ -31,12 +31,14 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   const [selectedRows, setSelectedRows] = useState([]);
   const [isBatchAction, setBatchAction] = useState(false);
   const [isDiscontinue, setDiscontinue] = useState(false);
+
+  const queryParams = Object.keys(location.query);
   // header filter
   const { fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
     dispatch,
     page: alertPage,
     pageSize: alertPageSize,
-    reset: Object.keys(location.query).length > 0 ? handleCloseMsg : null,
+    reset: queryParams.length > 0 ? handleCloseMsg : null,
   });
 
   const isAuth = useMemo(() => {
@@ -243,7 +245,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
           }}
           onExport={handleExport}
         />
-        {Object.keys(location.query).length > 0 && (
+        {queryParams.length > 0 && (
           <Alert
             closable
             type="info"
@@ -253,7 +255,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
               <>
                 <Icon type="exclamation-circle" theme="filled" />
                 Query Condition：
-                {Object.keys(location.query).map((w, index) => (
+                {queryParams.map((w, index) => (
                   <>
                     {index > 0 && ', '}
                     <em key={w}>{w}</em>

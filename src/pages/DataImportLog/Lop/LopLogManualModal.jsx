@@ -2,29 +2,38 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'umi/locale';
 import debounce from 'lodash/debounce';
 import { Drawer, Form, DatePicker, Input, Select, Upload, Icon, Button, Spin } from 'antd';
-import { SUBMISSION_REPORT, yesterday, dateFormat } from '../constants';
+import { SUBMISSION_REPORT, reqFormat, yesterday, dateFormat } from '../constants';
 import styles from '../index.less';
 
 const { Option } = Select;
 
-const isLt5M = size => size / 1024 / 1024 < 5;
+const isLt50M = size => size / 1024 / 1024 < 50;
 
 function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUpload }) {
   const [searchVal, setSearchVal] = useState('');
+  const [submitterPage, setSubmitterPage] = useState(1);
   const [submitterTotal, setSubmitterTotal] = useState(0);
   const [submitters, setSubmitters] = useState([]);
-  const [submitterPage, setSubmitterPage] = useState(1);
-  const [currentSubmitter, setSubmitter] = useState({});
 
-  const { getFieldDecorator, validateFields } = form;
+  const { getFieldDecorator, setFieldsValue, validateFields } = form;
 
   function handleClose() {
     form.resetFields();
-    setSubmitter({});
     setSubmitters([]);
     setSubmitterTotal(0);
     setSubmitterPage(1);
     onCancel();
+  }
+
+  async function handleFocus() {
+    if (!submitters.length) {
+      const { users, total } = await onSubmitter({
+        submitterCode: searchVal,
+        page: submitterPage,
+      });
+      setSubmitterTotal(total);
+      setSubmitters(users);
+    }
   }
 
   async function handleSearchSubmitterCode(value) {
@@ -44,6 +53,8 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
     e.stopPropagation();
     e.preventDefault();
     const { target } = e;
+    console.log(submitterTotal);
+    console.log(submitters);
     if (
       target.scrollTop + target.offsetHeight === target.scrollHeight &&
       submitters.length < submitterTotal
@@ -60,8 +71,11 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
   }
 
   function handleSubmitterCodeChange(value, option) {
-    setSubmitter(option.props.submitter);
+    setFieldsValue({
+      submitterName: option.props.submitter.submitterName,
+    });
   }
+
   function handleCommit() {
     validateFields(async (err, values) => {
       if (!err) {
@@ -72,7 +86,7 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
           const code = submitterCode.split('-')[1];
           const filename = items.relativeUrl;
           await onUpload({
-            tradeDate: tradeDate.format('YYYYMMDD'),
+            tradeDate: tradeDate.format(reqFormat),
             filename,
             submitterCode: code,
             ...rest,
@@ -106,7 +120,6 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.submitter-code" />}>
           {getFieldDecorator('submitterCode', {
-            initialValue: currentSubmitter.submitterCode,
             rules: [
               {
                 required: true,
@@ -118,10 +131,11 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
               showSearch
               showArrow={false}
               filterOption={false}
-              placeholder="please input submmitter code"
+              placeholder="please input submitter code"
               defaultActiveFirstOption={false}
               notFoundContent={loading['lop/fetchSubmitters'] ? <Spin size="small" /> : null}
               onChange={handleSubmitterCodeChange}
+              onFocus={handleFocus}
               onSearch={debounce(handleSearchSubmitterCode, 800)}
               onPopupScroll={handleSubmitterScroll}
             >
@@ -135,7 +149,6 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
         </Form.Item>
         <Form.Item label={<FormattedMessage id="data-import.submitter-name" />}>
           {getFieldDecorator('submitterName', {
-            initialValue: currentSubmitter.submitterName,
             rules: [
               {
                 required: true,
@@ -149,11 +162,11 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
             rules: [
               {
                 required: true,
-                message: 'Please select file-type!',
+                message: 'Please select file type!',
               },
             ],
           })(
-            <Select placeholder="please select file-type" allowClear>
+            <Select placeholder="please select file type" allowClear>
               {SUBMISSION_REPORT.map(report => (
                 <Option key={report}>{report}</Option>
               ))}
@@ -171,7 +184,7 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
                   }
                   if (value && value.length) {
                     const file = value[0];
-                    if (!isLt5M(file.size)) {
+                    if (!isLt50M(file.size)) {
                       return callback('file size must less than 5M');
                     }
                     if (file.error) {
@@ -194,7 +207,7 @@ function LopLogManualModal({ form, visible, loading, onSubmitter, onCancel, onUp
             <Upload
               accept=".xlsm,.xls,.xlsx,.pdf,application/msexcel"
               action="/upload?fileClass=ECP"
-              beforeUpload={file => isLt5M(file.size)}
+              beforeUpload={file => isLt50M(file.size)}
             >
               <Button>
                 <Icon type="upload" />

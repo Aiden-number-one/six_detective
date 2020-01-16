@@ -18,12 +18,14 @@ function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, tot
   const [info, setInfo] = useState(null);
   const [selectedKeys, setSelectedKeys] = useState([]);
 
+  const queryParams = Object.keys(location.query);
   // header filter
   const { fetchTableList, handlePageChange, getTitleProps } = useColumnFilter({
     dispatch,
     tableName: 'SLOP_BIZ.V_INFO',
     page: infoPage,
     pageSize: infoPageSize,
+    reset: queryParams.length > 0 ? handleCloseMsg : null,
   });
 
   const exportLoading = loading['alertCenter/exportInfos'];
@@ -94,7 +96,7 @@ function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, tot
             </button>
           </Col>
         </Row>
-        {Object.keys(location.query).length > 0 && (
+        {queryParams.length > 0 && (
           <Alert
             closable
             type="info"
@@ -104,7 +106,7 @@ function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, tot
               <>
                 <Icon type="exclamation-circle" theme="filled" />
                 Query Condition：
-                {Object.keys(location.query).map((w, index) => (
+                {queryParams.map((w, index) => (
                   <>
                     {index > 0 && ', '}
                     <em key={w}>{w}</em>
