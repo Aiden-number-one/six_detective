@@ -175,12 +175,12 @@ function ProcessList({
     }
     if (tradeDate) {
       const [start, end] = tradeDate.split(',');
-      const startResult = `${start}000000`;
-      const endResult = `${end}235959`;
+      // const startResult = `${start}000000`;
+      // const endResult = `${end}235959`;
       params = [
         ...params,
-        { column: 'updateDate', value: startResult, condition: '4' },
-        { column: 'updateDate', value: endResult, condition: '6' },
+        { column: 'updateDate', value: start, condition: '4' },
+        { column: 'updateDate', value: end, condition: '6' },
       ];
     }
     fetchTableList(
@@ -280,7 +280,7 @@ function ProcessList({
         const { curColumn, sort, conditions } = getTitleProps();
         fetchTableList(
           {
-            page: currentPage,
+            page: '1',
             pageSize: currentPageSize,
             currentColumn: curColumn,
             sort,
@@ -329,7 +329,7 @@ function ProcessList({
         const { curColumn, sort, conditions } = getTitleProps();
         fetchTableList(
           {
-            page: currentPage,
+            page: '1',
             pageSize: currentPageSize,
             currentColumn: curColumn,
             sort,
