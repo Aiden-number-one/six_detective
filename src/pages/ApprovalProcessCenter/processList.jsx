@@ -67,7 +67,7 @@ function TaskBtn({
 }) {
   return (
     <Row>
-      <Col span={24} align="right">
+      <Col span={24} align="right" className={styles.taskBtnBox}>
         <Search
           key="search"
           placeholder="search"
@@ -82,7 +82,7 @@ function TaskBtn({
               disabled={!selectedKeys.length}
               onClick={() => checkOwner(selectedKeys)}
             >
-              <IconFont type="iconqizhi" className={alertStyle['btn-icon']} />
+              <IconFont type="icon-claim-small" className={alertStyle['btn-icon']} />
               <FormattedMessage id="alert-center.claim" />
             </button>
             <button

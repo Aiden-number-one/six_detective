@@ -20,6 +20,7 @@ import styles from './BasicLayout.less';
 import { setStore } from '@/utils/store';
 // import globalStyles from '@/assets/css/index.less';
 import IconFont from '@/components/IconFont';
+import { flatteningTree } from '@/utils/utils';
 
 /**
  * use Authorized check all menu item
@@ -41,7 +42,16 @@ const footerRender = () => (
 );
 
 const BasicLayout = props => {
-  const { dispatch, children, settings, collapsed, menuData, taskCount, alertCount } = props;
+  const {
+    dispatch,
+    children,
+    settings,
+    collapsed,
+    menuData,
+    adminMenuData,
+    taskCount,
+    alertCount,
+  } = props;
 
   // console.log('props=========', props);
   /**
@@ -62,14 +72,29 @@ const BasicLayout = props => {
     // }
     dispatch({
       type: 'menu/getMenuData',
-      callback: m => {
+      callback: (m, menuList) => {
         // newMenuData = Object.assign([], menuData);
         setNewMenuData(m);
+        console.log('location.pathname, menuList=========', props.location.pathname, menuList);
         console.log('menuData111====', m, menuData);
         if (m.length <= 0) {
           message.warning('The menu is empty');
           dispatch({
             type: 'login/logout',
+          });
+        }
+        if (!menuList.some(element => element.page.includes(props.location.pathname))) {
+          dispatch({
+            type: 'menu/getAdminMenuData',
+            payload: {},
+            callback: adminList => {
+              console.log('adminList=======', adminList);
+              if (adminList.some(item => item.page.includes(props.location.pathname))) {
+                router.push('/no-access');
+              } else {
+                router.push('/404');
+              }
+            },
           });
         }
       },
@@ -331,6 +356,7 @@ export default connect(({ global, settings, menu }) => ({
   collapsed: global.collapsed,
   settings,
   menuData: menu.menuData,
+  adminMenuData: menu.adminMenuData,
   taskCount: menu.taskCount,
   alertCount: menu.alertCount,
 }))(BasicLayout);

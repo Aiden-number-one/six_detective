@@ -10,12 +10,10 @@
 }
 
 .title {
-  padding: 4px 10px;
+  padding: 4px 10px 4px 15px;
   color: #fff;
-  background-color: #10416c;
-  border-left: 4px solid #f4374c;
+  background-color: #0d87d4;
   .icon {
-    margin-right: 5px;
     font-size: 18px;
     vertical-align: bottom;
     cursor: pointer;
@@ -26,11 +24,11 @@
   .clear {
     cursor: pointer;
     &.disabled {
-      color: #999;
       cursor: default;
       pointer-events: none;
     }
     > .text {
+      margin-left: 4px;
       font-size: 12px;
       vertical-align: middle;
     }
@@ -39,8 +37,8 @@
 
 .content {
   position: relative;
-  padding: 16px 16px 50px;
-  border: 1px solid #10416c;
+  padding: 15px 15px 50px;
+  border: 1px solid #979aa8;
   .bottom-btns {
     position: absolute;
     right: 0;
@@ -49,7 +47,6 @@
     padding: 10px 16px;
     text-align: right;
     background-color: #fff;
-    border-top: 1px solid #e9e9e9;
     > button {
       width: auto;
       height: 24px;
@@ -66,7 +63,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #10416c;
+  border: 1px solid #979aa8;
   border-bottom: 0;
   > span {
     padding: 0 6px;
@@ -104,16 +101,16 @@
   height: 245px;
   overflow-y: auto;
   text-align: center;
-  border: 1px solid #10416c;
+  border: 1px solid #979aa8;
   .select {
     width: 90%;
   }
 }
 .checkbox {
-  border: 1px solid #10416c;
+  border: 1px solid #979aa8;
   .search {
     border: 0;
-    border-bottom: 1px solid #10416c;
+    border-bottom: 1px solid #979aa8;
     box-shadow: unset;
     &:focus,
     &:hover {
