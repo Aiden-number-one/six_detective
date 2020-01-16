@@ -389,7 +389,7 @@ function ProcessList({
   }
 
   function handleCloseMsg() {
-    router.replace('/homepage/Approval-Process-Center/all');
+    router.replace('/homepage/Approval-Process-Center');
   }
 
   return (
@@ -501,7 +501,7 @@ function ProcessList({
           align="left"
           dataIndex="classification"
           title={<ColumnTitle {...getTitleProps('classification')}>Classification</ColumnTitle>}
-          width="19%"
+          width="17%"
         />
         <Column
           ellipsis
@@ -510,11 +510,17 @@ function ProcessList({
           width="15%"
           title={<ColumnTitle {...getTitleProps('submitterName')}>Submitter Name</ColumnTitle>}
         />
-        <Column ellipsis align="left" dataIndex="details" title="Details" width="14%" />
+        <Column
+          ellipsis
+          align="left"
+          dataIndex="details"
+          title={<ColumnTitle {...getTitleProps('details')}>Details</ColumnTitle>}
+          width="14%"
+        />
         <Column
           align="center"
           dataIndex="updateDate"
-          title="Generation Date"
+          title={<ColumnTitle {...getTitleProps('updateDate')}>Generation Date</ColumnTitle>}
           render={(text, record) =>
             record.updateDate && moment(record.updateDate).format(timestampFormat)
           }
@@ -523,13 +529,13 @@ function ProcessList({
         <Column
           dataIndex="owner"
           align="center"
-          width="9%"
+          width="10%"
           title={<ColumnTitle {...getTitleProps('owner')}>Owner</ColumnTitle>}
         />
         <Column
           align="center"
           dataIndex="statusDesc"
-          width="9%"
+          width="10%"
           title={<ColumnTitle {...getTitleProps('statusDesc')}>Status</ColumnTitle>}
         />
         {match.params.type !== 'history' ? (
