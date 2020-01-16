@@ -166,6 +166,10 @@ export default props => {
                         initialValue: currentWidge.widgetDefault,
                       })(
                         <Select>
+                          mode=
+                          {(currentWidge.widgetType === 'selectmultiple' ||
+                            currentWidge.widgetType === 'checkbox') &&
+                            'multiple'}
                           {(
                             defaultValueDatasetType[
                               currentWidge.sourceType === 'dataset'

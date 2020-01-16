@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 15:06:33
+ * @LastEditTime : 2020-01-15 21:41:19
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -254,7 +254,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
           }
           expand = otherProps.expendDirection || 'Down';
           if (otherProps.dataSetting === 'sum') {
-            aggregate = otherProps.sumSetting;
+            aggregate = otherProps.sumSetting || 'sum';
             // 汇总的话为None
             expand = 'None';
           }
@@ -312,6 +312,7 @@ export function modifyTemplateAreaInside({
   value = {},
   position = 'A1',
   spreadsheetOtherProps = [],
+  deleteAll = false, // 是否清除全部
 }) {
   let newSpreadsheetOtherProps = [...spreadsheetOtherProps];
   const [rowIndex, colIndex] = getColIndexRowIndex(position);
@@ -334,6 +335,9 @@ export function modifyTemplateAreaInside({
   }
   const content = newSpreadsheetOtherProps[rowIndex][colIndex];
   newSpreadsheetOtherProps[rowIndex][colIndex] = { ...content, ...value };
+  if (deleteAll) {
+    newSpreadsheetOtherProps[rowIndex][colIndex] = {};
+  }
   return newSpreadsheetOtherProps;
 }
 
