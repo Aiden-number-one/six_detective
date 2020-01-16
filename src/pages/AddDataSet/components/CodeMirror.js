@@ -100,9 +100,16 @@ class CodeMirrorComponent extends Component {
         <Menu.Item key="1">Call</Menu.Item>
       </Menu>
     );
-    const placeHolder = `Please Input ${datasetType}, Support dynamic parameters, Parameter format is $[XXX]`
-      .replace('[', '{')
-      .replace(']', '}');
+    let placeHolder;
+    if (datasetType === 'SQL') {
+      placeHolder = `  Please Input ${datasetType}, Input $[abc] as a parameter, abc is a parameter name. For example: select * from table where id = $[abc]`
+        .replace('[', '{')
+        .replace(']', '}');
+    } else {
+      placeHolder = `  Please Input ${datasetType}, Input $[abc] as a parameter, abc is a parameter name. For example: call db2.api($[abc])`
+        .replace('[', '{')
+        .replace(']', '}');
+    }
     return connectDropTarget(
       <div
         style={{ position: 'relative' }}
@@ -119,9 +126,8 @@ class CodeMirrorComponent extends Component {
           <span
             style={{
               position: 'absolute',
-              left: 30,
+              left: 40,
               top: 5,
-              zIndex: 100,
               color: 'rgba(0, 0, 0, 0.25)',
               fontSize: 14,
             }}
