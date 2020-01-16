@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2020-01-16 13:11:23
+ * @LastEditTime : 2020-01-16 15:01:22
  * @LastEditors  : dailinbo
  */
 
@@ -213,8 +213,8 @@ export function formatRoutes(data) {
   function flattening(routes) {
     for (let i = 0; i < routes.length; i += 1) {
       const node = routes[i];
-      const { name, path } = node;
-      dataList.push({ name, path });
+      const { name, path, hideInMenu } = node;
+      dataList.push({ name, path, hideInMenu });
       if (node.routes) {
         flattening(node.routes);
       }

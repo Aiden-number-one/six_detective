@@ -61,7 +61,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
       params = [
         ...params,
         { column: 'alertTime', value: `${start}000000`, condition: '4' },
-        { column: 'alertTime', value: `${end}2459595`, condition: '6' },
+        { column: 'alertTime', value: `${end}2359595`, condition: '6' },
       ];
     }
     fetchTableList({
