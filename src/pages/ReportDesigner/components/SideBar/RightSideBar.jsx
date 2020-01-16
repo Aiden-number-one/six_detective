@@ -388,6 +388,7 @@ export default class RightSideBar extends PureComponent {
                   onClick={() => {
                     this.changeSiderBarType('cell');
                   }}
+                  title="Cell Property"
                 />
                 <IconFont
                   type="iconshitujuzhen"
@@ -395,6 +396,7 @@ export default class RightSideBar extends PureComponent {
                   onClick={() => {
                     this.changeSiderBarType('query');
                   }}
+                  title="Widget Control"
                 />
                 <IconFont
                   type="icon-data"
@@ -402,6 +404,7 @@ export default class RightSideBar extends PureComponent {
                   onClick={() => {
                     this.changeSiderBarType('global');
                   }}
+                  title="Global"
                 />
               </Sider>
             </Layout>

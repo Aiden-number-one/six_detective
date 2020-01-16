@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2020-01-15 11:06:17
+ * @LastEditTime : 2020-01-16 20:07:30
  * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
@@ -62,12 +62,12 @@ export default WrapperComponent => {
         name: 'sheet1',
         fxObj: document.querySelector('#fxFn'),
         row: {
-          len: 20,
+          len: 14,
           height: INITHEIGHT,
           minHeight: 2, // 设置高度可调最小高度
         },
         col: {
-          len: 20,
+          len: 8,
           width: INITWIDTH,
           indexWidth: 20,
           minWidth: 2, // 设置列最小宽度

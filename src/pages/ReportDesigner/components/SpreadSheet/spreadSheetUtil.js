@@ -89,13 +89,13 @@ export function convertXml(xmlObject) {
     // 处理行相关属性
     xmlRows.forEach(xmlRowsValue => {
       const { height, rowNumber: rowNumberInside } = xmlRowsValue;
-      resultObject.rows[rowNumberInside - 1].height = height * 1.5;
+      resultObject.rows[rowNumberInside - 1].height = parseInt(height * 1.5, 10);
     });
     // 处理列相关属性
     xmlColumns.forEach(xmlColumnsValue => {
       const { width, columnNumber: columnNumberInside } = xmlColumnsValue;
       resultObject.cols[columnNumberInside - 1] = resultObject.cols[columnNumberInside - 1] || {};
-      resultObject.cols[columnNumberInside - 1].width = width * 1.3;
+      resultObject.cols[columnNumberInside - 1].width = parseInt(width * 1.3, 10);
     });
     // 给rows、cols 添加len
     resultObject.rows.len = xmlRows.length;
@@ -262,7 +262,8 @@ export function generateJson(spreadSheetData) {
             // 边框相关样式
             Object.entries(cellContent.style[singleStyle]).forEach(
               ([borderStyle, borderStyleValue]) => {
-                const [color = 'rgb(0,0,0)'] = borderStyleValue;
+                // const [color = 'rgb(0,0,0)'] = borderStyleValue;
+                const color = 'rgb(0,0,0)';
                 if (borderStyle === 'bottom') {
                   // 下边框
                   // eslint-disable-next-line prefer-destructuring

@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:14:56
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-14 20:40:18
+ * @LastEditTime : 2020-01-16 18:05:13
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -33,7 +33,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input Name of Alert User Group',
+                  message: `${formatMessage({
+                    id: 'systemManagement.userMaintenance.alertGroupName',
+                  })} is missing`,
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.groupName,
@@ -48,7 +50,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input Remark of Alert User Group',
+                  message: `${formatMessage({
+                    id: 'systemManagement.userGroup.remark',
+                  })} is missing`,
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.groupDesc,

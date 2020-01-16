@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-19 14:06:28
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 09:50:36
+ * @LastEditTime : 2020-01-16 20:36:13
  */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
@@ -72,6 +72,17 @@ const Model = {
           );
           window.localStorage.clear();
         }
+        if (callback) callback();
+      } else {
+        yield put(
+          routerRedux.replace({
+            pathname: '/login',
+            search: stringify({
+              redirect: window.location.href,
+            }),
+          }),
+        );
+        window.localStorage.clear();
         if (callback) callback();
       }
     },

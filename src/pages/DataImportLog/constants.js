@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 18:53:34
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-16 15:58:47
+ * @LastEditTime : 2020-01-16 22:03:10
  */
 import moment from 'moment';
 
@@ -52,6 +52,6 @@ export const defaultMarket = ['HKFE', 'SEHK'];
 export function downloadFile(url) {
   const aLink = document.createElement('a');
   aLink.download = true;
-  aLink.href = `/download?filePath=${url}`;
+  aLink.href = `/download?filePath=${encodeURIComponent(url)}`;
   aLink.click();
 }

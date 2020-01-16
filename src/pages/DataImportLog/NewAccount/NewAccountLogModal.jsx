@@ -8,7 +8,7 @@ import styles from '../index.less';
 const tipMsg = 'Please press "Parse Files" button to display the files';
 const warningMsg = 'Please validate before upload. If information is incorrect,please edit.';
 
-const isLt5M = size => size / 1024 / 1024 < 5;
+const isLt50M = size => size / 1024 / 1024 < 50;
 
 function NewAccountLogManualModal({
   form,
@@ -154,7 +154,7 @@ function NewAccountLogManualModal({
                   }
                   if (value && value.length) {
                     const file = value[0];
-                    if (!isLt5M(file.size)) {
+                    if (!isLt50M(file.size)) {
                       return callback('file size must less than 5M');
                     }
                     if (file.error) {

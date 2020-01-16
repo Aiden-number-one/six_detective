@@ -40,7 +40,7 @@ export function AttachmentList({ attachments }) {
             />
             {getFileName(url)}
           </Text>
-          <a download href={`/download?filePath=${url}`}>
+          <a download href={`/download?filePath=${encodeURIComponent(url)}`}>
             <IconFont type="icondownload" className={styles.icon} />
           </a>
         </li>
