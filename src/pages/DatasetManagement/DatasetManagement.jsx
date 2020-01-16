@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-16 20:50:11
+ * @LastEditTime : 2020-01-16 21:02:04
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -98,8 +98,8 @@ export default class DatasetManagement extends PureComponent {
     let newPage;
     if (type === 'new') {
       newPage = {
-        pageNumber: '1',
-        pageSize: '10',
+        pageNumber: 1,
+        pageSize: 10,
       };
     } else {
       newPage = page;
@@ -113,7 +113,8 @@ export default class DatasetManagement extends PureComponent {
         payload: {
           datasetName: values.datasetName,
           folderId: activeTree,
-          ...newPage,
+          pageNumber: newPage.pageNumber.toString(),
+          pageSize: newPage.pageSize.toString(),
         },
       });
     });
@@ -330,8 +331,8 @@ export default class DatasetManagement extends PureComponent {
    */
   pageChange = (pageNumber, pageSize) => {
     const page = {
-      pageNumber: pageNumber.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber,
+      pageSize,
     };
 
     this.setState(
@@ -346,8 +347,8 @@ export default class DatasetManagement extends PureComponent {
 
   onShowSizeChange = (current, pageSize) => {
     const page = {
-      pageNumber: current.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber: current,
+      pageSize,
     };
     this.setState(
       {
@@ -551,7 +552,6 @@ export default class DatasetManagement extends PureComponent {
                     onChange={this.pageChange}
                     total={totalCount}
                     pageSize={page.pageSize}
-                    size="small"
                   />
                 )}
               </div>
