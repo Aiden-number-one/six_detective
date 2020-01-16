@@ -60,12 +60,22 @@ class SecurityLayout extends React.Component {
                 });
               }
             },
+            errorFn: () => {
+              this.setState({
+                loading: false,
+              });
+            },
           });
         } else {
           this.setState({
             loading: false,
           });
         }
+      },
+      errorFn: () => {
+        this.setState({
+          loading: false,
+        });
       },
     });
   };
