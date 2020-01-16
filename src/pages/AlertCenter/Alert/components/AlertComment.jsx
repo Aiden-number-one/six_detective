@@ -13,6 +13,7 @@ const { Paragraph } = Typography;
 function AlertAttachmentPop({ attachments, onDownloadAll }) {
   return (
     <Popover
+      trigger="click"
       placement="bottomRight"
       overlayClassName={styles['comment-attachment-container']}
       title={
@@ -28,8 +29,10 @@ function AlertAttachmentPop({ attachments, onDownloadAll }) {
       }
       content={<AttachmentList attachments={attachments} />}
     >
-      <IconFont type="iconbiezhen" />
-      <em>{attachments.length}</em>
+      <span style={{ cursor: 'pointer' }}>
+        <IconFont type="iconbiezhen" />
+        <em>{attachments.length}</em>
+      </span>
     </Popover>
   );
 }
@@ -46,9 +49,11 @@ export default function({
           ({user}){content.substring(0, 66)}
           {content.length > 66 ? '...' : ''}
         </Paragraph>
-        <Col className={approvalStyles.attachmentsBox}>
-          <AlertAttachmentPop attachments={attachments} onDownloadAll={onDownloadAll} />
-        </Col>
+        {attachments.length > 0 && (
+          <Col className={approvalStyles.attachmentsBox}>
+            <AlertAttachmentPop attachments={attachments} onDownloadAll={onDownloadAll} />
+          </Col>
+        )}
       </Row>
       <Row className={approvalStyles.attachmentsTimeBox}>
         <Col className={approvalStyles.time}>{moment(time).format(timestampFormat)}</Col>
