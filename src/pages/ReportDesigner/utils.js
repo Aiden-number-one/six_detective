@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 10:47:42
+ * @LastEditTime : 2020-01-15 21:41:19
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -179,11 +179,10 @@ export function getDataSetXml(contentDetail) {
     } = query;
     dataSetXml += `<datasource datasourceid="${datasourceId}" name="${datasourceName}" type="jdbc" username="${username}" password="${password}" url="${url}" driver="${driver}">`;
     datasourceValue.forEach(dataset => {
-      const { dataset_name: datasetName, dataset_type: type, fields = [] } = dataset;
-      dataSetXml += ` <dataset name="${datasetName}" type="${type.toLocaleLowerCase()}">`;
-      if (type === 'SQL') {
-        dataSetXml += ` <sql><![CDATA[${commandText}]]></sql>`;
-      }
+      const { dataset_name: datasetName, fields = [] } = dataset;
+      // dataset_type: type 暂时不需要根据sql或produce去区分
+      dataSetXml += ` <dataset name="${datasetName}" type="sql">`;
+      dataSetXml += ` <sql><![CDATA[${commandText}]]></sql>`;
       fields.forEach(field => {
         const { field_data_name: name } = field;
         dataSetXml += `<field name="${name}"/>`;
@@ -239,6 +238,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       } = style;
       let expand = 'None';
       let aggregate = 'group';
+      let order = 'none';
       const otherProps = spreadsheetOtherProps[rowsIndex][colsIndex];
       if (cellType === 'DATASET') {
         // TODO：spreadsheetOtherProps 怎么保持与表格单元格的一致
@@ -246,12 +246,15 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
           if (otherProps.dataSetting === 'group') {
             aggregate = 'group';
           }
+          if (otherProps.groupSetting === 'asc') {
+            order = 'asc';
+          }
           if (otherProps.dataSetting === 'list') {
             aggregate = 'select';
           }
           expand = otherProps.expendDirection || 'Down';
           if (otherProps.dataSetting === 'sum') {
-            aggregate = otherProps.sumSetting;
+            aggregate = otherProps.sumSetting || 'sum';
             // 汇总的话为None
             expand = 'None';
           }
@@ -280,7 +283,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       } else if (cellType === 'DATASET') {
         const datasetName = cellText.split('.')[0];
         const property = cellText.split('.')[1];
-        cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}" aggregate="${aggregate}" order="none" mapping-type="simple"></dataset-value>`;
+        cellxml += `<dataset-value dataset-name="${datasetName}" property="${property}" aggregate="${aggregate}" order="${order}" mapping-type="simple"></dataset-value>`;
       } else if (cellType === 'FORMULA') {
         // 去除公式中的等号
         cellText = cellText.replace(/=/, '');
@@ -309,6 +312,7 @@ export function modifyTemplateAreaInside({
   value = {},
   position = 'A1',
   spreadsheetOtherProps = [],
+  deleteAll = false, // 是否清除全部
 }) {
   let newSpreadsheetOtherProps = [...spreadsheetOtherProps];
   const [rowIndex, colIndex] = getColIndexRowIndex(position);
@@ -331,6 +335,9 @@ export function modifyTemplateAreaInside({
   }
   const content = newSpreadsheetOtherProps[rowIndex][colIndex];
   newSpreadsheetOtherProps[rowIndex][colIndex] = { ...content, ...value };
+  if (deleteAll) {
+    newSpreadsheetOtherProps[rowIndex][colIndex] = {};
+  }
   return newSpreadsheetOtherProps;
 }
 

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Table, Icon, Descriptions } from 'antd';
 import moment from 'moment';
-import { formatMessage, FormattedMessage } from 'umi/locale';
+import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
+import { statusMap } from '../Market/MarketLogList';
 import { dateFormat, timestampFormat, pageSizeOptions } from '../constants';
 import styles from '../index.less';
 
@@ -89,12 +90,20 @@ export default function({
       <Column
         width="10%"
         align="center"
-        dataIndex="submissionStatusDesc"
+        dataIndex="processingStage"
         title={<FormattedMessage id="data-import.submission-status" />}
+        render={(text, record) => {
+          const des = record.processingStageDesc;
+          if ([0, 1, 2, 8, 9].includes(+text)) {
+            const Status = statusMap[+text];
+            return <Status des={des} />;
+          }
+          return des;
+        }}
       />
       <Column
         align="center"
-        dataIndex="processingStatusDesc"
+        dataIndex="processingStageDesc"
         title={<FormattedMessage id="data-import.lop.processing-stage" />}
       />
       <Column

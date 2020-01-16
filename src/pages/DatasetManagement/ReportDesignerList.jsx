@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-16 13:03:09
+ * @LastEditTime : 2020-01-16 13:07:17
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -26,7 +26,10 @@ const NewSearchForm = Form.create({})(SearchForm);
   reportList: reportList.reportList, // 报表设计器列表的List
   activeTree: dataSet.activeTree, // 选中的树节点
   activeFolderId: dataSet.activeFolderId, // 选中文件夹的FolderId
-  loading: loading.effects['reportList/getReportList'] || loading.effects['reportList/delete'],
+  loading:
+    loading.effects['reportList/getReportList'] ||
+    loading.effects['reportList/delete'] ||
+    loading.effects['dataSet/getClassifyTree'],
 }))
 export default class DatasetManagement extends PureComponent {
   operateType = 'ADD'; // 操作类型
@@ -381,23 +384,25 @@ export default class DatasetManagement extends PureComponent {
         <div style={{ display: 'flex', minHeight: 'calc(100vh - 185px)' }}>
           <div style={{ flex: '0 0 220px', background: '#fff' }}>
             {this.Title()}
-            <ClassifyTree
-              add
-              modify
-              move
-              handleAddTree={this.handleAddTree}
-              handleModifyTree={this.handleModifyTree}
-              handleDeleteTree={this.handleDeleteTree}
-              checkable={false}
-              treeData={classifyTreeData}
-              treeKey={{
-                currentKey: 'folderId',
-                currentName: 'folderName',
-                parentKey: 'parentId',
-              }}
-              onSelect={this.onSelect}
-              showSearch={false}
-            />
+            {classifyTreeData.length > 0 && (
+              <ClassifyTree
+                add
+                modify
+                move
+                handleAddTree={this.handleAddTree}
+                handleModifyTree={this.handleModifyTree}
+                handleDeleteTree={this.handleDeleteTree}
+                checkable={false}
+                treeData={classifyTreeData}
+                treeKey={{
+                  currentKey: 'folderId',
+                  currentName: 'folderName',
+                  parentKey: 'parentId',
+                }}
+                onSelect={this.onSelect}
+                showSearch={false}
+              />
+            )}
           </div>
           <div style={{ flex: 1, overflowX: 'auto' }}>
             <div

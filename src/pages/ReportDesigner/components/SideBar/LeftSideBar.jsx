@@ -245,7 +245,9 @@ function Title({ title, isLeaf, displayDraw, connectDragSource, isParent, delete
               </span>
             </>
           )}
-          <span style={{ marginLeft: '3.5px' }}>{title}</span>
+          <span className={styles.titleText} style={{ marginLeft: '3.5px' }}>
+            {title}
+          </span>
         </span>,
       )}
       {hoverState && (

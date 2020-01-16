@@ -164,13 +164,14 @@ export default props => {
                   )}
                 </Form.Item>
                 {/* 数据设置2 */}
-                {otherProps.dataSetting === 'group' && (
+                {(otherProps.dataSetting === 'group' || !otherProps.dataSetting) && (
                   <Form.Item label=" " {...formLayout}>
                     {getFieldDecorator('groupSetting', {
                       initialValue: otherProps.groupSetting || 'normal',
                     })(
                       <Select>
                         <Option value="normal">Normal</Option>
+                        <Option value="asc">Group by & Sort</Option>
                       </Select>,
                     )}
                   </Form.Item>

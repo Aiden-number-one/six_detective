@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-13 15:52:48
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-14 22:30:51
+ * @LastEditTime : 2020-01-15 20:03:28
  */
 import { useState } from 'react';
 
@@ -23,22 +23,21 @@ export function useColumnFilter({
   const [curSortColumn, setCurSortColumn] = useState('');
   const [curSort, setCurSort] = useState('');
 
+  function clearFilter() {
+    setConditions([]);
+    setCurTableColumn('');
+    setCurSortColumn('');
+    setCurSort('');
+  }
+
   function fetchTableList(params = {}, dataTable = tableName) {
-    const { isReset, ...rest } = params;
     dispatch({
       type: actionType,
       payload: {
-        ...rest,
+        ...params,
         dataTable,
       },
     });
-
-    if (isReset) {
-      setConditions([]);
-      setCurTableColumn('');
-      setCurSortColumn('');
-      setCurSort('');
-    }
   }
 
   // filter methods
@@ -84,6 +83,7 @@ export function useColumnFilter({
   }
 
   return {
+    clearFilter,
     fetchTableList,
     handlePageChange,
     getTitleProps: (column = curTableColumn) => ({

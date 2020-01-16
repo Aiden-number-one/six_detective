@@ -4,6 +4,8 @@ import { Tabs, Row, Col, Input, Button, Drawer, Radio, Upload, Empty, Spin } fro
 import { connect } from 'dva';
 import moment from 'moment';
 import AlertComment from '@/pages/AlertCenter/Alert/components/AlertComment';
+import { downloadFile } from '@/pages/DataImportLog/constants';
+import { useColumnFilter } from '@/pages/AlertCenter/ColumnTitle';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
 import styles from './index.less';
@@ -50,6 +52,7 @@ function ProcessDetail({
   taskHistoryList,
   logList,
   currentTaskType,
+  pageSizeData,
 }) {
   const [isFullscreen, setFullscreen] = useState(false); // 全屏控制
   const [visible, setVisible] = useState(false); // 弹窗显示控制
@@ -64,7 +67,12 @@ function ProcessDetail({
   const [confirmBiCategoryValue, setConfirmBiCategory] = useState(''); // 保存confirmBiCategory
   const newDetailForm = React.createRef();
   const isLt5M = size => size / 1024 / 1024 < 5;
-
+  const { fetchTableList } = useColumnFilter({
+    dispatch,
+    tableName: currentTaskType,
+    page: pageSizeData.page,
+    pageSize: pageSizeData.pageSize,
+  });
   // 初始化 加载对应数据
   useEffect(() => {
     if (task) {
@@ -88,7 +96,7 @@ function ProcessDetail({
   }, [detailItems]);
 
   useEffect(() => {
-    if (task && currentTaskType !== 'his') {
+    if (task && currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY') {
       dispatch({
         type: 'approvalCenter/featchTaskGroup',
         payload: {
@@ -244,12 +252,13 @@ function ProcessDetail({
         type: 'approvalCenter/approveAndReject',
         payload: taskValue,
         callback: () => {
-          dispatch({
-            type: 'approvalCenter/fetch',
-            payload: {
-              type: currentTaskType,
-            },
-          });
+          fetchTableList({}, currentTaskType);
+          // dispatch({
+          //   type: 'approvalCenter/fetch',
+          //   payload: {
+          //     type: currentTaskType,
+          //   },
+          // });
           setUpAttachements([]);
           setComment('');
         },
@@ -268,13 +277,14 @@ function ProcessDetail({
         comment,
       },
       callback: () => {
-        dispatch({
-          type: 'approvalCenter/fetch',
-          payload: {
-            type: currentTaskType,
-            taskCode: task.taskCode,
-          },
-        });
+        fetchTableList({}, currentTaskType);
+        // dispatch({
+        //   type: 'approvalCenter/fetch',
+        //   payload: {
+        //     type: currentTaskType,
+        //     taskCode: task.taskCode,
+        //   },
+        // });
         setComment('');
       },
     });
@@ -413,6 +423,18 @@ function ProcessDetail({
     });
     setUpAttachements(fileList);
   }
+  // 下载所有附件
+  async function handleDownloadAll(fileList) {
+    const url = await dispatch({
+      type: 'global/fetchZipAttachments',
+      payload: {
+        attachmentUrl: fileList.toString(),
+      },
+    });
+    if (url) {
+      downloadFile(url);
+    }
+  }
   // 删除附件
   function handleRemove(file) {
     setUpAttachements(upAttachments.filter(item => item.uid !== file.uid));
@@ -506,6 +528,7 @@ function ProcessDetail({
                           user: item.commentUserName,
                           files: item.attachment,
                         }}
+                        onDownloadAll={handleDownloadAll}
                         key={item.id}
                       />
                     ))}
@@ -514,7 +537,7 @@ function ProcessDetail({
                   <CustomEmpty className={styles['comment-list']} />
                 )}
               </Spin>
-              {currentTaskType !== 'his' &&
+              {currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY' &&
               currentOwner &&
               detailItems[0] &&
               detailItems[0].receivedAnswer !== '0' ? (
@@ -615,7 +638,7 @@ function ProcessDetail({
             </TabPane>
             <TabPane tab="Task Lifecycle" key="2">
               <Spin spinning={loading['approvalCenter/getApprovalTaskHistory']}>
-                <div style={{ height: 370, overflowY: 'auto', padding: '0 18px' }}>
+                <div className={styles.LifecycleBox}>
                   {logList.length > 0 ? (
                     logList.map(log => <TaskLog log={log} key={log.id} />)
                   ) : (

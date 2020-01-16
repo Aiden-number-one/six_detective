@@ -41,7 +41,16 @@ const footerRender = () => (
 );
 
 const BasicLayout = props => {
-  const { dispatch, children, settings, collapsed, menuData, taskCount, alertCount } = props;
+  const {
+    dispatch,
+    children,
+    settings,
+    collapsed,
+    menuData,
+    adminMenuData,
+    taskCount,
+    alertCount,
+  } = props;
 
   // console.log('props=========', props);
   /**
@@ -62,16 +71,11 @@ const BasicLayout = props => {
     // }
     dispatch({
       type: 'menu/getMenuData',
-      callback: m => {
+      callback: (m, menuList) => {
         // newMenuData = Object.assign([], menuData);
         setNewMenuData(m);
+        console.log('location.pathname, menuList=========', props.location.pathname, menuList);
         console.log('menuData111====', m, menuData);
-        if (m.length <= 0) {
-          message.warning('The menu is empty');
-          dispatch({
-            type: 'login/logout',
-          });
-        }
       },
     });
   }, []);
@@ -331,6 +335,7 @@ export default connect(({ global, settings, menu }) => ({
   collapsed: global.collapsed,
   settings,
   menuData: menu.menuData,
+  adminMenuData: menu.adminMenuData,
   taskCount: menu.taskCount,
   alertCount: menu.alertCount,
 }))(BasicLayout);

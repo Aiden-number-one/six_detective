@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-24 16:04:36
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-11 22:21:54
+ * @LastEditTime : 2020-01-15 15:38:07
  */
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -12,6 +12,9 @@ import { dateFormat } from '@/pages/DataImportLog/constants';
 
 export const epColumns = [
   {
+    width: 80,
+    align: 'center',
+    ellipsis: true,
     dataIndex: 'EP_CODE',
     title: formatMessage({ id: 'alert-center.ep-code' }),
   },

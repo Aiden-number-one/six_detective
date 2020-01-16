@@ -292,7 +292,7 @@ class ToolBar extends Component {
             <Menu.Item
               key={name}
               onClick={() => {
-                const { cellPosition } = this.props;
+                const { cellPosition, dispatch } = this.props;
                 if (params === 'clearStyle') {
                   setCellStyle('clearformat');
                 }
@@ -309,6 +309,10 @@ class ToolBar extends Component {
                     value: '',
                     type: 'text',
                     cellPosition,
+                  });
+                  dispatch({
+                    type: 'reportDesigner/modifyTemplateArea',
+                    deleteAll: true,
                   });
                 }
               }}

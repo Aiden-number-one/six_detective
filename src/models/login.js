@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-19 14:06:28
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 16:02:11
+ * @LastEditTime : 2020-01-16 09:50:36
  */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
@@ -33,7 +33,7 @@ const Model = {
         message.error(response.bcjson.msg);
       }
     },
-    *getLoginStatus({ callback, payload }, { call, put }) {
+    *getLoginStatus({ callback, logging, payload }, { call, put }) {
       const response = yield call(getLoginStatus, { param: payload });
       if (response.bcjson.flag === '1') {
         const item = response.bcjson.items[0];
@@ -44,7 +44,7 @@ const Model = {
             callback: () => {},
           });
           setStore({ name: 'employeeId', content: '' });
-        }
+        } else if (logging) logging();
       }
       // if (response.bcjson.flag === '001') {
       //   message.error('您的登录信息已失效,请重新登录')
