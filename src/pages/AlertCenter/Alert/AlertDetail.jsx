@@ -69,6 +69,12 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
     }
   }, [alert]);
 
+  // hide body scrollbar
+  useEffect(() => {
+    const body = document.querySelector('body');
+    body.style.overflowY = isFullscreen ? 'hidden' : 'auto';
+  }, [isFullscreen]);
+
   async function handleAddItem(pane) {
     const isEqual = item => item.TASK_ID === pane.TASK_ID;
     setActiveKey(pane.TASK_ID.toString());
@@ -149,7 +155,7 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
   }
 
   return (
-    <Row className={styles['detail-container']} gutter={10}>
+    <Row className={styles['detail-container']} gutter={isFullscreen ? 0 : 10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
         <Tabs
           hideAdd
@@ -210,7 +216,6 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
               <TabPane key={pane.TASK_ID.toString()} tab="Alert Item">
                 <TaskItem
                   task={pane}
-                  style={{ height: isFullscreen ? 'auto' : 500 }}
                   taskItemHistorys={taskItemHistorys}
                   loading={loading['alertCenter/fetchTaskHistory']}
                 />
