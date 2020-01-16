@@ -4,6 +4,7 @@ import { Tabs, Row, Col, Input, Button, Drawer, Radio, Upload, Empty, Spin } fro
 import { connect } from 'dva';
 import moment from 'moment';
 import AlertComment from '@/pages/AlertCenter/Alert/components/AlertComment';
+import { downloadFile } from '@/pages/DataImportLog/constants';
 import { useColumnFilter } from '@/pages/AlertCenter/ColumnTitle';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
@@ -422,6 +423,18 @@ function ProcessDetail({
     });
     setUpAttachements(fileList);
   }
+  // 下载所有附件
+  async function handleDownloadAll(fileList) {
+    const url = await dispatch({
+      type: 'global/fetchZipAttachments',
+      payload: {
+        attachmentUrl: fileList.toString(),
+      },
+    });
+    if (url) {
+      downloadFile(url);
+    }
+  }
   // 删除附件
   function handleRemove(file) {
     setUpAttachements(upAttachments.filter(item => item.uid !== file.uid));
@@ -515,6 +528,7 @@ function ProcessDetail({
                           user: item.commentUserName,
                           files: item.attachment,
                         }}
+                        onDownloadAll={handleDownloadAll}
                         key={item.id}
                       />
                     ))}
