@@ -10,6 +10,7 @@ import { getAuthority } from '@/utils/authority';
 import {
   dateFormat,
   timestampFormat,
+  rawTimestampFormat,
   pageSizeOptions,
   downloadFile,
 } from '@/pages/DataImportLog/constants';
@@ -44,7 +45,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   }, []);
 
   useEffect(() => {
-    const { alertId, owner, status, tradeDate } = location.query;
+    const { alertId, owner, status, timestamp } = location.query;
     let params = [];
     if (alertId) {
       params = [{ column: 'alertNo', value: alertId, condition: '7' }];
@@ -55,12 +56,13 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
     if (status) {
       params = [...params, { column: 'alertStatusDesc', value: status, condition: '7' }];
     }
-    if (tradeDate) {
-      const [start, end] = tradeDate.split(',');
+    if (timestamp) {
+      // format timestamp
+      const [start, end] = timestamp.split(',');
       params = [
         ...params,
-        { column: 'tradeDate', value: start, condition: '4' },
-        { column: 'tradeDate', value: end, condition: '6' },
+        { column: 'alertTime', value: `${start}000000`, condition: '4' },
+        { column: 'alertTime', value: `${end}2359595`, condition: '6' },
       ];
     }
     fetchTableList({
@@ -291,11 +293,13 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
           })}
         >
           <Column
-            width={45}
-            ellipsis
+            width={60}
             dataIndex="no"
             title="No."
-            render={(text, record, index) => (alertPage - 1) * alertPageSize + index + 1}
+            render={(text, record, index) => {
+              const count = (alertPage - 1) * alertPageSize + index + 1;
+              return <span title={count}>{count}</span>;
+            }}
           />
           <Column
             dataIndex="alertNo"
@@ -328,7 +332,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
           <Column
             align="center"
             dataIndex="alertTime"
-            render={text => moment(text, timestampFormat).format(timestampFormat)}
+            render={text => moment(text, rawTimestampFormat).format(timestampFormat)}
             title={
               <ColumnTitle {...getTitleProps('alertTime')}>
                 <FormattedMessage id="alert-center.alert-timestamp" />

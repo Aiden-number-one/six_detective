@@ -48,7 +48,7 @@ function AlertDetailLogTabs({ dispatch, loading, comments, logs, alert, onDownlo
     setUpAttachements([]);
   }
   return (
-    <div>
+    <>
       <Tabs defaultActiveKey="1" type="card" className={styles['detail-comment']}>
         <TabPane key="1" tab={<FormattedMessage id="alert-center.comment-history" />}>
           <Spin spinning={loading['alertCenter/fetchComments']}>
@@ -100,7 +100,7 @@ function AlertDetailLogTabs({ dispatch, loading, comments, logs, alert, onDownlo
           }}
         />
       )}
-    </div>
+    </>
   );
 }
 export default connect(({ loading, alertCenter: { comments = [], logs = [] } }) => ({

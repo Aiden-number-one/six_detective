@@ -74,8 +74,6 @@ const BasicLayout = props => {
       callback: (m, menuList) => {
         // newMenuData = Object.assign([], menuData);
         setNewMenuData(m);
-        console.log('location.pathname, menuList=========', props.location.pathname, menuList);
-        console.log('menuData111====', m, menuData);
       },
     });
   }, []);

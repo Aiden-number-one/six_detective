@@ -149,11 +149,14 @@ function InfomationList({ dispatch, location, infos, infoPage, infoPageSize, tot
           })}
         >
           <Column
-            width={50}
+            width={60}
             ellipsis
             dataIndex="no"
             title="No."
-            render={(text, record, index) => (infoPage - 1) * infoPageSize + index + 1}
+            render={(text, record, index) => {
+              const count = (infoPage - 1) * infoPageSize + index + 1;
+              return <span title={count}>{count}</span>;
+            }}
           />
           <Column
             width={150}

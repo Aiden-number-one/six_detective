@@ -8,18 +8,24 @@ import { pageSizeOptions } from '@/pages/DataImportLog/constants';
 import styles from '@/pages/AlertCenter/index.less';
 import AlertTaskModal from './AlertTaskModal';
 
+const btnName = formatMessage({ id: 'alert-center.enter-approval' });
+
 export const TaskBtn = ({ task }) => {
   const localUserName = localStorage.getItem('loginName');
   const isDisabled = !task.USER_NAME || localUserName !== task.USER_NAME;
-  const route = task.TASK_STATUS === 'A' ? 'history' : 'my';
+  const route = ['A', 'T'].includes(task.TASK_STATUS) ? 'history' : 'my';
+
+  // fixed ie disable invalid
+  if (isDisabled) {
+    return <span style={{ color: '#d0d0d0' }}>{btnName}</span>;
+  }
 
   return (
     <Link
-      disabled={isDisabled}
       to={`/homepage/Approval-Process-Center/${route}?taskCode=${task.TASK_ID}`}
-      title={formatMessage({ id: 'alert-center.enter-approval' })}
+      title={btnName}
     >
-      <FormattedMessage id="alert-center.enter-approval" />
+      {btnName}
     </Link>
   );
 };

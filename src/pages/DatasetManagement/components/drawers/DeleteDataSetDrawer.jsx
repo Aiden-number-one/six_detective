@@ -2,8 +2,8 @@
  * @Description: 删除数据集
  * @Author: lan
  * @Date: 2019-12-11 20:54:21
- * @LastEditTime: 2019-12-18 11:07:37
- * @LastEditors: lan
+ * @LastEditTime : 2020-01-16 15:38:13
+ * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -42,7 +42,7 @@ export default class DeleteDataSetDrawer extends PureComponent {
             right: 0,
             bottom: 0,
             width: '100%',
-            borderTop: '1px solid #e9e9e9',
+            // borderTop: '1px solid #e9e9e9',
             padding: '10px 16px',
             background: '#fff',
             textAlign: 'right',

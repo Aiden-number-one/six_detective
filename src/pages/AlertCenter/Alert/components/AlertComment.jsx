@@ -10,6 +10,30 @@ import approvalStyles from '@/pages/ApprovalProcessCenter/index.less';
 
 const { Paragraph } = Typography;
 
+function AlertAttachmentPop({ attachments, onDownloadAll }) {
+  return (
+    <Popover
+      placement="bottomRight"
+      overlayClassName={styles['comment-attachment-container']}
+      title={
+        <div className={styles.title}>
+          <FormattedMessage id="alert-center.attachement-list" />
+          <IconFont
+            type="icondownload-all"
+            title="Download All"
+            className={styles['download-all']}
+            onClick={onDownloadAll}
+          />
+        </div>
+      }
+      content={<AttachmentList attachments={attachments} />}
+    >
+      <IconFont type="iconbiezhen" />
+      <em>{attachments.length}</em>
+    </Popover>
+  );
+}
+
 export default function({
   comment: { id, time, content, user = 'anonymous', files },
   onDownloadAll,
@@ -23,33 +47,10 @@ export default function({
           {content.length > 66 ? '...' : ''}
         </Paragraph>
         <Col className={approvalStyles.attachmentsBox}>
-          {attachments.length > 0 && (
-            <Popover
-              placement="bottomRight"
-              overlayClassName={styles['comment-attachment-container']}
-              title={
-                <div className={styles.title}>
-                  <FormattedMessage id="alert-center.attachement-list" />
-                  <IconFont
-                    type="icondownload-all"
-                    title="Download All"
-                    className={styles['download-all']}
-                    onClick={onDownloadAll}
-                  />
-                </div>
-              }
-              content={<AttachmentList attachments={attachments} />}
-            >
-              <IconFont type="iconbiezhen" />
-              <em className={approvalStyles.num}>{attachments.length}</em>
-            </Popover>
-          )}
+          <AlertAttachmentPop attachments={attachments} onDownloadAll={onDownloadAll} />
         </Col>
       </Row>
       <Row className={approvalStyles.attachmentsTimeBox}>
-        {/* <Paragraph ellipsis={{ rows: 3, expandable: true }}>
-          ({user}){content}
-        </Paragraph> */}
         <Col className={approvalStyles.time}>{moment(time).format(timestampFormat)}</Col>
       </Row>
     </li>

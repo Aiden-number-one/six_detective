@@ -52,14 +52,16 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
   const taskColumns = taskColumnsMap[+alert.alertTypeId];
   const TaskItem = TaskItemMap[+alert.alertTypeId];
   const isNewAccountType = [321, 322, 323].includes(+alert.alertTypeId);
+  // show attachments,just emailType = 111 show attachment
+  const isAttachmentsVisible = alert.emailType && alert.emailType.split(',').includes('111');
 
   useEffect(() => {
-    const { alertId, emailType } = alert;
+    const { alertId } = alert;
     // clear task item
     setPanes([]);
     setActiveKey('1');
-    // show attachments,just emailType = 111 show attachment
-    if (emailType && emailType.split(',').includes('111')) {
+
+    if (isAttachmentsVisible) {
       dispatch({
         type: 'alertCenter/fetchAttachments',
         payload: {
@@ -68,6 +70,12 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
       });
     }
   }, [alert]);
+
+  // hide body scrollbar
+  useEffect(() => {
+    const body = document.querySelector('body');
+    body.style.overflowY = isFullscreen ? 'hidden' : 'auto';
+  }, [isFullscreen]);
 
   async function handleAddItem(pane) {
     const isEqual = item => item.TASK_ID === pane.TASK_ID;
@@ -115,6 +123,7 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
     }
     setActiveKey(curActiveKey);
   }
+
   async function showEmail() {
     const err = await dispatch({
       type: 'alertCenter/fetchEmail',
@@ -126,6 +135,7 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
       setEmailVisible(true);
     }
   }
+
   async function handleSendEmail() {
     await dispatch({
       type: 'alertCenter/sendEmail',
@@ -149,7 +159,7 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
   }
 
   return (
-    <Row className={styles['detail-container']} gutter={10}>
+    <Row className={styles['detail-container']} gutter={isFullscreen ? 0 : 10}>
       <Col span={16} className={isFullscreen ? styles.fullscreen : ''}>
         <Tabs
           hideAdd
@@ -210,7 +220,6 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
               <TabPane key={pane.TASK_ID.toString()} tab="Alert Item">
                 <TaskItem
                   task={pane}
-                  style={{ height: isFullscreen ? 'auto' : 500 }}
                   taskItemHistorys={taskItemHistorys}
                   loading={loading['alertCenter/fetchTaskHistory']}
                 />
@@ -220,7 +229,7 @@ function AlertDetail({ dispatch, loading, alert, email, attachments }) {
               </TabPane>
             ))}
         </Tabs>
-        {+alert.emailType === 111 && attachments.length > 0 && (
+        {isAttachmentsVisible && (
           <AlertDownAttachments
             attachments={attachments}
             onDownloadAll={() => handleDownloadAll(attachments.map(({ url }) => url))}

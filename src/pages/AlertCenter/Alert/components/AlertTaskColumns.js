@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-24 16:04:36
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-15 15:38:07
+ * @LastEditTime : 2020-01-16 13:59:39
  */
 import { formatMessage } from 'umi/locale';
 import moment from 'moment';
@@ -45,7 +45,7 @@ export const caCodeColumns = [
   {
     dataIndex: 'EFFECTIVE_DATE',
     title: formatMessage({ id: 'alert-center.effective-date' }),
-    render: text => moment(text).format(dateFormat),
+    render: text => (text ? moment(text).format(dateFormat) : ''),
   },
   {
     dataIndex: 'CA_PRODUCT_CODE',
@@ -54,6 +54,7 @@ export const caCodeColumns = [
   {
     dataIndex: 'EXPIRY_DATE',
     title: formatMessage({ id: 'alert-center.expiry-date' }),
+    render: text => (text ? moment(text).format(dateFormat) : ''),
   },
 ];
 
