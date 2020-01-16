@@ -9,6 +9,30 @@ import styles from '@/pages/AlertCenter/index.less';
 
 const { Paragraph } = Typography;
 
+function AlertAttachmentPop({ attachments, onDownloadAll }) {
+  return (
+    <Popover
+      placement="bottomRight"
+      overlayClassName={styles['comment-attachment-container']}
+      title={
+        <div className={styles.title}>
+          <FormattedMessage id="alert-center.attachement-list" />
+          <IconFont
+            type="icondownload-all"
+            title="Download All"
+            className={styles['download-all']}
+            onClick={onDownloadAll}
+          />
+        </div>
+      }
+      content={<AttachmentList attachments={attachments} />}
+    >
+      <IconFont type="iconbiezhen" />
+      <em>{attachments.length}</em>
+    </Popover>
+  );
+}
+
 export default function({
   comment: { id, time, content, user = 'anonymous', files },
   onDownloadAll,
@@ -18,27 +42,11 @@ export default function({
     <li key={id}>
       <Row type="flex" justify="space-between" align="middle">
         <Col className={styles.time}>{moment(time).format(timestampFormat)}</Col>
-        <Col>
-          <Popover
-            placement="bottomRight"
-            overlayClassName={styles['comment-attachment-container']}
-            title={
-              <div className={styles.title}>
-                <FormattedMessage id="alert-center.attachement-list" />
-                <IconFont
-                  type="icondownload-all"
-                  title="Download All"
-                  className={styles['download-all']}
-                  onClick={onDownloadAll}
-                />
-              </div>
-            }
-            content={<AttachmentList attachments={attachments} />}
-          >
-            <IconFont type="iconbiezhen" />
-            <em>{attachments.length}</em>
-          </Popover>
-        </Col>
+        {attachments.length > 0 && (
+          <Col>
+            <AlertAttachmentPop attachments={attachments} onDownloadAll={onDownloadAll} />
+          </Col>
+        )}
       </Row>
       <Row>
         <Paragraph ellipsis={{ rows: 3, expandable: true }}>

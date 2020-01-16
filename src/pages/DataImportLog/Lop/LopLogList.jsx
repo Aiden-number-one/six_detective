@@ -3,11 +3,22 @@ import { Table, Icon, Descriptions } from 'antd';
 import moment from 'moment';
 import { FormattedMessage } from 'umi/locale';
 import IconFont from '@/components/IconFont';
-import { statusMap } from '../Market/MarketLogList';
 import { dateFormat, timestampFormat, pageSizeOptions } from '../constants';
 import styles from '../index.less';
 
 const { Column } = Table;
+
+const IconStatus = ({ type, color, des }) => (
+  <Icon type={type} style={{ color, fontSize: 16 }} title={des} />
+);
+
+export const statusMap = {
+  0: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
+  1: ({ des }) => <IconStatus type="loading" color="#009cff" des={des} />,
+  2: ({ des }) => <IconStatus type="close-circle" color="#e6344a" des={des} />,
+  8: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
+  9: ({ des }) => <IconStatus type="check-circle" color="#3b803e" des={des} />,
+};
 
 const submissionChannelMap = {
   A: 'ECP',
