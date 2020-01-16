@@ -19,27 +19,25 @@ export default function({
       <Row type="flex" justify="space-between" align="middle">
         <Col className={styles.time}>{moment(time).format(timestampFormat)}</Col>
         <Col>
-          {attachments.length > 0 && (
-            <Popover
-              placement="bottomRight"
-              overlayClassName={styles['comment-attachment-container']}
-              title={
-                <div className={styles.title}>
-                  <FormattedMessage id="alert-center.attachement-list" />
-                  <IconFont
-                    type="icondownload-all"
-                    title="Download All"
-                    className={styles['download-all']}
-                    onClick={onDownloadAll}
-                  />
-                </div>
-              }
-              content={<AttachmentList attachments={attachments} />}
-            >
-              <IconFont type="iconbiezhen" />
-              <em>{attachments.length}</em>
-            </Popover>
-          )}
+          <Popover
+            placement="bottomRight"
+            overlayClassName={styles['comment-attachment-container']}
+            title={
+              <div className={styles.title}>
+                <FormattedMessage id="alert-center.attachement-list" />
+                <IconFont
+                  type="icondownload-all"
+                  title="Download All"
+                  className={styles['download-all']}
+                  onClick={onDownloadAll}
+                />
+              </div>
+            }
+            content={<AttachmentList attachments={attachments} />}
+          >
+            <IconFont type="iconbiezhen" />
+            <em>{attachments.length}</em>
+          </Popover>
         </Col>
       </Row>
       <Row>

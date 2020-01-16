@@ -291,11 +291,13 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
           })}
         >
           <Column
-            width={45}
-            ellipsis
+            width={60}
             dataIndex="no"
             title="No."
-            render={(text, record, index) => (alertPage - 1) * alertPageSize + index + 1}
+            render={(text, record, index) => {
+              const count = (alertPage - 1) * alertPageSize + index + 1;
+              return <span title={count}>{count}</span>;
+            }}
           />
           <Column
             dataIndex="alertNo"
