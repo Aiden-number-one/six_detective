@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 16:26:17
+ * @LastEditTime : 2020-01-16 17:13:05
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -224,13 +224,11 @@ export default class DataProcessing extends Component {
     };
   }
 
-  componentDidMount() {
-    console.log('getAuthority===', getAuthority());
+  async componentDidMount() {
+    await this.getMarket();
     this.queryDataProcessing();
-    this.getMarket();
     this.getInitChart();
     this.getChartData();
-    // this.setDataChart();
     this.getStatusData();
     this.setState({
       authBypass: getAuthority().authBypass,
@@ -725,8 +723,12 @@ export default class DataProcessing extends Component {
             dataChartFormat('adjustmentRecords'),
           ),
         );
-        if (newDataCharts[1].name === 'HKEF') {
-          newDataCharts.reverse();
+        if (
+          newDataCharts.length > 1 &&
+          newDataCharts[0].name.toString().trim() !==
+            this.state.functionNameOptions[1].title.toString().trim()
+        ) {
+          newDataCharts = newDataCharts.reverse();
         }
         this.setState(
           {
