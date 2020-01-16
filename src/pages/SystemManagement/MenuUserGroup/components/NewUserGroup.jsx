@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 20:02:26
+ * @LastEditTime : 2020-01-16 20:28:40
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -82,6 +82,7 @@ class NewUser extends Component {
     super(props);
     this.state = {
       selectedKeys: [],
+      originalVisible: false,
       btnIds: [],
       btnArray: [],
       btnParentmenuids: [],
@@ -185,6 +186,7 @@ class NewUser extends Component {
         }
         that.setState({
           selectedKeys,
+          originalVisible: true,
           btnIds,
           btnArray,
           btnParentmenuids,
@@ -232,7 +234,7 @@ class NewUser extends Component {
 
   render() {
     const { menuData, groupMenuInfo, updateFlag } = this.props;
-    const { selectedKeys, btnIds, btnArray, btnParentmenuids } = this.state;
+    const { originalVisible, selectedKeys, btnIds, btnArray, btnParentmenuids } = this.state;
     return (
       <Fragment>
         <NewFormUser ref={this.newUserRef} groupMenuInfo={groupMenuInfo} />
@@ -240,7 +242,7 @@ class NewUser extends Component {
           <li>
             <h3 className={styles.groupTitle}>Authorizing access to menus</h3>
             <div className={styles.treeWraper}>
-              {(!updateFlag || selectedKeys.length > 0) && (
+              {(!updateFlag || originalVisible) && (
                 <ClassifyTree
                   all
                   checkable
