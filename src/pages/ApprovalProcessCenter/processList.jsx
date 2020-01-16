@@ -175,10 +175,12 @@ function ProcessList({
     }
     if (tradeDate) {
       const [start, end] = tradeDate.split(',');
+      const startResult = `${start}000000`;
+      const endResult = `${end}235959`;
       params = [
         ...params,
-        { column: 'updateDate', value: start, condition: '4' },
-        { column: 'updateDate', value: end, condition: '6' },
+        { column: 'updateDate', value: startResult, condition: '4' },
+        { column: 'updateDate', value: endResult, condition: '6' },
       ];
     }
     fetchTableList(
@@ -455,6 +457,7 @@ function ProcessList({
       )}
       <Table
         border
+        className={styles.tableBox}
         dataSource={tasks}
         rowKey="taskCode"
         loading={loading[actionType]}
@@ -468,7 +471,7 @@ function ProcessList({
         pagination={{
           total,
           showSizeChanger: true,
-          current: currentPage,
+          current: +currentPage,
           showTotal() {
             return `Total ${total} items`;
           },
@@ -522,7 +525,7 @@ function ProcessList({
           dataIndex="updateDate"
           title={<ColumnTitle {...getTitleProps('updateDate')}>Generation Date</ColumnTitle>}
           render={(text, record) =>
-            record.updateDate && moment(record.updateDate).format(timestampFormat)
+            record.updateDate && moment(record.updateDate, 'YYYYMMDDHHmmss').format(timestampFormat)
           }
           width="15%"
         />
