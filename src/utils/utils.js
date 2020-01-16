@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2020-01-14 13:31:12
+ * @LastEditTime : 2020-01-16 13:11:23
  * @LastEditors  : dailinbo
  */
 
@@ -201,6 +201,22 @@ export function flatteningTree(data) {
       dataList.push({ menuid, parentmenuid, menuname, page, isShow, sortNo, updatetime });
       if (node.children) {
         flattening(node.children);
+      }
+    }
+  }
+  flattening(data);
+  return dataList;
+}
+
+export function formatRoutes(data) {
+  const dataList = [];
+  function flattening(routes) {
+    for (let i = 0; i < routes.length; i += 1) {
+      const node = routes[i];
+      const { name, path } = node;
+      dataList.push({ name, path });
+      if (node.routes) {
+        flattening(node.routes);
       }
     }
   }

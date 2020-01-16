@@ -6,17 +6,21 @@ import router from 'umi/router';
 import { stringify } from 'querystring';
 import PageLoading from '@/components/PageLoading';
 import { getStore } from '@/utils/store';
+import { formatRoutes } from '@/utils/utils';
 
 class SecurityLayout extends React.Component {
   state = {
+    routes: [],
     isReady: false,
     loading: true,
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, route } = this.props;
+    const newRoutes = formatRoutes(route.routes[0].routes);
     this.setState({
       isReady: true,
+      routes: newRoutes,
     });
     dispatch({
       type: 'login/getLoginStatus',
@@ -33,39 +37,43 @@ class SecurityLayout extends React.Component {
 
   getMenu = () => {
     const { dispatch, location } = this.props;
+    const { routes } = this.state;
+    let subsistent = routes.filter(element => element.path && element.path.includes('/:'));
+    subsistent = subsistent.map(element => element.path.split('/:')[0]);
     dispatch({
       type: 'menu/getMenuData',
       callback: (m, menuList) => {
-        // newMenuData = Object.assign([], menuData);
         if (m.length <= 0) {
           message.warning('The menu is empty');
           dispatch({
             type: 'login/logout',
-          });
-        }
-        if (!menuList.some(element => element.page.includes(location.pathname))) {
-          dispatch({
-            type: 'menu/getAdminMenuData',
-            payload: {},
-            callback: adminList => {
-              if (adminList.some(item => item.page.includes(location.pathname))) {
-                router.push('/no-access');
-                this.setState({
-                  loading: false,
-                });
-              } else {
-                // router.push('/404');
-                this.setState({
-                  loading: false,
-                });
-              }
-            },
-            errorFn: () => {
+            callback: () => {
               this.setState({
                 loading: false,
               });
             },
           });
+        }
+        if (!menuList.some(element => element.page.includes(location.pathname))) {
+          if (location.pathname === '/homepage/information' || location.pathname === '/404') {
+            this.setState({
+              loading: false,
+            });
+          } else if (routes.some(item => item.path && item.path.includes(location.pathname))) {
+            router.push('/no-access');
+            this.setState({
+              loading: false,
+            });
+          } else if (subsistent.some(element => location.pathname.includes(element))) {
+            this.setState({
+              loading: false,
+            });
+          } else {
+            router.push('/404');
+            this.setState({
+              loading: false,
+            });
+          }
         } else {
           this.setState({
             loading: false,
