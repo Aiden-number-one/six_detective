@@ -61,7 +61,7 @@ export default function({
         },
       }}
       expandedRowRender={record => (
-        <Descriptions column={2}>
+        <Descriptions column={2} size="small">
           <Descriptions.Item label={<FormattedMessage id="data-import.submission-channel" />}>
             {submissionChannelMap[record.submissionChannel]}
           </Descriptions.Item>
@@ -78,7 +78,7 @@ export default function({
       )}
     >
       <Column
-        width="10%"
+        width={120}
         align="center"
         dataIndex="tradeDate"
         title={<FormattedMessage id="data-import.trade-date" />}

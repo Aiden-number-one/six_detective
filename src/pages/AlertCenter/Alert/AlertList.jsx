@@ -56,11 +56,12 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
       params = [...params, { column: 'alertStatusDesc', value: status, condition: '7' }];
     }
     if (timestamp) {
+      // format timestamp
       const [start, end] = timestamp.split(',');
       params = [
         ...params,
-        { column: 'alertTime', value: start, condition: '4' },
-        { column: 'alertTime', value: end, condition: '6' },
+        { column: 'alertTime', value: `${start}000000`, condition: '4' },
+        { column: 'alertTime', value: `${end}2359595`, condition: '6' },
       ];
     }
     fetchTableList({
