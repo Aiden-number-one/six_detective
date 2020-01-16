@@ -1,5 +1,5 @@
 import { stringToNum } from '@/utils/utils';
-import { INITHEIGHT, INITWIDTH } from '../../utils';
+import { INITHEIGHT, INITWIDTH, getCellStringByIndex } from '../../utils';
 
 /**
  * @description: 导入返回的xml
@@ -20,6 +20,8 @@ export function convertXml(xmlObject) {
     validations: [],
     autofilter: [],
   };
+  // 合并单元格相关
+  const merges = [];
   // 进行rows与cols的遍历
   for (let i = 0; i < xmlRows.length; i += 1) {
     resultObject.rows[i] = {
@@ -35,6 +37,8 @@ export function convertXml(xmlObject) {
       columnNumber = 0,
       value: { type = 'simple', value = '' },
       cellStyle,
+      colSpan = 0,
+      rowSpan = 0,
     } = cellValue;
     const typeMap = {
       simple: 'text',
@@ -43,7 +47,7 @@ export function convertXml(xmlObject) {
     const {
       align = 'left',
       bold = false,
-      fontSize = 10,
+      fontSize = 10, // 是否设置字体
       forecolor = '0,0,0',
       italic = false,
       underline = false,
@@ -52,7 +56,6 @@ export function convertXml(xmlObject) {
     } = cellStyle;
     // 存放单元格的相关属性
     const currentRows = resultObject.rows[rowNumber - 1] ? resultObject.rows[rowNumber - 1] : {};
-    const currentColumn = currentRows.cells;
     resultObject.rows[rowNumber - 1].cells[columnNumber - 1] = {
       text: value, // 数值
       cellProps: {
@@ -63,6 +66,7 @@ export function convertXml(xmlObject) {
         font: {
           bold, // 加醋
           italic, // 斜体
+          size: fontSize, // 字体大小
         },
         underline, // 下划线
         bgcolor: `rgb(${bgcolor})`, // 背景颜色
@@ -71,20 +75,32 @@ export function convertXml(xmlObject) {
         align, // 水平位置
       },
     };
+    // 处理行单元格合并的问题
+    if (colSpan > 1 || rowSpan > 1) {
+      const finalColSpan = colSpan ? colSpan - 1 : 0;
+      const finalRowSpan = rowSpan ? rowSpan - 1 : 0;
+      resultObject.rows[rowNumber - 1].cells[columnNumber - 1].merge = [finalRowSpan, finalColSpan];
+      const merge = `${getCellStringByIndex(
+        rowNumber - 1,
+        columnNumber - 1,
+      )}:${getCellStringByIndex(rowNumber - 1 + finalRowSpan, columnNumber - 1 + finalColSpan)}`;
+      merges.push(merge);
+    }
     // 处理行相关属性
     xmlRows.forEach(xmlRowsValue => {
       const { height, rowNumber: rowNumberInside } = xmlRowsValue;
-      resultObject.rows[rowNumberInside - 1].height = height;
+      resultObject.rows[rowNumberInside - 1].height = height * 1.5;
     });
     // 处理列相关属性
     xmlColumns.forEach(xmlColumnsValue => {
       const { width, columnNumber: columnNumberInside } = xmlColumnsValue;
       resultObject.cols[columnNumberInside - 1] = resultObject.cols[columnNumberInside - 1] || {};
-      resultObject.cols[columnNumberInside - 1].width = width;
+      resultObject.cols[columnNumberInside - 1].width = width * 1.3;
     });
     // 给rows、cols 添加len
     resultObject.rows.len = xmlRows.length;
     resultObject.cols.len = xmlColumns.length;
+    resultObject.merges = merges;
   });
   return resultObject;
 }

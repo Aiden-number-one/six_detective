@@ -383,7 +383,9 @@ class ToolBar extends Component {
         window.xsObj.instanceArray[window.xsObj.instanceArray.length - 1].data.setData(
           spreadSheetObj,
         );
-        window.xsObj.instanceArray[0].sheet.toolbar.change();
+        setTimeout(() => {
+          window.xsObj.instanceArray[0].sheet.toolbar.change();
+        }, 100);
       }
     } else if (info.file.status === 'error') {
       message.infp(`${info.file.name} file upload failed.`);

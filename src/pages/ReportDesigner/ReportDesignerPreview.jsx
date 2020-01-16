@@ -4,6 +4,7 @@ import { Icon, Row, Button, Spin } from 'antd';
 import less from './ReportPreview.less';
 import ReportPager from './ReportPager';
 import PreviewSearchArea from './components/PreviewSearchArea';
+import IconFont from '@/components/IconFont';
 
 @connect(({ reportDesignPreview, loading }) => {
   const { previewData = {}, dataSetColumn = {}, customSearchData = [] } = reportDesignPreview;
@@ -221,6 +222,9 @@ class ReportDesignerPreview extends Component {
               Search
             </Button>
           </Row>
+          <div className={less['icon-collaspe']}>
+            <IconFont type="iconarrow_collaspex" />
+          </div>
         </div>
 
         <Spin spinning={loading}>
