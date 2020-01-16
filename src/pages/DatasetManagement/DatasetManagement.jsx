@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-16 12:59:57
+ * @LastEditTime : 2020-01-16 13:13:10
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -498,23 +498,25 @@ export default class DatasetManagement extends PureComponent {
         <div style={{ display: 'flex', minHeight: 'calc(100vh - 185px)' }}>
           <div style={{ flex: '0 0 220px', background: '#fff', zIndex: 1 }}>
             {this.Title()}
-            <ClassifyTree
-              add
-              modify
-              move
-              handleAddTree={this.handleAddTree}
-              handleModifyTree={this.handleModifyTree}
-              handleDeleteTree={this.handleDeleteTree}
-              checkable={false}
-              treeData={classifyTreeData}
-              treeKey={{
-                currentKey: 'folderId',
-                currentName: 'folderName',
-                parentKey: 'parentId',
-              }}
-              onSelect={this.onSelect}
-              showSearch={false}
-            />
+            {classifyTreeData.length > 0 && (
+              <ClassifyTree
+                add
+                modify
+                move
+                handleAddTree={this.handleAddTree}
+                handleModifyTree={this.handleModifyTree}
+                handleDeleteTree={this.handleDeleteTree}
+                checkable={false}
+                treeData={classifyTreeData}
+                treeKey={{
+                  currentKey: 'folderId',
+                  currentName: 'folderName',
+                  parentKey: 'parentId',
+                }}
+                onSelect={this.onSelect}
+                showSearch={false}
+              />
+            )}
           </div>
           <div style={{ flex: 1 }}>
             <div
