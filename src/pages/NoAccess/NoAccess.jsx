@@ -18,10 +18,10 @@ const NoAccess = () => (
   //   }
   // ></Result>
   <div className={styles.page404}>
-    <span className={styles.font404}>No Access</span>
+    <span className={styles['no-access']}>No Access</span>
     <img src={seperate} alt="" height="300" />
     <div className={styles.box}>
-      <div>Sorry! We has the page, Please try to modify permissions.</div>
+      <div>Sorry! You do not have permission to access the page.</div>
       <span>Go To Home </span>
       <img src={arrow} alt="" width="14" onClick={() => router.push('/')} />
     </div>
