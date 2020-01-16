@@ -43,12 +43,12 @@ export default [
               //   name: 'Homepage',
               //   component: './Monitor/Monitor',
               // },
-              {
-                path: '/homepage/quick-menu-management',
-                name: 'quick-menu-management',
-                component: './HomePage/QuickMenu',
-                hideInMenu: true,
-              },
+              // {
+              //   path: '/homepage/quick-menu-management',
+              //   name: 'quick-menu-management',
+              //   component: './HomePage/QuickMenu',
+              //   hideInMenu: true,
+              // },
               {
                 path: '/homepage/alert-center',
                 name: 'Alert Center',
@@ -92,18 +92,6 @@ export default [
                     component: './DatasetManagement/DatasetManagement',
                   },
                 ],
-              },
-              {
-                path: '/report/report-designer/high-sla-reports',
-                name: 'highSlaReports',
-                component: './Page404',
-                hideInMenu: true,
-              },
-              {
-                path: '/report/report-designer/visualization-dashboard',
-                name: 'visualizationDashboard',
-                component: './Page404',
-                hideInMenu: true,
               },
             ],
           },
@@ -323,80 +311,80 @@ export default [
           },
     
           // 后面的没改过
-          {
-            path: '/data-management',
-            name: 'dataManagement',
-            icon: 'icon-zhuxian',
-            routes: [
-              {
-                path: '/data-management/data-processing',
-                name: 'dataProcessing',
-                component: './RulesEngine/RulesEngine',
-              },
-            ],
-          },
-          {
-            path: '/account-management',
-            name: 'accountManagement',
-            icon: 'icon-user',
-            routes: [
-              {
-                path: '/account-management/dashboard',
-                name: 'dashboard',
-                component: './Page404',
-              },
-              {
-                path: '/account-management/account',
-                name: 'account',
-                component: './Page404',
-              },
-              {
-                path: '/account-management/submitters',
-                name: 'submitters',
-                component: './Page404',
-              },
-            ],
-          },
-          {
-            path: '/surveillance',
-            name: 'surveillance',
-            icon: 'icon-shipin',
-            routes: [
-              {
-                path: '/surveillance/rule-engine',
-                name: 'ruleEngine',
-                routes: [
-                  {
-                    path: '/surveillance/rule-engine/rule-maintenance',
-                    name: 'ruleMaintenance',
-                    component: './Page404',
-                  },
-                  {
-                    path: '/surveillance/rule-engine/parameter-maintenance',
-                    name: 'parameterMaintenance',
-                    component: './Page404',
-                  },
-                ],
-              },
-              {
-                path: '/surveillance/modal-management',
-                name: 'modalManagement',
-                component: './Page404',
-              },
-            ],
-          },
-          {
-            path: '/analysis',
-            name: 'analysis',
-            icon: 'icon-chartpie',
-            routes: [
-              {
-                path: '/analysis/investor-segment-analysis',
-                name: 'investorSegmentAnalysis',
-                component: './Page404',
-              },
-            ],
-          },
+          // {
+          //   path: '/data-management',
+          //   name: 'dataManagement',
+          //   icon: 'icon-zhuxian',
+          //   routes: [
+          //     {
+          //       path: '/data-management/data-processing',
+          //       name: 'dataProcessing',
+          //       component: './RulesEngine/RulesEngine',
+          //     },
+          //   ],
+          // },
+          // {
+          //   path: '/account-management',
+          //   name: 'accountManagement',
+          //   icon: 'icon-user',
+          //   routes: [
+          //     {
+          //       path: '/account-management/dashboard',
+          //       name: 'dashboard',
+          //       component: './Page404',
+          //     },
+          //     {
+          //       path: '/account-management/account',
+          //       name: 'account',
+          //       component: './Page404',
+          //     },
+          //     {
+          //       path: '/account-management/submitters',
+          //       name: 'submitters',
+          //       component: './Page404',
+          //     },
+          //   ],
+          // },
+          // {
+          //   path: '/surveillance',
+          //   name: 'surveillance',
+          //   icon: 'icon-shipin',
+          //   routes: [
+          //     {
+          //       path: '/surveillance/rule-engine',
+          //       name: 'ruleEngine',
+          //       routes: [
+          //         {
+          //           path: '/surveillance/rule-engine/rule-maintenance',
+          //           name: 'ruleMaintenance',
+          //           component: './Page404',
+          //         },
+          //         {
+          //           path: '/surveillance/rule-engine/parameter-maintenance',
+          //           name: 'parameterMaintenance',
+          //           component: './Page404',
+          //         },
+          //       ],
+          //     },
+          //     {
+          //       path: '/surveillance/modal-management',
+          //       name: 'modalManagement',
+          //       component: './Page404',
+          //     },
+          //   ],
+          // },
+          // {
+          //   path: '/analysis',
+          //   name: 'analysis',
+          //   icon: 'icon-chartpie',
+          //   routes: [
+          //     {
+          //       path: '/analysis/investor-segment-analysis',
+          //       name: 'investorSegmentAnalysis',
+          //       component: './Page404',
+          //     },
+          //   ],
+          // },
           {
             path: '/404',
             name: '404',

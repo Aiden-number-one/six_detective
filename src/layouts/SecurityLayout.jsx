@@ -28,9 +28,16 @@ class SecurityLayout extends React.Component {
         // loginName: window.localStorage.currentUser,
         // userAgent: window.navigator.userAgent,
       },
-      callback: () => {},
+      callback: () => {
+        this.setState({
+          loading: false,
+        });
+      },
       logging: () => {
         this.getMenu();
+        this.setState({
+          loading: false,
+        });
       },
     });
   }
@@ -55,7 +62,12 @@ class SecurityLayout extends React.Component {
           });
         }
         if (!menuList.some(element => element.page.includes(location.pathname))) {
-          if (location.pathname === '/homepage/information' || location.pathname === '/404') {
+          if (
+            routes.some(
+              item => item.path && item.path.includes(location.pathname) && item.hideInMenu,
+            ) ||
+            location.pathname === '/404'
+          ) {
             this.setState({
               loading: false,
             });
