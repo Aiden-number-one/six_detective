@@ -6,7 +6,6 @@ import IconFont from '@/components/IconFont';
 import { timestampFormat } from '@/pages/DataImportLog/constants';
 import { AttachmentList } from './AlertDownAttachments';
 import styles from '@/pages/AlertCenter/index.less';
-import approvalStyles from '@/pages/ApprovalProcessCenter/index.less';
 
 const { Paragraph } = Typography;
 
@@ -31,7 +30,7 @@ function AlertAttachmentPop({ attachments, onDownloadAll }) {
     >
       <span style={{ cursor: 'pointer' }}>
         <IconFont type="iconbiezhen" />
-        <em>{attachments.length}</em>
+        <em className={styles.num}>{attachments.length}</em>
       </span>
     </Popover>
   );
@@ -43,20 +42,20 @@ export default function({
 }) {
   const attachments = files ? files.split(',') : [];
   return (
-    <li key={id}>
+    <li key={id} className={styles['comment-item-container']}>
       <Row type="flex">
         <Paragraph title={`(${user})${content}`} ellipsis={{ rows: 2, expandable: false }}>
           ({user}){content.substring(0, 66)}
           {content.length > 66 ? '...' : ''}
         </Paragraph>
         {attachments.length > 0 && (
-          <Col className={approvalStyles.attachmentsBox}>
+          <Col className={styles.attachmentsBox}>
             <AlertAttachmentPop attachments={attachments} onDownloadAll={onDownloadAll} />
           </Col>
         )}
       </Row>
-      <Row className={approvalStyles.attachmentsTimeBox}>
-        <Col className={approvalStyles.time}>{moment(time).format(timestampFormat)}</Col>
+      <Row className={styles.attachmentsTimeBox}>
+        <Col className={styles.time}>{moment(time).format(timestampFormat)}</Col>
       </Row>
     </li>
   );

@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 22:27:04
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 20:28:50
+ * @LastEditTime : 2020-01-16 10:55:41
  */
 import React, { PureComponent } from 'react';
 import { Form, Input, Select, DatePicker, Radio, Checkbox, InputNumber, Row, Col } from 'antd';
@@ -60,9 +60,15 @@ class PreviewSearchArea extends PureComponent {
                       rules: [
                         {
                           required: !widgetIsNull,
-                          message: 'Required',
+                          message: `${widgetName} is missing`,
+                        },
+                        {
                           max: Number(maxLength),
+                          message: `${maxLength} characters maximum`,
+                        },
+                        {
                           min: Number(minLength),
+                          message: `${minLength} characters minimum`,
                         },
                       ],
                       initialValue: widgetDefault,
@@ -85,7 +91,7 @@ class PreviewSearchArea extends PureComponent {
                       rules: [
                         {
                           required: !widgetIsNull,
-                          message: 'Required',
+                          message: `${widgetName} is missing`,
                         },
                       ],
                       initialValue: widgetDefault,
@@ -114,7 +120,7 @@ class PreviewSearchArea extends PureComponent {
                       rules: [
                         {
                           required: !widgetIsNull,
-                          message: 'Required',
+                          message: `${widgetName} is missing`,
                         },
                       ],
                       initialValue: widgetDefault,
@@ -153,7 +159,7 @@ class PreviewSearchArea extends PureComponent {
                       rules: [
                         {
                           required: !widgetIsNull,
-                          message: 'Required',
+                          message: `${widgetName} is missing`,
                         },
                       ],
                       initialValue: widgetDefault,
@@ -180,7 +186,7 @@ class PreviewSearchArea extends PureComponent {
                       rules: [
                         {
                           required: !widgetIsNull,
-                          message: 'Required',
+                          message: `${widgetName} is missing`,
                         },
                       ],
                       initialValue: widgetDefault ? moment(widgetDefault, 'YYYY-MM') : undefined,
@@ -203,7 +209,7 @@ class PreviewSearchArea extends PureComponent {
                       rules: [
                         {
                           required: !widgetIsNull,
-                          message: 'Required',
+                          message: `${widgetName} is missing`,
                         },
                       ],
                       initialValue: widgetDefault ? moment(widgetDefault, 'YYYY-MM-DD') : undefined,
@@ -226,7 +232,7 @@ class PreviewSearchArea extends PureComponent {
                       rules: [
                         {
                           required: !widgetIsNull,
-                          message: 'Required',
+                          message: `${widgetName} is missing`,
                         },
                       ],
                     })(
@@ -260,7 +266,7 @@ class PreviewSearchArea extends PureComponent {
                       rules: [
                         {
                           required: !widgetIsNull,
-                          message: 'Required',
+                          message: `${widgetName} is missing`,
                         },
                       ],
                     })(
