@@ -90,10 +90,10 @@ export default function({
       <Column
         width="10%"
         align="center"
-        dataIndex="submissionStatus"
+        dataIndex="processingStage"
         title={<FormattedMessage id="data-import.submission-status" />}
         render={(text, record) => {
-          const des = record.submissionStatusDesc;
+          const des = record.processingStageDesc;
           if ([0, 1, 2, 8, 9].includes(+text)) {
             const Status = statusMap[+text];
             return <Status des={des} />;
@@ -103,7 +103,7 @@ export default function({
       />
       <Column
         align="center"
-        dataIndex="processingStatusDesc"
+        dataIndex="processingStageDesc"
         title={<FormattedMessage id="data-import.lop.processing-stage" />}
       />
       <Column
