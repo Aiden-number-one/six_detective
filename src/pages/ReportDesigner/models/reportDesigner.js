@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 10:48:02
+ * @LastEditTime : 2020-01-15 21:19:05
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -143,6 +143,7 @@ export default {
           value: action.payload,
           position: action.cellPostion || state.cellPosition,
           spreadsheetOtherProps: state.spreadsheetOtherProps,
+          deleteAll: !!action.deleteAll,
         }),
       };
     },
