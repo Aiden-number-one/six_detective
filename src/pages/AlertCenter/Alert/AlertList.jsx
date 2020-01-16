@@ -44,7 +44,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
   }, []);
 
   useEffect(() => {
-    const { alertId, owner, status, tradeDate } = location.query;
+    const { alertId, owner, status, timestamp } = location.query;
     let params = [];
     if (alertId) {
       params = [{ column: 'alertNo', value: alertId, condition: '7' }];
@@ -55,12 +55,12 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
     if (status) {
       params = [...params, { column: 'alertStatusDesc', value: status, condition: '7' }];
     }
-    if (tradeDate) {
-      const [start, end] = tradeDate.split(',');
+    if (timestamp) {
+      const [start, end] = timestamp.split(',');
       params = [
         ...params,
-        { column: 'tradeDate', value: start, condition: '4' },
-        { column: 'tradeDate', value: end, condition: '6' },
+        { column: 'alertTime', value: start, condition: '4' },
+        { column: 'alertTime', value: end, condition: '6' },
       ];
     }
     fetchTableList({
@@ -291,11 +291,13 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
           })}
         >
           <Column
-            width={45}
-            ellipsis
+            width={60}
             dataIndex="no"
             title="No."
-            render={(text, record, index) => (alertPage - 1) * alertPageSize + index + 1}
+            render={(text, record, index) => {
+              const count = (alertPage - 1) * alertPageSize + index + 1;
+              return <span title={count}>{count}</span>;
+            }}
           />
           <Column
             dataIndex="alertNo"
