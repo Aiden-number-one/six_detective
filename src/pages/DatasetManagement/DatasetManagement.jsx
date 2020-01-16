@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-16 13:13:10
+ * @LastEditTime : 2020-01-16 20:50:11
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -92,13 +92,18 @@ export default class DatasetManagement extends PureComponent {
    * @Author: lan
    * @Date: 2020-01-15 16:49:33
    */
-  queryDataSet = () => {
+  queryDataSet = type => {
     const { dispatch, activeTree } = this.props;
     const { page } = this.state;
-    const newPage = {
-      pageNumber: '1',
-      pageSize: page.pageSize.toString(),
-    };
+    let newPage;
+    if (type === 'new') {
+      newPage = {
+        pageNumber: '1',
+        pageSize: '10',
+      };
+    } else {
+      newPage = page;
+    }
     this.setState({
       page: newPage,
     });
@@ -198,7 +203,7 @@ export default class DatasetManagement extends PureComponent {
       });
     }
     setTimeout(() => {
-      this.queryDataSet();
+      this.queryDataSet('new');
     }, 0);
   };
 
