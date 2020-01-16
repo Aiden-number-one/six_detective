@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 17:50:12
+ * @LastEditTime : 2020-01-16 20:02:26
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -27,7 +27,7 @@ class FormUser extends Component {
     const { groupMenuInfo } = this.props;
     return (
       <Fragment>
-        <Form>
+        <Form className="text-area">
           <Form.Item
             label={formatMessage({ id: 'systemManagement.userMaintenance.menuGroupName' })}
             labelCol={{ span: 6 }}
@@ -37,7 +37,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input Name of Menu User Group',
+                  message: `${formatMessage({
+                    id: 'systemManagement.userMaintenance.menuGroupName',
+                  })} is missing`,
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.groupName,
@@ -52,7 +54,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please input Remark of Menu User Group',
+                  message: `${formatMessage({
+                    id: 'systemManagement.userGroup.remark',
+                  })} is missing`,
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.groupDesc,

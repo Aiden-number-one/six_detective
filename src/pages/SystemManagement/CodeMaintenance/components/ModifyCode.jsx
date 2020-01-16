@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:15:30
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 11:21:10
+ * @LastEditTime : 2020-01-16 19:53:04
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -21,7 +21,7 @@ class FormUser extends Component {
     const { codeId, updateCodeItemParams } = this.props;
     return (
       <Fragment>
-        <Form>
+        <Form className="text-area">
           <Form.Item
             label={formatMessage({ id: 'systemManagement.codeMaintenance.codeID' })}
             labelCol={{ span: 4 }}
@@ -40,7 +40,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Subitem ID should not be empty',
+                  message: `${formatMessage({
+                    id: 'systemManagement.codeMaintenance.subitemId',
+                  })} is missing`,
                 },
               ],
               initialValue: (updateCodeItemParams && updateCodeItemParams.subitemId) || undefined,
@@ -55,7 +57,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Subitem Name should not be empty',
+                  message: `${formatMessage({
+                    id: 'systemManagement.codeMaintenance.subitemName',
+                  })} is missing`,
                 },
               ],
               initialValue: (updateCodeItemParams && updateCodeItemParams.subitemName) || undefined,
@@ -70,7 +74,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Sequence should not be empty',
+                  message: `${formatMessage({
+                    id: 'systemManagement.codeMaintenance.sequence',
+                  })} is missing`,
                 },
               ],
               initialValue: (updateCodeItemParams && updateCodeItemParams.sequence) || undefined,
