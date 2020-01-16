@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-15 14:14:01
+ * @LastEditTime : 2020-01-16 13:03:09
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -427,19 +427,17 @@ export default class DatasetManagement extends PureComponent {
                   pagination={false}
                   scroll={{ x: 'max-content' }}
                 />
-                <Pagination
-                  current={page.pageNumber}
-                  showSizeChanger
-                  showTotal={() =>
-                    `Page ${(rowsCount || 0) && page.pageNumber} of ${Math.ceil(
-                      (rowsCount || 0) / page.pageSize,
-                    )}`
-                  }
-                  onShowSizeChange={this.onShowSizeChange}
-                  onChange={this.pageChange}
-                  total={rowsCount}
-                  pageSize={page.pageSize}
-                />
+                {!!rowsCount && (
+                  <Pagination
+                    current={page.pageNumber}
+                    showSizeChanger
+                    showTotal={() => `Total ${rowsCount} items`}
+                    onShowSizeChange={this.onShowSizeChange}
+                    onChange={this.pageChange}
+                    total={rowsCount}
+                    pageSize={page.pageSize}
+                  />
+                )}
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-15 16:56:08
+ * @LastEditTime : 2020-01-16 12:59:57
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -33,6 +33,7 @@ const NewSearchForm = Form.create({})(SearchForm);
   column: dataSet.column, // 数据预览表头
   tableData: dataSet.tableData, // 数据预览数据
   activeFolderId: dataSet.activeFolderId, // 移动文件夹的FolderId
+  totalCount: dataSet.totalCount, // 数据集总数
 }))
 export default class DatasetManagement extends PureComponent {
   operateType = 'ADD'; // 操作类型
@@ -483,7 +484,14 @@ export default class DatasetManagement extends PureComponent {
       </Menu>
     );
     const { drawerTitle, page } = this.state;
-    const { classifyTreeData, dataSetData, column, tableData, activeFolderId } = this.props;
+    const {
+      classifyTreeData,
+      dataSetData,
+      column,
+      tableData,
+      activeFolderId,
+      totalCount,
+    } = this.props;
     const anotherTree = _.cloneDeep(classifyTreeData);
     return (
       <PageHeaderWrapper>
@@ -527,20 +535,18 @@ export default class DatasetManagement extends PureComponent {
                   pagination={false}
                   // scroll={{ x: 'max-content' }}
                 />
-                <Pagination
-                  current={page.pageNumber}
-                  showSizeChanger
-                  showTotal={() =>
-                    `Page ${(dataSetData.length || 0) && page.pageNumber} of ${Math.ceil(
-                      (dataSetData.length || 0) / page.pageSize,
-                    )}`
-                  }
-                  onShowSizeChange={this.onShowSizeChange}
-                  onChange={this.pageChange}
-                  total={dataSetData.length}
-                  pageSize={page.pageSize}
-                  size="small"
-                />
+                {!!totalCount && (
+                  <Pagination
+                    current={page.pageNumber}
+                    showSizeChanger
+                    showTotal={() => `Total ${totalCount} items`}
+                    onShowSizeChange={this.onShowSizeChange}
+                    onChange={this.pageChange}
+                    total={totalCount}
+                    pageSize={page.pageSize}
+                    size="small"
+                  />
+                )}
               </div>
             </div>
           </div>
