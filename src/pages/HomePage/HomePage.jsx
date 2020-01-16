@@ -138,8 +138,8 @@ export default class HomePage extends PureComponent {
       payload: {
         pageNumber: '1',
         pageSize: '4',
-        type: 'all',
-        taskCode: '',
+        dataTable: 'SLOP_BIZ.V_ALL_TASK',
+        conditions: [],
       },
     });
     // 获取快捷菜单
@@ -282,8 +282,8 @@ export default class HomePage extends PureComponent {
         payload: {
           pageNumber: '1',
           pageSize: '4',
-          type: 'all',
-          taskCode: '',
+          dataTable: 'SLOP_BIZ.V_ALL_TASK',
+          conditions: [],
         },
       });
       // 获取快捷菜单
@@ -3426,7 +3426,9 @@ export default class HomePage extends PureComponent {
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
                                   {item.alertTime &&
-                                    moment(item.alertTime, timestampFormat).format(timestampFormat)}
+                                    moment(item.alertTime, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -3452,16 +3454,23 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span
-                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
-                                >
-                                  {item.owner &&
-                                    item.owner.match(/[A-Z]/g) &&
-                                    item.owner.match(/[A-Z]/g).join('')}
-                                </span>
+                                {item.owner && (
+                                  <span
+                                    className={classNames(
+                                      styles.user,
+                                      styles[colorMap[item.owner]],
+                                    )}
+                                  >
+                                    {item.owner &&
+                                      item.owner.match(/[A-Z]/g) &&
+                                      item.owner.match(/[A-Z]/g).join('')}
+                                  </span>
+                                )}
                                 <span className={styles.date}>
                                   {item.updateDate &&
-                                    moment(item.updateDate).format(timestampFormat)}
+                                    moment(item.updateDate, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -3540,8 +3549,9 @@ export default class HomePage extends PureComponent {
                             <span className={styles.icon}>
                               <IconFont type="icon-sound" />
                             </span>
-                            {item.informationDetail &&
-                              `${item.informationDetail.substring(0, 70)}...`}
+                            {item.informationDetail && item.informationDetail.length > 70
+                              ? `${item.informationDetail.substring(0, 70)}...`
+                              : item.informationDetail}
                           </span>
                           <span className={styles.date}>
                             {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}
@@ -3996,7 +4006,9 @@ export default class HomePage extends PureComponent {
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
                                   {item.alertTime &&
-                                    moment(item.alertTime, timestampFormat).format(timestampFormat)}
+                                    moment(item.alertTime, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -4022,16 +4034,23 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span
-                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
-                                >
-                                  {item.owner &&
-                                    item.owner.match(/[A-Z]/g) &&
-                                    item.owner.match(/[A-Z]/g).join('')}
-                                </span>
+                                {item.owner && (
+                                  <span
+                                    className={classNames(
+                                      styles.user,
+                                      styles[colorMap[item.owner]],
+                                    )}
+                                  >
+                                    {item.owner &&
+                                      item.owner.match(/[A-Z]/g) &&
+                                      item.owner.match(/[A-Z]/g).join('')}
+                                  </span>
+                                )}
                                 <span className={styles.date}>
                                   {item.updateDate &&
-                                    moment(item.updateDate).format(timestampFormat)}
+                                    moment(item.updateDate, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -4111,8 +4130,9 @@ export default class HomePage extends PureComponent {
                             <span className={styles.icon}>
                               <IconFont type="icon-sound" />
                             </span>
-                            {item.informationDetail &&
-                              `${item.informationDetail.substring(0, 70)}...`}
+                            {item.informationDetail && item.informationDetail.length > 70
+                              ? `${item.informationDetail.substring(0, 70)}...`
+                              : item.informationDetail}
                           </span>
                           <span className={styles.date}>
                             {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}

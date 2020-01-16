@@ -127,10 +127,6 @@
     }
   }
   .taskBtnBox {
-    .btn-icon {
-      margin-right: 4px;
-      font-size: 12px;
-    }
     button {
       display: inline-flex;
       align-items: center;
@@ -138,7 +134,6 @@
       height: 30px;
       margin-right: 10px;
       padding: 0 14px;
-      color: #464c51;
       font-size: 12px;
       font-family: Avenir, sans-serif;
       vertical-align: middle;
@@ -153,15 +148,6 @@
       }
       &:last-child {
         margin-right: 0;
-      }
-      &.discontinue {
-        color: #f8374c;
-        border-color: #f8374c;
-        &:hover {
-          color: #fff;
-          background-color: #f8374c;
-          border-color: #f8374c;
-        }
       }
       &:disabled {
         color: unset;
@@ -191,26 +177,25 @@
       }
     }
   }
-  // .btns {
-  //   .btn-icon {
-  //     color: #464c51 !important;
-  //     font-size: 14px !important;
-  //     vertical-align: middle;
-  //   }
-  //   .icon {
-  //     color: rgba(188, 198, 204, 1);
-  //     font-size: 13px;
-  //     vertical-align: middle;
-  //     cursor: pointer;
-  //     &:nth-child(2) {
-  //       margin: 0 8px;
-  //       font-size: 19px;
-  //     }
-  //   }
-  //   .icon:hover {
-  //     color: #0d87d4;
-  //   }
-  // }
+  .tableBox {
+    .btn-icon {
+      margin-right: 4px;
+      font-size: 12px;
+    }
+    .icon {
+      color: rgba(188, 198, 204, 1);
+      font-size: 14px;
+      vertical-align: middle;
+      cursor: pointer;
+      &:nth-child(2) {
+        margin: 0 8px;
+        font-size: 19px;
+      }
+    }
+    .icon:hover {
+      color: #0d87d4;
+    }
+  }
 }
 
 .detail-container {
@@ -368,8 +353,8 @@
       background-color: #fff;
     }
     .LifecycleBox {
-      height: 370px;
-      padding: 10px 18px;
+      height: 368px;
+      padding: 10px 10px;
       overflow-y: auto;
       :global {
         .ant-row {
@@ -387,11 +372,21 @@
     }
 
     .comment-list {
-      min-height: 213px;
-      max-height: 300px;
+      height: 213px;
       margin: 0 0 18px;
-      padding: 0 18px;
+      padding: 10px 10px;
       overflow-y: auto;
+      :global {
+        .ant-typography {
+          position: relative;
+          width: 100%;
+          height: 34px;
+          padding-right: 38px;
+          line-height: 17px;
+          word-break: break-all;
+          cursor: pointer;
+        }
+      }
     }
     .loading-more {
       text-align: center;

@@ -2,7 +2,7 @@
  * @Description: 设置参数值
  * @Author: lan
  * @Date: 2019-12-11 20:54:21
- * @LastEditTime : 2020-01-14 12:43:55
+ * @LastEditTime : 2020-01-16 15:38:03
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -69,7 +69,7 @@ export default class ValueSetting extends PureComponent {
               right: 0,
               bottom: 0,
               width: '100%',
-              borderTop: '1px solid #e9e9e9',
+              // borderTop: '1px solid #e9e9e9',
               padding: '10px 16px',
               background: '#fff',
               textAlign: 'right',

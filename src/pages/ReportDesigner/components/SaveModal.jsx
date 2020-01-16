@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-12 15:09:07
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 20:33:36
+ * @LastEditTime : 2020-01-16 16:08:46
  */
 
 import React from 'react';
@@ -57,10 +57,10 @@ export default React.memo(
               <Form.Item {...Layout} label="Template Name">
                 {getFieldDecorator('reportName', {
                   rules: [
-                    { required: true, message: 'Report Name is missing' },
+                    { required: true, message: 'Template name is missing' },
                     {
                       max: 50,
-                      message: 'Report Name cannot be longer than 50 characters',
+                      message: 'Template name cannot be longer than 50 characters',
                     },
                   ],
                   initialValue: saveType === 'saveAs' ? `${reportName}_copy` : reportName,
@@ -68,7 +68,7 @@ export default React.memo(
               </Form.Item>
               <Form.Item {...Layout} label="Folder">
                 {getFieldDecorator('folderId', {
-                  rules: [{ required: false, message: 'Please select' }],
+                  rules: [{ required: true, message: 'Please select' }],
                   initialValue: saveType === 'saveAs' || !folderId ? undefined : folderId,
                 })(<TreeSelect treeData={classifyTree} placeholder="Please select" />)}
               </Form.Item>
@@ -89,7 +89,7 @@ export default React.memo(
                   right: 0,
                   bottom: 0,
                   width: '100%',
-                  borderTop: '1px solid #e9e9e9',
+                  // borderTop: '1px solid #e9e9e9',
                   padding: '10px 16px',
                   background: '#fff',
                   textAlign: 'right',

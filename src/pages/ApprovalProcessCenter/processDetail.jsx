@@ -518,7 +518,18 @@ function ProcessDetail({
             <TabPane tab="Approval History" key="1">
               <Spin spinning={loading['approvalCenter/getApprovalTaskHistory']}>
                 {taskHistoryList.length > 0 ? (
-                  <ul className={styles['comment-list']}>
+                  <ul
+                    className={styles['comment-list']}
+                    style={{
+                      height:
+                        currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY' &&
+                        currentOwner &&
+                        detailItems[0] &&
+                        detailItems[0].receivedAnswer !== '0'
+                          ? '213px'
+                          : '350px',
+                    }}
+                  >
                     {taskHistoryList.map(item => (
                       <AlertComment
                         comment={{
@@ -534,7 +545,18 @@ function ProcessDetail({
                     ))}
                   </ul>
                 ) : (
-                  <CustomEmpty className={styles['comment-list']} />
+                  <CustomEmpty
+                    className={styles['comment-list']}
+                    style={{
+                      height:
+                        currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY' &&
+                        currentOwner &&
+                        detailItems[0] &&
+                        detailItems[0].receivedAnswer !== '0'
+                          ? '213px'
+                          : '350px',
+                    }}
+                  />
                 )}
               </Spin>
               {currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY' &&

@@ -10,6 +10,7 @@ import { getAuthority } from '@/utils/authority';
 import {
   dateFormat,
   timestampFormat,
+  rawTimestampFormat,
   pageSizeOptions,
   downloadFile,
 } from '@/pages/DataImportLog/constants';
@@ -331,7 +332,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
           <Column
             align="center"
             dataIndex="alertTime"
-            render={text => moment(text, timestampFormat).format(timestampFormat)}
+            render={text => moment(text, rawTimestampFormat).format(timestampFormat)}
             title={
               <ColumnTitle {...getTitleProps('alertTime')}>
                 <FormattedMessage id="alert-center.alert-timestamp" />
