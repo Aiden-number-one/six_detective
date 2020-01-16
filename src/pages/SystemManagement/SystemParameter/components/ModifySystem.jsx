@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:19:32
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 12:20:31
+ * @LastEditTime : 2020-01-16 21:16:51
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -22,7 +22,7 @@ class FormUser extends Component {
     const { paramObj } = this.props;
     return (
       <Fragment>
-        <Form>
+        <Form className="text-area">
           <Form.Item
             label={formatMessage({ id: 'systemManagement.systemParameters.parameterType' })}
             labelCol={{ span: 6 }}
@@ -38,12 +38,6 @@ class FormUser extends Component {
             wrapperCol={{ span: 10 }}
           >
             {getFieldDecorator('parameterKey', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input your parameterKey',
-                },
-              ],
               initialValue: paramObj.parameterKey,
             })(<Input disabled />)}
           </Form.Item>
@@ -56,7 +50,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Parameter Value couldn’t be null',
+                  message: `${formatMessage({
+                    id: 'systemManagement.systemParameters.parameterValue',
+                  })} is missing`,
                 },
               ],
               initialValue: paramObj.parameterValue,
@@ -71,7 +67,7 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Remark couldn’t be null',
+                  message: `${formatMessage({ id: 'app.common.remark' })} is missing`,
                 },
               ],
               initialValue: paramObj.note,

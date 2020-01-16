@@ -130,6 +130,7 @@ const BasicLayout = props => {
     <div className={styles.popoverFooter}>
       <a
         onClick={() => {
+          setStore({ name: 'employeeId', content: '' });
           if (dispatch) {
             dispatch({
               type: 'login/logout',

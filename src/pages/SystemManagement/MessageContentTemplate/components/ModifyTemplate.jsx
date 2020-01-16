@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:24
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-10 12:16:27
+ * @LastEditTime : 2020-01-16 20:04:02
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message, Select } from 'antd';
@@ -23,19 +23,13 @@ class FormUser extends Component {
     const { groupMenuInfo, typeOptions } = this.props;
     return (
       <Fragment>
-        <Form>
+        <Form className="text-area">
           <Form.Item
             label={formatMessage({ id: 'systemManagement.template.templateName' })}
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('templateName', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input Name of Alert User Group',
-                },
-              ],
               initialValue: groupMenuInfo && groupMenuInfo.templateName,
             })(<Input disabled placeholder="Please input" />)}
           </Form.Item>
@@ -57,7 +51,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Type of email should not be empty',
+                  message: `${formatMessage({
+                    id: 'systemManagement.template.templateType',
+                  })} is missing`,
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.type,
@@ -80,7 +76,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Title of email should not be empty',
+                  message: `${formatMessage({
+                    id: 'systemManagement.template.templateTitle',
+                  })} is missing`,
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.title,
@@ -95,7 +93,9 @@ class FormUser extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Content of email should not be empty',
+                  message: `${formatMessage({
+                    id: 'systemManagement.template.templateContent',
+                  })} is missing`,
                 },
               ],
               initialValue: groupMenuInfo && groupMenuInfo.content,
