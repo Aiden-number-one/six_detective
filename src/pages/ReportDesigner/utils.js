@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 15:06:33
+ * @LastEditTime : 2020-01-16 20:02:18
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -208,7 +208,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
   spreadSheetData.forEach((rowsValue, rowsIndex) => {
     rowsValue.forEach((colsValue, colsIndex) => {
       let cellText = colsValue;
-      const { cellType, style } = spreadSheetProps[rowsIndex][colsIndex];
+      const { cellType, style, rowSpan, colSpan } = spreadSheetProps[rowsIndex][colsIndex];
       const {
         bgcolor,
         forecolor,
@@ -230,7 +230,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
         borderLeft,
         borderLeftColor,
         borderLeftType,
-        bordeLeftWidth,
+        borderLeftWidth,
         borderRight,
         borderRightColor,
         borderRightType,
@@ -254,7 +254,7 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
           }
           expand = otherProps.expendDirection || 'Down';
           if (otherProps.dataSetting === 'sum') {
-            aggregate = otherProps.sumSetting;
+            aggregate = otherProps.sumSetting || 'sum';
             // 汇总的话为None
             expand = 'None';
           }
@@ -266,15 +266,27 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       cellxml += `<cell expand="${expand}" name="${createCellPos(colsIndex) +
         (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}" ${
         cellType === 'LINK' ? `link-url="${otherProps.link}" link-target-window="_blank"` : ''
-      }>
+      } row-span="${rowSpan}" col-span="${colSpan}">
         <cell-style font-size="${fontSize}" align="${align}" valign="${valign}" ${bgcolor &&
         `bgcolor="${bgcolor}"`} ${forecolor && `forecolor="${forecolor}"`} ${underline &&
         `underline="${underline}"`} ${fontFamily && `font-family="${fontFamily}"`} ${italic &&
-        `italic="${italic}"`} ${bold && `bold="${bold}"`} ${borderBottom &&
-        `<bottom-border width=${borderBottomWidth} style=${borderBottomType} color=${borderBottomColor}`} ${borderTop &&
-        `<top-border width=${borderTopWidth} style=${borderTopType} color=${borderTopColor}`} ${borderLeft &&
-        `<left-border width=${bordeLeftWidth} style=${borderLeftType} color=${borderLeftColor}`} ${borderRight &&
-        `<right-border width=${borderRightWidth} style=${borderRightType} color=${borderRightColor}`}></cell-style>`;
+        `italic="${italic}"`} ${bold && `bold="${bold}"`}> ${
+        borderBottom
+          ? `<bottom-border width="${borderBottomWidth}" style="${borderBottomType}" color="${borderBottomColor}" />`
+          : ''
+      } ${
+        borderTop
+          ? `<top-border width="${borderTopWidth}" style="${borderTopType}" color="${borderTopColor}" />`
+          : ''
+      } ${
+        borderLeft
+          ? `<left-border width="${borderLeftWidth}" style="${borderLeftType}" color="${borderLeftColor}" />`
+          : ''
+      } ${
+        borderRight
+          ? `<right-border width="${borderRightWidth}" style="${borderRightType}" color="${borderRightColor}" />`
+          : ''
+      }</cell-style>`;
       // 去除undefined
       cellxml = cellxml.replace(/undefined/g, '');
       // 生成value相关元素
@@ -312,6 +324,7 @@ export function modifyTemplateAreaInside({
   value = {},
   position = 'A1',
   spreadsheetOtherProps = [],
+  deleteAll = false, // 是否清除全部
 }) {
   let newSpreadsheetOtherProps = [...spreadsheetOtherProps];
   const [rowIndex, colIndex] = getColIndexRowIndex(position);
@@ -334,6 +347,9 @@ export function modifyTemplateAreaInside({
   }
   const content = newSpreadsheetOtherProps[rowIndex][colIndex];
   newSpreadsheetOtherProps[rowIndex][colIndex] = { ...content, ...value };
+  if (deleteAll) {
+    newSpreadsheetOtherProps[rowIndex][colIndex] = {};
+  }
   return newSpreadsheetOtherProps;
 }
 

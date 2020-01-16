@@ -4,6 +4,7 @@ import { Tabs, Row, Col, Input, Button, Drawer, Radio, Upload, Empty, Spin } fro
 import { connect } from 'dva';
 import moment from 'moment';
 import AlertComment from '@/pages/AlertCenter/Alert/components/AlertComment';
+import { downloadFile } from '@/pages/DataImportLog/constants';
 import { useColumnFilter } from '@/pages/AlertCenter/ColumnTitle';
 import IconFont from '@/components/IconFont';
 import { ConfirmModel } from './component/ConfirmModel';
@@ -422,6 +423,18 @@ function ProcessDetail({
     });
     setUpAttachements(fileList);
   }
+  // 下载所有附件
+  async function handleDownloadAll(fileList) {
+    const url = await dispatch({
+      type: 'global/fetchZipAttachments',
+      payload: {
+        attachmentUrl: fileList.toString(),
+      },
+    });
+    if (url) {
+      downloadFile(url);
+    }
+  }
   // 删除附件
   function handleRemove(file) {
     setUpAttachements(upAttachments.filter(item => item.uid !== file.uid));
@@ -505,7 +518,18 @@ function ProcessDetail({
             <TabPane tab="Approval History" key="1">
               <Spin spinning={loading['approvalCenter/getApprovalTaskHistory']}>
                 {taskHistoryList.length > 0 ? (
-                  <ul className={styles['comment-list']}>
+                  <ul
+                    className={styles['comment-list']}
+                    style={{
+                      height:
+                        currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY' &&
+                        currentOwner &&
+                        detailItems[0] &&
+                        detailItems[0].receivedAnswer !== '0'
+                          ? '213px'
+                          : '350px',
+                    }}
+                  >
                     {taskHistoryList.map(item => (
                       <AlertComment
                         comment={{
@@ -515,12 +539,24 @@ function ProcessDetail({
                           user: item.commentUserName,
                           files: item.attachment,
                         }}
+                        onDownloadAll={handleDownloadAll}
                         key={item.id}
                       />
                     ))}
                   </ul>
                 ) : (
-                  <CustomEmpty className={styles['comment-list']} />
+                  <CustomEmpty
+                    className={styles['comment-list']}
+                    style={{
+                      height:
+                        currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY' &&
+                        currentOwner &&
+                        detailItems[0] &&
+                        detailItems[0].receivedAnswer !== '0'
+                          ? '213px'
+                          : '350px',
+                    }}
+                  />
                 )}
               </Spin>
               {currentTaskType !== 'SLOP_BIZ.V_TASK_HISTORY' &&

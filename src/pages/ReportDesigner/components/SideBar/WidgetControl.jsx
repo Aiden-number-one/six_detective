@@ -166,6 +166,10 @@ export default props => {
                         initialValue: currentWidge.widgetDefault,
                       })(
                         <Select>
+                          mode=
+                          {(currentWidge.widgetType === 'selectmultiple' ||
+                            currentWidge.widgetType === 'checkbox') &&
+                            'multiple'}
                           {(
                             defaultValueDatasetType[
                               currentWidge.sourceType === 'dataset'
@@ -453,12 +457,12 @@ export default props => {
                 <Form.Item label="Max Length" {...formLayout}>
                   {getFieldDecorator('maxLength', {
                     initialValue: currentWidge.maxLength,
-                  })(<InputNumber />)}
+                  })(<InputNumber precision={0} min={1} />)}
                 </Form.Item>
                 <Form.Item label="Min Length" {...formLayout}>
                   {getFieldDecorator('minLength', {
                     initialValue: currentWidge.minLength,
-                  })(<InputNumber />)}
+                  })(<InputNumber precision={0} min={1} />)}
                 </Form.Item>
               </>
             )}

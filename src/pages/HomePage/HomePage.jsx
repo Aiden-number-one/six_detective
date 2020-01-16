@@ -138,8 +138,8 @@ export default class HomePage extends PureComponent {
       payload: {
         pageNumber: '1',
         pageSize: '4',
-        type: 'all',
-        taskCode: '',
+        dataTable: 'SLOP_BIZ.V_ALL_TASK',
+        conditions: [],
       },
     });
     // 获取快捷菜单
@@ -282,8 +282,8 @@ export default class HomePage extends PureComponent {
         payload: {
           pageNumber: '1',
           pageSize: '4',
-          type: 'all',
-          taskCode: '',
+          dataTable: 'SLOP_BIZ.V_ALL_TASK',
+          conditions: [],
         },
       });
       // 获取快捷菜单
@@ -670,7 +670,7 @@ export default class HomePage extends PureComponent {
       {
         gender: 'a',
         value:
-          allAlertCount === 0 ? 0 : Number((allClaimAlertCount / allAlertCount).toFixed(2)) * 100,
+          allAlertCount === 0 ? 0 : Number((allClaimAlertCount / allAlertCount).toFixed(4)) * 100,
       },
     ];
     otherChart1.source(data, {
@@ -698,7 +698,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -731,7 +731,7 @@ export default class HomePage extends PureComponent {
         value:
           allAlertCount === 0
             ? 0
-            : Number((allProcessingAlertCount / allAlertCount).toFixed(2)) * 100,
+            : Number((allProcessingAlertCount / allAlertCount).toFixed(4)) * 100,
       },
     ];
     otherChart2.source(data, {
@@ -759,7 +759,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -790,7 +790,7 @@ export default class HomePage extends PureComponent {
       {
         gender: '',
         value:
-          allAlertCount === 0 ? 0 : Number((perClaimAlertCount / allAlertCount).toFixed(2)) * 100,
+          allAlertCount === 0 ? 0 : Number((perClaimAlertCount / allAlertCount).toFixed(4)) * 100,
       },
     ];
     otherChart3.source(data, {
@@ -818,7 +818,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -851,7 +851,7 @@ export default class HomePage extends PureComponent {
         value:
           allAlertCount === 0
             ? 0
-            : Number((perProcessingAlertCount / allAlertCount).toFixed(2)) * 100,
+            : Number((perProcessingAlertCount / allAlertCount).toFixed(4)) * 100,
       },
     ];
     otherChart4.source(data, {
@@ -879,7 +879,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -909,7 +909,7 @@ export default class HomePage extends PureComponent {
     let num = 0;
     if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
-        Number((allApprovalData[0].allClaimedNum / allApprovalData[0].allTotalNum).toFixed(2)) *
+        Number((allApprovalData[0].allClaimedNum / allApprovalData[0].allTotalNum).toFixed(4)) *
         100;
     }
     const data = [
@@ -943,7 +943,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -973,7 +973,7 @@ export default class HomePage extends PureComponent {
     let num = 0;
     if (allApprovalData[0] && allApprovalData[0].allTotalNum !== 0) {
       num =
-        Number((allApprovalData[0].allProcessingNum / allApprovalData[0].allTotalNum).toFixed(2)) *
+        Number((allApprovalData[0].allProcessingNum / allApprovalData[0].allTotalNum).toFixed(4)) *
         100;
     }
     const data = [
@@ -1007,7 +1007,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -1037,7 +1037,7 @@ export default class HomePage extends PureComponent {
     let num = 0;
     if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
-        Number((perApprovalData[0].myClaimedNum / perApprovalData[0].allTotalNum).toFixed(2)) * 100;
+        Number((perApprovalData[0].myClaimedNum / perApprovalData[0].allTotalNum).toFixed(4)) * 100;
     }
     const data = [
       {
@@ -1070,7 +1070,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -1100,7 +1100,7 @@ export default class HomePage extends PureComponent {
     let num = 0;
     if (perApprovalData[0] && perApprovalData[0].allTotalNum !== 0) {
       num =
-        Number((perApprovalData[0].myProcessingNum / perApprovalData[0].allTotalNum).toFixed(2)) *
+        Number((perApprovalData[0].myProcessingNum / perApprovalData[0].allTotalNum).toFixed(4)) *
         100;
     }
     const data = [
@@ -1134,7 +1134,7 @@ export default class HomePage extends PureComponent {
           gender: row.gender,
           value: 50,
         },
-        content: `${row.value.toFixed()}%`,
+        content: `${row.value.toFixed(2)}%`,
         style: {
           opacity: 0.75,
           fontSize: 12,
@@ -1326,7 +1326,7 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           // const alertStatusDesc = clickData._origin.type;
           router.push(
-            `/homepage/alert-center?owner=${alertOwnerId}&tradeDate=${this.state.startDate},${this.state.endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&timestamp=${this.state.startDate},${this.state.endDate}`,
           );
         }
       });
@@ -1491,7 +1491,7 @@ export default class HomePage extends PureComponent {
           // eslint-disable-next-line no-underscore-dangle
           // const alertStatusDesc = clickData._origin.label;
           router.push(
-            `/homepage/alert-center?owner=${alertOwnerId}&tradeDate=${this.state.startDate},${this.state.endDate}`,
+            `/homepage/alert-center?owner=${alertOwnerId}&timestamp=${this.state.startDate},${this.state.endDate}`,
           );
         }
       });
@@ -1524,7 +1524,7 @@ export default class HomePage extends PureComponent {
       let count = 0;
       userInfo.forEach(item => {
         ApprovalAll.push({
-          label: item.userId,
+          label: item.userName,
           type: 'Claimed',
           value: item.userClaimedNum,
         });
@@ -1534,7 +1534,7 @@ export default class HomePage extends PureComponent {
       });
       userInfo.forEach(item => {
         ApprovalAll.push({
-          label: item.userId,
+          label: item.userName,
           type: 'Processing',
           value: item.userProcessingNum,
         });
@@ -3426,7 +3426,9 @@ export default class HomePage extends PureComponent {
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
                                   {item.alertTime &&
-                                    moment(item.alertTime, timestampFormat).format(timestampFormat)}
+                                    moment(item.alertTime, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -3452,16 +3454,23 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span
-                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
-                                >
-                                  {item.owner &&
-                                    item.owner.match(/[A-Z]/g) &&
-                                    item.owner.match(/[A-Z]/g).join('')}
-                                </span>
+                                {item.owner && (
+                                  <span
+                                    className={classNames(
+                                      styles.user,
+                                      styles[colorMap[item.owner]],
+                                    )}
+                                  >
+                                    {item.owner &&
+                                      item.owner.match(/[A-Z]/g) &&
+                                      item.owner.match(/[A-Z]/g).join('')}
+                                  </span>
+                                )}
                                 <span className={styles.date}>
                                   {item.updateDate &&
-                                    moment(item.updateDate).format(timestampFormat)}
+                                    moment(item.updateDate, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -3540,8 +3549,9 @@ export default class HomePage extends PureComponent {
                             <span className={styles.icon}>
                               <IconFont type="icon-sound" />
                             </span>
-                            {item.informationDetail &&
-                              `${item.informationDetail.substring(0, 70)}...`}
+                            {item.informationDetail && item.informationDetail.length > 70
+                              ? `${item.informationDetail.substring(0, 70)}...`
+                              : item.informationDetail}
                           </span>
                           <span className={styles.date}>
                             {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}
@@ -3996,7 +4006,9 @@ export default class HomePage extends PureComponent {
                                 <span className={styles.date}>
                                   {/* {item.updateTime} */}
                                   {item.alertTime &&
-                                    moment(item.alertTime, timestampFormat).format(timestampFormat)}
+                                    moment(item.alertTime, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -4022,16 +4034,23 @@ export default class HomePage extends PureComponent {
                                 >
                                   {item.classification} {item.details}
                                 </span>
-                                <span
-                                  className={classNames(styles.user, styles[colorMap[item.owner]])}
-                                >
-                                  {item.owner &&
-                                    item.owner.match(/[A-Z]/g) &&
-                                    item.owner.match(/[A-Z]/g).join('')}
-                                </span>
+                                {item.owner && (
+                                  <span
+                                    className={classNames(
+                                      styles.user,
+                                      styles[colorMap[item.owner]],
+                                    )}
+                                  >
+                                    {item.owner &&
+                                      item.owner.match(/[A-Z]/g) &&
+                                      item.owner.match(/[A-Z]/g).join('')}
+                                  </span>
+                                )}
                                 <span className={styles.date}>
                                   {item.updateDate &&
-                                    moment(item.updateDate).format(timestampFormat)}
+                                    moment(item.updateDate, 'YYYYMMDDHHmmss').format(
+                                      timestampFormat,
+                                    )}
                                 </span>
                               </List.Item>
                             )}
@@ -4111,8 +4130,9 @@ export default class HomePage extends PureComponent {
                             <span className={styles.icon}>
                               <IconFont type="icon-sound" />
                             </span>
-                            {item.informationDetail &&
-                              `${item.informationDetail.substring(0, 70)}...`}
+                            {item.informationDetail && item.informationDetail.length > 70
+                              ? `${item.informationDetail.substring(0, 70)}...`
+                              : item.informationDetail}
                           </span>
                           <span className={styles.date}>
                             {moment(item.timestamp).format('DD-MMM-YYYY HH:mm')}

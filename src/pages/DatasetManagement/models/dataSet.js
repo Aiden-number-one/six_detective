@@ -2,7 +2,7 @@
  * @Description: 获取数据集列表
  * @Author: lan
  * @Date: 2019-11-07 17:42:09
- * @LastEditTime : 2020-01-14 15:57:19
+ * @LastEditTime : 2020-01-16 12:57:59
  * @LastEditors  : lan
  */
 import { message } from 'antd';
@@ -26,6 +26,7 @@ export default {
     tableData: [], // 数据预览数据
     activeTree: '', // 选中的树
     activeFolderId: '', // 移动文件夹选中的树
+    totalCount: 0, // 数据集总数
   },
   effects: {
     // 获取数据集分类树
@@ -87,6 +88,7 @@ export default {
         yield put({
           type: 'saveDataSetData',
           payload: response.bcjson.items,
+          totalCount: response.bcjson.totalCount,
         });
       }
     },
@@ -158,6 +160,7 @@ export default {
       return {
         ...state,
         dataSetData: action.payload,
+        totalCount: action.totalCount,
       };
     },
     // 保存数据预览表格表头

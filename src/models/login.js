@@ -2,8 +2,8 @@
  * @Description: This is for login
  * @Author: dailinbo
  * @Date: 2019-12-19 14:06:28
- * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 21:05:55
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-16 20:36:13
  */
 import { parse, stringify } from 'qs';
 import { message } from 'antd';
@@ -33,7 +33,7 @@ const Model = {
         message.error(response.bcjson.msg);
       }
     },
-    *getLoginStatus({ callback, payload }, { call, put }) {
+    *getLoginStatus({ callback, logging, payload }, { call, put }) {
       const response = yield call(getLoginStatus, { param: payload });
       if (response.bcjson.flag === '1') {
         const item = response.bcjson.items[0];
@@ -44,7 +44,7 @@ const Model = {
             callback: () => {},
           });
           setStore({ name: 'employeeId', content: '' });
-        }
+        } else if (logging) logging();
       }
       // if (response.bcjson.flag === '001') {
       //   message.error('您的登录信息已失效,请重新登录')
@@ -72,6 +72,17 @@ const Model = {
           );
           window.localStorage.clear();
         }
+        if (callback) callback();
+      } else {
+        yield put(
+          routerRedux.replace({
+            pathname: '/login',
+            search: stringify({
+              redirect: window.location.href,
+            }),
+          }),
+        );
+        window.localStorage.clear();
         if (callback) callback();
       }
     },

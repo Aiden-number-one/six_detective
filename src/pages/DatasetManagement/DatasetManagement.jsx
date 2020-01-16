@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-15 16:56:08
+ * @LastEditTime : 2020-01-16 21:02:04
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -33,6 +33,7 @@ const NewSearchForm = Form.create({})(SearchForm);
   column: dataSet.column, // 数据预览表头
   tableData: dataSet.tableData, // 数据预览数据
   activeFolderId: dataSet.activeFolderId, // 移动文件夹的FolderId
+  totalCount: dataSet.totalCount, // 数据集总数
 }))
 export default class DatasetManagement extends PureComponent {
   operateType = 'ADD'; // 操作类型
@@ -91,13 +92,18 @@ export default class DatasetManagement extends PureComponent {
    * @Author: lan
    * @Date: 2020-01-15 16:49:33
    */
-  queryDataSet = () => {
+  queryDataSet = type => {
     const { dispatch, activeTree } = this.props;
     const { page } = this.state;
-    const newPage = {
-      pageNumber: '1',
-      pageSize: page.pageSize.toString(),
-    };
+    let newPage;
+    if (type === 'new') {
+      newPage = {
+        pageNumber: 1,
+        pageSize: 10,
+      };
+    } else {
+      newPage = page;
+    }
     this.setState({
       page: newPage,
     });
@@ -107,7 +113,8 @@ export default class DatasetManagement extends PureComponent {
         payload: {
           datasetName: values.datasetName,
           folderId: activeTree,
-          ...newPage,
+          pageNumber: newPage.pageNumber.toString(),
+          pageSize: newPage.pageSize.toString(),
         },
       });
     });
@@ -197,7 +204,7 @@ export default class DatasetManagement extends PureComponent {
       });
     }
     setTimeout(() => {
-      this.queryDataSet();
+      this.queryDataSet('new');
     }, 0);
   };
 
@@ -324,8 +331,8 @@ export default class DatasetManagement extends PureComponent {
    */
   pageChange = (pageNumber, pageSize) => {
     const page = {
-      pageNumber: pageNumber.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber,
+      pageSize,
     };
 
     this.setState(
@@ -340,8 +347,8 @@ export default class DatasetManagement extends PureComponent {
 
   onShowSizeChange = (current, pageSize) => {
     const page = {
-      pageNumber: current.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber: current,
+      pageSize,
     };
     this.setState(
       {
@@ -483,30 +490,39 @@ export default class DatasetManagement extends PureComponent {
       </Menu>
     );
     const { drawerTitle, page } = this.state;
-    const { classifyTreeData, dataSetData, column, tableData, activeFolderId } = this.props;
+    const {
+      classifyTreeData,
+      dataSetData,
+      column,
+      tableData,
+      activeFolderId,
+      totalCount,
+    } = this.props;
     const anotherTree = _.cloneDeep(classifyTreeData);
     return (
       <PageHeaderWrapper>
         <div style={{ display: 'flex', minHeight: 'calc(100vh - 185px)' }}>
           <div style={{ flex: '0 0 220px', background: '#fff', zIndex: 1 }}>
             {this.Title()}
-            <ClassifyTree
-              add
-              modify
-              move
-              handleAddTree={this.handleAddTree}
-              handleModifyTree={this.handleModifyTree}
-              handleDeleteTree={this.handleDeleteTree}
-              checkable={false}
-              treeData={classifyTreeData}
-              treeKey={{
-                currentKey: 'folderId',
-                currentName: 'folderName',
-                parentKey: 'parentId',
-              }}
-              onSelect={this.onSelect}
-              showSearch={false}
-            />
+            {classifyTreeData.length > 0 && (
+              <ClassifyTree
+                add
+                modify
+                move
+                handleAddTree={this.handleAddTree}
+                handleModifyTree={this.handleModifyTree}
+                handleDeleteTree={this.handleDeleteTree}
+                checkable={false}
+                treeData={classifyTreeData}
+                treeKey={{
+                  currentKey: 'folderId',
+                  currentName: 'folderName',
+                  parentKey: 'parentId',
+                }}
+                onSelect={this.onSelect}
+                showSearch={false}
+              />
+            )}
           </div>
           <div style={{ flex: 1 }}>
             <div
@@ -527,20 +543,17 @@ export default class DatasetManagement extends PureComponent {
                   pagination={false}
                   // scroll={{ x: 'max-content' }}
                 />
-                <Pagination
-                  current={page.pageNumber}
-                  showSizeChanger
-                  showTotal={() =>
-                    `Page ${(dataSetData.length || 0) && page.pageNumber} of ${Math.ceil(
-                      (dataSetData.length || 0) / page.pageSize,
-                    )}`
-                  }
-                  onShowSizeChange={this.onShowSizeChange}
-                  onChange={this.pageChange}
-                  total={dataSetData.length}
-                  pageSize={page.pageSize}
-                  size="small"
-                />
+                {!!totalCount && (
+                  <Pagination
+                    current={page.pageNumber}
+                    showSizeChanger
+                    showTotal={() => `Total ${totalCount} items`}
+                    onShowSizeChange={this.onShowSizeChange}
+                    onChange={this.pageChange}
+                    total={totalCount}
+                    pageSize={page.pageSize}
+                  />
+                )}
               </div>
             </div>
           </div>

@@ -25,9 +25,9 @@ const ButtonGroup = Button.Group;
 class ToolBar extends Component {
   state = {
     // 默认白色背景
-    backgroundColor: '#fff',
+    backgroundColor: 'rgb(255, 255, 255)',
     // 默认黑色字体
-    fontColor: '#000',
+    fontColor: 'rgb(0, 0, 0)',
     // 默认样式
     btnActiveStatus: {
       autoLineBreak: false, // 是否自动换行
@@ -186,8 +186,9 @@ class ToolBar extends Component {
           freeze = true;
         }
         this.setState({
-          backgroundColor: cellStyle.bgcolor,
-          fontColor: cellStyle.color,
+          backgroundColor:
+            cellStyle.bgcolor === '#ffffff' ? 'rgb(255, 255, 255)' : cellStyle.bgcolor,
+          fontColor: cellStyle.color === '#0a0a0a' ? 'rgb(0, 0, 0)' : cellStyle.color,
           btnActiveStatus: {
             // 回显按钮样式
             ...btnActiveStatus,
@@ -292,7 +293,7 @@ class ToolBar extends Component {
             <Menu.Item
               key={name}
               onClick={() => {
-                const { cellPosition } = this.props;
+                const { cellPosition, dispatch } = this.props;
                 if (params === 'clearStyle') {
                   setCellStyle('clearformat');
                 }
@@ -309,6 +310,10 @@ class ToolBar extends Component {
                     value: '',
                     type: 'text',
                     cellPosition,
+                  });
+                  dispatch({
+                    type: 'reportDesigner/modifyTemplateArea',
+                    deleteAll: true,
                   });
                 }
               }}
@@ -379,7 +384,9 @@ class ToolBar extends Component {
         window.xsObj.instanceArray[window.xsObj.instanceArray.length - 1].data.setData(
           spreadSheetObj,
         );
-        window.xsObj.instanceArray[0].sheet.toolbar.change();
+        setTimeout(() => {
+          window.xsObj.instanceArray[0].sheet.toolbar.change();
+        }, 100);
       }
     } else if (info.file.status === 'error') {
       message.infp(`${info.file.name} file upload failed.`);
@@ -685,8 +692,11 @@ class ToolBar extends Component {
                       onClick={() => {
                         setCellStyle('bgcolor', backgroundColor);
                       }}
+                      style={{
+                        borderBottom: `3px solid ${backgroundColor}`,
+                      }}
                     >
-                      <IconFont type="iconic_format_color_fill" />
+                      <IconFont style={{ fontSize: 16 }} type="iconiconic_format_color_fill1" />
                     </Button>
                     <Dropdown
                       overlay={
@@ -694,7 +704,7 @@ class ToolBar extends Component {
                           color={backgroundColor}
                           onChange={value => {
                             this.setState({
-                              backgroundColor: value.hex,
+                              backgroundColor: `rgb(${value.rgb.r},${value.rgb.g},${value.rgb.b})`,
                             });
                             setCellStyle(
                               'bgcolor',
@@ -719,8 +729,11 @@ class ToolBar extends Component {
                       onClick={() => {
                         setCellStyle('color', fontColor);
                       }}
+                      style={{
+                        borderBottom: `3px solid ${fontColor}`,
+                      }}
                     >
-                      <IconFont type="iconic_format_color_text_px" />
+                      <IconFont style={{ fontSize: 12 }} type="iconiconic_format_color_text_px1" />
                     </Button>
                     <Dropdown
                       overlay={
@@ -728,7 +741,7 @@ class ToolBar extends Component {
                           color={fontColor}
                           onChange={value => {
                             this.setState({
-                              fontColor: value.hex,
+                              fontColor: `rgb(${value.rgb.r},${value.rgb.g},${value.rgb.b})`,
                             });
                             setCellStyle(
                               'color',

@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-12-02 18:53:34
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-13 19:15:58
+ * @LastEditTime : 2020-01-16 19:33:27
  */
 import moment from 'moment';
 
@@ -35,6 +35,9 @@ export const defaultPage = 1;
 export const defaultPageSize = 10;
 export const pageSizeOptions = ['10', '20', '50', '100'];
 
+export const rawDateFormat = 'YYYYMMDD';
+export const rawTimestampFormat = 'YYYYMMDDHHmmss';
+
 export const reqFormat = 'YYYYMMDD';
 export const dateFormat = 'DD-MMM-YYYY';
 export const timeFormat = 'HH:mm:ss';
@@ -49,6 +52,6 @@ export const defaultMarket = ['HKFE', 'SEHK'];
 export function downloadFile(url) {
   const aLink = document.createElement('a');
   aLink.download = true;
-  aLink.href = `/download?filePath=${url}`;
+  aLink.href = `/download?filePath=${encodeURIComponent(url)}`;
   aLink.click();
 }

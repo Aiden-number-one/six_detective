@@ -20,7 +20,12 @@ export default class SearchForm extends Component {
           </Col>
           <Col xs={24} sm={12} xl={7} xxl={5}>
             <Form.Item>
-              <Button type="primary" onClick={search}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  search('new');
+                }}
+              >
                 <IconFont type="iconsousuo" style={{ color: '#fff' }} />
                 {formatMessage({ id: 'app.common.search' })}
               </Button>
