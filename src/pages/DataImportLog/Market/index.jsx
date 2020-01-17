@@ -1,53 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
 import { FormattedMessage } from 'umi/locale';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Row } from 'antd';
-import { defaultDateRange, defaultMarket } from '../constants';
 import MarketLogManualModal from './MarketLogManualModal';
 import FilterForm from '../FilterForm';
 import MarketLogList from './MarketLogList';
+import useLog from '../hooks';
 
 import styles from '../index.less';
 
 function MarketLog({ dispatch, loading, logs, page: current, total }) {
   const [visible, setVisible] = useState(false);
-  const [dateRange, setdateRange] = useState([]);
-  const [searchParams, setSearchParams] = useState({});
-
-  useEffect(() => {
-    initPage();
-  }, []);
-
-  async function initPage() {
-    const lastTradeDate = await dispatch({
-      type: 'global/fetchLastTradeDate',
-    });
-
-    const startDate = lastTradeDate ? moment(lastTradeDate) : defaultDateRange[0];
-    const endDate = defaultDateRange[1];
-
-    setdateRange([startDate, endDate]);
-
-    dispatch({
-      type: 'market/fetch',
-      payload: {
-        market: defaultMarket,
-        startDate,
-        endDate,
-      },
-    });
-  }
-
-  function handleParams(type, params) {
-    setSearchParams(params);
-    dispatch({ type, payload: params });
-  }
-
-  function handlePageChange(page, pageSize) {
-    dispatch({ type: 'market/fetch', payload: { page, pageSize, ...searchParams } });
-  }
+  const { dateRange, searchParams, handleParams, handlePageChange } = useLog({
+    dispatch,
+    type: 'market',
+  });
 
   async function handleUpload(params) {
     await dispatch({
