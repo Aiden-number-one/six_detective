@@ -139,6 +139,12 @@ export default class RightSideBar extends PureComponent {
               <Title
                 index={index}
                 title={value.widgetName}
+                onClick={() => {
+                  dispatch({
+                    type: 'formArea/changeCustomSearchData',
+                    payload: { index: value.i },
+                  });
+                }}
                 isLeaf
                 copyData={() => {
                   dispatch({
@@ -416,7 +422,7 @@ export default class RightSideBar extends PureComponent {
   }
 }
 
-function Title({ title, isLeaf, copyData, deleteData }) {
+function Title({ title, isLeaf, copyData, deleteData, onClick }) {
   const [hoverState, hoverAction] = useState(false);
   return (
     <div
@@ -429,6 +435,7 @@ function Title({ title, isLeaf, copyData, deleteData }) {
         e.stopPropagation();
         hoverAction(false);
       }}
+      onClick={onClick}
     >
       <div className={styles.hoverArea} />
       {hoverState && <div className={styles.hoverBlock} />}

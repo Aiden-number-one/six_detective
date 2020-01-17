@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-16 20:02:18
+ * @LastEditTime : 2020-01-17 16:24:19
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -266,7 +266,9 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
       cellxml += `<cell expand="${expand}" name="${createCellPos(colsIndex) +
         (rowsIndex + 1).toString()}" row="${rowsIndex + 1}" col="${colsIndex + 1}" ${
         cellType === 'LINK' ? `link-url="${otherProps.link}" link-target-window="_blank"` : ''
-      } row-span="${rowSpan}" col-span="${colSpan}">
+      } ${rowSpan && rowSpan !== '1' ? `row-span="${rowSpan}"` : ''} ${
+        colSpan && colSpan !== '1' ? `col-span="${colSpan}"` : ''
+      }>
         <cell-style font-size="${fontSize}" align="${align}" valign="${valign}" ${bgcolor &&
         `bgcolor="${bgcolor}"`} ${forecolor && `forecolor="${forecolor}"`} ${underline &&
         `underline="${underline}"`} ${fontFamily && `font-family="${fontFamily}"`} ${italic &&
