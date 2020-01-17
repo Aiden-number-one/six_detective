@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-18 00:22:31
+ * @LastEditTime : 2020-01-18 00:45:37
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -384,7 +384,7 @@ class ClassifyTree extends Component {
 
   onChange = e => {
     // const { btnArray } = this.props;
-    const { menuList, allBtns } = this.state;
+    const { menuList, customeBtnIds, halfCheckedKeys, allBtns } = this.state;
     let checkedKeys = flatteningTree(this.props.treeData).filter(element => element.menuid);
     checkedKeys = checkedKeys.filter(element => !element.menuid.includes('btn'));
     // const checkedKeys = this.setGridDataFromTree([], menuList);
@@ -398,7 +398,8 @@ class ClassifyTree extends Component {
         // btnIndeterminate: false,
         // btnAllChecked: e.target.checked,
       });
-      this.props.onAllChecked(newCheckedKeys);
+      // this.props.onAllChecked(newCheckedKeys);
+      this.props.onCheck(newCheckedKeys, false, customeBtnIds, halfCheckedKeys);
     } else {
       this.setState({
         checkedKeys: [],
@@ -414,7 +415,12 @@ class ClassifyTree extends Component {
 
   onChangeBtn = e => {
     // const { btnArray } = this.props;
-    const { allBtns } = this.state;
+    // const { allBtns } = this.state;
+    const { menuList, customeBtnIds, halfCheckedKeys, allBtns } = this.state;
+    let checkedKeys = flatteningTree(this.props.treeData).filter(element => element.menuid);
+    checkedKeys = checkedKeys.filter(element => !element.menuid.includes('btn'));
+    // const checkedKeys = this.setGridDataFromTree([], menuList);
+    const newCheckedKeys = checkedKeys.map(element => element.menuid);
     this.setState({
       btnAllChecked: e.target.checked,
       btnIndeterminate: false,
@@ -423,10 +429,17 @@ class ClassifyTree extends Component {
       this.setState({
         customeBtnIds: allBtns.map(element => element.menuid),
       });
+      this.props.onCheck(
+        newCheckedKeys,
+        false,
+        allBtns.map(element => element.menuid),
+        halfCheckedKeys,
+      );
     } else {
       this.setState({
         customeBtnIds: [],
       });
+      this.props.onCheck(newCheckedKeys, false, [], halfCheckedKeys);
     }
   };
 
