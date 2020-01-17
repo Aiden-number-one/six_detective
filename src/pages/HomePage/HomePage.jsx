@@ -1515,7 +1515,7 @@ export default class HomePage extends PureComponent {
         container: 'ApprovalAll',
         forceFit: true,
         height: 250,
-        padding: [30, 100, 30, 50],
+        padding: [30, 50, 30, 50],
       });
     }
     if (allApprovalData[0] && allApprovalData[0].userInfo && allApprovalData[0].userInfo[0]) {
