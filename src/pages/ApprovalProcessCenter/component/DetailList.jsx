@@ -655,7 +655,7 @@ function NewAccound({
           </div>
         </List.Item>
         <List.Item>
-          <div className={styles.ListItem} style={{ marginTop: '10px' }}>
+          <div className={styles.ListItem}>
             <p>Received Answer</p>
             <p>{detailData.receivedAnswer}</p>
           </div>
@@ -965,7 +965,7 @@ function DetailForm({ form, task, detailItem, saveConfirmToCategory, saveConfirm
   const isEditing = detailData && detailData.isEditing;
   // const isEditing = true;
   // console.log('alertType---->', alertType, detailList, isShowForm);
-  console.log('detailList----->', detailList);
+  // console.log('detailList----->', detailList);
   useEffect(() => {
     setRadioCurrentValue(detailList.isCaCode);
   }, [detailList.isCaCode]);

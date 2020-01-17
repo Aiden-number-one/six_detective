@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'dva';
 import { Button, Row } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormattedMessage } from 'umi/locale';
-import { defaultDateRange, downloadFile } from '../constants';
 import FilterForm from '../FilterForm';
 import LopLogList from './LopLogList';
 import LopLogManualModal from './LopLogManualModal';
+import useLog from '../hooks';
 import styles from '../index.less';
 
 export function LopLog({ dispatch, loading, page: current, logs, total }) {
   const [visible, setVisible] = useState(false);
-  const [searchParams, setSearchParams] = useState({
-    startDate: defaultDateRange[0],
-    endDate: defaultDateRange[1],
+  const { dateRange, searchParams, handleParams, handlePageChange, handleDownload } = useLog({
+    dispatch,
+    type: 'lop',
   });
-
-  useEffect(() => {
-    dispatch({
-      type: 'lop/fetch',
-      payload: searchParams,
-    });
-  }, []);
 
   async function getSubmitters(params) {
     return dispatch({
@@ -30,14 +23,6 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
     });
   }
 
-  function handleParams(type, params) {
-    setSearchParams(params);
-    dispatch({ type, payload: params });
-  }
-
-  function handlePageChange(page, pageSize) {
-    dispatch({ type: 'lop/fetch', payload: { page, pageSize, ...searchParams } });
-  }
   async function handleUpload(params) {
     await dispatch({
       type: 'lop/importByManual',
@@ -48,23 +33,16 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
     });
     setVisible(false);
   }
-  async function handleDownload(lopImpId) {
-    const reportUrl = await dispatch({
-      type: 'lop/fetchReportUrl',
-      payload: {
-        lopImpId,
-      },
-    });
-
-    if (reportUrl) {
-      downloadFile(reportUrl);
-    }
-  }
 
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <FilterForm formType={0} loading={loading} onParams={handleParams} />
+        <FilterForm
+          formType={0}
+          loading={loading}
+          onParams={handleParams}
+          defaultDateRange={dateRange}
+        />
         <LopLogManualModal
           visible={visible}
           loading={loading}

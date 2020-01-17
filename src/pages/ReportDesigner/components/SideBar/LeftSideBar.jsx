@@ -198,8 +198,9 @@ export default class LeftSideBar extends PureComponent {
                     onClick={() => {
                       window.open('/report/report-designer/dataset-management');
                     }}
+                    title="Add Dataset"
                   >
-                    <Icon type="form" />
+                    <Icon type="plus-square" />
                   </div>
                 )}
               />
