@@ -480,14 +480,16 @@ function ProcessDetail({
               type="card"
               key=""
             >
-              <DetailList
-                ref={newDetailForm}
-                saveTask={saveTask}
-                detailItem={detailItems}
-                task={task}
-                saveConfirmToCategory={saveConfirmToCategory}
-                saveConfirmBiCategory={saveConfirmBiCategory}
-              />
+              <Spin spinning={loading['approvalCenter/fetchTaskDetail']}>
+                <DetailList
+                  ref={newDetailForm}
+                  saveTask={saveTask}
+                  detailItem={detailItems}
+                  task={task}
+                  saveConfirmToCategory={saveConfirmToCategory}
+                  saveConfirmBiCategory={saveConfirmBiCategory}
+                />
+              </Spin>
               <Drawer
                 title={`Assign to ( ${nextGroup} )`}
                 width={500}
