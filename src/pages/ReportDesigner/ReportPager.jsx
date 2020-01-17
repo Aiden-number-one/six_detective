@@ -72,6 +72,14 @@ function ReportPager(props) {
     } else if (currPage === totalPage) {
       setIsDiablePAH(false); // 开启前两个按钮
       setIsDiableNAE(true); // 禁用后两个按钮
+    } else if (/^\s*$/.test(currPage)) {
+      // 空的时候，全部开启
+      setIsDiablePAH(false);
+      setIsDiableNAE(false);
+    } else if (currPage > totalPage) {
+      setIsDiableNAE(true);
+    } else {
+      setIsDiablePAH(false); // 开启前两个按钮
     }
 
     // 如果用户配置了：不分页，禁用 首页/尾页 上一页 下一页 当前页 页面大小
@@ -83,7 +91,7 @@ function ReportPager(props) {
     // 处理回调：比如，父组件重新请求数据 TODO: FIXME: 为什么首次进来就会执行？？？
     if (currPage) {
       // 不为空
-      if (/^[1-9]+$/.test(currPage)) {
+      if (/^[1-9]\d*$/.test(currPage)) {
         pageChageCallback({ pageSize: `${pageSize}`, pageNumber: `${currPage}` }); // callback
       } else {
         message.error(
@@ -93,12 +101,18 @@ function ReportPager(props) {
         );
       }
     }
-  }, [currPage, pageSize]);
+  }, [currPage, pageSize, paging]);
 
   // 当前页码数改变时
   const currPageInputChage = ev => {
     const { value } = ev.target;
-    setCurrPage(value);
+    let refineValue = value; // 处理值
+    if (/^\s*$/.test(value)) {
+      refineValue = '';
+    } else {
+      refineValue = parseInt(value, 10);
+    }
+    setCurrPage(refineValue);
   };
 
   // 每页显示的条数改变时
@@ -113,7 +127,6 @@ function ReportPager(props) {
     // console.log('pageNumChangeHandler: ', action);
     const tar = ev.currentTarget;
     if (tar.classList.contains(less['step-disable'])) return;
-    // eslint-disable-next-line default-case
     switch (action) {
       case SETP_HOME:
         if (currPage !== 1) {
@@ -139,6 +152,8 @@ function ReportPager(props) {
           // console.log('currPage end -> ', currPage);
         }
         break;
+
+      // no default
     }
   };
 
