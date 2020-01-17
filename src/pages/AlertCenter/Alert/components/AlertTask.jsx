@@ -134,6 +134,7 @@ function AlertTask({ dispatch, loading, alertItems, users, taskColumns, onTaskRo
             title: formatMessage({ id: 'alert-center.owner' }),
           },
           {
+            width: 110,
             dataIndex: 'TASK_STATUS_DESC',
             title: formatMessage({ id: 'alert-center.status' }),
           },

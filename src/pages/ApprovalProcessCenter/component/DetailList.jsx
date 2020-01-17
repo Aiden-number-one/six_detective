@@ -965,6 +965,7 @@ function DetailForm({ form, task, detailItem, saveConfirmToCategory, saveConfirm
   const isEditing = detailData && detailData.isEditing;
   // const isEditing = true;
   // console.log('alertType---->', alertType, detailList, isShowForm);
+  console.log('detailList----->', detailList);
   useEffect(() => {
     setRadioCurrentValue(detailList.isCaCode);
   }, [detailList.isCaCode]);

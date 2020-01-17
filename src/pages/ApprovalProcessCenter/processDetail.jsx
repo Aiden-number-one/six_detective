@@ -82,6 +82,7 @@ function ProcessDetail({
           taskCode: task.taskCode,
         },
       });
+      newDetailForm.current.resetFields();
     }
   }, [task]);
 
