@@ -68,36 +68,20 @@ export function FilterType({ isNum, type, onChange }) {
   );
 }
 
-// type = [greater / less than] equal
-export function FilterSelect({ filterList, curColumn, conditions, onChange }) {
-  const [curOption, setCurOption] = useState(undefined);
-  useEffect(() => {
-    const curFilters = conditions.find(item => item.column === curColumn);
-    if (curFilters) {
-      const l = curFilters.value.split(',');
-      setCurOption(l.find(item => item === curOption));
-    } else {
-      // reset
-      setCurOption(undefined);
-    }
-  }, [filterList, curColumn, conditions]);
-
-  function handleChange(value) {
-    onChange(value);
-    setCurOption(value);
-  }
-
+// type = [greater / less than] equal (never save last filter state)
+export function FilterSelect({ loading, filterList, onChange }) {
   return (
     <div className={styles.selectbox}>
       <div className={styles.des}>Description</div>
       <Select
         showSearch
         allowClear
+        loading={loading}
         placeholder="please select a item"
         className={styles.select}
         optionFilterProp="children"
-        value={curOption}
-        onChange={handleChange}
+        dropdownMenuStyle={{ maxHeight: 160 }}
+        onChange={val => onChange(val)}
         filterOption={(input, option) =>
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
@@ -113,7 +97,14 @@ export function FilterSelect({ filterList, curColumn, conditions, onChange }) {
 }
 
 // type = contain
-export function FilterCheckbox({ loading, filterList, onCheckedList, curColumn, conditions }) {
+export function FilterCheckbox({
+  loading,
+  filterList,
+  selectedItem,
+  onCheckedList,
+  curColumn,
+  conditions,
+}) {
   const [isCheckAll, setCheckAll] = useState(true);
   const [indeterminate, setIndeterminate] = useState(false);
   const [checkedList, setCheckedList] = useState([]);
@@ -123,10 +114,14 @@ export function FilterCheckbox({ loading, filterList, onCheckedList, curColumn, 
     const curFilters = conditions.find(item => item.column === curColumn);
     if (curFilters) {
       setCheckedList(curFilters.value.split(','));
+      if (selectedItem) {
+        setIndeterminate(true);
+        setCheckAll(false);
+      }
     } else {
       // reset
-      setCheckedList(filterList || []);
-      setSearchList(filterList || []);
+      setCheckedList(filterList);
+      setSearchList(filterList);
       setIndeterminate(false);
       setCheckAll(true);
     }
@@ -181,7 +176,7 @@ export function FilterCheckbox({ loading, filterList, onCheckedList, curColumn, 
               {searchList.map(item => (
                 <Checkbox value={item} key={item} className="checkbox-item">
                   <Text ellipsis title={item}>
-                    {item}
+                    {item.length > 23 ? `${item.slice(0, 23)}...` : item}
                   </Text>
                 </Checkbox>
               ))}

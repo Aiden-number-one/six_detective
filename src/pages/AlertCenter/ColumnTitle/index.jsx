@@ -60,7 +60,7 @@ function ColumnTitle({
 
   function handleSelect(val) {
     setSelectedItem(val);
-    setCheckedList([val]);
+    setCheckedList(val ? [val] : filterItems);
   }
 
   function resetState() {
@@ -85,12 +85,12 @@ function ColumnTitle({
 
   async function handleOk() {
     const isCheckbox = filterType === 2 || filterType === 7;
-    const values = isCheckbox ? checkedList : [selectedItem];
+    const values = !isCheckbox && selectedItem ? [selectedItem] : checkedList;
 
     const condition = {
       column: curColumn,
       value: values.map(item => encodeURIComponent(item)).toString(),
-      condition: filterType.toString(),
+      condition: !isCheckbox && !selectedItem ? 7 : filterType.toString(),
     };
     let updatedConditions = conditions;
     const curCondition = conditions.find(item => item.column === curColumn);
@@ -134,6 +134,7 @@ function ColumnTitle({
                 filterList={filterItems}
                 curColumn={curColumn}
                 conditions={conditions}
+                selectedItem={selectedItem}
                 onCheckedList={handleCheckList}
               />
             ) : (
