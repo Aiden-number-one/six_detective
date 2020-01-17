@@ -2,8 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 21:43:02
+ * @LastEditors  : lan
+ * @LastEditTime : 2020-01-17 16:03:58
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -74,7 +74,7 @@ class HoverText extends Component {
         <span className={styles.hoverText}>
           {operate.add && <Icon type="plus-circle" onClick={e => this.addTree(e, nodeKeys)} />}
           {operate.modify && <Icon type="edit" onClick={e => this.modifyTree(e, nodeKeys)} />}
-          {operate.move && <Icon type="minus-circle" onClick={e => this.deleteTree(e, nodeKeys)} />}
+          {operate.move && <Icon type="delete" onClick={e => this.deleteTree(e, nodeKeys)} />}
         </span>
       </Fragment>
     );
