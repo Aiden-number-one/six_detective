@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 17:31:17
+ * @LastEditTime : 2020-01-16 21:11:07
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -587,7 +587,7 @@ class AuditTrailLogging extends Component {
             dataSource={getAuditLogList}
             pagination={false}
             columns={this.state.columns}
-            rowKey={row => row.logId}
+            rowKey={() => Math.random().toString()}
             scroll={{ x: this.state.columns.length > 5 ? document.body.clientWidth : false }}
           />
           {getAuditLogList && getAuditLogList.length > 0 && (

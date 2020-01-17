@@ -5,7 +5,7 @@ import moment from 'moment';
 import { dateFormat } from '../constants';
 import styles from '../index.less';
 
-const isLt5M = size => size / 1024 / 1024 < 5;
+const isLt50M = size => size / 1024 / 1024 < 50;
 // file name format: 20191314_tp001_0.csv
 const fileReg = /(\d{8})_\d_(.*)_(.)\.(.*)/;
 
@@ -14,7 +14,7 @@ function MarketLogManualModal({ form, visible, loading, onCancel, onUpload }) {
   const { getFieldDecorator, validateFields } = form;
 
   function handleBeforeUpload(file) {
-    return isLt5M(file.size) && fileReg.test(file.name);
+    return isLt50M(file.size) && fileReg.test(file.name);
   }
 
   function handleClose() {
@@ -65,7 +65,7 @@ function MarketLogManualModal({ form, visible, loading, onCancel, onUpload }) {
                   }
                   if (value && value.length) {
                     const file = value[0];
-                    if (!isLt5M(file.size)) {
+                    if (!isLt50M(file.size)) {
                       setUpFile({});
                       return callback('file size must less than 5M');
                     }

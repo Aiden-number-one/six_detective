@@ -8,7 +8,6 @@ export default function() {
   const [task, setTask] = useState(null);
   const [currentTaskType, setCurrentTaskType] = useState('SLOP_BIZ.V_ALL_TASK');
   const [pageSizeData, setPageSizeData] = useState({});
-
   return (
     <div className={styles['list-container']}>
       <ProcessList
@@ -20,7 +19,6 @@ export default function() {
       {task && (
         <ProcessDetail task={task} pageSizeData={pageSizeData} currentTaskType={currentTaskType} />
       )}
-      {/* <ProcessDetail task={task} currentTaskType={currentTaskType}/> */}
     </div>
   );
 }
