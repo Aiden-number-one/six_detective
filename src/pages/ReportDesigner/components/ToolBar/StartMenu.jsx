@@ -915,14 +915,12 @@ class ToolBar extends Component {
                     'mr6',
                     btnActiveStatus.isMerge && 'active',
                   )}
+                  onClick={() => {
+                    setCellStyle('merge', true);
+                    setCellStyle('align', 'center');
+                  }}
                 >
-                  <div
-                    className={classNames(styles.topBottom)}
-                    onClick={() => {
-                      setCellStyle('merge', true);
-                      setCellStyle('align', 'center');
-                    }}
-                  >
+                  <div className={classNames(styles.topBottom)}>
                     <IconFont type="iconhuanhang" />
                     <p className={styles.brP}>
                       <span>Merge and</span>
