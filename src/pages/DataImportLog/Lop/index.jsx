@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
+import moment from 'moment';
 import { Button, Row } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormattedMessage } from 'umi/locale';
@@ -11,17 +12,30 @@ import styles from '../index.less';
 
 export function LopLog({ dispatch, loading, page: current, logs, total }) {
   const [visible, setVisible] = useState(false);
-  const [searchParams, setSearchParams] = useState({
-    startDate: defaultDateRange[0],
-    endDate: defaultDateRange[1],
-  });
+  const [dateRange, setdateRange] = useState([]);
+  const [searchParams, setSearchParams] = useState({});
 
   useEffect(() => {
+    initPage();
+  }, []);
+
+  async function initPage() {
+    const lastTradeDate = await dispatch({
+      type: 'global/fetchLastTradeDate',
+    });
+    const startDate = lastTradeDate ? moment(lastTradeDate) : defaultDateRange[0];
+    const endDate = defaultDateRange[1];
+
+    setdateRange([startDate, endDate]);
+
     dispatch({
       type: 'lop/fetch',
-      payload: searchParams,
+      payload: {
+        startDate: dateRange[0],
+        endDate: dateRange[1],
+      },
     });
-  }, []);
+  }
 
   async function getSubmitters(params) {
     return dispatch({
@@ -38,6 +52,7 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
   function handlePageChange(page, pageSize) {
     dispatch({ type: 'lop/fetch', payload: { page, pageSize, ...searchParams } });
   }
+
   async function handleUpload(params) {
     await dispatch({
       type: 'lop/importByManual',
@@ -48,6 +63,7 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
     });
     setVisible(false);
   }
+
   async function handleDownload(lopImpId) {
     const reportUrl = await dispatch({
       type: 'lop/fetchReportUrl',
@@ -64,7 +80,12 @@ export function LopLog({ dispatch, loading, page: current, logs, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <FilterForm formType={0} loading={loading} onParams={handleParams} />
+        <FilterForm
+          formType={0}
+          loading={loading}
+          onParams={handleParams}
+          defaultDateRange={dateRange}
+        />
         <LopLogManualModal
           visible={visible}
           loading={loading}

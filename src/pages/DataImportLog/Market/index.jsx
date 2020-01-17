@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
+import moment from 'moment';
 import { FormattedMessage } from 'umi/locale';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Row } from 'antd';
@@ -12,18 +13,32 @@ import styles from '../index.less';
 
 function MarketLog({ dispatch, loading, logs, page: current, total }) {
   const [visible, setVisible] = useState(false);
-  const [searchParams, setSearchParams] = useState({
-    market: defaultMarket,
-    startDate: defaultDateRange[0],
-    endDate: defaultDateRange[1],
-  });
+  const [dateRange, setdateRange] = useState([]);
+  const [searchParams, setSearchParams] = useState({});
 
   useEffect(() => {
+    initPage();
+  }, []);
+
+  async function initPage() {
+    const lastTradeDate = await dispatch({
+      type: 'global/fetchLastTradeDate',
+    });
+
+    const startDate = lastTradeDate ? moment(lastTradeDate) : defaultDateRange[0];
+    const endDate = defaultDateRange[1];
+
+    setdateRange([startDate, endDate]);
+
     dispatch({
       type: 'market/fetch',
-      payload: searchParams,
+      payload: {
+        market: defaultMarket,
+        startDate,
+        endDate,
+      },
     });
-  }, []);
+  }
 
   function handleParams(type, params) {
     setSearchParams(params);
@@ -47,7 +62,12 @@ function MarketLog({ dispatch, loading, logs, page: current, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <FilterForm formType={1} loading={loading} onParams={handleParams} />
+        <FilterForm
+          formType={1}
+          loading={loading}
+          onParams={handleParams}
+          defaultDateRange={dateRange}
+        />
         <MarketLogManualModal
           visible={visible}
           loading={loading['market/importByManual']}

@@ -2,7 +2,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2020-01-14 21:38:03
+ * @LastEditTime : 2020-01-17 13:45:17
  * @LastEditors  : iron
  */
 import fetch, { request } from '@/utils/request.default';
@@ -90,6 +90,17 @@ export default {
         throw new Error(err);
       }
       return items;
+    },
+    *fetchLastTradeDate(_, { call }) {
+      try {
+        const { items } = yield call(fetch('get_last_trading_day_query'));
+        if (items && items.length > 0) {
+          return '20200112'; // items[0];
+        }
+        return '';
+      } catch (e) {
+        return '';
+      }
     },
   },
   reducers: {
