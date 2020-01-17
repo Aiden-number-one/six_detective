@@ -31,6 +31,12 @@ export function convertXml(xmlObject) {
       resultObject.rows[i].cells[j] = {};
     }
   }
+  const nowSpanObj = {
+    nowRow: -1,
+    nowColSpan: -1,
+    nowCol: -1,
+    nowRowSpan: -1,
+  };
   xmlCell.forEach(cellValue => {
     const {
       rowNumber = 0,
@@ -81,20 +87,38 @@ export function convertXml(xmlObject) {
     // 处理单元格的问题
     if (rightBorder || bottomBorder || topBorder || leftBorder) {
       const border = {};
-      if (rightBorder) {
-        border.left = ['thin', `rgb(${rightBorder.color})`];
-      }
+      // if (!(columnNumber === nowSpanObj.nowCol && rowNumber <= nowSpanObj.nowRowSpan)) {
       if (leftBorder) {
-        border.right = ['thin', `rgb(${leftBorder.color})`];
+        border.left = ['thin', `rgb(${leftBorder.color})`];
       }
+      // }
+      // if (!(columnNumber === nowSpanObj.nowCol && rowNumber <= nowSpanObj.nowRowSpan)) {
+      if (rightBorder) {
+        border.right = ['thin', `rgb(${rightBorder.color})`];
+      }
+      // }
+      // if (!(rowNumber === nowSpanObj.nowRow && columnNumber <= nowSpanObj.nowColSpan)) {
       if (topBorder) {
         border.top = ['thin', `rgb(${topBorder.color})`];
       }
+      // }
+      // if (!(rowNumber === nowSpanObj.nowRow && columnNumber <= nowSpanObj.nowColSpan)) {
       if (bottomBorder) {
         border.bottom = ['thin', `rgb(${bottomBorder.color})`];
       }
+      // }
       resultObject.rows[rowNumber - 1].cells[columnNumber - 1].style.border = border;
     }
+    // // 如果是rowSpan大于1，则在内的左右边框不显示
+    // if (rowSpan > 1) {
+    //   nowSpanObj.nowRowSpan = rowSpan;
+    //   nowSpanObj.nowCol = columnNumber;
+    // }
+    // // 如果是colSpan，则在内的上下边框不显示
+    // if (colSpan > 1) {
+    //   nowSpanObj.nowColSpan = colSpan;
+    //   nowSpanObj.nowRow = rowNumber;
+    // }
     // 处理行单元格合并的问题
     if (colSpan > 1 || rowSpan > 1) {
       const finalColSpan = colSpan ? colSpan - 1 : 0;

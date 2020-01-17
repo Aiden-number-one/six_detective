@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors  : iron
- * @LastEditTime : 2020-01-15 10:26:47
+ * @LastEditors  : dailinbo
+ * @LastEditTime : 2020-01-17 20:59:59
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -13,8 +13,13 @@
 import { extend } from 'umi-request';
 import uuidv1 from 'uuid/v1';
 import { md5 } from 'md5js';
+import { stringify } from 'querystring';
 import { message } from 'antd';
+import router from 'umi/router';
 import { getRandowNVPS, isFormData } from './utils';
+import Service from '@/services/common';
+
+const { getLoginStatus } = Service;
 
 const API_PREFFIX = '/api';
 const VERSION = 'v2.0';
@@ -44,6 +49,13 @@ export function errorHandler(error) {
   console.log('requst error:', error);
 
   const { response } = error;
+
+  const queryString = stringify({
+    redirect: window.location.href,
+  });
+  if (response.url.includes(`${getLoginStatus}`)) {
+    router.push(`/login?${queryString}`);
+  }
 
   if (response && response.status) {
     const { statusText } = response;
