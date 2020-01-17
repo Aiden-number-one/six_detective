@@ -34,7 +34,7 @@ export default function({ loading, upAttachments, onUpload, onCommit }) {
   return (
     <div className={styles['comment-box']}>
       <TextArea
-        placeholder="COMMENT"
+        placeholder="Comment"
         className={styles.txt}
         value={comment}
         onChange={({ target: { value } }) => setComment(value)}
