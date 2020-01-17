@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 09:36:59
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 11:22:20
+ * @LastEditTime : 2020-01-17 22:31:18
  */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
@@ -55,7 +55,7 @@ export default class ToolBar extends Component {
     return (
       <>
         <div className={classNames(styles.switchTabs)}>
-          <div className={styles.leftBlock} />
+          {/* <div className={styles.leftBlock} /> */}
           <div className={styles.middleBlock}>
             <div className={styles.nameSpace}>
               <IconFont type="iconcengji-copy" />
@@ -147,7 +147,7 @@ export default class ToolBar extends Component {
               </div>
             </div>
           </div>
-          <div className={styles.rightBlock} />
+          {/* <div className={styles.rightBlock} /> */}
         </div>
         <div style={{ display: tabActive === 'Start' ? 'block' : 'none' }}>
           <StartMenu {...this.props} />

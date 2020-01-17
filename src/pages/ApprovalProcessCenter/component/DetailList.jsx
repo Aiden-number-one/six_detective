@@ -45,7 +45,7 @@ function NewEP({ detailData, oldValueList, isShowForm, getFieldDecorator }) {
             <div className={styles.formBox}>
               <Form.Item label="EP Name">
                 {getFieldDecorator('epName', {
-                  rules: [{ required: !!isShowForm, message: 'Please input epName!' }],
+                  rules: [{ required: !!isShowForm, message: 'EP Name is missing!' }],
                   initialValue: detailData.epName,
                 })(<Input disabled={!isShowForm} />)}
               </Form.Item>
@@ -138,7 +138,7 @@ function NewProduct({
             <div className={styles.formBox}>
               <Form.Item label="Product Description">
                 {getFieldDecorator('productDesc', {
-                  rules: [{ required: !!isShowForm, message: 'Please input Product Description!' }],
+                  rules: [{ required: !!isShowForm, message: 'Product Description is missing!' }],
                   initialValue: detailData.productDesc,
                 })(<Input disabled={!isShowForm} />)}
               </Form.Item>
@@ -151,9 +151,7 @@ function NewProduct({
             <div className={styles.formBox}>
               <Form.Item label="Product Category" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
                 {getFieldDecorator('productCategory', {
-                  rules: [
-                    { required: !!isShowForm, message: 'Please select your Product Category!' },
-                  ],
+                  rules: [{ required: !!isShowForm, message: 'Product Category is missing!' }],
                   initialValue: detailData.productCategory,
                 })(
                   isShowForm ? (
@@ -182,7 +180,7 @@ function NewProduct({
             <div className={styles.formBox}>
               <Form.Item label="Futures or Option" labelCol={{ span: 9 }} wrapperCol={{ span: 12 }}>
                 {getFieldDecorator('contractNature', {
-                  rules: [{ required: !!isShowForm, message: 'Please select Futures or Option!' }],
+                  rules: [{ required: !!isShowForm, message: 'Futures or Option is missing!' }],
                   initialValue: detailData.contractNature,
                 })(
                   isShowForm ? (
@@ -207,7 +205,7 @@ function NewProduct({
             <div className={styles.formBox}>
               <Form.Item label="Product Group">
                 {getFieldDecorator('productGroup', {
-                  rules: [{ required: !!isShowForm, message: 'Please select Product Group!' }],
+                  rules: [{ required: !!isShowForm, message: 'Product Group is missing!' }],
                   initialValue: detailData.productGroup,
                 })(
                   isShowForm ? (
@@ -243,7 +241,7 @@ function NewProduct({
                   rules: [
                     {
                       required: !!isShowForm,
-                      message: 'Please select Template Code(Last Trade Day)',
+                      message: 'Template Code(Last Trade Day) is missing!',
                     },
                   ],
                   initialValue: detailData.ltdTmplCode,
@@ -281,7 +279,7 @@ function NewProduct({
                   rules: [
                     {
                       required: !!isShowForm,
-                      message: 'Please select Template Code(Position Limit)!',
+                      message: 'Template Code(Position Limit) is missing!',
                     },
                   ],
                   initialValue: detailData.plTmplCode,
@@ -319,7 +317,7 @@ function NewProduct({
                   rules: [
                     {
                       required: !!isShowForm,
-                      message: 'Please select Template Code(Reportable Limit)!',
+                      message: 'Template Code(Reportable Limit) is missing!',
                     },
                   ],
                   initialValue: detailData.rlTmplCode,
@@ -388,7 +386,7 @@ function NewProduct({
                       rules: [
                         {
                           required: !!isShowForm,
-                          message: 'Please input Size Factor for Calculate PD!',
+                          message: 'Size Factor for Calculate PD is missing!',
                         },
                       ],
                       initialValue: detailData.sizeFactor,
@@ -410,7 +408,7 @@ function NewProduct({
                       rules: [
                         {
                           required: !!isShowForm,
-                          message: 'Please input Weighting Factor for Calculate PD!',
+                          message: 'Weighting Factor for Calculate PD is missing!',
                         },
                       ],
                       initialValue: detailData.weightFactor,
@@ -502,7 +500,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
             <div className={styles.formBox}>
               <Form.Item label="Effective Date">
                 {getFieldDecorator('effectiveDate', {
-                  rules: [{ required: !!isShowForm, message: 'Effective Date is missing' }],
+                  rules: [{ required: !!isShowForm, message: 'Effective Date is missing!' }],
                   initialValue: isShowForm
                     ? detailData.effectiveDate && moment(detailData.effectiveDate)
                     : detailData.effectiveDate &&
@@ -523,7 +521,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
             <div className={styles.formBox}>
               <Form.Item label="Expiry Date">
                 {getFieldDecorator('expiryDate', {
-                  rules: [{ required: !!isShowForm, message: 'Expiry Date is missing' }],
+                  rules: [{ required: !!isShowForm, message: 'Expiry Date is missing!' }],
                   initialValue: isShowForm
                     ? detailData.expiryDate && moment(detailData.expiryDate)
                     : detailData.expiryDate && moment(detailData.expiryDate).format('DD-MMM-YYYY'),
@@ -538,7 +536,7 @@ function CaCode({ detailData, oldValueList, getFieldDecorator, setRadioCurrentVa
             <div className={styles.formBox}>
               <Form.Item label="Remark">
                 {getFieldDecorator('remark', {
-                  rules: [{ required: !!isShowForm, message: 'Please input Remark!' }],
+                  rules: [{ required: !!isShowForm, message: 'Remark is missing!' }],
                   initialValue: detailData.remark,
                 })(isShowForm ? <TextArea autoSize={{ minRows: 2 }} /> : <Input disabled />)}
               </Form.Item>

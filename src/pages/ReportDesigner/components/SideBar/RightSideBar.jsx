@@ -325,8 +325,26 @@ export default class RightSideBar extends PureComponent {
       dispatch,
       cellPosition, // 单元格位置
       dataSetPrivateList, // 私有数据集
-      otherProps: spreadsheetOtherProps.length > 0 ? spreadsheetOtherProps[rowIndex][colIndex] : {},
-      text: teamplateAreaObj.length > 0 ? teamplateAreaObj[0].data[rowIndex][colIndex] : '',
+      otherProps: (() => {
+        try {
+          if (spreadsheetOtherProps.length > 0) {
+            return spreadsheetOtherProps[rowIndex][colIndex];
+          }
+          return {};
+        } catch (error) {
+          return {};
+        }
+      })(),
+      text: (() => {
+        try {
+          if (teamplateAreaObj.length > 0) {
+            return teamplateAreaObj[0].data[rowIndex][colIndex];
+          }
+          return '';
+        } catch (error) {
+          return '';
+        }
+      })(),
     };
     // 控件的props
     const widgetProps = {
