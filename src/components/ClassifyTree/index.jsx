@@ -2,13 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
-<<<<<<< HEAD
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 17:53:42
-=======
- * @LastEditors  : lan
- * @LastEditTime : 2020-01-17 16:03:58
->>>>>>> 4ae87e88bb1185f84a42827672445ee93a3c8c0b
+ * @LastEditTime : 2020-01-17 19:37:45
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -147,7 +142,7 @@ class ClassifyTree extends Component {
     expandedKeys: [],
     defaultCheckedKeys: [],
     checkedKeys: [],
-    // tempCheckedKeys: [],
+    tempCheckedKeys: [],
     halfCheckedKeys: [],
     customeBtnIds: [],
     allBtns: [],
@@ -182,7 +177,7 @@ class ClassifyTree extends Component {
     this.setState({
       checkedKeys,
       customeBtnIds: btnIds,
-      // tempCheckedKeys: checkedKeys,
+      tempCheckedKeys: checkedKeys,
     });
     this.props.onSelect(menuList[0] && menuList[0][this.props.treeKey.currentKey]);
     if (all) {
@@ -331,7 +326,7 @@ class ClassifyTree extends Component {
     this.props.onCheck(selectedKeys, info, newCustomeBtnIds);
     this.setState({
       checkedKeys: selectedKeys,
-      // tempCheckedKeys: selectedKeys.concat(info.halfCheckedKeys),
+      tempCheckedKeys: selectedKeys.concat(info.halfCheckedKeys),
       halfCheckedKeys: info.halfCheckedKeys,
     });
     for (let i = 0; i < newCheckedKeys.length; i += 1) {
@@ -510,7 +505,7 @@ class ClassifyTree extends Component {
   };
 
   onChangeChecked = value => {
-    const { customeBtnIds, checkedKeys, allBtns, halfCheckedKeys } = this.state;
+    const { customeBtnIds, tempCheckedKeys, allBtns, halfCheckedKeys } = this.state;
     const btnIds = Object.assign([], customeBtnIds);
     if (value.target.checked) {
       btnIds.push(value.target.value);
@@ -526,7 +521,7 @@ class ClassifyTree extends Component {
         btnAllChecked: btnIds.length === allBtns.length,
       },
       () => {
-        this.props.onCheck(checkedKeys, { halfCheckedKeys }, btnIds);
+        this.props.onCheck(tempCheckedKeys, false, btnIds, halfCheckedKeys);
       },
     );
   };
