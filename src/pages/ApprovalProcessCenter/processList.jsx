@@ -126,14 +126,16 @@ function ProcessList({
   currentUsers,
   currentGroup,
   total,
+  currentPage,
+  currentPageSize,
   getTask,
   setCurrentTaskType,
   setPageSizeData,
 }) {
   const [selectedKeys, setSelectedKeys] = useState([]); // 列表复选框选中的值
   const [selectedCurrentTask, setSelectedTasks] = useState('SLOP_BIZ.V_ALL_TASK'); // 选中的tab选项
-  const [currentPage, setcurrentPage] = useState('1'); // 当前处在第几页
-  const [currentPageSize, setcurrentPageSize] = useState('10'); // 当前处在第几页
+  // const [currentPage, setcurrentPage] = useState('1'); // 当前处在第几页
+  // const [currentPageSize, setcurrentPageSize] = useState('10'); // 当前处在第几页
   const [currentRow, setcurrentRow] = useState('1'); // 列表选择的行
   const [visible, setVisible] = useState(false); // 弹窗显示隐藏控制
   const [radioValue, setRadioValue] = useState(''); // 分配任务选择的人员
@@ -155,9 +157,6 @@ function ProcessList({
   useEffect(() => {
     const { taskCode, owner, tradeDate } = location.query;
     const { type } = match.params;
-    // if (type !== 'my' || type !== 'history') {
-    //   router.replace('/homepage/Approval-Process-Center/all');
-    // }
     clearFilter();
     const currentTab =
       // eslint-disable-next-line no-nested-ternary
@@ -276,11 +275,10 @@ function ProcessList({
       },
       callback: () => {
         setConfirmVisible(false);
-        setcurrentPage(DEFAULT_PAGE);
         const { curColumn, sort, conditions } = getTitleProps();
         fetchTableList(
           {
-            page: '1',
+            page: currentPage,
             pageSize: currentPageSize,
             currentColumn: curColumn,
             sort,
@@ -329,7 +327,7 @@ function ProcessList({
         const { curColumn, sort, conditions } = getTitleProps();
         fetchTableList(
           {
-            page: '1',
+            page: currentPage,
             pageSize: currentPageSize,
             currentColumn: curColumn,
             sort,
@@ -387,7 +385,6 @@ function ProcessList({
       };
     }
     fetchTableList(params, selectedCurrentTask);
-    setcurrentPage(DEFAULT_PAGE);
   }
 
   function handleCloseMsg() {
@@ -476,13 +473,9 @@ function ProcessList({
             return `Total ${total} items`;
           },
           onChange(page, pageSize) {
-            setcurrentPage(page);
-            setcurrentPageSize(pageSize);
             handlePageChange(page, pageSize);
           },
           onShowSizeChange(page, pageSize) {
-            setcurrentPage(page);
-            setcurrentPageSize(pageSize);
             handlePageChange(page, pageSize);
           },
         }}
@@ -570,10 +563,12 @@ export default withRouter(
   connect(
     ({
       loading,
-      global: { filterTables, filterTableTotal },
+      global: { filterTables, filterTalbePage, filterTalbePageSize, filterTableTotal },
       approvalCenter: { currentUsers, currentGroup },
     }) => ({
       tasks: filterTables,
+      currentPage: filterTalbePage,
+      currentPageSize: filterTalbePageSize,
       total: filterTableTotal,
       currentUsers,
       currentGroup,
