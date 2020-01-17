@@ -127,7 +127,12 @@ function ColumnTitle({
             onSort={handleSort}
           />
           <div className={styles.content}>
-            <FilterType isNum={isNum} type={filterType} onChange={type => setFilterType(type)} />
+            <FilterType
+              isNum={isNum}
+              type={filterType}
+              loading={loading}
+              onChange={type => setFilterType(type)}
+            />
             {filterType === 2 || filterType === 7 ? (
               <FilterCheckbox
                 loading={loading}

@@ -50,14 +50,20 @@ export function FilterHeader({ disabled, onSort, sort, onClear }) {
   );
 }
 
-export function FilterType({ isNum, type, onChange }) {
+export function FilterType({ loading, isNum, type, onChange }) {
   const curTypes = isNum ? numTypes : textTypes;
   const curType = curTypes.find(({ id }) => id === type);
 
   return (
     <div className={styles['filter-type']}>
       <span>{isNum ? 'NUM' : 'TEXT'}</span>
-      <Select ellipsis className={styles.type} value={curType.name} onChange={val => onChange(val)}>
+      <Select
+        ellipsis
+        className={styles.type}
+        disabled={loading}
+        value={curType.name}
+        onChange={val => onChange(val)}
+      >
         {curTypes.map(({ id, name }) => (
           <Option value={id} key={id}>
             {name}
