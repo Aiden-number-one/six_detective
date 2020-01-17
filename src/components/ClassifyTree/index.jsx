@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-18 00:02:34
+ * @LastEditTime : 2020-01-18 00:22:31
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -191,7 +191,7 @@ class ClassifyTree extends Component {
           ),
         },
         () => {
-          // this.compareAllChecked();
+          this.compareAllChecked();
         },
       );
     }
@@ -239,16 +239,19 @@ class ClassifyTree extends Component {
 
   compareAllChecked = () => {
     const { checkedKeys } = this.props;
-    const { customeBtnIds } = this.state;
-    const { menuList, allBtns } = this.state;
-    const selectedKeys = this.setGridDataFromTree([], menuList);
-    const newCheckedKeys = selectedKeys.map(element => element.menuid);
-    for (let i = 0; i < newCheckedKeys.length; i += 1) {
-      if (newCheckedKeys[i].includes('btn')) {
-        newCheckedKeys.splice(i, 1);
-        i -= 1;
-      }
-    }
+    // const { customeBtnIds } = this.state;
+    const { customeBtnIds, allBtns } = this.state;
+    // const selectedKeys = this.setGridDataFromTree([], menuList);
+    // const newCheckedKeys = selectedKeys.map(element => element.menuid);
+    // for (let i = 0; i < newCheckedKeys.length; i += 1) {
+    //   if (newCheckedKeys[i].includes('btn')) {
+    //     newCheckedKeys.splice(i, 1);
+    //     i -= 1;
+    //   }
+    // }
+    let menuAll = flatteningTree(this.props.treeData).filter(element => element.menuid);
+    menuAll = menuAll.filter(element => !element.menuid.includes('btn'));
+    const newCheckedKeys = menuAll.map(element => element.menuid);
     this.setState({
       allChecked: checkedKeys.length === newCheckedKeys.length,
       indeterminate: checkedKeys.length && checkedKeys.length < newCheckedKeys.length,
