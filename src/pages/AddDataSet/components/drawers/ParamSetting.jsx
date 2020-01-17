@@ -18,7 +18,7 @@ export default class ParamSetting extends PureComponent {
         onClose={() => {
           toggleModal('paramSetting');
         }}
-        width={600}
+        width={800}
         className={styles.paramsDrawer}
       >
         <Button
@@ -33,17 +33,18 @@ export default class ParamSetting extends PureComponent {
         <ul style={{ padding: 0, marginTop: 10 }}>
           <li>
             <Row style={{ lineHeigh: '50px' }}>
-              <Col span={12}>Variable Name</Col>
-              <Col span={12}>Variable Type</Col>
+              <Col span={8}>Variable Name</Col>
+              <Col span={8}>Variable Type</Col>
+              <Col span={8}>Variable Default Value</Col>
             </Row>
           </li>
           {datasetParams.map((item, index) => (
             <li>
               <Row style={{ lineHeigh: '50px' }}>
-                <Col span={12}>
+                <Col span={8}>
                   <Input disabled style={{ width: '90%' }} value={item.parameter_name} />
                 </Col>
-                <Col span={12}>
+                <Col span={8}>
                   <Select
                     defaultValue={item.parameter_type}
                     style={{ width: '90%' }}
@@ -61,6 +62,19 @@ export default class ParamSetting extends PureComponent {
                     <Option value="DATE(YYYYMM)">DATE(YYYYMM)</Option>
                     <Option value="DATE(YYYY)">DATE(YYYY)</Option>
                   </Select>
+                </Col>
+                <Col span={8}>
+                  <Input
+                    style={{ width: '90%' }}
+                    defaultValue={item.parameter_default_value}
+                    onChange={e => {
+                      datasetParams.forEach((v, i) => {
+                        if (i === index) {
+                          v.parameter_default_value = e.target.value;
+                        }
+                      });
+                    }}
+                  />
                 </Col>
               </Row>
             </li>

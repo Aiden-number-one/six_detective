@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-15 17:50:54
+ * @LastEditTime : 2020-01-16 21:43:02
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -146,6 +146,7 @@ class ClassifyTree extends Component {
     customeBtnIds: [],
     autoExpandParent: true,
     allChecked: false,
+    indeterminate: false,
   };
 
   static getDerivedStateFromProps(props) {
@@ -238,15 +239,19 @@ class ClassifyTree extends Component {
         i -= 1;
       }
     }
-    if (this.arrayEquals(newCheckedKeys, checkedKeys)) {
-      this.setState({
-        allChecked: true,
-      });
-    } else {
-      this.setState({
-        allChecked: false,
-      });
-    }
+    this.setState({
+      allChecked: checkedKeys.length === newCheckedKeys.length,
+      indeterminate: checkedKeys.length && checkedKeys.length < newCheckedKeys.length,
+    });
+    // if (this.arrayEquals(newCheckedKeys, checkedKeys)) {
+    //   this.setState({
+    //     allChecked: true,
+    //   });
+    // } else {
+    //   this.setState({
+    //     allChecked: false,
+    //   });
+    // }
   };
 
   generateList = (data, treeKey) => {
@@ -318,15 +323,19 @@ class ClassifyTree extends Component {
         i -= 1;
       }
     }
-    if (this.arrayEquals(newCheckedKeys, selectedKeys)) {
-      this.setState({
-        allChecked: true,
-      });
-    } else {
-      this.setState({
-        allChecked: false,
-      });
-    }
+    this.setState({
+      allChecked: selectedKeys.length === newCheckedKeys.length,
+      indeterminate: selectedKeys.length && selectedKeys.length < newCheckedKeys.length,
+    });
+    // if (this.arrayEquals(newCheckedKeys, selectedKeys)) {
+    // this.setState({
+    //   allChecked: true,
+    // });
+    // } else {
+    //   this.setState({
+    //     allChecked: false,
+    //   });
+    // }
   };
 
   arrayEquals = (a1, a2) => {
@@ -357,6 +366,7 @@ class ClassifyTree extends Component {
         checkedKeys: newCheckedKeys,
         allChecked: e.target.checked,
         customeBtnIds: btnArray.map(element => element.menuid),
+        indeterminate: false,
       });
       this.props.onAllChecked(newCheckedKeys);
     } else {
@@ -364,6 +374,7 @@ class ClassifyTree extends Component {
         checkedKeys: [],
         allChecked: e.target.checked,
         customeBtnIds: [],
+        indeterminate: false,
       });
       this.props.onAllChecked([]);
     }
@@ -489,6 +500,7 @@ class ClassifyTree extends Component {
       defaultCheckedKeys,
       checkedKeys,
       allChecked,
+      indeterminate,
     } = this.state;
     const {
       checkable,
@@ -515,7 +527,12 @@ class ClassifyTree extends Component {
           />
         )}
         {all && (
-          <Checkbox onChange={this.onChange} style={{ marginLeft: '26px' }} checked={allChecked}>
+          <Checkbox
+            onChange={this.onChange}
+            style={{ marginLeft: '26px' }}
+            checked={allChecked}
+            indeterminate={indeterminate}
+          >
             All
           </Checkbox>
         )}

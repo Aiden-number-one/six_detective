@@ -82,6 +82,7 @@ function ProcessDetail({
           taskCode: task.taskCode,
         },
       });
+      newDetailForm.current.resetFields();
     }
   }, [task]);
 
@@ -156,6 +157,7 @@ function ProcessDetail({
           detailItems[0] && detailItems[0].newValue && detailItems[0].newValue.confirmToCategory;
         const defaultConfirmBiCategory =
           detailItems[0] && detailItems[0].newValue && detailItems[0].newValue.confirmBiCategory;
+        const confirmToCategory = confirmToCategoryValue || defaultConfirmToCategory;
         isErr = !err;
         if (!err) {
           if (alertTypeValue === '301') {
@@ -227,10 +229,10 @@ function ProcessDetail({
             alertTypeValue === '324'
           ) {
             valueData = {
-              confirmToCategory: confirmToCategoryValue || defaultConfirmToCategory,
+              confirmToCategory: confirmToCategory === 'NULL' ? '' : confirmToCategory,
               confirmBiCategory: confirmBiCategoryValue || defaultConfirmBiCategory,
-              confirmToCode: values.confirmToCode,
-              confirmToName: values.confirmToName,
+              confirmToCode: values.confirmToCode === 'NULL' ? '' : values.confirmToCode,
+              confirmToName: values.confirmToName === 'NULL' ? '' : values.confirmToName,
               confirmBiCode: values.confirmBiCode,
               confirmBiName: values.confirmBiName,
               reportAnyPosition: values.reportAnyPosition,
@@ -312,6 +314,7 @@ function ProcessDetail({
         detailItems[0] && detailItems[0].newValue && detailItems[0].newValue.confirmToCategory;
       const defaultConfirmBiCategory =
         detailItems[0] && detailItems[0].newValue && detailItems[0].newValue.confirmBiCategory;
+      const confirmToCategory = confirmToCategoryValue || defaultConfirmToCategory;
       isErr = !err;
       if (!err) {
         if (alertTypeValue === '301') {
@@ -383,10 +386,10 @@ function ProcessDetail({
           alertTypeValue === '324'
         ) {
           valueData = {
-            confirmToCategory: confirmToCategoryValue || defaultConfirmToCategory,
+            confirmToCategory: confirmToCategory === 'NULL' ? '' : confirmToCategory,
             confirmBiCategory: confirmBiCategoryValue || defaultConfirmBiCategory,
-            confirmToCode: values.confirmToCode,
-            confirmToName: values.confirmToName,
+            confirmToCode: values.confirmToCode === 'NULL' ? '' : values.confirmToCode,
+            confirmToName: values.confirmToName === 'NULL' ? '' : values.confirmToName,
             confirmBiCode: values.confirmBiCode,
             confirmBiName: values.confirmBiName,
             reportAnyPosition: values.reportAnyPosition,
@@ -477,14 +480,16 @@ function ProcessDetail({
               type="card"
               key=""
             >
-              <DetailList
-                ref={newDetailForm}
-                saveTask={saveTask}
-                detailItem={detailItems}
-                task={task}
-                saveConfirmToCategory={saveConfirmToCategory}
-                saveConfirmBiCategory={saveConfirmBiCategory}
-              />
+              <Spin spinning={loading['approvalCenter/fetchTaskDetail']}>
+                <DetailList
+                  ref={newDetailForm}
+                  saveTask={saveTask}
+                  detailItem={detailItems}
+                  task={task}
+                  saveConfirmToCategory={saveConfirmToCategory}
+                  saveConfirmBiCategory={saveConfirmBiCategory}
+                />
+              </Spin>
               <Drawer
                 title={`Assign to ( ${nextGroup} )`}
                 width={500}

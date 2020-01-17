@@ -165,11 +165,13 @@ export default props => {
                       return getFieldDecorator('widgetDefault', {
                         initialValue: currentWidge.widgetDefault,
                       })(
-                        <Select>
-                          mode=
-                          {(currentWidge.widgetType === 'selectmultiple' ||
-                            currentWidge.widgetType === 'checkbox') &&
-                            'multiple'}
+                        <Select
+                          mode={
+                            (currentWidge.widgetType === 'selectmultiple' ||
+                              currentWidge.widgetType === 'checkbox') &&
+                            'multiple'
+                          }
+                        >
                           {(
                             defaultValueDatasetType[
                               currentWidge.sourceType === 'dataset'

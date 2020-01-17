@@ -2350,7 +2350,7 @@ export default class HomePage extends PureComponent {
         container: 'marketPie',
         forceFit: true,
         height: 180,
-        padding: [10, 5, 10, 5],
+        padding: [15, 5, 10, 5],
       });
     }
     if (marketData[0]) {
