@@ -2,8 +2,8 @@
  * @Description: app global config
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2020-01-10 16:45:02
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-17 17:16:14
+ * @LastEditors  : liangchaoshun
  * @Description: umi 配置文件
  */
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -166,6 +166,7 @@ export default {
   proxy: {
     '/api': {
       // target: 'http://10.60.62.60:7567/superlop/restv2/admin/', // 季旋
+      // target: 'http://10.60.62.83:7567/superlop/restv2/admin/', // 张涛
       target: 'http://10.201.62.184:7567/superlop/restv2/admin/', // 线上
       // target: 'http://10.60.69.113:7567/superlop/restv2/admin/', // 测试
       // target: 'http://10.60.62.2:7567/superlop/restv2/admin/', // 李庆

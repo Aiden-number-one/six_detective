@@ -221,7 +221,6 @@ export default props => {
                       : undefined,
                   })(<DatePicker />)}
               </>
-              ,
             </Form.Item>
             {/* 表字段 */}
             <Form.Item label={<FormattedMessage id="report-designer.field" />} {...formLayout}>

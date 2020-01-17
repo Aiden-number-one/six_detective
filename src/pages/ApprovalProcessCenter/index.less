@@ -15,9 +15,9 @@
 .list-container {
   padding: 0 4px;
   :global {
-    .ant-table-thead tr th {
-      background-color: #fff;
-    }
+    // .ant-table-thead tr th {
+    //   background-color: #fff;
+    // }
     .ant-table-tbody tr {
       &.active {
         color: #10416c;
@@ -29,7 +29,7 @@
     }
     .ant-input[disabled] {
       padding: 0;
-      color: unset;
+      color: #464c51;
       background-color: #fff;
       border: none;
     }
@@ -260,6 +260,7 @@
     background-color: #fff;
   }
   .ListBox {
+    padding-top: 10px;
     padding-bottom: 18px;
     :global {
       .ant-form-item {
@@ -331,6 +332,11 @@
       //   text-overflow: ellipsis;
 
       // }
+    }
+    .ListItem::after {
+      min-height: inherit;
+      font-size: 0;
+      content: '';
     }
   }
 

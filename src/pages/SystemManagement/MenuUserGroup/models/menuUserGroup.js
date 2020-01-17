@@ -3,11 +3,11 @@
  * @Author: dailinbo
  * @Date: 2019-11-01 11:02:37
  * @LastEditors  : dailinbo
- * @LastEditTime : 2019-12-18 09:38:39
+ * @LastEditTime : 2020-01-17 16:48:26
  */
 import Service from '@/utils/Service';
 
-const { getMenuUserGroup, getNewUserGroup, getModifyUserGroup } = Service;
+const { getMenuUserGroup, getNewUserGroup, getModifyUserGroup, ignoreMenuList } = Service;
 
 const menuUserGroup = {
   namespace: 'menuUserGroup',
@@ -15,6 +15,7 @@ const menuUserGroup = {
     data: [],
     saveUser: {},
     updateData: {},
+    ignoreMenusData: {},
   },
   effects: {
     *getMenuUserGroup({ payload }, { call, put }) {
@@ -54,6 +55,18 @@ const menuUserGroup = {
         throw new Error(response.bcjson.msg);
       }
     },
+    *getIgnoreMenuList({ payload, callback }, { call, put }) {
+      const response = yield call(ignoreMenuList, { param: payload });
+      if (response.bcjson.flag === '1') {
+        yield put({
+          type: 'getIgnore',
+          payload: response.bcjson.items,
+        });
+        callback();
+      } else {
+        throw new Error(response.bcjson.msg);
+      }
+    },
   },
   reducers: {
     getDatas(state, action) {
@@ -72,6 +85,12 @@ const menuUserGroup = {
       return {
         ...state,
         updateData: action.payload,
+      };
+    },
+    getIgnore(state, action) {
+      return {
+        ...state,
+        ignoreMenusData: action.payload,
       };
     },
   },
