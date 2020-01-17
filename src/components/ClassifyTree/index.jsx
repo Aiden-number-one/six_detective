@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 19:51:50
+ * @LastEditTime : 2020-01-17 22:24:18
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -150,6 +150,7 @@ class ClassifyTree extends Component {
     allChecked: false,
     btnAllChecked: false,
     indeterminate: false,
+    btnIndeterminate: false,
   };
 
   static getDerivedStateFromProps(props) {
@@ -183,7 +184,7 @@ class ClassifyTree extends Component {
     if (all) {
       this.setState(
         {
-          checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
+          // checkedKeys: this.formatCheckedKeys(menuList, checkedKeys),
           allBtns: flatteningTree(this.props.treeData).filter(element =>
             element.menuid.includes('btn'),
           ),
@@ -383,14 +384,18 @@ class ClassifyTree extends Component {
         allChecked: e.target.checked,
         customeBtnIds: btnArray.map(element => element.menuid),
         indeterminate: false,
+        btnIndeterminate: false,
+        btnAllChecked: e.target.checked,
       });
       this.props.onAllChecked(newCheckedKeys);
     } else {
       this.setState({
         checkedKeys: [],
         allChecked: e.target.checked,
+        btnAllChecked: e.target.checked,
         customeBtnIds: [],
         indeterminate: false,
+        btnIndeterminate: false,
       });
       this.props.onAllChecked([]);
     }
@@ -594,7 +599,6 @@ class ClassifyTree extends Component {
           onCheck={this.onCheck}
           checkedKeys={checkedKeys}
           expandedKeys={expandedKeys}
-          defaultSelectedKeys={defaultCheckedKeys}
           autoExpandParent={autoExpandParent}
           defaultExpandAll
         >

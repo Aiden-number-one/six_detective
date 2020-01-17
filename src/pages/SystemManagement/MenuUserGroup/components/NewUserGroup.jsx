@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 19:26:32
+ * @LastEditTime : 2020-01-17 22:07:30
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -88,6 +88,7 @@ class NewUser extends Component {
       btnArray: [],
       btnParentmenuids: [],
       halfCheckedKeys: [],
+      ignoreData: [],
     };
   }
 
@@ -174,6 +175,7 @@ class NewUser extends Component {
       type: 'menuUserGroup/updateUserGroup',
       payload: params,
       callback: () => {
+        const { ignoreData } = this.state;
         const selectedKeys = this.props.updateGroup.map(element => element.menuId);
         const menuArray = flatteningTree(this.props.menuData);
         const btnArray = menuArray.filter(element => element.menuid.includes('btn'));
@@ -195,7 +197,7 @@ class NewUser extends Component {
           this.props.menuData.filter(element => !element.menuid.includes('btn')),
         );
         that.setState({
-          selectedKeys,
+          selectedKeys: selectedKeys.filter(val => ignoreData.indexOf(val) < 0),
           originalVisible: true,
           btnIds,
           btnArray,
@@ -215,6 +217,11 @@ class NewUser extends Component {
       payload: params,
       callback: () => {
         console.log('ignoreMenusData======', this.props.ignoreMenusData);
+        const ignoreData = [];
+        this.props.ignoreMenusData.forEach(element => ignoreData.push(element.OBJ_ID));
+        this.setState({
+          ignoreData,
+        });
       },
     });
   };
