@@ -19,12 +19,12 @@ class ModelForm extends Component {
       <Form onSubmit={this.handleSubmit}>
         <Form.Item label="Flow Name" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('name', {
-            rules: [{ required: true, message: 'Please input your name!' }],
+            rules: [{ required: true, message: 'Flow Name is missing!' }],
           })(<Input placeholder="" />)}
         </Form.Item>
         <Form.Item label="Description:" labelCol={{ span: 5 }} wrapperCol={{ span: 16 }}>
           {getFieldDecorator('description', {
-            rules: [{ required: true, message: 'Please input your description!' }],
+            rules: [{ required: true, message: 'Description is missing!' }],
           })(<TextArea rows={4} />)}
         </Form.Item>
       </Form>

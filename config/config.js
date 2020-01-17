@@ -2,8 +2,8 @@
  * @Description: app global config
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2020-01-17 17:16:14
- * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-17 22:04:35
+ * @LastEditors  : mus
  * @Description: umi 配置文件
  */
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -72,7 +72,9 @@ const plugins = [
     {
       moveMock: false, // whether move _mock.js to mock, default to true
       moveService: false, // whether move service.js to src/services/, default to true
+      // eslint-disable-next-line max-len
       modifyRequest: true, // whether modify umi-request to util(s)/request (if it exist), default to true
+      // eslint-disable-next-line max-len
       autoAddMenu: true, // whether add name and icon config to route config when download a pro, default to true
     },
   ],

@@ -1,8 +1,21 @@
+<!--
+ * @Des: Please Modify First
+ * @Author: iron
+ * @Email: chenggang@szkingdom.com.cn
+ * @Date: 2020-01-14 19:02:43
+ * @LastEditors  : iron
+ * @LastEditTime : 2020-01-17 21:29:04
+ -->
+
 ## table column filter
 
 ### file structure
 
-`hooks.js --- separate state and func index.jsx --- component entry index.less --- component style FilterContent.jsx --- select,checkbox and so on`
+```hooks.js --- separate state and func
+index.jsx --- component entry
+index.less --- component style
+FilterContent.jsx --- select,checkbox and so on
+```
 
 ### Get Started
 
@@ -31,6 +44,23 @@ const { clearFilter, fetchTableList, handlePageChange, getTitleProps } = useColu
     }
   />
 </Table>
+```
+
+### MODEL (request)
+
+- 'global/fetchTableFilterItems'
+- 'global/fetchTableList'
+- state
+
+```
+{
+  filterItems: [],
+  filterTables: [],
+  filterTableTotal: 0,
+  filterTalbePage: defaultPage,
+  filterTalbePageSize: defaultPageSize,
+  filterParams: {},
+}
 ```
 
 ### API
@@ -71,6 +101,7 @@ enum Condition = {
   'LESS THAN',
   'LESS THAN OR EQUAL',
   'CONTAIN',
+  'LIKE'
 }
 
 type Props = {
