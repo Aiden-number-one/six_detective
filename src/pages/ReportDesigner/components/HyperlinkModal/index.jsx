@@ -3,7 +3,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-13 20:28:07
  * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-15 15:47:22
+ * @LastEditTime : 2020-01-16 10:02:35
  * @Description: 超链接的模态框
  */
 
@@ -123,7 +123,7 @@ class HyperlinkModal extends PureComponent {
                   },
                   {
                     pattern: /^https?:\/\/(www\.)?.+\.com.*$/,
-                    message: 'Please input a',
+                    message: 'Please input a link',
                   },
                 ],
               })(<Input placeholder="Please start with http(s)://" />)}

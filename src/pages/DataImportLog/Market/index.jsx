@@ -3,36 +3,19 @@ import { connect } from 'dva';
 import { FormattedMessage } from 'umi/locale';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Row } from 'antd';
-import { defaultDateRange, defaultMarket } from '../constants';
 import MarketLogManualModal from './MarketLogManualModal';
 import FilterForm from '../FilterForm';
 import MarketLogList from './MarketLogList';
+import useLog from '../hooks';
 
 import styles from '../index.less';
 
 function MarketLog({ dispatch, loading, logs, page: current, total }) {
   const [visible, setVisible] = useState(false);
-  const [searchParams, setSearchParams] = useState({
-    market: defaultMarket,
-    startDate: defaultDateRange[0],
-    endDate: defaultDateRange[1],
+  const { dateRange, searchParams, handleParams, handlePageChange } = useLog({
+    dispatch,
+    type: 'market',
   });
-
-  useEffect(() => {
-    dispatch({
-      type: 'market/fetch',
-      payload: searchParams,
-    });
-  }, []);
-
-  function handleParams(type, params) {
-    setSearchParams(params);
-    dispatch({ type, payload: params });
-  }
-
-  function handlePageChange(page, pageSize) {
-    dispatch({ type: 'market/fetch', payload: { page, pageSize, ...searchParams } });
-  }
 
   async function handleUpload(params) {
     await dispatch({
@@ -47,7 +30,12 @@ function MarketLog({ dispatch, loading, logs, page: current, total }) {
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <FilterForm formType={1} loading={loading} onParams={handleParams} />
+        <FilterForm
+          formType={1}
+          loading={loading}
+          onParams={handleParams}
+          defaultDateRange={dateRange}
+        />
         <MarketLogManualModal
           visible={visible}
           loading={loading['market/importByManual']}

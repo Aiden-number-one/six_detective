@@ -1,37 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'dva';
 import { FormattedMessage } from 'umi/locale';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Button, Row } from 'antd';
-import { defaultDateRange, defaultMarket, downloadFile } from '../constants';
 import FilterForm from '../FilterForm';
 import NewAccountLogModal from './NewAccountLogModal';
 import NewAccountLogList from './NewAccountLogList';
+import useLog from '../hooks';
 import styles from '../index.less';
 
 function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
   const [visible, setVisible] = useState(false);
-  const [searchParams, setSearchParams] = useState({
-    market: defaultMarket,
-    startDate: defaultDateRange[0],
-    endDate: defaultDateRange[1],
+  const { dateRange, searchParams, handleParams, handlePageChange, handleDownload } = useLog({
+    dispatch,
+    type: 'newAccount',
   });
-
-  useEffect(() => {
-    dispatch({
-      type: 'newAccount/fetch',
-      payload: searchParams,
-    });
-  }, []);
-
-  function handleParams(type, params) {
-    setSearchParams(params);
-    dispatch({ type, payload: params });
-  }
-
-  function handlePageChange(page, pageSize) {
-    dispatch({ type: 'newAccount/fetch', payload: { page, pageSize, ...searchParams } });
-  }
 
   async function handleFilesParse(fileList) {
     return dispatch({
@@ -61,21 +44,16 @@ function NewAccountLog({ dispatch, loading, logs, page: current, total }) {
       dispatch({ type: 'newAccount/fetch', payload: searchParams });
     }
   }
-  async function handleDownload(lopImpId) {
-    const reportUrl = await dispatch({
-      type: 'lop/fetchReportUrl',
-      payload: {
-        lopImpId,
-      },
-    });
-    if (reportUrl) {
-      downloadFile(reportUrl);
-    }
-  }
+
   return (
     <PageHeaderWrapper>
       <div className={styles.container}>
-        <FilterForm formType={2} loading={loading} onParams={handleParams} />
+        <FilterForm
+          formType={2}
+          loading={loading}
+          onParams={handleParams}
+          defaultDateRange={dateRange}
+        />
         <NewAccountLogModal
           visible={visible}
           parseLoading={loading['newAccount/fetchParseFiles']}
