@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 22:07:30
+ * @LastEditTime : 2020-01-17 23:39:41
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -196,8 +196,9 @@ class NewUser extends Component {
           'modify-menuData===',
           this.props.menuData.filter(element => !element.menuid.includes('btn')),
         );
+        const newSelectedKeys = selectedKeys.filter(val => ignoreData.indexOf(val) < 0);
         that.setState({
-          selectedKeys: selectedKeys.filter(val => ignoreData.indexOf(val) < 0),
+          selectedKeys: newSelectedKeys.filter(element => !element.menuid.includes('btn')),
           originalVisible: true,
           btnIds,
           btnArray,
