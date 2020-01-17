@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 22:21:13
+ * @LastEditTime : 2020-01-17 23:14:53
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -305,8 +305,8 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
         // 去除公式中的等号
         cellText = cellText.replace(/=/, '');
         // 得到函数后，进行替换，得到相对应的小写
-        const formulaName = cellText.match(/(.*)\(.*\)/)[1];
-        cellText = cellText.replace(formulaName, formulaName.toLocaleLowerCase());
+        // const formulaName = cellText.match(/(.*)\(.*\)/)[1];
+        // cellText = cellText.replace(formulaName, formulaName.toLocaleLowerCase());
         cellxml += `<expression-value><![CDATA[${cellText}]]></expression-value>`;
       } else {
         cellxml += '<simple-value><![CDATA[]]></simple-value>';

@@ -5,7 +5,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 21:48:48
+ * @LastEditTime : 2020-01-17 23:21:17
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -82,6 +82,10 @@ export default class ReportDesigner extends PureComponent {
         afterSelection: this.afterSelection,
         afterDrop: this.afterDropSpreadSheet, // drop钩子函数
         calloutSpecialActionPanel: this.calloutSpecialActionPanel, // 调出特殊类型处理的模态框
+        afterInsertRow: this.afterInsertRow,
+        afterInsertCol: this.afterInsertCol,
+        afterDeleteRow: this.afterDeleteRow,
+        afterDeleteCol: this.afterDeleteCol,
       },
     );
     // 若有reportId，则调用接口查询报表设计器相关信息
@@ -124,6 +128,42 @@ export default class ReportDesigner extends PureComponent {
         rowIndex,
         columnIndex,
       },
+    });
+  };
+
+  // 增添一行
+  afterInsertRow = index => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/modifySpreadsheetOtherPropsToDoInsertRow',
+      payload: index,
+    });
+  };
+
+  // 增添一列
+  afterInsertCol = index => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/modifySpreadsheetOtherPropsToDoInsertColumn',
+      payload: index,
+    });
+  };
+
+  // 删除一行
+  afterDeleteRow = index => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/modifySpreadsheetOtherPropsToDoDeleteRow',
+      payload: index,
+    });
+  };
+
+  // 删除一列
+  afterDeleteCol = index => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/modifySpreadsheetOtherPropsToDoDeleteColumn',
+      payload: index,
     });
   };
 
