@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 20:04:47
+ * @LastEditTime : 2020-01-17 22:21:13
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -349,6 +349,12 @@ export function modifyTemplateAreaInside({
         return {};
       }),
     );
+  }
+  if (!newSpreadsheetOtherProps[rowIndex]) {
+    newSpreadsheetOtherProps[rowIndex] = {};
+  }
+  if (!newSpreadsheetOtherProps[rowIndex][colIndex]) {
+    newSpreadsheetOtherProps[rowIndex][colIndex] = {};
   }
   const content = newSpreadsheetOtherProps[rowIndex][colIndex];
   newSpreadsheetOtherProps[rowIndex][colIndex] = { ...content, ...value };
