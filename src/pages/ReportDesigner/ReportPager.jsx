@@ -63,18 +63,18 @@ function ReportPager(props) {
     // console.log('reportPager DidUpdate effect: ', currPage, pageSize);
 
     // 处理按钮状态：禁用 | 开启
-    if (currPage === 1) {
+    if (totalPage === VALUE_DEFAULT || totalPage === 1) {
+      setIsDiablePAH(true); // 都禁用
+      setIsDiableNAE(true); // 都禁用
+    } else if (currPage === 1) {
       setIsDiablePAH(true); // 禁用前两个按钮
       setIsDiableNAE(false); // 开启后两个按钮
-    } else if (totalPage === VALUE_DEFAULT) {
-      setIsDiableNAE(true);
     } else if (currPage === totalPage) {
       setIsDiablePAH(false); // 开启前两个按钮
       setIsDiableNAE(true); // 禁用后两个按钮
-    } else {
-      setIsDiablePAH(false);
     }
 
+    // 如果用户配置了：不分页，禁用 首页/尾页 上一页 下一页 当前页 页面大小
     if (!paging) {
       setIsDiablePAH(true);
       setIsDiableNAE(true);
