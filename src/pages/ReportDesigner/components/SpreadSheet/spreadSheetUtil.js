@@ -53,9 +53,12 @@ export function convertXml(xmlObject) {
       underline = false,
       valign = 'middle',
       bgcolor = '255,255,255',
+      bottomBorder,
+      leftBorder,
+      topBorder,
+      rightBorder,
     } = cellStyle;
     // 存放单元格的相关属性
-    const currentRows = resultObject.rows[rowNumber - 1] ? resultObject.rows[rowNumber - 1] : {};
     resultObject.rows[rowNumber - 1].cells[columnNumber - 1] = {
       text: value, // 数值
       cellProps: {
@@ -75,6 +78,23 @@ export function convertXml(xmlObject) {
         align, // 水平位置
       },
     };
+    // 处理单元格的问题
+    if (rightBorder || bottomBorder || topBorder || leftBorder) {
+      const border = {};
+      if (rightBorder) {
+        border.left = ['thin', `rgb(${rightBorder.color})`];
+      }
+      if (leftBorder) {
+        border.right = ['thin', `rgb(${leftBorder.color})`];
+      }
+      if (topBorder) {
+        border.top = ['thin', `rgb(${topBorder.color})`];
+      }
+      if (bottomBorder) {
+        border.bottom = ['thin', `rgb(${bottomBorder.color})`];
+      }
+      resultObject.rows[rowNumber - 1].cells[columnNumber - 1].style.border = border;
+    }
     // 处理行单元格合并的问题
     if (colSpan > 1 || rowSpan > 1) {
       const finalColSpan = colSpan ? colSpan - 1 : 0;
