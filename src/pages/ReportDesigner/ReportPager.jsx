@@ -63,18 +63,31 @@ function ReportPager(props) {
     // console.log('reportPager DidUpdate effect: ', currPage, pageSize);
 
     // 处理按钮状态：禁用 | 开启
-    if (currPage === 1) {
+    if (totalPage === VALUE_DEFAULT || totalPage === 1) {
+      setIsDiablePAH(true); // 都禁用
+      setIsDiableNAE(true); // 都禁用
+    } else if (/^\s*$/.test(currPage)) {
+      // 判空
+      setIsDiablePAH(false);
+      setIsDiableNAE(false);
+    } else if (currPage === 1) {
+      // 首页
       setIsDiablePAH(true); // 禁用前两个按钮
       setIsDiableNAE(false); // 开启后两个按钮
-    } else if (totalPage === VALUE_DEFAULT) {
-      setIsDiableNAE(true);
     } else if (currPage === totalPage) {
+      // 尾页
       setIsDiablePAH(false); // 开启前两个按钮
       setIsDiableNAE(true); // 禁用后两个按钮
-    } else {
-      setIsDiablePAH(false);
+    } else if (currPage > totalPage) {
+      // 输入超出
+      setIsDiableNAE(true);
+    } else if (currPage > 1 && currPage < totalPage) {
+      // 正常
+      setIsDiableNAE(false);
+      setIsDiablePAH(false); // 开启前两个按钮
     }
 
+    // 如果用户配置了：不分页，禁用 首页/尾页 上一页 下一页 当前页 页面大小
     if (!paging) {
       setIsDiablePAH(true);
       setIsDiableNAE(true);
@@ -83,7 +96,7 @@ function ReportPager(props) {
     // 处理回调：比如，父组件重新请求数据 TODO: FIXME: 为什么首次进来就会执行？？？
     if (currPage) {
       // 不为空
-      if (/^[1-9]+$/.test(currPage)) {
+      if (/^[1-9]\d*$/.test(currPage)) {
         pageChageCallback({ pageSize: `${pageSize}`, pageNumber: `${currPage}` }); // callback
       } else {
         message.error(
@@ -93,12 +106,18 @@ function ReportPager(props) {
         );
       }
     }
-  }, [currPage, pageSize]);
+  }, [currPage, pageSize, paging]);
 
   // 当前页码数改变时
   const currPageInputChage = ev => {
     const { value } = ev.target;
-    setCurrPage(value);
+    let refineValue = value; // 处理值
+    if (/^\s*$/.test(value)) {
+      refineValue = '';
+    } else {
+      refineValue = parseInt(value, 10);
+    }
+    setCurrPage(refineValue);
   };
 
   // 每页显示的条数改变时
@@ -113,7 +132,6 @@ function ReportPager(props) {
     // console.log('pageNumChangeHandler: ', action);
     const tar = ev.currentTarget;
     if (tar.classList.contains(less['step-disable'])) return;
-    // eslint-disable-next-line default-case
     switch (action) {
       case SETP_HOME:
         if (currPage !== 1) {
@@ -139,6 +157,8 @@ function ReportPager(props) {
           // console.log('currPage end -> ', currPage);
         }
         break;
+
+      // no default
     }
   };
 

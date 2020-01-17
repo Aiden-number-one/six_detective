@@ -75,7 +75,7 @@ class ReportDesignerPreview extends Component {
 
   // 页码 | 每页条数 改变时触发
   pageChageCallback = args => {
-    console.log('preview -> currPageChangeCb: ', args);
+    // console.log('preview -> currPageChangeCb: ', args);
     this.fetchData(args);
   };
 

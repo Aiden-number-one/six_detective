@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 17:13:05
+ * @LastEditTime : 2020-01-17 20:00:59
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -864,6 +864,7 @@ export default class DataProcessing extends Component {
       processingBar,
       HKEFTime,
       SEHKTime,
+      alertIds,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -978,7 +979,12 @@ export default class DataProcessing extends Component {
                         : { visibility: 'hidden' }
                     }
                   >
-                    <Button onClick={this.onBypass} type="primary" className="btn-usual">
+                    <Button
+                      onClick={this.onBypass}
+                      type="primary"
+                      disabled={alertIds.length === 0}
+                      className={alertIds.length > 0 ? ['btn-usual'] : ['disabled-btn']}
+                    >
                       {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
                     </Button>
                   </div>
@@ -1099,10 +1105,14 @@ export default class DataProcessing extends Component {
                 forceFit
               >
                 <div>
-                  The last time of data processing is for HKEF at {HKEFTime.t2} on {HKEFTime.t1}
+                  The last time of data processing is for{' '}
+                  {functionNameOptions.length > 2 && functionNameOptions[1].title} at {HKEFTime.t2}{' '}
+                  on {HKEFTime.t1}
                 </div>
                 <div>
-                  The last time of data processing is for SEHK at {SEHKTime.t2} on {SEHKTime.t1}
+                  The last time of data processing is for{' '}
+                  {functionNameOptions.length > 2 && functionNameOptions[2].title} at {SEHKTime.t2}{' '}
+                  on {SEHKTime.t1}
                 </div>
                 <Axis name="月份" />
                 <Axis name="月均降雨量" line={{ stroke: '#d9d9d9' }} position="left" />

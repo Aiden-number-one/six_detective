@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-30 12:12:26
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 21:11:07
+ * @LastEditTime : 2020-01-17 15:59:39
  */
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react';
@@ -85,7 +85,7 @@ class AuditTrailLogging extends Component {
       },
       {
         key: 'tableName',
-        visible: true,
+        visible: false,
       },
       {
         key: 'biToCode',
@@ -93,20 +93,20 @@ class AuditTrailLogging extends Component {
       },
       {
         key: 'productCode',
-        visible: true,
+        visible: false,
       },
       {
         key: 'effectiveTime',
-        visible: true,
+        visible: false,
         className: 'columnsnone',
       },
       {
         key: 'filedUpdated',
-        visible: false,
+        visible: true,
       },
       {
         key: 'updateType',
-        visible: false,
+        visible: true,
       },
       {
         key: 'logTime',
@@ -118,11 +118,11 @@ class AuditTrailLogging extends Component {
       },
       {
         key: 'before',
-        visible: false,
+        visible: true,
       },
       {
         key: 'after',
-        visible: false,
+        visible: true,
       },
     ],
     columns: [

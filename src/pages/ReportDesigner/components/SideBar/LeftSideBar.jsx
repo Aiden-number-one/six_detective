@@ -198,8 +198,9 @@ export default class LeftSideBar extends PureComponent {
                     onClick={() => {
                       window.open('/report/report-designer/dataset-management');
                     }}
+                    title="Add Dataset"
                   >
-                    <Icon type="form" />
+                    <Icon type="plus-square" />
                   </div>
                 )}
               />
@@ -254,14 +255,14 @@ function Title({ title, isLeaf, displayDraw, connectDragSource, isParent, delete
         <div className={styles.operationArea}>
           {isParent && (
             <>
-              <IconFont
-                type="icon-edit"
+              <Icon
+                type="edit"
                 onClick={() => {
                   displayDraw();
                 }}
               />
-              <IconFont
-                type="icon-delete"
+              <Icon
+                type="delete"
                 onClick={() => {
                   deleteModal();
                 }}

@@ -1,6 +1,6 @@
 import React, { PureComponent, useState } from 'react';
 import { connect } from 'dva';
-import { Layout, Form, Tree, Checkbox } from 'antd';
+import { Layout, Form, Tree, Checkbox, Icon } from 'antd';
 import classNames from 'classnames';
 import { FormattedMessage } from 'umi/locale';
 import _ from 'lodash';
@@ -139,6 +139,12 @@ export default class RightSideBar extends PureComponent {
               <Title
                 index={index}
                 title={value.widgetName}
+                onClick={() => {
+                  dispatch({
+                    type: 'formArea/changeCustomSearchData',
+                    payload: { index: value.i },
+                  });
+                }}
                 isLeaf
                 copyData={() => {
                   dispatch({
@@ -289,7 +295,7 @@ export default class RightSideBar extends PureComponent {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, setFieldsValue } = this.props.form;
     const {
       cellPosition, // 单元格位置
       rightSideCollapse, // 右边的面板
@@ -338,6 +344,7 @@ export default class RightSideBar extends PureComponent {
     // 表单的props
     const formProps = {
       getFieldDecorator,
+      setFieldsValue,
       dispatch,
     };
     return (
@@ -415,7 +422,7 @@ export default class RightSideBar extends PureComponent {
   }
 }
 
-function Title({ title, isLeaf, copyData, deleteData }) {
+function Title({ title, isLeaf, copyData, deleteData, onClick }) {
   const [hoverState, hoverAction] = useState(false);
   return (
     <div
@@ -428,6 +435,7 @@ function Title({ title, isLeaf, copyData, deleteData }) {
         e.stopPropagation();
         hoverAction(false);
       }}
+      onClick={onClick}
     >
       <div className={styles.hoverArea} />
       {hoverState && <div className={styles.hoverBlock} />}
@@ -438,16 +446,16 @@ function Title({ title, isLeaf, copyData, deleteData }) {
         <div className={styles.operationArea}>
           {isLeaf && (
             <>
-              <IconFont
+              <Icon
                 title="Copy"
-                type="iconcopy"
+                type="copy"
                 onClick={() => {
                   copyData();
                 }}
               />
-              <IconFont
+              <Icon
                 title="Delete"
-                type="icon-delete"
+                type="delete"
                 onClick={() => {
                   deleteData();
                 }}
