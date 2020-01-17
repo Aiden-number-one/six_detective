@@ -166,7 +166,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
       setCloseContent(
         <>
           <div>Do you confirm to close this alert?</div>
-          <div>(AlertId: {record.alertId})</div>
+          {/* <div>(AlertId: {record.alertId})</div> */}
         </>,
       );
     } else {
