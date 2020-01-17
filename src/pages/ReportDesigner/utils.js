@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 16:24:19
+ * @LastEditTime : 2020-01-17 20:04:47
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -208,7 +208,10 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
   spreadSheetData.forEach((rowsValue, rowsIndex) => {
     rowsValue.forEach((colsValue, colsIndex) => {
       let cellText = colsValue;
-      const { cellType, style, rowSpan, colSpan } = spreadSheetProps[rowsIndex][colsIndex];
+      const { cellType, style } = spreadSheetProps[rowsIndex][colsIndex];
+      let { rowSpan = '1', colSpan = '1' } = spreadSheetProps[rowsIndex][colsIndex];
+      rowSpan = rowSpan.toString();
+      colSpan = colSpan.toString();
       const {
         bgcolor,
         forecolor,

@@ -5,7 +5,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 11:02:05
+ * @LastEditTime : 2020-01-17 21:48:48
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -612,7 +612,14 @@ export default class ReportDesigner extends PureComponent {
               </Layout>
             </div>
           </div>
-          <FormulaModal initFmlVal={initFmlVal} />
+          <FormulaModal
+            initFmlVal={initFmlVal}
+            onClose={() => {
+              this.setState({
+                initFmlVal: '',
+              });
+            }}
+          />
           <HyperlinkModal
             initContentVal={initHylContentVal}
             initLinkVal={initHylLinkVal}
