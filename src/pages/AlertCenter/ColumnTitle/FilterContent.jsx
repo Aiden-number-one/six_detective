@@ -174,9 +174,9 @@ export function FilterCheckbox({
               onChange={handleChange}
             >
               {searchList.map(item => (
-                <Checkbox value={item} key={item} className="checkbox-item">
-                  <Text ellipsis title={item}>
-                    {item.length > 23 ? `${item.slice(0, 23)}...` : item}
+                <Checkbox value={item} key={String(item)} className="checkbox-item">
+                  <Text ellipsis title={String(item)}>
+                    {item && item.length > 23 ? `${item.slice(0, 23)}...` : item}
                   </Text>
                 </Checkbox>
               ))}
