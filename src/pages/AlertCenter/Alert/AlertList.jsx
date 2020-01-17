@@ -53,7 +53,8 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
       params = [{ column: 'alertNo', value: alertId, condition: '7' }];
     }
     if (owner) {
-      params = [...params, { column: 'userName', value: owner, condition: '7' }];
+      // 8 like
+      params = [...params, { column: 'userName', value: owner, condition: '8' }];
     }
     if (status) {
       params = [...params, { column: 'alertStatusDesc', value: status, condition: '7' }];
@@ -166,7 +167,7 @@ function AlertList({ dispatch, location, loading, alerts, alertPage, alertPageSi
       setCloseContent(
         <>
           <div>Do you confirm to close this alert?</div>
-          <div>(AlertId: {record.alertId})</div>
+          {/* <div>(AlertId: {record.alertId})</div> */}
         </>,
       );
     } else {

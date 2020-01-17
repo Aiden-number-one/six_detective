@@ -2410,7 +2410,7 @@ export default class HomePage extends PureComponent {
         .label('percent', {
           useHtml: true,
           htmlTemplate: (val, item) =>
-            `<div style="white-space:nowrap;text-align: center;font-size:12px;">(${item.point.label})</div><div style="font-size:12px;">${item.point.value}(${val})</div>`,
+            `<div style="white-space:nowrap;text-align: center;font-size:12px;padding-top:8px">(${item.point.label})</div><div style="font-size:12px;width:50px;white-space:nowrap">${item.point.value}(${val})</div>`,
         })
         .tooltip('label*percent', (label, percent) => {
           const value = `${(percent * 100).toFixed(2)}%`;
