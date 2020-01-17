@@ -1515,7 +1515,7 @@ export default class HomePage extends PureComponent {
         container: 'ApprovalAll',
         forceFit: true,
         height: 250,
-        padding: [30, 100, 30, 50],
+        padding: [30, 50, 30, 50],
       });
     }
     if (allApprovalData[0] && allApprovalData[0].userInfo && allApprovalData[0].userInfo[0]) {
@@ -1595,7 +1595,20 @@ export default class HomePage extends PureComponent {
           },
           offset: 10,
         })
-        .size(25)
+        // eslint-disable-next-line consistent-return
+        .size('', () => {
+          if (ApprovalAll.length / 2 === 1) {
+            return 35;
+          }
+          if (ApprovalAll.length / 2 < 7) {
+            return 25;
+          }
+          if (ApprovalAll.length / 2 < 8) {
+            return 20;
+          }
+          return 15;
+        })
+        // .size(25)
         .style({
           lineWidth: 1,
         })
