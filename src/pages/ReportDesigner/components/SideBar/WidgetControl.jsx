@@ -474,6 +474,13 @@ export default props => {
                 <Form.Item label="Max Length" {...formLayout}>
                   {getFieldDecorator('maxLength', {
                     initialValue: currentWidge.maxLength,
+                    // rules: [{
+                    //   validator: (rule, value, callback) => {
+                    //     if (value < currentWidge.minLength) {
+
+                    //     }
+                    //   },
+                    // }],
                   })(<InputNumber precision={0} min={1} />)}
                 </Form.Item>
                 <Form.Item label="Min Length" {...formLayout}>
