@@ -32,6 +32,7 @@ const formLayout = {
 export default props => {
   const {
     getFieldDecorator,
+    setFieldsValue,
     currentWidge = {},
     dataSetPrivateList,
     addCustomerType,
@@ -61,7 +62,13 @@ export default props => {
               {getFieldDecorator('widgetType', {
                 initialValue: currentWidge.widgetType,
               })(
-                <Select>
+                <Select
+                  onChange={() => {
+                    setFieldsValue({
+                      widgetDefault: undefined,
+                    });
+                  }}
+                >
                   <Option value="input">Input</Option>
                   <Option value="inputnumber">Input Number</Option>
                   <Option value="datepickeryyyy">Date Picker(yyyy)</Option>
@@ -212,7 +219,7 @@ export default props => {
                     initialValue: currentWidge.widgetDefault
                       ? moment(currentWidge.widgetDefault, 'YYYY-MM-DD')
                       : undefined,
-                  })(<MonthPicker />)}
+                  })(<DatePicker />)}
               </>
               ,
             </Form.Item>
@@ -269,9 +276,11 @@ export default props => {
                     })(
                       <Select
                         onChange={value => {
-                          currentWidge.table = undefined;
-                          currentWidge.currentWidge = undefined;
-                          currentWidge.widgetDefault = undefined;
+                          setFieldsValue({
+                            table: undefined,
+                            currentWidge: undefined,
+                            widgetDefault: undefined,
+                          });
                           // 获取数据源下所有的表
                           dispatch({
                             type: 'formArea/getDataSourceTable',
@@ -299,8 +308,10 @@ export default props => {
                     })(
                       <Select
                         onChange={value => {
-                          currentWidge.tablecolumn = undefined;
-                          currentWidge.widgetDefault = undefined;
+                          setFieldsValue({
+                            tablecolumn: undefined,
+                            widgetDefault: undefined,
+                          });
                           dispatch({
                             type: 'formArea/getTableColumnValue',
                             payload: {
@@ -327,7 +338,9 @@ export default props => {
                     })(
                       <Select
                         onChange={value => {
-                          currentWidge.widgetDefault = undefined;
+                          setFieldsValue({
+                            widgetDefault: undefined,
+                          });
                           // 获取完毕字段后，得到相对应的字段相对应的值
                           dispatch({
                             type: 'formArea/getDataSetColumnValue',
@@ -365,8 +378,10 @@ export default props => {
                       <Select
                         onChange={() => {
                           // TODO: 后期优化
-                          currentWidge.datacolumn = undefined;
-                          currentWidge.widgetDefault = undefined;
+                          setFieldsValue({
+                            datacolumn: undefined,
+                            widgetDefault: undefined,
+                          });
                         }}
                       >
                         {dataSetPublicList.map(value => (
