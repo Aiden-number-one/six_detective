@@ -147,6 +147,64 @@ export default {
         }),
       };
     },
+    // 插入一行
+    modifySpreadsheetOtherPropsToDoInsertRow(state, action) {
+      let newSpreadsheetOtherProps = [...state.spreadsheetOtherProps];
+      if (newSpreadsheetOtherProps.length > 0) {
+        const rowLength = newSpreadsheetOtherProps[0].length;
+        const newRow = new Array(rowLength).fill('').map(() => ({}));
+        newSpreadsheetOtherProps.splice(action.payload, 0, newRow);
+      } else {
+        newSpreadsheetOtherProps = [];
+      }
+      return {
+        ...state,
+        spreadsheetOtherProps: newSpreadsheetOtherProps,
+      };
+    },
+    // 插入一列
+    modifySpreadsheetOtherPropsToDoInsertColumn(state, action) {
+      let newSpreadsheetOtherProps = [...state.spreadsheetOtherProps];
+      if (newSpreadsheetOtherProps.length > 0) {
+        newSpreadsheetOtherProps.forEach(value => {
+          value.splice(action.payload, 0, {});
+        });
+      } else {
+        newSpreadsheetOtherProps = [];
+      }
+      return {
+        ...state,
+        spreadsheetOtherProps: newSpreadsheetOtherProps,
+      };
+    },
+    // 删除一行
+    modifySpreadsheetOtherPropsToDoDeleteRow(state, action) {
+      let newSpreadsheetOtherProps = [...state.spreadsheetOtherProps];
+      if (newSpreadsheetOtherProps.length > 0) {
+        newSpreadsheetOtherProps.splice(action.payload, 1);
+      } else {
+        newSpreadsheetOtherProps = [];
+      }
+      return {
+        ...state,
+        spreadsheetOtherProps: newSpreadsheetOtherProps,
+      };
+    },
+    // 删除一列
+    modifySpreadsheetOtherPropsToDoDeleteColumn(state, action) {
+      let newSpreadsheetOtherProps = [...state.spreadsheetOtherProps];
+      if (newSpreadsheetOtherProps.length > 0) {
+        newSpreadsheetOtherProps.forEach(value => {
+          value.splice(action.payload, 1);
+        });
+      } else {
+        newSpreadsheetOtherProps = [];
+      }
+      return {
+        ...state,
+        spreadsheetOtherProps: newSpreadsheetOtherProps,
+      };
+    },
     // 设置报表模板的ID
     setReportId(state, action) {
       return {
