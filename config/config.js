@@ -166,6 +166,7 @@ export default {
   proxy: {
     '/api': {
       // target: 'http://10.60.62.60:7567/superlop/restv2/admin/', // 季旋
+      // target: 'http://10.60.62.83:7567/superlop/restv2/admin/', // 张涛
       target: 'http://10.201.62.184:7567/superlop/restv2/admin/', // 线上
       // target: 'http://10.60.69.113:7567/superlop/restv2/admin/', // 测试
       // target: 'http://10.60.62.2:7567/superlop/restv2/admin/', // 李庆

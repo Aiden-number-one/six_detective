@@ -66,19 +66,24 @@ function ReportPager(props) {
     if (totalPage === VALUE_DEFAULT || totalPage === 1) {
       setIsDiablePAH(true); // 都禁用
       setIsDiableNAE(true); // 都禁用
+    } else if (/^\s*$/.test(currPage)) {
+      // 判空
+      setIsDiablePAH(false);
+      setIsDiableNAE(false);
     } else if (currPage === 1) {
+      // 首页
       setIsDiablePAH(true); // 禁用前两个按钮
       setIsDiableNAE(false); // 开启后两个按钮
     } else if (currPage === totalPage) {
+      // 尾页
       setIsDiablePAH(false); // 开启前两个按钮
       setIsDiableNAE(true); // 禁用后两个按钮
-    } else if (/^\s*$/.test(currPage)) {
-      // 空的时候，全部开启
-      setIsDiablePAH(false);
-      setIsDiableNAE(false);
     } else if (currPage > totalPage) {
+      // 输入超出
       setIsDiableNAE(true);
-    } else {
+    } else if (currPage > 1 && currPage < totalPage) {
+      // 正常
+      setIsDiableNAE(false);
       setIsDiablePAH(false); // 开启前两个按钮
     }
 
