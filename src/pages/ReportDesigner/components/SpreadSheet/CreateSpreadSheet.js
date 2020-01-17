@@ -2,8 +2,8 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2020-01-16 20:07:30
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-17 19:57:24
+ * @LastEditors  : liangchaoshun
  * @Email: mus@szkingdom.com
  */
 import React, { Component } from 'react';
@@ -204,6 +204,7 @@ export default WrapperComponent => {
            * @Date: 2019-06-26 09:16:33
            */
           insertRow() {
+            console.log('after inertRow');
             // xs
             //   .sheet
             //   .insertDeleteRowColumn('insert-row', xs.data.rows.len, 1, xs.data.rows.len - 1);
@@ -216,6 +217,7 @@ export default WrapperComponent => {
            * @Date: 2019-06-26 09:16:33
            */
           insertCol() {
+            console.log('after inertCol');
             // xs.sheet.insertDeleteRowColumn('insert-column', xs.data.cols.len, 1);
           },
           requestCondition(ri, ci, conditionItems, afterGetConditionItemsCallback) {
