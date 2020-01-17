@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-16 10:50:25
+ * @LastEditTime : 2020-01-17 17:00:33
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -138,10 +138,10 @@ const targetSpec = {
       widgetStatus: 'normal', // 标签状态
       field: '', // 控件字段名称
       isNull: false, // 控件是否为空
-      maxLength: Infinity, // 最大长度
-      minLength: 0, // 最小长度
-      maxNumber: Infinity, // 最大值
-      minNumber: -Infinity, // 最小值
+      maxLength: undefined, // 最大长度
+      minLength: undefined, // 最小长度
+      maxNumber: undefined, // 最大值
+      minNumber: undefined, // 最小值
       displayState: 'normal', // 展示控件状态
       initialValue: undefined, // 初始值
       // grid-layout相关

@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 09:37:56
+ * @LastEditTime : 2020-01-17 20:00:59
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -864,6 +864,7 @@ export default class DataProcessing extends Component {
       processingBar,
       HKEFTime,
       SEHKTime,
+      alertIds,
     } = this.state;
     const rowSelection = {
       columnWidth: 100,
@@ -978,7 +979,12 @@ export default class DataProcessing extends Component {
                         : { visibility: 'hidden' }
                     }
                   >
-                    <Button onClick={this.onBypass} type="primary" className="btn-usual">
+                    <Button
+                      onClick={this.onBypass}
+                      type="primary"
+                      disabled={alertIds.length === 0}
+                      className={alertIds.length > 0 ? ['btn-usual'] : ['disabled-btn']}
+                    >
                       {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
                     </Button>
                   </div>

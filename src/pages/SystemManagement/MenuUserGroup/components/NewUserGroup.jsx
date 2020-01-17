@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 16:53:19
+ * @LastEditTime : 2020-01-17 19:26:32
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -189,10 +189,10 @@ class NewUser extends Component {
             i -= 1;
           }
         }
-        console.log('mdify-selectedKeys===', selectedKeys);
+        console.log('mdify-updateGroup===', this.props.updateGroup);
         console.log(
           'modify-menuData===',
-          menuArray.filter(element => !element.menuid.includes('btn')),
+          this.props.menuData.filter(element => !element.menuid.includes('btn')),
         );
         that.setState({
           selectedKeys,
@@ -236,11 +236,11 @@ class NewUser extends Component {
    * @param {type} selectedKeyss: menu's auth, event, btnIds: button's auth.
    * @return: undefined
    */
-  onCheck = (selectedKeyss, event, btnIds) => {
+  onCheck = (selectedKeyss, event, btnIds, half) => {
     console.log('selectedKeyss, event, btnIds==', selectedKeyss, event, btnIds);
     let halfCheckedKeys = [];
     if (typeof event === 'boolean') {
-      halfCheckedKeys = [];
+      halfCheckedKeys = half;
     } else {
       halfCheckedKeys = Object.assign([], event.halfCheckedKeys);
     }
