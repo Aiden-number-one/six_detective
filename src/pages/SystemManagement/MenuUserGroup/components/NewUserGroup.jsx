@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 20:28:40
+ * @LastEditTime : 2020-01-16 22:33:16
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -184,6 +184,11 @@ class NewUser extends Component {
             i -= 1;
           }
         }
+        console.log('mdify-selectedKeys===', selectedKeys);
+        console.log(
+          'modify-menuData===',
+          menuArray.filter(element => !element.menuid.includes('btn')),
+        );
         that.setState({
           selectedKeys,
           originalVisible: true,
