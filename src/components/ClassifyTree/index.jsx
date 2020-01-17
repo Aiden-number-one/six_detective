@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 23:48:44
+ * @LastEditTime : 2020-01-18 00:02:34
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -146,6 +146,7 @@ class ClassifyTree extends Component {
     halfCheckedKeys: [],
     customeBtnIds: [],
     allBtns: [],
+    tempBtns: [],
     autoExpandParent: true,
     allChecked: false,
     btnAllChecked: false,
@@ -312,9 +313,9 @@ class ClassifyTree extends Component {
   onCheck = (selectedKeys, info) => {
     console.log('ookok====', selectedKeys);
     const { btnArray } = this.props;
-    const { menuList, customeBtnIds, allBtns } = this.state;
+    const { menuList, customeBtnIds, tempBtns, allBtns } = this.state;
     const newCustomeBtnIds = [];
-    btnArray.forEach(element => {
+    allBtns.forEach(element => {
       if (selectedKeys.some(item => item === element.parentmenuid)) {
         if (customeBtnIds.indexOf(element.menuid) > -1) {
           newCustomeBtnIds.push(element.menuid);
@@ -340,8 +341,9 @@ class ClassifyTree extends Component {
     //     i -= 1;
     //   }
     // }
-    console.log('selectedKeys========================', selectedKeys);
-    console.log('newCheckedKeys======================', newCheckedKeys);
+    // console.log('selectedKeys========================', selectedKeys);
+    // console.log('newCheckedKeys======================', newCheckedKeys);
+    console.log('newCustomeBtnIds.length === allBtns.length====', newCustomeBtnIds, allBtns);
     this.setState({
       allChecked: selectedKeys.length === newCheckedKeys.length,
       indeterminate: selectedKeys.length && selectedKeys.length < newCheckedKeys.length,
@@ -408,14 +410,15 @@ class ClassifyTree extends Component {
   };
 
   onChangeBtn = e => {
-    const { btnArray } = this.props;
+    // const { btnArray } = this.props;
+    const { allBtns } = this.state;
     this.setState({
       btnAllChecked: e.target.checked,
       btnIndeterminate: false,
     });
     if (e.target.checked) {
       this.setState({
-        customeBtnIds: btnArray.map(element => element.menuid),
+        customeBtnIds: allBtns.map(element => element.menuid),
       });
     } else {
       this.setState({
