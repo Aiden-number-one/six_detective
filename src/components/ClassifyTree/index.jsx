@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 19:37:45
+ * @LastEditTime : 2020-01-17 19:51:50
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -335,6 +335,8 @@ class ClassifyTree extends Component {
         i -= 1;
       }
     }
+    console.log('selectedKeys========================', selectedKeys);
+    console.log('newCheckedKeys======================', newCheckedKeys);
     this.setState({
       allChecked: selectedKeys.length === newCheckedKeys.length,
       indeterminate: selectedKeys.length && selectedKeys.length < newCheckedKeys.length,
