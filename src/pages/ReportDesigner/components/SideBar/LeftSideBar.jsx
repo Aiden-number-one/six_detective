@@ -254,14 +254,14 @@ function Title({ title, isLeaf, displayDraw, connectDragSource, isParent, delete
         <div className={styles.operationArea}>
           {isParent && (
             <>
-              <IconFont
-                type="icon-edit"
+              <Icon
+                type="edit"
                 onClick={() => {
                   displayDraw();
                 }}
               />
-              <IconFont
-                type="icon-delete"
+              <Icon
+                type="delete"
                 onClick={() => {
                   deleteModal();
                 }}
