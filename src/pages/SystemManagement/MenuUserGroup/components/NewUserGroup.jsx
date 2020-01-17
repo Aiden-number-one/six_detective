@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 20:28:40
+ * @LastEditTime : 2020-01-17 16:53:19
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -74,6 +74,7 @@ const NewFormUser = Form.create()(FormUser);
   loading: loading.effects,
   userGroup: menuUserGroup.saveUser,
   updateGroup: menuUserGroup.updateData,
+  ignoreMenusData: menuUserGroup.ignoreMenusData,
 }))
 class NewUser extends Component {
   newUserRef = React.createRef();
@@ -86,12 +87,14 @@ class NewUser extends Component {
       btnIds: [],
       btnArray: [],
       btnParentmenuids: [],
+      halfCheckedKeys: [],
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { updateFlag } = this.props;
     if (updateFlag) {
+      await this.getIgnoreMenuLists();
       this.getMenuGrops();
     }
   }
@@ -101,7 +104,7 @@ class NewUser extends Component {
   };
 
   onSave = () => {
-    const { selectedKeys } = this.state;
+    const { selectedKeys, halfCheckedKeys } = this.state;
     console.log('selectedKeys====================================', selectedKeys);
     const { dispatch, updateFlag } = this.props;
     this.newUserRef.current.validateFields((err, values) => {
@@ -117,6 +120,7 @@ class NewUser extends Component {
           groupName: values.groupName,
           groupDesc: values.groupDesc,
           menuIds: selectedKeys.join(','),
+          ignoreMenus: halfCheckedKeys.join(','),
         };
         dispatch({
           type: 'menuUserGroup/newUserGroup',
@@ -137,6 +141,7 @@ class NewUser extends Component {
           groupName: values.groupName,
           groupDesc: values.groupDesc,
           menuIds: selectedKeys.join(','),
+          ignoreMenus: halfCheckedKeys.join(','),
         };
         dispatch({
           type: 'menuUserGroup/updateUserGroup',
@@ -184,6 +189,11 @@ class NewUser extends Component {
             i -= 1;
           }
         }
+        console.log('mdify-selectedKeys===', selectedKeys);
+        console.log(
+          'modify-menuData===',
+          menuArray.filter(element => !element.menuid.includes('btn')),
+        );
         that.setState({
           selectedKeys,
           originalVisible: true,
@@ -191,6 +201,20 @@ class NewUser extends Component {
           btnArray,
           btnParentmenuids,
         });
+      },
+    });
+  };
+
+  getIgnoreMenuLists = () => {
+    const { dispatch, groupMenuInfo } = this.props;
+    const params = {
+      groupId: groupMenuInfo.groupId,
+    };
+    dispatch({
+      type: 'menuUserGroup/getIgnoreMenuList',
+      payload: params,
+      callback: () => {
+        console.log('ignoreMenusData======', this.props.ignoreMenusData);
       },
     });
   };
@@ -223,6 +247,7 @@ class NewUser extends Component {
     const newSelectedKeys = selectedKeyss.concat(halfCheckedKeys, btnIds);
     this.setState({
       selectedKeys: newSelectedKeys,
+      halfCheckedKeys,
     });
   };
 

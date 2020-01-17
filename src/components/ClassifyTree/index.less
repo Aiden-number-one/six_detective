@@ -3,6 +3,12 @@
     .ant-tree li .ant-tree-node-content-wrapper {
       padding: 0 !important;
     }
+    .ant-tree-node-content-wrapper {
+      width: 88%;
+    }
+    .ant-tree-title {
+      width: 100%;
+    }
   }
   .btnClass {
     display: inline-block !important;
@@ -25,8 +31,13 @@
   padding: 0 6px;
 }
 
+.titleWraper {
+  position: relative;
+}
 .titleWraper:hover {
   .hoverText {
+    position: absolute;
+    right: 0;
     display: inline-block;
     margin: 1px 0 1px 5px;
     color: #10416c;

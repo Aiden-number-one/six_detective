@@ -1,6 +1,6 @@
 import React, { PureComponent, useState } from 'react';
 import { connect } from 'dva';
-import { Layout, Form, Tree, Checkbox } from 'antd';
+import { Layout, Form, Tree, Checkbox, Icon } from 'antd';
 import classNames from 'classnames';
 import { FormattedMessage } from 'umi/locale';
 import _ from 'lodash';
@@ -446,16 +446,16 @@ function Title({ title, isLeaf, copyData, deleteData, onClick }) {
         <div className={styles.operationArea}>
           {isLeaf && (
             <>
-              <IconFont
+              <Icon
                 title="Copy"
-                type="iconcopy"
+                type="copy"
                 onClick={() => {
                   copyData();
                 }}
               />
-              <IconFont
+              <Icon
                 title="Delete"
-                type="icon-delete"
+                type="delete"
                 onClick={() => {
                   deleteData();
                 }}
