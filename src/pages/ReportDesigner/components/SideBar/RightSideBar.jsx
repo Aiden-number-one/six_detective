@@ -289,7 +289,7 @@ export default class RightSideBar extends PureComponent {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, setFieldsValue } = this.props.form;
     const {
       cellPosition, // 单元格位置
       rightSideCollapse, // 右边的面板
@@ -338,6 +338,7 @@ export default class RightSideBar extends PureComponent {
     // 表单的props
     const formProps = {
       getFieldDecorator,
+      setFieldsValue,
       dispatch,
     };
     return (

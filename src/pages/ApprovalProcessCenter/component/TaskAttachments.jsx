@@ -20,16 +20,23 @@ export default function({ attachments, onRemove, onRemoveAll }) {
         </span>
         <span onClick={onRemoveAll}>{formatMessage({ id: 'alert-center.delete-all' })}</span>
       </div>
-      <ul>
+      <ul className={styles['attachments-desc']}>
         {attachments.map(item => (
           <li key={item.uid}>
             <span className={styles['icon-btns']}>
               <a download href={`/download?filePath=${item.url}`}>
-                <IconFont type="icondownload" className={styles.icon} />
+                <IconFont type="icon-downloadx" className={styles.icon} />
               </a>
-              <IconFont type="icondelete" className={styles.icon} onClick={() => onRemove(item)} />
+              <IconFont
+                type="icon-delete-attem"
+                className={styles.icon}
+                onClick={() => onRemove(item)}
+              />
             </span>
-            <span>{item.name}</span>
+            <span className={styles['file-icon']}>
+              <IconFont type="icon-documentx" className={styles.icon} />
+              {item.name}
+            </span>
           </li>
         ))}
       </ul>

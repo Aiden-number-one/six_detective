@@ -2,7 +2,7 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-16 18:48:52
+ * @LastEditTime : 2020-01-17 13:56:55
  * @LastEditors  : lan
  */
 import React, { PureComponent } from 'react';
@@ -127,6 +127,10 @@ class AddDataSet extends PureComponent {
           dispatch({
             type: 'sqlDataSource/changeDataSetName',
             payload: items.datasetName,
+          });
+          dispatch({
+            type: 'sqlDataSource/setVariableList',
+            payload: items.datasetParams,
           });
         },
       });

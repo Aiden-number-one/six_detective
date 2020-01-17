@@ -1,6 +1,6 @@
 @import '~@/assets/css/variable.less';
 :global {
-  .proLayout .ant-select-selection,
+  // .proLayout .ant-select-selection,
   .ant-drawer-right .ant-select-selection,
   .ant-popover-inner-content .ant-select-selection {
     background-color: unset !important;
@@ -436,23 +436,49 @@
         }
       }
       .up-attachments {
-        background-color: #eef1f4;
+        background-color: #fff;
         .file-desc {
           display: flex;
           justify-content: space-between;
-          padding: 4px 10px;
-          color: #3d4a59;
+          padding: 8px 10px 4px 10px;
+          color: #0d87d4;
+          font-size: 12px;
+          font-family: Avenir, sans-serif;
+          span:first-child {
+            width: 250px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
           span:last-child {
+            font-weight: 500;
+            text-decoration: underline;
             cursor: pointer;
             &:hover {
-              color: #1e416c;
+              color: #009cff;
             }
           }
         }
         > ul {
           margin: 0;
-          padding: 6px 16px;
+          padding: 0 10px 6px 10px;
           color: #464c51;
+          li {
+            margin-bottom: 8px;
+          }
+          .icon {
+            color: #c0d0da;
+          }
+          .icon:nth-child(2) {
+            margin-right: 18px;
+            margin-left: 4px;
+          }
+          .file-icon {
+            .icon {
+              margin-right: 4px;
+              color: #464c51;
+            }
+          }
         }
       }
     }

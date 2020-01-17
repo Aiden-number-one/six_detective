@@ -498,13 +498,11 @@ class ToolBar extends Component {
             <div className={styles.group}>
               <Button
                 className={classNames('btn', 'btn2Report', 'mr6', paintformatActive && 'active')}
+                onClick={() => {
+                  setCellStyle('paintformat', true);
+                }}
               >
-                <div
-                  className={classNames(styles.topBottom)}
-                  onClick={() => {
-                    setCellStyle('paintformat', true);
-                  }}
-                >
+                <div className={classNames(styles.topBottom)}>
                   <IconFont type="icongeshishua" />
                   <p className={styles.brP}>
                     <span>Format</span>
@@ -915,14 +913,12 @@ class ToolBar extends Component {
                     'mr6',
                     btnActiveStatus.isMerge && 'active',
                   )}
+                  onClick={() => {
+                    setCellStyle('merge', true);
+                    setCellStyle('align', 'center');
+                  }}
                 >
-                  <div
-                    className={classNames(styles.topBottom)}
-                    onClick={() => {
-                      setCellStyle('merge', true);
-                      setCellStyle('align', 'center');
-                    }}
-                  >
+                  <div className={classNames(styles.topBottom)}>
                     <IconFont type="iconhuanhang" />
                     <p className={styles.brP}>
                       <span>Merge and</span>
@@ -940,13 +936,11 @@ class ToolBar extends Component {
                     'mr6',
                     btnActiveStatus.autoLineBreak && 'active',
                   )}
+                  onClick={() => {
+                    setCellStyle('textwrap', !btnActiveStatus.autoLineBreak);
+                  }}
                 >
-                  <div
-                    className={classNames(styles.topBottom)}
-                    onClick={() => {
-                      setCellStyle('textwrap', !btnActiveStatus.autoLineBreak);
-                    }}
-                  >
+                  <div className={classNames(styles.topBottom)}>
                     <IconFont type="iconhebingdanyuange_danyuangecaozuo_jurassic" />
                     <p className={styles.brP}>
                       <span>Wrap</span>

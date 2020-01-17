@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, DatePicker, Button, Checkbox, Select, Row, Col, Input } from 'antd';
-import { defaultDateRange, dateFormat, defaultMarket, SUBMISSION_REPORT } from './constants';
+import { dateFormat, defaultMarket, SUBMISSION_REPORT } from './constants';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -15,7 +15,7 @@ const formTypeMap = {
 const tradeDateLabel = formatMessage({ id: 'data-import.trade-date' });
 const submissionDateLabel = formatMessage({ id: 'data-import.submission-date' });
 
-const DateRangeFormItem = ({ getFieldDecorator, formType }) => (
+const DateRangeFormItem = ({ getFieldDecorator, defaultDateRange, formType }) => (
   <Form.Item label={formType === 2 ? submissionDateLabel : tradeDateLabel}>
     {getFieldDecorator('dateRange', {
       initialValue: defaultDateRange,
@@ -73,7 +73,7 @@ const FileTypeFormItem = ({ getFieldDecorator }) => (
   </Form.Item>
 );
 
-function FilterForm({ formType, form, loading, onParams }) {
+function FilterForm({ formType, form, loading, onParams, defaultDateRange }) {
   const { getFieldDecorator, validateFields } = form;
 
   function getParams(type) {
@@ -94,7 +94,11 @@ function FilterForm({ formType, form, loading, onParams }) {
     <Form layout="vertical" className="ant-advanced-search-form search-wraper">
       <Row gutter={{ xs: 0, sm: 8, md: 10, lg: 20, xl: 24 }} align="bottom" type="flex">
         <Col xs={24} sm={12} xl={10} xxl={8}>
-          <DateRangeFormItem formType={formType} getFieldDecorator={getFieldDecorator} />
+          <DateRangeFormItem
+            formType={formType}
+            getFieldDecorator={getFieldDecorator}
+            defaultDateRange={defaultDateRange}
+          />
         </Col>
         <Col xs={24} sm={12} xl={7} xxl={5}>
           {formType === 0 && <SubmissionReportFormItem getFieldDecorator={getFieldDecorator} />}
