@@ -3,7 +3,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-13 20:54:47
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 21:49:42
+ * @LastEditTime : 2020-01-17 22:51:27
  * @Description: 公式输入的模态框
  */
 
@@ -174,11 +174,11 @@ class FormulaModal extends PureComponent {
                         required: true,
                         message: 'Please input a formula',
                       },
-                      {
-                        // 一般性整体校验
-                        pattern: /^=?[A-Z]+\(.*\)$/,
-                        message: 'Please input the correct format, eg: =SUM()',
-                      },
+                      // {
+                      //   // 一般性整体校验
+                      //   pattern: /^=?[A-Z]+\(.*\)$/,
+                      //   message: 'Please input the correct format, eg: =SUM()',
+                      // },
                     ],
                   })(<Input placeholder="Please input a formula" />)}
                 </Form.Item>
