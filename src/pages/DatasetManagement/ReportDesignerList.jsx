@@ -2,8 +2,8 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-16 13:07:17
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-19 14:34:50
+ * @LastEditors  : liangchaoshun
  */
 import React, { PureComponent } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -164,7 +164,7 @@ export default class DatasetManagement extends PureComponent {
   // 新增树节点
   handleAddTree = (e, nodeTree) => {
     this.setState({
-      drawerTitle: 'ADD Folder',
+      drawerTitle: 'Add Folder',
     });
     this.operateType = 'ADD';
     if (nodeTree) {
@@ -382,7 +382,7 @@ export default class DatasetManagement extends PureComponent {
     return (
       <PageHeaderWrapper>
         <div style={{ display: 'flex', minHeight: 'calc(100vh - 185px)' }}>
-          <div style={{ flex: '0 0 220px', background: '#fff' }}>
+          <div style={{ minWidth: '220px', background: '#fff' }}>
             {this.Title()}
             {classifyTreeData.length > 0 && (
               <ClassifyTree
@@ -450,6 +450,8 @@ export default class DatasetManagement extends PureComponent {
         <Drawer
           title={drawerTitle}
           width={370}
+          className={styles['add-folder-drawer']}
+          closable={false}
           visible={this.state.visible.operateTree}
           onClose={() => {
             this.clearNodeTree();

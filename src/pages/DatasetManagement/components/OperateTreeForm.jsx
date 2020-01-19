@@ -2,8 +2,8 @@
  * @Description: 新增修改数据集分类树
  * @Author: lan
  * @Date: 2019-12-11 15:51:22
- * @LastEditTime : 2020-01-13 15:58:55
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-19 14:37:22
+ * @LastEditors  : liangchaoshun
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -56,7 +56,7 @@ export default class OperateTreeForm extends PureComponent {
                 },
               ],
               initialValue: nodeTree && nodeTree.folderName,
-            })(<Input />)}
+            })(<Input placeholder="Please input folder name" />)}
           </Form.Item>
         )}
         <div
