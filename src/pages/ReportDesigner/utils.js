@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 23:14:53
+ * @LastEditTime : 2020-01-19 11:15:18
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -169,17 +169,14 @@ export function getDataSetXml(contentDetail) {
   let dataSetXml = '';
   Object.entries(dataSourceMap).forEach(([datasourceId, datasourceValue]) => {
     const { query = {} } = datasourceValue[0];
-    const {
-      datasource_name: datasourceName,
-      username,
-      password,
-      url,
-      driver,
-      command_text: commandText,
-    } = query;
+    const { datasource_name: datasourceName, username, password, url, driver } = query;
     dataSetXml += `<datasource datasourceid="${datasourceId}" name="${datasourceName}" type="jdbc" username="${username}" password="${password}" url="${url}" driver="${driver}">`;
     datasourceValue.forEach(dataset => {
-      const { dataset_name: datasetName, fields = [] } = dataset;
+      const {
+        dataset_name: datasetName,
+        fields = [],
+        query: { command_text: commandText },
+      } = dataset;
       // dataset_type: type 暂时不需要根据sql或produce去区分
       dataSetXml += ` <dataset name="${datasetName}" type="sql">`;
       dataSetXml += ` <sql><![CDATA[${commandText}]]></sql>`;
