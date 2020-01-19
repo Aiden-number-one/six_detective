@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-19 17:15:35
+ * @LastEditTime : 2020-01-19 20:52:43
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -73,18 +73,31 @@ export default class DataProcessing extends Component {
           title: formatMessage({ id: 'app.common.number' }),
           dataIndex: 'index',
           key: 'index',
-          width: 80,
-          align: 'right',
+          width: 90,
+          align: 'center',
           render: (res, recode, index) => (
             <Fragment>
-              {recode.isClosedIntraday === '1' && (
+              {
                 <Antd.Tooltip
                   title="pending tasks for today"
                   className={styles['alert-icon-wraper']}
+                  style={
+                    recode.isClosedIntraday === '1'
+                      ? { visibility: 'visible' }
+                      : { visibility: 'hidden' }
+                  }
                 >
-                  <IconFont type="icon-tips" className={styles['alert-icon']} />
+                  <IconFont
+                    style={
+                      recode.isClosedIntraday === '1'
+                        ? { visibility: 'visible' }
+                        : { visibility: 'hidden' }
+                    }
+                    type="icon-tips"
+                    className={styles['alert-icon']}
+                  />
                 </Antd.Tooltip>
-              )}
+              }
               <span>{(this.state.page.pageNumber - 1) * this.state.page.pageSize + index + 1}</span>
             </Fragment>
           ),
