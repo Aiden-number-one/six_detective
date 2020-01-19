@@ -3,8 +3,8 @@
  * @Author: iron
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2019-11-08 18:06:37
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 20:59:59
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-19 15:36:24
  */
 
 // eslint-disable-next-line eslint-comments/disable-enable-pair
@@ -90,7 +90,9 @@ request.interceptors.request.use((url, opts) => {
     S: timestamp,
   };
   // 将来去掉，目前只为方便现在调试方便
-  const longJson = url === '/api/v2.0/bayconnect.superlop.set_report_template_content_edit.json';
+  const longJson =
+    url === '/api/v2.0/bayconnect.superlop.set_report_template_content_edit.json' ||
+    url === '/api/v2.0/bayconnect.superlop.set_report_template_data_query.json';
   const options = {
     ...opts,
     // params: isProOrDev() && !longJson ? {...opts.params,...opts.data} :{}, // 暂时为测试放开

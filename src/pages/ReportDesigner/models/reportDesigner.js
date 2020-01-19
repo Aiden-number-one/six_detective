@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-02 16:36:09
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 21:19:05
+ * @LastEditTime : 2020-01-19 15:28:30
  */
 import { message } from 'antd';
 import { createCellPos } from '@/utils/utils';
@@ -309,6 +309,10 @@ export default {
           description: payload.description || '',
         },
       };
+      if (payload.isTemporary) {
+        window.localStorage.setItem('temporaryJSon', JSON.stringify(reportTemplateContentObj));
+        return true;
+      }
       const response = yield call(setReportTemplateContent, {
         param: {
           folderId: payload.folderId,
@@ -316,6 +320,7 @@ export default {
           reportTemplateContent: JSON.stringify(reportTemplateContentObj),
         },
       });
+
       if (response.bcjson.flag === '1') {
         yield put({
           type: 'setReportId',
@@ -344,6 +349,7 @@ export default {
       } else {
         message.warn(response.bcjson.msg);
       }
+      return true;
     },
     // 获取公共数据集
     *getPublicDataSet({ payload }, { call, put }) {
