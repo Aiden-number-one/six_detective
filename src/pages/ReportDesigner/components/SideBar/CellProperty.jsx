@@ -156,7 +156,9 @@ export default props => {
                       <Option value="group">
                         {<FormattedMessage id="report-designer.group" />}
                       </Option>
-                      <Option value="list">{<FormattedMessage id="report-designer.list" />}</Option>
+                      <Option value="select">
+                        {<FormattedMessage id="report-designer.list" />}
+                      </Option>
                       <Option value="sum">{<FormattedMessage id="report-designer.sum" />}</Option>
                     </Select>,
                   )}
