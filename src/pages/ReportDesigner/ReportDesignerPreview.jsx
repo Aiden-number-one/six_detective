@@ -44,7 +44,8 @@ class ReportDesignerPreview extends Component {
     const reportTemplateContent = window.localStorage.getItem('temporaryJSon');
     const payload = {
       // 若为不分页，则pageNumber始终为0
-      pageNumber: paging === '1' ? pageNumber : '0',
+      // pageNumber: paging === '1' ? pageNumber : '0', // lcs 不分页注释
+      pageNumber: 0,
       pageSize,
       parameters,
     };
@@ -205,7 +206,14 @@ class ReportDesignerPreview extends Component {
     }
     return (
       <div className={less['report-preview-container']}>
-        <div className={less['page-container']} style={{ textAlign: 'right' }}>
+        <div
+          className={less['page-container']}
+          style={{
+            textAlign: 'right',
+            borderBottom:
+              customSearchData && customSearchData.length ? '1px solid #0d87d4' : 'none',
+          }}
+        >
           <ReportPager
             showPager={false} // TODO: 暂时隐藏分页
             inlineBlock

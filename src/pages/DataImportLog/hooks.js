@@ -4,7 +4,7 @@
  * @Email: chenggang@szkingdom.com.cn
  * @Date: 2020-01-17 14:12:08
  * @LastEditors  : iron
- * @LastEditTime : 2020-01-17 15:03:01
+ * @LastEditTime : 2020-01-19 17:56:20
  */
 import { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -27,6 +27,11 @@ export default function useLog({ dispatch, type: logType }) {
 
     setDateRange([startDate, endDate]);
 
+    // set defatul query params
+    setSearchParams({
+      startDate,
+      endDate,
+    });
     dispatch({
       type: `${logType}/fetch`,
       payload: {
