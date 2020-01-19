@@ -206,7 +206,14 @@ class ReportDesignerPreview extends Component {
     }
     return (
       <div className={less['report-preview-container']}>
-        <div className={less['page-container']} style={{ textAlign: 'right' }}>
+        <div
+          className={less['page-container']}
+          style={{
+            textAlign: 'right',
+            borderBottom:
+              customSearchData && customSearchData.length ? '1px solid #0d87d4' : 'none',
+          }}
+        >
           <ReportPager
             showPager={false} // TODO: 暂时隐藏分页
             inlineBlock
