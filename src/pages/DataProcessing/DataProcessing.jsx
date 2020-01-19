@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 20:00:59
+ * @LastEditTime : 2020-01-19 17:05:46
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -983,7 +983,7 @@ export default class DataProcessing extends Component {
                       onClick={this.onBypass}
                       type="primary"
                       disabled={alertIds.length === 0}
-                      className={alertIds.length > 0 ? ['btn-usual'] : ['disabled-btn']}
+                      className={alertIds.length > 0 ? 'btn-usual' : 'disabled-btn'}
                     >
                       {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
                     </Button>
@@ -1054,7 +1054,7 @@ export default class DataProcessing extends Component {
                   <Button
                     type="primary"
                     // className={[authDataProcess ? 'btn-usual' : 'noauth-btn']}
-                    className={authDataProcess ? ['btn-usual'] : ['disabled-btn']}
+                    className={authDataProcess ? 'btn-usual' : 'disabled-btn'}
                     onClick={this.startProcessing}
                     // disabled={!inspectDataVisible}
                     disabled={!authDataProcess}
