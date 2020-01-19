@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-19 20:52:43
+ * @LastEditTime : 2020-01-19 21:46:41
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -350,7 +350,9 @@ export default class DataProcessing extends Component {
         this.setState(
           {
             alertType: dataProcessingData.items[0] && dataProcessingData.items[0].alertType,
-            isBypass: !!(dataProcessingData.items[0].isClosedIntraday === '1'),
+            isBypass:
+              dataProcessingData.items[0] &&
+              !!(dataProcessingData.items[0].isClosedIntraday === '1'),
             inspectDataVisible: true,
           },
           () => {
@@ -468,7 +470,7 @@ export default class DataProcessing extends Component {
       {
         alertType: record.alertType,
         activeIndex: index,
-        isBypass: !!(record.isClosedIntraday === '1'),
+        isBypass: record && !!(record.isClosedIntraday === '1'),
       },
       () => {
         this.queryDataProcessingItem();
@@ -921,7 +923,7 @@ export default class DataProcessing extends Component {
                       classnames({
                         [styles['table-active']]:
                           record.alertType === alertType && index === activeIndex,
-                        [styles['alert-table-row']]: record.isClosedIntraday === '1',
+                        [styles['alert-table-row']]: record && record.isClosedIntraday === '1',
                       })
                     }
                     rowKey={row => row.alertType.toString()}
