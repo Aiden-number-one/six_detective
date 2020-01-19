@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2020-01-09 16:45:10
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 20:00:59
+ * @LastEditTime : 2020-01-19 17:15:35
  */
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -983,7 +983,7 @@ export default class DataProcessing extends Component {
                       onClick={this.onBypass}
                       type="primary"
                       disabled={alertIds.length === 0}
-                      className={alertIds.length > 0 ? ['btn-usual'] : ['disabled-btn']}
+                      className={alertIds.length > 0 ? 'btn-usual' : 'disabled-btn'}
                     >
                       {formatMessage({ id: 'systemManagement.dataProcessing.bypass' })}
                     </Button>
@@ -1054,7 +1054,7 @@ export default class DataProcessing extends Component {
                   <Button
                     type="primary"
                     // className={[authDataProcess ? 'btn-usual' : 'noauth-btn']}
-                    className={authDataProcess ? ['btn-usual'] : ['disabled-btn']}
+                    className={authDataProcess ? 'btn-usual' : 'disabled-btn'}
                     onClick={this.startProcessing}
                     // disabled={!inspectDataVisible}
                     disabled={!authDataProcess}
@@ -1105,14 +1105,14 @@ export default class DataProcessing extends Component {
                 forceFit
               >
                 <div>
-                  The last time of data processing is for{' '}
-                  {functionNameOptions.length > 2 && functionNameOptions[1].title} at {HKEFTime.t2}{' '}
-                  on {HKEFTime.t1}
+                  The last time of data processing for{' '}
+                  {functionNameOptions.length > 2 && functionNameOptions[1].title} is at{' '}
+                  {HKEFTime.t2} on {HKEFTime.t1}
                 </div>
                 <div>
-                  The last time of data processing is for{' '}
-                  {functionNameOptions.length > 2 && functionNameOptions[2].title} at {SEHKTime.t2}{' '}
-                  on {SEHKTime.t1}
+                  The last time of data processing for{' '}
+                  {functionNameOptions.length > 2 && functionNameOptions[2].title} is at{' '}
+                  {SEHKTime.t2} on {SEHKTime.t1}
                 </div>
                 <Axis name="月份" />
                 <Axis name="月均降雨量" line={{ stroke: '#d9d9d9' }} position="left" />

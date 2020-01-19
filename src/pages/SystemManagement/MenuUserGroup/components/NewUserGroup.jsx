@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:16:05
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 19:26:32
+ * @LastEditTime : 2020-01-19 16:46:59
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -51,14 +51,14 @@ class FormUser extends Component {
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('groupDesc', {
-              rules: [
-                {
-                  required: true,
-                  message: `${formatMessage({
-                    id: 'systemManagement.userGroup.remark',
-                  })} is missing`,
-                },
-              ],
+              // rules: [
+              //   {
+              //     required: true,
+              //     message: `${formatMessage({
+              //       id: 'systemManagement.userGroup.remark',
+              //     })} is missing`,
+              //   },
+              // ],
               initialValue: groupMenuInfo && groupMenuInfo.groupDesc,
             })(<TextArea rows={4} placeholder="Please input" />)}
           </Form.Item>
@@ -88,6 +88,7 @@ class NewUser extends Component {
       btnArray: [],
       btnParentmenuids: [],
       halfCheckedKeys: [],
+      ignoreData: [],
     };
   }
 
@@ -174,6 +175,7 @@ class NewUser extends Component {
       type: 'menuUserGroup/updateUserGroup',
       payload: params,
       callback: () => {
+        const { ignoreData } = this.state;
         const selectedKeys = this.props.updateGroup.map(element => element.menuId);
         const menuArray = flatteningTree(this.props.menuData);
         const btnArray = menuArray.filter(element => element.menuid.includes('btn'));
@@ -194,8 +196,10 @@ class NewUser extends Component {
           'modify-menuData===',
           this.props.menuData.filter(element => !element.menuid.includes('btn')),
         );
+        const newSelectedKeys = selectedKeys.filter(val => ignoreData.indexOf(val) < 0);
+        console.log('newSelectedKeys=111111111111111111111111=', newSelectedKeys);
         that.setState({
-          selectedKeys,
+          selectedKeys: newSelectedKeys.filter(element => !element.includes('btn')),
           originalVisible: true,
           btnIds,
           btnArray,
@@ -215,6 +219,11 @@ class NewUser extends Component {
       payload: params,
       callback: () => {
         console.log('ignoreMenusData======', this.props.ignoreMenusData);
+        const ignoreData = [];
+        this.props.ignoreMenusData.forEach(element => ignoreData.push(element.OBJ_ID));
+        this.setState({
+          ignoreData,
+        });
       },
     });
   };

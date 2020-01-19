@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 16:24:19
+ * @LastEditTime : 2020-01-19 14:36:04
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -169,17 +169,14 @@ export function getDataSetXml(contentDetail) {
   let dataSetXml = '';
   Object.entries(dataSourceMap).forEach(([datasourceId, datasourceValue]) => {
     const { query = {} } = datasourceValue[0];
-    const {
-      datasource_name: datasourceName,
-      username,
-      password,
-      url,
-      driver,
-      command_text: commandText,
-    } = query;
+    const { datasource_name: datasourceName, username, password, url, driver } = query;
     dataSetXml += `<datasource datasourceid="${datasourceId}" name="${datasourceName}" type="jdbc" username="${username}" password="${password}" url="${url}" driver="${driver}">`;
     datasourceValue.forEach(dataset => {
-      const { dataset_name: datasetName, fields = [] } = dataset;
+      const {
+        dataset_name: datasetName,
+        fields = [],
+        query: { command_text: commandText },
+      } = dataset;
       // dataset_type: type 暂时不需要根据sql或produce去区分
       dataSetXml += ` <dataset name="${datasetName}" type="sql">`;
       dataSetXml += ` <sql><![CDATA[${commandText}]]></sql>`;
@@ -208,7 +205,10 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
   spreadSheetData.forEach((rowsValue, rowsIndex) => {
     rowsValue.forEach((colsValue, colsIndex) => {
       let cellText = colsValue;
-      const { cellType, style, rowSpan, colSpan } = spreadSheetProps[rowsIndex][colsIndex];
+      const { cellType, style } = spreadSheetProps[rowsIndex][colsIndex];
+      let { rowSpan = '1', colSpan = '1' } = spreadSheetProps[rowsIndex][colsIndex];
+      rowSpan = rowSpan.toString();
+      colSpan = colSpan.toString();
       const {
         bgcolor,
         forecolor,
@@ -249,7 +249,8 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
           if (otherProps.groupSetting === 'asc') {
             order = 'asc';
           }
-          if (otherProps.dataSetting === 'list') {
+          // 为了兼容老数据
+          if (otherProps.dataSetting === 'select') {
             aggregate = 'select';
           }
           expand = otherProps.expendDirection || 'Down';
@@ -302,8 +303,8 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
         // 去除公式中的等号
         cellText = cellText.replace(/=/, '');
         // 得到函数后，进行替换，得到相对应的小写
-        const formulaName = cellText.match(/(.*)\(.*\)/)[1];
-        cellText = cellText.replace(formulaName, formulaName.toLocaleLowerCase());
+        // const formulaName = cellText.match(/(.*)\(.*\)/)[1];
+        // cellText = cellText.replace(formulaName, formulaName.toLocaleLowerCase());
         cellxml += `<expression-value><![CDATA[${cellText}]]></expression-value>`;
       } else {
         cellxml += '<simple-value><![CDATA[]]></simple-value>';
@@ -346,6 +347,12 @@ export function modifyTemplateAreaInside({
         return {};
       }),
     );
+  }
+  if (!newSpreadsheetOtherProps[rowIndex]) {
+    newSpreadsheetOtherProps[rowIndex] = {};
+  }
+  if (!newSpreadsheetOtherProps[rowIndex][colIndex]) {
+    newSpreadsheetOtherProps[rowIndex][colIndex] = {};
   }
   const content = newSpreadsheetOtherProps[rowIndex][colIndex];
   newSpreadsheetOtherProps[rowIndex][colIndex] = { ...content, ...value };

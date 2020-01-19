@@ -2,8 +2,8 @@
  * @Author: liangchaoshun
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-13 20:54:47
- * @LastEditors  : liangchaoshun
- * @LastEditTime : 2020-01-15 15:50:44
+ * @LastEditors  : mus
+ * @LastEditTime : 2020-01-17 22:51:27
  * @Description: 公式输入的模态框
  */
 
@@ -38,18 +38,18 @@ class FormulaModal extends PureComponent {
     };
   }
 
-  // 把公式的初始值放到到 Input
-  componentDidUpdate(prevProps) {
-    const { initFmlVal: prevVal } = prevProps;
-    const { initFmlVal: currVal } = this.props;
-    // eslint-disable-next-line react/no-did-update-set-state
-    if (prevVal !== currVal) {
-      const {
-        form: { setFieldsValue },
-      } = this.props;
-      setFieldsValue({ formulaValue: currVal }); // 赋值
-    }
-  }
+  // // 把公式的初始值放到到 Input
+  // componentDidUpdate(prevProps) {
+  //   const { initFmlVal: prevVal } = prevProps;
+  //   const { initFmlVal: currVal } = this.props;
+  //   // eslint-disable-next-line react/no-did-update-set-state
+  //   if (prevVal !== currVal) {
+  //     const {
+  //       form: { setFieldsValue },
+  //     } = this.props;
+  //     setFieldsValue({ formulaValue: currVal }); // 赋值
+  //   }
+  // }
 
   // 显示或隐藏处理公式的模态框
   showOrHideFormulaModal = bool => {
@@ -92,9 +92,10 @@ class FormulaModal extends PureComponent {
     // console.log('fmlCancel');
     const {
       form: { setFieldsValue },
+      onClose,
     } = this.props;
     setFieldsValue({ formulaValue: '' }); // 清空
-
+    onClose();
     this.showOrHideFormulaModal(false);
   };
 
@@ -133,6 +134,7 @@ class FormulaModal extends PureComponent {
     const {
       showFmlModal,
       form: { getFieldDecorator },
+      initFmlVal,
     } = this.props;
     const {
       formularSearchValue,
@@ -154,6 +156,8 @@ class FormulaModal extends PureComponent {
           onOk={this.fmlConfirm}
           onCancel={this.fmlCancel}
           wrapClassName={less['formula-modal']}
+          destroyOnClose
+          forceRender
         >
           <Form>
             <div className={less['formula-input-tip']}>
@@ -163,17 +167,18 @@ class FormulaModal extends PureComponent {
               <div className={less['formula-check-container']}>
                 <Form.Item>
                   {getFieldDecorator('formulaValue', {
+                    initialValue: initFmlVal,
                     validateFirst: true,
                     rules: [
                       {
                         required: true,
                         message: 'Please input a formula',
                       },
-                      {
-                        // 一般性整体校验
-                        pattern: /^=?[A-Z]+\(.*\)$/,
-                        message: 'Please input the correct format, eg: =SUM()',
-                      },
+                      // {
+                      //   // 一般性整体校验
+                      //   pattern: /^=?[A-Z]+\(.*\)$/,
+                      //   message: 'Please input the correct format, eg: =SUM()',
+                      // },
                     ],
                   })(<Input placeholder="Please input a formula" />)}
                 </Form.Item>

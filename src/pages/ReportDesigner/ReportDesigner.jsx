@@ -5,7 +5,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 11:02:05
+ * @LastEditTime : 2020-01-19 13:06:13
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -82,6 +82,14 @@ export default class ReportDesigner extends PureComponent {
         afterSelection: this.afterSelection,
         afterDrop: this.afterDropSpreadSheet, // drop钩子函数
         calloutSpecialActionPanel: this.calloutSpecialActionPanel, // 调出特殊类型处理的模态框
+        afterInsertRow: this.afterInsertRow,
+        afterInsertCol: this.afterInsertCol,
+        afterDeleteRow: this.afterDeleteRow,
+        afterDeleteCol: this.afterDeleteCol,
+      },
+      {
+        height: window.innerHeight - 50 - 70,
+        width: window.innerWidth - leftWidth,
       },
     );
     // 若有reportId，则调用接口查询报表设计器相关信息
@@ -124,6 +132,42 @@ export default class ReportDesigner extends PureComponent {
         rowIndex,
         columnIndex,
       },
+    });
+  };
+
+  // 增添一行
+  afterInsertRow = index => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/modifySpreadsheetOtherPropsToDoInsertRow',
+      payload: index,
+    });
+  };
+
+  // 增添一列
+  afterInsertCol = index => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/modifySpreadsheetOtherPropsToDoInsertColumn',
+      payload: index,
+    });
+  };
+
+  // 删除一行
+  afterDeleteRow = index => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/modifySpreadsheetOtherPropsToDoDeleteRow',
+      payload: index,
+    });
+  };
+
+  // 删除一列
+  afterDeleteCol = index => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'reportDesigner/modifySpreadsheetOtherPropsToDoDeleteColumn',
+      payload: index,
     });
   };
 
@@ -515,6 +559,7 @@ export default class ReportDesigner extends PureComponent {
       <DndProvider backend={HTML5Backend}>
         <Spin spinning={loading}>
           <div
+            style={{ overflowX: 'hidden' }}
             onClick={() => {
               this.changedisplayDropSelect(false);
             }}
@@ -612,7 +657,14 @@ export default class ReportDesigner extends PureComponent {
               </Layout>
             </div>
           </div>
-          <FormulaModal initFmlVal={initFmlVal} />
+          <FormulaModal
+            initFmlVal={initFmlVal}
+            onClose={() => {
+              this.setState({
+                initFmlVal: '',
+              });
+            }}
+          />
           <HyperlinkModal
             initContentVal={initHylContentVal}
             initLinkVal={initHylLinkVal}

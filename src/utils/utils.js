@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2020-01-16 15:01:22
+ * @LastEditTime : 2020-01-19 14:49:03
  * @LastEditors  : dailinbo
  */
 
@@ -24,6 +24,9 @@ const geneMenuData = data => {
     icon: menuIcons[item.menuname],
     // name: item.parentmenuid === '-1' ? item.menuname.toUpperCase() : item.menuname,
     name: item.menuname,
+    // name: item.page.includes('/report/report-designer/report-designer')
+    //   ? 'Report Management'
+    //   : item.menuname,
     hideInMenu: item.menutype === '1',
     target: item.linecss,
     component: components[item.page],

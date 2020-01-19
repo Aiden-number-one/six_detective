@@ -3,14 +3,15 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 09:36:59
- * @LastEditors  : mus
- * @LastEditTime : 2020-01-15 11:22:20
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-19 17:40:39
  */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import router from 'umi/router';
 import { connect } from 'dva';
-import { message } from 'antd';
+import { message, Icon } from 'antd';
 import styles from './index.less';
 import IconFont from '@/components/IconFont';
 import StartMenu from './StartMenu';
@@ -51,11 +52,21 @@ export default class ToolBar extends Component {
 
   render() {
     const { tabActive, reportNameType } = this.state;
-    const { reportName, reportId, saveDrawDisplay, paging } = this.props;
+    const { reportName, reportId, saveDrawDisplay, paging, dispatch } = this.props;
     return (
       <>
         <div className={classNames(styles.switchTabs)}>
-          <div className={styles.leftBlock} />
+          {/* <div className={styles.leftBlock} /> */}
+          <div
+            onClick={() => {
+              console.log('back handle');
+              router.push('/report/report-designer/report-designer');
+            }}
+            className={styles.backBtn}
+            title="BACK"
+          >
+            <Icon type="left" style={{ color: '#fff' }} />
+          </div>
           <div className={styles.middleBlock}>
             <div className={styles.nameSpace}>
               <IconFont type="iconcengji-copy" />
@@ -113,14 +124,25 @@ export default class ToolBar extends Component {
             <div className={styles.tabsAreaAction}>
               <div
                 className={styles.actionButt}
-                onClick={() => {
-                  if (!reportId) {
-                    message.warn('Please save the report template.');
-                    return;
-                  }
-                  window.open(
-                    `/report-designer-preview?reportId=${reportId}&paging=${paging ? '1' : '0'}`,
-                  );
+                onClick={async () => {
+                  // if (!reportId) {
+                  //   message.warn('Please save the report template.');
+                  //   return;
+                  // }
+                  window.xsObj.instanceArray[0].sheet.toolbar.change();
+                  await dispatch({
+                    type: 'reportDesigner/modifyTemplateArea',
+                    payload: {},
+                  });
+                  setTimeout(() => {
+                    dispatch({
+                      type: 'reportDesigner/packageTemplate',
+                      payload: {
+                        isTemporary: true,
+                      },
+                    });
+                    window.open('/report-designer-preview?isTempPreview=1');
+                  }, 200);
                 }}
               >
                 <IconFont type="iconicon_previrew" />
@@ -147,7 +169,7 @@ export default class ToolBar extends Component {
               </div>
             </div>
           </div>
-          <div className={styles.rightBlock} />
+          {/* <div className={styles.rightBlock} /> */}
         </div>
         <div style={{ display: tabActive === 'Start' ? 'block' : 'none' }}>
           <StartMenu {...this.props} />
