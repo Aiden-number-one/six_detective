@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-19 11:15:18
+ * @LastEditTime : 2020-01-19 14:36:04
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
@@ -249,7 +249,8 @@ export function getTemplateAreaCellPartXml(contentDetail, spreadsheetOtherProps)
           if (otherProps.groupSetting === 'asc') {
             order = 'asc';
           }
-          if (otherProps.dataSetting === 'list') {
+          // 为了兼容老数据
+          if (otherProps.dataSetting === 'select') {
             aggregate = 'select';
           }
           expand = otherProps.expendDirection || 'Down';

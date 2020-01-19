@@ -3,14 +3,15 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 09:36:59
- * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 22:31:18
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-19 13:46:10
  */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import router from 'umi/router';
 import { connect } from 'dva';
-import { message } from 'antd';
+import { message, Icon, Button } from 'antd';
 import styles from './index.less';
 import IconFont from '@/components/IconFont';
 import StartMenu from './StartMenu';
@@ -56,6 +57,16 @@ export default class ToolBar extends Component {
       <>
         <div className={classNames(styles.switchTabs)}>
           {/* <div className={styles.leftBlock} /> */}
+          <div
+            onClick={() => {
+              console.log('back handle');
+              router.push('/report/report-designer/report-designer');
+            }}
+            className={styles.backBtn}
+            title="BACK"
+          >
+            <Icon type="left" style={{ color: '#fff' }} />
+          </div>
           <div className={styles.middleBlock}>
             <div className={styles.nameSpace}>
               <IconFont type="iconcengji-copy" />
