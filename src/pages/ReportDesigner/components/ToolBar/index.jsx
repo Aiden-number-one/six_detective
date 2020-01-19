@@ -3,15 +3,15 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 09:36:59
- * @LastEditors  : mus
- * @LastEditTime : 2020-01-19 16:11:53
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-19 17:40:39
  */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import router from 'umi/router';
 import { connect } from 'dva';
-import { message, Icon, Button } from 'antd';
+import { message, Icon } from 'antd';
 import styles from './index.less';
 import IconFont from '@/components/IconFont';
 import StartMenu from './StartMenu';

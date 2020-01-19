@@ -44,7 +44,8 @@ class ReportDesignerPreview extends Component {
     const reportTemplateContent = window.localStorage.getItem('temporaryJSon');
     const payload = {
       // 若为不分页，则pageNumber始终为0
-      pageNumber: paging === '1' ? pageNumber : '0',
+      // pageNumber: paging === '1' ? pageNumber : '0', // lcs 不分页注释
+      pageNumber: 0,
       pageSize,
       parameters,
     };
