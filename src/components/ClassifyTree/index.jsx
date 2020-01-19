@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-17 22:38:10
+ * @LastEditTime : 2020-01-19 10:27:42
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -142,10 +142,11 @@ class ClassifyTree extends Component {
     expandedKeys: [],
     defaultCheckedKeys: [],
     checkedKeys: [],
-    tempCheckedKeys: [],
+    // tempCheckedKeys: [],
     halfCheckedKeys: [],
     customeBtnIds: [],
     allBtns: [],
+    tempBtns: [],
     autoExpandParent: true,
     allChecked: false,
     btnAllChecked: false,
@@ -178,7 +179,7 @@ class ClassifyTree extends Component {
     this.setState({
       checkedKeys,
       customeBtnIds: btnIds,
-      tempCheckedKeys: checkedKeys,
+      // tempCheckedKeys: checkedKeys,
     });
     this.props.onSelect(menuList[0] && menuList[0][this.props.treeKey.currentKey]);
     if (all) {
@@ -238,16 +239,19 @@ class ClassifyTree extends Component {
 
   compareAllChecked = () => {
     const { checkedKeys } = this.props;
-    const { customeBtnIds } = this.state;
-    const { menuList, allBtns } = this.state;
-    const selectedKeys = this.setGridDataFromTree([], menuList);
-    const newCheckedKeys = selectedKeys.map(element => element.menuid);
-    for (let i = 0; i < newCheckedKeys.length; i += 1) {
-      if (newCheckedKeys[i].includes('btn')) {
-        newCheckedKeys.splice(i, 1);
-        i -= 1;
-      }
-    }
+    // const { customeBtnIds } = this.state;
+    const { customeBtnIds, allBtns } = this.state;
+    // const selectedKeys = this.setGridDataFromTree([], menuList);
+    // const newCheckedKeys = selectedKeys.map(element => element.menuid);
+    // for (let i = 0; i < newCheckedKeys.length; i += 1) {
+    //   if (newCheckedKeys[i].includes('btn')) {
+    //     newCheckedKeys.splice(i, 1);
+    //     i -= 1;
+    //   }
+    // }
+    let menuAll = flatteningTree(this.props.treeData).filter(element => element.menuid);
+    menuAll = menuAll.filter(element => !element.menuid.includes('btn'));
+    const newCheckedKeys = menuAll.map(element => element.menuid);
     this.setState({
       allChecked: checkedKeys.length === newCheckedKeys.length,
       indeterminate: checkedKeys.length && checkedKeys.length < newCheckedKeys.length,
@@ -310,10 +314,11 @@ class ClassifyTree extends Component {
   };
 
   onCheck = (selectedKeys, info) => {
+    console.log('ookok====', selectedKeys);
     const { btnArray } = this.props;
-    const { menuList, customeBtnIds, allBtns } = this.state;
+    const { menuList, customeBtnIds, tempBtns, allBtns } = this.state;
     const newCustomeBtnIds = [];
-    btnArray.forEach(element => {
+    allBtns.forEach(element => {
       if (selectedKeys.some(item => item === element.parentmenuid)) {
         if (customeBtnIds.indexOf(element.menuid) > -1) {
           newCustomeBtnIds.push(element.menuid);
@@ -322,22 +327,26 @@ class ClassifyTree extends Component {
     });
     console.log('newCustomeBtnIds==', newCustomeBtnIds);
     console.log('allBtns========', allBtns);
-    const checkedKeys = this.setGridDataFromTree([], menuList);
+    console.log('treeData===========', flatteningTree(this.props.treeData));
+    // const checkedKeys = this.setGridDataFromTree([], menuList);
+    let checkedKeys = flatteningTree(this.props.treeData).filter(element => element.menuid);
+    checkedKeys = checkedKeys.filter(element => !element.menuid.includes('btn'));
     const newCheckedKeys = checkedKeys.map(element => element.menuid);
     this.props.onCheck(selectedKeys, info, newCustomeBtnIds);
     this.setState({
       checkedKeys: selectedKeys,
-      tempCheckedKeys: selectedKeys.concat(info.halfCheckedKeys),
+      // tempCheckedKeys: selectedKeys.concat(info.halfCheckedKeys),
       halfCheckedKeys: info.halfCheckedKeys,
     });
-    for (let i = 0; i < newCheckedKeys.length; i += 1) {
-      if (newCheckedKeys[i].includes('btn')) {
-        newCheckedKeys.splice(i, 1);
-        i -= 1;
-      }
-    }
-    console.log('selectedKeys========================', selectedKeys);
-    console.log('newCheckedKeys======================', newCheckedKeys);
+    // for (let i = 0; i < newCheckedKeys.length; i += 1) {
+    //   if (newCheckedKeys[i].includes('btn')) {
+    //     newCheckedKeys.splice(i, 1);
+    //     i -= 1;
+    //   }
+    // }
+    // console.log('selectedKeys========================', selectedKeys);
+    // console.log('newCheckedKeys======================', newCheckedKeys);
+    console.log('newCustomeBtnIds.length === allBtns.length====', newCustomeBtnIds, allBtns);
     this.setState({
       allChecked: selectedKeys.length === newCheckedKeys.length,
       indeterminate: selectedKeys.length && selectedKeys.length < newCheckedKeys.length,
@@ -375,46 +384,62 @@ class ClassifyTree extends Component {
 
   onChange = e => {
     // const { btnArray } = this.props;
-    const { menuList, allBtns } = this.state;
-    const checkedKeys = this.setGridDataFromTree([], menuList);
+    const { menuList, customeBtnIds, halfCheckedKeys, allBtns } = this.state;
+    let checkedKeys = flatteningTree(this.props.treeData).filter(element => element.menuid);
+    checkedKeys = checkedKeys.filter(element => !element.menuid.includes('btn'));
+    // const checkedKeys = this.setGridDataFromTree([], menuList);
     const newCheckedKeys = checkedKeys.map(element => element.menuid);
     if (e.target.checked) {
       this.setState({
         checkedKeys: newCheckedKeys,
         allChecked: e.target.checked,
-        customeBtnIds: allBtns.map(element => element.menuid),
+        // customeBtnIds: allBtns.map(element => element.menuid),
         indeterminate: false,
-        btnIndeterminate: false,
-        btnAllChecked: e.target.checked,
+        // btnIndeterminate: false,
+        // btnAllChecked: e.target.checked,
       });
-      this.props.onAllChecked(newCheckedKeys);
+      // this.props.onAllChecked(newCheckedKeys);
+      this.props.onCheck(newCheckedKeys, false, customeBtnIds, halfCheckedKeys);
     } else {
       this.setState({
         checkedKeys: [],
         allChecked: e.target.checked,
-        btnAllChecked: e.target.checked,
-        customeBtnIds: [],
+        // btnAllChecked: e.target.checked,
+        // customeBtnIds: [],
         indeterminate: false,
-        btnIndeterminate: false,
+        // btnIndeterminate: false,
       });
       this.props.onAllChecked([]);
     }
   };
 
   onChangeBtn = e => {
-    const { btnArray } = this.props;
+    // const { btnArray } = this.props;
+    // const { allBtns } = this.state;
+    const { menuList, customeBtnIds, halfCheckedKeys, allBtns } = this.state;
+    let checkedKeys = flatteningTree(this.props.treeData).filter(element => element.menuid);
+    checkedKeys = checkedKeys.filter(element => !element.menuid.includes('btn'));
+    // const checkedKeys = this.setGridDataFromTree([], menuList);
+    const newCheckedKeys = checkedKeys.map(element => element.menuid);
     this.setState({
       btnAllChecked: e.target.checked,
       btnIndeterminate: false,
     });
     if (e.target.checked) {
       this.setState({
-        customeBtnIds: btnArray.map(element => element.menuid),
+        customeBtnIds: allBtns.map(element => element.menuid),
       });
+      this.props.onCheck(
+        newCheckedKeys,
+        false,
+        allBtns.map(element => element.menuid),
+        halfCheckedKeys,
+      );
     } else {
       this.setState({
         customeBtnIds: [],
       });
+      this.props.onCheck(newCheckedKeys, false, [], halfCheckedKeys);
     }
   };
 
@@ -512,7 +537,7 @@ class ClassifyTree extends Component {
   };
 
   onChangeChecked = value => {
-    const { customeBtnIds, tempCheckedKeys, allBtns, halfCheckedKeys } = this.state;
+    const { customeBtnIds, checkedKeys, allBtns, halfCheckedKeys } = this.state;
     const btnIds = Object.assign([], customeBtnIds);
     if (value.target.checked) {
       btnIds.push(value.target.value);
@@ -528,7 +553,7 @@ class ClassifyTree extends Component {
         btnAllChecked: btnIds.length === allBtns.length,
       },
       () => {
-        this.props.onCheck(tempCheckedKeys, false, btnIds, halfCheckedKeys);
+        this.props.onCheck(checkedKeys, false, btnIds, halfCheckedKeys);
       },
     );
   };
@@ -570,25 +595,27 @@ class ClassifyTree extends Component {
           />
         )}
         {all && (
-          <>
-            <Checkbox
-              onChange={this.onChange}
-              style={{ marginLeft: '26px' }}
-              checked={allChecked}
-              indeterminate={indeterminate}
-            >
-              Menu All
-            </Checkbox>
-            <Checkbox
-              onChange={this.onChangeBtn}
-              style={{ marginLeft: '26px' }}
-              checked={btnAllChecked}
-              disabled={!allChecked}
-              indeterminate={btnIndeterminate}
-            >
-              Button All
-            </Checkbox>
-          </>
+          <Fragment>
+            <div style={{ marginLeft: '26px' }}>
+              <Checkbox
+                onChange={this.onChange}
+                style={{ marginLeft: '26px' }}
+                checked={allChecked}
+                indeterminate={indeterminate}
+              >
+                Menu All
+              </Checkbox>
+              <Checkbox
+                onChange={this.onChangeBtn}
+                style={{ marginLeft: '26px' }}
+                checked={btnAllChecked}
+                disabled={!allChecked}
+                indeterminate={btnIndeterminate}
+              >
+                Button All
+              </Checkbox>
+            </div>
+          </Fragment>
         )}
         <Tree
           // showLine
