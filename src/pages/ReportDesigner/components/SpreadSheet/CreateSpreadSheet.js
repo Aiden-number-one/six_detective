@@ -2,7 +2,7 @@
  * @Description: sheet的高阶函数
  * @Author: mus
  * @Date: 2019-09-20 17:15:40
- * @LastEditTime : 2020-01-17 23:40:34
+ * @LastEditTime : 2020-01-19 11:52:49
  * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
@@ -46,8 +46,9 @@ export default WrapperComponent => {
      * @Author: mus
      * @Date: 2019-12-12 11:27:53
      */
-    initSheet = (options, callbackProps) => {
+    initSheet = (options, callbackProps, otherProps) => {
       const { data = {} } = this.props;
+      const { height: sheetHeight, width: sheetWidth } = otherProps;
       const xsOptions = {
         showGrid: true, // 是否显示默认网格
         showToolbar: false, // 是否显示工具栏
@@ -62,12 +63,12 @@ export default WrapperComponent => {
         name: 'sheet1',
         fxObj: document.querySelector('#fxFn'),
         row: {
-          len: 14,
+          len: parseInt(sheetHeight / INITHEIGHT, 10),
           height: INITHEIGHT,
           minHeight: 2, // 设置高度可调最小高度
         },
         col: {
-          len: 8,
+          len: parseInt(sheetWidth / INITWIDTH, 10) + 1,
           width: INITWIDTH,
           indexWidth: 20,
           minWidth: 2, // 设置列最小宽度

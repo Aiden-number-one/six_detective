@@ -38,19 +38,25 @@ class ReportDesignerPreview extends Component {
     const {
       dispatch,
       location: {
-        query: { reportId, paging = '1' },
+        query: { reportId, paging = '1', isTempPreview },
       },
     } = this.props;
+    const reportTemplateContent = window.localStorage.getItem('temporaryJSon');
+    const payload = {
+      // 若为不分页，则pageNumber始终为0
+      pageNumber: paging === '1' ? pageNumber : '0',
+      pageSize,
+      parameters,
+    };
+    if (isTempPreview === '1') {
+      payload.reportTemplateContent = reportTemplateContent;
+    } else {
+      payload.reportId = reportId;
+    }
     // 查看预览数据
     dispatch({
       type: 'reportDesignPreview/getReportTemplateDataQuery',
-      payload: {
-        reportId,
-        // 若为不分页，则pageNumber始终为0
-        pageNumber: paging === '1' ? pageNumber : '0',
-        pageSize,
-        parameters,
-      },
+      payload,
     });
   };
 
@@ -199,48 +205,53 @@ class ReportDesignerPreview extends Component {
     }
     return (
       <div className={less['report-preview-container']}>
-        <div className={less['page-container']}>
+        <div className={less['page-container']} style={{ textAlign: 'right' }}>
           <ReportPager
+            showPager={false} // TODO: 暂时隐藏分页
             inlineBlock
             showTotal
             showPageSize
             totalPage={totalPage}
             totalRecord={totalRecord}
             pageChageCallback={this.pageChageCallback}
-            paging={paging}
+            paging={false} // TODO: 暂时不分页
           />
-          <div className="ant-divider ant-divider-vertical" role="separator" />
+          {/* <div className="ant-divider ant-divider-vertical" role="separator" /> */}
           <IconFont
             type="icondaochu"
             title="Export"
             className={less['icon-export']}
             onClick={this.exportExcel}
+            style={{ lineHeight: '26px', marginTop: '10px' }}
           />
-          <IconFont
+          {/* <IconFont
             type="icondayin"
             title="Print"
             className={less['icon-download']}
             onClick={this.printReportor}
-          />
+          /> */}
         </div>
 
-        <div className={less['filter-condition']}>
-          <PreviewSearchArea
-            wrappedComponentRef={inst => {
-              this.formRef = inst;
-            }}
-            customSearchData={customSearchData}
-            dataSetColumn={dataSetColumn}
-          />
-          <Row className={less['search-btn-row']}>
-            <Button type="primary" icon="search" onClick={this.search}>
-              Search
-            </Button>
-          </Row>
-          {/* <div className={less['icon-collaspe']}>
+        {customSearchData && customSearchData.length ? (
+          <div className={less['filter-condition']}>
+            <PreviewSearchArea
+              wrappedComponentRef={inst => {
+                this.formRef = inst;
+              }}
+              customSearchData={customSearchData}
+              dataSetColumn={dataSetColumn}
+            />
+
+            <Row className={less['search-btn-row']}>
+              <Button type="primary" icon="search" onClick={this.search}>
+                Search
+              </Button>
+            </Row>
+            {/* <div className={less['icon-collaspe']}>
             <IconFont type="iconarrow_collaspex" />
           </div> */}
-        </div>
+          </div>
+        ) : null}
 
         <Spin spinning={loading}>
           <div className={less['table-area']} dangerouslySetInnerHTML={{ __html: content }} />
