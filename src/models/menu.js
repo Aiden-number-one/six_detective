@@ -2,7 +2,7 @@
  * @Description: menu modal
  * @Author: mus
  * @Date: 2019-09-19 17:03:33
- * @LastEditTime : 2020-01-16 15:21:12
+ * @LastEditTime : 2020-01-19 18:44:59
  * @LastEditors  : dailinbo
  * @Email: mus@szkingdom.com
  */
@@ -31,10 +31,9 @@ export default {
       const items = response.bcjson.items || [];
       let menuData = geneMenuData(items);
       menuData = menuData.filter(element => !element.menuid.includes('btn'));
-      console.log('menuData=====', menuData);
       yield put({
         type: 'save',
-        payload: geneMenuData(menuData),
+        payload: menuData,
       });
       const newItems = Object.assign([], items);
       const newMenu = Object.assign([], newItems[0].menu);

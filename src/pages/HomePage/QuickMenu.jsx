@@ -201,6 +201,7 @@ export default class QuickMenu extends PureComponent {
 
   render() {
     const { menuData, quickMenuData, visible, toggleModal } = this.props;
+    console.log('menuData=====', menuData);
 
     const { targetKeys, targetData } = this.state;
 
