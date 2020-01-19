@@ -3,7 +3,7 @@
  * @Author: dailinbo
  * @Date: 2019-12-24 15:14:56
  * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-16 18:05:13
+ * @LastEditTime : 2020-01-19 16:47:17
  */
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
@@ -47,14 +47,14 @@ class FormUser extends Component {
             wrapperCol={{ span: 8 }}
           >
             {getFieldDecorator('groupDesc', {
-              rules: [
-                {
-                  required: true,
-                  message: `${formatMessage({
-                    id: 'systemManagement.userGroup.remark',
-                  })} is missing`,
-                },
-              ],
+              // rules: [
+              //   {
+              //     required: true,
+              //     message: `${formatMessage({
+              //       id: 'systemManagement.userGroup.remark',
+              //     })} is missing`,
+              //   },
+              // ],
               initialValue: groupMenuInfo && groupMenuInfo.groupDesc,
             })(<TextArea rows={4} placeholder="Please input" />)}
           </Form.Item>
