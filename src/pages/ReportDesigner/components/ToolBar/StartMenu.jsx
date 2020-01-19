@@ -410,6 +410,7 @@ class ToolBar extends Component {
       displayArea,
       reportId,
       paging,
+      dispatch,
     } = this.props;
     const { btnActiveStatus, backgroundColor, fontColor, cellType, paintformatActive } = this.state;
     const popoverProps = {
@@ -431,14 +432,28 @@ class ToolBar extends Component {
             <div className={styles.group}>
               <Button
                 className={classNames('btn', 'btn2Report', 'mr6')}
-                onClick={() => {
-                  if (!reportId) {
-                    message.warn('Please save the report template.');
-                    return;
-                  }
-                  window.open(
-                    `/report-designer-preview?reportId=${reportId}&paging=${paging ? '1' : '0'}`,
-                  );
+                onClick={async () => {
+                  // if (!reportId) {
+                  //   message.warn('Please save the report template.');
+                  //   return;
+                  // }
+                  // window.open(
+                  //   `/report-designer-preview?reportId=${reportId}&paging=${paging ? '1' : '0'}`,
+                  // );
+                  window.xsObj.instanceArray[0].sheet.toolbar.change();
+                  await dispatch({
+                    type: 'reportDesigner/modifyTemplateArea',
+                    payload: {},
+                  });
+                  setTimeout(() => {
+                    dispatch({
+                      type: 'reportDesigner/packageTemplate',
+                      payload: {
+                        isTemporary: true,
+                      },
+                    });
+                    window.open('/report-designer-preview?isTempPreview=1');
+                  }, 200);
                 }}
               >
                 <div className={styles.topBottom}>

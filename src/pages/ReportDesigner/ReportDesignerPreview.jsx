@@ -35,19 +35,25 @@ class ReportDesignerPreview extends Component {
     const {
       dispatch,
       location: {
-        query: { reportId, paging = '1' },
+        query: { reportId, paging = '1', isTempPreview },
       },
     } = this.props;
+    const reportTemplateContent = window.localStorage.getItem('temporaryJSon');
+    const payload = {
+      // 若为不分页，则pageNumber始终为0
+      pageNumber: paging === '1' ? pageNumber : '0',
+      pageSize,
+      parameters,
+    };
+    if (isTempPreview === '1') {
+      payload.reportTemplateContent = reportTemplateContent;
+    } else {
+      payload.reportId = reportId;
+    }
     // 查看预览数据
     dispatch({
       type: 'reportDesignPreview/getReportTemplateDataQuery',
-      payload: {
-        reportId,
-        // 若为不分页，则pageNumber始终为0
-        pageNumber: paging === '1' ? pageNumber : '0',
-        pageSize,
-        parameters,
-      },
+      payload,
     });
   };
 

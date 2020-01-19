@@ -4,7 +4,7 @@
  * @Email: mus@szkingdom.com
  * @Date: 2020-01-07 09:36:59
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 22:31:18
+ * @LastEditTime : 2020-01-19 15:50:10
  */
 /* eslint-disable max-len */
 import React, { Component } from 'react';
@@ -51,7 +51,7 @@ export default class ToolBar extends Component {
 
   render() {
     const { tabActive, reportNameType } = this.state;
-    const { reportName, reportId, saveDrawDisplay, paging } = this.props;
+    const { reportName, reportId, saveDrawDisplay, paging, dispatch } = this.props;
     return (
       <>
         <div className={classNames(styles.switchTabs)}>
@@ -113,14 +113,25 @@ export default class ToolBar extends Component {
             <div className={styles.tabsAreaAction}>
               <div
                 className={styles.actionButt}
-                onClick={() => {
-                  if (!reportId) {
-                    message.warn('Please save the report template.');
-                    return;
-                  }
-                  window.open(
-                    `/report-designer-preview?reportId=${reportId}&paging=${paging ? '1' : '0'}`,
-                  );
+                onClick={async () => {
+                  // if (!reportId) {
+                  //   message.warn('Please save the report template.');
+                  //   return;
+                  // }
+                  window.xsObj.instanceArray[0].sheet.toolbar.change();
+                  await dispatch({
+                    type: 'reportDesigner/modifyTemplateArea',
+                    payload: {},
+                  });
+                  setTimeout(() => {
+                    dispatch({
+                      type: 'reportDesigner/packageTemplate',
+                      payload: {
+                        isTemporary: true,
+                      },
+                    });
+                    window.open('/report-designer-preview?isTempPreview=1');
+                  }, 200);
                 }}
               >
                 <IconFont type="iconicon_previrew" />

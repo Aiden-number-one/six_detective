@@ -5,7 +5,7 @@
  * @Email: liangchaoshun@szkingdom.com
  * @Date: 2020-01-08 21:25:00
  * @LastEditors  : mus
- * @LastEditTime : 2020-01-17 23:21:17
+ * @LastEditTime : 2020-01-19 13:06:13
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -86,6 +86,10 @@ export default class ReportDesigner extends PureComponent {
         afterInsertCol: this.afterInsertCol,
         afterDeleteRow: this.afterDeleteRow,
         afterDeleteCol: this.afterDeleteCol,
+      },
+      {
+        height: window.innerHeight - 50 - 70,
+        width: window.innerWidth - leftWidth,
       },
     );
     // 若有reportId，则调用接口查询报表设计器相关信息
@@ -555,6 +559,7 @@ export default class ReportDesigner extends PureComponent {
       <DndProvider backend={HTML5Backend}>
         <Spin spinning={loading}>
           <div
+            style={{ overflowX: 'hidden' }}
             onClick={() => {
               this.changedisplayDropSelect(false);
             }}
