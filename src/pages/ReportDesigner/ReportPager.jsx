@@ -33,6 +33,7 @@ function ReportPager(props) {
   const { VALUE_DEFAULT, SETP_HOME, SETP_PREV, SETP_NEXT, SETP_END } = pagerConst;
   // 父组件传入的属性和方法
   const {
+    showPager = true, // 显示/隐藏分页
     inlineBlock, // 是否为行内块元素
     showTotal, // 是否显示总记录数
     totalPage: tpage, // 总页数，【字符串]
@@ -163,67 +164,71 @@ function ReportPager(props) {
   };
 
   return (
-    <div
-      className={less['report-page']}
-      style={{ display: inlineBlock ? 'inline-block' : 'block' }}
-    >
-      {showTotal ? (
-        <div className={less['total-records']}>
-          <span>Total Record: </span>
-          <span style={{ marginRight: '10px' }}>{totalRecord}</span>
+    <>
+      {showPager ? (
+        <div
+          className={less['report-page']}
+          style={{ display: inlineBlock ? 'inline-block' : 'block' }}
+        >
+          {showTotal ? (
+            <div className={less['total-records']}>
+              <span>Total Record: </span>
+              <span style={{ marginRight: '10px' }}>{totalRecord}</span>
+            </div>
+          ) : null}
+          {showPageSize ? (
+            <Select defaultValue={pageSizeArr[0]} onChange={onPageSizeChange} disabled={!paging}>
+              {pageSizeArr.map(value => (
+                <Select.Option key={value} value={value}>
+                  {value}/Page
+                </Select.Option>
+              ))}
+            </Select>
+          ) : null}
+          <span
+            title="Home"
+            onClick={ev => pageNumChangeHandler(SETP_HOME, ev)}
+            className={classNames(less['step-icon'], less['step-home'], {
+              [less['step-disable']]: isDiablePAH,
+            })}
+          >
+            <Icon type="vertical-right" />
+          </span>
+          <span
+            title="Prev"
+            onClick={ev => pageNumChangeHandler(SETP_PREV, ev)}
+            className={classNames(less['step-icon'], less['step-prev'], {
+              [less['step-disable']]: isDiablePAH,
+            })}
+          >
+            <Icon type="left" />
+          </span>
+          <div className={less['page-num']}>
+            <Input value={currPage} onChange={currPageInputChage} disabled={!paging} />
+            <span> / </span>
+            <span>{totalPage}</span>
+          </div>
+          <span
+            title="Next"
+            onClick={ev => pageNumChangeHandler(SETP_NEXT, ev)}
+            className={classNames(less['step-icon'], less['step-next'], {
+              [less['step-disable']]: isDiableNAE,
+            })}
+          >
+            <Icon type="right" />
+          </span>
+          <span
+            title="End"
+            onClick={ev => pageNumChangeHandler(SETP_END, ev)}
+            className={classNames(less['step-icon'], less['step-end'], {
+              [less['step-disable']]: isDiableNAE,
+            })}
+          >
+            <Icon type="vertical-left" />
+          </span>
         </div>
       ) : null}
-      {showPageSize ? (
-        <Select defaultValue={pageSizeArr[0]} onChange={onPageSizeChange} disabled={!paging}>
-          {pageSizeArr.map(value => (
-            <Select.Option key={value} value={value}>
-              {value}/Page
-            </Select.Option>
-          ))}
-        </Select>
-      ) : null}
-      <span
-        title="Home"
-        onClick={ev => pageNumChangeHandler(SETP_HOME, ev)}
-        className={classNames(less['step-icon'], less['step-home'], {
-          [less['step-disable']]: isDiablePAH,
-        })}
-      >
-        <Icon type="vertical-right" />
-      </span>
-      <span
-        title="Prev"
-        onClick={ev => pageNumChangeHandler(SETP_PREV, ev)}
-        className={classNames(less['step-icon'], less['step-prev'], {
-          [less['step-disable']]: isDiablePAH,
-        })}
-      >
-        <Icon type="left" />
-      </span>
-      <div className={less['page-num']}>
-        <Input value={currPage} onChange={currPageInputChage} disabled={!paging} />
-        <span> / </span>
-        <span>{totalPage}</span>
-      </div>
-      <span
-        title="Next"
-        onClick={ev => pageNumChangeHandler(SETP_NEXT, ev)}
-        className={classNames(less['step-icon'], less['step-next'], {
-          [less['step-disable']]: isDiableNAE,
-        })}
-      >
-        <Icon type="right" />
-      </span>
-      <span
-        title="End"
-        onClick={ev => pageNumChangeHandler(SETP_END, ev)}
-        className={classNames(less['step-icon'], less['step-end'], {
-          [less['step-disable']]: isDiableNAE,
-        })}
-      >
-        <Icon type="vertical-left" />
-      </span>
-    </div>
+    </>
   );
 }
 
