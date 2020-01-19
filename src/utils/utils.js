@@ -4,7 +4,7 @@
  * @Description: lan
  * @Author: lan
  * @Date: 2019-08-28 10:01:59
- * @LastEditTime : 2020-01-19 13:42:19
+ * @LastEditTime : 2020-01-19 14:49:03
  * @LastEditors  : dailinbo
  */
 
@@ -23,10 +23,10 @@ const geneMenuData = data => {
     path: item.page || '',
     icon: menuIcons[item.menuname],
     // name: item.parentmenuid === '-1' ? item.menuname.toUpperCase() : item.menuname,
-    // name: item.menuname,
-    name: item.page.includes('/report/report-designer/report-designer')
-      ? 'Report Management'
-      : item.menuname,
+    name: item.menuname,
+    // name: item.page.includes('/report/report-designer/report-designer')
+    //   ? 'Report Management'
+    //   : item.menuname,
     hideInMenu: item.menutype === '1',
     target: item.linecss,
     component: components[item.page],

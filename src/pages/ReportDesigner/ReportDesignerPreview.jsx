@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Icon, Row, Button, Spin } from 'antd';
+import { Row, Button, Spin } from 'antd';
 import less from './ReportPreview.less';
 import ReportPager from './ReportPager';
 import PreviewSearchArea from './components/PreviewSearchArea';
+import IconFont from '@/components/IconFont';
+
 // import IconFont from '@/components/IconFont';
 
 @connect(({ reportDesignPreview, loading }) => {
@@ -21,14 +23,15 @@ class ReportDesignerPreview extends Component {
     this.state = {
       dimenRadio: 'daily',
     };
+    this.parameters = ''; // 参数初始化
   }
 
   // 获取数据
   fetchData = (
-    { pageNumber = '1', pageSize = '10', parameters = '' } = {
+    { pageNumber = '1', pageSize = '10', parameters = this.parameters } = {
       pageNumber: '1',
       pageSize: '10',
-      parameters: '',
+      parameters: this.parameters,
     },
   ) => {
     // 若有reportId，则调用接口查询报表设计器相关信息
@@ -213,8 +216,18 @@ class ReportDesignerPreview extends Component {
             paging={paging}
           />
           <div className="ant-divider ant-divider-vertical" role="separator" />
-          <Icon type="export" title="Export" onClick={this.exportExcel} />
-          <Icon type="printer" title="Print" onClick={this.printReportor} />
+          <IconFont
+            type="icondaochu"
+            title="Export"
+            className={less['icon-export']}
+            onClick={this.exportExcel}
+          />
+          <IconFont
+            type="icondayin"
+            title="Print"
+            className={less['icon-download']}
+            onClick={this.printReportor}
+          />
         </div>
 
         <div className={less['filter-condition']}>
