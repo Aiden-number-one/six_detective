@@ -2,8 +2,8 @@
  * @Description: 新建数据集
  * @Author: lan
  * @Date: 2019-12-07 14:24:54
- * @LastEditTime : 2020-01-17 13:56:55
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-19 15:45:08
+ * @LastEditors  : dailinbo
  */
 import React, { PureComponent } from 'react';
 import {
@@ -543,6 +543,7 @@ class AddDataSet extends PureComponent {
                 <Button
                   style={{ float: 'right' }}
                   type="primary"
+                  className="btn-dataset"
                   onClick={() => {
                     if (this.state.sql) {
                       // 打开保存弹框
@@ -553,11 +554,13 @@ class AddDataSet extends PureComponent {
                     }
                   }}
                 >
+                  <IconFont type="iconICON_SAVEx" />
                   Save
                 </Button>
                 <Button
                   style={{ float: 'right' }}
-                  className="btn-usual"
+                  // className="btn-usual"
+                  className="btn-dataset"
                   type="primary"
                   onClick={() => {
                     if (this.state.sql) {
@@ -569,6 +572,7 @@ class AddDataSet extends PureComponent {
                     }
                   }}
                 >
+                  <IconFont type="iconlingcunwei" />
                   Save As
                 </Button>
               </Col>
