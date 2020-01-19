@@ -2,8 +2,8 @@
  * @Description: iconfont
  * @Author: mus
  * @Date: 2019-08-13 17:14:11
- * @LastEditTime : 2020-01-16 17:54:32
- * @LastEditors  : lan
+ * @LastEditTime : 2020-01-19 14:18:38
+ * @LastEditors  : mus
  * @Email: mus@szkingdom.com
  */
 import { Icon } from 'antd';

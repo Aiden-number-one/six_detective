@@ -97,6 +97,7 @@ class ReportDesignerPreview extends Component {
         reportId,
         bcLangType: 'ENUS',
         fileType: 'xls',
+        parameters: this.parameters,
       },
       callback: filePath => this.exportFile(filePath),
     });
@@ -163,6 +164,7 @@ class ReportDesignerPreview extends Component {
       });
       if (!err) {
         this.fetchData({ parameters: JSON.stringify(transformValue) });
+        this.parameters = JSON.stringify(transformValue);
       }
     });
   };
