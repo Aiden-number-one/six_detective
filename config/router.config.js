@@ -234,6 +234,17 @@ export default [
                 ],
               },
               {
+                path: '/etl-center/data-quality-management',
+                name: 'Data Quality Management',
+                routes: [
+                  {
+                    path: '/etl-center/data-quality-management/data-source-monitor',
+                    name: 'Data Source Monitor',
+                    component: './IframePage/IframePage',
+                  },
+                ],
+              },
+              {
                 path: '/etl-center/datasource-change',
                 name: 'Data Source Change',
                 component: './IframePage/IframePage',
@@ -309,7 +320,7 @@ export default [
               },
             ],
           },
-    
+
           // 后面的没改过
           // {
           //   path: '/data-management',
@@ -397,6 +408,6 @@ export default [
           },
         ],
       },
-    ]
+    ],
   },
 ];
