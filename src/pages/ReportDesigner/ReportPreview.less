@@ -1,8 +1,8 @@
 /*
  * @Author: liangchaoshun
  * @Date: 2020-01-03 16:21:21
- * @Last Modified by: liangchaoshun
- * @Last Modified time: 2020-01-06 21:11:43
+ * @Last Modified by: Chosen
+ * @Last Modified time: 2020-02-03 15:38:13
  * @Description: 样式：报表设计器预览页
  *
  */
@@ -35,9 +35,11 @@
 
   // 过滤条件
   .filter-condition {
-    padding: 20px 10px;
+    position: relative;
+    overflow: hidden;
     font-family: AvenirBook, sans-serif;
-    border-bottom: 1px solid #0d87d4;
+    border-bottom: 1px solid;
+
     // 行：label + dropdown
     .dropdown-item {
       display: inline-block;
@@ -120,7 +122,20 @@
 
     .icon-collaspe {
       position: absolute;
-      width: 100%;
+      bottom: 0;
+      left: 50%;
+      width: 100px;
+      height: 12px;
+      margin-left: -30px;
+      color: #0d87d4;
+      font-size: 9px;
+      line-height: 12px;
+      text-align: center;
+      background-color: #e7f2f9;
+
+      i {
+        cursor: pointer;
+      }
     }
   }
 

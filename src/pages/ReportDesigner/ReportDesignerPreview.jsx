@@ -6,8 +6,6 @@ import ReportPager from './ReportPager';
 import PreviewSearchArea from './components/PreviewSearchArea';
 import IconFont from '@/components/IconFont';
 
-// import IconFont from '@/components/IconFont';
-
 @connect(({ reportDesignPreview, loading }) => {
   const { previewData = {}, dataSetColumn = {}, customSearchData = [] } = reportDesignPreview;
   return {
@@ -21,7 +19,7 @@ class ReportDesignerPreview extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dimenRadio: 'daily',
+      filterCollapsed: false, // 筛选条件是否折叠
     };
     this.parameters = ''; // 参数初始化
   }
@@ -74,13 +72,6 @@ class ReportDesignerPreview extends Component {
   // filter: payment status
   onPayStatusChange = value => {
     console.log('paymentStatus: ', value);
-  };
-
-  // filter: radio
-  filterRadioChange = ev => {
-    const { value } = ev.target;
-    console.log('filterRadioChange: ', value);
-    this.setState({ dimenRadio: value });
   };
 
   // 页码 | 每页条数 改变时触发
@@ -178,7 +169,7 @@ class ReportDesignerPreview extends Component {
   };
 
   render() {
-    const { dimenRadio } = this.state;
+    const { filterCollapsed } = this.state;
     const {
       previewData: { items = [] },
       dataSetColumn, // 当选项来源于数据集时，select中option的数据来源
@@ -241,7 +232,14 @@ class ReportDesignerPreview extends Component {
         </div>
 
         {customSearchData && customSearchData.length ? (
-          <div className={less['filter-condition']}>
+          <div
+            className={less['filter-condition']}
+            style={
+              filterCollapsed
+                ? { height: '12px', padding: '0 10px', borderBottomColor: 'transparent' }
+                : { height: 'auto', padding: '20px 10px', borderBottomColor: '#0d87d4' }
+            }
+          >
             <PreviewSearchArea
               wrappedComponentRef={inst => {
                 this.formRef = inst;
@@ -255,9 +253,14 @@ class ReportDesignerPreview extends Component {
                 Search
               </Button>
             </Row>
-            {/* <div className={less['icon-collaspe']}>
-            <IconFont type="iconarrow_collaspex" />
-          </div> */}
+            <div className={less['icon-collaspe']}>
+              <IconFont
+                type={filterCollapsed ? 'iconarrow_collaspex-copy' : 'iconarrow_collaspex'}
+                onClick={() => {
+                  this.setState({ filterCollapsed: !filterCollapsed });
+                }}
+              />
+            </div>
           </div>
         ) : null}
 

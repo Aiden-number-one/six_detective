@@ -1,25 +1,32 @@
 /*
  * @Author: liangchaoshun
  * @Date: 2020-01-04 13:58:42
- * @Last Modified by: liangchaoshun
- * @Last Modified time: 2020-01-07 17:17:10
+ * @Last Modified by: Chosen
+ * @Last Modified time: 2020-02-03 16:16:01
  * @Description: 报表设计器的分页组件
  *
  * ---------------------------------------
- * introduction:
+ * introduction: 传进来的属性
+ * showPager: 是否显示分页
  * showTotal: 是否显示所有记录
- * showPageSize: 是否显示每页条数
+ * showPageSize: 是否显示每页条数选项
  * inlineBlock: 是否以行内块元素展示
+ * totalPage： 总页数，【字符串]
+ * totalRecord: 总记录数
+ * pageChageCallback: 页码|每页条数 改变后的回调
+ * paging: 是否分页
+ * pageSizeArr: 每页条数选项
+ *
  * ---------------------------------------
  *
  */
 
 import React, { useState, useEffect } from 'react';
-import { Input, Select, Icon, message } from 'antd';
+import { Input, Select, message } from 'antd';
 import classNames from 'classnames';
+import IconFont from '@/components/IconFont';
 
 import less from './ReportPager.less';
-
 // 当前组件的常量
 const pagerConst = {
   VALUE_DEFAULT: '--',
@@ -33,15 +40,15 @@ function ReportPager(props) {
   const { VALUE_DEFAULT, SETP_HOME, SETP_PREV, SETP_NEXT, SETP_END } = pagerConst;
   // 父组件传入的属性和方法
   const {
-    showPager = true, // 显示/隐藏分页
-    inlineBlock, // 是否为行内块元素
-    showTotal, // 是否显示总记录数
-    totalPage: tpage, // 总页数，【字符串]
-    totalRecord = VALUE_DEFAULT, // 总记录数
-    showPageSize, // 是否显示每页条数选项
-    pageChageCallback, // 页码|每页条数 改变后的回调
-    pageSizeArr = [10, 20, 30], // 每页条数选项
-    paging, // 是否分页
+    showPager = true,
+    inlineBlock,
+    showTotal,
+    totalPage: tpage,
+    totalRecord = VALUE_DEFAULT,
+    showPageSize,
+    pageChageCallback,
+    pageSizeArr = [10, 20, 30],
+    paging,
   } = props;
 
   const totalPage = parseInt(tpage, 10) || VALUE_DEFAULT; // 总页数，【数字】
@@ -192,7 +199,8 @@ function ReportPager(props) {
               [less['step-disable']]: isDiablePAH,
             })}
           >
-            <Icon type="vertical-right" />
+            {/* <Icon type="vertical-right" /> */}
+            <IconFont type="iconshouye" />
           </span>
           <span
             title="Prev"
@@ -201,7 +209,8 @@ function ReportPager(props) {
               [less['step-disable']]: isDiablePAH,
             })}
           >
-            <Icon type="left" />
+            {/* <Icon type="left" /> */}
+            <IconFont type="iconshangyiye" />
           </span>
           <div className={less['page-num']}>
             <Input value={currPage} onChange={currPageInputChage} disabled={!paging} />
@@ -215,7 +224,8 @@ function ReportPager(props) {
               [less['step-disable']]: isDiableNAE,
             })}
           >
-            <Icon type="right" />
+            {/* <Icon type="right" /> */}
+            <IconFont type="iconxiayiye" />
           </span>
           <span
             title="End"
@@ -224,7 +234,8 @@ function ReportPager(props) {
               [less['step-disable']]: isDiableNAE,
             })}
           >
-            <Icon type="vertical-left" />
+            {/* <Icon type="vertical-left" /> */}
+            <IconFont type="iconweiye" />
           </span>
         </div>
       ) : null}
