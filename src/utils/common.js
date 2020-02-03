@@ -108,6 +108,7 @@ const iframe = {
   '/etl-center/database-import': 'index.html#database-import',
   // 数据源监控
   '/data-management/data-enquiry': 'index.html#datasource-change',
+  '/etl-center/data-quality-management/data-source-monitor': 'index.html#datasource-change',
 };
 
 const components = {
