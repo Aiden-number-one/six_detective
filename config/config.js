@@ -2,8 +2,8 @@
  * @Description: app global config
  * @Author: lan
  * @Date: 2019-08-28 10:01:58
- * @LastEditTime : 2020-01-17 22:04:35
- * @LastEditors  : mus
+ * @LastEditTime : 2020-01-19 18:26:33
+ * @LastEditors  : liangchaoshun
  * @Description: umi 配置文件
  */
 // eslint-disable-next-line import/no-extraneous-dependencies

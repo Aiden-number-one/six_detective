@@ -53,7 +53,7 @@ export default class LeftSideBar extends PureComponent {
     const { dragInfoSet, selectedKeySet } = this.state;
     const { displayDraw, displayDeletePrivate } = this.props;
     return treeData.map(item => {
-      if (item.children && item.children.length) {
+      if (item.children) {
         return (
           <TreeNode
             key={item.key}
@@ -232,7 +232,7 @@ function Title({ title, isLeaf, displayDraw, connectDragSource, isParent, delete
       }}
     >
       <div className={styles.hoverArea} />
-      {hoverState && <div className={styles.hoverBlock} />}
+      {/* {hoverState && <div className={styles.hoverBlock} />} */}
       {connectDragSource(
         <span className={styles.title}>
           {/* 叶子不展示文件夹标志 */}

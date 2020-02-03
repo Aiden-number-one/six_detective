@@ -9,6 +9,7 @@ import generate from '@ant-design/colors/lib/generate';
 // import path from 'path';
 const fs = require('fs');
 const path = require('path');
+// const InsertTagPlugin = require('./dynamicInsertTag'); TODO
 
 function getModulePackageName(module) {
   if (!module.context) return null;
@@ -125,4 +126,5 @@ export default config => {
       },
     });
 
+    // config.plugin('dynamicTag').use(InsertTagPlugin); TODO
 };

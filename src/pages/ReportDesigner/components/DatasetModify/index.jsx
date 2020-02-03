@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { PureComponent } from 'react';
-import { Row, Col, Button, Form, Input, Select, message, Table, Spin } from 'antd';
+import { Row, Col, Button, Form, Input, Select, message, Table } from 'antd';
 import { connect } from 'dva';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import classNames from 'classnames';
@@ -225,7 +225,7 @@ export default class DatasetModify extends PureComponent {
                 initialValue: currentSelectDataSetOtherInfo.datasetType,
               })(
                 <Select placeholder="Please Input Name of Data Set">
-                  <Option value="SQL">SQL</Option>
+                  <Option value="SQL">Sql</Option>
                   <Option value="PROCEDURE">Stored Procedure</Option>
                 </Select>,
               )}
@@ -348,13 +348,13 @@ export default class DatasetModify extends PureComponent {
                 borderColor: 'rgb(70,76,81)',
               }}
             >
-              {displayTable ? 'BACK' : 'RUN SQL'}
+              {displayTable ? 'Back' : 'Run Sql'}
             </Button>
             <Button onClick={onClose} style={{ marginRight: 10 }}>
-              CANCEL
+              Cancel
             </Button>
             <Button type="primary" onClick={this.onSave}>
-              SAVE
+              Save
             </Button>
           </Col>
         </Row>

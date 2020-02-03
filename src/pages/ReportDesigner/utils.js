@@ -3,8 +3,8 @@
  * @Author: mus
  * @Email: mus@szkingdom.com
  * @Date: 2019-12-21 14:48:15
- * @LastEditors  : mus
- * @LastEditTime : 2020-01-19 14:36:04
+ * @LastEditors  : liangchaoshun
+ * @LastEditTime : 2020-01-20 17:04:00
  */
 import uuidv1 from 'uuid/v1';
 import { stringToNum, createCellPos } from '@/utils/utils';
