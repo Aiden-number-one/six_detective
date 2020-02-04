@@ -79,11 +79,11 @@ export default [
             routes: [
               {
                 path: '/report/report-designer',
-                name: 'Report Designer',
+                name: 'Report Management',
                 routes: [
                   {
                     path: '/report/report-designer/report-designer',
-                    name: 'Report Designer',
+                    name: 'Report Management',
                     component: './DatasetManagement/ReportDesignerList',
                   },
                   {
