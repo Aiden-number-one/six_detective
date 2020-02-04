@@ -190,20 +190,7 @@ export default class LeftSideBar extends PureComponent {
           </div>
           {leftSideCollapse && (
             <>
-              <DropSelect
-                {...dropSelectProps}
-                addon={() => (
-                  <div
-                    className={styles.addon}
-                    onClick={() => {
-                      window.open('/report/report-designer/dataset-management');
-                    }}
-                    title="Add Dataset"
-                  >
-                    <Icon type="plus-square" />
-                  </div>
-                )}
-              />
+              <DropSelect {...dropSelectProps} addon={() => null} />
               <div className={styles.tree}>
                 <Tree selectedKeys={selectedKeys} onSelect={this.selectTreeNode}>
                   {this.generateTree(dataSetPrivateListTree)}

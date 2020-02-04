@@ -12,8 +12,17 @@ export default class DropSelect extends Component {
 
   onClick = item => {
     const { privateData, setPrivateList } = this.props;
-    // 是否是私有数据集（datasetPrivate === '1'），若不是，则需要转为私有数据集
-    // const { dataset_private: datasetPrivate } = item;
+    // 计算添加的数据集的原数据集在私有数据集数组中存在了几次
+    const count =
+      privateData.length > 0
+        ? privateData.reduce((total, privateDataItem) => {
+            if (privateDataItem.origin_datasetId === item.datasetId) {
+              return total + 1;
+            }
+            return 0;
+          })
+        : 0;
+    console.log(count);
     setPrivateList([...privateData, dataSetTransform(item)]);
   };
 
@@ -35,13 +44,7 @@ export default class DropSelect extends Component {
     const dataText = privateData.map(item => item.dataset_name).join(',');
     return (
       <div className={styles.edit}>
-        <div
-          className={styles.dropSelect}
-          style={{
-            wth: `calc(100% - ${addon ? '29px' : '0px'}) `,
-            right: addon ? '30px' : '0px',
-          }}
-        >
+        <div className={styles.dropSelect}>
           <div
             className={styles.valueBox}
             onClick={e => {

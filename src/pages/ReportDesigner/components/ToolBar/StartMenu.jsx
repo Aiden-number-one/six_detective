@@ -434,7 +434,7 @@ class ToolBar extends Component {
                 className={classNames('btn', 'btn2Report', 'mr6')}
                 onClick={async () => {
                   // if (!reportId) {
-                  //   message.warn('Please save the report template.');
+                  //   message.error('Please save the report template.');
                   //   return;
                   // }
                   // window.open(
@@ -579,7 +579,7 @@ class ToolBar extends Component {
                         item => item === btnActiveStatus.fontSize,
                       );
                       if (index === 16) {
-                        index = 0;
+                        index = 16;
                       } else {
                         index += 1;
                       }
@@ -603,7 +603,7 @@ class ToolBar extends Component {
                         item => item === btnActiveStatus.fontSize,
                       );
                       if (index === 0) {
-                        index = 16;
+                        index = 0;
                       } else {
                         index -= 1;
                       }
