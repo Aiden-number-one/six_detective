@@ -6,10 +6,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import ThemeColorReplacer from 'webpack-theme-color-replacer';
 import generate from '@ant-design/colors/lib/generate';
-// import path from 'path';
 const fs = require('fs');
 const path = require('path');
-// const InsertTagPlugin = require('./dynamicInsertTag'); TODO
 
 function getModulePackageName(module) {
   if (!module.context) return null;
@@ -31,11 +29,6 @@ function getModulePackageName(module) {
   return packageName;
 }
 
-/* const getXSheetPath = () => {
-  const tpath = path(__dirname, '../public/xspreadsheet/xspreadsheet.*.js');
-  return fs.existsSync(tpath) && tpath;
-} */
-
 const getAntdSerials = color => {
   const lightNum = 9;
   const devide10 = 10; // 淡化（即less的tint）
@@ -48,17 +41,6 @@ const getAntdSerials = color => {
 };
 
 export default config => {
-  // console.log('config -> ', config);
-  /* const xsRegExp = /^xspreadsheet\..+\.js$/;
-  const xspreadsheetDir = path.join(__dirname, '../public/xspreadsheet');
-
-  const fileList = fs.readdirSync(xspreadsheetDir);
-  const [xs] = fileList.filter(v => xsRegExp.test(v));
-  if (xs) {
-    config.entry('xspreadsheet').add(`${xspreadsheetDir}/${xs}`);
-    console.log('全幅 -> ', config);
-  } */
-
 
   // preview.pro.ant.design only do not use in your production;
   if (
@@ -90,7 +72,7 @@ export default config => {
       },
     ]);
   }
-  
+
   // optimize chunks
   config.optimization // share the same chunks across different modules
     .runtimeChunk(false)
@@ -125,6 +107,4 @@ export default config => {
         },
       },
     });
-
-    // config.plugin('dynamicTag').use(InsertTagPlugin); TODO
 };

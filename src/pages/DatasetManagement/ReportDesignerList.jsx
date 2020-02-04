@@ -2,7 +2,7 @@
  * @Description: 数据集列表页面
  * @Author: lan
  * @Date: 2019-11-28 11:16:36
- * @LastEditTime : 2020-01-19 17:37:35
+ * @LastEditTime : 2020-02-04 14:50:25
  * @LastEditors  : liangchaoshun
  */
 import React, { PureComponent } from 'react';
@@ -300,20 +300,22 @@ export default class DatasetManagement extends PureComponent {
     // 表格表头
     const columns = [
       {
-        title: 'Name',
+        title: 'Report Name',
         dataIndex: 'reportName',
         key: 'reportName',
-        width: '25%',
+        width: '35%',
         ellipsis: true,
       },
       {
         title: 'Created By',
         dataIndex: 'createBy',
+        width: '17%',
         key: 'createBy',
       },
       {
         title: 'Modified By',
         dataIndex: 'updateBy',
+        width: '17%',
         key: 'updateBy',
       },
       {
@@ -406,44 +408,50 @@ export default class DatasetManagement extends PureComponent {
           </div>
           <div style={{ flex: 1, overflowX: 'auto' }}>
             <div
-              style={{ height: '100%', borderLeft: '1px solid #e0e0e0', backgroundColor: '#fff' }}
+              style={{
+                height: '100%',
+                padding: '10px',
+                backgroundColor: '#fff',
+                borderLeft: '1px solid #e0e0e0',
+              }}
             >
-              <NewSearchForm
-                search={this.queryReportTemplate}
-                ref={this.searchForm}
-                inputName="Report Template Name"
-              />
-              <div className={styles.content}>
-                <div className={styles.tableTop}>
-                  <Button
+              <div className={styles.tableTop}>
+                <Button
+                  onClick={() => {
+                    window.open('/report-designer');
+                  }}
+                  type="primary"
+                  className="btn-usual"
+                >
+                  <Icon
+                    type="plus"
+                    title="Add Classify"
                     onClick={() => {
-                      window.open('/report-designer');
+                      this.handleAddTree();
                     }}
-                    type="primary"
-                    className="btn-usual"
-                  >
-                    + New Report Template
-                  </Button>
-                </div>
-                <Table
-                  loading={loading}
-                  columns={columns}
-                  dataSource={reportList}
-                  pagination={false}
-                  scroll={{ x: 'max-content' }}
-                />
-                {!!rowsCount && (
-                  <Pagination
-                    current={page.pageNumber}
-                    showSizeChanger
-                    showTotal={() => `Total ${rowsCount} items`}
-                    onShowSizeChange={this.onShowSizeChange}
-                    onChange={this.pageChange}
-                    total={rowsCount}
-                    pageSize={page.pageSize}
                   />
-                )}
+                  <span>New Report Template</span>
+                </Button>
+                <NewSearchForm search={this.queryReportTemplate} ref={this.searchForm} />
               </div>
+              <Table
+                loading={loading}
+                columns={columns}
+                dataSource={reportList}
+                pagination={false}
+                scroll={{ x: 'max-content' }}
+              />
+              {!!rowsCount && (
+                <Pagination
+                  current={page.pageNumber}
+                  showSizeChanger
+                  showTotal={() => `Total ${rowsCount} items`}
+                  onShowSizeChange={this.onShowSizeChange}
+                  onChange={this.pageChange}
+                  total={rowsCount}
+                  pageSize={page.pageSize}
+                />
+              )}
             </div>
           </div>
         </div>
