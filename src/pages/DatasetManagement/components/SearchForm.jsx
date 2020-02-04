@@ -18,7 +18,7 @@ export default class SearchForm extends Component {
           type="flex"
           justify="end"
         >
-          <Col xl={8}>
+          <Col xl={9} xxl={6}>
             <Form.Item>
               {getFieldDecorator(
                 'datasetName',
@@ -26,7 +26,7 @@ export default class SearchForm extends Component {
               )(<Input placeholder="Please input report name" />)}
             </Form.Item>
           </Col>
-          <Col xl={5}>
+          <Col style={{ width: '100px', marginRight: '10px', paddingLeft: '0', paddingRight: '0' }}>
             <Form.Item>
               <Button
                 type="primary"
