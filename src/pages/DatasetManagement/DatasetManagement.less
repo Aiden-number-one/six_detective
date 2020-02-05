@@ -3,18 +3,20 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 4px;
   padding: 0 10px;
   color: #10416c;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
 }
-.content {
-  margin-top: 5px;
-  padding: 10px;
-  background: #fff;
-  .tableTop {
-    padding: 0 0 10px;
+
+.tableTop {
+  display: flex;
+  flex-direction: row;
+  :global {
+    .ant-form-item-control {
+      line-height: 1.5;
+    }
   }
 }
 .btn-icon {

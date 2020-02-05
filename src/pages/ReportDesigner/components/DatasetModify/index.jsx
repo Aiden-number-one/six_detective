@@ -101,7 +101,7 @@ export default class DatasetModify extends PureComponent {
       },
     });
     if (!Array.isArray(fields)) {
-      message.warn(fields);
+      message.error(fields);
       return false;
     }
     validateFieldsAndScroll((err, values) => {
@@ -125,6 +125,7 @@ export default class DatasetModify extends PureComponent {
         },
       });
       onClose();
+      message.success('Save Successfully');
     });
     return true;
   };
@@ -159,7 +160,7 @@ export default class DatasetModify extends PureComponent {
   handleParamSetting = () => {
     const { dispatch, currentSelectDataSetOtherInfo, variableList } = this.props;
     if (variableList.filter(value => value.parameter_value).length !== variableList.length) {
-      message.warn('Values is missing');
+      message.error('Values is missing');
       return;
     }
     dispatch({

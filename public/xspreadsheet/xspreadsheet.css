@@ -520,7 +520,7 @@ body {
   pointer-events: auto;
 }
 .x-spreadsheet-selectors .x-spreadsheet-image-switch-btn li {
-  background-image: url(images/sprite58ea.svg);
+  background-image: url(images/sprited6ae.svg);
   position: relative;
   width: 15px;
   height: 15px;
@@ -603,7 +603,7 @@ body {
   display: flex;
 }
 .x-spreadsheet-selector .x-spreadsheet-placeholder .left-items {
-  background-image: url(images/material_common_sprite823a3a.svg);
+  background-image: url(images/material_common_sprite82c856.svg);
   width: 32px;
   height: 32px;
   opacity: 0.8;
@@ -704,14 +704,14 @@ body {
   display: inline-block;
   width: 15px;
   height: 15px;
-  background-image: url(images/material_common_sprite823a3a.svg);
+  background-image: url(images/material_common_sprite82c856.svg);
   background-position: 0 -4214px;
 }
 .x-spreadsheet-item.state .state-desc-image {
   display: inline-block;
   width: 15px;
   height: 15px;
-  background-image: url(images/material_common_sprite823a3a.svg);
+  background-image: url(images/material_common_sprite82c856.svg);
   background-position: -20px -4214px;
 }
 .x-spreadsheet-item.state .state-asc-text {
@@ -744,16 +744,16 @@ body {
   margin-left: 25px;
 }
 .x-spreadsheet-item.paste-common.paste {
-  background-image: url(images/icon_paste939d.svg);
+  background-image: url(images/icon_paste4b64.svg);
 }
 .x-spreadsheet-item.paste-common.paste-value {
-  background-image: url(images/icon_paste_val975c.svg);
+  background-image: url(images/icon_paste_val590d.svg);
 }
 .x-spreadsheet-item.paste-common.paste-format {
-  background-image: url(images/icon_paste_format13f4.svg);
+  background-image: url(images/icon_paste_format9546.svg);
 }
 .x-spreadsheet-item.paste-common.paste-formula {
-  background-image: url(images/icon_paste_fxf71a.svg);
+  background-image: url(images/icon_paste_fxeda3.svg);
 }
 .x-spreadsheet-item.lop-menu-item {
   margin: 2px 0;
@@ -768,22 +768,22 @@ body {
   background-color: rgba(0, 0, 0, 0.05);
 }
 .x-spreadsheet-item.lop-menu-item.copy {
-  background-image: url(images/icon_copye10e.svg);
+  background-image: url(images/icon_copy6003.svg);
 }
 .x-spreadsheet-item.lop-menu-item.cut {
-  background-image: url(images/icon_cut628a.svg);
+  background-image: url(images/icon_cuta97e.svg);
 }
 .x-spreadsheet-item.lop-menu-item.filter {
-  background-image: url(images/icon_filter17e8.svg);
+  background-image: url(images/icon_filterf469.svg);
 }
 .x-spreadsheet-item.lop-menu-item.hide {
-  background-image: url(images/icon_hide1725.svg);
+  background-image: url(images/icon_hide76d6.svg);
 }
 .x-spreadsheet-item.lop-menu-item.unhide {
-  background-image: url(images/icon_show732a.svg);
+  background-image: url(images/icon_show0852.svg);
 }
 .x-spreadsheet-item.lop-menu-item.insert-comment {
-  background-image: url(images/icon_insert6821.svg);
+  background-image: url(images/icon_insert72d8.svg);
 }
 .x-spreadsheet-item.lop-menu-item.edit-comment {
   background-image: url(images/icon_edite10e.svg);
@@ -793,7 +793,7 @@ body {
 }
 .x-spreadsheet-item.lop-menu-item.insert-row,
 .x-spreadsheet-item.lop-menu-item.insert-column {
-  background-image: url(images/icon_insert6821.svg);
+  background-image: url(images/icon_insert72d8.svg);
 }
 .x-spreadsheet-item.lop-menu-item.delete-row,
 .x-spreadsheet-item.lop-menu-item.delete-column {
@@ -803,10 +803,10 @@ body {
   background-image: url(images/icon_delete87ba.svg);
 }
 .x-spreadsheet-item.lop-menu-item.clear {
-  background-image: url(images/icon_clear0090.svg);
+  background-image: url(images/icon_clear102b.svg);
 }
 .x-spreadsheet-item.lop-menu-item.data-design {
-  background-image: url(images/icon_data-design6c00.svg);
+  background-image: url(images/icon_data-design328e.svg);
 }
 .x-spreadsheet-item.state.checked {
   background: rgba(0, 0, 0, 0.08);
@@ -1283,7 +1283,7 @@ body {
   display: inline-block;
 }
 .x-spreadsheet-icon .x-spreadsheet-icon-img {
-  background-image: url(images/sprite58ea.svg);
+  background-image: url(images/sprited6ae.svg);
   position: absolute;
   width: 262px;
   height: 444px;
@@ -1495,4 +1495,4 @@ body {
 }
 
 
-/*# sourceMappingURL=xspreadsheet.937421.css.map*/
+/*# sourceMappingURL=xspreadsheet.css.map*/

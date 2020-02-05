@@ -41,7 +41,7 @@ export default class ToolBar extends Component {
   reportOnChange = e => {
     const { dispatch } = this.props;
     if (e.target.value.length > 50) {
-      message.warn('Report Name cannot be longer than 50 characters');
+      message.error('Report Name cannot be longer than 50 characters');
       return;
     }
     dispatch({
@@ -126,7 +126,7 @@ export default class ToolBar extends Component {
                 className={styles.actionButt}
                 onClick={async () => {
                   // if (!reportId) {
-                  //   message.warn('Please save the report template.');
+                  //   message.error('Please save the report template.');
                   //   return;
                   // }
                   window.xsObj.instanceArray[0].sheet.toolbar.change();

@@ -345,9 +345,9 @@ export default {
           null,
           `/report-designer?reportId=${response.bcjson.items[0].reportTemplateContent.report_id}`,
         );
-        message.info(response.bcjson.msg);
+        message.success(response.bcjson.msg);
       } else {
-        message.warn(response.bcjson.msg);
+        message.error(response.bcjson.msg);
       }
       return true;
     },
@@ -370,7 +370,7 @@ export default {
       if (response.bcjson.flag === '1') {
         return response.bcjson.items[0].reportDefinition;
       }
-      message.info(response.bcjson.msg);
+      message.success(response.bcjson.msg);
       return false;
     },
     // 查询报表模板
