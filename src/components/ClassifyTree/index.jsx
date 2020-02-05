@@ -2,8 +2,8 @@
  * @Description: This is a classify tree public module.
  * @Author: dailinbo
  * @Date: 2019-11-11 13:20:11
- * @LastEditors  : dailinbo
- * @LastEditTime : 2020-01-19 10:27:42
+ * @LastEditors  : DaiLinBo
+ * @LastEditTime : 2020-02-05 11:13:33
  * @Attributes:
  *  参数                    说明                                   类型                           默认值
  *  treeData                treeNodes数据                          Array
@@ -106,6 +106,7 @@ class TitleMessage extends Component {
       handleModifyTree,
       handleDeleteTree,
       operate,
+      reportIcon,
     } = this.props;
     const { operaterTree } = this.state;
     return (
@@ -115,6 +116,7 @@ class TitleMessage extends Component {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
+          {reportIcon && <Icon type="folder" className={styles['file-title']} />}
           <span className={styles.mainText}>{title}</span>
           {operaterTree && (
             <HoverText
@@ -443,7 +445,15 @@ class ClassifyTree extends Component {
     }
   };
 
-  loop = (orgsTree, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, operate) => {
+  loop = (
+    orgsTree,
+    treeKey,
+    handleAddTree,
+    handleModifyTree,
+    handleDeleteTree,
+    operate,
+    reportIcon,
+  ) => {
     const { customeBtnIds, checkedKeys } = this.state;
     return (
       orgsTree &&
@@ -479,6 +489,7 @@ class ClassifyTree extends Component {
                   handleModifyTree={handleModifyTree}
                   handleDeleteTree={handleDeleteTree}
                   operate={operate}
+                  reportIcon={reportIcon}
                 />
               }
               parentId={parentKey}
@@ -490,6 +501,7 @@ class ClassifyTree extends Component {
                 handleModifyTree,
                 handleDeleteTree,
                 operate,
+                reportIcon,
               )}
             </TreeNode>
           );
@@ -511,6 +523,7 @@ class ClassifyTree extends Component {
                     handleModifyTree={handleModifyTree}
                     handleDeleteTree={handleDeleteTree}
                     operate={operate}
+                    reportIcon={reportIcon}
                   />
                 )}
                 {currentKey.includes('btn') && (
@@ -581,6 +594,7 @@ class ClassifyTree extends Component {
       add,
       modify,
       move,
+      reportIcon,
     } = this.props;
     if (menuList) {
       this.generateList(menuList, treeKey);
@@ -620,6 +634,7 @@ class ClassifyTree extends Component {
         <Tree
           // showLine
           // checkStrictly
+          showIcon
           checkable={checkable}
           onExpand={this.onExpand}
           onSelect={this.onSelect}
@@ -629,11 +644,19 @@ class ClassifyTree extends Component {
           autoExpandParent={autoExpandParent}
           defaultExpandAll
         >
-          {this.loop(menuList, treeKey, handleAddTree, handleModifyTree, handleDeleteTree, {
-            add,
-            modify,
-            move,
-          })}
+          {this.loop(
+            menuList,
+            treeKey,
+            handleAddTree,
+            handleModifyTree,
+            handleDeleteTree,
+            {
+              add,
+              modify,
+              move,
+            },
+            reportIcon,
+          )}
         </Tree>
       </div>
     );
